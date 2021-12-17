@@ -5,7 +5,7 @@
     src:
       local('Noto Sans Light'),
       local('NotoSans-Light'),
-      url('../font/NotoSansKR-Light.otf') format('opentype');
+      url('../../assets/font/Noto_Sans_KR/NotoSansKR-Light.otf') format('opentype');
 }
 @font-face {
     font-family: 'Noto Sans Kr';
@@ -14,7 +14,7 @@
     src:
       local('Noto Sans Regular'),
       local('NotoSans-Regular'),
-      url('../font/NotoSansKR-Regular.otf') format('opentype');
+      url('../../assets/font/Noto_Sans_KR/NotoSansKR-Regular.otf') format('opentype');
 }
 @font-face {
     font-family: 'Noto Sans Kr';
@@ -23,7 +23,7 @@
     src:
       local('Noto Sans Bold'),
       local('NotoSans-Bold'),
-      url('../font/NotoSansKR-Bold.otf') format('opentype');
+      url('../../assets/font/Noto_Sans_KR/NotoSansKR-Bold.otf') format('opentype');
 }
 
 :root { 
@@ -48,7 +48,7 @@
         
 /* COMMON */
 * {
-    font-size: 14px;
+    font-size: 12px;
 }
 html {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica
@@ -79,7 +79,7 @@ select {
     appearance:none;
     height: 24px;
     line-height: 24px;
-    background: #f2f2f2 url(../img/ic_select_arr_s.svg) right 5px center/16px no-repeat;
+    background: #f2f2f2 url(../../assets/img/PE-icon/ic_select_arr_s.svg) right 5px center/16px no-repeat;
     padding-right: 26px !important;
 } 
 textarea, input {
@@ -116,7 +116,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     top: 4px;
     width: 16px;
     height: 16px;
-    background: url(../img/ic_input_cal.svg) center/cover no-repeat;
+    background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
 }
 .input-searchWrap {
     position: relative;
@@ -133,16 +133,16 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     display: block;
     width: 28px;
     height: 24px;
-    background: url(../img/ic_search.svg) center/16px no-repeat;
+    background: url(../../assets/img/PE-icon/ic_search.svg) center/16px no-repeat;
     border: 0;
 }
 input[type="checkbox"] {
     height: 24px;
     width: 24px;
-    background: #f2f2f2 url(../img/ic_check_df.svg) center/16px no-repeat;
+    background: #f2f2f2 url(../../assets/img/PE-icon/ic_check_df.svg) center/16px no-repeat;
 }
 input[type="checkbox"]:checked {
-    background: var(--primary) url(../img/ic_check_ac.svg) center/16px no-repeat;
+    background: var(--primary) url(../../assets/img/PE-icon/ic_check_ac.svg) center/16px no-repeat;
 }
 
 /* RADIO 추가 */
@@ -259,10 +259,18 @@ input[type="radio"] {
     display: block;
     width: 16px;
     height: 16px;
-    background: url(../img/ic_logOut.svg) center/cover no-repeat;
+    background: url(../../assets/img/PE-icon/ic_logOut.svg) center/cover no-repeat;
     margin-right: 8px;
 }
-.btn.btn-filter-p,
+.btn.btn-filter-p {
+    border-radius: 0;
+    font-size: 12px;
+    height: 24px;
+    line-height: 22px;
+    padding: 0 10px;
+    color: #fff;
+    min-width: 80px;
+}
 .btn.btn-filter-b {
     border-radius: 0;
     font-size: 12px;
@@ -272,11 +280,36 @@ input[type="radio"] {
     color: #fff;
     min-width: 80px;
 }
+.btn.btn-filter-e {
+    border-radius: 0;
+    font-size: 12px;
+    height: 24px;
+    line-height: 22px;
+    padding: 0 10px;
+    color: #fff;
+    min-width: 80px;
+}
+.btn.btn-filter-d {
+    border-radius: 0;
+    font-size: 12px;
+    height: 24px;
+    line-height: 22px;
+    padding: 0 10px;
+    color: #fff;
+    min-width: 80px;
+    border: 1px solid #8C8C8C;
+}
 .btn.btn-filter-p {
     background: var(--primary);
 }
 .btn.btn-filter-b {
     background: #5B5B5B;
+}
+.btn.btn-filter-e {
+    background: #00B700;
+}
+.btn.btn-filter-d {
+    background: #BDBDBD;
 }
 .btn.btn-filter-p:hover{
     background-color: var(--primary-b);
@@ -284,15 +317,23 @@ input[type="radio"] {
 .btn.btn-filter-b:hover {
     background-color: #3c3c3c;
 }
+.btn.btn-filter-e:hover {
+    background-color: #009300;
+}
+.btn.btn-filter-d:hover {
+    background-color: #A6A6A6;
+}
 .btn.btn-filter-p:hover a,
-.btn.btn-filter-b:hover a{
+.btn.btn-filter-b:hover a,
+.btn.btn-filter-e:hover a,
+.btn.btn-filter-d:hover a{
     text-decoration: none;
 }
 .ic-info {
     display: block;
     width: 16px;
     height: 16px;
-    background: url(../img/ic_info.svg) center/cover no-repeat;
+    background: url(../../assets/img/PE-icon/ic_info.svg) center/cover no-repeat;
     margin-right: 4px;
 }
 .info-msg {
@@ -326,7 +367,7 @@ table.form-table select {
     box-sizing: border-box;
 }
 table.form-table select {
-    background-image: url(../img/ic_select_arr.svg);
+    background-image: url(../../assets/img/PE-icon/ic_select_arr.svg);
     background-size: 16px;
     background-position: calc(100% - 15px) center;
     background-repeat: no-repeat;
@@ -630,7 +671,7 @@ aside dl dd + dd a {
     display: block;
     width: 16px;
     height: 16px;
-    background: url(../img/ic_lnb_arr.svg) center/cover no-repeat;
+    background: url(../../assets/img/PE-icon/ic_lnb_arr.svg) center/cover no-repeat;
     transition: 0.3s;
 }
 .aside-con .collapsed.menu-group::before {
@@ -639,7 +680,10 @@ aside dl dd + dd a {
 
 /* SECTION -- FILTER */
 .filter {
-    padding: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -650,7 +694,7 @@ aside dl dd + dd a {
 }
 .filter .filter-con .filter-item {
     float: left;
-    margin-right: 20px;
+    margin-right: 15px;
     padding: 4px 0;
 }
 .filter .filter-con .filter-item label {
@@ -692,7 +736,7 @@ aside dl dd + dd a {
 .pop-header .pop-close {
     width: 16px;
     height: 16px;
-    background: url(../img/ic_popup_close.svg) center/cover no-repeat;
+    background: url(../../assets/img/PE-icon/ic_popup_close.svg) center/cover no-repeat;
 }
 .pop-body {
     padding: 25px 20px 70px;
@@ -741,7 +785,7 @@ aside dl dd + dd a {
     display: block;
     width: 29px;
     height: 24px;
-    background: #f2f2f2 url(../img/ic_upload.svg) center/16px no-repeat;
+    background: #f2f2f2 url(../../assets/img/PE-icon/ic_upload.svg) center/16px no-repeat;
     position: relative;
     float: left;
 }
@@ -761,7 +805,7 @@ aside dl dd + dd a {
     display: none;
     width: 16px;
     height: 16px;
-    background: url(../img/ic_file_delete.svg) center/cover no-repeat;
+    background: url(../../assets/img/PE-icon/ic_file_delete.svg) center/cover no-repeat;
 }
 .pop-body table .file-Attach .upload-nameWrap input.upload-name {
     background: transparent;

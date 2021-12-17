@@ -17,14 +17,11 @@ const auth = {
     },
     actions: {
         async LOGIN({ commit }, userInfo) {
-            console.log("auth: " + userInfo.auth_token )
+            console.log("auth: " + userInfo.userId )
             const { data } = await loginUser(userInfo); // api 호출
             commit('setUserInfo', data);
             saveAuthToCookie(data.token);
             saveUserToCookie(data.userId);
-            console.log(" getUserFromCookie() ::" ,  getUserFromCookie())
-            console.log(" getAuthFromCookie() ::" ,  getAuthFromCookie())
-            
         }
     }
 }

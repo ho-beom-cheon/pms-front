@@ -34,7 +34,7 @@
                         </td>
                         <th>옵션선택</th>
                         <td>
-                            <select name="" id="">
+                            <select>
                                 <option value="옵션1">옵션1</option>
                                 <option value="옵션2">옵션2</option>
                                 <option value="옵션3">옵션3</option>
@@ -58,7 +58,7 @@
                     <tr>
                         <th>결함유형</th>
                         <td>
-                            <select name="" id="">
+                            <select>
                                 <option value="옵션1">옵션1</option>
                                 <option value="옵션2">옵션2</option>
                                 <option value="옵션3">옵션3</option>
@@ -69,10 +69,10 @@
                     </tr>
                     <tr>
                         <th>
-                            결함내용
+                            결함내용
                         </th>
                         <td colspan="3">
-                            <textarea name="" id="" cols="30" rows="10" placeholder="결함내용을 입력해주세요"></textarea>
+                            <textarea cols="30" rows="10" placeholder="결함내용을 입력해주세요"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -105,7 +105,7 @@
                     <tr>
                         <th>결함유형</th>
                         <td>
-                            <select name="" id="">
+                            <select>
                                 <option value="옵션1">옵션1</option>
                                 <option value="옵션2">옵션2</option>
                                 <option value="옵션3">옵션3</option>
@@ -113,7 +113,7 @@
                         </td>
                         <th>처리상태</th>
                         <td>
-                            <select name="" id="">
+                            <select>
                                 <option value="옵션1">옵션1</option>
                                 <option value="옵션2">옵션2</option>
                                 <option value="옵션3">옵션3</option>
@@ -142,7 +142,7 @@
                             조치내용
                         </th>
                         <td colspan="3">
-                            <textarea name="" id="" cols="30" rows="10" placeholder=""></textarea>
+                            <textarea cols="30" rows="10" placeholder=""></textarea>
                         </td>
                     </tr>
                     <tr>

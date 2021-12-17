@@ -3,7 +3,6 @@ import store from '@/store/auth';
 export function setInterceptors(axiosService) {
   axiosService.interceptors.request.use(
     function (config) {
-		
       config.headers.Authorization = store.state.token;
       return config;
     },
