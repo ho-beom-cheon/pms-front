@@ -8,13 +8,13 @@ function createAxiosService() {
   });
 }
 
-function createAxiosServiceWithAuth() {
+function createAxiosServiceWithAuth(url) {
   const axiosService = axios.create({
-    baseURL: `${process.env.VUE_APP_API}`,
+    baseURL: `${process.env.VUE_APP_API}/${url}`,
   });
     
   return setInterceptors(axiosService);
 }
 
-export const axiosService = createAxiosServiceWithAuth();
-//export const posts = createAxiosServiceWithAuth('api/user/signin');
+export const axiosService = createAxiosService();
+export const posts = createAxiosServiceWithAuth('posts');
