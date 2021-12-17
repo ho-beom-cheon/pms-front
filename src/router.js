@@ -28,6 +28,7 @@ const SWZP0010 = () => import(/* webpackChunkName: "SWZP0010" */ './views/pms/SW
 const SWZP0014 = () => import(/* webpackChunkName: "SWZP0014" */ './views/pms/SWZP0014.vue'); menuList.push(SWZP0014); menuListStr.push("SWZP0014");
 const SWZP0030 = () => import(/* webpackChunkName: "SWZP0030" */ './views/pms/SWZP0030.vue'); menuList.push(SWZP0030); menuListStr.push("SWZP0030");
 const SWZP0040 = () => import(/* webpackChunkName: "SWZP0040" */ './views/pms/SWZP0040.vue'); menuList.push(SWZP0040); menuListStr.push("SWZP0040");
+const SWZP0041 = () => import(/* webpackChunkName: "SWZP0041" */ './views/pms/SWZP0041.vue'); menuList.push(SWZP0041); menuListStr.push("SWZP0041");
 const SWZP0050 = () => import(/* webpackChunkName: "SWZP0050" */ './views/pms/SWZP0050.vue'); menuList.push(SWZP0050); menuListStr.push("SWZP0050");
 const SWZP0060 = () => import(/* webpackChunkName: "SWZP0060" */ './views/pms/SWZP0060.vue'); menuList.push(SWZP0060); menuListStr.push("SWZP0060");
 const SWZP0070 = () => import(/* webpackChunkName: "SWZP0070" */ './views/pms/SWZP0070.vue'); menuList.push(SWZP0070); menuListStr.push("SWZP0070");
@@ -55,7 +56,7 @@ for(var idx=0; idx < menuListStr.length; idx++){
   tmpObj.path = "/" + menuListStr[idx].toLowerCase() ;
   tmpObj.name = menuListStr[idx].toLowerCase() ;
   
-  if( "/login/Tmp/".indexOf(menuListStr[idx]) > 0 ) {
+  if( "/login/Tmp/SWZP0041/".indexOf(menuListStr[idx]) > 0 ) {
     tmpObj.components = { default:menuList[idx] } ;  
   } else {
     tmpObj.components = { header:PmsHeader, footer:PmsFooter, default:menuList[idx] } ;

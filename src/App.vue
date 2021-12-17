@@ -18,3 +18,8 @@ export default {
   },
 };
 </script>
+<style>
+@import "./assets/bootstrap-5.1.3-dist/css/bootstrap.css";
+@import "./assets/css/reset.css";
+@import "./assets/css/theme.css";
+</style>

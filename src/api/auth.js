@@ -5,7 +5,7 @@ function registerUser(userData) {
 }
 
 function loginUser(userData) {
-  return axiosService.post('api/user/signin', userData);
+  return axiosService.post('login', userData);
 }
 
 export { registerUser, loginUser };
