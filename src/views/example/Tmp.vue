@@ -62,12 +62,12 @@
 					<div class="row row-cols-12 ">
 						<div id="content-grid-top" class="col-12">
 							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridInit">초기화</button>
-							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridAddRow">행추가</button>
-							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridDelRow">행삭제</button>
-							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridADelRow">전체삭제</button>
-							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridIns">저장</button>
-							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridExcelExport">엑셀저장</button>
-							<button id="grid-top-com" class="btn-small btn-info" type="submit" @click="gridExcelImport">엑셀업로드</button>
+							<button id="grid-top-com1" class="btn-small btn-info" type="submit" @click="gridAddRow">행추가</button>
+							<button id="grid-top-com2" class="btn-small btn-info" type="submit" @click="gridDelRow">행삭제</button>
+							<button id="grid-top-com3" class="btn-small btn-info" type="submit" @click="gridADelRow">전체삭제</button>
+							<button id="grid-top-com4" class="btn-small btn-info" type="submit" @click="gridIns">저장</button>
+							<button id="grid-top-com5" class="btn-small btn-info" type="submit" @click="gridExcelExport">엑셀저장</button>
+							<button id="grid-top-com6" class="btn-small btn-info" type="submit" @click="gridExcelImport">엑셀업로드</button>
 						</div>
 					</div>
 					<div>
