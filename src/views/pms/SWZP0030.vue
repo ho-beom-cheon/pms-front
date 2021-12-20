@@ -66,7 +66,7 @@
                         </div>
                     </li>
                     <li class="filter-item">
-                        <div class="item-con">업무구분
+                        <div class="item-con">업무 구분
                             <select 
                                 v-model = "info.bzcd_selected"
                                 style   = "width: 145px"
