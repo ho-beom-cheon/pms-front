@@ -50,7 +50,7 @@
             <section class="filter">
                 <ul class="filter-con clear-fix">
                     <li class="filter-item">
-                        <div class="item-con">업무구분
+                        <div class="item-con">업무 구분
                             <select 
                                 v-model = "bzcd_selected"
                                 style   = "width: 180px"
