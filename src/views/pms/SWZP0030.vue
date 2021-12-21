@@ -114,7 +114,7 @@
                 >
               </div>
             </li>
-            <li class="filter-item">n
+            <li class="filter-item">
               <div class="item-con">처리단계
                 <select
                     v-model = "info.itg_tst_prc_cd_selected"
@@ -248,7 +248,6 @@
         <div class="gridWrap" style="min-width: 750px;">
           <grid
               ref="grid"
-              :selectionSettings ="selectionOptions"
               :data="dataSource"
               :header="header"
               :columns="columns"
@@ -435,12 +434,6 @@ export default {
 
     return {
 
-      /*selectionOptions : {
-        type :"Multiple",
-        checkboxOnly : true
-        //mode : "Cell",
-        //cellSelectionMode : 'Box'
-      },*/
       info :{
 
         scnr_id	: this.scnr_id,			 // 시나리오id
