@@ -275,7 +275,7 @@ var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이
 
 // 업무구분
 const bzcd = [
-  {	text:"전체", 	value:'000'},
+  {	text:"전체", 	value:'999'},
   {	text:"신용", 	value:'AAA'},
   {	text:"재무제표", 	value:"BBB"},
   {	text:"신용평가", 	value:"CCC"},
@@ -283,7 +283,7 @@ const bzcd = [
 
 // 차수
 var sqn_cd = [
-  {text:"전체", value:"0"},
+  {text:"전체", value:"999"},
   {text:"사전", value:"1"},
   {text:"1차수", value:"2"},
   {text:"2차수", value:"3"},
@@ -294,14 +294,14 @@ var sqn_cd = [
 ];
 // 처리단계 (가데이타)
 var itg_tst_prc_cd = [
-  {text:"전체", value:"0"},
+  {text:"전체", value:"999"},
   {text:"1단계", value:"1"},
   {text:"2단계", value:"2"}
 
 ];
 //유형
 var tp = [
-  {text:"전체", value:"0"},
+  {text:"전체", value:"999"},
   {text:"배치", value:"1"},
   {text:"화면", value:"2"},
   {text:"인터페이스", value:"3"},
