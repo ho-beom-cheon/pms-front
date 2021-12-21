@@ -534,8 +534,7 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: 'http://localhost:8080/SWZP0030/select', method: 'GET' },
-          updateData: { url: 'http://localhost:8080/SWZP0030/update', method: 'PUT' }
+          readData: { url: 'http://localhost:8080/SWZP0030/select', method: 'GET' }
         },
         initialRequest: false,
       },
