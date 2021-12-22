@@ -83,14 +83,14 @@
                     <li class="filter-item">
                         <div class="item-con">등록단계구분
                             <select 
-                                v-model = "info.wbs_cd_selected"
+                                v-model = "info.rgs_dscd_selected"
                                 style   = "width: 120px"
                             >
                                 <option
-                                    v-for  = "(wbs_cd, idx) in info.wbs_cd"
+                                    v-for  = "(rgs_dscd, idx) in info.rgs_dscd"
                                     :key   = "idx"
-                                    v-text = "wbs_cd.text"
-                                    :value = "wbs_cd.value"
+                                    v-text = "rgs_dscd.text"
+                                    :value = "rgs_dscd.value"
                                 ></option>
                             </select>
                         </div>
@@ -98,14 +98,14 @@
                     <li class="filter-item">
                         <div class="item-con">결함유형
                             <select 
-                                v-model = "info.err_dis_selected"
+                                v-model = "info.err_tycd_selected"
                                 style   = "width: 100px"
                             >
                                 <option
-                                    v-for  = "(err_dis, idx) in info.err_dis"
+                                    v-for  = "(err_tycd, idx) in info.err_tycd"
                                     :key   = "idx"
-                                    v-text = "err_dis.text"
-                                    :value = "err_dis.value"
+                                    v-text = "err_tycd.text"
+                                    :value = "err_tycd.value"
                                 ></option>
                             </select>
                         </div>
@@ -113,14 +113,14 @@
                     <li class="filter-item">
                         <div class="item-con">처리단계
                           <select
-                              v-model = "info.itg_tst_prc_cd_selected"
+                              v-model = "info.err_prc_step_cd_selected"
                               style   = "width: 128px"
                           >
                             <option
-                                v-for  = "(itg_tst_prc_cd, idx) in info.itg_tst_prc_cd"
+                                v-for  = "(err_prc_step_cd, idx) in info.err_prc_step_cd"
                                 :key   = "idx"
-                                v-text = "itg_tst_prc_cd.text"
-                                :value = "itg_tst_prc_cd.value"
+                                v-text = "err_prc_step_cd.text"
+                                :value = "err_prc_step_cd.value"
                             ></option>
                           </select>
                         </div>
@@ -129,7 +129,7 @@
                         <div class="item-con">결함등록자
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.dvlpe_no"
+                                   v-model="info.rgpe_no"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 140px"
                             >
@@ -139,7 +139,7 @@
                         <div class="item-con">담당자
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.pl_no"
+                                   v-model="info.dvlpe_no"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 145px"
                             >
@@ -173,7 +173,7 @@
                         <div class="item-con">프로그램ID
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.pgm_id"
+                                   v-model="info.mng_id"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 140px"
                             >
@@ -247,14 +247,14 @@ var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이
 
 // 업무구분
 const bzcd = [
-				{	text:"전체", 	value:'000'}, 
+				{	text:"전체", 	value:'999'},
 				{	text:"신용", 	value:'AAA'}, 
 				{	text:"재무제표", 	value:"BBB"},
 				{	text:"신용평가", 	value:"CCC"},
 			 ];
 //등록단계구분
-const wbs_cd = [
-        {	text:"전체", 	value:'0'},
+const rgs_dscd = [
+        {	text:"전체", 	value:'999'},
         {	text:"단위테스트", 	value:'1'},
         {	text:"소스인스펙션", 	value:"2"},
         {	text:"시큐어코딩", 	value:"3"},
@@ -269,8 +269,8 @@ const wbs_cd = [
        ];
 
 //결함유형
-const err_dis = [
-        {	text:"전체", 	value:'0'},
+const err_tycd = [
+        {	text:"전체", 	value:'999'},
         {	text:"결함", 	value:'1'},
         {	text:"개선", 	value:"2"},
         {	text:"기타", 	value:"3"},
@@ -278,8 +278,8 @@ const err_dis = [
       ];
 
 // 처리단계
-const itg_tst_prc_cd = [
-						{	text:"전체", 		value:"0"},
+const err_prc_step_cd = [
+						{	text:"전체", 		value:"999"},
 						{	text:"결함등록",	value:"1"},
 						{	text:"접수", 	value:"2"},
 						{	text:"보류", 	value:"3"},
@@ -292,9 +292,9 @@ const itg_tst_prc_cd = [
 					
 var prjt_nm_selected;
 var bzcd_selected;
-var wbs_cd_selected;
-var err_dis_selected;
-var itg_tst_prc_cd_selected;
+var rgs_dscd_selected;
+var err_tycd_selected;
+var err_prc_step_cd_selected;
 
 export default {
 	// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -403,21 +403,21 @@ export default {
           rgpe_no : this.rgpe_no,       //결함등록자
           dvlpe_no : this.dvlpe_no,     //담당자
           pl_no : this.pl_no,           //담당PL
-          pgm_id : this.pgm_id,         //프로그램ID
+          mng_id : this.mng_id,         //프로그램ID
           err_txt : this.err_txt,       //결함내용
 
 
           prjt_nm     : prjt_nm,    		      // 프로젝트명
           bzcd        : bzcd,    			        // 업무구분
-          wbs_cd      : wbs_cd,               //등록단계구분
-          err_dis     : err_dis,              //결함유형
-          itg_tst_prc_cd  : itg_tst_prc_cd,   //처리단계
+          rgs_dscd      : rgs_dscd,               //등록단계구분
+          err_tycd     : err_tycd,              //결함유형
+          err_prc_step_cd  : err_prc_step_cd,   //처리단계
 					/* select 박스 */
           prjt_nm_selected        : prjt_nm[0].value,        // 프로젝트명
           bzcd_selected           : bzcd[0].value,           // 업무구분
-          wbs_cd_selected         : wbs_cd[0].value,         // 등록단계구분
-          err_dis_selected        : err_dis[0].value,        // 결함유형
-          itg_tst_prc_cd_selected : itg_tst_prc_cd[0].value, // 처리단계
+          rgs_dscd_selected         : rgs_dscd[0].value,         // 등록단계구분
+          err_tycd_selected        : err_tycd[0].value,        // 결함유형
+          err_prc_step_cd_selected : err_prc_step_cd[0].value, // 처리단계
 
 				},
 				addRow : {
@@ -499,8 +499,8 @@ export default {
 			],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0010/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/SWZP0040/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/SWZP0040/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
