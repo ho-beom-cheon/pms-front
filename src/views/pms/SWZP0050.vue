@@ -53,14 +53,14 @@
                     <li class="filter-item">
                         <div class="item-con">프로젝트
                             <select 
-                                v-model = "info.prjt_nm_selected"
+                                v-model = "info.prjt_id_selected"
                                 style   = "width: 165px"
                             >
                                 <option
-                                    v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                                    v-for  = "(prjt_id, idx) in info.prjt_id"
                                     :key   = "idx"
-                                    v-text = "prjt_nm.text"
-                                    :value = "prjt_nm.value"
+                                    v-text = "prjt_id.text"
+                                    :value = "prjt_id.value"
                                 ></option>
                             </select>
                         </div>
@@ -98,14 +98,14 @@
                     <li class="filter-item">
                         <div class="item-con">처리상태
                             <select 
-                                v-model = "info.prc_sts_cd_selected"
+                                v-model = "info.req_prc_step_cd_selected"
                                 style   = "width: 100px"
                             >
                                 <option
-                                    v-for  = "(prc_sts_cd, idx) in info.prc_sts_cd"
+                                    v-for  = "(req_prc_step_cd, idx) in info.req_prc_step_cd"
                                     :key   = "idx"
-                                    v-text = "prc_sts_cd.text"
-                                    :value = "prc_sts_cd.value"
+                                    v-text = "req_prc_step_cd.text"
+                                    :value = "req_prc_step_cd.value"
                                 ></option>
                             </select>
                         </div>
@@ -114,7 +114,7 @@
                         <div class="item-con">신청자
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.dvlpe_no"
+                                   v-model="info.reqe_no"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 145px"
                             >
@@ -206,19 +206,19 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
+var prjt_id  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 
 
 // 업무구분
 const bzcd = [
-				{	text:"전체", 	value:'000'}, 
+				{	text:"전체", 	value:'999'},
 				{	text:"신용", 	value:'AAA'}, 
 				{	text:"재무제표", 	value:"BBB"},
 				{	text:"신용평가", 	value:"CCC"},
 			 ];
 //신청구분
 const req_dscd = [
-        {	text:"전체", 	value:'0'},
+        {	text:"전체", 	value:'999'},
         {	text:"개발현황", 	value:'1'},
         {	text:"통합테스트", 	value:"2"},
         {	text:"테이블변경", 	value:"3"},
@@ -228,18 +228,18 @@ const req_dscd = [
         {	text:"기타", 	value:"7"},
       ];
 //처리상태
-const prc_sts_cd = [
-        {	text:"전체", 	value:'0'},
+const req_prc_step_cd = [
+        {	text:"전체", 	value:'999'},
         {	text:"변경요청", 	value:'1'},
         {	text:"반려", 	value:"2"},
         {	text:"재요청", 	value:"3"},
         {	text:"처리중", 	value:'4'},
         {	text:"처리완료", 	value:'5'}
       ];
-var prjt_nm_selected;
+var prjt_id_selected;
 var bzcd_selected;
 var req_dscd_selected;
-var prc_sts_cd_selected;
+var req_prc_step_cd_selected;
 
 
 export default {
@@ -345,23 +345,20 @@ export default {
 	data() {
 		return {
 				info : {
-					pgm_id      : this.pgm_id,    	// 프로그램ID
-					pgm_nm      : this.pgm_nm,    	// 프로그램명
-					dvlpe_no    : this.dvlpe_no,    // 개발자명
-					pl_no       : this.pl_no,    	// 담당PL명
-					
-					dvlp_dis_cd : dvlp_dis_cd,		// 개발구분
-					prjt_nm     : prjt_nm,    		// 프로젝트명
-					bzcd        : bzcd,    			// 업무구분
-					pgm_dis_cd  : pgm_dis_cd,    	// 프로그램구분
-					prc_step_cd : prc_step_cd,    	// 처리단계
+
+          reqe_no    : this.reqe_no,    // 신청자
+          prcpe_no    : this.prcpe_no,    	// 처리자
+          chg_txt     : this.chg_txt,//신청내용
+					prjt_id     : prjt_id,    		// 프로젝트명
+					bzcd        : bzcd,    		  	// 업무구분
+          req_dscd    : req_dscd,    	    // 신청구분
+          req_prc_step_cd :  req_prc_step_cd,    	// 처리상태
 
 					/* select 박스 */
-					dvlp_dis_cd_selected : dvlp_dis_cd[0].value,  // 개발구분
-					prjt_nm_selected     : prjt_nm[0].value,      // 프로젝트명
-					bzcd_selected        : bzcd[0].value,         // 업무구분 
-					pgm_dis_cd_selected  : pgm_dis_cd[0].value    // 프로그램구분
-
+					prjt_id_selected     : prjt_id[0].value,      // 프로젝트명
+					bzcd_selected        : bzcd[0].value,         // 업무구분
+          req_dscd_selected    : req_dscd[0].value, //신청구분
+          req_prc_step_cd_selected    :  req_prc_step_cd[0].value, //처리상태
 				},
 				addRow : {
 					
@@ -441,8 +438,8 @@ export default {
 			],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0010/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/SWZP0050/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/SWZP0050/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
@@ -458,7 +455,7 @@ export default {
 					header: '신청ID',
           width: 180,
           align: 'left',
-          name: 'reqpe_no'/*요청자번호*/
+          name: 'reqpe_dscd'/*요청자번호*/
 				},
 				{
 					header: '업무',
@@ -483,55 +480,37 @@ export default {
 					header: '신청자',
 					width: 100,
 					align: 'center',
-					name: 'bzcd',
+					name: 'reqe_no',
 					type: 'text'
 				},
 				{
 					header: '신청내용',
 					width: 80,
 					align: 'center',
-					name: 'dvlp_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: dvlp_dis_cd
-							}
-					}
+					name: 'req_txt',
+          type: 'text'
 				},
 				{
-					header: '처리일자',
-					width: 120,
-					align: 'center',
-					name: 'pgm_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: pgm_dis_cd
-							}
-					}
+          header: '처리일자',
+          width: 110,
+          align: 'center',
+          name: 'prc_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker'
 				},
 				{
 					header: '처리자',
 					width: 120,
 					align: 'center',
-					name: 'enlpe_nm',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: enlpe_nm
-							}
-					}
+					name: 'prcpe_no',
+          type: 'text'
 				},
 				{
 					header: '처리상태',
-					width: 110,
-					align: 'center',
-					name: 'frcs_sta_dt',
-					format: 'yyyy-mm-dd',
-					editor: 'datePicker'
+          width: 120,
+          align: 'center',
+          name: 'req_prc_step_cd',
+          type: 'text'
 				}
 			]
 		}
