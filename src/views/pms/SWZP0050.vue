@@ -98,14 +98,14 @@
                     <li class="filter-item">
                         <div class="item-con">처리상태
                             <select 
-                                v-model = "info.prc_sts_cd_selected"
+                                v-model = "info.req_prc_step_cd_selected"
                                 style   = "width: 100px"
                             >
                                 <option
-                                    v-for  = "(prc_sts_cd, idx) in info.prc_sts_cd"
+                                    v-for  = "(req_prc_step_cd, idx) in info.req_prc_step_cd"
                                     :key   = "idx"
-                                    v-text = "prc_sts_cd.text"
-                                    :value = "prc_sts_cd.value"
+                                    v-text = "req_prc_step_cd.text"
+                                    :value = "req_prc_step_cd.value"
                                 ></option>
                             </select>
                         </div>
@@ -211,14 +211,14 @@ var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이
 
 // 업무구분
 const bzcd = [
-				{	text:"전체", 	value:'000'}, 
+				{	text:"전체", 	value:'999'},
 				{	text:"신용", 	value:'AAA'}, 
 				{	text:"재무제표", 	value:"BBB"},
 				{	text:"신용평가", 	value:"CCC"},
 			 ];
 //신청구분
 const req_dscd = [
-        {	text:"전체", 	value:'0'},
+        {	text:"전체", 	value:'999'},
         {	text:"개발현황", 	value:'1'},
         {	text:"통합테스트", 	value:"2"},
         {	text:"테이블변경", 	value:"3"},
@@ -228,8 +228,8 @@ const req_dscd = [
         {	text:"기타", 	value:"7"},
       ];
 //처리상태
-const prc_sts_cd = [
-        {	text:"전체", 	value:'0'},
+const req_prc_step_cd = [
+        {	text:"전체", 	value:'999'},
         {	text:"변경요청", 	value:'1'},
         {	text:"반려", 	value:"2"},
         {	text:"재요청", 	value:"3"},
@@ -239,7 +239,7 @@ const prc_sts_cd = [
 var prjt_nm_selected;
 var bzcd_selected;
 var req_dscd_selected;
-var prc_sts_cd_selected;
+var req_prc_step_cd_selected;
 
 
 export default {
@@ -345,23 +345,20 @@ export default {
 	data() {
 		return {
 				info : {
-					pgm_id      : this.pgm_id,    	// 프로그램ID
-					pgm_nm      : this.pgm_nm,    	// 프로그램명
-					dvlpe_no    : this.dvlpe_no,    // 개발자명
-					pl_no       : this.pl_no,    	// 담당PL명
-					
-					dvlp_dis_cd : dvlp_dis_cd,		// 개발구분
+
+					dvlpe_no    : this.dvlpe_no,    // 신청자
+          prcpe_no    : this.prcpe_no,    	// 처리자
+          chg_txt     : this.chg_txt,//신청내용
 					prjt_nm     : prjt_nm,    		// 프로젝트명
-					bzcd        : bzcd,    			// 업무구분
-					pgm_dis_cd  : pgm_dis_cd,    	// 프로그램구분
-					prc_step_cd : prc_step_cd,    	// 처리단계
+					bzcd        : bzcd,    		  	// 업무구분
+          req_dscd    : req_dscd,    	    // 신청구분
+          req_prc_step_cd :  req_prc_step_cd,    	// 처리상태
 
 					/* select 박스 */
-					dvlp_dis_cd_selected : dvlp_dis_cd[0].value,  // 개발구분
 					prjt_nm_selected     : prjt_nm[0].value,      // 프로젝트명
-					bzcd_selected        : bzcd[0].value,         // 업무구분 
-					pgm_dis_cd_selected  : pgm_dis_cd[0].value    // 프로그램구분
-
+					bzcd_selected        : bzcd[0].value,         // 업무구분
+          req_dscd_selected    : req_dscd[0].value, //신청구분
+          req_prc_step_cd_selected    :  req_prc_step_cd[0].value, //처리상태
 				},
 				addRow : {
 					
@@ -441,8 +438,8 @@ export default {
 			],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0010/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/SWZP0050/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/SWZP0050/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
@@ -458,7 +455,7 @@ export default {
 					header: '신청ID',
           width: 180,
           align: 'left',
-          name: 'reqpe_no'/*요청자번호*/
+          name: 'reqpe_dscd'/*요청자번호*/
 				},
 				{
 					header: '업무',
@@ -483,55 +480,37 @@ export default {
 					header: '신청자',
 					width: 100,
 					align: 'center',
-					name: 'bzcd',
+					name: 'reqpe_no',
 					type: 'text'
 				},
 				{
 					header: '신청내용',
 					width: 80,
 					align: 'center',
-					name: 'dvlp_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: dvlp_dis_cd
-							}
-					}
+					name: 'req_txt',
+          type: 'text'
 				},
 				{
-					header: '처리일자',
-					width: 120,
-					align: 'center',
-					name: 'pgm_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: pgm_dis_cd
-							}
-					}
+          header: '처리일자',
+          width: 110,
+          align: 'center',
+          name: 'prc_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker'
 				},
 				{
 					header: '처리자',
 					width: 120,
 					align: 'center',
-					name: 'enlpe_nm',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: enlpe_nm
-							}
-					}
+					name: 'prcpe_no',
+          type: 'text'
 				},
 				{
 					header: '처리상태',
-					width: 110,
-					align: 'center',
-					name: 'frcs_sta_dt',
-					format: 'yyyy-mm-dd',
-					editor: 'datePicker'
+          width: 120,
+          align: 'center',
+          name: 'req_prc_step_cd',
+          type: 'text'
 				}
 			]
 		}
