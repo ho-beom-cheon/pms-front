@@ -26,8 +26,8 @@
                   
                       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <ul class="card-body">
-                            <li class="active"><a href="/SWZP0010">{{menu_list[0].name}}</a></li>
-                            <li><a href="/SWZP0014">{{menu_list[1].name}}</a></li>
+                            <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
+                            <li class="active"><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
                             <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                             <li><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                             <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
@@ -257,14 +257,14 @@ var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이
  
 // 업무구분 
 const bzcd = [ 
-{text:"전체", value:'000'},  
+{text:"전체", value:'999'},
 {text:"신용", value:'AAA'},  
 {text:"재무제표", value:"BBB"}, 
 {text:"신용평가", value:"CCC"}, 
  ]; 
 // 개발구분 
 const dvlp_dis_cd = [ 
-{text:"전체", value:"000"}, 
+{text:"전체", value:"999"},
 {text:"신규", value:"100"},  
 {text:"변경", value:"200"}, 
 {text:"이행", value:"300"}, 
@@ -272,7 +272,7 @@ const dvlp_dis_cd = [
 ]; 
 // 프로그램구분 
 const pgm_dis_cd = [ 
-{text:"전체", value:"000"}, 
+{text:"전체", value:"999"},
 {text:"화면", value:"100"}, 
 {text:"프로그램", value:"200"}, 
 {text:"보고서", value:"300"}, 
@@ -280,7 +280,7 @@ const pgm_dis_cd = [
 ]; 
 // 프로그램 세부 구분 
 const enlpe_nm = [ 
-{text:"전체", value:'000'},  
+{text:"전체", value:'999'},
 {text:"JSP", value:"100"}, 
 {text:"JAVA", value:"200"}, 
 {text:"RD", value:"300"} 
@@ -324,8 +324,7 @@ beforeMount() {
 console.log("beforeMount"); 
 }, 
 mounted() { 
-console.log("mounted"); 
-this.getCombo()
+console.log("mounted");
 }, 
 beforeUpdate() { 
 console.log("beforeUpdate"); 
@@ -348,35 +347,7 @@ return this.count;
  
 }, 
 // 일반적인 함수를 선언하는 부분  
-methods: { 
-getCombo() {
-    var comboList = ['0000000000','1000000001'];
-    const url="http://localhost:8080/SWZP9000/select";
-    switch (this.$route.path){
-      case "/SWZP0010" :
-           comboList.push('1000000002');
-           comboList.push('1000000003');
-     break;
-      case "/SWZP0030" :
-           comboList.push('1000000006');
-     break;
-   default :
-    }
-    for (let i = 0; i < comboList.length; i++) {
-    const params = new URLSearchParams();
-    params.append('prjt_id', '0000000000');
-    params.append('grp_tycd', comboList[i]);
-    axios.post(url,params)
-    .then(response => {
-        if(response.status == 200){
-            console.log(response.data);
-        }
-        }).catch(e=>
-        {
-          return;
-        })
-    }
-},
+methods: {
 change(){ 
 console.log("change"); 
 }, 
@@ -473,14 +444,14 @@ showDummyRows: true,
 open: false, 
 menu_list: [ 
 { 
-id: 'SWZP0010', 
-path: '/SWZP0010', 
-name: '개발현황' 
+id: 'SWZP0014',
+path: '/SWZP0014',
+name: 'PMS현황'
 }, 
-{ 
-id: 'SWZP0014', 
-path: '/SWZP0014', 
-name: 'PMS현황' 
+{
+id: 'SWZP0010',
+path: '/SWZP0010',
+name: '개발현황'
 }, 
 { 
 id: 'SWZP0030', 
