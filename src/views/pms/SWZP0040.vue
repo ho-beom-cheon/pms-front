@@ -26,8 +26,8 @@
                   
                       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <ul class="card-body">
-                            <li><a href="/SWZP0010">{{menu_list[0].name}}</a></li>
-                            <li><a href="/SWZP0014">{{menu_list[1].name}}</a></li>
+                            <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
+                            <li><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
                             <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                             <li class="active"><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                             <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
@@ -433,14 +433,14 @@ export default {
 					open: false,
 					menu_list: [
 					{
-						id: 'SWZP0010',
-						path: '/SWZP0010',
-						name: '개발현황'
-					},
-					{
-						id: 'SWZP0014',
-						path: '/SWZP0014',
-						name: 'PMS현황'
+            id: 'SWZP0014',
+            path: '/SWZP0014',
+            name: 'PMS현황'
+          },
+            {
+              id: 'SWZP0010',
+              path: '/SWZP0010',
+              name: '개발현황'
 					},
 					{
 						id: 'SWZP0030',
