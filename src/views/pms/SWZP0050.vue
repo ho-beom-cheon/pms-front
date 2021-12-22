@@ -53,14 +53,14 @@
                     <li class="filter-item">
                         <div class="item-con">프로젝트
                             <select 
-                                v-model = "info.prjt_nm_selected"
+                                v-model = "info.prjt_id_selected"
                                 style   = "width: 165px"
                             >
                                 <option
-                                    v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                                    v-for  = "(prjt_id, idx) in info.prjt_id"
                                     :key   = "idx"
-                                    v-text = "prjt_nm.text"
-                                    :value = "prjt_nm.value"
+                                    v-text = "prjt_id.text"
+                                    :value = "prjt_id.value"
                                 ></option>
                             </select>
                         </div>
@@ -114,7 +114,7 @@
                         <div class="item-con">신청자
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.dvlpe_no"
+                                   v-model="info.reqe_no"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 145px"
                             >
@@ -206,7 +206,7 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
+var prjt_id  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 
 
 // 업무구분
@@ -236,7 +236,7 @@ const req_prc_step_cd = [
         {	text:"처리중", 	value:'4'},
         {	text:"처리완료", 	value:'5'}
       ];
-var prjt_nm_selected;
+var prjt_id_selected;
 var bzcd_selected;
 var req_dscd_selected;
 var req_prc_step_cd_selected;
@@ -346,16 +346,16 @@ export default {
 		return {
 				info : {
 
-					dvlpe_no    : this.dvlpe_no,    // 신청자
+          reqe_no    : this.reqe_no,    // 신청자
           prcpe_no    : this.prcpe_no,    	// 처리자
           chg_txt     : this.chg_txt,//신청내용
-					prjt_nm     : prjt_nm,    		// 프로젝트명
+					prjt_id     : prjt_id,    		// 프로젝트명
 					bzcd        : bzcd,    		  	// 업무구분
           req_dscd    : req_dscd,    	    // 신청구분
           req_prc_step_cd :  req_prc_step_cd,    	// 처리상태
 
 					/* select 박스 */
-					prjt_nm_selected     : prjt_nm[0].value,      // 프로젝트명
+					prjt_id_selected     : prjt_id[0].value,      // 프로젝트명
 					bzcd_selected        : bzcd[0].value,         // 업무구분
           req_dscd_selected    : req_dscd[0].value, //신청구분
           req_prc_step_cd_selected    :  req_prc_step_cd[0].value, //처리상태
@@ -480,7 +480,7 @@ export default {
 					header: '신청자',
 					width: 100,
 					align: 'center',
-					name: 'reqpe_no',
+					name: 'reqe_no',
 					type: 'text'
 				},
 				{
