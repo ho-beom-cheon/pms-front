@@ -272,14 +272,14 @@ var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이
 
 // 업무구분
 const bzcd = [
-				{	text:"전체", 	value:'000'}, 
+				{	text:"전체", 	value:'999'},
 				{	text:"신용", 	value:'AAA'}, 
 				{	text:"재무제표", 	value:"BBB"},
 				{	text:"신용평가", 	value:"CCC"},
 			 ];
 // 개발구분
 const dvlp_dis_cd = [
-	                    {	text:"전체", 		value:"000"},
+	                    {	text:"전체", 		value:"999"},
 	                    {	text:"신규", 		value:"100"}, 
 	                    {	text:"변경", 		value:"200"},
 	                    {	text:"이행", 		value:"300"},
@@ -287,7 +287,7 @@ const dvlp_dis_cd = [
 	                ];
 // 프로그램구분
 const pgm_dis_cd = [
-                   		{	text:"전체", 		value:"000"},
+                   		{	text:"전체", 		value:"999"},
   						{	text:"화면", 		value:"100"},
   						{	text:"프로그램", 	value:"200"},
   						{	text:"보고서", 	value:"300"},
@@ -295,14 +295,14 @@ const pgm_dis_cd = [
   				   ];
 // 프로그램 세부 구분
 const enlpe_nm = [
-					{	text:"전체", 		value:'000'}, 
+					{	text:"전체", 		value:'999'},
   					{	text:"JSP", 	value:"100"},
   					{	text:"JAVA", 	value:"200"},
   					{	text:"RD", 		value:"300"}
   				 ];
 // 처리단계
 const prc_step_cd = [
-						{	text:"전체", 		value:"0"},
+						{	text:"전체", 		value:"999"},
 						{	text:"미개발",	value:"1"},
 						{	text:"개발중", 	value:"2"},
 						{	text:"개발완료", 	value:"3"},
@@ -515,8 +515,8 @@ export default {
 			],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0010/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/SWZP0030/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/SWZP0030/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
