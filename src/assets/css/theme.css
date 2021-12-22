@@ -407,27 +407,6 @@ table.form-table select {
 .gridWrap {
 
 }
-.multiGridWrap {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 370px);
-}
-.div1{
-    grid-column: 1/4;
-    margin: 10px;
-}
-.div2{
-    grid-column: 4/6;
-    margin: 10px;
-}
-.div3{
-    grid-column: 1/3;
-    margin: 10px;
-}
-.div4{
-    grid-column: 3/6;
-    margin: 10px;
-}
 .grid {
     font-size: 12px;
     text-align: left;
@@ -454,6 +433,122 @@ table.form-table select {
     padding: 7px 20px;
     height: 50px;
     border-bottom: 1px solid #C4C4C4;
+}
+/*SWZP0070, SWZP0080 적용 CSS*/
+.multiGridWrap {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 370px);
+    gap: 3px;
+    margin: 1px;
+}
+.div-header{
+    margin: 8px;
+}
+.div-grid{
+    margin: 8px;
+}
+.div1{
+    grid-column: 1/4;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div2{
+    grid-column: 4/6;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div3{
+    grid-column: 1/3;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div4{
+    grid-column: 3/6;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+/*SWZP0014 적용 CSS*/
+.multiGridWrap-a {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 410px);
+    gap: 3px;
+    margin: 1px;
+}
+.div-header-a{
+    margin: 8px;
+    list-style:none;
+}
+.div-grid-a{
+    margin: 8px;
+}
+.div1-a{
+    grid-column: 1/2;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div2-a{
+    grid-column: 2/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div3-a{
+    grid-column: 1/3;
+    border-right: 1px solid #d5d5d5;
+}
+.div4-a{
+    grid-column: 3/6;
+}
+.div0-a{
+    grid-column: 1/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(1, 395px);
+    gap: 3px;
+}
+/*SWZP0060 적용 CSS*/
+.multiGridWrap-b {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 410px);
+    gap: 3px;
+    margin: 1px;
+}
+.div-header-b{
+    margin: 8px;
+    list-style:none;
+}
+.div-grid-b{
+    margin: 8px;
+}
+.div1-b{
+    grid-column: 1/2;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div2-b{
+    grid-column: 2/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+}
+.div3-b{
+    grid-column: 1/4;
+    border-right: 1px solid #d5d5d5;
+}
+.div4-b{
+    grid-column: 4/6;
+}
+.div0-b{
+    grid-column: 1/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(1, 455px);
+    gap: 3px;
 }
 
 /* GNB */
@@ -705,6 +800,14 @@ aside dl dd + dd a {
     padding-bottom: 10px;
     padding-right: 15px;
     padding-left: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+/*SWZP0014 필터*/
+.filter-a {
+    padding-top: 10px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
