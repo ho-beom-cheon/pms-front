@@ -26,8 +26,8 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <ul class="card-body">
-                <li><a href="/SWZP0010">{{menu_list[0].name}}</a></li>
-                <li><a href="/SWZP0014">{{menu_list[1].name}}</a></li>
+                <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
+                <li><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
                 <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                 <li><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                 <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
@@ -107,10 +107,12 @@
       <section class="page-contents">
         <div class="multiGridWrap">
           <div class="div1">
-            <div class="div-header">업무별 개발현황
-              <div class="btn btn-filter-e" style="float: right; margin-bottom: 8px">
-                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-              </div>
+            <div class="div-header"><h2>업무별 개발현황</h2>
+              <ul class="filter-btn">
+                <div class="btn btn-filter-e">
+                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                </div>
+              </ul>
             </div>
             <div class="div-grid">
               <grid
@@ -128,10 +130,12 @@
             </div>
           </div>
           <div class="div2">
-            <div class="div-header">담당자별 개발현황
-              <div class="btn btn-filter-e" style="float: right; margin-bottom: 8px">
-                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-              </div>
+            <div class="div-header"><h2>담당자별 개발현황</h2>
+              <ul class="filter-btn">
+                <div class="btn btn-filter-e">
+                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                </div>
+              </ul>
             </div>
             <div class="div-grid">
               <grid
@@ -149,10 +153,12 @@
             </div>
           </div>
           <div class="div3">
-            <div class="div-header">결함현황
-              <div class="btn btn-filter-e" style="float: right; margin-bottom: 8px">
-                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-              </div>
+            <div class="div-header"><h2>결함현황</h2>
+              <ul class="filter-btn">
+                <div class="btn btn-filter-e">
+                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                </div>
+              </ul>
             </div>
             <div class="div-grid">
               <grid
@@ -170,10 +176,12 @@
             </div>
           </div>
           <div class="div4">
-            <div class="div-header">개발 및 결함 미진내역
-              <div class="btn btn-filter-e" style="float: right; margin-bottom: 8px">
-                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-              </div>
+            <div class="div-header"><h2>개발 및 결함 미진내역</h2>
+              <ul class="filter-btn">
+                <div class="btn btn-filter-e">
+                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                </div>
+              </ul>
             </div>
             <div class="div-grid">
               <grid
@@ -425,14 +433,14 @@ export default {
       open: false,
       menu_list: [
         {
-          id: 'SWZP0010',
-          path: '/SWZP0010',
-          name: '개발현황'
-        },
-        {
           id: 'SWZP0014',
           path: '/SWZP0014',
           name: 'PMS현황'
+        },
+        {
+          id: 'SWZP0010',
+          path: '/SWZP0010',
+          name: '개발현황'
         },
         {
           id: 'SWZP0030',
