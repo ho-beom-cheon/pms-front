@@ -635,34 +635,33 @@ table.form-table select {
 }
 .div1-body-c{
     grid-column: 1/2;
-    border-right: 1px solid #d5d5d5;
     display: flex;
 }
 .div2-body-c{
-    grid-column: 2/3;
-    border-right: 1px solid #d5d5d5;
-}
-.div3-body-c{
-    grid-column: 3/4;
-    border-right: 1px solid #d5d5d5;
-}
-.div4-body-c{
-    grid-column: 4/5;
-    border-right: 1px solid #d5d5d5;
-}
-.div5-body-c{
-    grid-column: 5/6;
-    border-right: 1px solid #d5d5d5;
+    grid-column: 2/6;
 }
 .div-grid-c{
     margin: 8px;
 }
 .div1-c{
-    grid-column: 1/4;
-    border-right: 1px solid #d5d5d5;
+    grid-column: 1/5;
+    margin: 5px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(3, 99px);
+    gap: 3px;
+}
+.div1-1-c{
+    grid-row: 1/2;
+    border-bottom: 1px solid #d5d5d5;
+}
+.div1-2-c{
+    grid-row: 2/4;
 }
 .div2-c{
-    grid-column: 4/6;
+    grid-column: 5/6;
+    margin-top: 8px;
+    margin-right: 8px;
 }
 .div3-c{
     grid-column: 1/2;
@@ -690,7 +689,7 @@ table.form-table select {
     border: 1px solid #d5d5d5;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(1, 300px);
+    grid-template-rows: repeat(1, 315px);
     gap: 3px;
 }
 
@@ -732,7 +731,7 @@ header.GNB .gnb-con .gnb-menu li {
     justify-content: center;
     align-items: center;
     flex: 1 0 auto;
-    max-width: 124px;
+    max-width: 200px;
     background: #dfdfdf;
     padding: 0 10px;
     box-sizing: border-box;
@@ -980,7 +979,6 @@ aside dl dd + dd a {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
 .filter-btn {
     flex: 1 0 auto;
     display: flex;
@@ -988,7 +986,24 @@ aside dl dd + dd a {
     gap: 4px;
 }
 
+/*SWZP0110 적용 CSS*/
+.filter-con .filter-item-a {
+    float: left;
+    margin-left: 8px;
+    padding: 1.3px 0;
+}
+.filter-con .filter-item-a label {
+    margin-right: 7px;
+    display: inline-block;
+    width: 80px;
+    font-weight: normal;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
 
+}
 
 /* SECTION -- POPUP */
 

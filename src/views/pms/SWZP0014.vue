@@ -217,7 +217,9 @@
                     <input type="text" class="upload-name" disabled>
                     <a href="#" class="upload-delete" onclick="alert('delete-file')"></a>
                   </div>
-                  <button class="btn btn-line-p">다운로드</button>
+                  <div class="btn btn-line-p">
+                    <a href="#" @click="gridExcelExport">다운로드</a>
+                  </div>
                   <div class="btn btn-filter-b" style = "margin-left: 20px">
                     <a href="#" @click="gridExcelExport">공지추가</a>
                   </div>

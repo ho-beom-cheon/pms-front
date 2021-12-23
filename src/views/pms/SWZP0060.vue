@@ -26,8 +26,8 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <ul class="card-body">
-                <li><a href="/SWZP0010">{{menu_list[0].name}}</a></li>
-                <li><a href="/SWZP0014">{{menu_list[1].name}}</a></li>
+                <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
+                <li><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
                 <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                 <li><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                 <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
@@ -232,108 +232,245 @@
         </div>
         <div class="div0-b">
           <div class="div3-b">
-            <div class="div-header-b">프로젝트 공지사항
+            <div class="div-header-b"><h2>상세내용</h2>
+              <ul class="filter-btn">
+                <div class="btn btn-filter-b">
+                  <a href="#" @click="gridExcelExport">신규초기화</a>
+                </div>
+                <div class="btn btn-filter-p" style = "margin-left: 20px">
+                  <a href="#" @click="fnSave">저장</a>
+                </div>
+              </ul>
             </div>
-            <section class="filter">
-              <div class = "col">
-                <ul class="filter-btn">
-                  <div class="btn btn-filter-d">
-                    <a href="#" @click="gridExcelExport">PMS가이드ⓘ</a>
+            <div class="div2-body-c">
+              <ul class="filter-con clear-fix-a">
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>관리구분</label>
+                    <select
+                        v-model = "info.prjt_nm_selected"
+                        style   = "width: 230px"
+                    >
+                      <option
+                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          :key   = "idx"
+                          v-text = "prjt_nm.text"
+                          :value = "prjt_nm.value"
+                      ></option>
+                    </select>
                   </div>
-                </ul>
-                <ul class="filter-con clear-fix">
-                  <div class = "col">
-                    <li class="filter-item">
-                      <div class="item-con">공지업무
-                        <select
-                            v-model = "info.prjt_nm_selected"
-                            style   = "width: 165px;  margin-left: 7px"
-                        >
-                          <option
-                              v-for  = "(prjt_nm, idx) in info.prjt_nm"
-                              :key   = "idx"
-                              v-text = "prjt_nm.text"
-                              :value = "prjt_nm.value"
-                          ></option>
-                        </select>
-                      </div>
-                    </li>
-                    <li class="filter-item">
-                      <div class="item-con">공지일자
-                        <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
-                      </div>
-                    </li>
-                    <li class="filter-item">
-                      <div class="item-con">공지자
-                        <input type="text"
-                               placeholder="사번"
-                               v-model="info.pgm_id"
-                               @keyup.enter="fnSearch"
-                               style   = "width: 100px; margin-right: 5px"
-                        >
-                        <input type="text"
-                               placeholder="이름"
-                               v-model="info.pgm_nm"
-                               @keyup.enter="fnSearch"
-                               style   = "width: 145px"
-                        >
-                      </div>
-                    </li>
-                    <li class="filter-item">
-                      <div class="item-con">
-                        <input type="checkbox" v-model="info.check_Yn">
-                        <label>　공지사항삭제</label>
-                      </div>
-                    </li>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>처리상태</label>
+                    <select
+                        v-model = "info.prjt_nm_selected"
+                        style   = "width: 137px"
+                    >
+                      <option
+                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          :key   = "idx"
+                          v-text = "prjt_nm.text"
+                          :value = "prjt_nm.value"
+                      ></option>
+                    </select>
                   </div>
-                  <div class = "col">
-                    <li class="filter-item">
-                      <div class="item-con">　제목　
-                        <input type="text"
-                               placeholder="사번"
-                               v-model="info.pgm_id"
-                               id= ""
-                               @keyup.enter="fnSearch"
-                               style   = "width: 898px; margin-left: 5px"
-                        >
-                      </div>
-                    </li>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>관리ID</label>
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="info.pgm_id"
+                           @keyup.enter="fnSearch"
+                           style   = "width: 190px"
+                    >
                   </div>
-                  <div class = "col">
-                    <li class="filter-item">
-                      <div class="item-con">
-                        <th style="vertical-align: middle">
-                          결함내용　
-                        </th>
-                        <td>
-                          <textarea cols="145" rows="20" placeholder="결함내용을 입력해주세요"></textarea>
-                        </td>
-                      </div>
-                    </li>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>요청구분</label>
+                    <select
+                        v-model = "info.prjt_nm_selected"
+                        style   = "width: 230px"
+                    >
+                      <option
+                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          :key   = "idx"
+                          v-text = "prjt_nm.text"
+                          :value = "prjt_nm.value"
+                      ></option>
+                    </select>
                   </div>
-                </ul>
-                <ul class="filter-btn" style="margin-top: 7px">
-                  <label for="file-upload-btn">
-                    <input type="file" id="file-upload-btn">
-                  </label>
-                  <div class="upload-nameWrap">
-                    <input type="text" class="upload-name" disabled>
-                    <a href="#" class="upload-delete" onclick="alert('delete-file')"></a>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>요청일자</label>
+                    <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
                   </div>
-                  <button class="btn btn-line-p">다운로드</button>
-                  <div class="btn btn-filter-b" style = "margin-left: 20px">
-                    <a href="#" @click="gridExcelExport">공지추가</a>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>요청자</label>
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="info.pgm_id"
+                           @keyup.enter="fnSearch"
+                           style   = "width: 109px"
+                    >
                   </div>
-                  <div class="btn btn-filter-p">
-                    <a href="#" @click="fnSave">저장</a>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>조치담당자</label>
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="info.pgm_id"
+                           @keyup.enter="fnSearch"
+                           style   = "width: 109px"
+                    >
                   </div>
-                </ul>
-
-              </div>
-            </section>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>조치업무명</label>
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="info.pgm_id"
+                           @keyup.enter="fnSearch"
+                           style   = "width: 230px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>조치예정일자</label>
+                    <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>조치일자</label>
+                    <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>긴급성</label>
+                    <select
+                        v-model = "info.prjt_nm_selected"
+                        style   = "width: 230px"
+                    >
+                      <option
+                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          :key   = "idx"
+                          v-text = "prjt_nm.text"
+                          :value = "prjt_nm.value"
+                      ></option>
+                    </select>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>영향도</label>
+                    <select
+                        v-model = "info.prjt_nm_selected"
+                        style   = "width: 137px"
+                    >
+                      <option
+                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          :key   = "idx"
+                          v-text = "prjt_nm.text"
+                          :value = "prjt_nm.value"
+                      ></option>
+                    </select>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>등급</label>
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="info.pgm_id"
+                           @keyup.enter="fnSearch"
+                           style   = "width: 100px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <label>제목</label>
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="info.pgm_id"
+                           @keyup.enter="fnSearch"
+                           style   = "width: 870px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <th style="vertical-align: middle">
+                      <label>결함내용</label>
+                    </th>
+                    <td>
+                      <textarea cols="140" rows="6" placeholder="결함내용을 입력해주세요"></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <th style="vertical-align: middle">
+                      <label>조치내용</label>
+                    </th>
+                    <td>
+                      <textarea cols="140" rows="6" placeholder="조치내용을 입력해주세요"></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <th style="vertical-align: middle">
+                      <label>해결방안내용</label>
+                    </th>
+                    <td>
+                      <textarea cols="140" rows="6" placeholder="해결방안내용을 입력해주세요"></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <th style="vertical-align: middle">
+                      <label>비고</label>
+                    </th>
+                    <td>
+                      <textarea cols="140" rows="3" placeholder="비고를 입력해주세요"></textarea>
+                    </td>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="div4-b">
-
+            <div class="div-header-b"><h2>상세내용확대보기</h2>
+              <ul class="filter-btn">
+                <div class="btn btn-filter-b">
+                  <a href="#" @click="gridExcelExport">+ 확대</a>
+                </div>
+                <div class="btn btn-filter-b">
+                  <a href="#" @click="gridExcelExport">- 축소</a>
+                </div>
+              </ul>
+            </div>
+            <div class="div2-body-c">
+              <ul class="filter-con clear-fix-a">
+                <li class="filter-item-a">
+                  <td>
+                    <textarea cols="103" rows="33"></textarea>
+                  </td>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -541,14 +678,14 @@ export default {
       open: false,
       menu_list: [
         {
-          id: 'SWZP0010',
-          path: '/SWZP0010',
-          name: '개발현황'
-        },
-        {
           id: 'SWZP0014',
           path: '/SWZP0014',
           name: 'PMS현황'
+        },
+        {
+          id: 'SWZP0010',
+          path: '/SWZP0010',
+          name: '개발현황'
         },
         {
           id: 'SWZP0030',
