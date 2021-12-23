@@ -26,8 +26,8 @@
                   
                       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <ul class="card-body">
-                            <li><a href="/SWZP0010">{{menu_list[0].name}}</a></li>
-                            <li><a href="/SWZP0014">{{menu_list[1].name}}</a></li>
+                            <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
+                            <li><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
                             <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                             <li><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                             <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
@@ -128,53 +128,56 @@
 
             <!-- page contents -->
             <section class="page-contents">
-            <div class="grid-box" style="padding: 10px"><p style="margin-bottom: 10px">산출물상세정보</p>
+            <div class="grid-box">
+              <div class="div-header"><h2>산출물 상세정보</h2></div>
                 <div class="gridWrap" style="min-width: 750px;">
-						<grid
-							ref="grid"
-							:data="data1"
-							:header="header"
-							:columns="columns1"
-							:bodyHeight="140"
-							:showDummyRows="showDummyRows"
-							:columnOptions="columnOptions"
-							:rowHeight="rowHeight"
-							:rowHeaders="rowHeaders"
-							@click="onClick"
-						></grid>
+                  <grid
+                    ref="grid"
+                    :data="data1"
+                    :header="header"
+                    :columns="columns1"
+                    :bodyHeight="140"
+                    :showDummyRows="showDummyRows"
+                    :columnOptions="columnOptions"
+                    :rowHeight="rowHeight"
+                    :rowHeaders="rowHeaders"
+                    @click="onClick"
+                  ></grid>
                 </div>
                </div>
-               <div class="grid-box" style="padding: 10px"><p style="margin-bottom: 10px">산출물점검대상</p>
-                <div class="gridWrap" style="min-width: 750px;">
-						<grid
-							ref="grid"
-							:data="data2"
-							:header="header"
-							:columns="columns2"
-							:bodyHeight="bodyHeight"
-							:showDummyRows="showDummyRows"
-							:columnOptions="columnOptions"
-							:rowHeight="rowHeight"
-							:rowHeaders="rowHeaders"
-							@click="onClick"
-						></grid>
-                </div>
+               <div class="grid-box">
+                 <div class="div-header"><h2>산출물 점검대상</h2></div>
+                  <div class="gridWrap" style="min-width: 750px;">
+                    <grid
+                      ref="grid"
+                      :data="data2"
+                      :header="header"
+                      :columns="columns2"
+                      :bodyHeight="bodyHeight"
+                      :showDummyRows="showDummyRows"
+                      :columnOptions="columnOptions"
+                      :rowHeight="rowHeight"
+                      :rowHeaders="rowHeaders"
+                      @click="onClick"
+                    ></grid>
+                  </div>
                </div>
-               <div class="grid-box" style="padding: 10px"><p style="margin-bottom: 10px">미매핑내역</p>
-                <div class="gridWrap" style="min-width: 750px;">
-						<grid
-							ref="grid"
-							:data="data3"
-							:header="header"
-							:columns="columns3"
-							:bodyHeight="bodyHeight"
-							:showDummyRows="showDummyRows"
-							:columnOptions="columnOptions"
-							:rowHeight="rowHeight"
-							:rowHeaders="rowHeaders"
-							@click="onClick"
-						></grid>
-                </div>
+               <div class="grid-box">
+                 <div class="div-header"><h2>미매핑 ID목록</h2></div>
+                  <div class="gridWrap" style="min-width: 750px;">
+                    <grid
+                      ref="grid"
+                      :data="data3"
+                      :header="header"
+                      :columns="columns3"
+                      :bodyHeight="bodyHeight"
+                      :showDummyRows="showDummyRows"
+                      :columnOptions="columnOptions"
+                      :rowHeight="rowHeight"
+                      :rowHeaders="rowHeaders"
+                      @click="onClick"
+                    ></grid>
+                  </div>
                </div>
             </section>
         </div>
@@ -324,14 +327,14 @@ export default {
 			open: false,
 			menu_list: [
 				{
-					id: 'SWZP0010',
-					path: '/SWZP0010',
-					name: '개발현황'
-				},
-				{
-					id: 'SWZP0014',
-					path: '/SWZP0014',
-					name: 'PMS현황'
+          id: 'SWZP0014',
+          path: '/SWZP0014',
+          name: 'PMS현황'
+        },
+        {
+          id: 'SWZP0010',
+          path: '/SWZP0010',
+          name: '개발현황'
 				},
 				{
 					id: 'SWZP0030',
