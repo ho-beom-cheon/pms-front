@@ -83,14 +83,14 @@
                     <li class="filter-item">
                         <div class="item-con">등록단계구분
                             <select 
-                                v-model = "info.dvlp_dis_cd_selected"
+                                v-model = "info.rgs_dscd_selected"
                                 style   = "width: 120px"
                             >
                                 <option
-                                    v-for  = "(dvlp_dis_cd, idx) in info.dvlp_dis_cd"
+                                    v-for  = "(rgs_dscd, idx) in info.rgs_dscd"
                                     :key   = "idx"
-                                    v-text = "dvlp_dis_cd.text"
-                                    :value = "dvlp_dis_cd.value"
+                                    v-text = "rgs_dscd.text"
+                                    :value = "rgs_dscd.value"
                                 ></option>
                             </select>
                         </div>
@@ -98,49 +98,49 @@
                     <li class="filter-item">
                         <div class="item-con">결함유형
                             <select 
-                                v-model = "info.prc_step_cd_selected"
+                                v-model = "info.err_tycd_selected"
                                 style   = "width: 100px"
                             >
                                 <option
-                                    v-for  = "(prc_step_cd, idx) in info.prc_step_cd"
+                                    v-for  = "(err_tycd, idx) in info.err_tycd"
                                     :key   = "idx"
-                                    v-text = "prc_step_cd.text"
-                                    :value = "prc_step_cd.value"
+                                    v-text = "err_tycd.text"
+                                    :value = "err_tycd.value"
                                 ></option>
                             </select>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">처리단계
-                            <select 
-                                v-model = "info.prc_step_cd_selected"
-                                style   = "width: 120px"
-                            >
-                                <option
-                                    v-for  = "(prc_step_cd, idx) in info.prc_step_cd"
-                                    :key   = "idx"
-                                    v-text = "prc_step_cd.text"
-                                    :value = "prc_step_cd.value"
-                                ></option>
-                            </select>
+                          <select
+                              v-model = "info.err_prc_step_cd_selected"
+                              style   = "width: 128px"
+                          >
+                            <option
+                                v-for  = "(err_prc_step_cd, idx) in info.err_prc_step_cd"
+                                :key   = "idx"
+                                v-text = "err_prc_step_cd.text"
+                                :value = "err_prc_step_cd.value"
+                            ></option>
+                          </select>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">결함등록자
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.dvlpe_no"
+                                   v-model="info.rgpe_no"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 140px"
                             >
                         </div>
                     </li>
                     <li class="filter-item">
-                        <div class="item-con">개발자명
+                        <div class="item-con">담당자
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.pl_no"
-                                   @keyup.enter="fnSearcha"
+                                   v-model="info.dvlpe_no"
+                                   @keyup.enter="fnSearch"
                                    style   = "width: 145px"
                             >
                         </div>
@@ -150,7 +150,7 @@
                             <input type="text" 
                                    placeholder="입력" 
                                    v-model="info.pl_no"
-                                   @keyup.enter="fnSearcha"
+                                   @keyup.enter="fnSearch"
                                    style   = "width: 145px"
                             >
                         </div>
@@ -173,7 +173,7 @@
                         <div class="item-con">프로그램ID
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.dvlpe_no"
+                                   v-model="info.mng_id"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 140px"
                             >
@@ -183,7 +183,7 @@
                         <div class="item-con">결함내용
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.dvlpe_no"
+                                   v-model="info.err_txt"
                                    @keyup.enter="fnSearch"
                                    style   = "width: 435px"
                             >
@@ -247,49 +247,54 @@ var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이
 
 // 업무구분
 const bzcd = [
-				{	text:"전체", 	value:'000'}, 
+				{	text:"전체", 	value:'999'},
 				{	text:"신용", 	value:'AAA'}, 
 				{	text:"재무제표", 	value:"BBB"},
 				{	text:"신용평가", 	value:"CCC"},
 			 ];
-// 개발구분
-const dvlp_dis_cd = [
-	                    {	text:"전체", 		value:"000"},
-	                    {	text:"신규", 		value:"100"}, 
-	                    {	text:"변경", 		value:"200"},
-	                    {	text:"이행", 		value:"300"},
-	                    {	text:"삭제", 		value:"400"}
-	                ];
-// 프로그램구분
-const pgm_dis_cd = [
-                   		{	text:"전체", 		value:"000"},
-  						{	text:"화면", 		value:"100"},
-  						{	text:"프로그램", 	value:"200"},
-  						{	text:"보고서", 	value:"300"},
-  						{	text:"배치", 		value:"400"}
-  				   ];
-// 프로그램 세부 구분
-const enlpe_nm = [
-					{	text:"전체", 		value:'000'}, 
-  					{	text:"JSP", 	value:"100"},
-  					{	text:"JAVA", 	value:"200"},
-  					{	text:"RD", 		value:"300"}
-  				 ];
+//등록단계구분
+const rgs_dscd = [
+        {	text:"전체", 	value:'999'},
+        {	text:"단위테스트", 	value:'1'},
+        {	text:"소스인스펙션", 	value:"2"},
+        {	text:"시큐어코딩", 	value:"3"},
+        {	text:"모의해킹", 	value:'4'},
+        {	text:"사전통합테스트", 	value:"5"},
+        {	text:"통합테스트1차", 	value:"6"},
+        {	text:"통합테스트2차", 	value:'7'},
+        {	text:"통합테스트3차", 	value:"8"},
+        {	text:"통합테스트4차", 	value:"9"},
+        {	text:"통합테스트5차", 	value:"10"},
+        {	text:"안정화", 	value:"11"}
+       ];
+
+//결함유형
+const err_tycd = [
+        {	text:"전체", 	value:'999'},
+        {	text:"결함", 	value:'1'},
+        {	text:"개선", 	value:"2"},
+        {	text:"기타", 	value:"3"},
+        {	text:"결함아님", 	value:"4"}
+      ];
+
 // 처리단계
-const prc_step_cd = [
-						{	text:"전체", 		value:"0"},
-						{	text:"미개발",	value:"1"},
-						{	text:"개발중", 	value:"2"},
-						{	text:"개발완료", 	value:"3"},
-						{	text:"PL완료", 	value:"4"},
-						{	text:"삭제", 		value:"5"},
-						{	text:"개발종료", 	value:"6"}
+const err_prc_step_cd = [
+						{	text:"전체", 		value:"999"},
+						{	text:"결함등록",	value:"1"},
+						{	text:"접수", 	value:"2"},
+						{	text:"보류", 	value:"3"},
+						{	text:"이관", 	value:"4"},
+						{	text:"조치중", 		value:"5"},
+						{	text:"담당자조치완료", 	value:"6"},
+            {	text:"업무PL확인", 	value:"7"},
+            {	text:"등록자확인", 	value:"8"}
 					];
 					
-var pgm_dis_cd_selected;
-var bzcd_selected;
 var prjt_nm_selected;
-var dvlp_dis_cd_selected;
+var bzcd_selected;
+var rgs_dscd_selected;
+var err_tycd_selected;
+var err_prc_step_cd_selected;
 
 export default {
 	// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -394,31 +399,35 @@ export default {
 	data() {
 		return {
 				info : {
-					pgm_id      : this.pgm_id,    	// 프로그램ID
-					pgm_nm      : this.pgm_nm,    	// 프로그램명
-					dvlpe_no    : this.dvlpe_no,    // 개발자명
-					pl_no       : this.pl_no,    	// 담당PL명
-					
-					dvlp_dis_cd : dvlp_dis_cd,		// 개발구분
-					prjt_nm     : prjt_nm,    		// 프로젝트명
-					bzcd        : bzcd,    			// 업무구분
-					pgm_dis_cd  : pgm_dis_cd,    	// 프로그램구분
-					prc_step_cd : prc_step_cd,    	// 처리단계
 
+          rgpe_no : this.rgpe_no,       //결함등록자
+          dvlpe_no : this.dvlpe_no,     //담당자
+          pl_no : this.pl_no,           //담당PL
+          mng_id : this.mng_id,         //프로그램ID
+          err_txt : this.err_txt,       //결함내용
+
+
+          prjt_nm     : prjt_nm,    		      // 프로젝트명
+          bzcd        : bzcd,    			        // 업무구분
+          rgs_dscd      : rgs_dscd,               //등록단계구분
+          err_tycd     : err_tycd,              //결함유형
+          err_prc_step_cd  : err_prc_step_cd,   //처리단계
 					/* select 박스 */
-					dvlp_dis_cd_selected : dvlp_dis_cd[0].value,  // 개발구분
-					prjt_nm_selected     : prjt_nm[0].value,      // 프로젝트명
-					bzcd_selected        : bzcd[0].value,         // 업무구분 
-					pgm_dis_cd_selected  : pgm_dis_cd[0].value    // 프로그램구분
+          prjt_nm_selected        : prjt_nm[0].value,        // 프로젝트명
+          bzcd_selected           : bzcd[0].value,           // 업무구분
+          rgs_dscd_selected         : rgs_dscd[0].value,         // 등록단계구분
+          err_tycd_selected        : err_tycd[0].value,        // 결함유형
+          err_prc_step_cd_selected : err_prc_step_cd[0].value, // 처리단계
 
 				},
 				addRow : {
 					
 				},
-					frcs_sta_dt : '',    // 계획일자STA
-					frcs_end_dt : '',    // 계획일자END
-					sta_dt      : '',    // 실제일자STA
-					end_dt      : '',    // 실제일자END
+
+					frcs_sta_dt : '',    //결함등록일자STA
+					frcs_end_dt : '',    //결함등록일자END
+					sta_dt      : '',    //결함조치일자STA
+					end_dt      : '',    //결함조치일자END
 		            
 					check_Yn    : false,  // 삭제프로그램/소스취약점포함
 					
@@ -490,8 +499,8 @@ export default {
 			],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0010/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/SWZP0040/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/SWZP0040/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
@@ -504,251 +513,103 @@ export default {
 			},
 			columns: [
 				{
-					header: '업무',
+					header: '업무구분',
 					width: 100,
 					minWidth: 50,
 					maxWidth: 250,
-					name: 'title',
-					align: 'center',
-					formatter: 'listItemText',
-					editor: {
-							 	type: 'select',
-								options:{
-											listItems: listItem
-										}
-							}
+					name: 'bzcd'
 				},
 				{
-					header: '업무세부',
+					header: '등록단계',
 					width: 180,
 					align: 'left',
-					name: 'bz_dtls_txt',
+					name: 'rgs_dscd',
 				},
 				{
-					header: '프로그램ID',
+					header: '프로그램ID 테스트케이스ID',
 					width: 150,
 					align: 'left',
-					name: 'pgm_id',
-					
+					name: 'prjt_id'/*컬럼명 name 애매모호 ...db 보고 확인 */
 				},
 				{
-					header: '프로그램명',
+					header: '프로그램명 테스트케이스명',
 					width: 280,
 					align: 'left',
-					name: 'pgm_nm',
+					name: 'pgm_nm',/*컬럼명 name 애매모호 ...db 보고 확인 */
 					
 				},
 				{
-					header: '업무구분',
+					header: '결함유형',
 					width: 100,
 					align: 'center',
-					name: 'bzcd',
+					name: 'err_tycd',
 					type: 'text'
-				},
-				{
-					header: '개발구분',
-					width: 80,
-					align: 'center',
-					name: 'dvlp_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: dvlp_dis_cd
-							}
-					}
-				},
-				{
-					header: '프로그램구분',
-					width: 120,
-					align: 'center',
-					name: 'pgm_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: pgm_dis_cd
-							}
-					}
-				},
-				{
-					header: '프로그램세부구분',
-					width: 120,
-					align: 'center',
-					name: 'enlpe_nm',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-								listItems: enlpe_nm
-							}
-					}
-				},
-				{
-					header: '예상시작일',
-					width: 110,
-					align: 'center',
-					name: 'frcs_sta_dt',
-					format: 'yyyy-mm-dd',
-					editor: 'datePicker'
-				},
-				{
-					header: '예상종료일',
-					width: 110,
-					align: 'center',
-					type: 'date',
-					name: 'frcs_end_dt',
-					editor: 'datePicker'
-				},
-				{
-					header: '개발자완료일자',
-					width: 110,
-					align: 'center',
-					name: 'dvlpe_cnf_dt',
-					editor: 'datePicker'
-				},
-				{
-					header: 'PL확인일자',
-					width: 110,
-					align: 'center',
-					name: 'pl_cnf_dt',
-					editor: 'datePicker'
 				},
 				{
 					header: '처리단계',
 					width: 80,
 					align: 'center',
-					name: 'prc_step_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
+					name: 'err_prc_step_cd'
 				},
 				{
-					header: '개발자',
-					width: 160,
-					align: 'center',
-					name: 'dvlpe_no',
-					
-				},
-				{
-					header: '담당PL',
-					width: 160,
-					align: 'center',
-					name: 'pl_no',
-					
-				},
-				{
-					header: '현업',
-					width: 160,
-					align: 'center',
-					name: 'opr_no',
-					
-				},
-				{
-					header: '단위테스트증빙첨부',
-					width: 150,
-					align: 'center',
-					name: 'atfl_mng_id',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '총건수',
-					width: 80,
-					align: 'right',
-					name: 'col19',
-					
-				},
-				{
-					header: '완료',
-					width: 80,
-					align: 'center',
-					name: 'col20',
-					
-				},
-				{
-					header: '미완료',
-					width: 80,
-					align: 'center',
-					name: 'col21',
-					
-				},
-				{
-					header: '결함등록',
+					header: '결함등록일자',
 					width: 120,
-					name: 'col22',
+					align: 'center',
+					name: 'rgs_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker'
 				},
 				{
-					header: '요구사항ID',
-					width: 150,
-					name: 'col23',
+					header: '결함등록자',
+					width: 120,
+					align: 'center',
+					name: 'rgpe_no'
 				},
 				{
-					header: '미진사유',
-					width: 400,
-					name: 'col24',
+					header: '결함내용',
+					width: 110,
+					align: 'center',
+					name: 'err_txt'
 				},
 				{
-					header: '해당화면ID',
-					width: 200,
-					name: 'col25',
+					header: '조치예정일자',
+					width: 110,
+					align: 'center',
+					type: 'date',
+					name: 'ttmn_scd_dt',
+					editor: 'datePicker'
 				},
 				{
-					header: '소스경로',
-					width: 140,
-					name: 'col26'
+					header: '조치일자',
+					width: 110,
+					align: 'center',
+					name: 'ttmn_dt',
+					editor: 'datePicker'
 				},
 				{
-					header: '일자',
-					width: 90,
-					name: 'col27'
+					header: '조치자명',
+					width: 110,
+					align: 'center',
+					name: 'dvlpe_no'/*컬럼명 name 애매모호 ...db 보고 확인 */
 				},
 				{
-					header: '이행시간',
-					width: 90,
-					name: 'col28'
+					header: 'PL명',
+					width: 80,
+					align: 'center',
+					name: 'pl_no'
 				},
 				{
-					header: '담당자',
-					width: 90,
-					name: 'col29'
+					header: '조치내용',
+					width: 160,
+					align: 'center',
+					name: 'ttmn_txt'
 				},
 				{
-					header: '일자',
-					width: 90,
-					name: 'col30'
-				},
-				{
-					header: '점검시간',
-					width: 90,
-					name: 'col31'
-				},
-				{
-					header: '담당자',
-					width: 90,
-					name: 'col32'
-				},
-				{
-					header: '이행진행구분',
-					width: 150,
-					name: 'col33',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
+					header: '이관전업무',
+					width: 160,
+					align: 'center',
+					name: 'bfjr_bzcd'
+				}
 			]
 		}
 	},
