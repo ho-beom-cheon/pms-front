@@ -26,8 +26,8 @@
                   
                       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <ul class="card-body">
-                            <li class="active"><a href="/SWZP0010">{{menu_list[0].name}}</a></li>
-                            <li><a href="/SWZP0014">{{menu_list[1].name}}</a></li>
+                            <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
+                            <li class="active"><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
                             <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                             <li><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                             <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
@@ -324,8 +324,7 @@ beforeMount() {
 console.log("beforeMount"); 
 }, 
 mounted() { 
-console.log("mounted"); 
-this.getCombo()
+console.log("mounted");
 }, 
 beforeUpdate() { 
 console.log("beforeUpdate"); 
@@ -348,35 +347,7 @@ return this.count;
  
 }, 
 // 일반적인 함수를 선언하는 부분  
-methods: { 
-getCombo() {
-    var comboList = ['0000000000','1000000001'];
-    const url="http://localhost:8080/SWZP9000/select";
-    switch (this.$route.path){
-      case "/SWZP0010" :
-           comboList.push('1000000002');
-           comboList.push('1000000003');
-     break;
-      case "/SWZP0030" :
-           comboList.push('1000000006');
-     break;
-   default :
-    }
-    for (let i = 0; i < comboList.length; i++) {
-    const params = new URLSearchParams();
-    params.append('prjt_id', '0000000000');
-    params.append('grp_tycd', comboList[i]);
-    axios.post(url,params)
-    .then(response => {
-        if(response.status == 200){
-            console.log(response.data);
-        }
-        }).catch(e=>
-        {
-          return;
-        })
-    }
-},
+methods: {
 change(){ 
 console.log("change"); 
 }, 
@@ -473,14 +444,14 @@ showDummyRows: true,
 open: false, 
 menu_list: [ 
 { 
-id: 'SWZP0010', 
-path: '/SWZP0010', 
-name: '개발현황' 
+id: 'SWZP0014',
+path: '/SWZP0014',
+name: 'PMS현황'
 }, 
-{ 
-id: 'SWZP0014', 
-path: '/SWZP0014', 
-name: 'PMS현황' 
+{
+id: 'SWZP0010',
+path: '/SWZP0010',
+name: '개발현황'
 }, 
 { 
 id: 'SWZP0030', 
