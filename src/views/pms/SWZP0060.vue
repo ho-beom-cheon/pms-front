@@ -68,14 +68,14 @@
             <li class="filter-item">
               <div class="item-con">관리구분
                 <select
-                    v-model = "info.bzcd_selected"
+                    v-model = "info.rgs_dis_cd_selected"
                     style   = "width: 145px"
                 >
                   <option
-                      v-for  = "(bzcd, idx) in info.bzcd"
+                      v-for  = "(rgs_dis_cd, idx) in info.rgs_dis_cd"
                       :key   = "idx"
-                      v-text = "bzcd.text"
-                      :value = "bzcd.value"
+                      v-text = "rgs_dis_cd.text"
+                      :value = "rgs_dis_cd.value"
                   ></option>
                 </select>
               </div>
@@ -83,14 +83,14 @@
             <li class="filter-item">
               <div class="item-con">요청구분
                 <select
-                    v-model = "info.dvlp_dis_cd_selected"
+                    v-model = "info.req_dis_cd_selected"
                     style   = "width: 120px"
                 >
                   <option
-                      v-for  = "(dvlp_dis_cd, idx) in info.dvlp_dis_cd"
+                      v-for  = "(req_dis_cd, idx) in info.req_dis_cd"
                       :key   = "idx"
-                      v-text = "dvlp_dis_cd.text"
-                      :value = "dvlp_dis_cd.value"
+                      v-text = "req_dis_cd.text"
+                      :value = "req_dis_cd.value"
                   ></option>
                 </select>
               </div>
@@ -98,14 +98,14 @@
             <li class="filter-item">
               <div class="item-con">처리상태
                 <select
-                    v-model = "info.pgm_dis_cd"
+                    v-model = "info.prc_step_cd_selected"
                     style   = "width: 120px"
                 >
                   <option
-                      v-for  = "(pgm_dis_cd, idx) in info.pgm_dis_cd"
+                      v-for  = "(prc_step_cd, idx) in info.prc_step_cd"
                       :key   = "idx"
-                      v-text = "pgm_dis_cd.text"
-                      :value = "pgm_dis_cd.value"
+                      v-text = "prc_step_cd.text"
+                      :value = "prc_step_cd.value"
                   ></option>
                 </select>
               </div>
@@ -114,7 +114,7 @@
               <div class="item-con">조치업무명
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.pgm_nm"
+                       v-model="info.tgt_biz_nm"
                        @keyup.enter="fnSearch"
                        style   = "width: 110px"
                 >
@@ -124,7 +124,7 @@
               <div class="item-con">요청자
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.dvlpe_no"
+                       v-model="info.achi_nm"
                        @keyup.enter="fnSearch"
                        style   = "width: 110px"
                 >
@@ -134,7 +134,7 @@
               <div class="item-con">조치담당자
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.pl_no"
+                       v-model="info.ttmn_crpe_nm"
                        @keyup.enter="fnSearcha"
                        style   = "width: 110px"
                 >
@@ -148,24 +148,43 @@
             </li>
             <li class="filter-item">
               <div class="item-con">요청일자
-                <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt"></div>
+                <div class="input-dateWrap">
+                  <input type="date"
+                         :max="info.rgs_end_dt"
+                         v-model="info.rgs_sta_dt"
+                         style   = "width: 137px"
+                  ></div>
                 -
-                <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt"></div>
+                <div class="input-dateWrap">
+                  <input type="date"
+                         :min="info.rgs_sta_dt"
+                         v-model="info.rgs_end_dt"
+                         style   = "width: 137px"
+                  ></div>
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">조치일자
-                <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                <div class="input-dateWrap">
+                  <input type="date"
+                         :min="info.ttmn_end_dt"
+                         v-model="info.ttmn_sta_dt"
+                         style   = "width: 137px"
+                  ></div>
                 -
-                <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt"></div>
+                <div class="input-dateWrap">
+                  <input type="date"
+                         :min="info.ttmn_sta_dt"
+                         v-model="info.ttmn_end_dt"
+                         style   = "width: 137px"
+                  ></div>
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">제목
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.pgm_id"
-                       id= "info.pgm_id"
+                       v-model="info.titl_nm"
                        @keyup.enter="fnSearch"
                        style   = "width: 160px"
                 >
@@ -175,7 +194,7 @@
               <div class="item-con">요청내용
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.pgm_nm"
+                       v-model="info.req_dis_txt"
                        @keyup.enter="fnSearch"
                        style   = "width: 160px"
                 >
@@ -185,7 +204,7 @@
               <div class="item-con">조치내용
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.dvlpe_no"
+                       v-model="info.ttmn_txt"
                        @keyup.enter="fnSearch"
                        style   = "width: 160px"
                 >
@@ -195,7 +214,7 @@
               <div class="item-con">해결방안내용
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.dvlpe_no"
+                       v-model="info.slv_mpln_txt"
                        @keyup.enter="fnSearch"
                        style   = "width: 160px"
                 >
@@ -248,14 +267,14 @@
                   <div class="item-con">
                     <label>관리구분</label>
                     <select
-                        v-model = "info.prjt_nm_selected"
+                        v-model = "detail.d_rgs_dis_cd_selected"
                         style   = "width: 230px"
                     >
                       <option
-                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          v-for  = "(d_rgs_dis_cd, idx) in detail.d_rgs_dis_cd"
                           :key   = "idx"
-                          v-text = "prjt_nm.text"
-                          :value = "prjt_nm.value"
+                          v-text = "d_rgs_dis_cd.text"
+                          :value = "d_rgs_dis_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -264,14 +283,14 @@
                   <div class="item-con">
                     <label>처리상태</label>
                     <select
-                        v-model = "info.prjt_nm_selected"
+                        v-model = "detail.d_prc_step_cd_selected"
                         style   = "width: 137px"
                     >
                       <option
-                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          v-for  = "(d_prc_step_cd, idx) in detail.d_prc_step_cd"
                           :key   = "idx"
-                          v-text = "prjt_nm.text"
-                          :value = "prjt_nm.value"
+                          v-text = "d_prc_step_cd.text"
+                          :value = "d_prc_step_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -281,7 +300,7 @@
                     <label>관리ID</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="info.pgm_id"
+                           v-model="detail.mng_id"
                            @keyup.enter="fnSearch"
                            style   = "width: 190px"
                     >
@@ -291,14 +310,14 @@
                   <div class="item-con">
                     <label>요청구분</label>
                     <select
-                        v-model = "info.prjt_nm_selected"
+                        v-model = "detail.d_req_dis_cd_selected"
                         style   = "width: 230px"
                     >
                       <option
-                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          v-for  = "(d_req_dis_cd, idx) in detail.d_req_dis_cd"
                           :key   = "idx"
-                          v-text = "prjt_nm.text"
-                          :value = "prjt_nm.value"
+                          v-text = "d_req_dis_cd.text"
+                          :value = "d_req_dis_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -306,7 +325,12 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>요청일자</label>
-                    <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                    <div class="input-dateWrap">
+                      <input type="date"
+                             :max="detail.rgs_dt"
+                             v-model="detail.rgs_dt"
+                             style   = "width: 137px"
+                      ></div>
                   </div>
                 </li>
                 <li class="filter-item-a">
@@ -314,7 +338,7 @@
                     <label>요청자</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="info.pgm_id"
+                           v-model="detail.d_achi_nm"
                            @keyup.enter="fnSearch"
                            style   = "width: 109px"
                     >
@@ -325,7 +349,7 @@
                     <label>조치담당자</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="info.pgm_id"
+                           v-model="detail.d_ttmn_crpe_nm"
                            @keyup.enter="fnSearch"
                            style   = "width: 109px"
                     >
@@ -336,7 +360,7 @@
                     <label>조치업무명</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="info.pgm_id"
+                           v-model="detail.d_tgt_biz_nm"
                            @keyup.enter="fnSearch"
                            style   = "width: 230px"
                     >
@@ -345,27 +369,35 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>조치예정일자</label>
-                    <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                    <div class="input-dateWrap">
+                      <input type="date"
+                             v-model="detail.ttmn_scd_dt"
+                             style   = "width: 137px"
+                      ></div>
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>조치일자</label>
-                    <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                    <div class="input-dateWrap">
+                      <input type="date"
+                             v-model="detail.ttmn_dt"
+                             style   = "width: 137px"
+                      ></div>
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>긴급성</label>
                     <select
-                        v-model = "info.prjt_nm_selected"
+                        v-model = "detail.urgn_cd_selected"
                         style   = "width: 230px"
                     >
                       <option
-                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          v-for  = "(urgn_cd, idx) in detail.urgn_cd"
                           :key   = "idx"
-                          v-text = "prjt_nm.text"
-                          :value = "prjt_nm.value"
+                          v-text = "urgn_cd.text"
+                          :value = "urgn_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -374,14 +406,14 @@
                   <div class="item-con">
                     <label>영향도</label>
                     <select
-                        v-model = "info.prjt_nm_selected"
+                        v-model = "detail.ifnc_cd_selected"
                         style   = "width: 137px"
                     >
                       <option
-                          v-for  = "(prjt_nm, idx) in info.prjt_nm"
+                          v-for  = "(ifnc_cd, idx) in detail.ifnc_cd"
                           :key   = "idx"
-                          v-text = "prjt_nm.text"
-                          :value = "prjt_nm.value"
+                          v-text = "ifnc_cd.text"
+                          :value = "ifnc_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -391,7 +423,7 @@
                     <label>등급</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="info.pgm_id"
+                           v-model="detail.gd_txt"
                            @keyup.enter="fnSearch"
                            style   = "width: 100px"
                     >
@@ -402,7 +434,7 @@
                     <label>제목</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="info.pgm_id"
+                           v-model="detail.d_titl_nm"
                            @keyup.enter="fnSearch"
                            style   = "width: 870px"
                     >
@@ -411,10 +443,14 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <th style="vertical-align: middle">
-                      <label>결함내용</label>
+                      <label>요청내용</label>
                     </th>
                     <td>
-                      <textarea cols="140" rows="6" placeholder="결함내용을 입력해주세요"></textarea>
+                      <textarea cols="140"
+                                rows="6"
+                                placeholder="결함내용을 입력해주세요"
+                                v-model="detail.d_req_dis_txt"
+                      ></textarea>
                     </td>
                   </div>
                 </li>
@@ -424,7 +460,11 @@
                       <label>조치내용</label>
                     </th>
                     <td>
-                      <textarea cols="140" rows="6" placeholder="조치내용을 입력해주세요"></textarea>
+                      <textarea cols="140"
+                                rows="6"
+                                placeholder="조치내용을 입력해주세요"
+                                v-model="detail.d_ttmn_txt"
+                      ></textarea>
                     </td>
                   </div>
                 </li>
@@ -434,7 +474,11 @@
                       <label>해결방안내용</label>
                     </th>
                     <td>
-                      <textarea cols="140" rows="6" placeholder="해결방안내용을 입력해주세요"></textarea>
+                      <textarea cols="140"
+                                rows="6"
+                                placeholder="해결방안내용을 입력해주세요"
+                                v-model="detail.d_slv_mpln_txt"
+                      ></textarea>
                     </td>
                   </div>
                 </li>
@@ -444,7 +488,11 @@
                       <label>비고</label>
                     </th>
                     <td>
-                      <textarea cols="140" rows="3" placeholder="비고를 입력해주세요"></textarea>
+                      <textarea cols="140"
+                                rows="3"
+                                placeholder="비고를 입력해주세요"
+                                v-model="detail.rmrk"
+                      ></textarea>
                     </td>
                   </div>
                 </li>
@@ -466,7 +514,10 @@
               <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
                   <td>
-                    <textarea cols="103" rows="33"></textarea>
+                    <textarea cols="103"
+                              rows="33"
+                              v-model="detail.d_req_dis_txt"
+                    ></textarea>
                   </td>
                 </li>
               </ul>
@@ -486,54 +537,80 @@ import axios from 'axios';
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
+var prjt_nm  = [{text:"PMS프로젝트", value:"1"},{text:"PMS프로젝트2", value:"2"},{text:"PMS프로젝트3", value:"3"}];
 
 
-// 업무구분
-const bzcd = [
+// 관리구분
+const rgs_dis_cd = [
   {text:"전체", value:'999'},
-  {text:"신용", value:'AAA'},
-  {text:"재무제표", value:"BBB"},
-  {text:"신용평가", value:"CCC"},
+  {text:"ActionItem", value:'A'},
+  {text:"이슈", value:'I'},
+  {text:"위험", value:"R"},
 ];
-// 개발구분
-const dvlp_dis_cd = [
-  {text:"전체", value:"999"},
-  {text:"신규", value:"100"},
-  {text:"변경", value:"200"},
-  {text:"이행", value:"300"},
-  {text:"삭제", value:"400"}
-];
-// 프로그램구분
-const pgm_dis_cd = [
-  {text:"전체", value:"999"},
-  {text:"화면", value:"100"},
-  {text:"프로그램", value:"200"},
-  {text:"보고서", value:"300"},
-  {text:"배치", value:"400"}
-];
-// 프로그램 세부 구분
-const enlpe_nm = [
+// 요청구분
+const req_dis_cd = [
   {text:"전체", value:'999'},
-  {text:"JSP", value:"100"},
-  {text:"JAVA", value:"200"},
-  {text:"RD", value:"300"}
+  {text:"품질", value:"100"},
+  {text:"업무처리", value:"200"},
+  {text:"협의사항", value:"300"},
+  {text:"기타", value:"900"},
 ];
-// 처리단계
+// 처리상태(이슈처리단계구분코드)
 const prc_step_cd = [
-  {text:"전체", value:"0"},
-  {text:"미개발",value:"1"},
-  {text:"개발중", value:"2"},
-  {text:"개발완료", value:"3"},
-  {text:"PL완료", value:"4"},
-  {text:"삭제", value:"5"},
-  {text:"개발종료", value:"6"}
+  {text:"전체", value:'999'},
+  {text:"발생", value:"100"},
+  {text:"요청", value:"200"},
+  {text:"보류", value:"300"},
+  {text:"진행중", value:"400"},
+  {text:"완료", value:"500"}
+];
+// 상세내용 관리구분
+const d_rgs_dis_cd = [
+  {text:"ActionItem", value:'A'},
+  {text:"이슈", value:'I'},
+  {text:"위험", value:"R"},
+];
+// 상세내용 요청구분
+const d_req_dis_cd = [
+  {text:"품질", value:"100"},
+  {text:"업무처리", value:"200"},
+  {text:"협의사항", value:"300"},
+  {text:"기타", value:"900"},
+];
+// 상세내용 처리상태(이슈처리단계구분코드)
+const d_prc_step_cd = [
+  {text:"발생", value:"100"},
+  {text:"요청", value:"200"},
+  {text:"보류", value:"300"},
+  {text:"진행중", value:"400"},
+  {text:"완료", value:"500"}
+];
+// 상세내용 영향도
+const ifnc_cd = [
+  {text:"매우낮음", value:"100"},
+  {text:"낮음", value:"200"},
+  {text:"높음", value:"300"},
+  {text:"매우높음", value:"400"},
+];
+// 상세내용 긴급성
+const urgn_cd = [
+  {text:"매우낮음", value:"100"},
+  {text:"낮음", value:"200"},
+  {text:"높음", value:"300"},
+  {text:"매우높음", value:"400"},
 ];
 
-var pgm_dis_cd_selected;
-var bzcd_selected;
 var prjt_nm_selected;
-var dvlp_dis_cd_selected;
+var rgs_dis_cd_selected;
+var req_dis_cd_selected;
+var prc_step_cd_selected;
+var d_prjt_nm_selected;
+var d_rgs_dis_cd_selected;
+var d_req_dis_cd_selected;
+var d_prc_step_cd_selected;
+var urgn_cd_selected;
+var ifnc_cd_selected;
+
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -586,13 +663,37 @@ export default {
       console.log("change");
     },
     fnSave(){
-      debugger;
-      this.$refs.grid.invoke("modifyData");
-      console.log("modify");
+
     },
+
     onClick(ev) {
-      console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+      this.$refs.grid.invoke("getRow",this.curRow);
+      const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
+      console.log(this.$refs.grid.invoke("getRow", this.curRow));
+      this.cellDataBind(currentRowData)
+    },
+    cellDataBind(currentRowData) {
+      this.detail.d_rgs_dis_cd_selected  = currentRowData.rgs_dis_cd;                     // (상세)관리구분
+      this.detail.d_prc_step_cd_selected = currentRowData.prc_step_cd;                    // (상세)처리상태
+      this.detail.mng_id                 = currentRowData.mng_id;                         // (상세)관리ID
+      this.detail.d_req_dis_cd_selected  = currentRowData.req_dis_cd;                     // (상세)요청구분
+      this.detail.rgs_dt                 = this.getFormatDate(currentRowData.rgs_dt)      // (상세)요청일자
+      this.detail.d_achi_nm              = currentRowData.achi_nm;                        // (상세)요청자
+      this.detail.d_ttmn_crpe_nm         = currentRowData.ttmn_crpe_nm;                   // (상세)조치담당자
+      this.detail.d_tgt_biz_nm           = currentRowData.tgt_biz_nm;                     // (상세)조치업무명
+      this.detail.ttmn_scd_dt            = this.getFormatDate(currentRowData.ttmn_scd_dt) // (상세)조치예정일자
+      this.detail.ttmn_dt                = this.getFormatDate(currentRowData.ttmn_dt)     // (상세)조치일자
+      this.detail.ifnc_cd_selected       = currentRowData.ifnc_cd;                        // (상세)영향도
+      this.detail.urgn_cd_selected       = currentRowData.urgn_cd;                        // (상세)긴급성
+      this.detail.gd_txt                 = currentRowData.gd_txt;                         // (상세)등급
+      this.detail.d_titl_nm              = currentRowData.titl_nm;                        // (상세)제목
+      this.detail.d_req_dis_txt          = currentRowData.req_dis_txt;                    // (상세)요청내용
+      this.detail.d_ttmn_txt             = currentRowData.ttmn_txt;                       // (상세)조치내용
+      this.detail.d_slv_mpln_txt         = currentRowData.slv_mpln_txt;                   // (상세)해결방안내용
+      this.detail.rmrk                   = currentRowData.rmrk;                           // (상세)비고
+
+
     },
     fnSearch(){
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -603,7 +704,7 @@ export default {
     },
     gridAddRow(){
 
-      this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0010", col5:"PMS구축"},{focus:true}) ;
+      this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0060", col5:"PMS구축"},{focus:true}) ;
     },
     gridDelRow(){
       this.$refs.grid.invoke("removeRow", this.curRow);
@@ -623,7 +724,19 @@ export default {
     },
     open_page(){
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
-    }
+    },
+    getFormatDate(date){
+      // YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환
+      if ( date == null || date === '') {
+        return false;
+      } else {
+        let year = date.substr(0, 4);
+        let month = date.substr(4,2);
+        let day = date.substr(6,2);
+
+        return  year + '-' + month + '-' + day;
+      }
+    },
 
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
@@ -639,33 +752,64 @@ export default {
   data() {
     return {
       info : {
-        pgm_id      : this.pgm_id,    // 프로그램ID
-        pgm_nm      : this.pgm_nm,    // 프로그램명
-        dvlpe_no    : this.dvlpe_no,    // 개발자명
-        pl_no       : this.pl_no,    // 담당PL명
+        /* 필터 변수 */
+        prjt_nm     : prjt_nm,             // 프로젝트명
+        rgs_dis_cd  : rgs_dis_cd,          // 관리구분
+        req_dis_cd  : req_dis_cd,          // 요청구분
+        prc_step_cd : prc_step_cd,         // 처리상태
 
-        dvlp_dis_cd : dvlp_dis_cd,// 개발구분
-        prjt_nm     : prjt_nm,    // 프로젝트명
-        bzcd        : bzcd,    // 업무구분
-        pgm_dis_cd  : pgm_dis_cd,    // 프로그램구분
-        prc_step_cd : prc_step_cd,    // 처리단계
+        prjt_nm_selected     : prjt_nm[0].value,       // 선택 된 프로젝트명
+        rgs_dis_cd_selected  : rgs_dis_cd[0].value,    // 선택 된 관리구분
+        req_dis_cd_selected  : req_dis_cd[0].value,    // 선택 된 요청구분
+        prc_step_cd_selected : prc_step_cd[0].value,   // 선택 된 처리상태
 
-        /* select 박스 */
-        dvlp_dis_cd_selected : dvlp_dis_cd[0].value,  // 개발구분
-        prjt_nm_selected     : prjt_nm[0].value,      // 프로젝트명
-        bzcd_selected        : bzcd[0].value,         // 업무구분
-        pgm_dis_cd_selected  : pgm_dis_cd[0].value    // 프로그램구분
+        rgs_sta_dt  : '',        // 요청시작일자
+        rgs_end_dt  : '',        // 요청종료일자
+        ttmn_sta_dt : '',        // 조치시작일자
+        ttmn_end_dt : '',        // 조치종료일자
 
+        tgt_biz_nm    : this.tgt_biz_nm,               // 조치업무명
+        achi_nm       : this.achi_nm,                  // 요청자
+        ttmn_crpe_nm  : this.ttmn_crpe_nm,             // 조치담당자
+        titl_nm       : this.titl_nm,                  // 제목
+        req_dis_txt   : this.req_dis_txt,              // 요청내용
+        ttmn_txt      : this.ttmn_txt,                 // 조치내용
+        slv_mpln_txt  : this.slv_mpln_txt,             // 해결방안내용
+
+        check_Yn    : false,       // 완료/제외/해결/미발생해소 포함 여부
       },
+
+      detail : {
+        /* 상세내용 변수 */
+        d_rgs_dis_cd  : d_rgs_dis_cd,            // (상세)관리구분
+        d_prc_step_cd : d_prc_step_cd,           // (상세)처리상태
+        mng_id        : '',                      // (상세)관리ID
+        d_req_dis_cd  : d_req_dis_cd,            // (상세)요청구분
+        rgs_dt        : '',                      // (상세)요청일자
+        d_achi_nm       : this.d_achi_nm,        // (상세)요청자
+        d_ttmn_crpe_nm  : this.d_ttmn_crpe_nm,   // (상세)조치담당자
+        d_tgt_biz_nm    : this.d_tgt_biz_nm,     // (상세)조치업무명
+        ttmn_scd_dt : '',                        // (상세)조치예정일자
+        ttmn_dt     : '',                        // (상세)조치일자
+        ifnc_cd     : ifnc_cd,                   // (상세)영향도
+        urgn_cd     : urgn_cd,                   // (상세)긴급성
+        gd_txt        : this.gd_txt,             // (상세)등급
+        d_titl_nm       : this.d_titl_nm,        // (상세)제목
+        d_req_dis_txt   : this.d_req_dis_txt,    // (상세)요청내용
+        d_ttmn_txt      : this.d_ttmn_txt,       // (상세)조치내용
+        d_slv_mpln_txt  : this.d_slv_mpln_txt,   // (상세)해결방안내용
+        rmrk          : this.rmrk,               // (상세)비고
+
+        d_rgs_dis_cd_selected  : d_rgs_dis_cd[0].value,     // (상세)선택 된 관리구분
+        d_req_dis_cd_selected  : d_req_dis_cd[0].value,     // (상세)선택 된 요청구분
+        d_prc_step_cd_selected : d_prc_step_cd[0].value,    // (상세)선택 된 처리상태
+        urgn_cd_selected     : urgn_cd[0].value,            // (상세)영향도
+        ifnc_cd_selected     : ifnc_cd[0].value,            // (상세)긴급성
+      },
+
       addRow : {
         grid : this.grid,
       },
-      frcs_sta_dt : '',    // 계획일자STA
-      frcs_end_dt : '',    // 계획일자END
-      sta_dt      : '',    // 실제일자STA
-      end_dt      : '',    // 실제일자END
-
-      check_Yn    : false,  // 삭제프로그램/소스취약점포함
 
       count:0,
       curRow:-1,
@@ -735,9 +879,9 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-          updateData : { url: 'http://localhost:8080/SWZP0010/update', method: 'PUT'},
-          modifyData : { url: 'http://localhost:8080/SWZP0010/modify', method: 'PUT'},
+          readData: { url: 'http://localhost:8080/SWZP0060/select', method: 'GET' },
+          updateData : { url: 'http://localhost:8080/SWZP0060/update', method: 'PUT'},
+          modifyData : { url: 'http://localhost:8080/SWZP0060/modify', method: 'PUT'},
         },
         initialRequest: false,
       },
@@ -750,250 +894,115 @@ export default {
       },
       columns: [
         {
-          header: '업무',
-          width: 100,
-          minWidth: 50,
-          maxWidth: 250,
-          name: 'title',
-          align: 'center',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-        {
-          header: '업무세부',
-          width: 180,
-          align: 'left',
-          name: 'bz_dtls_txt',
-        },
-        {
-          header: '프로그램ID',
+          header: '관리구분',
           width: 150,
           align: 'left',
-          name: 'pgm_id',
-
+          name: 'rgs_dis_cd',
         },
         {
-          header: '프로그램명',
+          header: '관리ID',
+          width: 100,
+          align: 'left',
+          name: 'mng_id',
+        },
+        {
+          header: '제목',
+          width: 230,
+          align: 'left',
+          name: 'titl_nm',
+        },
+        {
+          header: '요청내용',
           width: 280,
           align: 'left',
-          name: 'pgm_nm',
-
+          name: 'req_dis_txt',
         },
         {
-          header: '업무구분',
-          width: 100,
-          align: 'center',
-          name: 'bzcd',
-          type: 'text'
+          header: '요청구분',
+          width: 110,
+          align: 'left',
+          name: 'req_dis_cd',
         },
         {
-          header: '개발구분',
-          width: 80,
-          align: 'center',
-          name: 'dvlp_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: dvlp_dis_cd
-            }
-          }
-        },
-        {
-          header: '프로그램구분',
-          width: 120,
-          align: 'center',
-          name: 'pgm_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: pgm_dis_cd
-            }
-          }
-        },
-        {
-          header: '프로그램세부구분',
-          width: 120,
-          align: 'center',
-          name: 'enlpe_nm',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: enlpe_nm
-            }
-          }
-        },
-        {
-          header: '예상시작일',
+          header: '요청일자',
           width: 110,
           align: 'center',
-          name: 'frcs_sta_dt',
+          name: 'rgs_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
         },
         {
-          header: '예상종료일',
+          header: '요청자',
           width: 110,
-          align: 'center',
-          type: 'date',
-          name: 'frcs_end_dt',
-          editor: 'datePicker'
+          align: 'left',
+          name: 'achi_nm',
         },
         {
-          header: '개발자완료일자',
+          header: '처리상태',
           width: 110,
-          align: 'center',
-          name: 'dvlpe_cnf_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: 'PL확인일자',
-          width: 110,
-          align: 'center',
-          name: 'pl_cnf_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: '처리단계',
-          width: 80,
-          align: 'center',
+          align: 'left',
           name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
         },
         {
-          header: '개발자',
-          width: 160,
+          header: '조치업무명',
+          width: 110,
+          align: 'left',
+          name: 'tgt_biz_nm',
+        },
+        {
+          header: '조치담당자',
+          width: 110,
+          align: 'left',
+          name: 'ttmn_crpe_nm',
+        },
+        {
+          header: '조치예정일자',
+          width: 110,
           align: 'center',
-          name: 'dvlpe_no',
-
+          name: 'ttmn_scd_dt',
+          format: 'yyyy-mm-dd',
         },
         {
-          header: '담당PL',
-          width: 160,
+          header: '조치일자',
+          width: 110,
           align: 'center',
-          name: 'pl_no',
-
+          name: 'ttmn_dt',
+          format: 'yyyy-mm-dd',
         },
         {
-          header: '현업',
-          width: 160,
-          align: 'center',
-          name: 'opr_no',
-
+          header: '조치내용',
+          width: 230,
+          align: 'left',
+          name: 'ttmn_txt',
         },
         {
-          header: '단위테스트증빙첨부',
-          width: 150,
-          align: 'center',
-          name: 'atfl_mng_id',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
+          header: '비고',
+          width: 230,
+          align: 'left',
+          name: 'rmrk',
         },
         {
-          header: '총건수',
-          width: 80,
-          align: 'right',
-          name: 'col19',
-
+          header: '긴급성',
+          width: 110,
+          align: 'left',
+          name: 'urgn_cd',
         },
         {
-          header: '완료',
-          width: 80,
-          align: 'center',
-          name: 'col20',
-
+          header: '영향도',
+          width: 110,
+          align: 'left',
+          name: 'ifnc_cd',
         },
         {
-          header: '미완료',
-          width: 80,
-          align: 'center',
-          name: 'col21',
-
+          header: '등급',
+          width: 110,
+          align: 'left',
+          name: 'gd_txt',
         },
         {
-          header: '결함등록',
-          width: 120,
-          name: 'col22',
-        },
-        {
-          header: '요구사항ID',
-          width: 150,
-          name: 'col23',
-        },
-        {
-          header: '미진사유',
-          width: 400,
-          name: 'col24',
-        },
-        {
-          header: '해당화면ID',
-          width: 200,
-          name: 'col25',
-        },
-        {
-          header: '소스경로',
-          width: 140,
-          name: 'col26'
-        },
-        {
-          header: '일자',
-          width: 90,
-          name: 'col27'
-        },
-        {
-          header: '이행시간',
-          width: 90,
-          name: 'col28'
-        },
-        {
-          header: '담당자',
-          width: 90,
-          name: 'col29'
-        },
-        {
-          header: '일자',
-          width: 90,
-          name: 'col30'
-        },
-        {
-          header: '점검시간',
-          width: 90,
-          name: 'col31'
-        },
-        {
-          header: '담당자',
-          width: 90,
-          name: 'col32'
-        },
-        {
-          header: '이행진행구분',
-          width: 150,
-          name: 'col33',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
+          header: '해결방안내용',
+          width: 230,
+          align: 'left',
+          name: 'slv_mpln_txt',
         },
       ]
     }
