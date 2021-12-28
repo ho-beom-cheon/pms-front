@@ -133,13 +133,12 @@
               <grid
                   ref="grid"
                   :data="dataSource"
-                  :header="header"
-                  :columns="columns"
+                  :header="header1"
+                  :columns="columns1"
                   :bodyHeight="bodyHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
-                  :rowHeaders="rowHeaders"
                   @click="onClick"
               ></grid>
             </div>
@@ -156,13 +155,12 @@
               <grid
                   ref="grid"
                   :data="dataSource"
-                  :header="header"
-                  :columns="columns"
+                  :header="header2"
+                  :columns="columns2"
                   :bodyHeight="bodyHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
-                  :rowHeaders="rowHeaders"
                   @click="onClick"
               ></grid>
             </div>
@@ -179,13 +177,12 @@
               <grid
                   ref="grid"
                   :data="dataSource"
-                  :header="header"
-                  :columns="columns"
+                  :header="header3"
+                  :columns="columns3"
                   :bodyHeight="bodyHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
-                  :rowHeaders="rowHeaders"
                   @click="onClick"
               ></grid>
             </div>
@@ -202,13 +199,12 @@
               <grid
                   ref="grid"
                   :data="dataSource"
-                  :header="header"
-                  :columns="columns"
+                  :header="header4"
+                  :columns="columns4"
                   :bodyHeight="bodyHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
-                  :rowHeaders="rowHeaders"
                   @click="onClick"
               ></grid>
             </div>
@@ -514,258 +510,390 @@ export default {
       columnOptions: {
         resizable: true
       },
-      rowHeaders:['checkbox', 'rowNum'],
-      header:{
-        height: 40
+      header1: {
+        height : 45,
+        complexColumns: [
+          {
+            header: '전체계획및실적(금주포함)',
+            name: 'mergeColumn1',
+            childNames: ['af_tot_cnt', 'cmpl_cnt', 'af_cmpl_cnt', 'ncmpl_cnt', 'prnr_rt']
+          },
+          {
+            header: '금주계획및실적(담당자기준)',
+            name: 'mergeColumn2',
+            childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']
+          },
+          {
+            header: '금주계획및실적(업무PL기준)',
+            name: 'mergeColumn3',
+            childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt']
+          },
+          {
+            header: '차주계획및실적',
+            name: 'mergeColumn4',
+            childNames: ['pl_prnr_rt', 'tot_cnt2']
+          },
+        ]
       },
-      columns: [
+      columns1: [
         {
-          header: '업무',
-          width: 100,
-          minWidth: 50,
-          maxWidth: 250,
-          name: 'title',
-          align: 'center',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-        {
-          header: '업무세부',
-          width: 180,
+          header: '업무구분',
+          width: 85,
           align: 'left',
           name: 'bz_dtls_txt',
         },
         {
-          header: '프로그램ID',
-          width: 150,
+          header: '차수',
+          width: 55,
           align: 'left',
-          name: 'pgm_id',
-
+          name: 'sqn_cd',
         },
         {
-          header: '프로그램명',
-          width: 280,
+          header: '전체',
+          width: 55,
           align: 'left',
-          name: 'pgm_nm',
-
+          name: 'tot_cnt',
         },
         {
-          header: '업무구분',
-          width: 100,
-          align: 'center',
-          name: 'bzcd',
-          type: 'text'
+          header: '전체',
+          width: 55,
+          align: 'left',
+          name: 'af_tot_cnt',
         },
         {
-          header: '개발구분',
-          width: 80,
-          align: 'center',
-          name: 'dvlp_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: dvlp_dis_cd
-            }
-          }
+          header: '계획완료',
+          width: 55,
+          align: 'left',
+          name: 'cmpl_cnt',
         },
         {
-          header: '프로그램구분',
-          width: 120,
-          align: 'center',
-          name: 'pgm_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: pgm_dis_cd
-            }
-          }
-        },
-        {
-          header: '프로그램세부구분',
-          width: 120,
-          align: 'center',
-          name: 'enlpe_nm',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: enlpe_nm
-            }
-          }
-        },
-        {
-          header: '예상시작일',
-          width: 110,
-          align: 'center',
-          name: 'frcs_sta_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker'
-        },
-        {
-          header: '예상종료일',
-          width: 110,
-          align: 'center',
-          type: 'date',
-          name: 'frcs_end_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: '개발자완료일자',
-          width: 110,
-          align: 'center',
-          name: 'dvlpe_cnf_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: 'PL확인일자',
-          width: 110,
-          align: 'center',
-          name: 'pl_cnf_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: '처리단계',
-          width: 80,
-          align: 'center',
-          name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-        {
-          header: '개발자',
-          width: 160,
-          align: 'center',
-          name: 'dvlpe_no',
-
-        },
-        {
-          header: '담당PL',
-          width: 160,
-          align: 'center',
-          name: 'pl_no',
-
-        },
-        {
-          header: '현업',
-          width: 160,
-          align: 'center',
-          name: 'opr_no',
-
-        },
-        {
-          header: '단위테스트증빙첨부',
-          width: 150,
-          align: 'center',
-          name: 'atfl_mng_id',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-        {
-          header: '총건수',
-          width: 80,
-          align: 'right',
-          name: 'col19',
-
-        },
-        {
-          header: '완료',
-          width: 80,
-          align: 'center',
-          name: 'col20',
-
+          header: '선완료',
+          width: 55,
+          align: 'left',
+          name: 'af_cmpl_cnt',
         },
         {
           header: '미완료',
-          width: 80,
-          align: 'center',
-          name: 'col21',
-
+          width: 55,
+          align: 'left',
+          name: 'ncmpl_cnt',
         },
         {
-          header: '결함등록',
-          width: 120,
-          name: 'col22',
+          header: '진척율',
+          width: 55,
+          align: 'left',
+          name: 'prnr_rt',
         },
         {
-          header: '요구사항ID',
-          width: 150,
-          name: 'col23',
+          header: '전체',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt1',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'cmpl_cnt1',
+        },
+        {
+          header: '미완료',
+          width: 55,
+          align: 'left',
+          name: 'ncmpl_cnt1',
+        },
+        {
+          header: '진척율',
+          width: 55,
+          align: 'left',
+          name: 'prnr_rt1',
+        },
+        {
+          header: '전체',
+          width: 55,
+          align: 'left',
+          name: 'pl_tot_cnt',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'pl_cmpl_cnt',
+        },
+        {
+          header: '미완료',
+          width: 55,
+          align: 'left',
+          name: 'pl_ncmpl_cnt',
+        },
+        {
+          header: '계획',
+          width: 55,
+          align: 'left',
+          name: 'pl_prnr_rt',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt2',
+        },
+      ],
+      header2: {
+        height : 45,
+        complexColumns: [
+          {
+            header: '전체계획및실적(금주포함)',
+            name: 'mergeColumn1',
+            childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']
+          },
+          {
+            header: '금주계획및실적',
+            name: 'mergeColumn3',
+            childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt', 'prnr_rt2']
+          },
+          {
+            header: '차주계획및실적',
+            name: 'mergeColumn4',
+            childNames: ['pl_prnr_rt', 'tot_cnt2']
+          },
+        ]
+      },
+      columns2: [
+        {
+          header: '업무구분',
+          width: 85,
+          align: 'left',
+          name: 'bz_dtls_txt',
+        },
+        {
+          header: '차수',
+          width: 55,
+          align: 'left',
+          name: 'sqn_cd',
+        },
+        {
+          header: '담당자',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt',
+        },
+        {
+          header: '전체',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt1',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'cmpl_cnt1',
+        },
+        {
+          header: '미완료',
+          width: 55,
+          align: 'left',
+          name: 'ncmpl_cnt1',
+        },
+        {
+          header: '진척율',
+          width: 55,
+          align: 'left',
+          name: 'prnr_rt1',
+        },
+        {
+          header: '전체',
+          width: 55,
+          align: 'left',
+          name: 'pl_tot_cnt',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'pl_cmpl_cnt',
+        },
+        {
+          header: '미완료',
+          width: 55,
+          align: 'left',
+          name: 'pl_ncmpl_cnt',
+        },
+        {
+          header: '진척율',
+          width: 55,
+          align: 'left',
+          name: 'prnr_rt2',
+        },
+        {
+          header: '계획',
+          width: 55,
+          align: 'left',
+          name: 'pl_prnr_rt',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt2',
+        },
+      ],
+      header3: {
+        height : 45,
+        complexColumns: [
+          {
+            header: '결함유형',
+            name: 'mergeColumn1',
+            childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']
+          },
+          {
+            header: '조치현황',
+            name: 'mergeColumn3',
+            childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt']
+          },
+        ]
+      },
+      columns3: [
+        {
+          header: '업무구분',
+          width: 125,
+          align: 'left',
+          name: 'bz_dtls_txt',
+        },
+        {
+          header: '차수',
+          width: 55,
+          align: 'left',
+          name: 'sqn_cd',
+        },
+        {
+          header: '전체',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt',
+        },
+        {
+          header: '결함',
+          width: 55,
+          align: 'left',
+          name: 'tot_cnt1',
+        },
+        {
+          header: '개선',
+          width: 55,
+          align: 'left',
+          name: 'cmpl_cnt1',
+        },
+        {
+          header: '기타',
+          width: 55,
+          align: 'left',
+          name: 'ncmpl_cnt1',
+        },
+        {
+          header: '결함아님',
+          width: 55,
+          align: 'left',
+          name: 'prnr_rt1',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'pl_tot_cnt',
+        },
+        {
+          header: '진행',
+          width: 55,
+          align: 'left',
+          name: 'pl_cmpl_cnt',
+        },
+        {
+          header: '보류',
+          width: 55,
+          align: 'left',
+          name: 'pl_ncmpl_cnt',
+        },
+      ],
+      header4: {
+        height : 45,
+        complexColumns: [
+          {
+            header: '완료여부',
+            name: 'mergeColumn1',
+            childNames: ['pl_cmpl_cnt', 'pl_ncmpl_cnt']
+          },
+        ]
+      },
+      columns4: [
+        {
+          header: '업무구분',
+          width: 85,
+          align: 'left',
+          name: 'bz_dtls_txt',
+        },
+        {
+          header: '미진구분',
+          width: 55,
+          align: 'left',
+          name: 'sqn_cd',
+        },
+        {
+          header: '테스트케이스ID',
+          width: 85,
+          align: 'left',
+          name: 'tot_cnt',
+        },
+        {
+          header: '테스트케이스명',
+          width: 100,
+          align: 'left',
+          name: 'tot_cnt1',
+        },
+        {
+          header: '예상종료일자',
+          width: 70,
+          align: 'left',
+          name: 'cmpl_cnt1',
+        },
+        {
+          header: '테스트완료일자조치일자',
+          width: 70,
+          align: 'left',
+          name: 'ncmpl_cnt1',
+        },
+        {
+          header: '담당자',
+          width: 70,
+          align: 'left',
+          name: 'prnr_rt1',
+        },
+        {
+          header: 'PL',
+          width: 70,
+          align: 'left',
+          name: 'pl_tot_cnt',
+        },
+        {
+          header: '담당자',
+          width: 70,
+          align: 'left',
+          name: 'pl_cmpl_cnt',
+        },
+        {
+          header: 'PL',
+          width: 70,
+          align: 'left',
+          name: 'pl_ncmpl_cnt',
         },
         {
           header: '미진사유',
-          width: 400,
-          name: 'col24',
+          width: 210,
+          align: 'left',
+          name: 'prnr_rt2',
         },
-        {
-          header: '해당화면ID',
-          width: 200,
-          name: 'col25',
-        },
-        {
-          header: '소스경로',
-          width: 140,
-          name: 'col26'
-        },
-        {
-          header: '일자',
-          width: 90,
-          name: 'col27'
-        },
-        {
-          header: '이행시간',
-          width: 90,
-          name: 'col28'
-        },
-        {
-          header: '담당자',
-          width: 90,
-          name: 'col29'
-        },
-        {
-          header: '일자',
-          width: 90,
-          name: 'col30'
-        },
-        {
-          header: '점검시간',
-          width: 90,
-          name: 'col31'
-        },
-        {
-          header: '담당자',
-          width: 90,
-          name: 'col32'
-        },
-        {
-          header: '이행진행구분',
-          width: 150,
-          name: 'col33',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-      ]
+      ],
     }
   },
 };
