@@ -523,20 +523,27 @@ export default {
         resizable: true
       },
       rowHeaders:['checkbox', 'rowNum'],
-      header:{
-        height: 40
+      header: {
+        height : 45,
+        complexColumns: [
+          {
+            header: '결함건수',
+            name: 'mergeColumn1',
+            childNames: ['col19', 'col20', 'col21']
+          },
+        ]
       },
       columns: [
         {
           header: '업무구분',
-          width: 100,
+          width: 150,
           align: 'center',
           name: 'bzcd',
           type: 'text'
         },
         {
           header: '차수',
-          width: 100,
+          width: 70,
           align: 'center',
           name: 'sqn_cd',
           type: 'text'
@@ -550,35 +557,35 @@ export default {
         },
         {
           header: '시나리오명',
-          width: 100,
-          align: 'center',
+          width: 200,
+          align: 'left',
           name: 'scnr_nm',
           type: 'text'
         },
         {
           header: '완료여부',
-          width: 100,
+          width: 70,
           align: 'center',
           name: 'bzcd',
           type: 'text'
         },
         {
           header: '테스트케이스ID',
-          width: 100,
+          width: 130,
           align: 'center',
           name: 'tst_case_id',
           type: 'text'
         },
         {
           header: '테스트케이스명',
-          width: 100,
-          align: 'center',
+          width: 200,
+          align: 'left',
           name: 'tst_case_nm',
           type: 'text'
         },
         {
           header: '처리단계',
-          width: 80,
+          width: 130,
           align: 'center',
           name: 'dvlp_dis_cd',
           formatter: 'listItemText',
@@ -621,21 +628,21 @@ export default {
         },
         {
           header: '개발자',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'dvlpe_no',
 
         },
         {
           header: '담당PL',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'pl_no',
 
         },
         {
           header: '담당현업',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'opr_no',
 
@@ -701,7 +708,7 @@ export default {
         },
         {
           header: '요구사항ID',
-          width: 90,
+          width: 150,
           name: 'col28'
         },
         {
