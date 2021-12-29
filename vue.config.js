@@ -4,9 +4,15 @@ module.exports = {
   outputDir: "../src/main/resources/static",
   indexPath: "../static/index.html",
   devServer: {
-    disableHostCheck: true,
+    //disableHostCheck: true,
     port:8081,
-    // proxy: 'http://localhost:8080'
+    // proxy: {
+    //     '^/': {
+    //       target:  'http://localhost:8080',
+    //       changeOrigin: true,
+    //       logLevel: 'debug',
+    //     }
+    // }
   },
   configureWebpack: {
     // Set up all the aliases we use in our app.
