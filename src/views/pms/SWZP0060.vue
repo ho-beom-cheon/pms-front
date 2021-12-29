@@ -254,7 +254,7 @@
             <div class="div-header-b"><h2>상세내용</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridExcelExport">신규초기화</a>
+                  <a href="#" @click="fnClear">신규초기화</a>
                 </div>
                 <div class="btn btn-filter-p" style = "margin-left: 20px">
                   <a href="#" @click="fnSave">저장</a>
@@ -299,10 +299,11 @@
                   <div class="item-con">
                     <label>관리ID</label>
                     <input type="text"
-                           placeholder="입력"
+                           placeholder="입력 불가"
                            v-model="detail.mng_id"
+                           :disabled="validated ? disabled : ''"
                            @keyup.enter="fnSearch"
-                           style   = "width: 190px"
+                           style   = "background-color: #dcdcdc ; width: 109px"
                     >
                   </div>
                 </li>
@@ -425,7 +426,7 @@
                            placeholder="입력"
                            v-model="detail.gd_txt"
                            @keyup.enter="fnSearch"
-                           style   = "width: 100px"
+                           style   = "width: 109px"
                     >
                   </div>
                 </li>
@@ -517,6 +518,7 @@
                     <textarea cols="103"
                               rows="33"
                               v-model="detail.d_req_dis_txt"
+                              :disabled="validated ? disabled : ''"
                     ></textarea>
                   </td>
                 </li>
@@ -659,13 +661,29 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
-    change(){
-      console.log("change");
-    },
     fnSave(){
 
     },
-
+    fnClear(){
+      this.detail.d_rgs_dis_cd_selected  = d_rgs_dis_cd[0].value      // (상세)관리구분
+      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
+      this.detail.mng_id                 = ''                         // (상세)관리ID
+      this.detail.d_req_dis_cd_selected  = d_req_dis_cd[0].value      // (상세)요청구분
+      this.detail.rgs_dt                 = ''                         // (상세)요청일자
+      this.detail.d_achi_nm              = ''                         // (상세)요청자
+      this.detail.d_ttmn_crpe_nm         = ''                         // (상세)조치담당자
+      this.detail.d_tgt_biz_nm           = ''                         // (상세)조치업무명
+      this.detail.ttmn_scd_dt            = ''                         // (상세)조치예정일자
+      this.detail.ttmn_dt                = ''                         // (상세)조치일자
+      this.detail.ifnc_cd_selected       = urgn_cd[0].value           // (상세)영향도
+      this.detail.urgn_cd_selected       = ifnc_cd[0].value           // (상세)긴급성
+      this.detail.gd_txt                 = ''                         // (상세)등급
+      this.detail.d_titl_nm              = ''                         // (상세)제목
+      this.detail.d_req_dis_txt          = ''                         // (상세)요청내용
+      this.detail.d_ttmn_txt             = ''                         // (상세)조치내용
+      this.detail.d_slv_mpln_txt         = ''                         // (상세)해결방안내용
+      this.detail.rmrk                   = ''                         // (상세)비고
+    },
     onClick(ev) {
       this.curRow = ev.rowKey;
       this.$refs.grid.invoke("getRow",this.curRow);
