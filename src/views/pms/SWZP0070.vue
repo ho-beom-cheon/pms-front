@@ -137,6 +137,7 @@
                   :header="header1"
                   :columns="columns1"
                   :bodyHeight="bodyHeight"
+                  :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
@@ -159,6 +160,7 @@
                   :header="header2"
                   :columns="columns2"
                   :bodyHeight="bodyHeight"
+                  :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
@@ -181,6 +183,7 @@
                   :header="header3"
                   :columns="columns3"
                   :bodyHeight="bodyHeight"
+                  :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
@@ -203,6 +206,7 @@
                   :header="header4"
                   :columns="columns4"
                   :bodyHeight="bodyHeight"
+                  :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
@@ -357,7 +361,8 @@ export default {
       scrollX: false,
       scrollY: false,
       bodyHeight: 270,
-      rowHeight: 30,
+      rowHeight: 25,
+      minRowHeight: 10,
       showDummyRows: true,
       open: false,
       menu_list: [
