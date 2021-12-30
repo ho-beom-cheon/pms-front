@@ -692,7 +692,13 @@ table.form-table select {
     grid-template-rows: repeat(1, 315px);
     gap: 3px;
 }
-
+.grid1-box{
+    border: 1px solid #d5d5d5;
+    margin: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
 /* GNB */
 header.GNB {
     display: flex;
