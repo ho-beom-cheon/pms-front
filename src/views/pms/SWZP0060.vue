@@ -135,7 +135,7 @@
                 <input type="text"
                        placeholder="입력"
                        v-model="info.ttmn_crpe_nm"
-                       @keyup.enter="fnSearcha"
+                       @keyup.enter="fnSearch"
                        style   = "width: 110px"
                 >
               </div>

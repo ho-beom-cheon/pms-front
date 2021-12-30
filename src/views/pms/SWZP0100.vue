@@ -23,7 +23,7 @@
                             PMS
                           </button>
                       </div>
-                  
+
                       <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <ul class="card-body">
                             <li><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
@@ -51,12 +51,12 @@
                 <ul class="filter-con clear-fix">
                     <li class="filter-item">
                         <div class="item-con">업무구분
-                            <select 
-                                v-model = "bzcd_selected"
+                            <select
+                                v-model = "info.bzcd_selected"
                                 style   = "width: 180px"
                             >
                                 <option
-                                    v-for  = "(bzcd, idx) in bzcd"
+                                    v-for  = "(bzcd, idx) in info.bzcd"
                                     :key   = "idx"
                                     v-text = "bzcd.text"
                                     :value = "bzcd.value"
@@ -66,59 +66,59 @@
                     </li>
                     <li class="filter-item">
                         <div class="item-con">산출물구분
-                            <select 
-                                v-model = "prjt_nm_selected"
+                            <select
+                                v-model = "info.file_cd_selected"
                                 style   = "width: 180px"
                             >
                                 <option
-                                    v-for  = "(prjt_nm, idx) in prjt_nm"
+                                    v-for  = "(file_cd, idx) in info.file_cd"
                                     :key   = "idx"
-                                    v-text = "prjt_nm.text"
-                                    :value = "prjt_nm.value"
+                                    v-text = "file_cd.text"
+                                    :value = "file_cd.value"
                                 ></option>
                             </select>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">검증구분
-                            <select 
-                                v-model = "dvlp_dis_cd_selected"
+                            <select
+                                v-model = "info.check_cd_selected"
                                 style   = "width: 200px"
                             >
                                 <option
-                                    v-for  = "(dvlp_dis_cd, idx) in dvlp_dis_cd"
+                                    v-for  = "(check_cd, idx) in info.check_cd"
                                     :key   = "idx"
-                                    v-text = "dvlp_dis_cd.text"
-                                    :value = "dvlp_dis_cd.value"
+                                    v-text = "check_cd.text"
+                                    :value = "check_cd.value"
                                 ></option>
                             </select>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">검색항목
-                            <select 
-                                v-model = "prc_step_cd_selected"
+                            <select
+                                v-model = "info.search_cd_selected"
                                 style   = "width: 100px"
                             >
                                 <option
-                                    v-for  = "(prc_step_cd, idx) in prc_step_cd"
+                                    v-for  = "(search_cd, idx) in info.search_cd"
                                     :key   = "idx"
-                                    v-text = "prc_step_cd.text"
-                                    :value = "prc_step_cd.value"
+                                    v-text = "search_cd.text"
+                                    :value = "search_cd.value"
                                 ></option>
                             </select>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">
-                            <input type="text" placeholder="입력" v-model="pgm_id" style = "width: 330px">
+                            <input type="text" placeholder="입력" v-model="info.searchbox_cd" style = "width: 330px">
                         </div>
                     </li>
                 </ul>
 
                 <ul class="filter-btn">
-                    <div class="btn btn-filter-p" style = "margin-left: 30px">
-                        <a href="#" @click="fnSave">신규신청</a>
+                    <div class="btn btn-filter-b">
+                      <a href="#" @click="gridExcelExport">테이블백업</a>
                     </div>
                     <div class="btn btn-filter-p" style = "margin-left: 10px">
                         <a href="#" @click="fnSearch">조회</a>
@@ -128,15 +128,30 @@
 
             <!-- page contents -->
             <section class="page-contents">
-            <div class="grid-box">
-              <div class="div-header"><h2>산출물 상세정보</h2></div>
+            <div class="grid1-box">
+              <div class="div-header"><h2>산출물 상세정보</h2>
+                <ul class="filter-btn">
+                  <li class="filter-item">
+                    <div class="item-con">
+                      <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
+                      <label>　삭제 후 엑셀업로드　</label>
+                    </div>
+                  </li>
+                  <div class="btn btn-filter-e">
+                    <a href="#" @click="gridExcelExport">엑셀업로드</a>
+                  </div>
+                  <div class="btn btn-filter-e">
+                    <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  </div>
+                </ul>
+              </div>
                 <div class="gridWrap" style="min-width: 750px;">
                   <grid
-                    ref="grid"
-                    :data="data1"
+                    ref="grid1"
+                    :data="dataSource"
                     :header="header"
                     :columns="columns1"
-                    :bodyHeight="140"
+                    :bodyHeight="125"
                     :showDummyRows="showDummyRows"
                     :columnOptions="columnOptions"
                     :rowHeight="rowHeight"
@@ -145,29 +160,34 @@
                   ></grid>
                 </div>
                </div>
-               <div class="grid-box">
+               <div class="grid1-box">
                  <div class="div-header"><h2>산출물 점검대상</h2></div>
                   <div class="gridWrap" style="min-width: 750px;">
                     <grid
-                      ref="grid"
-                      :data="data2"
+                      ref="grid2"
+                      :data="dataSource"
                       :header="header"
                       :columns="columns2"
                       :bodyHeight="bodyHeight"
                       :showDummyRows="showDummyRows"
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
-                      :rowHeaders="rowHeaders"
                       @click="onClick"
                     ></grid>
                   </div>
                </div>
-               <div class="grid-box">
-                 <div class="div-header"><h2>미매핑 ID목록</h2></div>
+               <div class="grid1-box">
+                 <div class="div-header"><h2>미매핑 ID목록</h2>
+                   <ul class="filter-btn">
+                     <div class="btn btn-filter-e">
+                       <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                     </div>
+                   </ul>
+                 </div>
                   <div class="gridWrap" style="min-width: 750px;">
                     <grid
-                      ref="grid"
-                      :data="data3"
+                      ref="grid3"
+                      :data="dataSource"
                       :header="header"
                       :columns="columns3"
                       :bodyHeight="bodyHeight"
@@ -190,23 +210,43 @@ import WindowPopup from "./SWZP0041.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-// 전체 선택
-// 프로젝트명
-var prjt_nm = [{text:"전체", value:"0"}, {text:"ITeyesPMS구축", value:"1"},{text:"바젤3개편안시스템구축", value:"2"},{text:"심사분석시스템재구축", value:"3"}];
-// 업무구분
-var bzcd = [{text:"전체", value:"0"}, {text:"PMS테스트", value:"1"},{text:"해외_운영리스크", value:"2"},{text:"지주_신용리스크", value:"3"},{text:"지주_ERMS", value:"4"}];
-// 개발구분
-var dvlp_dis_cd = [{text:"전체", value:"0"}, {text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-// 프로그램구분
-var pgm_dis_cd = [{text:"전체", value:"0"}, {text:"배치", value:"1"},{text:"화면", value:"2"},{text:"인터페이스", value:"3"},{text:"서비스", value:"4"},{text:"모듈", value:"5"},{text:"R-CLIPS", value:"6"},{text:"소스취약점", value:"7"},{text:"보고서", value:"8"},{text:"기타프로그램", value:"9"}];
-// 처리단계
-var prc_step_cd = [{text:"전체", value:"0"}, {text:"미개발", value:"1"},{text:"개발중", value:"2"},{text:"개발완료", value:"3"},{text:"PL완료", value:"4"},{text:"삭제", value:"5"},{text:"개발종료", value:"6"}];
+
+// 업무구분코드
+const bzcd = [
+  {text: "전체", value: '999'},
+  {text: "신용", value: 'AAA'},
+  {text: "재무제표", value: "BBB"},
+  {text: "신용평가", value: "CCC"},
+];
+// 산출물구분코드
+const file_cd = [
+  {text: "전체", value: "999"},
+  {text: "요구사항정의서", value: "100"},
+  {text: "화면설계서", value: "200"},
+  {text: "프로그램설계서", value: "300"},
+  {text: "인터페이스설계서", value: "400"},
+  {text: "테이블목록", value: "500"},
+  {text: "단위테스트결과서", value: "600"},
+  {text: "통합테스트결과서", value: "700"},
+  {text: "요구사항추적표", value: "800"},
+];
+// 검증구분코드
+const check_cd = [
+  {text: "1: 산출물목록 -> 산출물매핑ID", value: "100"},
+  {text: "2: 산출물매핑ID -> 산출물목록", value: "200"},
+];
+// 검색항목코드
+const search_cd = [
+  {text: "전체", value: "999"},
+  {text: "산출물상세정보", value: "100"},
+  {text: "산출물점검대상", value: "200"},
+  {text: "미매핑ID목록", value: "300"},
+];
 
 export default {
 	// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
-    WindowPopup
 	},
 	// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 	// "라이프사이클 훅"이라고 함.
@@ -243,7 +283,7 @@ export default {
 			return this.count;
 		}
 	},
-	// 일반적인 함수를 선언하는 부분 
+	// 일반적인 함수를 선언하는 부분
 	methods: {
 		change(){
 			console.log();
@@ -256,72 +296,62 @@ export default {
 			this.curRow = ev.rowKey;
 		},
 		fnSearch(){
-			this.$refs.grid.invoke("setRequestParams", {cond1:"contents"});
-			this.$refs.grid.invoke("readData");
+      this.$refs.grid1.invoke("setRequestParams", this.info);
+      this.$refs.grid1.invoke("readData");
+      this.$refs.grid2.invoke("setRequestParams", this.info);
+      this.$refs.grid2.invoke("readData");
+      this.$refs.grid3.invoke("setRequestParams", this.info);
+      this.$refs.grid3.invoke("readData");
 		},
 		gridInit(){
-			this.$refs.grid.invoke("clear");
-		},
-		gridAddRow(){
-			this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0010", col5:"PMS구축"},{focus:true}) ;
-		},
-		gridDelRow(){
-			this.$refs.grid.invoke("removeRow", this.curRow);
-			// DB 데이터 삭제로직 추가
-		},
-		gridADelRow(){
-			// DB 데이터 삭제로직 추가 
-		},
-		gridIns(){
-			// DB 데이터 삭제로직 추가 
+			this.$refs.grid1.invoke("clear");
+			this.$refs.grid2.invoke("clear");
+			this.$refs.grid3.invoke("clear");
 		},
 		gridExcelExport(){
-			this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+			this.$refs.grid1.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+			this.$refs.grid2.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+			this.$refs.grid3.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
 		},
 		gridExcelImport(){
 			// 엑셀파일 업로드 로직 추가
 		},
 		open_page(){
 			this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
-		}
+		},
 	},
 	// 특정 데이터에 실행되는 함수를 선언하는 부분
 	// newValue, oldValue 두개의 매개변수를 사용할 수 있음
 	watch:{
-		count: (a, b) => { 
+		count: (a, b) => {
 			console.log("count의 값이 변경되면 여기도 실행");
 			console.log("new Value :: " + a);
 			console.log("old Value :: " + b);
-		} 
+		}
 	},
 	// 변수 선언부분
 	data() {
 		return {
-			prjt_nm_selected: prjt_nm[0].value,
-			bzcd_selected: bzcd[0].value,
-			dvlp_dis_cd_selected: dvlp_dis_cd[0].value,
-			pgm_dis_cd_selected: pgm_dis_cd[0].value,
-			prc_step_cd_selected: prc_step_cd[0].value,
-			prjt_nm: prjt_nm,            // 프로젝트명
-			bzcd: bzcd,                  // 업무구분
-			dvlp_dis_cd: dvlp_dis_cd,    // 개발구분
-			pgm_dis_cd: pgm_dis_cd,      // 프로그램구분
-			prc_step_cd: prc_step_cd,    // 처리단계
-			frcs_sta_dt: '',             // 계획일자STA
-			frcs_end_dt: '',             // 계획일자END
-			pgm_id: '',                  // 프로그램ID
-			pgm_nm: '',                  // 프로그램명
-			dvlpe_no: '',                // 개발자명
-			pl_no: '',                   // 담당PL명
-			sta_dt: '',                  // 실제일자STA
-			end_dt: '',                  // 실제일자END
-			check_Yn: false,             // 삭제프로그램/소스취약점포함
+      info: {
+        bzcd_selected: bzcd[0].value,            // 업무구분
+        file_cd_selected: file_cd[0].value,      // 산출물구분
+        check_cd_selected: check_cd[0].value,    // 검증구분
+        search_cd_selected: search_cd[0].value,  // 검색항목구분
+
+        bzcd: bzcd,                  // 업무구분
+        file_cd: file_cd,            // 산출물구분
+        check_cd: check_cd,          // 검증구분
+        search_cd: search_cd,        // 검색항목구분
+
+        searchbox_cd: this.searchbox_cd, // 검색 입력
+      },
+
 			count:0,
 			curRow:-1,
 			title:"",
 			scrollX:false,
 			scrollY:false,
-			bodyHeight: 210,
+			bodyHeight: 175,
 			rowHeight: 10,
 			showDummyRows: true,
 			open: false,
@@ -382,246 +412,213 @@ export default {
 					name: '시스템관리'
 				},
 			],
-			data: {
+      dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-				},	
+					readData: { url: 'http://localhost:8080/SWZP0100/select', method: 'GET' },
+				},
 				initialRequest: false,
 			},
 			columnOptions: {
 				resizable: true
 			},
 			rowHeaders:['rowNum'],
-			header:{ 
-				height: 28
-			},
+      header: {
+        height: 45,
+        complexColumns: [
+          {
+            header: '산출물목록',
+            name: 'mergeColumn1',
+            childNames: [ 'colm22', 'colm23', 'colm24', 'colm25'
+                        , 'colm26', 'colm27', 'colm28', 'colm29', 'colm30'
+                        , 'colm31', 'colm32', 'colm35', 'colm36']
+          },
+        ]
+      },
 			columns1: [
-				{
-					header: '어플리케이션',
-					width: 150,
-					minWidth: 50,
-					maxWidth: 250,
-					name: 'title',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '어플리케이션명',
-					width: 150,
-					name: 'bz_dtls_txt',
-				},
-				{
-					header: '레벨',
-					width: 150,
-					name: 'pgm_id',
-					
-				},
-				{
-					header: '어플리케이션기능',
-					width: 150,
-					name: 'pgm_nm',
-					
-				},
-				{
-					header: '프로세스ID',
-					width: 150,
-					name: 'bzcd',
-					
-				},
-				{
-					header: '단위기능ID',
-					width: 150,
-					name: 'dvlp_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '단위기능명',
-					width: 150,
-					name: 'pgm_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '세부설정',
-					width: 150,
-					name: 'enlpe_nm',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '주요입력',
-					width: 150,
-					name: 'prc_step_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '처리흐름',
-					width: 150,
-					name: 'dvlpe_no',
-					
-				},
-				{
-					header: '주요출력',
-					width: 150,
-					name: 'pl_no',
-					
-				},
-				{
-					header: '비고',
-					width: 150,
-					name: 'opr_no',
-					
-				},
+        {
+          header: '항목1',
+          width: 150,
+          name: 'colm01',
+        },
+        {
+          header: '항목2',
+          width: 150,
+          name: 'colm02',
+        },
+        {
+          header: '항목3',
+          width: 150,
+          name: 'colm03',
+        },
+        {
+          header: '항목4',
+          width: 150,
+          name: 'colm04',
+        },
+        {
+          header: '항목5',
+          width: 150,
+          name: 'colm05',
+        },
+        {
+          header: '항목6',
+          width: 150,
+          name: 'colm06',
+        },
+        {
+          header: '항목7',
+          width: 150,
+          name: 'colm07',
+        },
+        {
+          header: '항목8',
+          width: 150,
+          name: 'colm08',
+        },
+        {
+          header: '항목9',
+          width: 150,
+          name: 'colm09',
+        },
+        {
+          header: '항목10',
+          width: 150,
+          name: 'colm10',
+        },
+        {
+          header: '항목11',
+          width: 150,
+          name: 'colm11',
+        },
+        {
+          header: '항목12',
+          width: 150,
+          name: 'colm12',
+        },
+        {
+          header: '항목13',
+          width: 150,
+          name: 'colm13',
+        },
+        {
+          header: '항목14',
+          width: 150,
+          name: 'colm14',
+        },
+        {
+          header: '항목15',
+          width: 150,
+          name: 'colm15',
+        },
+        {
+          header: '항목16',
+          width: 150,
+          name: 'colm16',
+        },
+        {
+          header: '항목17',
+          width: 150,
+          name: 'colm17',
+        },
+        {
+          header: '항목18',
+          width: 150,
+          name: 'colm18',
+        },
+        {
+          header: '항목19',
+          width: 150,
+          name: 'colm19',
+        },
+        {
+          header: '항목20',
+          width: 150,
+          name: 'colm20',
+        },
 			],
-			columns2: [
-				{
-					header: '산출명',
-					width: 150,
-					minWidth: 50,
-					maxWidth: 250,
-					name: 'title',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '산출물등록',
-					width: 150,
-					name: 'bz_dtls_txt',
-				},
-				{
-					header: '업무기능분할도',
-					width: 150,
-					name: 'pgm_id',
-					
-				},
-				{
-					header: '요구사항정의서',
-					width: 150,
-					name: 'pgm_nm',
-					
-				},
-				{
-					header: '화면목록',
-					width: 150,
-					name: 'bzcd',
-					
-				},
-				{
-					header: '보고서목록',
-					width: 150,
-					name: 'dvlp_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '단위기능명',
-					width: 150,
-					name: 'pgm_dis_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '세부설정',
-					width: 150,
-					name: 'enlpe_nm',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '주요입력',
-					width: 150,
-					name: 'prc_step_cd',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '처리흐름',
-					width: 150,
-					name: 'dvlpe_no',
-					
-				},
-				{
-					header: '주요출력',
-					width: 150,
-					name: 'pl_no',
-					
-				},
-				{
-					header: '비고',
-					width: 150,
-					name: 'opr_no',
-					
-				},
+      columns2: [
+        {
+          header: '구분',
+          width: 50,
+          name: 'colm21',
+        },
+        {
+          header: '산출명',
+          width: 190,
+          name: 'colm22',
+        },
+        {
+          header: '산출물등록',
+          width: 80,
+          name: 'colm23',
+          align: 'center',
+        },
+        {
+          header: '업무기능분할도',
+          width: 120,
+          name: 'colm24',
+        },
+        {
+          header: '요구사항정의서',
+          width: 120,
+          name: 'colm25',
+        },
+        {
+          header: '화면목록',
+          width: 120,
+          name: 'colm26',
+        },
+        {
+          header: '보고서목록',
+          width: 120,
+          name: 'colm27',
+        },
+        {
+          header: '인터페이스목록',
+          width: 120,
+          name: 'colm28',
+        },
+        {
+          header: '프로그램목록',
+          width: 120,
+          name: 'colm29',
+        },
+        {
+          header: '테이블목록',
+          width: 120,
+          name: 'colm30',
+        },
+        {
+          header: '단위테스트',
+          width: 120,
+          name: 'colm31',
+        },
+        {
+          header: '통합테스트',
+          width: 120,
+          name: 'colm32',
+        },
+        {
+          header: '요구사항추적표',
+          width: 120,
+          name: 'colm35',
+        },
+        {
+          header: '메뉴구조도',
+          width: 120,
+          name: 'colm36',
+        },
 			],
 			columns3: [
-				{
-					header: '항목ID',
-					width: 350,
-					name: 'title',
-					formatter: 'listItemText',
-					editor: {
-					type: 'select',
-					options:{
-							listItems: listItem
-							}
-					}
-				},
-				{
-					header: '항목명',
-					name: 'bz_dtls_txt',
-				},
+        {
+          header: '항목ID',
+          width: 350,
+          name: 'colm33',
+        },
+        {
+          header: '항목명',
+          name: 'colm34',
+        },
 			]
 		}
 	},
