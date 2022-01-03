@@ -7,7 +7,7 @@ function createAxiosService() {
     withCredentials: true,
     baseURL: process.env.VUE_APP_API + "/api/",
   });
-    
+
   return setInterceptors(axiosService);
 }
 
