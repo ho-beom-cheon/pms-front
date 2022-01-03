@@ -514,8 +514,8 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: 'http://localhost:8080/SWZP0010/select', method: 'GET' },
-          modifyData : { url: 'http://localhost:8080/SWZP0010/select', method: 'PUT'},
+          readData: { url: 'http://localhost:8080/SWZP0030/select', method: 'GET' },
+          modifyData : { url: 'http://localhost:8080/SWZP0030/select', method: 'PUT'},
         },
         initialRequest: false,
       },
@@ -523,55 +523,69 @@ export default {
         resizable: true
       },
       rowHeaders:['checkbox', 'rowNum'],
-      header:{
-        height: 40
+      header: {
+        height : 45,
+        complexColumns: [
+          {
+            header: '결함건수',
+            name: 'mergeColumn1',
+            childNames: ['col19', 'col20', 'col21']
+          },
+        ]
       },
       columns: [
         {
-          header: '업무',
-          width: 100,
-          minWidth: 50,
-          maxWidth: 250,
-          name: 'title',
-          align: 'center',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-        {
-          header: '업무세부',
-          width: 180,
-          align: 'left',
-          name: 'bz_dtls_txt',
-        },
-        {
-          header: '프로그램ID',
-          width: 150,
-          align: 'left',
-          name: 'pgm_id',
-
-        },
-        {
-          header: '프로그램명',
-          width: 280,
-          align: 'left',
-          name: 'pgm_nm',
-
-        },
-        {
           header: '업무구분',
-          width: 100,
+          width: 150,
           align: 'center',
           name: 'bzcd',
           type: 'text'
         },
         {
-          header: '개발구분',
-          width: 80,
+          header: '차수',
+          width: 70,
+          align: 'center',
+          name: 'sqn_cd',
+          type: 'text'
+        },
+        {
+          header: '시나리오ID',
+          width: 100,
+          align: 'center',
+          name: 'scnr_id',
+          type: 'text'
+        },
+        {
+          header: '시나리오명',
+          width: 200,
+          align: 'left',
+          name: 'scnr_nm',
+          type: 'text'
+        },
+        {
+          header: '완료여부',
+          width: 70,
+          align: 'center',
+          name: 'bzcd',
+          type: 'text'
+        },
+        {
+          header: '테스트케이스ID',
+          width: 130,
+          align: 'center',
+          name: 'tst_case_id',
+          type: 'text'
+        },
+        {
+          header: '테스트케이스명',
+          width: 200,
+          align: 'left',
+          name: 'tst_case_nm',
+          type: 'text'
+        },
+        {
+          header: '처리단계',
+          width: 130,
           align: 'center',
           name: 'dvlp_dis_cd',
           formatter: 'listItemText',
@@ -579,32 +593,6 @@ export default {
             type: 'select',
             options:{
               listItems: dvlp_dis_cd
-            }
-          }
-        },
-        {
-          header: '프로그램구분',
-          width: 120,
-          align: 'center',
-          name: 'pgm_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: pgm_dis_cd
-            }
-          }
-        },
-        {
-          header: '프로그램세부구분',
-          width: 120,
-          align: 'center',
-          name: 'enlpe_nm',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: enlpe_nm
             }
           }
         },
@@ -625,7 +613,7 @@ export default {
           editor: 'datePicker'
         },
         {
-          header: '개발자완료일자',
+          header: '개발자확인일자',
           width: 110,
           align: 'center',
           name: 'dvlpe_cnf_dt',
@@ -639,41 +627,28 @@ export default {
           editor: 'datePicker'
         },
         {
-          header: '처리단계',
-          width: 80,
-          align: 'center',
-          name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: listItem
-            }
-          }
-        },
-        {
           header: '개발자',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'dvlpe_no',
 
         },
         {
           header: '담당PL',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'pl_no',
 
         },
         {
-          header: '현업',
-          width: 160,
+          header: '담당현업',
+          width: 100,
           align: 'center',
           name: 'opr_no',
 
         },
         {
-          header: '단위테스트증빙첨부',
+          header: '통합테스트증빙첨부',
           width: 150,
           align: 'center',
           name: 'atfl_mng_id',
@@ -712,37 +687,32 @@ export default {
           name: 'col22',
         },
         {
-          header: '요구사항ID',
-          width: 150,
-          name: 'col23',
-        },
-        {
           header: '미진사유',
           width: 400,
           name: 'col24',
         },
         {
-          header: '해당화면ID',
+          header: '프로그램ID',
           width: 200,
           name: 'col25',
         },
         {
-          header: '소스경로',
+          header: '화면ID',
           width: 140,
           name: 'col26'
         },
         {
-          header: '일자',
+          header: '거래코드',
           width: 90,
           name: 'col27'
         },
         {
-          header: '이행시간',
-          width: 90,
+          header: '요구사항ID',
+          width: 150,
           name: 'col28'
         },
         {
-          header: '담당자',
+          header: '사전조건',
           width: 90,
           name: 'col29'
         },
