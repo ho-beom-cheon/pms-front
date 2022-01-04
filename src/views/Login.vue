@@ -171,7 +171,7 @@ export default {
                   JSON.stringify(res.data.data)
               );
               if(res.data.data[0].login_yn == "Y") {
-                this.$router.push('/SWZP0010');
+                this.$router.push('/SWZP0014');
               } else if(res.data.data[0].login_yn == 'C') {
                 alert("비밀번호를 변경하세요.");
               } else if(res.data.data[0].login_yn == 'N') {

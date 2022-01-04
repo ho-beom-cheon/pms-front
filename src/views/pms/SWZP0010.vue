@@ -393,9 +393,9 @@ export default {
     gridAddRow(){
       this.$refs.grid.invoke("appendRow",
           {
-            pgm_id  : sessionStorage.getItem(""),
-            bzcd    : sessionStorage.getItem(""),
-            prjt_id : sessionStorage.getItem(""),
+            pgm_id  : sessionStorage.getItem("pgm_id"),
+            bzcd    : sessionStorage.getItem("bzcd"),
+            prjt_id : sessionStorage.getItem("prjt_id"),
             bkup_id : "00000000",
           },
           {focus:true}) ;
