@@ -135,7 +135,7 @@
                 <input type="text"
                        placeholder="입력"
                        v-model="info.ttmn_crpe_nm"
-                       @keyup.enter="fnSearch"
+                       @keyup.enter="fnSearcha"
                        style   = "width: 110px"
                 >
               </div>
@@ -244,6 +244,7 @@
               :bodyHeight="bodyHeight"
               :showDummyRows="showDummyRows"
               :columnOptions="columnOptions"
+              :minRowHeight="minRowHeight"
               :rowHeight="rowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
@@ -267,6 +268,8 @@
                   <div class="item-con">
                     <label>관리구분</label>
                     <select
+                        id    = "d_rgs_dis_cd_selected"
+                        name    = "d_rgs_dis_cd_selected"
                         v-model = "detail.d_rgs_dis_cd_selected"
                         style   = "width: 230px"
                     >
@@ -301,7 +304,7 @@
                     <input type="text"
                            placeholder="입력 불가"
                            v-model="detail.mng_id"
-                           :disabled="validated ? disabled : ''"
+                           :readonly="detail.mng_id"
                            @keyup.enter="fnSearch"
                            style   = "background-color: #dcdcdc ; width: 109px"
                     >
@@ -362,6 +365,8 @@
                     <input type="text"
                            placeholder="입력"
                            v-model="detail.d_tgt_biz_nm"
+                           id ="d_tgt_biz_nm"
+                           name ="d_tgt_biz_nm"
                            @keyup.enter="fnSearch"
                            style   = "width: 230px"
                     >
@@ -518,7 +523,7 @@
                     <textarea cols="103"
                               rows="33"
                               v-model="detail.d_req_dis_txt"
-                              :disabled="validated ? disabled : ''"
+                              :readonly="detail.d_req_dis_txt"
                     ></textarea>
                   </td>
                 </li>
@@ -535,7 +540,9 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
 import WindowPopup from "./SWZP0041.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
-import axios from 'axios';
+import axios from "axios";
+
+const storage = window.sessionStorage;
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
@@ -602,6 +609,10 @@ const urgn_cd = [
   {text:"매우높음", value:"400"},
 ];
 
+const ai = axios.create({
+  baseURL: "http://localhost:8080/SWZP0060/"
+});
+
 var prjt_nm_selected;
 var rgs_dis_cd_selected;
 var req_dis_cd_selected;
@@ -618,7 +629,6 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
-    WindowPopup
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -638,6 +648,8 @@ export default {
   },
   mounted() {
     console.log("mounted");
+    // 최초조회
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -661,8 +673,45 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
-    fnSave(){
+    fnSave() {
+      // 관리ID가 없으면 INSERT
+      if(this.detail.mng_id == "" || this.detail.mng_id == "null"){
 
+      // 관리ID가 있으면 UPDATE
+      }else {
+        this.checkPrimary()
+        ai.put("/update",
+            {
+              d_rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,
+              d_prc_step_cd: this.detail.d_prc_step_cd_selected,
+              mng_id: this.detail.mng_id,
+              d_req_dis_cd: this.detail.d_req_dis_cd_selected,
+              rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),
+              d_achi_nm: this.detail.d_achi_nm,
+              d_ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,
+              d_tgt_biz_nm: this.detail.d_tgt_biz_nm,
+              ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),
+              ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),
+              ifnc_cd: this.detail.ifnc_cd_selected,
+              urgn_cd: this.detail.urgn_cd_selected,
+              gd_txt: this.detail.gd_txt,
+              d_titl_nm: this.detail.d_titl_nm,
+              d_req_dis_txt: this.detail.d_req_dis_txt,
+              d_ttmn_txt: this.detail.d_ttmn_txt,
+              d_slv_mpln_txt: this.detail.d_slv_mpln_txt,
+              rmrk: this.detail.rmrk,
+            }
+        )
+            .then(res => {
+              if (res.status == 200) {
+                console.log(res.data);
+              }
+            }).catch(e => {
+          alert("필수값을 입력해주세요.");
+        })
+        //업데이트 후 재조회
+        this.$refs.grid.invoke("reloadData");
+      }
     },
     fnClear(){
       this.detail.d_rgs_dis_cd_selected  = d_rgs_dis_cd[0].value      // (상세)관리구분
@@ -686,9 +735,9 @@ export default {
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
-      this.$refs.grid.invoke("getRow",this.curRow);
+      this.$refs.grid.invoke("getRow", this.curRow);
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
-      console.log(this.$refs.grid.invoke("getRow", this.curRow));
+      // console.log(this.$refs.grid.invoke("getRow", this.curRow));
       this.cellDataBind(currentRowData)
     },
     cellDataBind(currentRowData) {
@@ -711,7 +760,6 @@ export default {
       this.detail.d_slv_mpln_txt         = currentRowData.slv_mpln_txt;                   // (상세)해결방안내용
       this.detail.rmrk                   = currentRowData.rmrk;                           // (상세)비고
 
-
     },
     fnSearch(){
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -719,20 +767,6 @@ export default {
     },
     gridInit(){
       this.$refs.grid.invoke("clear");
-    },
-    gridAddRow(){
-
-      this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0060", col5:"PMS구축"},{focus:true}) ;
-    },
-    gridDelRow(){
-      this.$refs.grid.invoke("removeRow", this.curRow);
-// DB 데이터 삭제로직 추가
-    },
-    gridADelRow(){
-// DB 데이터 삭제로직 추가
-    },
-    gridIns(){
-// DB 데이터 삭제로직 추가
     },
     gridExcelExport(){
       this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
@@ -755,7 +789,27 @@ export default {
         return  year + '-' + month + '-' + day;
       }
     },
+    getUnFormatDate(date){
+      // YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환
+      if ( date == null || date === '') {
+        return false;
+      } else {
+        let year = date.substr(0, 4);
+        let month = date.substr(5,2);
+        let day = date.substr(8,2);
 
+        return  year + month + day;
+      }
+    },
+    checkPrimary() {
+      if(this.detail.d_titl_nm == "" || this.detail.d_titl_nm == "null"){
+        alert("관리구분을 입력해 주세요.");
+        return false;
+      }else{   //취소
+        alert("정말 저장하시겠습니까?");
+        return;
+      }
+    },
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
@@ -799,30 +853,30 @@ export default {
 
       detail : {
         /* 상세내용 변수 */
-        d_rgs_dis_cd  : d_rgs_dis_cd,            // (상세)관리구분
-        d_prc_step_cd : d_prc_step_cd,           // (상세)처리상태
-        mng_id        : '',                      // (상세)관리ID
-        d_req_dis_cd  : d_req_dis_cd,            // (상세)요청구분
-        rgs_dt        : '',                      // (상세)요청일자
-        d_achi_nm       : this.d_achi_nm,        // (상세)요청자
-        d_ttmn_crpe_nm  : this.d_ttmn_crpe_nm,   // (상세)조치담당자
-        d_tgt_biz_nm    : this.d_tgt_biz_nm,     // (상세)조치업무명
-        ttmn_scd_dt : '',                        // (상세)조치예정일자
-        ttmn_dt     : '',                        // (상세)조치일자
-        ifnc_cd     : ifnc_cd,                   // (상세)영향도
-        urgn_cd     : urgn_cd,                   // (상세)긴급성
-        gd_txt        : this.gd_txt,             // (상세)등급
-        d_titl_nm       : this.d_titl_nm,        // (상세)제목
-        d_req_dis_txt   : this.d_req_dis_txt,    // (상세)요청내용
-        d_ttmn_txt      : this.d_ttmn_txt,       // (상세)조치내용
-        d_slv_mpln_txt  : this.d_slv_mpln_txt,   // (상세)해결방안내용
-        rmrk          : this.rmrk,               // (상세)비고
+        d_rgs_dis_cd   : d_rgs_dis_cd,            // (상세)관리구분
+        d_prc_step_cd  : d_prc_step_cd,           // (상세)처리상태
+        mng_id         : '',                      // (상세)관리ID
+        d_req_dis_cd   : d_req_dis_cd,            // (상세)요청구분
+        rgs_dt         : '',                      // (상세)요청일자
+        d_achi_nm      : this.d_achi_nm,        // (상세)요청자
+        d_ttmn_crpe_nm : this.d_ttmn_crpe_nm,   // (상세)조치담당자
+        d_tgt_biz_nm   : this.d_tgt_biz_nm,     // (상세)조치업무명
+        ttmn_scd_dt    : '',                        // (상세)조치예정일자
+        ttmn_dt        : '',                        // (상세)조치일자
+        ifnc_cd        : ifnc_cd,                   // (상세)영향도
+        urgn_cd        : urgn_cd,                   // (상세)긴급성
+        gd_txt         : this.gd_txt,             // (상세)등급
+        d_titl_nm      : this.d_titl_nm,        // (상세)제목
+        d_req_dis_txt  : this.d_req_dis_txt,    // (상세)요청내용
+        d_ttmn_txt     : this.d_ttmn_txt,       // (상세)조치내용
+        d_slv_mpln_txt : this.d_slv_mpln_txt,   // (상세)해결방안내용
+        rmrk           : this.rmrk,               // (상세)비고
 
         d_rgs_dis_cd_selected  : d_rgs_dis_cd[0].value,     // (상세)선택 된 관리구분
         d_req_dis_cd_selected  : d_req_dis_cd[0].value,     // (상세)선택 된 요청구분
         d_prc_step_cd_selected : d_prc_step_cd[0].value,    // (상세)선택 된 처리상태
-        urgn_cd_selected     : urgn_cd[0].value,            // (상세)영향도
-        ifnc_cd_selected     : ifnc_cd[0].value,            // (상세)긴급성
+        urgn_cd_selected       : urgn_cd[0].value,            // (상세)영향도
+        ifnc_cd_selected       : ifnc_cd[0].value,            // (상세)긴급성
       },
 
       addRow : {
@@ -835,7 +889,8 @@ export default {
       scrollX:false,
       scrollY:false,
       bodyHeight: 210,
-      rowHeight: 30,
+      minRowHeight: 10,
+      rowHeight: 25,
       showDummyRows: true,
       open: false,
       menu_list: [
