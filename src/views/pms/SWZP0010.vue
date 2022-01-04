@@ -204,7 +204,7 @@
               <a href="#" @click="gridExcelExport">양식다운로드ⓘ</a>
             </div>
             <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀업로드</a>
+              <a href="#" @click="gridExcelImport">엑셀업로드</a>
             </div>
             <div class="btn btn-filter-e">
               <a href="#" @click="gridExcelExport">엑셀다운로드</a>
@@ -321,6 +321,13 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    // 화면 접속 시 데이터 조회
+    this.fnSearch();
+    // 열고정
+    this.$refs.grid.invoke("setFrozenColumnCount", 1);
+    // 정렬
+    //this.$refs.grid.invoke("sort",);
+
     console.log("mounted");
   },
   beforeUpdate() {
@@ -349,25 +356,26 @@ export default {
       console.log("change");
     },
     fnSave(){
+      // 데이터 로그 확인
       console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
       console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
       console.log("deletedRows ::" ,this.$refs.grid.invoke("getModifiedRows").deletedRows);
 
+      // 변경 데이터 저장
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
       this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
       this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
+      // 데이터 파라메타 전달
       this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-      this.$refs.grid.invoke("request", "updateData");
+      this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
       this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-      this.$refs.grid.invoke("request", "createData");
-
-      // for(var i=0; i<this.deletedRows.length; i++) {
-      //   this.$refs.grid.invoke("setRequestParams", this.$refs.grid.invoke("getModifiedRows").deletedRows[i]);
-      //
-      // }
-      this.$refs.grid.invoke("setRequestParams", this.$refs.grid.invoke("getModifiedRows").deletedRows);
-      this.$refs.grid.invoke("request", "deleteData");
+      // update api 요청
+      this.$refs.grid.invoke("request", "updateData",{showConfirm:false});
+      // create api 요청
+      this.$refs.grid.invoke("request", "createData",{showConfirm:false});
+      // delete api 요청
+      this.$refs.grid.invoke("request", "deleteData",{showConfirm:false});
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
@@ -375,6 +383,7 @@ export default {
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
     },
     fnSearch(){
+      // 조회 api 호출
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -382,15 +391,18 @@ export default {
       this.$refs.grid.invoke("clear");
     },
     gridAddRow(){
-
-      this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0010", col5:"PMS구축"},{focus:true}) ;
+      this.$refs.grid.invoke("appendRow",
+          {
+            pgm_id  : sessionStorage.getItem(""),
+            bzcd    : sessionStorage.getItem(""),
+            prjt_id : sessionStorage.getItem(""),
+            bkup_id : "00000000",
+          },
+          {focus:true}) ;
     },
     gridDelRow(){
-      this.$refs.grid.invoke("removeRow", this.curRow);
-// DB 데이터 삭제로직 추가 
-    },
-    gridADelRow(){
-// DB 데이터 삭제로직 추가  
+      this.$refs.grid.invoke("removeCheckedRows", this.curRow,{showConfirm:false});
+    // DB 데이터 삭제로직 추가
     },
     gridIns(){
 // DB 데이터 삭제로직 추가  
@@ -399,7 +411,8 @@ export default {
       this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
     },
     gridExcelImport(){
-// 엑셀파일 업로드 로직 추가 
+// 엑셀파일 업로드 로직 추가
+      this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀다운로드"});
     },
     open_page(){
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
@@ -420,23 +433,23 @@ export default {
   data() {
     return {
       info : {
-        pgm_id      : this.pgm_id,    // 프로그램ID
-        pgm_nm      : this.pgm_nm,    // 프로그램명
-        dvlpe_no    : this.dvlpe_no,    // 개발자명
-        pl_no       : this.pl_no,    // 담당PL명
+        pgm_id      : this.pgm_id,          // 프로그램ID
+        pgm_nm      : this.pgm_nm,          // 프로그램명
+        dvlpe_no    : this.dvlpe_no,        // 개발자명
+        pl_no       : this.pl_no,           // 담당PL명
 
-        dvlp_dis_cd : dvlp_dis_cd,// 개발구분
-        prjt_nm     : prjt_nm,    // 프로젝트명
-        bzcd        : bzcd,    // 업무구분
-        pgm_dis_cd  : pgm_dis_cd,    // 프로그램구분
-        prc_step_cd : prc_step_cd,    // 처리단계
+        dvlp_dis_cd : dvlp_dis_cd,          // 개발구분
+        prjt_nm     : prjt_nm,              // 프로젝트명
+        bzcd        : bzcd,                 // 업무구분
+        pgm_dis_cd  : pgm_dis_cd,           // 프로그램구분
+        prc_step_cd : prc_step_cd,          // 처리단계
 
         /* select 박스 */
         dvlp_dis_cd_selected  : dvlp_dis_cd[0].value,  // 개발구분
         prjt_nm_selected      : prjt_nm[0].value,      // 프로젝트명
         bzcd_selected         : bzcd[0].value,         // 업무구분
         pgm_dis_cd_selected   : pgm_dis_cd[0].value,   // 프로그램구분
-        prc_step_cd_selected  : prc_step_cd[0].value,   // 프로그램구분
+        prc_step_cd_selected  : prc_step_cd[0].value,  // 프로그램구분
       },
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
@@ -445,10 +458,10 @@ export default {
       addRow : {
         grid : this.grid,
       },
-      frcs_sta_dt : '',    // 계획일자STA
-      frcs_end_dt : '',    // 계획일자END
-      sta_dt      : '',    // 실제일자STA
-      end_dt      : '',    // 실제일자END
+      frcs_sta_dt : '',     // 계획일자STA
+      frcs_end_dt : '',     // 계획일자END
+      sta_dt      : '',     // 실제일자STA
+      end_dt      : '',     // 실제일자END
 
       check_Yn    : false,  // 삭제프로그램/소스취약점포함
 
@@ -521,12 +534,13 @@ export default {
       dataSource: {
         api: {
           readData: { url: process.env.VUE_APP_API + '/SWZP0010/select', method: 'GET' },
-          createData : { url: process.env.VUE_APP_API + '/SWZP0010/create', method: 'POST',showConfirm: false},
-          updateData : { url: process.env.VUE_APP_API + '/SWZP0010/update', method: 'PUT',showConfirm: false},
-          deleteData : { url: process.env.VUE_APP_API + '/SWZP0010/delete', method: 'DELETE', showConfirm: false},
+          createData : { url: process.env.VUE_APP_API + '/SWZP0010/create', method: 'POST'},
+          updateData : { url: process.env.VUE_APP_API + '/SWZP0010/update', method: 'PUT'},
+          deleteData : { url: process.env.VUE_APP_API + '/SWZP0010/delete', method: 'PUT'},
         },
-       // initialRequest: false,
-        contentType : 'application/ json;',
+        initialRequest: false,
+        showConfirm: false,
+        contentType : 'application/json;',
         headers : {  'x-custom-header' : 'custom-header'  },
         withCredentials: false,
       },
