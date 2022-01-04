@@ -98,7 +98,6 @@ export default {
   methods: {
     // 프로젝트 리스트 셋팅
     setPjt(data) {
-      debugger;
         for(let i=0; i<data.length; i++) {
           this.pjt_list.push({"text": data[i].DTLS_TYNM, "value": data[i].DTLS_TYCD});
         }
@@ -107,7 +106,7 @@ export default {
     // 프로젝트 리스트 가져오기
     getPjt() {
       axiosService.get(
-          "/SWZP0010/pjtInfo",
+          "/pjtInfo",
           {
           },
       ).then(res => {
@@ -123,7 +122,7 @@ export default {
     },
 
     getInfo() {
-      ai.post(
+      axiosService.post(
           "/info",
           {
             userId: "some_userId",
@@ -156,7 +155,8 @@ export default {
       storage.setItem("catn_dcd", "");          // 구성원 구분코드
       storage.setItem("aut_cd", "");            // 권한ID
       storage.setItem("login_yn", "");          // 로그인상태
-      ai.post("/user/signin", {
+
+      axiosService.post("/user/signin", {
         userId: this.userId,
         password: this.password,
         pjt_selected : this.pjt_selected,
@@ -164,8 +164,7 @@ export default {
           .then(res => {
             if (res.data.status) {
               this.message = res.data.data[0].empnm + "로 로그인 되었습니다.";
-              console.dir(res.headers["jwt-auth-token"]);
-              debugger;
+
               this.setInfo(
                   "성공",
                   res.data.auth_token,
