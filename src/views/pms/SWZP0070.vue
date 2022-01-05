@@ -274,6 +274,8 @@ export default {
   },
   mounted() {
     console.log("mounted");
+    // 최초조회
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
