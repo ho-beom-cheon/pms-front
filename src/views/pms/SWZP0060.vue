@@ -332,7 +332,6 @@
                     <label>요청일자</label>
                     <div class="input-dateWrap">
                       <input type="date"
-                             :max="detail.rgs_dt"
                              v-model="detail.rgs_dt"
                              style="width: 137px"
                       ></div>
@@ -710,31 +709,29 @@ export default {
                 }).catch(e => {
               alert("필수값을 입력해주세요.");
             })
-            //insert 후 재조회
-            this.$refs.grid.invoke("reloadData");
 
             // 관리ID가 있으면 UPDATE
           } else {
             ai.put("/update",
                 {
-                  d_rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,
-                  d_prc_step_cd: this.detail.d_prc_step_cd_selected,
-                  mng_id: this.detail.mng_id,
-                  d_req_dis_cd: this.detail.d_req_dis_cd_selected,
-                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),
-                  d_achi_nm: this.detail.d_achi_nm,
-                  d_ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,
-                  d_tgt_biz_nm: this.detail.d_tgt_biz_nm,
-                  ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),
-                  ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),
-                  ifnc_cd: this.detail.ifnc_cd_selected,
-                  urgn_cd: this.detail.urgn_cd_selected,
-                  gd_txt: this.detail.gd_txt,
-                  d_titl_nm: this.detail.d_titl_nm,
-                  d_req_dis_txt: this.detail.d_req_dis_txt,
-                  d_ttmn_txt: this.detail.d_ttmn_txt,
-                  d_slv_mpln_txt: this.detail.d_slv_mpln_txt,
-                  rmrk: this.detail.rmrk,
+                  d_rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                   // (상세)관리구분
+                  d_prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
+                  mng_id: this.detail.mng_id,                                        // (상세)관리ID
+                  d_req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
+                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),                  // (상세)요청일자
+                  d_achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
+                  d_ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
+                  d_tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
+                  ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),        // (상세)조치예정일자
+                  ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),                // (상세)조치일자
+                  ifnc_cd: this.detail.ifnc_cd_selected,                             // (상세)영향도
+                  urgn_cd: this.detail.urgn_cd_selected,                             // (상세)긴급성
+                  gd_txt: this.detail.gd_txt,                                        // (상세)등급
+                  d_titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
+                  d_req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
+                  d_ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
+                  d_slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
+                  rmrk: this.detail.rmrk,                                            // (상세)비고
                 }
             )
                 .then(res => {
@@ -744,9 +741,9 @@ export default {
                 }).catch(e => {
               alert("필수값을 입력해주세요.");
             })
-            //업데이트 후 재조회
-            this.$refs.grid.invoke("reloadData");
           }
+          //update / insert 후 재조회
+          this.$refs.grid.invoke("reloadData");
         } else {   //취소
           return;
         }
@@ -780,9 +777,11 @@ export default {
       this.curRow = ev.rowKey;
       this.$refs.grid.invoke("getRow", this.curRow);
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
-      // console.log(this.$refs.grid.invoke("getRow", this.curRow));
-      this.cellDataBind(currentRowData)
+      if(currentRowData != null) {
+        this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+      }
     },
+    /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
       this.detail.d_rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
       this.detail.d_prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리상태
@@ -804,6 +803,7 @@ export default {
       this.detail.rmrk = currentRowData.rmrk;                                  // (상세)비고
 
     },
+    /* 저장 */
     fnSearch() {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -815,13 +815,10 @@ export default {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
     gridExcelImport() {
-// 엑셀파일 업로드 로직 추가
+
     },
-    open_page() {
-      this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
-    },
+    /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
     getFormatDate(date) {
-      // YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환
       if (date == null || date === '') {
         return false;
       } else {
@@ -832,8 +829,8 @@ export default {
         return year + '-' + month + '-' + day;
       }
     },
+    /* YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환 */
     getUnFormatDate(date) {
-      // YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환
       if (date == null || date === '') {
         return false;
       } else {
@@ -844,11 +841,24 @@ export default {
         return year + month + day;
       }
     },
+    /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.d_titl_nm == "" || this.detail.d_titl_nm == "null") {
+      if (this.detail.d_rgs_dis_cd == "" || this.detail.d_rgs_dis_cd == "null") {            // 관리구분
         return false;
-      } else {   //취소
-        return true;
+      } else if (this.detail.d_prc_step_cd == "" || this.detail.d_prc_step_cd == "null") {   // 처리상태
+        return false;
+      } else if (this.detail.d_req_dis_cd == "" || this.detail.d_req_dis_cd == "null") {     // 요청구분
+        return false;
+      } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 요청일자
+        return false;
+      } else if (this.detail.d_achi_nm == "" || this.detail.d_achi_nm == "null") {           // 요청자
+        return false;
+      } else if (this.detail.d_titl_nm == "" || this.detail.d_titl_nm == "null") {           // 제목
+        return false;
+      } else if (this.detail.d_req_dis_txt == "" || this.detail.d_req_dis_txt == "null") {   // 요청내용
+        return false;
+      } else {
+        return true;  // 필수 값 모두 입력 시 true
       }
     },
   },
@@ -866,58 +876,58 @@ export default {
     return {
       info: {
         /* 필터 변수 */
-        prjt_nm: prjt_nm,             // 프로젝트명
+        prjt_nm: prjt_nm,                // 프로젝트명
         rgs_dis_cd: rgs_dis_cd,          // 관리구분
         req_dis_cd: req_dis_cd,          // 요청구분
-        prc_step_cd: prc_step_cd,         // 처리상태
+        prc_step_cd: prc_step_cd,        // 처리상태
 
-        prjt_nm_selected: prjt_nm[0].value,       // 선택 된 프로젝트명
+        prjt_nm_selected: prjt_nm[0].value,          // 선택 된 프로젝트명
         rgs_dis_cd_selected: rgs_dis_cd[0].value,    // 선택 된 관리구분
         req_dis_cd_selected: req_dis_cd[0].value,    // 선택 된 요청구분
-        prc_step_cd_selected: prc_step_cd[0].value,   // 선택 된 처리상태
+        prc_step_cd_selected: prc_step_cd[0].value,  // 선택 된 처리상태
 
-        rgs_sta_dt: '',        // 요청시작일자
-        rgs_end_dt: '',        // 요청종료일자
+        rgs_sta_dt: '',         // 요청시작일자
+        rgs_end_dt: '',         // 요청종료일자
         ttmn_sta_dt: '',        // 조치시작일자
         ttmn_end_dt: '',        // 조치종료일자
 
         tgt_biz_nm: this.tgt_biz_nm,               // 조치업무명
-        achi_nm: this.achi_nm,                  // 요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,             // 조치담당자
-        titl_nm: this.titl_nm,                  // 제목
-        req_dis_txt: this.req_dis_txt,              // 요청내용
-        ttmn_txt: this.ttmn_txt,                 // 조치내용
-        slv_mpln_txt: this.slv_mpln_txt,             // 해결방안내용
+        achi_nm: this.achi_nm,                     // 요청자
+        ttmn_crpe_nm: this.ttmn_crpe_nm,           // 조치담당자
+        titl_nm: this.titl_nm,                     // 제목
+        req_dis_txt: this.req_dis_txt,             // 요청내용
+        ttmn_txt: this.ttmn_txt,                   // 조치내용
+        slv_mpln_txt: this.slv_mpln_txt,           // 해결방안내용
 
         check_Yn: false,       // 완료/제외/해결/미발생해소 포함 여부
       },
 
       detail: {
         /* 상세내용 변수 */
-        d_rgs_dis_cd: d_rgs_dis_cd,            // (상세)관리구분
+        d_rgs_dis_cd: d_rgs_dis_cd,             // (상세)관리구분
         d_prc_step_cd: d_prc_step_cd,           // (상세)처리상태
-        mng_id: '',                      // (상세)관리ID
-        d_req_dis_cd: d_req_dis_cd,            // (상세)요청구분
-        rgs_dt: '',                      // (상세)요청일자
-        d_achi_nm: this.d_achi_nm,        // (상세)요청자
-        d_ttmn_crpe_nm: this.d_ttmn_crpe_nm,   // (상세)조치담당자
-        d_tgt_biz_nm: this.d_tgt_biz_nm,     // (상세)조치업무명
+        mng_id: '',                             // (상세)관리ID
+        d_req_dis_cd: d_req_dis_cd,             // (상세)요청구분
+        rgs_dt: '',                             // (상세)요청일자
+        d_achi_nm: this.d_achi_nm,              // (상세)요청자
+        d_ttmn_crpe_nm: this.d_ttmn_crpe_nm,    // (상세)조치담당자
+        d_tgt_biz_nm: this.d_tgt_biz_nm,        // (상세)조치업무명
         ttmn_scd_dt: '',                        // (상세)조치예정일자
-        ttmn_dt: '',                        // (상세)조치일자
-        ifnc_cd: ifnc_cd,                   // (상세)영향도
-        urgn_cd: urgn_cd,                   // (상세)긴급성
-        gd_txt: this.gd_txt,             // (상세)등급
-        d_titl_nm: this.d_titl_nm,        // (상세)제목
-        d_req_dis_txt: this.d_req_dis_txt,    // (상세)요청내용
-        d_ttmn_txt: this.d_ttmn_txt,       // (상세)조치내용
-        d_slv_mpln_txt: this.d_slv_mpln_txt,   // (상세)해결방안내용
-        rmrk: this.rmrk,               // (상세)비고
+        ttmn_dt: '',                            // (상세)조치일자
+        ifnc_cd: ifnc_cd,                       // (상세)영향도
+        urgn_cd: urgn_cd,                       // (상세)긴급성
+        gd_txt: this.gd_txt,                    // (상세)등급
+        d_titl_nm: this.d_titl_nm,              // (상세)제목
+        d_req_dis_txt: this.d_req_dis_txt,      // (상세)요청내용
+        d_ttmn_txt: this.d_ttmn_txt,            // (상세)조치내용
+        d_slv_mpln_txt: this.d_slv_mpln_txt,    // (상세)해결방안내용
+        rmrk: this.rmrk,                        // (상세)비고
 
-        d_rgs_dis_cd_selected: d_rgs_dis_cd[0].value,     // (상세)선택 된 관리구분
-        d_req_dis_cd_selected: d_req_dis_cd[0].value,     // (상세)선택 된 요청구분
+        d_rgs_dis_cd_selected: d_rgs_dis_cd[0].value,      // (상세)선택 된 관리구분
+        d_req_dis_cd_selected: d_req_dis_cd[0].value,      // (상세)선택 된 요청구분
         d_prc_step_cd_selected: d_prc_step_cd[0].value,    // (상세)선택 된 처리상태
-        urgn_cd_selected: urgn_cd[0].value,            // (상세)영향도
-        ifnc_cd_selected: ifnc_cd[0].value,            // (상세)긴급성
+        urgn_cd_selected: urgn_cd[0].value,                // (상세)영향도
+        ifnc_cd_selected: ifnc_cd[0].value,                // (상세)긴급성
       },
 
       addRow: {
