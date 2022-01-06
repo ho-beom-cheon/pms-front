@@ -366,16 +366,24 @@ export default {
       this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
       this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
-      // 데이터 파라메타 전달
-      this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-      this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
-      this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-      // update api 요청
-      this.$refs.grid.invoke("request", "updateData",{showConfirm:false});
-      // create api 요청
-      this.$refs.grid.invoke("request", "createData",{showConfirm:false});
-      // delete api 요청
-      this.$refs.grid.invoke("request", "deleteData",{showConfirm:false});
+      if(this.createdRows.length !== 0){
+        // 데이터 파라메타 전달
+        this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
+        // create api 요청
+        this.$refs.grid.invoke("request", "createData",{showConfirm:false});
+      }
+      if(this.updatedRows.length !== 0){
+        // 데이터 파라메타 전달
+        this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+        // update api 요청
+        this.$refs.grid.invoke("request", "updateData",{showConfirm:false});
+      }
+      if(this.deletedRows.length !== 0){
+        // 데이터 파라메타 전달
+        this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
+        // delete api 요청
+        this.$refs.grid.invoke("request", "deleteData",{showConfirm:false});
+      }
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
@@ -412,7 +420,7 @@ export default {
     },
     gridExcelImport(){
 // 엑셀파일 업로드 로직 추가
-      this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀다운로드"});
+      this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀업로드"});
     },
     open_page(){
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
@@ -539,7 +547,6 @@ export default {
           deleteData : { url: process.env.VUE_APP_API + '/SWZP0010/delete', method: 'PUT'},
         },
         initialRequest: false,
-        showConfirm: false,
         contentType : 'application/json;',
         headers : {  'x-custom-header' : 'custom-header'  },
         withCredentials: false,
@@ -557,13 +564,13 @@ export default {
           width: 100,
           minWidth: 50,
           maxWidth: 250,
-          name: 'title',
+          name: 'bzcd',
           align: 'center',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options:{
-              listItems: listItem
+              listItems: bzcd
             }
           }
         },
@@ -591,7 +598,7 @@ export default {
           header: '업무구분',
           width: 100,
           align: 'center',
-          name: 'bzcd',
+          name: 'bzcd_sys',
           type: 'text'
         },
         {
