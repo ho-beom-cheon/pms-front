@@ -775,7 +775,6 @@ export default {
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
-      this.$refs.grid.invoke("getRow", this.curRow);
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
       if(currentRowData != null) {
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
@@ -820,7 +819,7 @@ export default {
     /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
     getFormatDate(date) {
       if (date == null || date === '') {
-        return false;
+        return;
       } else {
         let year = date.substr(0, 4);
         let month = date.substr(4, 2);
@@ -832,7 +831,7 @@ export default {
     /* YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환 */
     getUnFormatDate(date) {
       if (date == null || date === '') {
-        return false;
+        return;
       } else {
         let year = date.substr(0, 4);
         let month = date.substr(5, 2);
