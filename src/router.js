@@ -23,6 +23,7 @@ const ExTran = () => import(/* webpackChunkName: "exTran" */ './views/example/Ex
 const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetMain.vue'); menuList.push(NetMain); menuListStr.push("NetMain");
 const Tmp = () => import(/* webpackChunkName: "Tmp" */ './views/example/Tmp.vue'); menuList.push(Tmp); menuListStr.push("Tmp");
 
+
 /* PMS */
 const SWZP0010 = () => import(/* webpackChunkName: "SWZP0010" */ './views/pms/SWZP0010.vue'); menuList.push(SWZP0010); menuListStr.push("SWZP0010");
 const SWZP0014 = () => import(/* webpackChunkName: "SWZP0014" */ './views/pms/SWZP0014.vue'); menuList.push(SWZP0014); menuListStr.push("SWZP0014");

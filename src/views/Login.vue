@@ -25,10 +25,10 @@
             <td>
               <select v-model="pjt_selected" style="width: 300px;">
                 <option
-                v-for   = "(pjt_list,idx) in pjt_list"
-                :key    ="idx"
-                v-text  ="pjt_list.text"
-                :value  ="pjt_list.value"
+                    v-for   = "(pjt_list,idx) in pjt_list"
+                    :key    ="idx"
+                    v-text  ="pjt_list.text"
+                    :value  ="pjt_list.value"
                 ></option>
               </select>
             </td>
@@ -40,6 +40,7 @@
                      id="userId" v-model="userId" style="width: 300px;"
                      @keyup.enter="login"
               >
+              <h6 class="mt-1" style="color:red; font-size: small" v-if="idCheak">로그인 사번은 필수 입력 사항입니다.</h6>
             </td>
           </tr>
           <tr>
@@ -49,14 +50,45 @@
                      id="password" v-model="password" style="width: 300px;"
                      @keyup.enter="login"
               >
+              <p class="mt-1" style="color:red; font-size: small" v-if="pwCheak">비밀번호는 필수 입력 사항입니다.</p>
             </td>
           </tr>
           </tbody>
         </table>
       </div>
       <div class="bottom">
-        <button class="btn btn-primary" @click="login">로그인</button>
-        <button class="btn btn-primary">비밀번호변경</button>
+        <base-button class="btn btn-primary" @click="login">로그인</base-button>
+        <base-button class="btn btn-primary" @click="passwordChg">비밀번호변경</base-button>
+        <modal :show.sync="modals.modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">비밀번호 변경</h3>
+          <tr>
+            <th>신규 비밀번호</th>
+            <td>
+              <input type="text" placeholder="비밀번호"
+                     name="newPassword"
+                     v-model="newPassword"
+                     id="newPassword"
+                     style="width: 350px;"
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>비밀번호 확인</th>
+            <td>
+              <input type="password" placeholder="비밀번호 확인"
+                     name="passwordConfirm"
+                     v-model="passwordConfirm"
+                     id="passwordConfirm"
+                     style="width: 350px;"
+              >
+            </td>
+          </tr>
+
+          <template slot="footer">
+            <button class="btn btn-primary" type="primary" @click="pwChange">변경</button>
+            <button type="primary" class="ml-auto btn btn-primary" @click="closeModal"> 취소</button>
+          </template>
+        </modal>
       </div>
     </div>
 
@@ -67,17 +99,24 @@
 <script>
 import axios from "axios";
 import {axiosService} from "@/api/http";
+import Modal from "@/components/Modal.vue";
 // 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다. 
 const storage = window.sessionStorage;
 
-const ai = axios.create({
-  baseURL: "http://localhost:8080/api/"
-});
-
-
 export default {
+  components : {
+    Modal
+  },
   created() {
+    this.sessionClear();
     this.getPjt();
+  },
+  updated() {
+    // 로그인 정보 필수 입력 문구 초기화
+    if(this.userId !== "")
+      this.idCheak = false
+    if(this.password !== "")
+      this.pwCheak = false
   },
 
   data() {
@@ -90,18 +129,49 @@ export default {
       info: "",
       dtls_tynm: "",
       dtls_tycd: "",
-      pjt_list : [],
-      pjt_selected  : "",    // 프로그램구분
+      pjt_list : [],            // 프로그램 리스트
+      pjt_selected  : "",       // 프로그램구분
+      idCheak : false,          // id 유효체크
+      pwCheak : false,          // password 유효체크
+      passwordConfirm : "",     // 변경 패스퉝드 확인
+      newPassword     : "",     // 변경할 패스워드
+      isActive        : true,
+      flag            : false,
+      modals: {
+        modal1: false,
+      }
     };
   },
 
   methods: {
+    /* 비밀번호 변경 조건 체크*/
+    passwordChg() {
+      if(this.vaildation()) {
+        axiosService.post("/user/signin", {
+          userId: this.userId,
+          password: this.password,
+          pjt_selected: this.pjt_selected,
+        }).then(res => {
+          this.modals.modal1 = true
+        }).catch(e => {
+          alert("사용자가 없습니다.");
+          this.setInfo("실패", "", JSON.stringify(e.response || e.message));
+        });
+      }
+    },
+    /* 모달창 닫기 */
+    closeModal() {
+      this.modals.modal1 = false
+      this.flag = true
+      this.newPassword = ""
+      this.passwordConfirm = ""
+    },
     // 프로젝트 리스트 셋팅
     setPjt(data) {
-        for(let i=0; i<data.length; i++) {
-          this.pjt_list.push({"text": data[i].DTLS_TYNM, "value": data[i].DTLS_TYCD});
-        }
-        this.pjt_selected = this.pjt_list[0].value;
+      for(let i=0; i<data.length; i++) {
+        this.pjt_list.push({"text": data[i].DTLS_TYNM, "value": data[i].DTLS_TYCD});
+      }
+      this.pjt_selected = this.pjt_list[0].value;
     },
     // 프로젝트 리스트 가져오기
     getPjt() {
@@ -146,7 +216,79 @@ export default {
             this.setInfo("정보 조회 실패", "", e.response.data.msg);
           });
     },
+    /* 비밀번호 변경 */
+    pwChange() {
+      if(this.newPassword === this.passwordConfirm) {
+        axiosService.put(
+            "/pwChange",
+            {
+              password: this.newPassword,
+              userId: this.userId,
+              pjt_selected: this.pjt_selected,
+            },
+        ).then(res => {
+          this.modals.modal1 = false;
+          alert("비밀번호가 변경되었습니다.");
+          this.valClear();
+        }).catch(e => {
+        });
+      }
+      else {
+        alert("변경 비밀번호와 변경 비밀번호 확인이 틀립니다.");
+      }
+    },
+    /* 로그인 체크 */
     login() {
+      this.sessionClear();
+      if(this.vaildation()) {
+        axiosService.post("/user/signin", {
+          userId: this.userId,
+          password: this.password,
+          pjt_selected: this.pjt_selected,
+        })
+            .then(res => {
+              if (res.data.status) {
+                this.message = res.data.data[0].empnm + "로 로그인 되었습니다.";
+
+                this.setInfo(
+                    "성공",
+                    res.data.auth_token,
+                    JSON.stringify(res.data.data)
+                );
+                if (res.data.data[0].login_yn === "Y") {
+
+                  this.isActive = true
+                  this.$router.push('/SWZP0014');
+                  /* 세션 스토리지 값 저장 */
+                  storage.setItem("jwt-auth-token", res.data.auth_token);       // 인증토큰
+                  storage.setItem("empno", res.data.data[0].empno);             // 직원번호
+                  storage.setItem("empnm", res.data.data[0].empnm);             // 직원명
+                  storage.setItem("prjt_id", res.data.data[0].prjt_id);         // 프로젝트ID
+                  storage.setItem("bzcd", res.data.data[0].bzcd);               // 업무구분
+                  storage.setItem("catn_dcd", res.data.data[0].catn_dcd);       // 구성원 구분코드
+                  storage.setItem("aut_cd", res.data.data[0].aut_cd);           // 권한ID
+                  storage.setItem("login_yn", res.data.data[0].login_yn);       // 로그인상태
+
+                } else if (res.data.data[0].login_yn === 'C') {
+                  alert("비밀번호를 변경하세요.");
+                  this.modals.modal1 = true
+                } else if (res.data.data[0].login_yn === 'N') {
+                  alert("비밀번호가 틀렸습니다.")
+                }
+              } else {
+                this.setInfo("", "", "");
+                this.message = "로그인해주세요.";
+                alert("입력 정보를 확인하세요.");
+              }
+            })
+            .catch(e => {
+              alert("사용자가 없습니다.");
+              this.setInfo("실패", "", JSON.stringify(e.response || e.message));
+            });
+      }
+    },
+    /* 세션 초기화 */
+    sessionClear() {
       storage.setItem("jwt-auth-token", "");    // 인증토큰
       storage.setItem("empno", "");             // 직원번호
       storage.setItem("empnm", "");             // 직원명
@@ -155,50 +297,27 @@ export default {
       storage.setItem("catn_dcd", "");          // 구성원 구분코드
       storage.setItem("aut_cd", "");            // 권한ID
       storage.setItem("login_yn", "");          // 로그인상태
-
-      axiosService.post("/user/signin", {
-        userId: this.userId,
-        password: this.password,
-        pjt_selected : this.pjt_selected,
-      })
-          .then(res => {
-            if (res.data.status) {
-              this.message = res.data.data[0].empnm + "로 로그인 되었습니다.";
-
-              this.setInfo(
-                  "성공",
-                  res.data.auth_token,
-                  JSON.stringify(res.data.data)
-              );
-              if(res.data.data[0].login_yn == "Y") {
-                this.$router.push('/SWZP0014');
-              } else if(res.data.data[0].login_yn == 'C') {
-                alert("비밀번호를 변경하세요.");
-              } else if(res.data.data[0].login_yn == 'N') {
-                alert("비밀번호가 틀렸습니다.")
-              }
-              /* 세션 스토리지 값 저장 */
-              storage.setItem("jwt-auth-token", res.data.auth_token);       // 인증토큰
-              storage.setItem("empno", res.data.data[0].empno);             // 직원번호
-              storage.setItem("empnm", res.data.data[0].empnm);             // 직원명
-              storage.setItem("prjt_id", res.data.data[0].prjt_id);         // 프로젝트ID
-              storage.setItem("bzcd", res.data.data[0].bzcd);               // 업무구분
-              storage.setItem("catn_dcd", res.data.data[0].catn_dcd);       // 구성원 구분코드
-              storage.setItem("aut_cd", res.data.data[0].aut_cd);           // 권한ID
-              storage.setItem("login_yn", res.data.data[0].login_yn);       // 로그인상태
-
-            } else {
-              this.setInfo("", "", "");
-              this.message = "로그인해주세요.";
-              alert("입력 정보를 확인하세요.");
-            }
-          })
-          .catch(e => {
-            alert("사용자가 없습니다.");
-            this.setInfo("실패", "", JSON.stringify(e.response || e.message));
-          });
     },
-
+    valClear() {
+          this.userId = "";
+          this.password = "";
+          this.passwordConfirm = "";
+          this.newPassword = "";
+    },
+    /* 값 유효성 체크 */
+    vaildation() {
+      if(this.userId === ""){
+        this.idCheak = true;
+        this.isActive = true;
+        return false;
+      }
+      if(this.password === ""){
+        this.pwCheak = true;
+        this.isActive = true;
+        return false;
+      }
+      return true;
+    },
     init() {
       if (storage.getItem("jwt-auth-token")) {
         this.message = storage.getItem('empno') + "로 로그인 되었습니다.";
@@ -209,6 +328,7 @@ export default {
   },
   mounted() {
     this.init();
+    this.valClear();
   }
 };
 </script>
