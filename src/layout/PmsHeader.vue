@@ -51,8 +51,8 @@ empnm : sessionStorage.getItem('LOGIN_EMP_NM'),
       sessionStorage.setItem("LOGIN_YN", "");                // 로그인상태
       this.$router.push('/login')
     },
-  } 
-}; 
-</script> 
-<style> 
+  }
+};
+</script>
+<style>
 </style>
