@@ -1,20 +1,25 @@
 const pms = {
     namespaced: true,
     state: {
-        userRole:"admin"
+        CD0000000000N:[],
+        CD1000000001N:[],
+        CD1000000002N:[],
+        CD1000000003N:[],
+        CD1000000004N:[],
     },
     getters: {
-        GE_POST_LIST: state => state.userRole
+        CD1000000001N : state => state.CD1000000001N
     },
     mutations: {
-        MU_POST_LIST: (state, payload) => {
-            state.postList = payload
-        }
+        SET_CD_ALL(state, array){
+            state.CD0000000000N = array[0];
+            state.CD1000000001N = array[1];
+            state.CD1000000002N = array[2];
+            state.CD1000000003N = array[3];
+            state.CD1000000004N = array[4];
+        },
     },
     actions: {
-        AC_USER_NAME: ({ commit }, payload) => {
-            commit('MU_POST_LIST', payload)
-        }
     }
 }
 

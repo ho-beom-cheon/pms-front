@@ -27,7 +27,7 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <ul class="card-body">
                 <li class="active"><a href="/SWZP0014">{{menu_list[0].name}}</a></li>
-                <li><a href="/SWZP0010">{{menu_list[1].name}}</a></li>
+                <li><a href="/PJTE2100">{{menu_list[1].name}}</a></li>
                 <li><a href="/SWZP0030">{{menu_list[2].name}}</a></li>
                 <li><a href="/SWZP0040">{{menu_list[3].name}}</a></li>
                 <li><a href="/SWZP0050">{{menu_list[4].name}}</a></li>
