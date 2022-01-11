@@ -25,7 +25,7 @@ const Tmp = () => import(/* webpackChunkName: "Tmp" */ './views/example/Tmp.vue'
 
 
 /* PMS */
-const SWZP0010 = () => import(/* webpackChunkName: "SWZP0010" */ './views/pms/SWZP0010.vue'); menuList.push(SWZP0010); menuListStr.push("SWZP0010");
+const PJTE2100 = () => import(/* webpackChunkName: "PJTE2100" */ './views/pms/PJTE2100.vue'); menuList.push(PJTE2100); menuListStr.push("PJTE2100");
 const SWZP0014 = () => import(/* webpackChunkName: "SWZP0014" */ './views/pms/SWZP0014.vue'); menuList.push(SWZP0014); menuListStr.push("SWZP0014");
 const SWZP0030 = () => import(/* webpackChunkName: "SWZP0030" */ './views/pms/SWZP0030.vue'); menuList.push(SWZP0030); menuListStr.push("SWZP0030");
 const SWZP0040 = () => import(/* webpackChunkName: "SWZP0040" */ './views/pms/SWZP0040.vue'); menuList.push(SWZP0040); menuListStr.push("SWZP0040");

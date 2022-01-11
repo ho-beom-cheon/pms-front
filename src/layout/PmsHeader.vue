@@ -15,7 +15,7 @@
                     <div class="imgWrap"> 
                         <img src="../assets/img/PE-icon/ic_profile.svg" alt="profile">
                     </div> 
-                    <span>{{ empnm }} 님</span>  
+                    <span>{{ empnm }} 님</span>
                 </a> 
                 <button class="btn logOut" @click="logout">로그아웃</button> 
             </div> 
@@ -35,22 +35,21 @@ export default {
   }, 
   data() { 
     return { 
-empnm : sessionStorage.getItem('empnm'),
+empnm : sessionStorage.getItem('LOGIN_EMP_NM'),
         list: this.$router.options.routes
     } 
   }, 
   methods:{
- logout() { 
- 
+ logout() {
       sessionStorage.setItem("jwt-auth-token", "");
-      sessionStorage.setItem("empno", "");             // 직원번호
-      sessionStorage.setItem("empnm", "");             // 직원명
-    sessionStorage.setItem("prjt_id", "");           // 프로젝트ID 
-    sessionStorage.setItem("bzcd", "");              // 업무구분 
-    sessionStorage.setItem("catn_dcd", "");          // 구성원 구분코드 
-    sessionStorage.setItem("aut_cd", "");            // 권한ID 
-    sessionStorage.setItem("login_yn", "");          // 로그인상태 
-    this.$router.push('/login') 
+      sessionStorage.setItem("LOGIN_EMP_NO", "");            // 직원번호
+      sessionStorage.setItem("LOGIN_EMP_NM", "");            // 직원명
+      sessionStorage.setItem("LOGIN_PROJ_ID", "");           // 프로젝트ID
+      sessionStorage.setItem("LOGIN_BZCD", "");              // 업무구분
+      sessionStorage.setItem("LOGIN_CATN_DCD", "");          // 구성원 구분코드
+      sessionStorage.setItem("LOGIN_AUT_CD", "");            // 권한ID
+      sessionStorage.setItem("LOGIN_YN", "");                // 로그인상태
+      this.$router.push('/login')
     },
   } 
 }; 

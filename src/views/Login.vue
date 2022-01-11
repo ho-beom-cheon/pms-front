@@ -257,17 +257,16 @@ export default {
                 );
                 if (res.data.data[0].login_yn === "Y") {
 
-                  this.isActive = true
                   this.$router.push('/SWZP0014');
                   /* 세션 스토리지 값 저장 */
                   storage.setItem("jwt-auth-token", res.data.auth_token);       // 인증토큰
-                  storage.setItem("empno", res.data.data[0].empno);             // 직원번호
-                  storage.setItem("empnm", res.data.data[0].empnm);             // 직원명
-                  storage.setItem("prjt_id", res.data.data[0].prjt_id);         // 프로젝트ID
-                  storage.setItem("bzcd", res.data.data[0].bzcd);               // 업무구분
-                  storage.setItem("catn_dcd", res.data.data[0].catn_dcd);       // 구성원 구분코드
-                  storage.setItem("aut_cd", res.data.data[0].aut_cd);           // 권한ID
-                  storage.setItem("login_yn", res.data.data[0].login_yn);       // 로그인상태
+                  storage.setItem("LOGIN_EMP_NO", res.data.data[0].empno);             // 직원번호
+                  storage.setItem("LOGIN_EMP_NM", res.data.data[0].empnm);             // 직원명
+                  storage.setItem("LOGIN_PROJ_ID", res.data.data[0].prjt_id);         // 프로젝트ID
+                  storage.setItem("LOGIN_BZCD", res.data.data[0].bzcd);               // 업무구분
+                  storage.setItem("LOGIN_CATN_DCD", res.data.data[0].catn_dcd);       // 구성원 구분코드
+                  storage.setItem("LOGIN_AUT_CD", res.data.data[0].aut_cd);           // 권한ID
+                  storage.setItem("LOGIN_YN", res.data.data[0].login_yn);       // 로그인상태
 
                 } else if (res.data.data[0].login_yn === 'C') {
                   alert("비밀번호를 변경하세요.");
@@ -289,14 +288,14 @@ export default {
     },
     /* 세션 초기화 */
     sessionClear() {
-      storage.setItem("jwt-auth-token", "");    // 인증토큰
-      storage.setItem("empno", "");             // 직원번호
-      storage.setItem("empnm", "");             // 직원명
-      storage.setItem("prjt_id", "");           // 프로젝트ID
-      storage.setItem("bzcd", "");              // 업무구분
-      storage.setItem("catn_dcd", "");          // 구성원 구분코드
-      storage.setItem("aut_cd", "");            // 권한ID
-      storage.setItem("login_yn", "");          // 로그인상태
+      storage.setItem("jwt-auth-token", "");          // 인증토큰
+      storage.setItem("LOGIN_EMP_NO", "");            // 직원번호
+      storage.setItem("LOGIN_EMP_NM", "");            // 직원명
+      storage.setItem("LOGIN_PROJ_ID", "");           // 프로젝트ID
+      storage.setItem("LOGIN_BZCD", "");              // 업무구분
+      storage.setItem("LOGIN_CATN_DCD", "");          // 구성원 구분코드
+      storage.setItem("LOGIN_AUT_CD", "");            // 권한ID
+      storage.setItem("LOGIN_YN", "");                // 로그인상태
     },
     valClear() {
           this.userId = "";
@@ -308,19 +307,17 @@ export default {
     vaildation() {
       if(this.userId === ""){
         this.idCheak = true;
-        this.isActive = true;
         return false;
       }
       if(this.password === ""){
         this.pwCheak = true;
-        this.isActive = true;
         return false;
       }
       return true;
     },
     init() {
       if (storage.getItem("jwt-auth-token")) {
-        this.message = storage.getItem('empno') + "로 로그인 되었습니다.";
+        this.message = storage.getItem('LOGIN_EMP_NO') + "로 로그인 되었습니다.";
       } else {
         storage.setItem("jwt-auth-token", "");
       }
@@ -328,7 +325,6 @@ export default {
   },
   mounted() {
     this.init();
-    this.valClear();
   }
 };
 </script>
