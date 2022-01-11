@@ -254,8 +254,8 @@
         <div class="div0-b">
           <div class="div3-b">
             <div class="div-header-b"><h2>상세내용</h2>
-              <ul class="filter-btn">
-                <div class="btn btn-filter-b">
+              <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
+                <div class="btn btn-filter-b" style="margin-left: 20px">
                   <a href="#" @click="fnClear">신규초기화</a>
                 </div>
                 <div class="btn btn-filter-p" style="margin-left: 20px">
@@ -267,7 +267,7 @@
               <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>관리구분</label>
+                    <label>*관리구분</label>
                     <select
                         id="d_rgs_dis_cd_selected"
                         name="d_rgs_dis_cd_selected"
@@ -285,7 +285,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>처리상태</label>
+                    <label>*처리상태</label>
                     <select
                         v-model="detail.d_prc_step_cd_selected"
                         style="width: 137px"
@@ -313,7 +313,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>요청구분</label>
+                    <label>*요청구분</label>
                     <select
                         v-model="detail.d_req_dis_cd_selected"
                         style="width: 230px"
@@ -329,7 +329,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>요청일자</label>
+                    <label>*요청일자</label>
                     <div class="input-dateWrap">
                       <input type="date"
                              v-model="detail.rgs_dt"
@@ -339,7 +339,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>요청자</label>
+                    <label>*요청자</label>
                     <input type="text"
                            placeholder="입력"
                            v-model="detail.d_achi_nm"
@@ -437,7 +437,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>제목</label>
+                    <label>*제목</label>
                     <input type="text"
                            placeholder="입력"
                            v-model="detail.d_titl_nm"
@@ -449,7 +449,7 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <th style="vertical-align: middle">
-                      <label>요청내용</label>
+                      <label>*요청내용</label>
                     </th>
                     <td>
                       <textarea cols="140"
@@ -611,18 +611,6 @@ const urgn_cd = [
 const ai = axios.create({
   baseURL: "http://localhost:8080/SWZP0060/"
 });
-
-var prjt_nm_selected;
-var rgs_dis_cd_selected;
-var req_dis_cd_selected;
-var prc_step_cd_selected;
-var d_prjt_nm_selected;
-var d_rgs_dis_cd_selected;
-var d_req_dis_cd_selected;
-var d_prc_step_cd_selected;
-var urgn_cd_selected;
-var ifnc_cd_selected;
-
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)

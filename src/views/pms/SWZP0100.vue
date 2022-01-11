@@ -117,9 +117,6 @@
                 </ul>
 
                 <ul class="filter-btn">
-                    <div class="btn btn-filter-b">
-                      <a href="#" @click="gridExcelExport">테이블백업</a>
-                    </div>
                     <div class="btn btn-filter-p" style = "margin-left: 10px">
                         <a href="#" @click="fnSearch">조회</a>
                     </div>
@@ -152,6 +149,7 @@
                     :header="header"
                     :columns="columns1"
                     :bodyHeight="125"
+                    :minRowHeight="minRowHeight"
                     :showDummyRows="showDummyRows"
                     :columnOptions="columnOptions"
                     :rowHeight="rowHeight"
@@ -169,6 +167,7 @@
                       :header="header"
                       :columns="columns2"
                       :bodyHeight="bodyHeight"
+                      :minRowHeight="minRowHeight"
                       :showDummyRows="showDummyRows"
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
@@ -191,6 +190,7 @@
                       :header="header"
                       :columns="columns3"
                       :bodyHeight="bodyHeight"
+                      :minRowHeight="minRowHeight"
                       :showDummyRows="showDummyRows"
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
@@ -263,6 +263,7 @@ export default {
 	},
 	mounted() {
 		console.log("mounted");
+    this.fnSearch()
 	},
 	beforeUpdate() {
 		console.log("beforeUpdate");
@@ -352,7 +353,8 @@ export default {
 			scrollX:false,
 			scrollY:false,
 			bodyHeight: 175,
-			rowHeight: 10,
+      minRowHeight: 10,
+      rowHeight: 25,
 			showDummyRows: true,
 			open: false,
 			menu_list: [
