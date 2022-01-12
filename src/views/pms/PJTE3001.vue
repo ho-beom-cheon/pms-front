@@ -1,4 +1,5 @@
 <template>
+<!--  -->
     <section class="popup">
         <div class="pop-header">
             <h1>결함상세관리</h1>

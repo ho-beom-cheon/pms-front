@@ -85,14 +85,14 @@
               </div>
             </li>
             <li class="filter-item">
-                <div class="item-con">개발자명
+              <div class="item-con">개발자명
                 <input type="text"
                        placeholder="입력"
                        v-model="info.dvlpe_no"
                        @keyup.enter="fnSearch"
                        style   = "width: 140px"
                 >
-                </div>
+              </div>
             </li>
             <li class="filter-item">
               <div class="item-con">담당PL명
@@ -173,7 +173,7 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 
 
-//그리드 아이템 예제 
+//그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 
@@ -186,7 +186,7 @@ const dvlp_dis_cd = [
   {text:"이행", value:"300"},
   {text:"삭제", value:"400"}
 ];
-// 프로그램구분 
+// 프로그램구분
 const pgm_dis_cd = [
   {text:"전체", value:"TTT"},
   {text:"화면", value:"100"},
@@ -194,14 +194,14 @@ const pgm_dis_cd = [
   {text:"보고서", value:"300"},
   {text:"배치", value:"400"}
 ];
-// 프로그램 세부 구분 
+// 프로그램 세부 구분
 const enlpe_nm = [
   {text:"전체", value:'TTT'},
   {text:"JSP", value:"100"},
   {text:"JAVA", value:"200"},
   {text:"RD", value:"300"}
 ];
-// 처리단계 
+// 처리단계
 const prc_step_cd = [
   {text:"전체",      value:"TTT"},
   {text:"개발전",     value:"000"},
@@ -214,21 +214,21 @@ const prc_step_cd = [
 ];
 
 export default {
-// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언) 
+// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
     grid: Grid,
     WindowPopup
   },
-// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수 
-// "라이프사이클 훅"이라고 함. 
-// 자세한 사항은 Vue 라이프 사이클 참조 
-// https://kr.vuejs.org/v2/guide/instance.html 
+// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
+// "라이프사이클 훅"이라고 함.
+// 자세한 사항은 Vue 라이프 사이클 참조
+// https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
     console.log("beforeCreate");
   },
-// 화면 동작 시 제일 처음 실행되는 부분 
-// 변수 초기화 
+// 화면 동작 시 제일 처음 실행되는 부분
+// 변수 초기화
   created() {
 
     console.log("created")
@@ -258,8 +258,8 @@ export default {
   destroyed() {
     console.log("destroyed");
   },
-// 함수를 선언하는 부분 
-// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점. 
+// 함수를 선언하는 부분
+// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
   computed: {
     setBzcd() {
       bzcd.push(this.$store.getters["pms/CD1000000001N"])
@@ -271,7 +271,7 @@ export default {
 
   },
 
-// 일반적인 함수를 선언하는 부분  
+// 일반적인 함수를 선언하는 부분
   methods: {
     bzcd_change(params) {this.info.bzcd_selected = params},
     dvlp_dis_cd_change(params) {this.info.bzcd_selected = params},
@@ -341,15 +341,15 @@ export default {
     },
     gridDelRow(){
       for(let i=0; i<this.$refs.grid.invoke('getCheckedRows').length; i++){
-          if(this.$refs.grid.invoke('getCheckedRows')[i].save_yn === "Y"){
-            this.$refs.grid.invoke("uncheckAll");
-            alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
-            return;
-          }
+        if(this.$refs.grid.invoke('getCheckedRows')[i].save_yn === "Y"){
+          this.$refs.grid.invoke("uncheckAll");
+          alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
+          return;
+        }
       }
       this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm:false});
 
-    // DB 데이터 삭제로직 추가
+      // DB 데이터 삭제로직 추가
     },
     gridExcelExport(){
       this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
@@ -363,8 +363,8 @@ export default {
     }
 
   },
-// 특정 데이터에 실행되는 함수를 선언하는 부분 
-// newValue, oldValue 두개의 매개변수를 사용할 수 있음 
+// 특정 데이터에 실행되는 함수를 선언하는 부분
+// newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
     count: (a, b) => {
       console.log("count의 값이 변경되면 여기도 실행");
@@ -373,7 +373,7 @@ export default {
     }
   },
 
-// 변수 선언부분 
+// 변수 선언부분
   data() {
     return {
 
@@ -499,24 +499,24 @@ export default {
       },
       rowHeaders:['checkbox', 'rowNum'],
       header:{
-          height: 50,
-          complexColumns: [
-            {
-              header: '계획',
-              name: 'mergeColumn1',
-              childNames: ['frcs_sta_dt', 'frcs_end_dt']
-            },
-            {
-              header: '실적',
-              name: 'mergeColumn2',
-              childNames: ['sta_dt', 'end_dt']
-            },
-            {
-              header: '결함',
-              name: 'mergeColumn3',
-              childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']
-            },
-          ]
+        height: 50,
+        complexColumns: [
+          {
+            header: '계획',
+            name: 'mergeColumn1',
+            childNames: ['frcs_sta_dt', 'frcs_end_dt']
+          },
+          {
+            header: '실적',
+            name: 'mergeColumn2',
+            childNames: ['sta_dt', 'end_dt']
+          },
+          {
+            header: '결함',
+            name: 'mergeColumn3',
+            childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']
+          },
+        ]
       },
       columns: [
         {
