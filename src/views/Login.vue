@@ -257,7 +257,7 @@ export default {
                 );
                 if (res.data.data[0].login_yn === "Y") {
 
-                  this.$router.push('/SWZP0014');
+                  this.$router.push('/PJTE1000');
                   /* 세션 스토리지 값 저장 */
                   storage.setItem("jwt-auth-token", res.data.auth_token);       // 인증토큰
                   storage.setItem("LOGIN_EMP_NO", res.data.data[0].empno);             // 직원번호
