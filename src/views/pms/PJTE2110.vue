@@ -2,7 +2,7 @@
   <!-- CONTENTS -->
   <div class="contents">
 
-    <!-- ASIDE -- LNB -->
+    <!-- ASIDE -- LNB  -->
     <aside>
       <div class="page-tit">
         ITeyes PMS
