@@ -27,17 +27,17 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <ul class="card-body">
-                <li><a href="/SWZP0014">{{ menu_list[0].name }}</a></li>
-                <li><a href="/SWZP0010">{{ menu_list[1].name }}</a></li>
-                <li><a href="/SWZP0030">{{ menu_list[2].name }}</a></li>
-                <li><a href="/SWZP0040">{{ menu_list[3].name }}</a></li>
-                <li><a href="/SWZP0050">{{ menu_list[4].name }}</a></li>
-                <li class="active"><a href="/SWZP0060">{{ menu_list[5].name }}</a></li>
-                <li><a href="/SWZP0070">{{ menu_list[6].name }}</a></li>
-                <li><a href="/SWZP0080">{{ menu_list[7].name }}</a></li>
-                <li><a href="/SWZP0090">{{ menu_list[8].name }}</a></li>
-                <li><a href="/SWZP0100">{{ menu_list[9].name }}</a></li>
-                <li><a href="/SWZP0110">{{ menu_list[10].name }}</a></li>
+                <li><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
+                <li><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
+                <li><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
+                <li><a href="/PJTE2200">{{ menu_list[3].name }}</a></li>
+                <li><a href="/PJTE2210">{{ menu_list[4].name }}</a></li>
+                <li><a href="/PJTE3000">{{ menu_list[5].name }}</a></li>
+                <li class="active"><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
+                <li><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
+                <li><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
+                <li><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
+                <li><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
               </ul>
             </div>
           </div>
@@ -609,7 +609,7 @@ const urgn_cd = [
 ];
 
 const ai = axios.create({
-  baseURL: "http://localhost:8080/SWZP0060/"
+  baseURL: "http://localhost:8080/PJTE4000/"
 });
 
 export default {
@@ -933,64 +933,64 @@ export default {
       open: false,
       menu_list: [
         {
-          id: 'SWZP0014',
-          path: '/SWZP0014',
-          name: 'PMS현황'
+          id: 'PJTE1000',
+          path: '/PJTE1000',
+          name: 'ProjectEyes현황'
         },
         {
-          id: 'SWZP0010',
-          path: '/SWZP0010',
+          id: 'PJTE2100',
+          path: '/PJTE2100',
           name: '개발현황'
         },
         {
-          id: 'SWZP0030',
-          path: '/SWZP0030',
-          name: '통합테스트'
-        },
-        {
-          id: 'SWZP0040',
-          path: '/SWZP0040',
-          name: '결함관리'
-        },
-        {
-          id: 'SWZP0050',
-          path: '/SWZP0050',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'SWZP0060',
-          path: '/SWZP0060',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'SWZP0070',
-          path: '/SWZP0070',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'SWZP0080',
-          path: '/SWZP0080',
+          id: 'PJTE2110',
+          path: '/PJTE2110',
           name: '개발진척현황'
         },
         {
-          id: 'SWZP0090',
-          path: '/SWZP0090',
-          name: '본오픈이행관리'
+          id: 'PJTE2200',
+          path: '/PJTE2200',
+          name: '통합테스트'
         },
         {
-          id: 'SWZP0100',
-          path: '/SWZP0100',
-          name: '산출물체크관리'
+          id: 'PJTE2210',
+          path: '/PJTE2210',
+          name: '통합테스트진척현황'
         },
         {
-          id: 'SWZP0110',
-          path: '/SWZP0110',
+          id: 'PJTE3000',
+          path: '/PJTE3000',
+          name: '결함관리'
+        },
+        {
+          id: 'PJTE4000',
+          path: '/PJTE4000',
+          name: 'ActionItem및이슈관리현황'
+        },
+        {
+          id: 'PJTE5000',
+          path: '/PJTE5000',
+          name: 'WBS관리'
+        },
+        {
+          id: 'PJTE6000',
+          path: '/PJTE6000',
+          name: 'PMS신청관리'
+        },
+        {
+          id: 'PJTE7000',
+          path: '/PJTE7000',
+          name: '산출물정합성체크'
+        },
+        {
+          id: 'PJTE9000',
+          path: '/PJTE9000',
           name: '시스템관리'
         },
       ],
       dataSource: {
         api: {
-          readData: {url: 'http://localhost:8080/SWZP0060/select', method: 'GET'},
+          readData: {url: 'http://localhost:8080/PJTE4000/select', method: 'GET'},
         },
         initialRequest: false,
       },
