@@ -24,16 +24,16 @@ const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetM
 
 /* PMS */
 const SWZP0010 = () => import(/* webpackChunkName: "SWZP0010" */ './views/pms/PJTE2100.vue'); menuList.push(SWZP0010); menuListStr.push("SWZP0010");
-const SWZP0014 = () => import(/* webpackChunkName: "SWZP0014" */ './views/pms/SWZP0014.vue'); menuList.push(SWZP0014); menuListStr.push("SWZP0014");
-const SWZP0030 = () => import(/* webpackChunkName: "SWZP0030" */ './views/pms/SWZP0030.vue'); menuList.push(SWZP0030); menuListStr.push("SWZP0030");
-const SWZP0040 = () => import(/* webpackChunkName: "SWZP0040" */ './views/pms/SWZP0040.vue'); menuList.push(SWZP0040); menuListStr.push("SWZP0040");
-const SWZP0050 = () => import(/* webpackChunkName: "SWZP0050" */ './views/pms/SWZP0050.vue'); menuList.push(SWZP0050); menuListStr.push("SWZP0050");
-const SWZP0060 = () => import(/* webpackChunkName: "SWZP0060" */ './views/pms/SWZP0060.vue'); menuList.push(SWZP0060); menuListStr.push("SWZP0060");
-const SWZP0070 = () => import(/* webpackChunkName: "SWZP0070" */ './views/pms/SWZP0070.vue'); menuList.push(SWZP0070); menuListStr.push("SWZP0070");
-const SWZP0080 = () => import(/* webpackChunkName: "SWZP0080" */ './views/pms/SWZP0080.vue'); menuList.push(SWZP0080); menuListStr.push("SWZP0080");
-const SWZP0090 = () => import(/* webpackChunkName: "SWZP0090" */ './views/pms/SWZP0090.vue'); menuList.push(SWZP0090); menuListStr.push("SWZP0090");
-const SWZP0100 = () => import(/* webpackChunkName: "SWZP0100" */ './views/pms/SWZP0100.vue'); menuList.push(SWZP0100); menuListStr.push("SWZP0100");
-const SWZP0110 = () => import(/* webpackChunkName: "SWZP0110" */ './views/pms/SWZP0110.vue'); menuList.push(SWZP0110); menuListStr.push("SWZP0110");
+const SWZP0014 = () => import(/* webpackChunkName: "SWZP0014" */ './views/pms/PJTE1000.vue'); menuList.push(SWZP0014); menuListStr.push("SWZP0014");
+const SWZP0030 = () => import(/* webpackChunkName: "SWZP0030" */ './views/pms/PJTE2200.vue'); menuList.push(SWZP0030); menuListStr.push("SWZP0030");
+const SWZP0040 = () => import(/* webpackChunkName: "SWZP0040" */ './views/pms/PJTE3000.vue'); menuList.push(SWZP0040); menuListStr.push("SWZP0040");
+const SWZP0050 = () => import(/* webpackChunkName: "SWZP0050" */ './views/pms/PJTE6000.vue'); menuList.push(SWZP0050); menuListStr.push("SWZP0050");
+const SWZP0060 = () => import(/* webpackChunkName: "SWZP0060" */ './views/pms/PJTE4000.vue'); menuList.push(SWZP0060); menuListStr.push("SWZP0060");
+const SWZP0070 = () => import(/* webpackChunkName: "SWZP0070" */ './views/pms/PJTE2210.vue'); menuList.push(SWZP0070); menuListStr.push("SWZP0070");
+const SWZP0080 = () => import(/* webpackChunkName: "SWZP0080" */ './views/pms/PJTE2110.vue'); menuList.push(SWZP0080); menuListStr.push("SWZP0080");
+const SWZP0090 = () => import(/* webpackChunkName: "SWZP0090" */ './views/pms/PJTE5000.vue'); menuList.push(SWZP0090); menuListStr.push("SWZP0090");
+const SWZP0100 = () => import(/* webpackChunkName: "SWZP0100" */ './views/pms/PJTE7000.vue'); menuList.push(SWZP0100); menuListStr.push("SWZP0100");
+const SWZP0110 = () => import(/* webpackChunkName: "SWZP0110" */ './views/pms/PJTE9000.vue'); menuList.push(SWZP0110); menuListStr.push("SWZP0110");
 
 Vue.use(Router);
 

@@ -255,11 +255,11 @@ export default {
             this.set_yn = "Y";
             this.row++;
           } else if (this.set_yn === "Y") {
-            if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected        = sessionStorage.getItem("prjt_id")
-            if(this.CD1000000001T.length !== 0)  this.bzcd_selected           = this.CD1000000001T[0].value
-            if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected     = this.CD1000000002T[0].value
+            if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected        = sessionStorage.getItem("LOGIN_PROJ_ID")
+            if(this.CD1000000001T.length !== 0)  this.bzcd_selected           = sessionStorage.getItem("LOGIN_BZCD")
+            if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected    = this.CD1000000002T[0].value
             if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected    = this.CD1000000003T[0].value
-            if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected    = this.CD1000000004T[0].value
+            if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected     = this.CD1000000004T[0].value
             break;
           }
         }
@@ -330,7 +330,7 @@ export default {
       // PMS 상세 코드
       axiosService.get("/PJTE2100/combo", {
         params: {
-          prjt_id: sessionStorage.getItem("prjt_id")
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID")
         }
       }).then(res => {
         this.setCombo(res.data.data.contents);

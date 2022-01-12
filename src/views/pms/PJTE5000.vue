@@ -1,5 +1,5 @@
 <template>
-  <!-- CONTENTS1 -->
+  <!-- CONTENTS -->
   <div class="contents">
 
     <!-- ASIDE -- LNB -->
@@ -359,7 +359,7 @@ export default {
 // 엑셀파일 업로드 로직 추가 
     },
     open_page() {
-      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+      this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
     }
 
   },
@@ -474,9 +474,10 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: {url: 'http://localhost:8080/PJTE5000/select', method: 'GET'},
-          updateData: {url: 'http://localhost:8080/PJTE5000/update', method: 'PUT'},
-          modifyData: {url: 'http://localhost:8080/PJTE5000/modify', method: 'PUT'},
+          readData   : { url: process.env.VUE_APP_API + '/PJTE5000/select', method: 'GET' },
+          createData : { url: process.env.VUE_APP_API + '/PJTE5000/create', method: 'POST'},
+          updateData : { url: process.env.VUE_APP_API + '/PJTE5000/update', method: 'PUT'},
+          deleteData : { url: process.env.VUE_APP_API + '/PJTE5000/delete', method: 'PUT'},
         },
         initialRequest: false,
       },

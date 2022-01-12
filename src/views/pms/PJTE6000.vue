@@ -201,7 +201,7 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
-import WindowPopup from "./SWZP0041.vue";          // 결함등록팝업
+import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 
 //그리드 아이템 예제
