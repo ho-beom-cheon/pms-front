@@ -52,6 +52,21 @@
         <div class="col">
           <ul class="filter-con clear-fix">
             <li class="filter-item">
+              <div class="item-con">백업ID
+                <select
+                    v-model="info.prjt_nm_selected"
+                    style="width: 120px"
+                >
+                  <option
+                      v-for="(prjt_nm, idx) in info.prjt_nm"
+                      :key="idx"
+                      v-text="prjt_nm.text"
+                      :value="prjt_nm.value"
+                  ></option>
+                </select>
+              </div>
+            </li>
+            <li class="filter-item">
               <div class="item-con">프로젝트명
                 <select
                     v-model="info.prjt_nm_selected"
@@ -122,31 +137,57 @@
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">요청자
+              <div class="input-searchWrap">요청자
                 <input type="text"
-                       placeholder="입력"
+                       placeholder="직원번호"
+                       id="id.achi_no"
+                       v-model="info.achi_no"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px; background-color: #dcdcdc; margin-right: 3px"
+                       disabled
+                >
+                <button class="search-btn"
+                        id="btn.achi_nm"
+                        @click="open_pjte9001"
+                ></button>
+                <input type="text"
+                       placeholder="직원명"
+                       id="id.achi_nm"
                        v-model="info.achi_nm"
                        @keyup.enter="fnSearch"
-                       style="width: 110px"
+                       style="width: 80px"
                 >
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">조치담당자
+              <div class="input-searchWrap">조치담당자
                 <input type="text"
-                       placeholder="입력"
+                       placeholder="직원번호"
+                       id="id.ttmn_crpe_no"
+                       v-model="info.ttmn_crpe_no"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px; background-color: #dcdcdc; margin-right: 3px"
+                       disabled
+                >
+                <button class="search-btn"
+                        id="btn.ttmn_crpe_nm"
+                        @click="open_pjte9001"
+                ></button>
+                <input type="text"
+                       placeholder="직원명"
+                       id="id.ttmn_crpe_nm"
                        v-model="info.ttmn_crpe_nm"
-                       @keyup.enter="fnSearcha"
-                       style="width: 110px"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px"
                 >
               </div>
             </li>
-            <li class="filter-item">
-              <div class="item-con">
-                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
-                <label>　완료/제외/해결/미발생해소 포함</label>
-              </div>
-            </li>
+<!--            <li class="filter-item">-->
+<!--              <div class="item-con">-->
+<!--                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">-->
+<!--                <label>　완료/제외/해결/미발생해소 포함</label>-->
+<!--              </div>-->
+<!--            </li>-->
             <li class="filter-item">
               <div class="item-con">요청일자
                 <div class="input-dateWrap">
@@ -634,6 +675,7 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    this.$refs.grid.invoke("disableColumn", 'rgs_dis_cd');
     console.log("mounted");
     // 최초조회
     this.fnSearch();
@@ -792,6 +834,12 @@ export default {
     },
     /* 저장 */
     fnSearch() {
+      // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
+      this.info.achi_no = document.getElementById("id.achi_no").value            // 조회한 요청자 이름 설정
+      this.info.achi_nm = document.getElementById("id.achi_nm").value            // 조회한 요청자 이름 설정
+      this.info.ttmn_crpe_no = document.getElementById("id.ttmn_crpe_no").value  // 조회한 조치담당자 이름 설정
+      this.info.ttmn_crpe_nm = document.getElementById("id.ttmn_crpe_nm").value  // 조회한 조치담당자 이름 설정
+      // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -803,6 +851,10 @@ export default {
     },
     gridExcelImport() {
 
+    },
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
     },
     /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
     getFormatDate(date) {
@@ -886,7 +938,10 @@ export default {
         ttmn_txt: this.ttmn_txt,                   // 조치내용
         slv_mpln_txt: this.slv_mpln_txt,           // 해결방안내용
 
-        check_Yn: false,       // 완료/제외/해결/미발생해소 포함 여부
+        achi_no: this.achi_nm,                     // 요청자
+        ttmn_crpe_no: this.ttmn_crpe_nm,           // 조치담당자
+
+        // check_Yn: false,       // 완료/제외/해결/미발생해소 포함 여부
       },
 
       detail: {
@@ -1007,6 +1062,13 @@ export default {
           width: 150,
           align: 'left',
           name: 'rgs_dis_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'text',
+            options:{
+              listItems: rgs_dis_cd
+            }
+          }
         },
         {
           header: '관리ID',
