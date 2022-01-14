@@ -518,6 +518,9 @@
   </div>
 </template>
 <script>
+window.fileData = (fileLists) => {
+  console.log(fileLists)
+}
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
@@ -668,7 +671,7 @@ export default {
 // 엑셀파일 업로드 로직 추가
     },
     open_page(){
-      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+      window.open("../PJTE9002/", "open_page", "width=1000, height=800");
     }
 
   },
