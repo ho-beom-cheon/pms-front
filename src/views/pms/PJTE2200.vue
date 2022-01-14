@@ -136,13 +136,18 @@
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">개발자명
+              <div class="input-searchWrap">개발자명
                 <input type="text"
                        placeholder="입력"
+                       id="id.dvlpe_eno"
+                       name="info.dvlpe_eno"
                        v-model="info.dvlpe_eno"
                        @keyup.enter="fnSearch"
                        style="width: 140px"
                 >
+                <button class="search-btn"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
             <li class="filter-item">
@@ -214,9 +219,9 @@
             </li>
           </ul>
           <ul class="filter-btn">
-<!--            <div class="btn btn-filter-b">-->
-<!--              <a href="#" @click="gridAddRow">행추가(임시)</a>-->
-<!--            </div>-->
+            <!--            <div class="btn btn-filter-b">-->
+            <!--              <a href="#" @click="gridAddRow">행추가(임시)</a>-->
+            <!--            </div>-->
             <div class="btn btn-filter-b">
               <a href="#" @click="open_page">기타항목수정</a>
             </div>
@@ -257,6 +262,7 @@
               :rowHeight="rowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
+              @dblclick="dblonClick"
           ></grid>
         </div>
       </section>
@@ -269,7 +275,7 @@ import {Grid} from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 
-// 커스텀 이미지 버튼을 만들기 위한 클래스 생성
+// 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
 class CustomRenderer {
   constructor(props) {
     const el = document.createElement('img');
@@ -424,7 +430,13 @@ export default {
       this.$refs.grid.invoke("getRow", this.curRow);
       // 결함등록 Column 클릭 시 결함등록팝업 호출
       if(ev.columnName == 'btn_popup') {
-        this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
+        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+      }
+    },
+    dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
+      this.curRow = ev.rowKey;
+      if(ev.columnName == 'tst_case_nm') {
+        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
       }
     },
     // gridfocusChange(ev) {
@@ -472,7 +484,10 @@ export default {
       this.$refs.grid.invoke("import", "xlsx", {fileName: "엑셀업로드"});
     },
     open_page() {
-      this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
+      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+    },
+    open_pjte9001() {
+      this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");
     },
   },
   // 특정 데이터에 실행되는 함수를 선언하는 부분
@@ -683,7 +698,6 @@ export default {
           width: 200,
           align: 'left',
           name: 'tst_case_nm',
-          editor: 'text'
         },
         {
           header: '처리단계',

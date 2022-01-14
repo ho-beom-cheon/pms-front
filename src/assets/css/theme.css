@@ -98,7 +98,7 @@ textarea, input, select {
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: pre-wrap;
 }
 input[type="date"]::-webkit-calendar-picker-indicator{
     opacity:0;
