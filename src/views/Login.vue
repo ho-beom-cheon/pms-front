@@ -1,6 +1,9 @@
 <template>
   <body>
   <section class="login">
+   <div disabled="true">
+    <combo></combo>
+   </div>
     <div class="loginBx">
       <div class="top">
         <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
@@ -151,6 +154,7 @@ export default {
           userId: this.userId,
           password: this.password,
           pjt_selected: this.pjt_selected,
+          btn_gubun: "Y",
         }).then(res => {
           this.modals.modal1 = true
         }).catch(e => {

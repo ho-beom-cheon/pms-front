@@ -1,3 +1,5 @@
+import {loginUser} from "@/api/auth";
+
 const pms = {
     namespaced: true,
     state: {
@@ -20,6 +22,11 @@ const pms = {
         },
     },
     actions: {
+        async SET_COMBO({ commit }, data) {
+            //const {data} = await loginUser(); // api 호출
+            commit('SET_CD_ALL', data);
+            console.log("data :: " , data);
+        }
     }
 }
 
