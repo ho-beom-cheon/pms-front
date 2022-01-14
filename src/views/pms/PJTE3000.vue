@@ -216,6 +216,18 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modal123" cols="73" rows="15" style="margin-bottom: 10px">{{modalTxt}}</textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
         <div class="gridWrap" style="min-width: 750px;">
           <grid
               ref="grid"
@@ -223,11 +235,13 @@
               :header="header"
               :columns="columns"
               :bodyHeight="bodyHeight"
+              :minRowHeight="minRowHeight"
               :showDummyRows="showDummyRows"
               :columnOptions="columnOptions"
               :rowHeight="rowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
+              @dblclick="dblonClick"
           ></grid>
         </div>
       </section>
@@ -241,6 +255,7 @@ import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import axios from "axios";
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
+import Modal from "@/components/Modal";
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
@@ -283,17 +298,11 @@ const err_prc_step_cd = [
 
 ];
 
-var prjt_nm_selected;
-var bzcd_selected;
-var rgs_dscd_selected;
-var err_tycd_selected;
-var err_prc_step_cd_selected;
-
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
+    Modal,
     grid: Grid,
-    WindowPopup
   },
   // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
   // "라이프사이클 훅"이라고 함.
@@ -313,7 +322,7 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
-    this.$refs.grid.invoke("readData");
+    this.fnSearch();
     console.log("mounted");
   },
   beforeUpdate() {
@@ -341,13 +350,27 @@ export default {
     change(){
       console.log();
     },
-    fnSave(){
-      //this.$refs.grid.invoke("modifyData");
-      //console.log("modifyData");
-    },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+    },
+    dblonClick(ev) {  // 그리드 내용 더블클릭 시 상세보기 모달팝업
+      this.curRow = ev.rowKey;
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      if(typeof currentCellData.value !=="undefined" && currentCellData.value !== '' && currentCellData.value !== null) {
+        if(ev.columnName == 'ttmn_txt') {  // 컬럼명이 <조치내용>일 때만 팝업
+          this.modals.txt_modal1 = true;
+          this.modalTxt = currentCellData.value;
+          const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+        }
+      }
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+        this.$refs.grid.invoke("setValue", this.curRow, "ttmn_txt", document.getElementById("modal123").value);
+        this.modals.txt_modal1 = false;
+    },
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     fnSearch(){
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -377,8 +400,8 @@ export default {
       // 엑셀파일 업로드 로직 추가
     },
     open_page(){
-      this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
-    }
+      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+    },
 
   },
   // 특정 데이터에 실행되는 함수를 선언하는 부분
@@ -425,13 +448,18 @@ export default {
 
       check_Yn    : false,  // 삭제프로그램/소스취약점포함
 
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
       count:0,
       curRow:-1,
       title:"",
       scrollX:false,
       scrollY:false,
       bodyHeight: 610,
-      rowHeight: 30,
+      minRowHeight: 10,
+      rowHeight: 25,
       showDummyRows: true,
       open: false,
       menu_list: [
@@ -531,19 +559,6 @@ export default {
           }
         },
         {
-          header: '프로그램ID',
-          width: 150,
-          align: 'left',
-          name: 'prjt_id'/*컬럼명 name 애매모호 ...db 보고 확인 */
-        },
-        {
-          header: '프로그램명',
-          width: 280,
-          align: 'left',
-          name: 'pgm_nm',/*컬럼명 name 애매모호 ...db 보고 확인 */
-
-        },
-        {
           header: '결함유형',
           width: 100,
           align: 'center',
@@ -569,7 +584,7 @@ export default {
           align: 'center',
           name: 'rgs_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
+          editor: 'datePicker',
         },
         {
           header: '결함등록자',
@@ -612,9 +627,9 @@ export default {
         },
         {
           header: '조치내용',
-          width: 160,
-          align: 'center',
-          name: 'ttmn_txt'
+          width: 360,
+          align: 'left',
+          name: 'ttmn_txt',
         },
         {
           header: '이관전업무',
