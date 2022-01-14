@@ -1,11 +1,28 @@
 <template>
   <div>
     <li class="filter-item">
+      <div class="item-con">백업ID
+        <select
+            v-model = "bkup_id_selected"
+            style   = "width: 167px"
+            @change = "bkup_id_change"
+        >
+          <option
+              v-for  = "(bkup_id, idx) in CD1000000001T"
+              :key   = "idx"
+              v-text = "bkup_id.text"
+              :value = "bkup_id.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item">
       <div class="item-con">프로젝트명
         <select
             v-model = "prjt_nm_selected"
-            style   = "width: 167px"
+            style   = "width: 180px"
             :disabled="read"
+            @change="prjt_nm_chage"
         >
           <option
               v-for  = "(prjt_nm, idx) in CD0000000000T"
@@ -37,7 +54,7 @@
       <div class="item-con">개발구분
         <select
             v-model = "dvlp_dis_cd_selected"
-            style   = "width: 80px"
+            style   = "width: 94px"
             @change = "dvlp_dis_cd_change"
         >
           <option
@@ -86,6 +103,7 @@
 
 <script>
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
+import {mapActions} from 'vuex'
 
 export default {
   name: "combo",
@@ -131,12 +149,16 @@ export default {
       set_yn : "",
       read : true,
 
-      //프로젝트명
+      // 백업ID
+      bkup_id_selected : "",
+      bkup_id : "",
+      // 프로젝트명
       prjt_nm_selected : "",
       prjt_nm : "",
       // 업무구분
       bzcd_selected : "",
       bzcd : "",
+      bzcd_n : [],
       // 프로그램구분
       pgm_dis_cd_selected : "",
       pgm_dis_cd : "",
@@ -149,8 +171,15 @@ export default {
     }
   },
   methods: {
-    setTest() {
-      this.$store.commit('pms/SET_CD_ALL', this.cd_all)
+    ...mapActions("pms",["SET_COMBO"]),
+    async setTest(){
+      try {
+        await this.SET_COMBO(this.cd_all)
+        console.log("확인")
+      } catch(error) {
+        console.log("Error Msg : " + error)
+        // 개발용
+      }
     },
     bzcd_change() {
       this.$emit('bzcd_change', this.bzcd_selected)
@@ -159,10 +188,16 @@ export default {
       this.$emit('dvlp_dis_cd_change', this.dvlp_dis_cd_selected)
     },
     pgm_dis_cd_change() {
-      this.$emit('pgm_dis_cd_change', this.pgm_dis_cd_change)
+      this.$emit('pgm_dis_cd_change', this.pgm_dis_cd_selected)
     },
     prc_step_cd_change() {
-      this.$emit('prc_step_cd_change', this.prc_step_cd_change)
+      this.$emit('prc_step_cd_change', this.prc_step_cd_selected)
+    },
+    bkup_id_change() {
+      this.$emit('bkup_id_change', this.bkup_id_selected)
+    },
+    prjt_nm_chage() {
+      this.$emit('prjt_nm_chage', this.prjt_nm_selected)
     },
 
     setCombo(data) {
@@ -255,8 +290,9 @@ export default {
             this.set_yn = "Y";
             this.row++;
           } else if (this.set_yn === "Y") {
+            if(this.CD0000000000T.length !== 0)  this.bkup_id_selected        = "00000000000"
             if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected        = sessionStorage.getItem("LOGIN_PROJ_ID")
-            if(this.CD1000000001T.length !== 0)  this.bzcd_selected           = sessionStorage.getItem("LOGIN_BZCD")
+            if(this.CD1000000001T.length !== 0)  this.bzcd_selected           = (sessionStorage.getItem("LOGIN_BZCD") !== ""  ? sessionStorage.getItem("LOGIN_BZCD"): this.CD0000000000T[0].value)
             if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected    = this.CD1000000002T[0].value
             if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected    = this.CD1000000003T[0].value
             if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected     = this.CD1000000004T[0].value
@@ -267,6 +303,7 @@ export default {
       }
     },
     setCdAll() {
+      this.bzcd_n.push(this.CD1000000001N)
       this.cd_all.push(this.CD0000000000N)
       this.cd_all.push(this.CD1000000001N)
       this.cd_all.push(this.CD1000000002N)
@@ -296,35 +333,41 @@ export default {
       this.cd_all.push(this.CD1000000026N)
     },
     init()  {
+      // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
+          sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+        this.read = false;
+      }
+
       this.code_it =
           [
-              "0000000000",
-              "1000000001",
-              "1000000002",
-              "1000000003",
-              "1000000004",
-              "1000000005",
-              "1000000006",
-              "1000000007",
-              "1000000008",
-              "1000000009",
-              "1000000010",
-              "1000000011",
-              "1000000012",
-              "1000000013",
-              "1000000014",
-              "1000000015",
-              "1000000016",
-              "1000000017",
-              "1000000018",
-              "1000000019",
-              "1000000020",
-              "1000000021",
-              "1000000022",
-              "1000000023",
-              "1000000024",
-              "1000000025",
-              "1000000026",
+            "0000000000",
+            "1000000001",
+            "1000000002",
+            "1000000003",
+            "1000000004",
+            "1000000005",
+            "1000000006",
+            "1000000007",
+            "1000000008",
+            "1000000009",
+            "1000000010",
+            "1000000011",
+            "1000000012",
+            "1000000013",
+            "1000000014",
+            "1000000015",
+            "1000000016",
+            "1000000017",
+            "1000000018",
+            "1000000019",
+            "1000000020",
+            "1000000021",
+            "1000000022",
+            "1000000023",
+            "1000000024",
+            "1000000025",
+            "1000000026",
           ];
 
       // PMS 상세 코드
