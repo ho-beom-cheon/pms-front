@@ -163,7 +163,6 @@ export default {
       }
     },
     fnChoice() {  // 선택 버튼 클릭 시 Button의 targetId 에 따라 값을 넘김
-      debugger;
       const btn_id = opener.document.activeElement.id;
       if(typeof this.info.empno!=="undefined" && this.info.empno !== '' && this.info.empno !== null) {
         if (btn_id == 'btn.achi_nm') {
