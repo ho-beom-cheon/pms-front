@@ -173,13 +173,13 @@ export default {
           opener.document.getElementById('id.ttmn_crpe_nm').value = this.info.empnm  // 조치담당자 직원명
           opener.document.getElementById('id.ttmn_crpe_no').value = this.info.empno  // 조치담당자 직원번호
           window.close();
-        } else if (btn_id == 'btn.dvlpe_nm') {
+        } else if (btn_id == 'btn.dvlpe') {
           opener.document.getElementById('id.dvlpe_nm').value = this.info.empnm  // 개발자 직원명
           opener.document.getElementById('id.dvlpe_no').value = this.info.empno  // 개발자 직원번호
           window.close();
-        } else if (btn_id == 'btn.pl_nm') {
-          opener.document.getElementById('id.pl_nm').value = this.info.empnm  // PL 직원명
-          opener.document.getElementById('id.pl_no').value = this.info.empno  // PL 직원번호
+        } else if (btn_id == 'btn.pl') {
+          opener.document.getElementById('id.pl_nm').value = this.info.empnm  // 담당자 직원명
+          opener.document.getElementById('id.pl_no').value = this.info.empno  // 담당자 직원번호
           window.close();
         }
       } else {
@@ -214,8 +214,8 @@ export default {
       window.close();
     },
     fnSearch() {
-        this.$refs.grid.invoke("setRequestParams", this.info);
-        this.$refs.grid.invoke("readData");
+      this.$refs.grid.invoke("setRequestParams", this.info);
+      this.$refs.grid.invoke("readData");
     },
     gridInit() {
       this.$refs.grid.invoke("clear");
