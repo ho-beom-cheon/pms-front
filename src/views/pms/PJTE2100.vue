@@ -90,40 +90,51 @@
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">개발자명
+              <div class="input-searchWrap">개발자명
+
                 <input type="text"
-                       placeholder="입력"
+                       placeholder="직원명"
+                       id="id.dvlpe_nm"
                        v-model="info.dvlpe_nm"
-                       style   = "width: 115px"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px"
                 >
-                <button>
-                 <img src="@/assets/img/ic_search.svg" alt="profile">
-                </button>
                 <input type="text"
-                       placeholder="입력"
+                       placeholder="직원번호"
+                       id="id.dvlpe_no"
                        v-model="info.dvlpe_no"
-                       style   = "width: 120px"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px; background-color: #dcdcdc; margin-left: 3px"
                        :disabled = true
                 >
-              </div>
+                <button class="search-btn"
+                        id="btn.dvlpe_nm"
+                        @click="open_pjte9001"
+                ></button>
 
+              </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">담당PL명
+              <div class="input-searchWrap">담당PL명
                 <input type="text"
-                       placeholder="입력"
+                       placeholder="직원명"
+                       id="id.pl_nm"
                        v-model="info.pl_nm"
-                       style   = "width: 115px"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px"
                 >
-                <button>
-                  <img src="@/assets/img/ic_search.svg" alt="profile">
-                </button>
                 <input type="text"
-                       placeholder="입력"
+                       placeholder="직원번호"
+                       id="id.pl_no"
                        v-model="info.pl_no"
-                       style   = "width: 120px"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px; background-color: #dcdcdc; margin-left: 3px"
                        :disabled = true
                 >
+                <button class="search-btn"
+                        id="btn.pl_nm"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
             <li class="filter-item">
@@ -170,6 +181,20 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <!-- Modal popup contents -->
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
+        <!-- grid contents -->
         <div class="gridWrap" style="min-width: 750px;">
           <grid
               ref="grid"
@@ -182,6 +207,7 @@
               :rowHeight="rowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
+              @dblclick="dblonClick"
           ></grid>
         </div>
       </section>
@@ -192,9 +218,11 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import { Grid } from '@toast-ui/vue-grid';
+import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import { mapActions, mapState } from 'vuex'
+
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
 class CustomRenderer {
@@ -219,7 +247,8 @@ export default {
   components: {
     Combo,
     grid: Grid,
-    WindowPopup
+    WindowPopup,
+    Modal
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -285,6 +314,7 @@ export default {
       // 특정 열 비활성화
       this.$refs.grid.invoke("disableColumn", 'bz_dtls_txt');
       this.$refs.grid.invoke("disableColumn", 'pgm_id');
+      this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
 
       // '100' 권한,개발잠명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
@@ -399,12 +429,39 @@ export default {
       if(ev.columnName === 'pal_atfl_mng_id') {
         this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
       }
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      if(typeof currentCellData.value !=="undefined" && currentCellData.value !== '' && currentCellData.value !== null) {
+        if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+          this.modals.txt_modal1 = true;
+          this.modalTxt = currentCellData.value;
+          const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+        }
+      }
+    },
+    // 그리드 내용 더블클릭 시 상세보기 모달팝업
+    dblonClick(ev) {
+      this.curRow = ev.rowKey;
+
+
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
+    },
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     //조회
     fnSearch(){
       if(this.searchVaildation() === false) {
         return;
       }
+      // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
+      this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value            // 조회한 요청자 이름 설정
+      this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value            // 조회한 요청자 이름 설정
+      this.info.pl_no = document.getElementById("id.pl_no").value  // 조회한 조치담당자 이름 설정
+      this.info.pl_nm = document.getElementById("id.pl_nm").value  // 조회한 조치담당자 이름 설정
+      // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -422,7 +479,12 @@ export default {
       const addRow = this.$refs.grid.invoke("getModifiedRows").createdRows[0].rowKey;
       //this.$refs.grid.invoke("disableColumn", "pgm_nm");
       this.$refs.grid.invoke("startEditing", 52,'pgm_nm');
-
+      this.fnEnable();
+    },
+    fnEnable() {
+      // 새로 ADD한 Row를 enable시킴
+      this.NewRow = this.$refs.grid.invoke("getRowCount");
+      this.$refs.grid.invoke("enableRow", this.NewRow-1, {withCheckbox: true});
     },
     // 행삭제
     gridDelRow(){
@@ -439,6 +501,10 @@ export default {
     // 엑셀파일 업로드(미완성)
     gridExcelImport(){
       this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀업로드"});
+    },
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
     },
     // 팝업 호출
     open_page(){
@@ -606,6 +672,12 @@ export default {
           name: '시스템관리'
         },
       ],
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
 
       /* grid 속성 */
       count:0,
@@ -876,7 +948,7 @@ export default {
         },
         {
           header: '비고',
-          width: 120,
+          width: 220,
           name: 'rmrk',
           editor: 'text',
           ellipsis : true,
