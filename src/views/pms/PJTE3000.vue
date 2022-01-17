@@ -216,10 +216,11 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <!-- Modal popup contents -->
         <Modal :show.sync="modals.txt_modal1">
           <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
           <tr>
-            <textarea id="modal123" cols="73" rows="15" style="margin-bottom: 10px">{{modalTxt}}</textarea>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
           </tr>
           <tr>
             <div style="float: right">
@@ -228,6 +229,7 @@
             </div>
           </tr>
         </Modal>
+        <!-- grid contents -->
         <div class="gridWrap" style="min-width: 750px;">
           <grid
               ref="grid"
@@ -353,9 +355,7 @@ export default {
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
-    },
-    dblonClick(ev) {  // 그리드 내용 더블클릭 시 상세보기 모달팝업
-      this.curRow = ev.rowKey;
+      // 그리드 내용 클릭 시 상세보기 모달팝업
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
       if(typeof currentCellData.value !=="undefined" && currentCellData.value !== '' && currentCellData.value !== null) {
         if(ev.columnName == 'ttmn_txt') {  // 컬럼명이 <조치내용>일 때만 팝업
@@ -365,9 +365,12 @@ export default {
         }
       }
     },
+    dblonClick(ev) {
+      this.curRow = ev.rowKey;
+    },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-        this.$refs.grid.invoke("setValue", this.curRow, "ttmn_txt", document.getElementById("modal123").value);
-        this.modals.txt_modal1 = false;
+      this.$refs.grid.invoke("setValue", this.curRow, "ttmn_txt", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
@@ -448,10 +451,12 @@ export default {
 
       check_Yn    : false,  // 삭제프로그램/소스취약점포함
 
+      /* 그리드 상세보기 모달 속성 */
       modals: {
         txt_modal1: false,
       },
       modalTxt:this.modalTxt,
+
       count:0,
       curRow:-1,
       title:"",
@@ -596,7 +601,8 @@ export default {
           header: '결함내용',
           width: 110,
           align: 'center',
-          name: 'err_txt'
+          name: 'err_txt',
+          ellipsis : true,
         },
         {
           header: '조치예정일자',
@@ -630,6 +636,7 @@ export default {
           width: 360,
           align: 'left',
           name: 'ttmn_txt',
+          ellipsis : true,
         },
         {
           header: '이관전업무',

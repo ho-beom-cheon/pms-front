@@ -139,40 +139,28 @@
             <li class="filter-item">
               <div class="input-searchWrap">요청자
                 <input type="text"
-                       placeholder="직원번호"
-                       id="id.achi_no"
-                       v-model="info.achi_no"
-                       @keyup.enter="fnSearch"
-                       style="width: 80px; background-color: #dcdcdc; margin-right: 3px"
-                       disabled
-                >
-                <button class="search-btn"
-                        id="btn.achi_nm"
-                        @click="open_pjte9001"
-                ></button>
-                <input type="text"
                        placeholder="직원명"
                        id="id.achi_nm"
                        v-model="info.achi_nm"
                        @keyup.enter="fnSearch"
                        style="width: 80px"
                 >
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.achi_no"
+                       v-model="info.achi_no"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px; background-color: #dcdcdc; margin-left: 3px"
+                       :disabled = true
+                >
+                <button class="search-btn"
+                        id="btn.achi_nm"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
             <li class="filter-item">
               <div class="input-searchWrap">조치담당자
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.ttmn_crpe_no"
-                       v-model="info.ttmn_crpe_no"
-                       @keyup.enter="fnSearch"
-                       style="width: 80px; background-color: #dcdcdc; margin-right: 3px"
-                       disabled
-                >
-                <button class="search-btn"
-                        id="btn.ttmn_crpe_nm"
-                        @click="open_pjte9001"
-                ></button>
                 <input type="text"
                        placeholder="직원명"
                        id="id.ttmn_crpe_nm"
@@ -180,6 +168,18 @@
                        @keyup.enter="fnSearch"
                        style="width: 80px"
                 >
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.ttmn_crpe_no"
+                       v-model="info.ttmn_crpe_no"
+                       @keyup.enter="fnSearch"
+                       style="width: 80px; background-color: #dcdcdc; margin-left: 3px"
+                       :disabled = true
+                >
+                <button class="search-btn"
+                        id="btn.ttmn_crpe_nm"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
 <!--            <li class="filter-item">-->

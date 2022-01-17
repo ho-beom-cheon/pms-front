@@ -163,7 +163,6 @@ export default {
       }
     },
     fnChoice() {  // 선택 버튼 클릭 시 Button의 targetId 에 따라 값을 넘김
-      debugger;
       const btn_id = opener.document.activeElement.id;
       if(typeof this.info.empno!=="undefined" && this.info.empno !== '' && this.info.empno !== null) {
         if (btn_id == 'btn.achi_nm') {
@@ -173,6 +172,14 @@ export default {
         } else if (btn_id == 'btn.ttmn_crpe_nm') {
           opener.document.getElementById('id.ttmn_crpe_nm').value = this.info.empnm  // 조치담당자 직원명
           opener.document.getElementById('id.ttmn_crpe_no').value = this.info.empno  // 조치담당자 직원번호
+          window.close();
+        } else if (btn_id == 'btn.dvlpe_nm') {
+          opener.document.getElementById('id.dvlpe_nm').value = this.info.empnm  // 개발자 직원명
+          opener.document.getElementById('id.dvlpe_no').value = this.info.empno  // 개발자 직원번호
+          window.close();
+        } else if (btn_id == 'btn.pl_nm') {
+          opener.document.getElementById('id.pl_nm').value = this.info.empnm  // PL 직원명
+          opener.document.getElementById('id.pl_no').value = this.info.empno  // PL 직원번호
           window.close();
         }
       } else {
