@@ -54,12 +54,12 @@
 
           <ul class="filter-con clear-fix">
             <combo
-                   @bkup_id_change="bkup_id_change"
-                   @prjt_nm_chage="prjt_nm_chage"
-                   @bzcd_change="bzcd_change"
-                   @dvlp_dis_cd_change="dvlp_dis_cd_change"
-                   @pgm_dis_cd_change="pgm_dis_cd_change"
-                   @prc_step_cd_change="prc_step_cd_change"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @bzcd_change="bzcd_change"
+                @dvlp_dis_cd_change="dvlp_dis_cd_change"
+                @pgm_dis_cd_change="pgm_dis_cd_change"
+                @prc_step_cd_change="prc_step_cd_change"
             ></combo>
             <li class="filter-item">
               <div class="item-con">예상종료일자
@@ -90,38 +90,44 @@
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">개발자명
+              <div class="input-searchWrap">개발자명
                 <input type="text"
                        placeholder="입력"
                        v-model="info.dvlpe_nm"
                        style   = "width: 115px"
+                       id="id.dvlpe_nm"
                 >
-                <button>
-                 <img src="@/assets/img/ic_search.svg" alt="profile">
-                </button>
+                <button class="search-btn"
+                        id="btn.dvlpe"
+                        @click="open_pjte9001"
+                ></button>
                 <input type="text"
                        placeholder="입력"
                        v-model="info.dvlpe_no"
                        style   = "width: 120px"
+                       id="id.dvlpe_no"
                        :disabled = true
                 >
               </div>
 
             </li>
             <li class="filter-item">
-              <div class="item-con">담당PL명
+              <div class="input-searchWrap">담당PL명
                 <input type="text"
                        placeholder="입력"
                        v-model="info.pl_nm"
                        style   = "width: 115px"
+                       id="id.pl_nm"
                 >
-                <button>
-                  <img src="@/assets/img/ic_search.svg" alt="profile">
-                </button>
+                <button class="search-btn"
+                        id="btn.pl"
+                        @click="open_pjte9001"
+                ></button>
                 <input type="text"
                        placeholder="입력"
                        v-model="info.pl_no"
                        style   = "width: 120px"
+                       id="id.pl_no"
                        :disabled = true
                 >
               </div>
@@ -135,35 +141,35 @@
             </li>
           </ul>
           <div class="mt-1">
-          <ul class="filter-btn">
-            <div class="btn btn-filter-d">
-              <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
-            </div>
-            <div class="btn btn-filter-d">
-              <a href="#" @click="gridExcelExport">양식다운로드ⓘ</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelImport">엑셀업로드</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="gridAddRow">행추가</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="gridDelRow">행삭제</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="fnEtcSave">기타항목수정</a>
-            </div>
-            <div class="btn btn-filter-p" style = "margin-left: 20px">
-              <a href="#" @click="fnSave">저장</a>
-            </div>
-            <div class="btn btn-filter-p">
-              <a href="#" @click="fnSearch">조회</a>
-            </div>
-          </ul>
+            <ul class="filter-btn">
+              <div class="btn btn-filter-d">
+                <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
+              </div>
+              <div class="btn btn-filter-d">
+                <a href="#" @click="gridExcelExport">양식다운로드ⓘ</a>
+              </div>
+              <div class="btn btn-filter-e">
+                <a href="#" @click="gridExcelImport">엑셀업로드</a>
+              </div>
+              <div class="btn btn-filter-e">
+                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+              </div>
+              <div class="btn btn-filter-b">
+                <a href="#" @click="gridAddRow">행추가</a>
+              </div>
+              <div class="btn btn-filter-b">
+                <a href="#" @click="gridDelRow">행삭제</a>
+              </div>
+              <div class="btn btn-filter-b">
+                <a href="#" @click="fnEtcSave">기타항목수정</a>
+              </div>
+              <div class="btn btn-filter-p" style = "margin-left: 20px">
+                <a href="#" @click="fnSave">저장</a>
+              </div>
+              <div class="btn btn-filter-p">
+                <a href="#" @click="fnSearch">조회</a>
+              </div>
+            </ul>
           </div>
         </div>
       </section>
@@ -268,6 +274,7 @@ export default {
 
 // 일반적인 함수를 선언하는 부분
   methods: {
+
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.bkup_id_selected = params},
     prjt_nm_chage(params) {this.prjt_nm_selected = params},
@@ -288,8 +295,8 @@ export default {
 
       // '100' 권한,개발잠명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
-         this.info.dvlpe_nm = sessionStorage.getItem("LOGIN_EMP_NM")
-         this.info.dvlpe_no = sessionStorage.getItem("LOGIN_EMP_NO")
+        this.info.dvlpe_nm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.dvlpe_no = sessionStorage.getItem("LOGIN_EMP_NO")
       }
       // '200' 권한, pl명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '200'){
@@ -298,9 +305,6 @@ export default {
       }
       // 정렬
       //this.$refs.grid.invoke("sort",);
-    },
-    change(){
-      console.log("change");
     },
     // 저장 버튼
     fnSave(){
@@ -313,13 +317,14 @@ export default {
       console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
       console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
       console.log("deletedRows ::" ,this.$refs.grid.invoke("getModifiedRows").deletedRows);
+
       // 변경 데이터 저장
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
       this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
       this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
       if(this.createdRows.length !== 0){
-        if(this.vaildation(this.createdRows, "1") === true){
+        if(this.vaildation(this.createdRows, "1", "I") === true){
           try {
             // 데이터 파라메타 전달
             this.$refs.grid.invoke("setRequestParams", JSON.stringify());
@@ -330,10 +335,12 @@ export default {
           } catch (e){
             console.log(e);
           }
+        } else {
+          this.$refs.grid.invoke("reloadData");
         }
       }
       if(this.updatedRows.length !== 0){
-        if(this.vaildation(this.updatedRows, "1") === true) {
+        if(this.vaildation(this.updatedRows, "1", "U") === true) {
           try {
             // 데이터 파라메타 전달
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -343,6 +350,8 @@ export default {
           } catch (e) {
             console.log("업데이트 오류 ::", e);
           }
+        } else {
+           this.$refs.grid.invoke("reloadData");
         }
       }
       if(this.deletedRows.length !== 0){
@@ -368,9 +377,9 @@ export default {
       }
       // 변경 데이터 저장
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-      debugger
+
       if(this.updatedRows.length !== 0){
-        if(this.vaildation(this.updatedRows, "2") === true) {
+        if(this.vaildation(this.updatedRows, "2", "U") === true) {
           try {
             // 데이터 파라메타 전달
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -380,6 +389,8 @@ export default {
           } catch (e) {
             console.log("업데이트 오류 ::", e);
           }
+        } else {
+          this.$refs.grid.invoke("reloadData");
         }
       }
       // 저장 후 변경 데이터 배열 비움
@@ -394,10 +405,10 @@ export default {
 
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id') {
-        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+        this.pop = window.open("../PJTE9002/", "open_page", "width=100, height=400");
       }
       if(ev.columnName === 'pal_atfl_mng_id') {
-        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+        this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
       }
     },
     //조회
@@ -405,6 +416,12 @@ export default {
       if(this.searchVaildation() === false) {
         return;
       }
+      // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
+      this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value            // 조회한 요청자 이름 설정
+      this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value            // 조회한 요청자 이름 설정
+      this.info.pl_no = document.getElementById("id.pl_no").value  // 조회한 조치담당자 이름 설정
+      this.info.pl_nm = document.getElementById("id.pl_nm").value  // 조회한 조치담당자 이름 설정
+
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -419,16 +436,15 @@ export default {
           },
           {focus:true}) ;
 
-      const addRow = this.$refs.grid.invoke("getModifiedRows").createdRows[0].rowKey;
+      //const addRow = this.$refs.grid.invoke("getModifiedRows").createdRows[0].rowKey;
       //this.$refs.grid.invoke("disableColumn", "pgm_nm");
-      this.$refs.grid.invoke("startEditing", 52,'pgm_nm');
 
     },
     // 행삭제
     gridDelRow(){
-        if(this.$refs.grid.invoke('getRow',this.curRow).save_yn === "Y"){
-          alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
-          return;
+      if(this.$refs.grid.invoke('getRow',this.curRow).save_yn === "Y"){
+        alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
+        return;
       }
       this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm:false});
     },
@@ -442,7 +458,11 @@ export default {
     },
     // 팝업 호출
     open_page(){
-      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+      this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
+    },
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
     },
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
@@ -458,58 +478,68 @@ export default {
 
     },
     // 유효값 검증
-    vaildation(data, division) {
-        /* 공통 */
-        //if(sessionStorage.getItem("LOGIN_AUT_CD") === null)      { alert("권한 ID는 필수 입력 사항입니다");  return false;}
+    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분' , 'update(U) | insert(I) 구분')
+    vaildation(data, division, cuGubun) {
 
-        for(let i=0; i<data.length; i++){
-          // 저장과 기타항목수정 분류
-          if(division === "1") {
-            /* 권한 ID에 따른 처리단계 체크 */
-            if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
-              if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
-                alert("권한이 부족합니다.")
-                return false;
-              }
-            } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-              if (data[i].prc_step_cd !== "300") {
-                alert("권한이 부족합니다.")
-                return false;
-              }
-            } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300") { //권한 ID[300:IT]
-              if (data[i].prc_step_cd !== "400" && data[i].prc_step_cd !== "600") {
-                alert("권한이 부족합니다.")
-                return false;
-              }
-            } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[400:현업]
-              if (data[i].prc_step_cd !== "500" && data[i].prc_step_cd !== "600") {
-                alert("권한이 부족합니다.")
-                return false;
-              }
-            }
-            //권한ID[500:PM,600:PMO] - 모두 가능
-          }
-          /* 출력 영역  */
-          if(data[i].bzcd === null)         { alert("업무구분은 필수 입력 사항입니다");      return false;}
-          if(data[i].pgm_id === null)       { alert("프로그램ID는 필수 입력 사항입니다");    return false;}
-          if(data[i].pgm_nm === null)       {  alert("프로그램명은 필수 입력 사항입니다");   return false;}
-          if(data[i].dvlp_dis_cd === null)  { alert("개발구분은 필수 입력 사항입니다");      return false;}
-          if(data[i].pgm_dis_cd === null)   { alert("프로그램 구분은 필수 입력 사항입니다");  return false;}
-          if(data[i].frcs_sta_dt === null)  { alert("예상시작일자는 필수 입력 사항입니다");   return false;}
-          if(data[i].frcs_end_dt === null)  { alert("예상종료일자는 필수 입력 사항입니다");   return false;}
-          if(data[i].prc_step_cd === null)  { alert("처리단계는 필수 입력 사항입니다");      return false;}
-          if(data[i].dvlpe_no === null)     { alert("개발자 사번은 필수 입력 사항입니다");   return false;}
-          if(data[i].pl_no === null)        { alert("PL 사번은 필수 입력 사항입니다");      return false;}
-          if(data[i].crpe_no === null)      { alert("담당자 사번은 필수 입력 사항입니다");   return false;}
-          if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
-          if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
-
-          if(data[i].prc_step_cd >= "200"){
-            if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-          }
+      for(let i=0; i<data.length; i++){
+        if(cuGubun === "U") {
+          this.updatedRows[i].login_aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+          this.updatedRows[i].login_bzcd = sessionStorage.getItem("LOGIN_BZCD");
+          this.updatedRows[i].login_emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
+          this.updatedRows[i].login_proj_id = sessionStorage.getItem("LOGIN_PROJ_ID");
+        } else {
+          this.createdRows[i].login_aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+          this.createdRows[i].login_bzcd = sessionStorage.getItem("LOGIN_BZCD");
+          this.createdRows[i].login_emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
+          this.createdRows[i].login_proj_id = sessionStorage.getItem("LOGIN_PROJ_ID");
         }
+        // 저장과 기타항목수정 분류
+        if(division === "1") {
+          /* 권한 ID에 따른 처리단계 체크 */
+          if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
+            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
+            if (data[i].prc_step_cd !== "300") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300") { //권한 ID[300:IT]
+            if (data[i].prc_step_cd !== "400" && data[i].prc_step_cd !== "600") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[400:현업]
+            if (data[i].prc_step_cd !== "500" && data[i].prc_step_cd !== "600") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          }
+          //권한ID[500:PM,600:PMO] - 모두 가능
+        }
+        /* 출력 영역  */
+        if(data[i].bzcd === null)         { alert("업무구분은 필수 입력 사항입니다");      return false;}
+        if(data[i].pgm_id === null)       { alert("프로그램ID는 필수 입력 사항입니다");    return false;}
+        if(data[i].pgm_nm === null)       {  alert("프로그램명은 필수 입력 사항입니다");   return false;}
+        if(data[i].dvlp_dis_cd === null)  { alert("개발구분은 필수 입력 사항입니다");      return false;}
+        if(data[i].pgm_dis_cd === null)   { alert("프로그램 구분은 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null)  { alert("예상시작일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].frcs_end_dt === null)  { alert("예상종료일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].prc_step_cd === null)  { alert("처리단계는 필수 입력 사항입니다");      return false;}
+        if(data[i].dvlpe_no === null)     { alert("개발자 사번은 필수 입력 사항입니다");   return false;}
+        if(data[i].pl_no === null)        { alert("PL 사번은 필수 입력 사항입니다");      return false;}
+        if(data[i].crpe_no === null)      { alert("담당자 사번은 필수 입력 사항입니다");   return false;}
+        if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
+        if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
 
-        return  true;
+        if(data[i].prc_step_cd >= "200"){
+          if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+        }
+      }
+
+      return  true;
     },
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
@@ -535,7 +565,11 @@ export default {
       pgm_dis_cd_selected   : null,
       prc_step_cd_selected  : null,
 
-      sessionAraay : this.sessionAraay,
+      login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
+      login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),
+      login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),
+      login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),
+
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
       createdRows : this.createdRows,
@@ -667,14 +701,14 @@ export default {
             type: 'select',
             options:{
               listItems:
-                    [
-                      {"text":" ","value":"NNN"},
-                      {"text":"관리","value":"EEE"},
-                      {"text":"공통","value":"DDD"},
-                      {"text":"신용조사","value":"AAA"},
-                      {"text":"재무제표","value":"BBB"},
-                      {"text":"신용평가","value":"CCC"}
-                    ]
+                  [
+                    {"text":" ","value":"NNN"},
+                    {"text":"관리","value":"EEE"},
+                    {"text":"공통","value":"DDD"},
+                    {"text":"신용조사","value":"AAA"},
+                    {"text":"재무제표","value":"BBB"},
+                    {"text":"신용평가","value":"CCC"}
+                  ]
             }
           }
         },
@@ -733,7 +767,7 @@ export default {
             options:{
               listItems:
                   [
-                      {"text":" ","value":"NNN"},
+                    {"text":" ","value":"NNN"},
                     {"text":"화면","value":"100"},
                     {"text":"프로그램","value":"200"},
                     {"text":"보고서","value":"300"},
@@ -933,6 +967,34 @@ export default {
           header: '프로젝트 ID',
           width: 90,
           name: 'prjt_id',
+          align: 'center',
+          hidden : true,
+        },
+        {
+          header: '권한 코드(세션)',
+          width: 90,
+          name: 'login_aut_cd',
+          align: 'center',
+          hidden : true,
+        },
+        {
+          header: '업무구분(세션)',
+          width: 90,
+          name: 'login_bzcd',
+          align: 'center',
+          hidden : true,
+        },
+        {
+          header: '사원번호(세션)',
+          width: 90,
+          name: 'login_emp_no',
+          align: 'center',
+          hidden : true,
+        },
+        {
+          header: '프로젝트ID(세션)',
+          width: 90,
+          name: 'login_proj_id',
           align: 'center',
           hidden : true,
         },
