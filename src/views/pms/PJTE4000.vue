@@ -182,12 +182,12 @@
                 ></button>
               </div>
             </li>
-<!--            <li class="filter-item">-->
-<!--              <div class="item-con">-->
-<!--                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">-->
-<!--                <label>　완료/제외/해결/미발생해소 포함</label>-->
-<!--              </div>-->
-<!--            </li>-->
+            <!--            <li class="filter-item">-->
+            <!--              <div class="item-con">-->
+            <!--                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">-->
+            <!--                <label>　완료/제외/해결/미발생해소 포함</label>-->
+            <!--              </div>-->
+            <!--            </li>-->
             <li class="filter-item">
               <div class="item-con">요청일자
                 <div class="input-dateWrap">
@@ -550,10 +550,10 @@
             <div class="div-header-b"><h2>상세내용확대보기</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridExcelExport">+ 확대</a>
+                  <a href="#" @click="textSizeUP">+ 확대</a>
                 </div>
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridExcelExport">- 축소</a>
+                  <a href="#" @click="textSizeDown">- 축소</a>
                 </div>
               </ul>
             </div>
@@ -563,8 +563,10 @@
                   <td>
                     <textarea cols="103"
                               rows="33"
+                              id="detailTextArea"
                               v-model="detail.d_req_dis_txt"
                               :readonly="detail.d_req_dis_txt"
+                              style="height: 396px; width: 647px"
                     ></textarea>
                   </td>
                 </li>
@@ -681,6 +683,7 @@ export default {
     this.fnSearch();
     // 상세내용 초기화
     this.fnClear();
+    document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -856,6 +859,14 @@ export default {
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
     },
+    textSizeUP() {  //상세내용 확대보기  (+확대버튼)
+      this.defaultFontSize++;
+      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
+    },
+    textSizeDown() {  //상세내용 확대보기  (-축소버튼)
+      this.defaultFontSize--;
+      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
+    },
     /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
     getFormatDate(date) {
       if (date == null || date === '') {
@@ -975,7 +986,7 @@ export default {
       addRow: {
         grid: this.grid,
       },
-
+      defaultFontSize: 20,
       count: 0,
       curRow: -1,
       title: "",
@@ -1081,12 +1092,14 @@ export default {
           width: 230,
           align: 'left',
           name: 'titl_nm',
+          ellipsis : true,
         },
         {
           header: '요청내용',
           width: 280,
           align: 'left',
           name: 'req_dis_txt',
+          ellipsis : true,
         },
         {
           header: '요청구분',
@@ -1144,12 +1157,14 @@ export default {
           width: 230,
           align: 'left',
           name: 'ttmn_txt',
+          ellipsis : true,
         },
         {
           header: '비고',
           width: 230,
           align: 'left',
           name: 'rmrk',
+          ellipsis : true,
         },
         {
           header: '긴급성',
@@ -1174,6 +1189,7 @@ export default {
           width: 230,
           align: 'left',
           name: 'slv_mpln_txt',
+          ellipsis : true,
         },
       ]
     }
