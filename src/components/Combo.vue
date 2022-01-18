@@ -98,7 +98,6 @@
         </select>
       </div>
     </li>
-    </ul>
   </div>
 </template>
 
