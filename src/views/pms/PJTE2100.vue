@@ -51,9 +51,9 @@
       <!-- 필터영역 -->
       <section class="filter">
         <div class = "col">
-
           <ul class="filter-con clear-fix">
             <combo
+                :comboArray = "this.comboList"
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
@@ -61,6 +61,7 @@
                 @pgm_dis_cd_change="pgm_dis_cd_change"
                 @prc_step_cd_change="prc_step_cd_change"
             ></combo>
+
             <li class="filter-item">
               <div class="item-con">예상종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
@@ -216,7 +217,6 @@ import { Grid } from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
-import { mapActions, mapState } from 'vuex'
 
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -250,6 +250,7 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
+
     console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
@@ -291,12 +292,12 @@ export default {
   methods: {
 
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params) {this.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.prjt_nm_selected = params},
-    bzcd_change(params) {this.bzcd_selected = params},
-    dvlp_dis_cd_change(params) {this.dvlp_dis_cd_selected = params},
-    pgm_dis_cd_change(params) {this.pgm_dis_cd_selected = params},
-    prc_step_cd_change(params) {this.prc_step_cd_selected = params},
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    dvlp_dis_cd_change(params) {this.info.dvlp_dis_cd_selected = params},
+    pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
+    prc_step_cd_change(params) {this.info.prc_step_cd_selected = params},
 
     init() {
       // 그리드 초기화
@@ -581,6 +582,9 @@ export default {
 // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C1","C2","C3","C4"],
+
       info : {
         pgm_id        : this.pgm_id,          // 프로그램ID
         pgm_nm        : this.pgm_nm,          // 프로그램명
@@ -592,6 +596,12 @@ export default {
         frcs_end_dt   : this.frcs_end_dt,     // 계획일자END
         dvlpe_sta_dt  : this.dvlpe_sta_dt,    // 실제일자STA
         dvlpe_end_dt  : this.dvlpe_end_dt,    // 실제일자END
+        prjt_nm_selected      : null,
+        bkup_id_selected      : null,
+        bzcd_selected         : null,
+        dvlp_dis_cd_selected  : null,
+        pgm_dis_cd_selected   : null,
+        prc_step_cd_selected  : null,
       },
       login : {
         login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
@@ -599,12 +609,7 @@ export default {
         login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),
         login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),
       },
-      prjt_nm_selected      : null,
-      bkup_id_selected      : null,
-      bzcd_selected         : null,
-      dvlp_dis_cd_selected  : null,
-      pgm_dis_cd_selected   : null,
-      prc_step_cd_selected  : null,
+
 
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,

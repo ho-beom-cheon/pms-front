@@ -1,9 +1,6 @@
 <template>
   <body>
   <section class="login">
-   <div disabled="true">
-    <combo></combo>
-   </div>
     <div class="loginBx">
       <div class="top">
         <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
@@ -100,7 +97,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import {axiosService} from "@/api/http";
 import Modal from "@/components/Modal.vue";
 // 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다. 

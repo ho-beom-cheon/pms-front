@@ -1,6 +1,6 @@
 <template>
   <div>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C27'">
       <div class="item-con">백업ID
         <select
             v-model = "bkup_id_selected"
@@ -16,7 +16,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트명
         <select
             v-model = "prjt_nm_selected"
@@ -33,7 +33,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C1'">
       <div class="item-con">업무구분
         <select
             v-model = "bzcd_selected"
@@ -50,7 +50,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C2'">
       <div class="item-con">개발구분
         <select
             v-model = "dvlp_dis_cd_selected"
@@ -66,7 +66,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
       <div class="item-con">처리단계
         <select
             v-model = "prc_step_cd_selected"
@@ -82,7 +82,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C4'">
       <div class="item-con">프로그램구분
         <select
             v-model = "pgm_dis_cd_selected"
@@ -98,6 +98,7 @@
         </select>
       </div>
     </li>
+    </ul>
   </div>
 </template>
 
@@ -107,9 +108,12 @@ import {mapActions} from 'vuex'
 
 export default {
   name: "combo",
-
+  props: {
+    comboArray: Array,
+  },
   mounted () {
     this.init()
+    debugger;
   },
   data() {
     return {
@@ -144,6 +148,7 @@ export default {
       CD1000000026T : [],  CD1000000026N : [],
       CD1000000027T : [],  CD1000000027N : [],
 
+      comboList: this.comboArray,
       code_it : [],
       cd_all : [],
       row : 0,
@@ -176,7 +181,7 @@ export default {
     async setTest(){
       try {
         await this.SET_COMBO(this.cd_all)
-        console.log("확인")
+
       } catch(error) {
         console.log("Error Msg : " + error)
         // 개발용
@@ -292,7 +297,7 @@ export default {
             if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected    = this.CD1000000002T[0].value
             if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected    = this.CD1000000003T[0].value
             if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected     = this.CD1000000004T[0].value
-            if(this.CD1000000027T.length !== 0)  this.bkup_id_selected     = this.CD1000000027T[0].value
+            if(this.CD1000000027T.length !== 0)  this.bkup_id_selected        = this.CD1000000027T[0].value
             break;
           }
         }
