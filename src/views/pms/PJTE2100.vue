@@ -74,7 +74,6 @@
                 <input type="text"
                        placeholder="입력"
                        v-model="info.pgm_id"
-                       @keyup.enter="fnSearch"
                        style   = "width: 145px"
                 >
               </div>
@@ -85,7 +84,6 @@
                        placeholder="입력"
                        v-model="info.pgm_nm"
                        id= "info.pgm_nm"
-                       @keyup.enter="fnSearch"
                        style   = "width: 180px"
                 >
               </div>
@@ -290,7 +288,6 @@ export default {
 
 // 일반적인 함수를 선언하는 부분
   methods: {
-
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
@@ -306,11 +303,10 @@ export default {
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
       // 특정 열 비활성화
-      this.$refs.grid.invoke("disableColumn", 'bz_dtls_txt');
       this.$refs.grid.invoke("disableColumn", 'pgm_id');
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
 
-      // '100' 권한,개발잠명
+      // '100' 권한,개발자명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
         this.info.dvlpe_nm = sessionStorage.getItem("LOGIN_EMP_NM")
         this.info.dvlpe_no = sessionStorage.getItem("LOGIN_EMP_NO")
@@ -646,7 +642,7 @@ export default {
       scrollX:false,
       scrollY:false,
       bodyHeight: 610,
-      rowHeight: 30,
+      rowHeight: 25,
       showDummyRows: true,
       open: true,
       // toast ui grid 데이터
@@ -667,7 +663,7 @@ export default {
       },
       rowHeaders:['rowNum'],
       header:{
-        height: 50,
+        height: 45,
         complexColumns: [
           {
             header: '계획',
