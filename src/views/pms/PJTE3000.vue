@@ -66,6 +66,21 @@
               </div>
             </li>
             <li class="filter-item">
+              <div class="item-con">백업ID
+                <select
+                    v-model="info.bkup_id_selected"
+                    style="width: 120px"
+                >
+                  <option
+                      v-for="(bkup_id, idx) in info.bkup_id"
+                      :key="idx"
+                      v-text="bkup_id.text"
+                      :value="bkup_id.value"
+                  ></option>
+                </select>
+              </div>
+            </li>
+            <li class="filter-item">
               <div class="item-con">업무구분
                 <select
                     v-model = "info.bzcd_selected"
@@ -81,7 +96,7 @@
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">등록단계구분
+              <div class="item-con">등록단계
                 <select
                     v-model = "info.rgs_dscd_selected"
                     style   = "width: 120px"
@@ -125,55 +140,90 @@
                 </select>
               </div>
             </li>
-            <li class="filter-item">
-              <div class="item-con">결함등록자
+            <li class="filter-item-n">
+              <div class="input-searchWrap">결함등록자
                 <input type="text"
-                       placeholder="입력"
-                       v-model="info.rgpe_no"
-                       @keyup.enter="fnSearch"
-                       style   = "width: 140px"
+                       placeholder="직원명"
+                       id="id.rgpe_nm"
+                       v-model="info.rgpe_nm"
+                       style="width: 90px"
                 >
+                <button class="search-btn"
+                        id="btn.rgpe"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">담당자
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.rgpe_no"
+                     v-model="info.rgpe_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
+            </li>
+            <li class="filter-item-n">
+              <div class="input-searchWrap">조치자
                 <input type="text"
-                       placeholder="입력"
-                       v-model="info.dvlpe_no"
-                       @keyup.enter="fnSearch"
-                       style   = "width: 145px"
+                       placeholder="직원명"
+                       id="id.dvlpe_nm"
+                       v-model="info.dvlpe_nm"
+                       style="width: 90px"
                 >
+                <button class="search-btn"
+                        id="btn.dvlpe"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">담당PL
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.dvlpe_no"
+                     v-model="info.dvlpe_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
+            </li>
+            <li class="filter-item-n">
+              <div class="input-searchWrap">담당PL
                 <input type="text"
-                       placeholder="입력"
-                       v-model="info.pl_no"
-                       @keyup.enter="fnSearch"
-                       style   = "width: 145px"
+                       placeholder="직원명"
+                       id="id.pl_nm"
+                       v-model="info.pl_nm"
+                       style="width: 90px"
                 >
+                <button class="search-btn"
+                        id="btn.pl"
+                        @click="open_pjte9001"
+                ></button>
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">결함등록일자
-                <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt"></div>
-                -
-                <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt"></div>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">결함조치일자
-                <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
-                -
-                <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt"></div>
-              </div>
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.pl_no"
+                     v-model="info.pl_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
             </li>
             <li class="filter-item">
               <div class="item-con">프로그램ID
                 <input type="text"
                        placeholder="입력"
                        v-model="info.mng_id"
+                       @keyup.enter="fnSearch"
+                       style   = "width: 120px"
+                >
+              </div>
+            </li>
+            <li class="filter-item">
+              <div class="item-con">프로그램명
+                <input type="text"
+                       placeholder="입력"
+                       v-model="info.mng_nm"
                        @keyup.enter="fnSearch"
                        style   = "width: 140px"
                 >
@@ -185,10 +235,26 @@
                        placeholder="입력"
                        v-model="info.err_txt"
                        @keyup.enter="fnSearch"
-                       style   = "width: 435px"
+                       style   = "width: 140px"
                 >
               </div>
             </li>
+            <li class="filter-item">
+              <div class="item-con">결함등록일자
+                <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt" style="width: 125px"></div>
+                -
+                <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt" style="width: 125px"></div>
+              </div>
+            </li>
+            <li class="filter-item">
+              <div class="item-con">결함조치일자
+                <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt" style="width: 125px"></div>
+                -
+                <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt" style="width: 125px"></div>
+              </div>
+            </li>
+
+
 
             <li class="filter-item">
               <div class="item-con">
@@ -376,6 +442,15 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSearch(){
+      // 조회 버튼 클릭 시 직원조회팝업에서 받아온 직원데이터를 v-model에 넣는다.
+      this.info.rgpe_no = document.getElementById("id.rgpe_no").value      // 결함등록자 이름 설정
+      this.info.rgpe_nm = document.getElementById("id.rgpe_nm").value      // 결함등록자 이름 설정
+      this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value    // 조치자 이름 설정
+      this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value    // 조치자 이름 설정
+      this.info.pl_no = document.getElementById("id.pl_no").value          // 담당PL 이름 설정
+      this.info.pl_nm = document.getElementById("id.pl_nm").value          // 담당PL 이름 설정
+
+      // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -405,6 +480,10 @@ export default {
     open_page(){
       this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
     },
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    },
 
   },
   // 특정 데이터에 실행되는 함수를 선언하는 부분
@@ -421,9 +500,12 @@ export default {
     return {
       info : {
 
-        rgpe_no : this.rgpe_no,       //결함등록자
-        dvlpe_no : this.dvlpe_no,     //담당자
-        pl_no : this.pl_no,           //담당PL
+        rgpe_no : this.rgpe_no,       //결함등록자번호
+        rgpe_nm : this.rgpe_nm,       //결함등록자명
+        dvlpe_no : this.dvlpe_no,     //담당자번호
+        dvlpe_nm : this.dvlpe_nm,     //담당자명
+        pl_no : this.pl_no,           //담당PL번호
+        pl_nm : this.pl_nm,           //담당PL명
         mng_id : this.mng_id,         //프로그램ID
         err_txt : this.err_txt,       //결함내용
 
@@ -462,7 +544,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 610,
+      bodyHeight: 650,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,

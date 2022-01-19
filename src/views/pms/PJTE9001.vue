@@ -181,6 +181,10 @@ export default {
           opener.document.getElementById('id.pl_nm').value = this.info.empnm  // 담당자 직원명
           opener.document.getElementById('id.pl_no').value = this.info.empno  // 담당자 직원번호
           window.close();
+        } else if (btn_id == 'btn.rgpe') {
+          opener.document.getElementById('id.rgpe_nm').value = this.info.empnm  // 담당자 직원명
+          opener.document.getElementById('id.rgpe_no').value = this.info.empno  // 담당자 직원번호
+          window.close();
         }
       } else {
         alert('선택 항목이 없습니다.');
