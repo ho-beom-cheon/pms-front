@@ -1,22 +1,6 @@
 <template>
-  <div>
-    <li class="filter-item">
-      <div class="item-con">백업ID
-        <select
-            v-model = "bkup_id_selected"
-            style   = "width: 167px"
-            @change = "bkup_id_change"
-        >
-          <option
-              v-for  = "(bkup_id, idx) in CD1000000027T"
-              :key   = "idx"
-              v-text = "bkup_id.text"
-              :value = "bkup_id.value"
-          ></option>
-        </select>
-      </div>
-    </li>
-    <li class="filter-item">
+  <div style="display:inline;">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트명
         <select
             v-model = "prjt_nm_selected"
@@ -33,7 +17,23 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C27'">
+      <div class="item-con">백업ID
+        <select
+            v-model = "bkup_id_selected"
+            style   = "width: 167px"
+            @change = "bkup_id_change"
+        >
+          <option
+              v-for  = "(bkup_id, idx) in CD1000000027T"
+              :key   = "idx"
+              v-text = "bkup_id.text"
+              :value = "bkup_id.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C1'">
       <div class="item-con">업무구분
         <select
             v-model = "bzcd_selected"
@@ -50,7 +50,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C2'">
       <div class="item-con">개발구분
         <select
             v-model = "dvlp_dis_cd_selected"
@@ -66,7 +66,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
       <div class="item-con">처리단계
         <select
             v-model = "prc_step_cd_selected"
@@ -82,7 +82,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C4'">
       <div class="item-con">프로그램구분
         <select
             v-model = "pgm_dis_cd_selected"
@@ -107,7 +107,9 @@ import {mapActions} from 'vuex'
 
 export default {
   name: "combo",
-
+  props: {
+    comboArray: Array,
+  },
   mounted () {
     this.init()
   },
@@ -144,6 +146,7 @@ export default {
       CD1000000026T : [],  CD1000000026N : [],
       CD1000000027T : [],  CD1000000027N : [],
 
+      comboList: this.comboArray,
       code_it : [],
       cd_all : [],
       row : 0,
@@ -176,7 +179,7 @@ export default {
     async setTest(){
       try {
         await this.SET_COMBO(this.cd_all)
-        console.log("확인")
+
       } catch(error) {
         console.log("Error Msg : " + error)
         // 개발용
@@ -210,10 +213,7 @@ export default {
         for (let z = 0; z < data.length; z++) {
           if (this.code_it[i] === data[z].GRP_TYCD) {
               if(this.row === 0) {
-                if (i === 0) {
-                  this.CD0000000000T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
-                  this.CD0000000000N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
-                } else if (i === 1) {
+                if (i === 1) {
                   this.CD1000000001T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                   this.CD1000000001N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
                 } else if (i === 2) {
@@ -237,9 +237,6 @@ export default {
                 } else if (i === 8) {
                   this.CD1000000008T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                   this.CD1000000008N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
-                } else if (i === 27) {
-                  this.CD1000000027T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
-                  this.CD1000000027N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
                 }
               }
             if(i === 0) {
@@ -286,13 +283,12 @@ export default {
             this.set_yn = "Y";
             this.row++;
           } else if (this.set_yn === "Y") {
-            if(this.CD0000000000T.length !== 0)  this.bkup_id_selected        = "00000000000"
             if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected        = sessionStorage.getItem("LOGIN_PROJ_ID")
-            if(this.CD1000000001T.length !== 0)  this.bzcd_selected           = (sessionStorage.getItem("LOGIN_BZCD") !== ""  ? sessionStorage.getItem("LOGIN_BZCD"): this.CD0000000000T[0].value)
+            if(this.CD1000000001T.length !== 0)  this.bzcd_selected           = (sessionStorage.getItem("LOGIN_BZCD") !== ""  ? sessionStorage.getItem("LOGIN_BZCD"): this.CD1000000001T[0].value)
             if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected    = this.CD1000000002T[0].value
             if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected    = this.CD1000000003T[0].value
             if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected     = this.CD1000000004T[0].value
-            if(this.CD1000000027T.length !== 0)  this.bkup_id_selected     = this.CD1000000027T[0].value
+            if(this.CD1000000027T.length !== 0)  this.bkup_id_selected        = this.CD1000000027T[0].value
             break;
           }
         }

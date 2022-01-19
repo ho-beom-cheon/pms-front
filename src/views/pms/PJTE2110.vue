@@ -50,48 +50,62 @@
       <!-- 필터영역 -->
       <section class="filter">
         <ul class="filter-con clear-fix">
-          <li class="filter-item">
-            <div class="item-con">프로젝트명
-              <select
-                  v-model="info.prjt_nm_selected"
-                  style="width: 167px"
-              >
-                <option
-                    v-for="(prjt_nm, idx) in info.prjt_nm"
-                    :key="idx"
-                    v-text="prjt_nm.text"
-                    :value="prjt_nm.value"
-                ></option>
-              </select>
-            </div>
-          </li>
-          <li class="filter-item">
-            <div class="item-con">업무구분
-              <select
-                  v-model="info.bzcd_selected"
-                  style="width: 145px"
-              >
-                <option
-                    v-for="(bzcd, idx) in info.bzcd"
-                    :key="idx"
-                    v-text="bzcd.text"
-                    :value="bzcd.value"
-                ></option>
-              </select>
-            </div>
-          </li>
+          <Combo
+              :comboArray = "this.comboList"
+              @bkup_id_change="bkup_id_change"
+              @prjt_nm_chage="prjt_nm_chage"
+              @bzcd_change="bzcd_change"
+          ></Combo>
           <li class="filter-item">
             <div class="item-con">기준일
-              <div class="input-dateWrap"><input type="date" v-model="info.sta_dt"></div>
+              <div class="input-dateWrap"><input type="date" v-model="info.inq_date"></div>
             </div>
           </li>
           <li class="filter-item">
-            <div class="item-con">담당자명/직원번호
+            <div class="input-searchWrap">담당PL명
+              <input type="text"
+                     placeholder="직원명"
+                     id="id.pl_nm"
+                     v-model="info.pl_nm"
+                     style   = "width: 120px"
+              >
+              <button class="search-btn"
+                      id="btn.pl"
+                      @click="open_pjte9001"
+              ></button>
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.pl_no"
+                     v-model="info.pl_no"
+                     style   = "width: 120px"
+                     :disabled = true
+              >
+              </div>
+          </li>
+        </ul>
+        <ul class="filter-con clear-fix" :hidden="true">
+          <li class="filter-item">
+            <div class="item-con">현재일자
               <input type="text" v-model="info.crpe_no" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
-            <div class="item-con">
+            <div class="item-con">진행일자
+              <input type="text" v-model="info.crpe_no" style="width: 100px">
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">에러처리일자
+              <input type="text" v-model="info.crpe_no" style="width: 100px">
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">진행일수
+              <input type="text" v-model="info.crpe_no" style="width: 100px">
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">에러처리일수
               <input type="text" v-model="info.crpe_no" style="width: 100px">
             </div>
           </li>
@@ -206,16 +220,13 @@
 </template>
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
+import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
-import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
-import axios from 'axios';
+import {axiosService} from "@/api/http";
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_nm = [{text: "PMS프로젝트", value: "1"}, {text: "PMS프로젝트2", value: "2"}, {text: "PMS프로젝트3", value: "3"}];
-
-
 // 업무구분
 const bzcd = [
   {text: "전체", value: '999'},
@@ -224,18 +235,12 @@ const bzcd = [
   {text: "신용평가", value: "CCC"},
 ];
 
-var prjt_nm_selected;
-var bzcd_selected;
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
+    Combo,
     grid: Grid,
   },
-// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
-// "라이프사이클 훅"이라고 함.
-// 자세한 사항은 Vue 라이프 사이클 참조
-// https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
     console.log("beforeCreate");
   },
@@ -243,7 +248,6 @@ export default {
 // 변수 초기화
   created() {
     console.log("created");
-
   },
   beforeMount() {
     console.log("beforeMount");
@@ -251,7 +255,7 @@ export default {
   mounted() {
     console.log("mounted");
     // 최초조회
-    this.fnSearch();
+    //this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -268,27 +272,51 @@ export default {
 // 함수를 선언하는 부분
 // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
   computed: {
-    getCount() {
-      return this.count;
-    }
-
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
-    change() {
-      console.log("change");
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].bzcd_selected;
+    },
+    init() {
+      axiosService.get(
+          "/dayCalc",
+          {
+          },
+      ).then(res => {
+      }).catch(e => {
+
+      });
+      // '500', '600' 권한,조회 영역 활성화
+      if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
+
+      }
+      // 정렬
+      //this.$refs.grid.invoke("sort",);
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
     },
     fnSearch() {
+      this.comboSetData();
+      this.info.gubun = "1";
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
+      this.info.gubun = "2"
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
+      this.info.gubun = "3"
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
+      this.info.gubun = "4"
       this.$refs.grid4.invoke("setRequestParams", this.info);
       this.$refs.grid4.invoke("readData");
     },
@@ -304,33 +332,36 @@ export default {
       this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
       this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    },
 
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
     }
   },
 // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C1"],
+
       info: {
-        prjt_nm: prjt_nm,    // 프로젝트명
-        bzcd: bzcd,       // 업무구분
-
-        crpe_no: this.crpe_no,    // 담당자 사번
-
+        crpe_no: this.crpe_no,       // 담당자 사번
+        inq_date: this.inq_date,         // 기준일자
         /* select 박스 */
-        prjt_nm_selected: prjt_nm[0].value,      // 프로젝트명
-        bzcd_selected: bzcd[0].value,         // 업무구분
-
-        sta_dt: '',    // 기준일자
+        bkup_id_selected: this.bkup_id_selected,      // 프로젝트명
+        prjt_nm_selected: this.prjt_nm_selected,      // 프로젝트명
+        bzcd_selected: this.bzcd_selected,         // 업무구분
+        gubun : '',
       },
-
+      addRow : {
+        grid1 : this.grid1,
+      },
       count: 0,
       curRow: -1,
       title: "",
@@ -399,169 +430,151 @@ export default {
         },
       ],
       dataSource: {
-        api: {
-          readData: {url: 'http://localhost:8080/PJTE2110/select', method: 'GET'},
-        },
+        api: {readData: {url: process.env.VUE_APP_API + '/PJTE2110/select', method: 'GET'}},
         initialRequest: false,
       },
-      columnOptions: {
-        resizable: true
-      },
+      columnOptions: { resizable: true },
       header1: {
         height: 45,
         complexColumns: [
-          {
-            header: '전체계획및실적(금주포함)',
-            name: 'mergeColumn1',
-            childNames: ['af_tot_cnt', 'cmpl_cnt', 'af_cmpl_cnt', 'ncmpl_cnt', 'prnr_rt']
-          },
-          {
-            header: '금주계획및실적(담당자기준)',
-            name: 'mergeColumn2',
-            childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']
-          },
-          {
-            header: '금주계획및실적(업무PL기준)',
-            name: 'mergeColumn3',
-            childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt']
-          },
-          {
-            header: '차주계획및실적',
-            name: 'mergeColumn4',
-            childNames: ['pl_prnr_rt', 'tot_cnt2']
-          },
+          {header: '전체계획및실적(금주포함)',   name: 'mergeColumn1', childNames: ['af_tot_cnt', 'cmpl_cnt', 'af_cmpl_cnt', 'ncmpl_cnt', 'prnr_rt']},
+          {header: '금주계획및실적(담당자기준)', name: 'mergeColumn2', childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']},
+          {header: '금주계획및실적(업무PL기준)', name: 'mergeColumn3', childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt']},
+          {header: '차주계획및실적', name: 'mergeColumn4', childNames: ['cmpl_cnt2', 'tot_cnt2']},
         ]
       },
       columns1: [
         {
           header: '업무구분',
-          width: 140,
+          width: 100,
           align: 'left',
           name: 'bzcd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: bzcd
+            }
+          }
         },
         {
           header: '전체',
-          width: 55,
-          align: 'left',
+          width: 65,
+          align: 'right',
           name: 'tot_cnt',
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'af_tot_cnt',
         },
         {
           header: '계획완료',
-          width: 55,
-          align: 'left',
+          width: 60,
+          align: 'right',
           name: 'cmpl_cnt',
         },
         {
           header: '선완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'af_cmpl_cnt',
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'ncmpl_cnt',
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt',
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt1',
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'cmpl_cnt1',
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'ncmpl_cnt1',
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt1',
         },
         {
           header: '전체',
-          width: 55,
-          align: 'left',
+          width: 60,
+          align: 'right',
           name: 'pl_tot_cnt',
         },
         {
           header: '완료',
-          width: 55,
-          align: 'left',
+          width: 60,
+          align: 'right',
           name: 'pl_cmpl_cnt',
         },
         {
           header: '미완료',
-          width: 55,
-          align: 'left',
+          width: 60,
+          align: 'right',
           name: 'pl_ncmpl_cnt',
         },
         {
           header: '계획',
           width: 55,
-          align: 'left',
-          name: 'pl_prnr_rt',
+          align: 'right',
+          name: 'tot_cnt2',
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
-          name: 'tot_cnt2',
+          align: 'right',
+          name: 'cmpl_cnt2',
         },
       ],
       header2: {
         height: 45,
         complexColumns: [
-          {
-            header: '전체계획및실적(금주포함)',
-            name: 'mergeColumn1',
-            childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']
-          },
-          {
-            header: '금주계획및실적',
-            name: 'mergeColumn3',
-            childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt', 'prnr_rt2']
-          },
-          {
-            header: '차주계획및실적',
-            name: 'mergeColumn4',
-            childNames: ['pl_prnr_rt', 'tot_cnt2']
-          },
+          {header: '전체계획및실적(금주포함)', name: 'mergeColumn1', childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']},
+          {header: '금주계획및실적', name: 'mergeColumn3', childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt', 'prnr_rt2']},
+          {header: '차주계획및실적', name: 'mergeColumn4', childNames: ['pl_prnr_rt', 'tot_cnt2']},
         ]
       },
       columns2: [
         {
           header: '업무구분',
-          width: 140,
+          width: 100,
           align: 'left',
           name: 'bzcd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: bzcd
+            }
+          }
         },
         {
           header: '담당자',
           width: 55,
           align: 'left',
-          name: 'crpe_no',
+          name: 'emp_nm',
         },
         {
           header: '전체',
@@ -630,69 +643,76 @@ export default {
           {
             header: '결함유형',
             name: 'mergeColumn1',
-            childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']
+            childNames: ['err_cnt', 'impt_cnt', 'etc_err_cnt', 'nerr_cnt']
           },
           {
             header: '조치현황',
             name: 'mergeColumn3',
-            childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt']
+            childNames: ['spnd_cnt', 'cmpl_cnt', 'ncmpl_cnt']
           },
         ]
       },
       columns3: [
         {
           header: '업무구분',
-          width: 180,
+          width: 100,
           align: 'left',
           name: 'bzcd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: bzcd
+            }
+          }
         },
         {
           header: '전체',
-          width: 55,
-          align: 'left',
-          name: 'tot_cnt',
+          width: 65,
+          align: 'right',
+          name: 'tot_err_cnt',
         },
         {
           header: '결함',
-          width: 55,
-          align: 'left',
-          name: 'tot_cnt1',
+          width: 65,
+          align: 'right',
+          name: 'err_cnt',
         },
         {
           header: '개선',
-          width: 55,
-          align: 'left',
-          name: 'cmpl_cnt1',
+          width: 65,
+          align: 'right',
+          name: 'impt_cnt',
         },
         {
           header: '기타',
-          width: 55,
-          align: 'left',
-          name: 'ncmpl_cnt1',
+          width: 65,
+          align: 'right',
+          name: 'etc_err_cnt',
         },
         {
           header: '결함아님',
-          width: 55,
-          align: 'left',
-          name: 'prnr_rt1',
+          width: 65,
+          align: 'right',
+          name: 'nerr_cnt',
         },
         {
           header: '완료',
-          width: 55,
-          align: 'left',
-          name: 'pl_tot_cnt',
+          width: 65,
+          align: 'right',
+          name: 'cmpl_cnt',
         },
         {
           header: '진행',
-          width: 55,
-          align: 'left',
-          name: 'pl_cmpl_cnt',
+          width: 65,
+          align: 'right',
+          name: 'ncmpl_cnt',
         },
         {
           header: '보류',
-          width: 55,
-          align: 'left',
-          name: 'pl_ncmpl_cnt',
+          width: 65,
+          align: 'right',
+          name: 'spnd_cnt',
         },
       ],
       header4: {
@@ -701,7 +721,7 @@ export default {
           {
             header: '완료여부',
             name: 'mergeColumn1',
-            childNames: ['pl_cmpl_cnt', 'pl_ncmpl_cnt']
+            childNames: ['pl_yn', 'crpe_yn']
           },
         ]
       },
@@ -711,12 +731,19 @@ export default {
           width: 140,
           align: 'left',
           name: 'bzcd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: bzcd
+            }
+          }
         },
         {
           header: '미진구분',
           width: 65,
           align: 'left',
-          name: 'sqn_cd',
+          name: 'nprrn_kbn',
         },
         {
           header: '프로그램ID',
@@ -738,39 +765,39 @@ export default {
         },
         {
           header: '개발완료일자조치일자',
-          width: 90,
+          width: 150,
           align: 'left',
-          name: 'ncmpl_cnt1',
+          name: 'dvlpe_cnf_dt',
         },
         {
           header: '담당자',
           width: 70,
           align: 'left',
-          name: 'crpe_no',
+          name: 'dvlpe_nm',
         },
         {
           header: 'PL',
           width: 70,
           align: 'left',
-          name: 'pl_no',
+          name: 'pl_nm',
         },
         {
           header: '담당자',
           width: 70,
           align: 'left',
-          name: 'pl_cmpl_cnt',
+          name: 'crpe_yn',
         },
         {
           header: 'PL',
           width: 70,
           align: 'left',
-          name: 'pl_ncmpl_cnt',
+          name: 'pl_yn',
         },
         {
           header: '미진사유',
           width: 210,
           align: 'left',
-          name: 'rmrk',
+          name: 'nprrn',
         },
       ],
     }

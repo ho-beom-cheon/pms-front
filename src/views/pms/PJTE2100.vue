@@ -51,9 +51,9 @@
       <!-- 필터영역 -->
       <section class="filter">
         <div class = "col">
-
           <ul class="filter-con clear-fix">
             <combo
+                :comboArray = "this.comboList"
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
@@ -61,11 +61,12 @@
                 @pgm_dis_cd_change="pgm_dis_cd_change"
                 @prc_step_cd_change="prc_step_cd_change"
             ></combo>
+
             <li class="filter-item">
               <div class="item-con">예상종료일자
-                <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
                 -
-                <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt"></div>
+                <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
               </div>
             </li>
             <li class="filter-item">
@@ -73,7 +74,6 @@
                 <input type="text"
                        placeholder="입력"
                        v-model="info.pgm_id"
-                       @keyup.enter="fnSearch"
                        style   = "width: 145px"
                 >
               </div>
@@ -84,7 +84,6 @@
                        placeholder="입력"
                        v-model="info.pgm_nm"
                        id= "info.pgm_nm"
-                       @keyup.enter="fnSearch"
                        style   = "width: 180px"
                 >
               </div>
@@ -96,22 +95,16 @@
                        id="id.dvlpe_nm"
                        v-model="info.dvlpe_nm"
                        style   = "width: 115px"
-                       id="id.dvlpe_nm"
                 >
-                <button class="search-btn"
-                        id="btn.dvlpe"
-                        @click="open_pjte9001"
-                ></button>
                 <input type="text"
                        placeholder="직원번호"
                        id="id.dvlpe_no"
                        v-model="info.dvlpe_no"
                        style   = "width: 120px"
-                       id="id.dvlpe_no"
                        :disabled = true
                 >
                 <button class="search-btn"
-                        id="btn.dvlpe_nm"
+                        id="btn.dvlpe"
                         @click="open_pjte9001"
                 ></button>
 
@@ -124,31 +117,25 @@
                        id="id.pl_nm"
                        v-model="info.pl_nm"
                        style   = "width: 115px"
-                       id="id.pl_nm"
                 >
-                <button class="search-btn"
-                        id="btn.pl"
-                        @click="open_pjte9001"
-                ></button>
                 <input type="text"
                        placeholder="직원번호"
                        id="id.pl_no"
                        v-model="info.pl_no"
                        style   = "width: 120px"
-                       id="id.pl_no"
                        :disabled = true
                 >
                 <button class="search-btn"
-                        id="btn.pl_nm"
+                        id="btn.pl"
                         @click="open_pjte9001"
                 ></button>
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">개발자완료일자
-                <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_end_dt" v-model="info.dvlpe_sta_dt"></div>
                 -
-                <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt"></div>
+                <div class="input-dateWrap"><input type="date" :min="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
           </ul>
@@ -228,7 +215,6 @@ import { Grid } from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
-import { mapActions, mapState } from 'vuex'
 
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -262,6 +248,7 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
+
     console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
@@ -297,21 +284,17 @@ export default {
 // 함수를 선언하는 부분
 // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
   computed: {
-    getCount() {
-      return this.count;
-    }
   },
 
 // 일반적인 함수를 선언하는 부분
   methods: {
-
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params) {this.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.prjt_nm_selected = params},
-    bzcd_change(params) {this.bzcd_selected = params},
-    dvlp_dis_cd_change(params) {this.dvlp_dis_cd_selected = params},
-    pgm_dis_cd_change(params) {this.pgm_dis_cd_selected = params},
-    prc_step_cd_change(params) {this.prc_step_cd_selected = params},
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    dvlp_dis_cd_change(params) {this.info.dvlp_dis_cd_selected = params},
+    pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
+    prc_step_cd_change(params) {this.info.prc_step_cd_selected = params},
 
     init() {
       // 그리드 초기화
@@ -320,11 +303,10 @@ export default {
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
       // 특정 열 비활성화
-      this.$refs.grid.invoke("disableColumn", 'bz_dtls_txt');
       this.$refs.grid.invoke("disableColumn", 'pgm_id');
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
 
-      // '100' 권한,개발잠명
+      // '100' 권한,개발자명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
         this.info.dvlpe_nm = sessionStorage.getItem("LOGIN_EMP_NM")
         this.info.dvlpe_no = sessionStorage.getItem("LOGIN_EMP_NO")
@@ -355,10 +337,9 @@ export default {
       this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
       if(this.createdRows.length !== 0){
-        if(this.vaildation(this.createdRows, "1", "I") === true){
+        if(this.vaildation(this.createdRows, "1") === true){
           try {
             // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify());
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
             // create api 요청
             this.$refs.grid.invoke("request", "createData", {showConfirm: false});
@@ -371,10 +352,12 @@ export default {
         }
       }
       if(this.updatedRows.length !== 0){
-        if(this.vaildation(this.updatedRows, "1", "U") === true) {
+        if(this.vaildation(this.updatedRows, "1") === true) {
           try {
             // 데이터 파라메타 전달
+
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+            this.$refs.grid.invoke("setRequestParams", this.login);
             // update api 요청
             this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
             alert("저장이 완료되었습니다.")
@@ -410,7 +393,7 @@ export default {
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
 
       if(this.updatedRows.length !== 0){
-        if(this.vaildation(this.updatedRows, "2", "U") === true) {
+        if(this.vaildation(this.updatedRows, "2") === true) {
           try {
             // 데이터 파라메타 전달
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -487,11 +470,15 @@ export default {
             bkup_id : "0000000000",
           },
           {focus:true}) ;
-
-      //const addRow = this.$refs.grid.invoke("getModifiedRows").createdRows[0].rowKey;
-      //this.$refs.grid.invoke("disableColumn", "pgm_nm");
-
+      this.fnEnable();
     },
+    // 추가한 행 편집 활성화
+    fnEnable() {
+      // 새로 ADD한 Row를 enable시킴
+      this.NewRow = this.$refs.grid.invoke("getRowCount");
+      this.$refs.grid.invoke("enableRow", this.NewRow-1, {withCheckbox: true});
+    },
+
     // 행삭제
     gridDelRow(){
       if(this.$refs.grid.invoke('getRow',this.curRow).save_yn === "Y"){
@@ -516,10 +503,6 @@ export default {
     open_page(){
       this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
     },
-    open_pjte9001(event) {
-      const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
-    },
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
       if(this.info.pl_nm === "") this.info.pl_no = "";
@@ -534,21 +517,10 @@ export default {
 
     },
     // 유효값 검증
-    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분' , 'update(U) | insert(I) 구분')
-    vaildation(data, division, cuGubun) {
+    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
+    vaildation(data, division) {
 
       for(let i=0; i<data.length; i++){
-        if(cuGubun === "U") {
-          this.updatedRows[i].login_aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-          this.updatedRows[i].login_bzcd = sessionStorage.getItem("LOGIN_BZCD");
-          this.updatedRows[i].login_emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
-          this.updatedRows[i].login_proj_id = sessionStorage.getItem("LOGIN_PROJ_ID");
-        } else {
-          this.createdRows[i].login_aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-          this.createdRows[i].login_bzcd = sessionStorage.getItem("LOGIN_BZCD");
-          this.createdRows[i].login_emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
-          this.createdRows[i].login_proj_id = sessionStorage.getItem("LOGIN_PROJ_ID");
-        }
         // 저장과 기타항목수정 분류
         if(division === "1") {
           /* 권한 ID에 따른 처리단계 체크 */
@@ -590,9 +562,9 @@ export default {
         if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
         if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
 
-        if(data[i].prc_step_cd >= "200"){
-          if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-        }
+        // if(data[i].prc_step_cd >= "200"){
+        //   if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+        // }
       }
 
       return  true;
@@ -606,25 +578,34 @@ export default {
 // 변수 선언부분
   data() {
     return {
-      info : {
-        pgm_id      : this.pgm_id,          // 프로그램ID
-        pgm_nm      : this.pgm_nm,          // 프로그램명
-        dvlpe_no    : this.dvlpe_no,        // 개발자번호
-        dvlpe_nm    : this.dvlpe_nm,        // 개발자명
-        pl_no       : this.pl_no,           // 담당PL번호
-        pl_nm       : this.pl_nm,           // 담당PL명
-      },
-      prjt_nm_selected      : null,
-      bkup_id_selected      : null,
-      bzcd_selected         : null,
-      dvlp_dis_cd_selected  : null,
-      pgm_dis_cd_selected   : null,
-      prc_step_cd_selected  : null,
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C1","C2","C3","C4"],
 
-      login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
-      login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),
-      login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),
-      login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),
+      info : {
+        pgm_id        : this.pgm_id,          // 프로그램ID
+        pgm_nm        : this.pgm_nm,          // 프로그램명
+        dvlpe_no      : this.dvlpe_no,        // 개발자번호
+        dvlpe_nm      : this.dvlpe_nm,        // 개발자명
+        pl_nm         : this.pl_nm,           // 담당PL명
+        pl_no         : this.pl_no,           // 담당PL번호
+        frcs_sta_dt   : this.frcs_sta_dt,     // 계획일자STA
+        frcs_end_dt   : this.frcs_end_dt,     // 계획일자END
+        dvlpe_sta_dt  : this.dvlpe_sta_dt,    // 실제일자STA
+        dvlpe_end_dt  : this.dvlpe_end_dt,    // 실제일자END
+        prjt_nm_selected      : null,
+        bkup_id_selected      : null,
+        bzcd_selected         : null,
+        dvlp_dis_cd_selected  : null,
+        pgm_dis_cd_selected   : null,
+        prc_step_cd_selected  : null,
+      },
+      login : {
+        login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
+        login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),
+        login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),
+        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),
+      },
+
 
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
@@ -633,70 +614,21 @@ export default {
       addRow : {
         grid : this.grid,
       },
-      frcs_sta_dt : "",     // 계획일자STA
-      frcs_end_dt : "",     // 계획일자END
-      sta_dt      : "",     // 실제일자STA
-      end_dt      : "",     // 실제일자END
 
       // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [
-        {
-          id: 'PJTE1000',
-          path: '/PJTE1000',
-          name: 'ProjectEyes현황'
-        },
-        {
-          id: 'PJTE2100',
-          path: '/PJTE2100',
-          name: '개발현황'
-        },
-        {
-          id: 'PJTE2110',
-          path: '/PJTE2110',
-          name: '개발진척현황'
-        },
-        {
-          id: 'PJTE2200',
-          path: '/PJTE2200',
-          name: '통합테스트'
-        },
-        {
-          id: 'PJTE2210',
-          path: '/PJTE2210',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'PJTE3000',
-          path: '/PJTE3000',
-          name: '결함관리'
-        },
-        {
-          id: 'PJTE4000',
-          path: '/PJTE4000',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'PJTE5000',
-          path: '/PJTE5000',
-          name: 'WBS관리'
-        },
-        {
-          id: 'PJTE6000',
-          path: '/PJTE6000',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'PJTE7000',
-          path: '/PJTE7000',
-          name: '산출물정합성체크'
-        },
-        {
-          id: 'PJTE9000',
-          path: '/PJTE9000',
-          name: '시스템관리'
-        },
+        { id: 'PJTE1000', path: '/PJTE1000', name: 'ProjectEyes현황' },
+        { id: 'PJTE2100', path: '/PJTE2100', name: '개발현황' },
+        { id: 'PJTE2110', path: '/PJTE2110', name: '개발진척현황' },
+        { id: 'PJTE2200', path: '/PJTE2200', name: '통합테스트' },
+        { id: 'PJTE2210', path: '/PJTE2210', name: '통합테스트진척현황' },
+        { id: 'PJTE3000', path: '/PJTE3000', name: '결함관리' },
+        { id: 'PJTE4000', path: '/PJTE4000', name: 'ActionItem및이슈관리현황' },
+        { id: 'PJTE5000', path: '/PJTE5000', name: 'WBS관리' },
+        { id: 'PJTE6000', path: '/PJTE6000', name: 'PMS신청관리' },
+        { id: 'PJTE7000', path: '/PJTE7000', name: '산출물정합성체크' },
+        { id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리' },
       ],
-
       /* 그리드 상세보기 모달 속성 */
       modals: {
         txt_modal1: false,
@@ -710,7 +642,7 @@ export default {
       scrollX:false,
       scrollY:false,
       bodyHeight: 610,
-      rowHeight: 30,
+      rowHeight: 25,
       showDummyRows: true,
       open: true,
       // toast ui grid 데이터
@@ -731,7 +663,7 @@ export default {
       },
       rowHeaders:['rowNum'],
       header:{
-        height: 50,
+        height: 45,
         complexColumns: [
           {
             header: '계획',
@@ -1029,34 +961,6 @@ export default {
           header: '프로젝트 ID',
           width: 90,
           name: 'prjt_id',
-          align: 'center',
-          hidden : true,
-        },
-        {
-          header: '권한 코드(세션)',
-          width: 90,
-          name: 'login_aut_cd',
-          align: 'center',
-          hidden : true,
-        },
-        {
-          header: '업무구분(세션)',
-          width: 90,
-          name: 'login_bzcd',
-          align: 'center',
-          hidden : true,
-        },
-        {
-          header: '사원번호(세션)',
-          width: 90,
-          name: 'login_emp_no',
-          align: 'center',
-          hidden : true,
-        },
-        {
-          header: '프로젝트ID(세션)',
-          width: 90,
-          name: 'login_proj_id',
           align: 'center',
           hidden : true,
         },
