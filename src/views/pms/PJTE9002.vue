@@ -3,7 +3,6 @@
   <section class="popup">
     <div class="pop-header">
       <h1>첨부파일등록</h1>
-      <a href="#" class="pop-close"></a>
     </div>
     <div class="pop-body">
       <table>
@@ -43,7 +42,7 @@
         <tr>
           <th>첨부파일관리ID</th>
           <td>
-            <input type="text" placeholder="가이드 텍스트" style="width: 300px;" v-model="atfl_mng_id" @keyup.enter="fnSearch">
+            <input type="text" placeholder="가이드 텍스트" style="width: 300px;" v-model="atfl_mng_id" :disabled="read">
           </td>
         </tr>
         </tbody>
@@ -51,7 +50,7 @@
       <section class="filter">
         <div class = "col">
 
-          <ul class="filter-btn">
+          <ul class="filter-btn" v-if="bkup_id === '0000000000'">
             <div class="btn btn-filter-b">
               <a href="#" @click="addFile">행추가</a>
             </div>
@@ -87,12 +86,12 @@
               <input type="text" v-model="fileList.rmrmk" />
             </td>
             <td>
-              <label class="input-file-button" :for="'input-file'+fileList.sqno">
+              <label class="input-file-button" :for="'input-file'+fileList.sqno" v-if="bkup_id === '0000000000'">
                 업로드
               </label>
               <input :id="'input-file'+fileList.sqno" type="file" @change="handleFileChange($event, fileList.sqno)"  style="display: none"/>
               &nbsp;
-              <label class="input-down-button">
+              <label class="input-down-button" @click="fileDownload(fileList.file_nm)">
                 다운로드
               </label>
             </td>
@@ -103,7 +102,7 @@
     </div>
     <div class="pop-footer">
       <button class="btn btn-filter-b" @click="close">닫기</button>
-      <button class="btn btn-filter-p" @click="fileSave">저장</button>
+      <button class="btn btn-filter-p" @click="fileSave" v-if="bkup_id==='0000000000'">저장</button>
     </div>
   </section>
 </template>
@@ -123,31 +122,14 @@ export default {
   },
   data() {
     return {
-      atfl_mng_id : '1',
+      bkup_id: this.$route.query.bkup_id,
+      atfl_mng_id : this.$route.query.atfl_mng_id,
       read : true,
       pjt_list: [],
       pjt_selected:'',
-      file_rgs_dscd_selected: 100,
-      file_rgs_dscds : [100, 200, 201, 300, 400, 500, 600, 700, 800, 900],
-      fileLists : [
-        {
-          sqno: 1,
-          file_path: '',
-          file_nm: '',
-          org_file_nm : 'test11',
-          rmrmk : '비고',
-          file : null,
-        },
-        {
-          sqno: 2,
-          file_path: '',
-          file_nm: '',
-          org_file_nm : 'test22',
-          rmrmk : '비고',
-          file : null,
-        },
-
-      ],
+      file_rgs_dscd_selected: this.$route.query.file_rgs_dscd,
+      file_rgs_dscds : [100, 101, 200, 300, 400, 500, 600, 700, 900],
+      fileLists : [],
       afterSearch:false,
       check_array:[],
       file_array:[],
@@ -157,7 +139,7 @@ export default {
   methods: {
     // 행 추가
     addFile() {
-      let sqno = this.fileLists[this.fileLists.length-1].sqno + 1;
+      let sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
       let file_path = '', file_nm = '', org_file_nm = '', rmrmk=''
       this.fileLists.push({
         sqno,file_path, file_nm, org_file_nm, rmrmk
@@ -192,20 +174,32 @@ export default {
     },
     // 파일 첨부 시 핸들링 함수
     handleFileChange(e, sqno) {
-      console.log(e.target.files[0], sqno)
       let nowDate = new Date();
-      let file_nm = nowDate.getHours()+''+nowDate.getMinutes()+''+nowDate.getSeconds();
+      let fileNameCheck = false;
+      let file_nm = sessionStorage.getItem("LOGIN_EMP_NO")+'-'+nowDate.getFullYear()+''+('0' + (nowDate.getMonth() + 1)).slice(-2) +''+('0'+nowDate.getDate()).slice(-2)+''
+          + ('0'+nowDate.getHours()).slice(-2)+''+('0'+nowDate.getMinutes()).slice(-2)+''+('0'+nowDate.getSeconds()).slice(-2);
+
+      // 기존 첨부파일과 파일명 같으면 업로드 X
+      let list_idx = this.fileLists.findIndex( e => e.sqno == sqno);
+      for(let i=0; i<this.fileLists.length; i++) {
+        if (this.fileLists[i].org_file_nm === e.target.files[0].name && i != list_idx) {
+          alert("같은 파일명을 가진 파일은 업로드할 수 없습니다.");
+          fileNameCheck = true;
+          break;
+        }
+      }
+      if(fileNameCheck) return false;
+
       for(let i=0; i<this.fileLists.length; i++){
         if(this.fileLists[i].sqno === sqno){
           this.fileLists[i].org_file_nm = e.target.files[0].name;
-          this.fileLists[i].file_nm = this.file_rgs_dscd_selected+file_nm;
+          this.fileLists[i].file_nm = this.file_rgs_dscd_selected+'-'+file_nm+'.'+e.target.files[0].name.split('.')[1];
           this.fileLists[i].file = e.target.files[0];
         }
       }
     },
     // 프로젝트 리스트 가져오기
     getPjt() {
-      // "/PJTE9002/select"
       axiosService.get(
           "/pjtInfo",
           {
@@ -222,20 +216,20 @@ export default {
       for(let i=0; i<data.length; i++) {
         this.pjt_list.push({"text": data[i].DTLS_TYNM, "value": data[i].DTLS_TYCD});
       }
-      this.pjt_selected = this.pjt_list[0].value;
+      this.pjt_selected = this.$route.query.prjt_id;
       this.fnSearch();
     },
 
     // 조회하기
     fnSearch() {
-      if(this.atfl_mng_id === ''){
+      if(this.atfl_mng_id === '' || this.atfl_mng_id==null || this.atfl_mng_id===undefined){
         this.fileLists = [
           {
             sqno: 1,
             file_path: '',
             file_nm: '',
-            org_file_nm : '첨부파일ID 없음',
-            rmrmk : '첨부파일ID 없음',
+            org_file_nm : '',
+            rmrmk : '',
             file: null,
           },
         ];
@@ -244,14 +238,23 @@ export default {
             "/PJTE9002/select",
             {
               params : {
-                bkup_id:'0000000000',
-                prjt_id_selected:'1000000001',
-                atfl_mng_id:'1000000001',
+                bkup_id:this.$route.query.bkup_id,
+                prjt_id_selected:this.$route.query.prjt_id,
+                atfl_mng_id:this.$route.query.atfl_mng_id,
                 file_rgs_dscd:this.file_rgs_dscd_selected,
               }
             },
         ).then(res => {
-          console.log(res);
+          res.data.data.fileList.map(e => {
+            this.fileLists.push({
+              sqno: e.sqno,
+              file_path: e.file_path,
+              file_nm: e.file_nm,
+              org_file_nm : e.org_file_nm,
+              rmrmk : e.rmrmk,
+              file: null,
+            },)
+          })
         }).catch(e => {
 
         });
@@ -269,39 +272,81 @@ export default {
 
     //저장
     async fileSave() {
+      if(this.bkup_id != '0000000000'){
+        alert("백업정보는 저장할 수 없습니다.");
+        return false;
+      }
       let login_emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
       let login_proj_id = sessionStorage.getItem("LOGIN_PROJ_ID");
       let login_aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
 
-      Promise.all(
-          this.fileLists.map(async fileList => {
-            const formData = new FormData();
-            formData.append("login_emp_no", login_emp_no);
-            formData.append("login_proj_id", login_proj_id);
-            formData.append("login_aut_cd", login_aut_cd);
-            formData.append("bkup_id", '0000000000');
+      const formData = new FormData();
 
-            formData.append("prjt_id", '1000000001');
-            formData.append("file_rgs_dscd", this.file_rgs_dscd_selected);
-            formData.append("atfl_mng_id",  '1000000011');
+      this.fileLists.map(async fileList => {
 
+        formData.append("files", fileList.file);
+        fileList.file = null;
 
-            formData.append("sqno", fileList.sqno);
-            formData.append("file_nm", fileList.file_nm);
-            formData.append("org_file_nm", fileList.org_file_nm);
-            formData.append("rmrmk", fileList.rmrmk);
-            formData.append("file", fileList.file);
-            return await axiosService.post("/PJTE9002/insert", formData, {
-              headers: {
-                'Content-Type' : 'multipart/form-data'
-              }
-            })
-          })
-      )
+      })
+      formData.append("login_emp_no", login_emp_no);
+      formData.append("login_proj_id", login_proj_id);
+      formData.append("login_aut_cd", login_aut_cd);
+      formData.append("bkup_id", this.bkup_id);
+
+      formData.append("prjt_id", this.pjt_selected);
+      formData.append("file_rgs_dscd", this.file_rgs_dscd_selected);
+      formData.append("atfl_mng_id",  this.atfl_mng_id);
+
+      formData.append("mng_id", this.$route.query.mng_id); // mng_id 넘겨 받은 값으로 대체하기
+      formData.append("bzcd", this.$route.query.bzcd); // bzcd 넘겨 받은 값으로 대체하기
+      formData.append("pgm_id", this.$route.query.pgm_id); //pgm_id 넘겨 받은 값으로 대체하기
+      formData.append("sqn_cd", this.$route.query.sqn_cd); //sqn_cd 넘겨 받은 값으로 대체하기
+      formData.append("tst_case_id", this.$route.query.tst_case_id); //tst_case_id 넘겨 받은 값으로 대체하기
+      formData.append("jsonList", JSON.stringify(this.fileLists));
+
+      await axiosService.post("/PJTE9002/insert", formData, {
+        headers: {
+          'Content-Type' : 'multipart/form-data'
+        }
+      })
       .then(res => {
-        console.log(res);
+        // console.log(res.data);
+        if(res.data == "success"){
+          alert("첨부파일이 저장되었습니다.")
+          opener.fileData(this.fileLists);
+          window.close();
+        }
+      })
+      .catch(e => {
+        // console.log(e);
       })
 
+    },
+
+    fileDownload(fileName) {
+      axiosService.get("/PJTE9002/fileDownload",
+          {
+              params: {
+                fileName
+              },
+            responseType : "blob"
+          }
+      )
+      .then(res => {
+        let blob = new Blob([res.data], { type: res.headers['content-type'] })
+        // let fileName = getFileName(res.headers['content-disposition'])
+        // fileName = decodeURI(fileName) // 파일명 디코딩 (프로젝트에 따라 사용여부 옵션)
+
+        if (window.navigator.msSaveOrOpenBlob) { // IE 10+
+          window.navigator.msSaveOrOpenBlob(blob, fileName)
+        } else { // not IE
+          let link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.target = '_self'
+          if (fileName) link.download = fileName
+          link.click()
+        }
+      })
     }
 
   },
