@@ -671,7 +671,9 @@ export default {
 // 엑셀파일 업로드 로직 추가
     },
     open_page(){
-      window.open("../PJTE9002/", "open_page", "width=1000, height=800");
+      let bkup_id='0000000000', prjt_id='1000000001', atfl_mng_id='1000000011', file_rgs_dscd='700',
+      mng_id = '1000000000', bzcd='BBB', sqn_cd='Cust_summary_L9', tst_case_id='200', pgm_id='TS-001-TC-014'
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&bzcd=${bzcd}&sqn_cd=${sqn_cd}&tst_case_id=${tst_case_id}&pgm_id=${pgm_id}&`, "open_page", "width=1000, height=800");
     }
 
   },
