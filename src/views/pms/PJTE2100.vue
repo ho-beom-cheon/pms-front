@@ -65,7 +65,7 @@
             <li class="filter-item">
               <div class="item-con">예상종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
-                -
+                ~
                 <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
               </div>
             </li>
@@ -134,7 +134,7 @@
             <li class="filter-item">
               <div class="item-con">개발자완료일자
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_end_dt" v-model="info.dvlpe_sta_dt"></div>
-                -
+                ~
                 <div class="input-dateWrap"><input type="date" :min="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
@@ -234,6 +234,20 @@ class CustomRenderer {
     this.el.src = '/img/ic_logOut.8c60a751.svg';
   }
 }
+// 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
+class SearchBtn {
+  constructor(props) {
+    const el = document.createElement('img');
+    el.src = 'some-image-link';
+    this.el = el;
+    this.render(props);
+  }
+  getElement() {return this.el;}
+  render(props) {
+    // 결함등록 버튼 img
+    this.el.src = '/img/ic_search.21e28c8b.svg';
+  }
+}
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -263,7 +277,7 @@ export default {
     // 화면 초기화
     this.init();
     // 화면 접속 시 데이터 조회
-    this.fnSearch();
+    // this.fnSearch();
     console.log("mounted");
   },
   beforeUpdate() {
@@ -295,6 +309,16 @@ export default {
     dvlp_dis_cd_change(params) {this.info.dvlp_dis_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     prc_step_cd_change(params) {this.info.prc_step_cd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+      this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
+      this.info.pgm_dis_cd_selected = this.$children[0].$data.pgm_dis_cd_selected;
+      this.info.itg_tst_prc_cd_selected = this.$children[0].$data.itg_tst_prc_cd_selected;
+    },
 
     init() {
       // 그리드 초기화
@@ -425,19 +449,15 @@ export default {
         this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
       }
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(typeof currentCellData.value !=="undefined" && currentCellData.value !== '' && currentCellData.value !== null) {
         if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
           this.modals.txt_modal1 = true;
           this.modalTxt = currentCellData.value;
           const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
         }
-      }
     },
     // 그리드 내용 더블클릭 시 상세보기 모달팝업
     dblonClick(ev) {
       this.curRow = ev.rowKey;
-
-
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -451,6 +471,8 @@ export default {
       if(this.searchVaildation() === false) {
         return;
       }
+      this.comboSetData();
+
       // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
       this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value            // 조회한 요청자 이름 설정
       this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value            // 조회한 요청자 이름 설정
@@ -489,7 +511,7 @@ export default {
     },
     // 엑셀 다운로드
     gridExcelExport(){
-      this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"}, {useFormattedValue : true});
     },
     // 엑셀파일 업로드(미완성)
     gridExcelImport(){
@@ -510,7 +532,6 @@ export default {
     },
     // 조회 유효값 검사
     searchVaildation(){
-
       //if(this.bkup_id_selected === null) { alert("백업 ID는 필수 입력 사항입니다"); return false;}
       //if(this.prjt_nm_selected === null) { alert("프로그램 ID는 필수 입력 사항입니다"); return false;}
       return true;
@@ -519,7 +540,6 @@ export default {
     // 유효값 검증
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
     vaildation(data, division) {
-
       for(let i=0; i<data.length; i++){
         // 저장과 기타항목수정 분류
         if(division === "1") {
@@ -580,18 +600,18 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C2","C3","C4"],
-
       info : {
-        pgm_id        : this.pgm_id,          // 프로그램ID
-        pgm_nm        : this.pgm_nm,          // 프로그램명
-        dvlpe_no      : this.dvlpe_no,        // 개발자번호
-        dvlpe_nm      : this.dvlpe_nm,        // 개발자명
-        pl_nm         : this.pl_nm,           // 담당PL명
-        pl_no         : this.pl_no,           // 담당PL번호
-        frcs_sta_dt   : this.frcs_sta_dt,     // 계획일자STA
-        frcs_end_dt   : this.frcs_end_dt,     // 계획일자END
-        dvlpe_sta_dt  : this.dvlpe_sta_dt,    // 실제일자STA
-        dvlpe_end_dt  : this.dvlpe_end_dt,    // 실제일자END
+        pgm_id                : this.pgm_id,          // 프로그램ID
+        pgm_nm                : this.pgm_nm,          // 프로그램명
+        dvlpe_no              : this.dvlpe_no,        // 개발자번호
+        dvlpe_nm              : this.dvlpe_nm,        // 개발자명
+        pl_nm                 : this.pl_nm,           // 담당PL명
+        pl_no                 : this.pl_no,           // 담당PL번호
+        frcs_sta_dt           : this.frcs_sta_dt,     // 계획일자STA
+        frcs_end_dt           : this.frcs_end_dt,     // 계획일자END
+        dvlpe_sta_dt          : this.dvlpe_sta_dt,    // 실제일자STA
+        dvlpe_end_dt          : this.dvlpe_end_dt,    // 실제일자END
+
         prjt_nm_selected      : null,
         bkup_id_selected      : null,
         bzcd_selected         : null,
@@ -605,7 +625,6 @@ export default {
         login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),
         login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),
       },
-
 
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
@@ -665,21 +684,12 @@ export default {
       header:{
         height: 45,
         complexColumns: [
-          {
-            header: '계획',
-            name: 'mergeColumn1',
-            childNames: ['frcs_sta_dt', 'frcs_end_dt']
-          },
-          {
-            header: '실적',
-            name: 'mergeColumn2',
-            childNames: ['sta_dt', 'end_dt']
-          },
-          {
-            header: '결함',
-            name: 'mergeColumn3',
-            childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']
-          },
+          {header: '계획',      name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
+          {header: '실적',      name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
+          {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']},
+          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_nm', 'dvlpe_btn','dvlpe_no'], hideChildHeaders : true},
+          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], hideChildHeaders : true},
+          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], hideChildHeaders : true},
         ]
       },
       columns: [
@@ -711,7 +721,6 @@ export default {
           width: 180,
           align: 'left',
           name: 'bz_dtls_txt',
-          editor: 'text',
         },
         {
           header: '프로그램ID',
@@ -767,7 +776,7 @@ export default {
                     {"text":"보고서","value":"300"},
                     {"text":"배치","value":"400"}
                   ]
-            }
+             }
           }
         },
         {
@@ -854,25 +863,64 @@ export default {
         //   }
         // },
         {
-          header: '개발자명',
-          width: 160,
+          header: '개발자',
+          width: 80,
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
         },
         {
+          header: '개발자',
+          width: 50,
+          align: 'center',
+          name: 'dvlpe_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: '개발자',
+          width: 80,
+          align: 'center',
+          name: 'dvlpe_no',
+          editor: 'text',
+        },
+        {
           header: 'PL명',
-          width: 160,
+          width: 80,
           align: 'center',
           name: 'pl_nm',
+        },
+        {
+          header: 'PL명',
+          width: 50,
+          align: 'center',
+          name: 'pl_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: 'PL번호',
+          width: 80,
+          align: 'center',
+          name: 'pl_no',
+        },
+        {
+          header: '담당자명',
+          width: 80,
+          align: 'center',
+          name: 'crpe_nm',
           editor: 'text',
         },
         {
           header: '담당자명',
-          width: 160,
+          width: 50,
           align: 'center',
-          name: 'crpe_nm',
-          editor: 'text',
+          name: 'crpe_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: '담당자번호',
+          width: 80,
+          align: 'center',
+          name: 'crpe_no',
         },
         {
           header: '전체',
@@ -896,8 +944,16 @@ export default {
           editor: 'text',
         },
         {
+          header: '등록',
+          width: 80,
+          align: 'center',
+          name: 'err_btn',
+          renderer: CustomRenderer,
+        },
+        {
           header: '요구사항 ID',
           width: 120,
+          align: 'center',
           name: 'rqu_sbh_id',
           ellipsis : true,
           editor: 'text',
@@ -905,6 +961,7 @@ export default {
         {
           header: '비고',
           width: 220,
+          align: 'left',
           name: 'rmrk',
           editor: 'text',
           ellipsis : true,

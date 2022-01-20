@@ -53,51 +53,15 @@
       <section class="filter">
         <div class="col">
           <ul class="filter-con clear-fix">
-            <li class="filter-item">
-              <div class="item-con">프로젝트명
-                <select
-                    v-model="info.prjt_nm_selected"
-                    style="width: 165px"
-                >
-                  <option
-                      v-for="(prjt_nm, idx) in info.prjt_nm"
-                      :key="idx"
-                      v-text="prjt_nm.text"
-                      :value="prjt_nm.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">업무구분
-                <select
-                    v-model="info.bzcd_selected"
-                    style="width: 145px"
-                >
-                  <option
-                      v-for="(bzcd, idx) in info.bzcd"
-                      :key="idx"
-                      v-text="bzcd.text"
-                      :value="bzcd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">차수
-                <select
-                    v-model="info.sqn_cd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(sqn_cd, idx) in info.sqn_cd"
-                      :key="idx"
-                      v-text="sqn_cd.text"
-                      :value="sqn_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
+            <combo
+                :comboArray = "this.comboList"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @bzcd_change="bzcd_change"
+                @sqn_cd_change="sqn_cd_change"
+                @pgm_dis_cd_change="pgm_dis_cd_change"
+                @itg_tst_prc_cd_change="itg_tst_prc_cd_change"
+            ></combo>
             <li class="filter-item">
               <div class="item-con">시나리오ID
                 <input type="text"
@@ -105,58 +69,7 @@
                        v-model="info.scnr_id"
                        id="info.scnr_id"
                        @keyup.enter="fnSearch"
-                       style="width: 90px"
-                >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">테스트케이스ID
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.tst_case_id"
-                       id="info.tst_case_id"
-                       @keyup.enter="fnSearch"
-                       style="width: 153px"
-                >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">처리단계
-                <select
-                    v-model="info.itg_tst_prc_cd_selected"
-                    style="width: 80px"
-                >
-                  <option
-                      v-for="(itg_tst_prc_cd, idx) in info.itg_tst_prc_cd"
-                      :key="idx"
-                      v-text="itg_tst_prc_cd.text"
-                      :value="itg_tst_prc_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="input-searchWrap">개발자명
-                <input type="text"
-                       placeholder="입력"
-                       id="id.dvlpe_eno"
-                       name="info.dvlpe_eno"
-                       v-model="info.dvlpe_eno"
-                       @keyup.enter="fnSearch"
-                       style="width: 140px"
-                >
-                <button class="search-btn"
-                        @click="open_pjte9001"
-                ></button>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">담당PL명
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.pl_eno"
-                       @keyup.enter="fnSearch"
-                       style="width: 145px"
+                       style="width: 100px"
                 >
               </div>
             </li>
@@ -168,35 +81,13 @@
               </div>
             </li>
             <li class="filter-item">
-              <div class="item-con">개발자확인일자
-                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt02" v-model="info.dvlpe_cnf_dt01"></div>
-                -
-                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt01" v-model="info.dvlpe_cnf_dt02"></div>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">담당현업명
+              <div class="item-con">테스트케이스ID
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.crpe_eno"
-                       @keyup.enter="fnSearch"
-                       style="width: 140px"
+                       v-model="info.tst_case_id"
+                       id="info.tst_case_id"
+                       style="width: 157px"
                 >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">유형
-                <select
-                    v-model="info.tp_selected"
-                    style="width: 145px"
-                >
-                  <option
-                      v-for="(tp, idx) in info.tp"
-                      :key="idx"
-                      v-text="tp.text"
-                      :value="tp.value"
-                  ></option>
-                </select>
               </div>
             </li>
             <li class="filter-item">
@@ -205,26 +96,84 @@
                        placeholder="입력"
                        v-model="info.rqu_sbh_id"
                        id="info.rqu_sbh_id"
-                       @keyup.enter="fnSearch"
-                       style="width: 153px"
+                       style="width: 146px"
                 >
               </div>
             </li>
 
             <li class="filter-item">
-              <div class="item-con">
-                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
-                <label>　삭제통합테스트 포함</label>
+              <div class="input-searchWrap">개발자명
+                <input type="text"
+                       placeholder="직원명"
+                       id="id.dvlpe_enm"
+                       v-model="info.dvlpe_enm"
+                       style   = "width: 115px"
+                >
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.dvlpe_no"
+                       v-model="info.dvlpe_eno"
+                       style   = "width: 120px"
+                       :disabled = true
+                >
+                <button class="search-btn"
+                        id="btn.dvlpe"
+                        @click="open_pjte9001"
+                ></button>
+
+              </div>
+            </li>
+            <li class="filter-item">
+              <div class="input-searchWrap">담당PL명
+                <input type="text"
+                       placeholder="직원명"
+                       id="id.pl_nm"
+                       v-model="info.pl_nm"
+                       style   = "width: 115px"
+                >
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.pl_no"
+                       v-model="info.pl_no"
+                       style   = "width: 120px"
+                       :disabled = true
+                >
+                <button class="search-btn"
+                        id="btn.pl"
+                        @click="open_pjte9001"
+                ></button>
+              </div>
+            </li>
+            <li class="filter-item">
+              <div class="input-searchWrap">담당현업명
+                <input type="text"
+                       id="id.crpe_nm"
+                       placeholder="입력"
+                       v-model="info.crpe_enm"
+                       style="width: 140px"
+                >
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.crpe_no"
+                       v-model="info.pl_no"
+                       style   = "width: 120px"
+                       :disabled = true
+                >
+                <button class="search-btn"
+                        id="btn.crpe"
+                        @click="open_pjte9001"
+                ></button>
+              </div>
+            </li>
+            <li class="filter-item">
+              <div class="item-con">개발자확인일자
+                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt02" v-model="info.dvlpe_cnf_dt01"></div>
+                -
+                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt01" v-model="info.dvlpe_cnf_dt02"></div>
               </div>
             </li>
           </ul>
           <ul class="filter-btn">
-            <!--            <div class="btn btn-filter-b">-->
-            <!--              <a href="#" @click="gridAddRow">행추가(임시)</a>-->
-            <!--            </div>-->
-            <div class="btn btn-filter-b">
-              <a href="#" @click="open_page">기타항목수정</a>
-            </div>
             <div class="btn btn-filter-d">
               <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
             </div>
@@ -237,12 +186,16 @@
             <div class="btn btn-filter-e">
               <a href="#" @click="gridExcelExport">엑셀다운로드</a>
             </div>
+            <div class="btn btn-filter-b">
+              <a href="#" @click="open_page">기타항목수정</a>
+            </div>
             <div class="btn btn-filter-p" style="margin-left: 20px">
               <a href="#" @click="fnSave">저장</a>
             </div>
             <div class="btn btn-filter-p">
               <a href="#" @click="fnSearch">조회</a>
             </div>
+
           </ul>
         </div>
       </section>
@@ -263,6 +216,7 @@
               :rowHeaders="rowHeaders"
               @click="onClick"
               @dblclick="dblonClick"
+              id = "grid"
           ></grid>
         </div>
       </section>
@@ -271,6 +225,7 @@
 </template>
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
+import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
@@ -280,35 +235,44 @@ class CustomRenderer {
   constructor(props) {
     const el = document.createElement('img');
     el.src = 'some-image-link';
-
     this.el = el;
     this.render(props);
   }
-
-  getElement() {
-    return this.el;
-  }
-
+  getElement() {return this.el;}
   render(props) {
     // 결함등록 버튼 img
     this.el.src = '/img/ic_logOut.8c60a751.svg';
   }
-};
+}
+// 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
+class SearchBtn {
+  constructor(props) {
+    const el = document.createElement('img');
+    el.src = 'some-image-link';
+    this.el = el;
+    this.render(props);
+  }
+  getElement() {return this.el;}
+  render(props) {
+    // 결함등록 버튼 img
+    this.el.src = '/img/ic_search.21e28c8b.svg';
+  }
+}
+
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_nm = [{text: "PMS프로젝트", value: "1"}, {text: "PMS프로젝트2", value: "2"}, {text: "PMS프로젝트3", value: "3"}];
 
 // 업무구분
 const bzcd = [
-  {text: "전체", value: '999'},
+  {text: "선택", value: ' '},
   {text: "신용", value: 'AAA'},
   {text: "재무제표", value: "BBB"},
   {text: "신용평가", value: "CCC"},
 ];
 // 차수구분
 const sqn_cd = [
-  {text: "전체", value: "999"},
+  {text: "선택", value: " "},
   {text: "신규", value: "100"},
   {text: "변경", value: "200"},
   {text: "이행", value: "300"},
@@ -316,7 +280,7 @@ const sqn_cd = [
 ];
 // 통합테스트처리코드 (처리단계)
 const itg_tst_prc_cd = [
-  {text: "전체", value: "999"},
+  {text: "선택", value: " "},
   {text: "테스트전", value: "000"},
   {text: "테스트시작", value: "100"},
   {text: "테스트자완료", value: "200"},
@@ -325,7 +289,7 @@ const itg_tst_prc_cd = [
 ];
 // 유형
 const tp = [
-  {text: "전체", value: "999"},
+  {text: "선택", value: " "},
   {text: "화면", value: "100"},
   {text: "프로그램", value: "200"},
   {text: "보고서", value: "300"},
@@ -336,26 +300,22 @@ const tp = [
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
+    Combo,
     grid: Grid,
   },
-  // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
-  // "라이프사이클 훅"이라고 함.
-  // 자세한 사항은 Vue 라이프 사이클 참조
-  // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
     console.log("beforeCreate");
   },
   // 화면 동작 시 제일 처음 실행되는 부분
   // 변수 초기화
   created() {
-    // 권한에 따른 컬럼 세팅
-
     console.log("created");
   },
   beforeMount() {
     console.log("beforeMount");
   },
   mounted() {
+
     console.log("mounted");
     this.fnSearch();    // 최초조회
     this.setColumns();  // 권한에 따른 컬럼 세팅
@@ -382,60 +342,128 @@ export default {
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    sqn_cd_change(params) {this.info.sqn_cd_selected = params},
+    pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
+    itg_tst_prc_cd_change(params) {this.info.itg_tst_prc_cd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+      this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
+      this.info.pgm_dis_cd_selected = this.$children[0].$data.pgm_dis_cd_selected;
+      this.info.itg_tst_prc_cd_selected = this.$children[0].$data.itg_tst_prc_cd_selected;
+    },
+
     setColumns() {    // 권한에 따른 컬럼 세팅
-      if (sessionStorage.getItem("aut_cd") == '100') {
+      if (sessionStorage.getItem("aut_cd") === '100') {
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
-      } else if (sessionStorage.getItem("aut_cd") == '500') {
+      } else if (sessionStorage.getItem("aut_cd") === '500') {
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
       } else {
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
       }
     },
-    change() {
-      console.log();
-    },
-    fnSave() {
+    // 저장 버튼
+    fnSave(){
+      // 변경 사항 유무 체크
+      if(this.$refs.grid.invoke("isModified") === false){
+        alert("변경된 내용이 없습니다.");
+        return;
+      }
       // 데이터 로그 확인
-      console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
-      console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
-      console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
+      console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
+      console.log("deletedRows ::" ,this.$refs.grid.invoke("getModifiedRows").deletedRows);
+
       // 변경 데이터 저장
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
       this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
       this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
-      if (this.createdRows.length !== 0) {
-        // 데이터 파라메타 전달
-        this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-        // create api 요청
-        this.$refs.grid.invoke("request", "createData", {showConfirm: false});
+      if(this.createdRows.length !== 0){
+        if(this.vaildation(this.createdRows, "1") === true){
+          try {
+            // 데이터 파라메타 전달
+            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
+            // create api 요청
+            this.$refs.grid.invoke("request", "createData", {showConfirm: false});
+            alert("저장이 완료되었습니다.")
+            this.$refs.grid.invoke("reloadData");
+          } catch (e){
+            console.log(e);
+          }
+        }
+        // 저장 후 변경 데이터 배열 비움
+        this.$refs.grid.invoke("clearModifiedData")
+        this.$refs.grid.invoke("reloadData");
       }
-      if (this.updatedRows.length !== 0) {
-        // 데이터 파라메타 전달
-        this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-        // update api 요청
-        this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+      if(this.updatedRows.length !== 0){
+        if(this.vaildation(this.updatedRows, "1") === true) {
+          try {
+            // 데이터 파라메타 전달
+            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+            this.$refs.grid.invoke("setRequestParams", this.login);
+            // update api 요청
+            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+            alert("저장이 완료되었습니다.")
+          } catch (e) {
+            console.log("업데이트 오류 ::", e);
+          }
+        }
       }
-      if (this.deletedRows.length !== 0) {
-        // 데이터 파라메타 전달
-        this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
-        // delete api 요청
-        this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-      }
-      // this.$refs.grid.invoke("disableRow", this.curRow, {withCheckbox: true});  // 행 단위 disable
-      // this.$refs.grid.invoke("disableCell", this.curRow, 'dvlp_dis_cd');  // 셀 단위 disable
+      // 저장 후 변경 데이터 배열 비움
+      this.$refs.grid.invoke("clearModifiedData")
+      this.$refs.grid.invoke("reloadData");
     },
+
+    // 기타 항목 저장
+    fnEtcSave() {
+      // 변경 사항 유무 체크
+      if(this.$refs.grid.invoke("isModified") === false){
+        alert("변경된 내용이 없습니다.");
+        return;
+      }
+      // 변경 데이터 저장
+      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+
+      if(this.updatedRows.length !== 0) {
+        if (this.vaildation(this.updatedRows, "2") === true) {
+          try {
+            // 데이터 파라메타 전달
+            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+            // update api 요청
+            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+            alert("저장이 완료되었습니다.")
+          } catch (e) {
+            console.log("업데이트 오류 ::", e);
+          }
+        }
+      }
+      // 저장 후 변경 데이터 배열 비움
+      this.$refs.grid.invoke("clearModifiedData")
+      this.$refs.grid.invoke("reloadData");
+    },
+
     onClick(ev) {
       this.curRow = ev.rowKey;
       this.$refs.grid.invoke("getRow", this.curRow);
       // 결함등록 Column 클릭 시 결함등록팝업 호출
-      if(ev.columnName == 'btn_popup') {
+      if(ev.columnName === 'btn_popup') {
         this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+      }
+      if(ev.columnName === 'dvlpe_btn') {
+        this.pop = window.open("../PJTE9001/", "open_page", "width=1000, height=600");
       }
     },
     dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
       this.curRow = ev.rowKey;
-      if(ev.columnName == 'tst_case_nm') {
+      if(ev.columnName === 'tst_case_nm') {
         this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
       }
     },
@@ -444,6 +472,8 @@ export default {
     //   this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
     // },
     fnSearch() {
+      this.comboSetData();
+
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -461,6 +491,60 @@ export default {
           {focus: true});
       this.fnEnable();
     },
+    // 유효값 검증
+    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
+    vaildation(data, division) {
+      for(let i=0; i<data.length; i++){
+        // 저장과 기타항목수정 분류
+        if(division === "1") {
+          /* 권한 ID에 따른 처리단계 체크 */
+          if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
+            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
+            if (data[i].prc_step_cd !== "300") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300") { //권한 ID[300:IT]
+            if (data[i].prc_step_cd !== "400" && data[i].prc_step_cd !== "600") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[400:현업]
+            if (data[i].prc_step_cd !== "500" && data[i].prc_step_cd !== "600") {
+              alert("권한이 부족합니다.")
+              return false;
+            }
+          }
+          //권한ID[500:PM,600:PMO] - 모두 가능
+        }
+        /* 출력 영역  */
+        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
+        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert("시나리오 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert("시나리오명은 필수 입력 사항입니다");      return false;}
+        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert("테스트케이스 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
+        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
+        if(data[i].dvlpe_cnf_dt === null || data[i].dvlpe_cnf_dt === "")   { alert("개발자확인일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].rqu_sbh_id === null || data[i].rqu_sbh_id === "")       { alert("요구사항 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].tst_rst === null || data[i].tst_rst === "")             { alert("테스트 결과는 필수 입력 사항입니다");     return false;}
+        if(data[i].tst_achi_rst  === null || data[i].tst_achi_rst  === "") { alert("테스트 수행결과는 필수 입력 사항입니다");  return false;}
+        if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
+        if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
+
+        // if(data[i].prc_step_cd >= "200"){
+        //   if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+        // }
+      }
+
+      return  true;
+    },
+
     fnEnable() {
       // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
@@ -468,12 +552,6 @@ export default {
     },
     gridDelRow() {
       this.$refs.grid.invoke("removeCheckedRows", this.curRow, {showConfirm: false});
-      // DB 데이터 삭제로직 추가
-    },
-    gridADelRow() {
-      // DB 데이터 삭제로직 추가
-    },
-    gridIns() {
       // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
@@ -493,35 +571,29 @@ export default {
   // 특정 데이터에 실행되는 함수를 선언하는 부분
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
-    count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
-    }
   },
   // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C1","C4","C6","C26"],
+
       info: {
-        /* 필터 변수 */
-        prjt_nm: prjt_nm,             // 프로젝트명
-        bzcd: bzcd,                   // 업무구분
-        sqn_cd: sqn_cd,               // 차수구분
-        itg_tst_prc_cd: itg_tst_prc_cd,     // 처리단계
-        tp: tp,                       //유형
+        scnr_id      : this.scnr_id,         // 시나리오 ID
+        tst_case_id  : this.tst_case_id,     // 테스트케이스 ID
+        dvlpe_eno    : this.dvlpe_eno,       // 개발자번호
+        dvlpe_enm    : this.dvlpe_enm,       // 개발자명
+        pl_eno       : this.pl_eno,          // 담당 PL번호
+        pl_nm        : this.pl_nm,           // 담당 PL명
+        crpe_eno     : this.crpe_eno,        // 담당현업명
+        rqu_sbh_id   : this.rqu_sbh_id,      // 요구사항 ID
 
-        prjt_nm_selected: prjt_nm[0].value,             // 선택 된 프로젝트명
-        bzcd_selected: bzcd[0].value,                   // 선택 된 업무구분
-        sqn_cd_selected: sqn_cd[0].value,               // 선택 된 차수구분
-        itg_tst_prc_cd_selected: itg_tst_prc_cd[0].value,     // 선택 된 처리단계
-        tp_selected: tp[0].value,                       // 선택 된 유형
-
-        scnr_id  : this.scnr_id,         // 시나리오ID
-        tst_case_id  : this.tst_case_id, // 테스트케이스ID
-        dvlpe_eno: this.dvlpe_eno,       // 개발자명
-        pl_eno: this.pl_eno,             // 담당PL명
-        crpe_eno: this.crpe_eno,         // 담당현업명
-        rqu_sbh_id: this.rqu_sbh_id,     // 요구사항ID
+        prjt_nm_selected         : null,
+        bkup_id_selected         : null,
+        bzcd_selected            : null,
+        sqn_cd_selected          : null,
+        pgm_dis_cd_selected      : null,
+        itg_tst_prc_cd_selected  : null,
 
         frcs_end_dt01: '',        // 예상종료일자 (시작)
         frcs_end_dt02: '',        // 예상종료일자 (종료)
@@ -549,74 +621,30 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 610,
+      bodyHeight: 630,
       rowHeight: 25,
       minRowHeight: 10,
       showDummyRows: true,
       open: false,
+      // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [
-        {
-          id: 'PJTE1000',
-          path: '/PJTE1000',
-          name: 'ProjectEyes현황'
-        },
-        {
-          id: 'PJTE2100',
-          path: '/PJTE2100',
-          name: '개발현황'
-        },
-        {
-          id: 'PJTE2110',
-          path: '/PJTE2110',
-          name: '개발진척현황'
-        },
-        {
-          id: 'PJTE2200',
-          path: '/PJTE2200',
-          name: '통합테스트'
-        },
-        {
-          id: 'PJTE2210',
-          path: '/PJTE2210',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'PJTE3000',
-          path: '/PJTE3000',
-          name: '결함관리'
-        },
-        {
-          id: 'PJTE4000',
-          path: '/PJTE4000',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'PJTE5000',
-          path: '/PJTE5000',
-          name: 'WBS관리'
-        },
-        {
-          id: 'PJTE6000',
-          path: '/PJTE6000',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'PJTE7000',
-          path: '/PJTE7000',
-          name: '산출물정합성체크'
-        },
-        {
-          id: 'PJTE9000',
-          path: '/PJTE9000',
-          name: '시스템관리'
-        },
+        { id: 'PJTE1000', path: '/PJTE1000', name: 'ProjectEyes현황' },
+        { id: 'PJTE2100', path: '/PJTE2100', name: '개발현황' },
+        { id: 'PJTE2110', path: '/PJTE2110', name: '개발진척현황' },
+        { id: 'PJTE2200', path: '/PJTE2200', name: '통합테스트' },
+        { id: 'PJTE2210', path: '/PJTE2210', name: '통합테스트진척현황' },
+        { id: 'PJTE3000', path: '/PJTE3000', name: '결함관리' },
+        { id: 'PJTE4000', path: '/PJTE4000', name: 'ActionItem및이슈관리현황' },
+        { id: 'PJTE5000', path: '/PJTE5000', name: 'WBS관리' },
+        { id: 'PJTE6000', path: '/PJTE6000', name: 'PMS신청관리' },
+        { id: 'PJTE7000', path: '/PJTE7000', name: '산출물정합성체크' },
+        { id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리' },
       ],
       dataSource: {
         api: {
           readData   : { url: process.env.VUE_APP_API + '/PJTE2200/select', method: 'GET' },
           createData : { url: process.env.VUE_APP_API + '/PJTE2200/create', method: 'POST'},
           updateData : { url: process.env.VUE_APP_API + '/PJTE2200/update', method: 'PUT'},
-          deleteData : { url: process.env.VUE_APP_API + '/PJTE2200/delete', method: 'PUT'},
         },
         initialRequest: false,
         contentType: 'application/json;',
@@ -626,24 +654,31 @@ export default {
       columnOptions: {
         resizable: true
       },
-      rowHeaders: ['checkbox', 'rowNum'],
+      rowHeaders: ['rowNum'],
       header: {
         height: 45,
         complexColumns: [
-          {
-            header: '결함건수',
-            name: 'mergeColumn1',
-            childNames: ['col19', 'col20', 'col21']
-          },
+          {header: '결함건수',  name: 'mergeColumn1', childNames: ['col19', 'col20', 'col21']},
+          {header: '테스트계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
+          {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt']},
+          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno'], hideChildHeaders : true},
+          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno'], hideChildHeaders : true},
+          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno'], hideChildHeaders : true},
         ]
       },
       columns: [
         {
           header: '업무구분',
           width: 150,
-          align: 'center',
+          align: 'left',
           name: 'bzcd',
-          editor: 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: bzcd,
+            }
+          }
         },
         {
           header: '차수',
@@ -673,25 +708,10 @@ export default {
           editor: 'text'
         },
         {
-          header: '완료여부',
-          width: 70,
-          align: 'center',
-          name: 'itg_tst_prc_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: itg_tst_prc_cd
-            }
-          }
-        },
-        {
           header: '테스트케이스ID',
           width: 130,
           align: 'center',
           name: 'tst_case_id',
-          editor: 'text',
-          sortable: 'true'
         },
         {
           header: '테스트케이스명',
@@ -719,7 +739,6 @@ export default {
           name: 'frcs_sta_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker'
-
         },
         {
           header: '예상종료일',
@@ -745,24 +764,63 @@ export default {
         },
         {
           header: '개발자',
-          width: 100,
+          width: 80,
+          align: 'center',
+          name: 'dvlpe_enm',
+          editor: 'text',
+        },
+        {
+          header: '개발자',
+          width: 60,
+          align: 'center',
+          name: 'dvlpe_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: '개발자',
+          width: 80,
           align: 'center',
           name: 'dvlpe_eno',
-
+          editor: 'text',
         },
         {
-          header: '담당PL',
-          width: 100,
+          header: 'PL명',
+          width: 80,
+          align: 'center',
+          name: 'pl_enm',
+        },
+        {
+          header: 'PL명',
+          width: 50,
+          align: 'center',
+          name: 'pl_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: 'PL번호',
+          width: 80,
           align: 'center',
           name: 'pl_eno',
-
         },
         {
-          header: '담당현업',
-          width: 100,
+          header: '담당자명',
+          width: 80,
+          align: 'center',
+          name: 'crpe_enm',
+          editor: 'text',
+        },
+        {
+          header: '담당자명',
+          width: 50,
+          align: 'center',
+          name: 'crpe_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: '담당자번호',
+          width: 80,
           align: 'center',
           name: 'crpe_eno',
-
         },
         {
           header: '통합테스트증빙첨부',
@@ -778,25 +836,22 @@ export default {
           }
         },
         {
-          header: '총건수',
+          header: '전체',
           width: 80,
           align: 'right',
-          name: 'col19',
-
+          name: 'err_tot_cnt',
         },
         {
           header: '완료',
           width: 80,
-          align: 'center',
-          name: 'col20',
-
+          align: 'right',
+          name: 'err_cmpl_cnt',
         },
         {
           header: '미완료',
           width: 80,
-          align: 'center',
-          name: 'col21',
-
+          align: 'right',
+          name: 'err_ncmpl_cnt',
         },
         {
           header: '결함등록',
@@ -808,59 +863,92 @@ export default {
         {
           header: '미진사유',
           width: 400,
-          name: 'col24',
+          name: 'RMRK',
+          editor: "text",
         },
         {
           header: '프로그램ID',
           width: 200,
           name: 'pgm_id',
+          editor: "text",
         },
         {
           header: '화면ID',
           width: 140,
-          name: 'scrn_id'
+          name: 'scrn_id',
+          editor: "text",
         },
         {
           header: '거래코드',
           width: 90,
-          name: 'trn_cd'
+          name: 'trn_cd',
+          editor: "text",
         },
         {
           header: '요구사항ID',
           width: 150,
-          name: 'rqu_sbh_id'
+          name: 'rqu_sbh_id',
+          editor: "text",
         },
         {
           header: '사전조건',
           width: 90,
-          name: 'prr_cnd'
+          name: 'prr_cnd',
+          editor: "text",
         },
         {
-          header: '일자',
+          header: '입력값',
           width: 90,
-          name: 'col30'
+          name: 'inp_val',
+          editor: "text",
         },
         {
-          header: '점검시간',
+          header: '테스트설명/절차',
           width: 90,
-          name: 'col31'
+          name: 'tst_des',
+          editor: "text",
         },
         {
-          header: '담당자',
+          header: '출력값',
           width: 90,
-          name: 'crpe_eno'
+          name: 'oup_val',
+          editor: "text",
         },
         {
-          header: '이행진행구분',
+          header: '유형',
+          width: 90,
+          name: 'tp',
+          editor: "text",
+        },
+        {
+          header: '출력수단',
           width: 150,
-          name: 'col33',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: listItem
-            }
-          }
+          name: 'oup_mens',
+          editor: "text",
+        },
+        {
+          header: '테스트결과',
+          width: 150,
+          name: 'oup_mens',
+          editor: "text",
+        },
+        {
+          header: '테스트수행결과',
+          width: 150,
+          name: 'tst_achi_rst',
+          editor: "text",
+        },
+        {
+          header: '백업ID',
+          width: 100,
+          name: 'bkup_id',
+          hidden : true,
+        },
+        {
+          header: '프로젝트ID',
+          width: 100,
+          name: 'prjt_id',
+          hidden : true,
         },
       ],
     }
