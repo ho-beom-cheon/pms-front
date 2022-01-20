@@ -281,9 +281,10 @@ export default {
 
     // 콤보 처음 값 저장
     comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].bzcd_selected;
+      debugger;
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
     },
     init() {
       axiosService.get(
@@ -372,62 +373,19 @@ export default {
       minRowHeight: 10,
       showDummyRows: true,
       open: false,
+      // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [
-        {
-          id: 'PJTE1000',
-          path: '/PJTE1000',
-          name: 'ProjectEyes현황'
-        },
-        {
-          id: 'PJTE2100',
-          path: '/PJTE2100',
-          name: '개발현황'
-        },
-        {
-          id: 'PJTE2110',
-          path: '/PJTE2110',
-          name: '개발진척현황'
-        },
-        {
-          id: 'PJTE2200',
-          path: '/PJTE2200',
-          name: '통합테스트'
-        },
-        {
-          id: 'PJTE2210',
-          path: '/PJTE2210',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'PJTE3000',
-          path: '/PJTE3000',
-          name: '결함관리'
-        },
-        {
-          id: 'PJTE4000',
-          path: '/PJTE4000',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'PJTE5000',
-          path: '/PJTE5000',
-          name: 'WBS관리'
-        },
-        {
-          id: 'PJTE6000',
-          path: '/PJTE6000',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'PJTE7000',
-          path: '/PJTE7000',
-          name: '산출물정합성체크'
-        },
-        {
-          id: 'PJTE9000',
-          path: '/PJTE9000',
-          name: '시스템관리'
-        },
+        { id: 'PJTE1000', path: '/PJTE1000', name: 'ProjectEyes현황' },
+        { id: 'PJTE2100', path: '/PJTE2100', name: '개발현황' },
+        { id: 'PJTE2110', path: '/PJTE2110', name: '개발진척현황' },
+        { id: 'PJTE2200', path: '/PJTE2200', name: '통합테스트' },
+        { id: 'PJTE2210', path: '/PJTE2210', name: '통합테스트진척현황' },
+        { id: 'PJTE3000', path: '/PJTE3000', name: '결함관리' },
+        { id: 'PJTE4000', path: '/PJTE4000', name: 'ActionItem및이슈관리현황' },
+        { id: 'PJTE5000', path: '/PJTE5000', name: 'WBS관리' },
+        { id: 'PJTE6000', path: '/PJTE6000', name: 'PMS신청관리' },
+        { id: 'PJTE7000', path: '/PJTE7000', name: '산출물정합성체크' },
+        { id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리' },
       ],
       dataSource: {
         api: {readData: {url: process.env.VUE_APP_API + '/PJTE2110/select', method: 'GET'}},
