@@ -126,7 +126,6 @@ export default {
   // 변수 초기화
   created() {
     // 권한에 따른 컬럼 세팅
-
     console.log("created");
   },
   beforeMount() {
@@ -181,9 +180,9 @@ export default {
           opener.document.getElementById('id.pl_nm').value = this.info.empnm  // 담당자 직원명
           opener.document.getElementById('id.pl_no').value = this.info.empno  // 담당자 직원번호
           window.close();
-        } else if (btn_id == 'btn.rgpe') {
-          opener.document.getElementById('id.rgpe_nm').value = this.info.empnm  // 담당자 직원명
-          opener.document.getElementById('id.rgpe_no').value = this.info.empno  // 담당자 직원번호
+        } else if (btn_id === 'btn.crpe') {
+          opener.document.getElementById('id.crpe_nm').value = this.info.empnm  // 담당자 직원명
+          opener.document.getElementById('id.crpe_no').value = this.info.empno  // 담당자 직원번호
           window.close();
         }
       } else {
