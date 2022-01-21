@@ -19,7 +19,8 @@
         <div class="accordion" id="accordionExample">
           <div class="card">
             <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+                      aria-expanded="true" aria-controls="collapseOne">
                 PMS
               </button>
             </div>
@@ -48,19 +49,19 @@
     <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
-        <div class = "col">
+        <div class="col">
           <ul class="filter-con clear-fix">
             <li class="filter-item">
               <div class="item-con">프로젝트명
                 <select
-                    v-model = "info.prjt_nm_selected"
-                    style   = "width: 165px"
+                    v-model="info.prjt_id_selected"
+                    style="width: 165px"
                 >
                   <option
-                      v-for  = "(prjt_nm, idx) in info.prjt_nm"
-                      :key   = "idx"
-                      v-text = "prjt_nm.text"
-                      :value = "prjt_nm.value"
+                      v-for="(prjt_id, idx) in info.prjt_id"
+                      :key="idx"
+                      v-text="prjt_id.text"
+                      :value="prjt_id.value"
                   ></option>
                 </select>
               </div>
@@ -83,14 +84,14 @@
             <li class="filter-item">
               <div class="item-con">업무구분
                 <select
-                    v-model = "info.bzcd_selected"
-                    style   = "width: 145px"
+                    v-model="info.bzcd_selected"
+                    style="width: 145px"
                 >
                   <option
-                      v-for  = "(bzcd, idx) in info.bzcd"
-                      :key   = "idx"
-                      v-text = "bzcd.text"
-                      :value = "bzcd.value"
+                      v-for="(bzcd, idx) in info.bzcd"
+                      :key="idx"
+                      v-text="bzcd.text"
+                      :value="bzcd.value"
                   ></option>
                 </select>
               </div>
@@ -98,14 +99,14 @@
             <li class="filter-item">
               <div class="item-con">등록단계
                 <select
-                    v-model = "info.rgs_dscd_selected"
-                    style   = "width: 120px"
+                    v-model="info.rgs_dscd_selected"
+                    style="width: 120px"
                 >
                   <option
-                      v-for  = "(rgs_dscd, idx) in info.rgs_dscd"
-                      :key   = "idx"
-                      v-text = "rgs_dscd.text"
-                      :value = "rgs_dscd.value"
+                      v-for="(rgs_dscd, idx) in info.rgs_dscd"
+                      :key="idx"
+                      v-text="rgs_dscd.text"
+                      :value="rgs_dscd.value"
                   ></option>
                 </select>
               </div>
@@ -113,14 +114,14 @@
             <li class="filter-item">
               <div class="item-con">결함유형
                 <select
-                    v-model = "info.err_tycd_selected"
-                    style   = "width: 100px"
+                    v-model="info.err_tycd_selected"
+                    style="width: 100px"
                 >
                   <option
-                      v-for  = "(err_tycd, idx) in info.err_tycd"
-                      :key   = "idx"
-                      v-text = "err_tycd.text"
-                      :value = "err_tycd.value"
+                      v-for="(err_tycd, idx) in info.err_tycd"
+                      :key="idx"
+                      v-text="err_tycd.text"
+                      :value="err_tycd.value"
                   ></option>
                 </select>
               </div>
@@ -128,14 +129,14 @@
             <li class="filter-item">
               <div class="item-con">처리단계
                 <select
-                    v-model = "info.err_prc_step_cd_selected"
-                    style   = "width: 128px"
+                    v-model="info.err_prc_step_cd_selected"
+                    style="width: 128px"
                 >
                   <option
-                      v-for  = "(err_prc_step_cd, idx) in info.err_prc_step_cd"
-                      :key   = "idx"
-                      v-text = "err_prc_step_cd.text"
-                      :value = "err_prc_step_cd.value"
+                      v-for="(err_prc_step_cd, idx) in info.err_prc_step_cd"
+                      :key="idx"
+                      v-text="err_prc_step_cd.text"
+                      :value="err_prc_step_cd.value"
                   ></option>
                 </select>
               </div>
@@ -160,7 +161,7 @@
                      id="id.rgpe_no"
                      v-model="info.rgpe_no"
                      style="width: 70px; background-color: #f2f2f2;"
-                     :disabled = true
+                     :disabled=true
               >
             </li>
             <li class="filter-item-n">
@@ -183,7 +184,7 @@
                      id="id.dvlpe_no"
                      v-model="info.dvlpe_no"
                      style="width: 70px; background-color: #f2f2f2;"
-                     :disabled = true
+                     :disabled=true
               >
             </li>
             <li class="filter-item-n">
@@ -206,16 +207,15 @@
                      id="id.pl_no"
                      v-model="info.pl_no"
                      style="width: 70px; background-color: #f2f2f2;"
-                     :disabled = true
+                     :disabled=true
               >
             </li>
             <li class="filter-item">
               <div class="item-con">프로그램ID
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.mng_id"
-                       @keyup.enter="fnSearch"
-                       style   = "width: 120px"
+                       v-model="info.cctn_id"
+                       style="width: 120px"
                 >
               </div>
             </li>
@@ -223,9 +223,8 @@
               <div class="item-con">프로그램명
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.mng_nm"
-                       @keyup.enter="fnSearch"
-                       style   = "width: 140px"
+                       v-model="info.cctn_nm"
+                       style="width: 140px"
                 >
               </div>
             </li>
@@ -234,46 +233,42 @@
                 <input type="text"
                        placeholder="입력"
                        v-model="info.err_txt"
-                       @keyup.enter="fnSearch"
-                       style   = "width: 140px"
+                       style="width: 140px"
                 >
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">결함등록일자
-                <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt" style="width: 125px"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.rgs_end_dt" v-model="info.rgs_sta_dt"
+                                                   style="width: 125px"></div>
                 -
-                <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt" style="width: 125px"></div>
+                <div class="input-dateWrap"><input type="date" :min="info.rgs_sta_dt" v-model="info.rgs_end_dt"
+                                                   style="width: 125px"></div>
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">결함조치일자
-                <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt" style="width: 125px"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.ttmn_end_dt" v-model="info.ttmn_sta_dt" style="width: 125px">
+                </div>
                 -
-                <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt" style="width: 125px"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.ttmn_sta_dt" v-model="info.ttmn_end_dt" style="width: 125px">
+                </div>
               </div>
             </li>
 
 
-
             <li class="filter-item">
               <div class="item-con">
-                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
+                <input type="checkbox" id="cmpl_yn" v-model="info.cmpl_yn">
                 <label>　완료건 포함</label>
               </div>
             </li>
           </ul>
           <ul class="filter-btn">
-            <div class="btn btn-filter-b">
-              <a href="#" @click="open_page">안정화결함등록</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀업로드</a>
-            </div>
             <div class="btn btn-filter-e">
               <a href="#" @click="gridExcelExport">엑셀다운로드</a>
             </div>
-            <div class="btn btn-filter-p" style = "margin-left: 20px">
+            <div class="btn btn-filter-p" style="margin-left: 20px">
               <a href="#" @click="fnSearch">조회</a>
             </div>
           </ul>
@@ -318,51 +313,57 @@
 </template>
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
-import { Grid } from '@toast-ui/vue-grid';
-import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
+import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import axios from "axios";
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import Modal from "@/components/Modal";
+import PJTE9001 from "@/views/pms/PJTE9001";
 
 //그리드 아이템 예제
-var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-var prjt_nm  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
+var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
+var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {text: "PMS프로젝트3",  value: "1000000003"}];
+var bkup_id = [{text: "백업", value: "0000000000"}];
 
 
 // 업무구분
 const bzcd = [
-  {	text:"전체", 	value:'999'},
-  {	text:"신용", 	value:'AAA'},
-  {	text:"재무제표", 	value:"BBB"},
-  {	text:"신용평가", 	value:"CCC"},
+  {text: "전체", value: 'TTT'},
+  {text: "신용", value: 'AAA'},
+  {text: "재무제표", value: "BBB"},
+  {text: "신용평가", value: "CCC"},
 ];
 //등록단계구분
 const rgs_dscd = [
-  {	text:"전체", 	        value:'999'},
-  {	text:"단위테스트", 	  value:'1100'},
-  {	text:"통합테스트1차", 	value:'2100'},
-  {	text:"통합테스트2차", 	value:'2200'},
-  {	text:"통합테스트3차", 	value:'2300'},
-  {	text:"통합테스트4차", 	value:'2400'},
+  {text: "전체", value: 'TTT'},
+  {text: "단위테스트단계", value: '1100'},
+  {text: "1차통합테스트단계", value: '2100'},
+  {text: "2차통합테스트단계", value: '2200'},
+  {text: "3차통합테스트단계", value: '2300'},
+  {text: "4차통합테스트단계", value: '2400'},
 ];
 
 //결함유형
 const err_tycd = [
-  {	text:"전체", 	value:'999'},
-  {	text:"결함", 	value:'100'},
-  {	text:"개선", 	value:'200'},
-  {	text:"기타", 	value:'900'},
+  {text: "전체", value: 'TTT'},
+  {text: "결함", value: '100'},
+  {text: "개선", value: '200'},
+  {text: "결함아님", value: '300'},
+  {text: "기타결함", value: '900'},
 ];
 
 // 처리단계
 const err_prc_step_cd = [
 
-  {text:"전체",     value:"999"},
-  {text:"미개발",   value:"100"},
-  {text:"개발중",   value:"200"},
-  {text:"개발완료",  value:"300"},
-  {text:"PL완료",    value:"400"},
+  {text: "전체", value: "TTT"},
+  {text: "등록", value: "100"},
+  {text: "담당자배정", value: "200"},
+  {text: "결함재등록", value: "300"},
+  {text: "이관", value: "400"},
+  {text: "보류", value: "500"},
+  {text: "개발자조치완료", value: "600"},
+  {text: "PL확인", value: "700"},
+  {text: "등록자확인", value: "800"},
 
 ];
 
@@ -390,13 +391,14 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    this.init();
     this.fnSearch();
     console.log("mounted");
   },
   beforeUpdate() {
     console.log("beforeUpdate");
   },
-  updated(){
+  updated() {
     console.log("updated");
   },
   beforeDestroy() {
@@ -415,33 +417,34 @@ export default {
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
-    change(){
-      console.log();
+    init() {
+      // 그리드 초기화
+      this.$refs.grid.invoke("clear");
+      // 조회 필터 초기화
+      this.info.cmpl_yn = false
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
       // 그리드 내용 클릭 시 상세보기 모달팝업
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(typeof currentCellData.value !=="undefined" && currentCellData.value !== '' && currentCellData.value !== null) {
-        if(ev.columnName == 'ttmn_txt') {  // 컬럼명이 <조치내용>일 때만 팝업
-          this.modals.txt_modal1 = true;
-          this.modalTxt = currentCellData.value;
-          const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-        }
+      if (ev.columnName == 'ttmn_txt') {  // 컬럼명이 <조치내용>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
     },
     dblonClick(ev) {
       this.curRow = ev.rowKey;
     },
-    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+    fnEdit() {   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "ttmn_txt", document.getElementById("modalId").value);
       this.modals.txt_modal1 = false;
     },
-    fnCloseModal(){  // 모달창 닫기
+    fnCloseModal() {  // 모달창 닫기
       this.modals.txt_modal1 = false;
     },
-    fnSearch(){
+    fnSearch() {
       // 조회 버튼 클릭 시 직원조회팝업에서 받아온 직원데이터를 v-model에 넣는다.
       this.info.rgpe_no = document.getElementById("id.rgpe_no").value      // 결함등록자 이름 설정
       this.info.rgpe_nm = document.getElementById("id.rgpe_nm").value      // 결함등록자 이름 설정
@@ -454,33 +457,32 @@ export default {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
-    gridInit(){
-      this.$refs.grid.invoke("clear");
-    },
-    gridAddRow(){
+    gridAddRow() {
 
-      this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0010", col5:"PMS구축"},{focus:true}) ;
+      this.$refs.grid.invoke("appendRow", {col1: "1", col3: "개발", col4: "SWZP0010", col5: "PMS구축"}, {focus: true});
     },
-    gridDelRow(){
+    gridDelRow() {
       this.$refs.grid.invoke("removeRow", this.curRow);
       // DB 데이터 삭제로직 추가
     },
-    gridADelRow(){
+    gridADelRow() {
       // DB 데이터 삭제로직 추가
     },
-    gridIns(){
+    gridIns() {
       // DB 데이터 삭제로직 추가
     },
-    gridExcelExport(){
-      this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+    gridExcelExport() {
+      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
-    gridExcelImport(){
+    gridExcelImport() {
       // 엑셀파일 업로드 로직 추가
     },
-    open_page(){
+    open_page() {
       this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
     },
     open_pjte9001(event) {
+
+
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
     },
@@ -488,7 +490,7 @@ export default {
   },
   // 특정 데이터에 실행되는 함수를 선언하는 부분
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
-  watch:{
+  watch: {
     count: (a, b) => {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
@@ -498,52 +500,53 @@ export default {
   // 변수 선언부분
   data() {
     return {
-      info : {
+      info: {
+        // 콤보
+        prjt_id: prjt_id,    		            // 프로젝트명
+        bkup_id: bkup_id,                   // 백업ID
+        bzcd: bzcd,    			                // 업무구분
+        rgs_dscd: rgs_dscd,                 //등록단계구분
+        err_tycd: err_tycd,                 //결함유형
+        err_prc_step_cd: err_prc_step_cd,   //처리단계
 
-        rgpe_no : this.rgpe_no,       //결함등록자번호
-        rgpe_nm : this.rgpe_nm,       //결함등록자명
-        dvlpe_no : this.dvlpe_no,     //담당자번호
-        dvlpe_nm : this.dvlpe_nm,     //담당자명
-        pl_no : this.pl_no,           //담당PL번호
-        pl_nm : this.pl_nm,           //담당PL명
-        mng_id : this.mng_id,         //프로그램ID
-        err_txt : this.err_txt,       //결함내용
+        prjt_id_selected: prjt_id[0].value,                 // 프로젝트명
+        bkup_id_selected: bkup_id[0].value,                 // 백업ID
+        bzcd_selected: bzcd[0].value,                       // 업무구분
+        rgs_dscd_selected: rgs_dscd[0].value,               // 등록단계구분
+        err_tycd_selected: err_tycd[0].value,               // 결함유형
+        err_prc_step_cd_selected: err_prc_step_cd[0].value, // 처리단계
 
-        prjt_nm     : prjt_nm,    		      // 프로젝트명
-        bzcd        : bzcd,    			        // 업무구분
-        rgs_dscd      : rgs_dscd,               //등록단계구분
-        err_tycd     : err_tycd,              //결함유형
-        err_prc_step_cd  : err_prc_step_cd,   //처리단계
-        /* select 박스 */
-        prjt_nm_selected        : prjt_nm[0].value,        // 프로젝트명
-        bzcd_selected           : bzcd[0].value,           // 업무구분
-        rgs_dscd_selected         : rgs_dscd[0].value,         // 등록단계구분
-        err_tycd_selected        : err_tycd[0].value,        // 결함유형
-        err_prc_step_cd_selected : err_prc_step_cd[0].value, // 처리단계
+        rgpe_no: this.rgpe_no,       // 결함등록자번호
+        rgpe_nm: this.rgpe_nm,       // 결함등록자명
+        dvlpe_no: this.dvlpe_no,     // 조치자번호
+        dvlpe_nm: this.dvlpe_nm,     // 조치자명
+        pl_no: this.pl_no,           // 담당PL번호
+        pl_nm: this.pl_nm,           // 담당PL명
 
+        cctn_id: this.cctn_id,       // 프로그램ID
+        cctn_nm: this.cctn_nm,       // 프로그램명
+        err_txt: this.err_txt,       // 결함내용
+
+        rgs_sta_dt: '',     // 결함등록일자STA
+        rgs_end_dt: '',     // 결함등록일자END
+        ttmn_sta_dt: '',    // 결함조치일자STA
+        ttmn_end_dt: '',    // 결함조치일자END
+
+        cmpl_yn: this.cmpl_yn,    // 완료건 포함 여부
       },
-      addRow : {
 
-      },
-
-      frcs_sta_dt : '',    //결함등록일자STA
-      frcs_end_dt : '',    //결함등록일자END
-      sta_dt      : '',    //결함조치일자STA
-      end_dt      : '',    //결함조치일자END
-
-      check_Yn    : false,  // 삭제프로그램/소스취약점포함
-
+      addRow: {},
       /* 그리드 상세보기 모달 속성 */
       modals: {
         txt_modal1: false,
       },
-      modalTxt:this.modalTxt,
+      modalTxt: this.modalTxt,
 
-      count:0,
-      curRow:-1,
-      title:"",
-      scrollX:false,
-      scrollY:false,
+      count: 0,
+      curRow: -1,
+      title: "",
+      scrollX: false,
+      scrollY: false,
       bodyHeight: 650,
       minRowHeight: 10,
       rowHeight: 25,
@@ -609,19 +612,31 @@ export default {
       dataSource: {
 
         api: {
-          readData   : { url: process.env.VUE_APP_API + '/PJTE3000/select', method: 'GET' },
-          createData : { url: process.env.VUE_APP_API + '/PJTE3000/create', method: 'POST'},
-          updateData : { url: process.env.VUE_APP_API + '/PJTE3000/update', method: 'PUT'},
-          deleteData : { url: process.env.VUE_APP_API + '/PJTE3000/delete', method: 'PUT'},
+          readData: {url: process.env.VUE_APP_API + '/PJTE3000/select', method: 'GET'},
+          createData: {url: process.env.VUE_APP_API + '/PJTE3000/create', method: 'POST'},
+          updateData: {url: process.env.VUE_APP_API + '/PJTE3000/update', method: 'PUT'},
+          deleteData: {url: process.env.VUE_APP_API + '/PJTE3000/delete', method: 'PUT'},
         },
         initialRequest: false,
       },
       columnOptions: {
         resizable: true
       },
-      rowHeaders:['rowNum'],
-      header:{
-        height: 40
+      rowHeaders: ['rowNum'],
+      header: {
+        height: 45,
+        complexColumns: [
+          {
+            header: '프로그램ID',
+            name: 'mergeColumn1',
+            childNames: ['cctn_id']
+          },
+          {
+            header: '프로그램명',
+            name: 'mergeColumn2',
+            childNames: ['cctn_nm']
+          },
+        ]
       },
       columns: [
         {
@@ -640,10 +655,22 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: rgs_dscd
             }
           }
+        },
+        {
+          header: '테스트케이스ID',
+          width: 180,
+          align: 'center',
+          name: 'cctn_id'
+        },
+        {
+          header: '테스트케이스명',
+          width: 180,
+          align: 'left',
+          name: 'cctn_nm'
         },
         {
           header: '결함유형',
@@ -654,7 +681,7 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: err_tycd
             }
           }
@@ -677,14 +704,21 @@ export default {
           header: '결함등록자',
           width: 120,
           align: 'center',
-          name: 'rgpe_no'
+          name: 'rgpe_nm'
         },
         {
           header: '결함내용',
           width: 110,
           align: 'center',
           name: 'err_txt',
-          ellipsis : true,
+          ellipsis: true,
+        },
+        {
+          header: '조치내용',
+          width: 360,
+          align: 'left',
+          name: 'ttmn_txt',
+          ellipsis: true,
         },
         {
           header: '조치예정일자',
@@ -705,20 +739,13 @@ export default {
           header: '조치자명',
           width: 110,
           align: 'center',
-          name: 'dvlpe_no'/*컬럼명 name 애매모호 ...db 보고 확인 */
+          name: 'dvlpe_nm'/*컬럼명 name 애매모호 ...db 보고 확인 */
         },
         {
           header: 'PL명',
           width: 80,
           align: 'center',
-          name: 'pl_no'
-        },
-        {
-          header: '조치내용',
-          width: 360,
-          align: 'left',
-          name: 'ttmn_txt',
-          ellipsis : true,
+          name: 'pl_nm'
         },
         {
           header: '이관전업무',
