@@ -75,9 +75,9 @@
             </li>
             <li class="filter-item">
               <div class="item-con">예상종료일자
-                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt02" v-model="info.frcs_end_dt01"></div>
-                -
-                <div class="input-dateWrap"><input type="date" :min="info.frcs_end_dt01" v-model="info.frcs_end_dt02"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
+                ~
+                <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
               </div>
             </li>
             <li class="filter-item">
@@ -106,7 +106,7 @@
                 <input type="text"
                        placeholder="직원명"
                        id="id.dvlpe_nm"
-                       v-model="info.dvlpe_nm"
+                       v-model="info.dvlpe_enm"
                        style   = "width: 90px"
                 >
                 <button class="search-btn"
@@ -119,7 +119,7 @@
               <input type="text"
                      placeholder="직원번호"
                      id="id.dvlpe_no"
-                     v-model="info.dvlpe_no"
+                     v-model="info.dvlpe_eno"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
               >
@@ -129,7 +129,7 @@
                 <input type="text"
                        placeholder="직원명"
                        id="id.pl_nm"
-                       v-model="info.pl_nm"
+                       v-model="info.pl_enm"
                        style   = "width: 90px"
                 >
                 <button class="search-btn"
@@ -142,7 +142,7 @@
               <input type="text"
                      placeholder="직원번호"
                      id="id.pl_no"
-                     v-model="info.pl_no"
+                     v-model="info.pl_eno"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
               >
@@ -172,9 +172,9 @@
             </li>
             <li class="filter-item">
               <div class="item-con">개발자확인일자
-                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt02" v-model="info.dvlpe_cnf_dt01"></div>
-                -
-                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt01" v-model="info.dvlpe_cnf_dt02"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_end_dt" v-model="info.dvlpe_sta_dt"></div>
+                ~
+                <div class="input-dateWrap"><input type="date" :max="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
           </ul>
@@ -207,6 +207,19 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <!-- Modal popup contents -->
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
         <div class="gridWrap" style="min-width: 750px;">
           <grid
               ref="grid"
@@ -221,7 +234,6 @@
               :rowHeaders="rowHeaders"
               @click="onClick"
               @dblclick="dblonClick"
-              id = "grid"
           ></grid>
         </div>
       </section>
@@ -232,6 +244,7 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
+import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 
@@ -307,6 +320,7 @@ export default {
   components: {
     Combo,
     grid: Grid,
+    Modal,
   },
   beforeCreate() {
     console.log("beforeCreate");
@@ -320,7 +334,6 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
-
     console.log("mounted");
     this.fnSearch();    // 최초조회
     this.setColumns();  // 권한에 따른 컬럼 세팅
@@ -340,10 +353,6 @@ export default {
   // 함수를 선언하는 부분
   // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
   computed: {
-    getCount() {
-      return this.count;
-    }
-
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
@@ -366,12 +375,9 @@ export default {
     },
 
     setColumns() {    // 권한에 따른 컬럼 세팅
-      if (sessionStorage.getItem("aut_cd") === '100') {
+      if (sessionStorage.getItem("aut_cd") !== '500' || sessionStorage.getItem("aut_cd") !== '600') {
+        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
-      } else if (sessionStorage.getItem("aut_cd") === '500') {
-        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
-      } else {
-        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
       }
     },
     // 저장 버튼
@@ -399,7 +405,6 @@ export default {
             // create api 요청
             this.$refs.grid.invoke("request", "createData", {showConfirm: false});
             alert("저장이 완료되었습니다.")
-            this.$refs.grid.invoke("reloadData");
           } catch (e){
             console.log(e);
           }
@@ -417,7 +422,6 @@ export default {
             // update api 요청
             this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
             alert("저장이 완료되었습니다.")
-            this.$refs.grid.invoke("reloadData");
           } catch (e) {
             console.log("업데이트 오류 ::", e);
           }
@@ -459,26 +463,43 @@ export default {
     onClick(ev) {
       this.curRow = ev.rowKey;
       this.$refs.grid.invoke("getRow", this.curRow);
+
       // 결함등록 Column 클릭 시 결함등록팝업 호출
-      if(ev.columnName === 'btn_popup') {
+      if(ev.columnName === 'btn_popup')
         this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-      }
-      if(ev.columnName === 'dvlpe_btn') {
+      if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn' )
         this.pop = window.open("../PJTE9001/", "open_page", "width=1000, height=600");
+
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+
+      if(ev.columnName === 'rmrk') {
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
     },
+
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
+    },
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
+    },
+
     dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
       this.curRow = ev.rowKey;
-      if(ev.columnName === 'tst_case_nm') {
-        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-      }
     },
-    // gridfocusChange(ev) {
-    //   this.$refs.grid.invoke("click", {rowkey:this.curRow}, {columnName: 'btn_popup'});
-    //   this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
-    // },
+
     fnSearch() {
       this.comboSetData();
+
+      this.info.dvlpe_eno = document.getElementById("id.dvlpe_no").value
+      this.info.dvlpe_enm = document.getElementById("id.dvlpe_nm").value
+      this.info.pl_eno = document.getElementById("id.pl_no").value
+      this.info.pl_enm = document.getElementById("id.pl_nm").value
+      this.info.crpe_eno = document.getElementById("id.crpe_no").value
+      this.info.crpe_enm = document.getElementById("id.crpe_nm").value
 
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -492,7 +513,7 @@ export default {
             pgm_id: sessionStorage.getItem("pgm_id"),
             bzcd: sessionStorage.getItem("bzcd"),
             prjt_id: sessionStorage.getItem("prjt_id"),
-            bkup_id: "00000000",
+            bkup_id: "0000000000",
           },
           {focus: true});
       this.fnEnable();
@@ -590,8 +611,9 @@ export default {
         dvlpe_eno    : this.dvlpe_eno,       // 개발자번호
         dvlpe_enm    : this.dvlpe_enm,       // 개발자명
         pl_eno       : this.pl_eno,          // 담당 PL번호
-        pl_nm        : this.pl_nm,           // 담당 PL명
+        pl_enm       : this.pl_nm,           // 담당 PL명
         crpe_eno     : this.crpe_eno,        // 담당현업명
+        crpe_enm     : this.crpe_enm,        // 담당현업명
         rqu_sbh_id   : this.rqu_sbh_id,      // 요구사항 ID
 
         prjt_nm_selected         : null,
@@ -601,10 +623,10 @@ export default {
         pgm_dis_cd_selected      : null,
         itg_tst_prc_cd_selected  : null,
 
-        frcs_end_dt01: '',        // 예상종료일자 (시작)
-        frcs_end_dt02: '',        // 예상종료일자 (종료)
-        dvlpe_cnf_dt01: '',      // 개발자확인일자 (시작)
-        dvlpe_cnf_dt02: '',      // 개발자확인일자 (종료)
+        frcs_sta_dt: this.frcs_sta_dt,        // 예상종료일자 (시작)
+        frcs_end_dt: this.frcs_end_dt,        // 예상종료일자 (종료)
+        dvlpe_sta_dt: this.dvlpe_sta_dt,      // 개발자확인일자 (시작)
+        dvlpe_end_dt: this.dvlpe_end_dt,      // 개발자확인일자 (종료)
 
       },
       updatedRows: this.updatedRows,
@@ -615,12 +637,11 @@ export default {
         grid: this.grid,
       },
 
-      frcs_sta_dt: '',    // 예상시작일자
-      frcs_end_dt: '',    // 예상종료일자
-      sta_dt: '',         // 실제시작일자
-      end_dt: '',         // 실제종료일자
-
-      check_Yn: false,    // 삭제프로그램/소스취약점포함
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
 
       count: 0,
       curRow: -1,
@@ -723,9 +744,10 @@ export default {
         },
         {
           header: '테스트케이스명',
-          width: 200,
+          width: 250,
           align: 'left',
           name: 'tst_case_nm',
+          ellipsis : true,
         },
         {
           header: '처리단계',
@@ -772,14 +794,14 @@ export default {
         },
         {
           header: '개발자',
-          width: 80,
+          width: 70,
           align: 'center',
           name: 'dvlpe_enm',
           editor: 'text',
         },
         {
           header: '개발자',
-          width: 60,
+          width: 50,
           align: 'center',
           name: 'dvlpe_btn',
           renderer: SearchBtn,
@@ -789,13 +811,13 @@ export default {
           width: 80,
           align: 'center',
           name: 'dvlpe_eno',
-          editor: 'text',
         },
         {
           header: 'PL명',
-          width: 80,
+          width: 70,
           align: 'center',
           name: 'pl_enm',
+          editor: 'text',
         },
         {
           header: 'PL명',
@@ -812,7 +834,7 @@ export default {
         },
         {
           header: '담당자명',
-          width: 80,
+          width: 70,
           align: 'center',
           name: 'crpe_enm',
           editor: 'text',
@@ -871,8 +893,9 @@ export default {
         {
           header: '미진사유',
           width: 400,
-          name: 'RMRK',
+          name: 'rmrk',
           editor: "text",
+          ellipsis : true,
         },
         {
           header: '프로그램ID',
@@ -912,9 +935,10 @@ export default {
         },
         {
           header: '테스트설명/절차',
-          width: 90,
+          width: 300,
           name: 'tst_des',
           editor: "text",
+          ellipsis : true,
         },
         {
           header: '출력값',

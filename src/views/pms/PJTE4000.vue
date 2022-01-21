@@ -51,81 +51,14 @@
       <section class="filter">
         <div class="col">
           <ul class="filter-con clear-fix">
-            <li class="filter-item">
-              <div class="item-con">프로젝트명
-                <select
-                    v-model="info.prjt_id_selected"
-                    style="width: 167px"
-                >
-                  <option
-                      v-for="(prjt_id, idx) in info.prjt_id"
-                      :key="idx"
-                      v-text="prjt_id.text"
-                      :value="prjt_id.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">백업ID
-                <select
-                    v-model="info.bkup_id_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(bkup_id, idx) in info.bkup_id"
-                      :key="idx"
-                      v-text="bkup_id.text"
-                      :value="bkup_id.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">관리구분
-                <select
-                    v-model="info.rgs_dis_cd_selected"
-                    style="width: 145px"
-                >
-                  <option
-                      v-for="(rgs_dis_cd, idx) in info.rgs_dis_cd"
-                      :key="idx"
-                      v-text="rgs_dis_cd.text"
-                      :value="rgs_dis_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">요청구분
-                <select
-                    v-model="info.req_dis_cd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(req_dis_cd, idx) in info.req_dis_cd"
-                      :key="idx"
-                      v-text="req_dis_cd.text"
-                      :value="req_dis_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">처리상태
-                <select
-                    v-model="info.prc_step_cd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(prc_step_cd, idx) in info.prc_step_cd"
-                      :key="idx"
-                      v-text="prc_step_cd.text"
-                      :value="prc_step_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
+            <combo
+                :comboArray = "this.comboList"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @bzcd_change="bzcd_change"
+                @rgs_dis_cd_change="rgs_dis_cd_change"
+                @req_dis_cd_change="req_dis_cd_change"
+            ></combo>
             <li class="filter-item">
               <div class="item-con">조치업무명
                 <input type="text"
@@ -576,6 +509,7 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import axios from "axios";
+import Combo from "@/components/Combo";
 import PJTE9001 from "@/views/pms/PJTE9001";
 
 const storage = window.sessionStorage;
@@ -654,6 +588,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
+    Combo,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -700,6 +635,22 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    rgs_dis_cd_change(params) {this.info.rgs_dis_cd_selected = params},
+    req_dis_cd_change(params) {this.info.req_dis_cd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+      this.info.rgs_dis_cd_selected = this.$children[0].$data.rgs_dis_cd_selected;
+      this.info.req_dis_cd_selected = this.$children[0].$data.req_dis_cd_selected;
+    },
+
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
@@ -864,6 +815,7 @@ export default {
     },
     /* 저장 */
     fnSearch() {
+      this.comboSetData();
       // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
       this.info.achi_no = document.getElementById("id.achi_no").value            // 조회한 요청자 이름 설정
       this.info.achi_nm = document.getElementById("id.achi_nm").value            // 조회한 요청자 이름 설정
@@ -939,15 +891,13 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
-    count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
-    }
   },
 // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C2","C12","C13"],
+
       info: {
         /* 필터 변수 */
         // 공통 sessionStorage 데이터
@@ -994,6 +944,7 @@ export default {
         login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
         login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+
 
         bkup_id: bkup_id,                // 백업ID
         prjt_id: prjt_id,                // 프로젝트ID
