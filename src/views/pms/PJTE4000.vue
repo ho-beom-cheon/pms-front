@@ -253,7 +253,7 @@
             </li>
             <li class="filter-item">
               <div class="item-con">
-                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
+                <input type="checkbox" id="cmpl_yn" v-model="info.cmpl_yn">
                 <label>　완료건포함</label>
               </div>
             </li>
@@ -558,8 +558,8 @@
                               rows="33"
                               id="detailTextArea"
                               v-model="detail.d_req_dis_txt"
-                              :readonly="detail.d_req_dis_txt"
-                              style="height: 428px; width: 647px"
+                              :disabled = true
+                              style="height: 428px; width: 647px; background-color: #f2f2f2; border: none"
                     ></textarea>
                   </td>
                 </li>
@@ -576,6 +576,7 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import axios from "axios";
+import PJTE9001 from "@/views/pms/PJTE9001";
 
 const storage = window.sessionStorage;
 
@@ -671,13 +672,11 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
-    this.$refs.grid.invoke("disableColumn", 'rgs_dis_cd');
     console.log("mounted");
+    // 초기화
+    this.init();
     // 최초조회
     this.fnSearch();
-    // 상세내용 초기화
-    this.fnClear();
-    document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -701,6 +700,33 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    init() {
+      // 그리드 초기화
+      this.$refs.grid.invoke("clear");
+      // 조회 필터 초기화
+      this.info.cmpl_yn = false
+      // 상세내용 초기화
+      this.detail.d_rgs_dis_cd_selected = d_rgs_dis_cd[0].value       // (상세)관리구분
+      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
+      this.detail.mng_id = ''                                         // (상세)관리ID
+      this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
+      this.detail.rgs_dt = ''                                         // (상세)요청일자
+      this.detail.d_achi_nm = ''                                      // (상세)요청자
+      this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
+      this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
+      this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
+      this.detail.ttmn_dt = ''                                        // (상세)조치일자
+      this.detail.ifnc_cd_selected = urgn_cd[0].value                 // (상세)영향도
+      this.detail.urgn_cd_selected = ifnc_cd[0].value                 // (상세)긴급성
+      this.detail.gd_txt = ''                                         // (상세)등급
+      this.detail.d_titl_nm = ''                                      // (상세)제목
+      this.detail.d_req_dis_txt = ''                                  // (상세)요청내용
+      this.detail.d_ttmn_txt = ''                                     // (상세)조치내용
+      this.detail.d_slv_mpln_txt = ''                                 // (상세)해결방안내용
+      this.detail.rmrk = ''                                           // (상세)비고
+      // 상세내용 확대보기 초기 폰트사이즈 설정
+      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+    },
     fnSave() {
       //필수항목 확인
       if (this.checkPrimary() == true) {
@@ -710,19 +736,19 @@ export default {
           if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
             ai.post("/insert",
                 {
-                  d_rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                                                                             // (상세)관리구분
-                  d_titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
-                  d_req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
-                  d_req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
+                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                                                                             // (상세)관리구분
+                  titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
+                  req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
+                  req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
                   rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),                  // (상세)요청일자
-                  d_achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
-                  d_prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
-                  d_tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
-                  d_ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
+                  achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
+                  prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
+                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
+                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
                   ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),        // (상세)조치예정일자
                   ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),                // (상세)조치일자
-                  d_ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
-                  d_slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
+                  ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
+                  slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
                   ifnc_cd: this.detail.ifnc_cd_selected,                             // (상세)영향도
                   gd_txt: this.detail.gd_txt,                                        // (상세)등급
                   urgn_cd: this.detail.urgn_cd_selected,                             // (상세)긴급성
@@ -743,30 +769,29 @@ export default {
 
             // 관리ID가 있으면 UPDATE
           } else {
-            debugger
             ai.put("/update",
                 {
-                  d_rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                   // (상세)관리구분
-                  d_titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
-                  d_req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
-                  d_req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
-                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),                  // (상세)요청일자
-                  d_achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
-                  d_prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
-                  d_tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
-                  d_ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
-                  ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),        // (상세)조치예정일자
-                  ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),                // (상세)조치일자
-                  d_ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
-                  d_slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
-                  ifnc_cd: this.detail.ifnc_cd_selected,                             // (상세)영향도
-                  gd_txt: this.detail.gd_txt,                                        // (상세)등급
-                  urgn_cd: this.detail.urgn_cd_selected,                             // (상세)긴급성
-                  rmrk: this.detail.rmrk,                                            // (상세)비고
-                  login_emp_no:this.detail.login_emp_no,                             // (상세)Session 직원 번호
-                  bkup_id:this.detail.bkup_id_selected,                              // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                              // (상세)프로젝트ID
-                  mng_id: this.detail.mng_id,                                        // (상세)관리ID
+                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                   // (상세)관리구분
+                  titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
+                  req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
+                  req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
+                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),                // (상세)요청일자
+                  achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
+                  prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
+                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
+                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
+                  ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),      // (상세)조치예정일자
+                  ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),              // (상세)조치일자
+                  ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
+                  slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
+                  ifnc_cd: this.detail.ifnc_cd_selected,                           // (상세)영향도
+                  gd_txt: this.detail.gd_txt,                                      // (상세)등급
+                  urgn_cd: this.detail.urgn_cd_selected,                           // (상세)긴급성
+                  rmrk: this.detail.rmrk,                                          // (상세)비고
+                  login_emp_no:this.detail.login_emp_no,                           // (상세)Session 직원 번호
+                  bkup_id:this.detail.bkup_id_selected,                            // (상세)백업ID
+                  prjt_id:this.detail.prjt_id_selected,                            // (상세)프로젝트ID
+                  mng_id: this.detail.mng_id,                                      // (상세)관리ID
                 }
             )
                 .then(res => {
@@ -788,7 +813,7 @@ export default {
       }
 
     },
-    fnClear() {
+    fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
       this.detail.d_rgs_dis_cd_selected = d_rgs_dis_cd[0].value       // (상세)관리구분
       this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
       this.detail.mng_id = ''                                         // (상세)관리ID
@@ -847,9 +872,6 @@ export default {
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-    },
-    gridInit() {
-      this.$refs.grid.invoke("clear");
     },
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
@@ -962,7 +984,7 @@ export default {
         achi_no: this.achi_nm,                     // 요청자
         ttmn_crpe_no: this.ttmn_crpe_nm,           // 조치담당자
 
-        // check_Yn: false,       // 완료/제외/해결/미발생해소 포함 여부
+        cmpl_yn: this.cmpl_yn,       // 완료/제외/해결/미발생해소 포함 여부
       },
 
       detail: {
@@ -1104,7 +1126,7 @@ export default {
         {
           header: '관리ID',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'mng_id',
         },
         {
@@ -1137,7 +1159,7 @@ export default {
         {
           header: '요청자',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'achi_nm',
         },
         {
@@ -1155,7 +1177,7 @@ export default {
         {
           header: '조치담당자',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'ttmn_crpe_nm',
         },
         {
