@@ -166,7 +166,7 @@
                 </ul>
                 <ul class="filter-btn">
                     <div class="btn btn-filter-b">
-                        <a href="#" @click="open_page">신규신청</a>
+                        <a href="#" @click="open_page()">신규신청</a>
                     </div>
                     <div class="btn btn-filter-e">
                         <a href="#" @click="gridExcelExport">엑셀다운로드</a>
@@ -327,8 +327,11 @@ export default {
 		gridExcelImport(){
 			// 엑셀파일 업로드 로직 추가
 		},
-		open_page(){
-			this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
+		open_page(mng_id){
+      if(mng_id == null || mng_id==='' || mng_id === undefined) mng_id=''
+      // mng_id='1000000003'
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
+			this.pop = window.open(`../PJTE6001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&`, "open_page", "width=1000, height=800");
 		}
 
 	},
@@ -438,8 +441,8 @@ export default {
       ],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0050/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0050/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/PJTE6000/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/PJTE6000/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
