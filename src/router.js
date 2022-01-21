@@ -31,6 +31,7 @@ const PJTE2200 = () => import(/* webpackChunkName: "PJTE2200" */ './views/pms/PJ
 const PJTE3000 = () => import(/* webpackChunkName: "PJTE3000" */ './views/pms/PJTE3000.vue'); menuList.push(PJTE3000); menuListStr.push("PJTE3000");
 const PJTE3001 = () => import(/* webpackChunkName: "PJTE3001" */ './views/pms/PJTE3001.vue'); menuList.push(PJTE3001); menuListStr.push("PJTE3001");
 const PJTE6000 = () => import(/* webpackChunkName: "PJTE6000" */ './views/pms/PJTE6000.vue'); menuList.push(PJTE6000); menuListStr.push("PJTE6000");
+const PJTE6001 = () => import(/* webpackChunkName: "PJTE6001" */ './views/pms/PJTE6001.vue'); menuList.push(PJTE6001); menuListStr.push("PJTE6001");
 const PJTE4000 = () => import(/* webpackChunkName: "PJTE4000" */ './views/pms/PJTE4000.vue'); menuList.push(PJTE4000); menuListStr.push("PJTE4000");
 const PJTE2210 = () => import(/* webpackChunkName: "PJTE2210" */ './views/pms/PJTE2210.vue'); menuList.push(PJTE2210); menuListStr.push("PJTE2210");
 const PJTE2110 = () => import(/* webpackChunkName: "PJTE2110" */ './views/pms/PJTE2110.vue'); menuList.push(PJTE2110); menuListStr.push("PJTE2110");
@@ -59,7 +60,7 @@ for(var idx=0; idx < menuListStr.length; idx++){
   tmpObj.path = "/" + menuListStr[idx].toLowerCase() ;
   tmpObj.name = menuListStr[idx].toLowerCase() ;
   
-  if( "/login/Tmp/PJTE3001/PJTE9001/PJTE9002/".indexOf(menuListStr[idx]) > 0) {
+  if( "/login/Tmp/PJTE3001/PJTE6001/PJTE9001/PJTE9002/".indexOf(menuListStr[idx]) > 0) {
     tmpObj.components = { default:menuList[idx] } ;  
   } else {
     tmpObj.components = { header:PmsHeader, footer:PmsFooter, default:menuList[idx] } ;
