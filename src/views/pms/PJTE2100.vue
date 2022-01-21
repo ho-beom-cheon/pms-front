@@ -88,48 +88,51 @@
                 >
               </div>
             </li>
-            <li class="filter-item">
+            <li class="filter-item-n">
               <div class="input-searchWrap">개발자명
                 <input type="text"
                        placeholder="직원명"
                        id="id.dvlpe_nm"
                        v-model="info.dvlpe_nm"
-                       style   = "width: 115px"
-                >
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.dvlpe_no"
-                       v-model="info.dvlpe_no"
-                       style   = "width: 120px"
-                       :disabled = true
+                       style   = "width: 90px"
                 >
                 <button class="search-btn"
                         id="btn.dvlpe"
                         @click="open_pjte9001"
                 ></button>
-
               </div>
             </li>
             <li class="filter-item">
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.dvlpe_no"
+                       v-model="info.dvlpe_no"
+                       style="width: 70px; background-color: #f2f2f2;"
+                       :disabled = true
+                >
+            </li>
+            <li class="filter-item-n">
               <div class="input-searchWrap">담당PL명
                 <input type="text"
                        placeholder="직원명"
                        id="id.pl_nm"
                        v-model="info.pl_nm"
-                       style   = "width: 115px"
-                >
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.pl_no"
-                       v-model="info.pl_no"
-                       style   = "width: 120px"
-                       :disabled = true
+                       style   = "width: 90px"
                 >
                 <button class="search-btn"
                         id="btn.pl"
                         @click="open_pjte9001"
                 ></button>
               </div>
+            </li>
+            <li class="filter-item">
+                <input type="text"
+                       placeholder="직원번호"
+                       id="id.pl_no"
+                       v-model="info.pl_no"
+                       style="width: 70px; background-color: #f2f2f2;"
+                       :disabled = true
+                >
             </li>
             <li class="filter-item">
               <div class="item-con">개발자완료일자
@@ -600,6 +603,7 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C2","C3","C4"],
+
       info : {
         pgm_id                : this.pgm_id,          // 프로그램ID
         pgm_nm                : this.pgm_nm,          // 프로그램명
@@ -888,6 +892,7 @@ export default {
           width: 80,
           align: 'center',
           name: 'pl_nm',
+          editor: 'text',
         },
         {
           header: 'PL명',

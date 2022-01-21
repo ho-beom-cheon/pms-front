@@ -61,26 +61,28 @@
               <div class="input-dateWrap"><input type="date" v-model="info.inq_date"></div>
             </div>
           </li>
-          <li class="filter-item">
+          <li class="filter-item-n">
             <div class="input-searchWrap">담당PL명
               <input type="text"
                      placeholder="직원명"
                      id="id.pl_nm"
                      v-model="info.pl_nm"
-                     style   = "width: 120px"
+                     style   = "width: 90px"
               >
               <button class="search-btn"
                       id="btn.pl"
                       @click="open_pjte9001"
               ></button>
-              <input type="text"
-                     placeholder="직원번호"
-                     id="id.pl_no"
-                     v-model="info.pl_no"
-                     style   = "width: 120px"
-                     :disabled = true
-              >
-              </div>
+            </div>
+          </li>
+          <li class="filter-item">
+            <input type="text"
+                   placeholder="직원번호"
+                   id="id.pl_no"
+                   v-model="info.pl_no"
+                   style="width: 70px; background-color: #f2f2f2;"
+                   :disabled = true
+            >
           </li>
         </ul>
         <ul class="filter-con clear-fix" :hidden="true">

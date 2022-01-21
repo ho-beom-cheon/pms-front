@@ -101,42 +101,36 @@
               </div>
             </li>
 
-            <li class="filter-item">
+            <li class="filter-item-n">
               <div class="input-searchWrap">개발자명
                 <input type="text"
                        placeholder="직원명"
-                       id="id.dvlpe_enm"
-                       v-model="info.dvlpe_enm"
-                       style   = "width: 115px"
-                >
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.dvlpe_no"
-                       v-model="info.dvlpe_eno"
-                       style   = "width: 120px"
-                       :disabled = true
+                       id="id.dvlpe_nm"
+                       v-model="info.dvlpe_nm"
+                       style   = "width: 90px"
                 >
                 <button class="search-btn"
                         id="btn.dvlpe"
                         @click="open_pjte9001"
                 ></button>
-
               </div>
             </li>
             <li class="filter-item">
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.dvlpe_no"
+                     v-model="info.dvlpe_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
+            </li>
+            <li class="filter-item-n">
               <div class="input-searchWrap">담당PL명
                 <input type="text"
                        placeholder="직원명"
                        id="id.pl_nm"
                        v-model="info.pl_nm"
-                       style   = "width: 115px"
-                >
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.pl_no"
-                       v-model="info.pl_no"
-                       style   = "width: 120px"
-                       :disabled = true
+                       style   = "width: 90px"
                 >
                 <button class="search-btn"
                         id="btn.pl"
@@ -145,25 +139,36 @@
               </div>
             </li>
             <li class="filter-item">
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.pl_no"
+                     v-model="info.pl_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
+            </li>
+            <li class="filter-item-n">
               <div class="input-searchWrap">담당현업명
                 <input type="text"
                        id="id.crpe_nm"
                        placeholder="입력"
                        v-model="info.crpe_enm"
-                       style="width: 140px"
-                >
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.crpe_no"
-                       v-model="info.pl_no"
-                       style   = "width: 120px"
-                       :disabled = true
+                       style="width: 90px"
                 >
                 <button class="search-btn"
                         id="btn.crpe"
                         @click="open_pjte9001"
                 ></button>
               </div>
+            </li>
+            <li class="filter-item">
+            <input type="text"
+                   placeholder="직원번호"
+                   id="id.crpe_no"
+                   v-model="info.crpe_eno"
+                   style="width: 70px; background-color: #f2f2f2;"
+                   :disabled = true
+                >
             </li>
             <li class="filter-item">
               <div class="item-con">개발자확인일자
@@ -412,6 +417,7 @@ export default {
             // update api 요청
             this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
             alert("저장이 완료되었습니다.")
+            this.$refs.grid.invoke("reloadData");
           } catch (e) {
             console.log("업데이트 오류 ::", e);
           }
@@ -522,20 +528,20 @@ export default {
           //권한ID[500:PM,600:PMO] - 모두 가능
         }
         /* 출력 영역  */
-        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
-        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert("시나리오 ID는 필수 입력 사항입니다");     return false;}
-        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert("시나리오명은 필수 입력 사항입니다");      return false;}
-        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert("테스트케이스 ID는 필수 입력 사항입니다");  return false;}
-        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
-        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
-        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
-        if(data[i].dvlpe_cnf_dt === null || data[i].dvlpe_cnf_dt === "")   { alert("개발자확인일자는 필수 입력 사항입니다");   return false;}
-        if(data[i].rqu_sbh_id === null || data[i].rqu_sbh_id === "")       { alert("요구사항 ID는 필수 입력 사항입니다");     return false;}
-        if(data[i].tst_rst === null || data[i].tst_rst === "")             { alert("테스트 결과는 필수 입력 사항입니다");     return false;}
-        if(data[i].tst_achi_rst  === null || data[i].tst_achi_rst  === "") { alert("테스트 수행결과는 필수 입력 사항입니다");  return false;}
-        if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
-        if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
-        if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
+        // if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
+        // if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert("시나리오 ID는 필수 입력 사항입니다");     return false;}
+        // if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert("시나리오명은 필수 입력 사항입니다");      return false;}
+        // if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert("테스트케이스 ID는 필수 입력 사항입니다");  return false;}
+        // if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
+        // if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
+        // if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
+        // if(data[i].dvlpe_cnf_dt === null || data[i].dvlpe_cnf_dt === "")   { alert("개발자확인일자는 필수 입력 사항입니다");   return false;}
+        // if(data[i].rqu_sbh_id === null || data[i].rqu_sbh_id === "")       { alert("요구사항 ID는 필수 입력 사항입니다");     return false;}
+        // if(data[i].tst_rst === null || data[i].tst_rst === "")             { alert("테스트 결과는 필수 입력 사항입니다");     return false;}
+        // if(data[i].tst_achi_rst  === null || data[i].tst_achi_rst  === "") { alert("테스트 수행결과는 필수 입력 사항입니다");  return false;}
+        // if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
+        // if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
+        // if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
 
         // if(data[i].prc_step_cd >= "200"){
         //   if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
@@ -669,8 +675,10 @@ export default {
       columns: [
         {
           header: '업무구분',
-          width: 150,
-          align: 'left',
+          width: 100,
+          minWidth: 50,
+          maxWidth: 250,
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
