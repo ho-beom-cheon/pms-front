@@ -44,114 +44,85 @@
             </div>
         </aside>
 
-        <!-- 컨텐츠 영역 -->
+        <!-- 컨텐츠 영역//  -->
         <div class="contents-body">
             <!-- 필터영역 -->
             <section class="filter">
               <div class = "col">
                 <ul class="filter-con clear-fix">
-                    <li class="filter-item">
-                        <div class="item-con">프로젝트
-                            <select 
-                                v-model = "info.prjt_id_selected"
-                                style   = "width: 165px"
-                            >
-                                <option
-                                    v-for  = "(prjt_id, idx) in info.prjt_id"
-                                    :key   = "idx"
-                                    v-text = "prjt_id.text"
-                                    :value = "prjt_id.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">업무
-                            <select 
-                                v-model = "info.bzcd_selected"
-                                style   = "width: 145px"
-                            >
-                                <option
-                                    v-for  = "(bzcd, idx) in info.bzcd"
-                                    :key   = "idx"
-                                    v-text = "bzcd.text"
-                                    :value = "bzcd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">신청구분
-                            <select 
-                                v-model = "info.req_dscd_selected"
-                                style   = "width: 120px"
-                            >
-                                <option
-                                    v-for  = "(req_dscd, idx) in info.req_dscd"
-                                    :key   = "idx"
-                                    v-text = "req_dscd.text"
-                                    :value = "req_dscd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">처리상태
-                            <select 
-                                v-model = "info.req_prc_step_cd_selected"
-                                style   = "width: 100px"
-                            >
-                                <option
-                                    v-for  = "(req_prc_step_cd, idx) in info.req_prc_step_cd"
-                                    :key   = "idx"
-                                    v-text = "req_prc_step_cd.text"
-                                    :value = "req_prc_step_cd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">신청자
-                            <input type="text" 
-                                   placeholder="입력" 
-                                   v-model="info.reqe_no"
-                                   @keyup.enter="fnSearch"
-                                   style   = "width: 145px"
-                            >
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">처리자
-                            <input type="text" 
-                                   placeholder="입력" 
-                                   v-model="info.prcpe_no"
-                                   @keyup.enter="fnSearch"
-                                   style   = "width: 145px"
-                            >
-                        </div>
-                    </li>
+                  <combo
+                      :comboArray = "this.comboList"
+                      @bkup_id_change="bkup_id_change"
+                      @prjt_nm_chage="prjt_nm_chage"
+                      @bzcd_change="bzcd_change"
+                      @req_dscd_change="req_dscd_change"
+                      @req_prc_step_cd_change="req_prc_step_cd_change"
+                  ></combo>
+                  <li class="filter-item-n">
+                    <div class="input-searchWrap">신청자
+                      <input type="text"
+                             placeholder="직원명"
+                             id="id.pl_nm"
+                             style="width: 90px"
+                      >
+                      <button class="search-btn"
+                              id="btn.pl"
+                              @click="open_pjte9001"
+                      ></button>
+                    </div>
+                  </li>
+                  <li class="filter-item">
+                    <input type="text"
+                           placeholder="직원번호"
+                           v-model="info.reqpe_no"
+                           id="id.pl_no"
+                           style="width: 70px; background-color: #f2f2f2;"
+                           :disabled = true
+                    >
+                  </li>
+                  <li class="filter-item-n">
+                    <div class="input-searchWrap">처리자
+                      <input type="text"
+                             placeholder="직원명"
+                             id="id.crpe_nm"
+                             style="width: 90px"
+                      >
+                      <button class="search-btn"
+                              id="btn.crpe"
+                              @click="open_pjte9001"
+                      ></button>
+                    </div>
+                  </li>
+                  <li class="filter-item">
+                    <input type="text"
+                           placeholder="직원번호"
+                           v-model="info.prcpe_no"
+                           id="id.crpe_no"
+                           style="width: 70px; background-color: #f2f2f2;"
+                           :disabled = true
+                    >
+                  </li>
                 </ul>
                 <ul class="filter-con clear-fix">
                     <li class="filter-item">
                         <div class="item-con">신청일자
-                            <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt"></div>
+                            <div class="input-dateWrap"><input type="date" :max="req_end_dt" v-model="req_sta_dt"></div>
                             -
-                            <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt"></div>
+                            <div class="input-dateWrap"><input type="date" :min="req_sta_dt" v-model="req_end_dt"></div>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">처리일자
-                            <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                            <div class="input-dateWrap"><input type="date" :max="prc_end_dt" v-model="prc_sta_dt"></div>
                             -
-                            <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt"></div>
+                            <div class="input-dateWrap"><input type="date" :min="prc_sta_dt" v-model="prc_end_dt"></div>
                         </div>
                     </li>
                     <li class="filter-item">
                         <div class="item-con">신청내용
                             <input type="text" 
                                    placeholder="입력" 
-                                   v-model="info.chg_txt"
-                                   @keyup.enter="fnSearch"
+                                   v-model="info.req_txt"
                                    style   = "width: 200px"
                             >
                         </div>
@@ -159,14 +130,14 @@
 
                     <li class="filter-item">
                         <div class="item-con">
-                            <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
+                            <input type="checkbox" id="check_Yn" v-model="check_Yn">
                             <label>　완료건 포함</label>
                         </div>
                     </li>
                 </ul>
                 <ul class="filter-btn">
                     <div class="btn btn-filter-b">
-                        <a href="#" @click="open_page">신규신청</a>
+                        <a href="#" @click="open_page()">신규신청</a>
                     </div>
                     <div class="btn btn-filter-e">
                         <a href="#" @click="gridExcelExport">엑셀다운로드</a>
@@ -203,50 +174,52 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
+import combo from '@/components/Combo';
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 var prjt_id  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 
 
-// 업무구분
-const bzcd = [
-				{	text:"전체", 	value:'999'},
-				{	text:"신용", 	value:'AAA'}, 
-				{	text:"재무제표", 	value:"BBB"},
-				{	text:"신용평가", 	value:"CCC"},
-			 ];
-//신청구분
-const req_dscd = [
-        {	text:"전체", 	value:'999'},
-        {	text:"개발현황", 	value:'1'},
-        {	text:"통합테스트", 	value:"2"},
-        {	text:"테이블변경", 	value:"3"},
-        {	text:"SQL튜닝", 	value:'4'},
-        {	text:"AA관련", 	value:'5'},
-        {	text:"PMS수정요청", 	value:"6"},
-        {	text:"기타", 	value:"7"},
-      ];
-//처리상태
-const req_prc_step_cd = [
-        {	text:"전체", 	value:'999'},
-        {	text:"변경요청", 	value:'1'},
-        {	text:"반려", 	value:"2"},
-        {	text:"재요청", 	value:"3"},
-        {	text:"처리중", 	value:'4'},
-        {	text:"처리완료", 	value:'5'}
-      ];
-var prjt_id_selected;
-var bzcd_selected;
-var req_dscd_selected;
-var req_prc_step_cd_selected;
+// // 업무구분
+// const bzcd = [
+// 				{	text:"전체", 	value:'999'},
+// 				{	text:"신용", 	value:'AAA'},
+// 				{	text:"재무제표", 	value:"BBB"},
+// 				{	text:"신용평가", 	value:"CCC"},
+// 			 ];
+// //신청구분
+// const req_dscd = [
+//         {	text:"전체", 	value:'999'},
+//         {	text:"개발현황", 	value:'1'},
+//         {	text:"통합테스트", 	value:"2"},
+//         {	text:"테이블변경", 	value:"3"},
+//         {	text:"SQL튜닝", 	value:'4'},
+//         {	text:"AA관련", 	value:'5'},
+//         {	text:"PMS수정요청", 	value:"6"},
+//         {	text:"기타", 	value:"7"},
+//       ];
+// //처리상태
+// const req_prc_step_cd = [
+//         {	text:"전체", 	value:'999'},
+//         {	text:"변경요청", 	value:'1'},
+//         {	text:"반려", 	value:"2"},
+//         {	text:"재요청", 	value:"3"},
+//         {	text:"처리중", 	value:'4'},
+//         {	text:"처리완료", 	value:'5'}
+//       ];
+// var prjt_id_selected;
+// var bzcd_selected;
+// var req_dscd_selected;
+// var req_prc_step_cd_selected;
 
 
 export default {
 	// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   	components: {
     	grid: Grid,
-    	WindowPopup
+    	WindowPopup,
+      combo
 	},
 	// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 	// "라이프사이클 훅"이라고 함.
@@ -265,6 +238,7 @@ export default {
 		console.log("beforeMount");
 	},
 	mounted() {
+    this.fnSearch();
 		console.log("mounted");
 	},
 	beforeUpdate() {
@@ -289,6 +263,26 @@ export default {
 	},
 	// 일반적인 함수를 선언하는 부분 
 	methods: {
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    },
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    req_dscd_change(params) {this.info.req_dscd_selected = params},
+    req_prc_step_cd_change(params) {this.info.req_prc_step_cd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+      this.info.req_dscd_selected = this.$children[0].$data.req_dscd_selected;
+      this.info.req_prc_step_cd_selected = this.$children[0].$data.req_prc_step_cd_selected;
+    },
+
 		change(){
 			console.log();
 		},
@@ -327,8 +321,11 @@ export default {
 		gridExcelImport(){
 			// 엑셀파일 업로드 로직 추가
 		},
-		open_page(){
-			this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
+		open_page(mng_id){
+      if(mng_id == null || mng_id==='' || mng_id === undefined) mng_id=''
+      // mng_id='1000000003'
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
+			this.pop = window.open(`../PJTE6001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&`, "open_page", "width=1000, height=800");
 		}
 
 	},
@@ -339,36 +336,64 @@ export default {
 			console.log("count의 값이 변경되면 여기도 실행");
 			console.log("new Value :: " + a);
 			console.log("old Value :: " + b);
-		} 
+		},
+    check_Yn () {
+      this.check_Yn ? this.info.check_Yn = 'Y' : this.info.check_Yn = 'N';
+    },
+    req_sta_dt (){
+      this.info.req_sta_dt = this.req_sta_dt.split('-').join('');
+    } ,    // 신청일자STA
+    req_end_dt () {
+      this.info.req_end_dt = this.req_end_dt.split('-').join('');
+    },    // 신청일자END
+    prc_sta_dt () {
+      this.info.prc_sta_dt = this.prc_sta_dt.split('-').join('');
+    },    // 처리일자STA
+    prc_end_dt () {
+      this.info.prc_end_dt = this.prc_end_dt.split('-').join('');
+    },    // 처리일자END
+
 	},
 	// 변수 선언부분
 	data() {
 		return {
+      comboList : ["C27","C0","C1","C10","C11"],
 				info : {
 
-          reqe_no    : this.reqe_no,    // 신청자
+          reqpe_no    : this.reqpe_no,    // 신청자
           prcpe_no    : this.prcpe_no,    	// 처리자
-          chg_txt     : this.chg_txt,//신청내용
-					prjt_id     : prjt_id,    		// 프로젝트명
-					bzcd        : bzcd,    		  	// 업무구분
-          req_dscd    : req_dscd,    	    // 신청구분
-          req_prc_step_cd :  req_prc_step_cd,    	// 처리상태
+          req_txt     : this.req_txt,//신청내용
+					// prjt_id     : prjt_id,    		// 프로젝트명
+					// bzcd        : bzcd,    		  	// 업무구분
+          // req_dscd    : req_dscd,    	    // 신청구분
+          // req_prc_step_cd :  req_prc_step_cd,    	// 처리상태
 
 					/* select 박스 */
-					prjt_id_selected     : prjt_id[0].value,      // 프로젝트명
-					bzcd_selected        : bzcd[0].value,         // 업무구분
-          req_dscd_selected    : req_dscd[0].value, //신청구분
-          req_prc_step_cd_selected    :  req_prc_step_cd[0].value, //처리상태
+					// prjt_id_selected     : prjt_id[0].value,      // 프로젝트명
+					// bzcd_selected        : bzcd[0].value,         // 업무구분
+          // req_dscd_selected    : req_dscd[0].value, //신청구분
+          // req_prc_step_cd_selected    :  req_prc_step_cd[0].value, //처리상태,
+
+          prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id_selected      : '0000000000',
+          bzcd_selected         : 'TTT',
+          req_dscd_selected     : 'TTT',
+          req_prc_step_cd_selected : 'TTT',
+          check_Yn : 'N',
+          req_sta_dt : '',    // 신청일자STA
+          req_end_dt : '',    // 신청일자END
+          prc_sta_dt : '',    // 처리일자STA
+          prc_end_dt : '',    // 처리일자END
 				},
 				addRow : {
 					
 				},
-					frcs_sta_dt : '',    // 계획일자STA
-					frcs_end_dt : '',    // 계획일자END
-					sta_dt      : '',    // 실제일자STA
-					end_dt      : '',    // 실제일자END
+					req_sta_dt : '',    // 신청일자STA
+					req_end_dt : '',    // 신청일자END
+					prc_sta_dt : '',    // 처리일자STA
+					prc_end_dt : '',    // 처리일자END
 		            
-					check_Yn    : false,  // 삭제프로그램/소스취약점포함
+					check_Yn    : false,  // 완료건 포함
 					
 					count:0,
 					curRow:-1,
@@ -438,8 +463,8 @@ export default {
       ],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/SWZP0050/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/SWZP0050/select', method: 'PUT'},
+					readData: { url: 'http://localhost:8080/PJTE6000/select', method: 'GET' },
+					modifyData : { url: 'http://localhost:8080/PJTE6000/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
@@ -454,39 +479,73 @@ export default {
 				{
 					header: '신청ID',
           width: 180,
+          align: 'center',
+          name: 'mng_id'/*요청자번호*/
+				},
+        {
+          header: '업무구분',
+          width: 100,
+          minWidth: 50,
+          maxWidth: 250,
+          name: 'bzcd',
           align: 'left',
-          name: 'reqpe_dscd'/*요청자번호*/
-				},
-				{
-					header: '업무',
-					width: 180,
-					align: 'left',
-					name: 'bzcd',
-				},
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text":" ","value":"NNN"},
+                    {"text":"관리","value":"EEE"},
+                    {"text":"공통","value":"DDD"},
+                    {"text":"신용조사","value":"AAA"},
+                    {"text":"재무제표","value":"BBB"},
+                    {"text":"신용평가","value":"CCC"}
+                  ]
+            }
+          }
+        },
 				{
 					header: '신청구분',
-					width: 150,
+					width: 100,
 					align: 'left',
-					name: 'req_dscd'
+					name: 'req_dscd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {	text:"전체", 	value:'TTT'},
+                    {	text:"개발현황관련", 	value:'100'},
+                    {	text:"통합테스트관련", 	value:"200"},
+                    {	text:"PMS오류관련", 	value:'400'},
+                    {	text:"DB관련", 	value:'500'},
+                    {	text:"기타", 	value:"600"},
+                  ]
+            }
+          }
 				},
 				{
 					header: '신청일자',
-					width: 280,
-					align: 'left',
+					width: 110,
+					align: 'center',
 					name: 'req_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker'
 					
 				},
 				{
 					header: '신청자',
 					width: 100,
-					align: 'center',
-					name: 'reqe_no',
+					align: 'left',
+					name: 'reqpe_nm',
 					type: 'text'
 				},
 				{
 					header: '신청내용',
-					width: 80,
-					align: 'center',
+					width: 280,
+					align: 'left',
 					name: 'req_txt',
           type: 'text'
 				},
@@ -501,16 +560,36 @@ export default {
 				{
 					header: '처리자',
 					width: 120,
-					align: 'center',
-					name: 'prcpe_no',
+					align: 'left',
+					name: 'prcpe_nm',
           type: 'text'
 				},
+        {
+          header: '처리내용',
+          width: 280,
+          align: 'left',
+          name: 'prc_txt',
+          type: 'text'
+        },
 				{
 					header: '처리상태',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'req_prc_step_cd',
-          type: 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {	text:"전체", 	value:'TTT'},
+                    {	text:"요청", 	value:'100'},
+                    {	text:"담당자배정", 	value:"200"},
+                    {	text:"보류", 	value:"300"},
+                    {	text:"처리완료", 	value:'400'},
+                  ]
+            }
+          }
 				}
 			]
 		}
