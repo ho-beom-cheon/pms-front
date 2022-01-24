@@ -231,10 +231,21 @@ import {axiosService} from "@/api/http";
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
 // 업무구분
 const bzcd = [
-  {text: "전체", value: '999'},
+  {"text":" ","value":"NNN"},
+  {"text":"관리","value":"EEE"},
+  {"text":"공통","value":"DDD"},
   {text: "신용", value: 'AAA'},
   {text: "재무제표", value: "BBB"},
   {text: "신용평가", value: "CCC"},
+];
+
+// 차수구분
+const sqn_cd = [
+  {text: " ", value: "NNN"},
+  {text: "1차수", value: "100"},
+  {text: "2차수", value: "200"},
+  {text: "3차수", value: "300"},
+  {text: "4차수", value: "400"},
 ];
 
 export default {
@@ -540,6 +551,30 @@ export default {
           header: '전체',
           width: 55,
           align: 'left',
+          name: 'tot_cnt',
+        },
+        {
+          header: '완료',
+          width: 55,
+          align: 'left',
+          name: 'cmpl_cnt',
+        },
+        {
+          header: '미완료',
+          width: 55,
+          align: 'left',
+          name: 'ncmpl_cnt',
+        },
+        {
+          header: '진척율',
+          width: 55,
+          align: 'left',
+          name: 'prnr_rt',
+        },
+        {
+          header: '전체',
+          width: 55,
+          align: 'left',
           name: 'tot_cnt1',
         },
         {
@@ -559,30 +594,6 @@ export default {
           width: 55,
           align: 'left',
           name: 'prnr_rt1',
-        },
-        {
-          header: '전체',
-          width: 55,
-          align: 'left',
-          name: 'pl_tot_cnt',
-        },
-        {
-          header: '완료',
-          width: 55,
-          align: 'left',
-          name: 'pl_cmpl_cnt',
-        },
-        {
-          header: '미완료',
-          width: 55,
-          align: 'left',
-          name: 'pl_ncmpl_cnt',
-        },
-        {
-          header: '진척율',
-          width: 55,
-          align: 'left',
-          name: 'prnr_rt2',
         },
         {
           header: '계획',
@@ -688,7 +699,7 @@ export default {
       columns4: [
         {
           header: '업무구분',
-          width: 140,
+          width: 100,
           align: 'left',
           name: 'bzcd',
           formatter: 'listItemText',
