@@ -160,12 +160,17 @@
                 <ul class="filter-con clear-fix">
                     <li class="filter-item">
                       <div class="item-con">공지업무
-                        <input type="text"
-                               placeholder="공지업무를 입력해주세요"
-                               v-model="detail.ntar_bzcd"
-                               @keyup.enter="fnSearch"
-                               style   = "width: 165px; margin-left: 8px"
+                        <select
+                            v-model="detail.ntar_bzcd_selected"
+                            style="width: 165px; margin-left: 8px"
                         >
+                          <option
+                              v-for="(ntar_bzcd, idx) in detail.ntar_bzcd"
+                              :key="idx"
+                              v-text="ntar_bzcd.text"
+                              :value="ntar_bzcd.value"
+                          ></option>
+                        </select>
                       </div>
                     </li>
                   <li class="filter-item">
@@ -177,7 +182,7 @@
                     <div class="input-searchWrap">공지자
                       <input type="text"
                              placeholder="직원명"
-                             id="detail.rgs_nm"
+                             id="id.rgs_nm"
                              v-model="detail.rgs_nm"
                              style="width: 90px"
                       >
@@ -190,7 +195,7 @@
                   <li class="filter-item">
                     <input type="text"
                            placeholder="직원번호"
-                           id="detail.rgs_no"
+                           id="id.rgs_no"
                            v-model="detail.rgs_no"
                            style="width: 70px; background-color: #f2f2f2;"
                            :disabled = true
@@ -208,7 +213,6 @@
                         <input type="text"
                                placeholder="제목을 입력해주세요"
                                v-model="detail.titl_txt"
-                               @keyup.enter="fnSearch"
                                style   = "width: 890px; margin-left: 6px"
                         >
                       </div>
@@ -224,7 +228,7 @@
                                     rows="20"
                                     style   = "width: 890px; height: 240px"
                                     placeholder="공지사항을 입력해주세요"
-                                    v-model="detail.d_req_dis_txt"
+                                    v-model="detail.ancpt"
                           ></textarea>
                         </td>
                       </div>
@@ -243,7 +247,7 @@
                     <a href="#">다운로드</a>
                   </div>
                   <div class="btn btn-filter-b" style = "margin-left: 20px">
-                    <a href="#">공지추가</a>
+                    <a href="#" @click="fnClear">공지추가</a>
                   </div>
                   <div class="btn btn-filter-p">
                     <a href="#" @click="fnSave">저장</a>
@@ -264,7 +268,8 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
-import axios from 'axios';
+import {axiosService} from "@/api/http";
+import axios from "axios";
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
@@ -279,6 +284,16 @@ const bzcd = [
   {text:"재무제표", value:"BBB"},
   {text:"신용평가", value:"CCC"},
 ];
+
+// 공지구분
+const ntar_bzcd = [
+  {text:"프로젝트공지", value:'100'},
+  {text:"업무공지", value:"200"},
+];
+
+const ai = axios.create({
+  baseURL: "http://localhost:8080/PJTE1000/"
+});
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -335,21 +350,127 @@ export default {
         document.getElementById('id.prjt_id').disabled = false;
       }
     },
-    change(){
-      console.log("change");
-    },
     fnSave(){
-      console.log("modify");
+      //필수항목 확인
+      if (this.checkPrimary() == true) {
+        //확인창
+        if (confirm("정말 저장하시겠습니까??") == true) {
+          // 관리ID가 없으면 INSERT
+          if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
+            ai.post("/insert",
+                {
+                  bkup_id:this.detail.bkup_id_selected,                // (상세)백업ID
+                  prjt_id:this.detail.prjt_id_selected,                // (상세)프로젝트ID
+                  ntar_bzcd:this.detail.ntar_bzcd_selected,               // (상세)공지구분
+                  mng_id: this.detail.mng_id,                          // (상세)관리ID
+                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),    // (상세)공지일자
+                  titl_txt: this.detail.titl_txt,                      // (상세)제목내용
+                  ancpt: this.detail.ancpt,                            // (상세)공지내역
+                  rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
+                  rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
+                  atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
+                  check_Yn: this.detail.check_Yn,                      // (상세)삭제여부
+                  del_yn: this.detail.del_yn,                          // (상세)삭제여부
+                }
+            )
+                .then(res => {
+                  if (res.status == 200) {
+                    console.log(res.data);
+                  }
+                }).catch(e => {
+              alert("필수값을 입력해주세요.");
+            })
+
+            // 관리ID가 있으면 UPDATE
+          } else {
+            if(check_Yn === true){
+              this.detail.del_yn = 'Y'
+            }
+            ai.put("/update",
+                {
+                  bkup_id:this.detail.bkup_id_selected,                // (상세)백업ID
+                  prjt_id:this.detail.prjt_id_selected,                // (상세)프로젝트ID
+                  ntar_bzcd:this.detail.ntar_bzcd_selected,               // (상세)공지구분
+                  mng_id: this.detail.mng_id,                          // (상세)관리ID
+                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),    // (상세)공지일자
+                  titl_txt: this.detail.titl_txt,                      // (상세)제목내용
+                  ancpt: this.detail.ancpt,                            // (상세)공지내역
+                  rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
+                  rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
+                  atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
+                  check_yn: this.detail.check_Yn,                      // (상세)삭제여부체크박스
+                  del_yn: this.detail.del_yn,                          // (상세)삭제여부
+                }
+            )
+                .then(res => {
+                  if (res.status == 200) {
+                    console.log(res.data);
+                  }
+                }).catch(e => {
+              alert("저장 실패.");
+            })
+          }
+          //update / insert 후 재조회
+          this.$refs.grid3.invoke("reloadData");
+        } else {   //취소
+          return;
+        }
+      } else {
+        //필수 항목 미입력 시
+        alert("필수항목을 입력해 주세요.");
+      }
+    },
+    fnClear() {
+      // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
+      this.detail.ntar_bzcd_selected = ntar_bzcd[0].value         // (상세)공지구분
+      this.detail.mng_id = ''                                         // (상세)관리ID
+      this.detail.rgs_dt = this.getToday()                                         // (상세)요청일자
+      this.detail.titl_txt = ''                                         // (상세)제목내용
+      this.detail.ancpt = ''                                         // (상세)공지내역
+      this.detail.rgs_no = sessionStorage.getItem("LOGIN_EMP_NO")  // (상세)등록자번호
+      this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM")  // (상세)등록자번호
+      this.detail.atfl_mng_id = ''                                           // (상세)첨부파일관리ID
     },
     onClick(ev) {
-      console.log("클릭" + ev.rowKey);
-      this.curRow = ev.rowKey;
+      // TO-DO현황 ROW클릭 시 클릭한ROW의 rowNum으로 TO-DO상세내역 재조회
+      if (ev.columnName == 'todo_nm' || ev.columnName == 'proc_cnt') {
+        this.info.gubun = "2"
+        this.info.rowNum = ev.rowKey;
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+      }
+      // 프로젝트 공지사항 ROW클릭 시 오른쪽 input, selectBox에 바인딩
+      if (ev.columnName == 'rgs_dt' || ev.columnName == 'ntar_bzcd' || ev.columnName == 'titl_txt') {
+        this.curRow = ev.rowKey;
+        const currentRowData = (this.$refs.grid3.invoke("getRow", this.curRow));
+        if (currentRowData != null) {
+          this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+        }
+      }
+    },
+    /* 그리드 Row onClick클릭 시 상세내용에 Bind */
+    cellDataBind(currentRowData) {
+      this.detail.ntar_bzcd_selected = currentRowData.ntar_bzcd;       // (상세)공지구분
+      this.detail.mng_id = currentRowData.mng_id;                        // (상세)관리ID
+      this.detail.rgs_dt = this.getFormatDate(currentRowData.rgs_dt);    // (상세)공지일자
+      this.detail.titl_txt = currentRowData.titl_txt;                    // (상세)제목내용
+      this.detail.ancpt = currentRowData.ancpt;                          // (상세)공지내역
+      this.detail.rgs_no = currentRowData.rgs_no;                        // (상세)공지자 번호
+      this.detail.rgs_nm = currentRowData.rgs_nm;                        // (상세)공지자 이름
+      this.detail.atfl_mng_id = currentRowData.atfl_mng_id;              // (상세)첨부파일관리ID
     },
     fnSearch(){
+      /*조회 시 그리드 구분코드 this.info.gubun를 파라메터로 넘겨서 조회*/
+      //그리드 1
+      this.info.gubun = "1";
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
+      //그리드 2
+      this.info.gubun = "2"
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
+      //그리드 3
+      this.info.gubun = "3"
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
     },
@@ -361,6 +482,57 @@ export default {
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    },
+    /* YYYY-MM-DD형태의 오늘 날짜를 구하는 함수*/
+    getToday() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = ("0" + (1 + date.getMonth())).slice(-2);
+      var day = ("0" + date.getDate()).slice(-2);
+
+      return year + '-' + month + '-' + day;
+    },
+    /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
+    getFormatDate(date) {
+      if (date == null || date === '') {
+        return;
+      } else {
+        let year = date.substr(0, 4);
+        let month = date.substr(4, 2);
+        let day = date.substr(6, 2);
+
+        return year + '-' + month + '-' + day;
+      }
+    },
+    /* YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환 */
+    getUnFormatDate(date) {
+      if (date == null || date === '') {
+        return;
+      } else {
+        let year = date.substr(0, 4);
+        let month = date.substr(5, 2);
+        let day = date.substr(8, 2);
+
+        return year + month + day;
+      }
+    },
+    /* 저장을 하기위한 필수 항목 체크 */
+    checkPrimary() {
+      if (this.detail.bkup_id == "" || this.detail.bkup_id == "null") {            // 백업ID
+        return false;
+      } else if (this.detail.d_ntar_bzcd == "" || this.detail.d_ntar_bzcd == "null") {   // 공지구분
+        return false;
+      } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 공지일자
+        return false;
+      } else if (this.detail.titl_txt == "" || this.detail.titl_txt == "null") {           // 제목내용
+        return false;
+      } else if (this.detail.ancpt == "" || this.detail.ancpt == "null") {           // 공지내역
+        return false;
+      } else if (this.detail.rgs_no == "" || this.detail.rgs_no == "null") {   // 등록자번호
+        return false;
+      } else {
+        return true;  // 필수 값 모두 입력 시 true
+      }
     },
 
   },
@@ -377,6 +549,9 @@ export default {
   data() {
     return {
       info : {
+        // 그리드 조회 변수
+        gubun : '',               // 그리드 구분자
+        rowNum :0,
         bkup_id     : bkup_id,    // 백업ID
         prjt_id     : prjt_id,    // 프로젝트ID
         bkup_id_selected : bkup_id[0].value,      // 백업ID
@@ -390,7 +565,29 @@ export default {
       },
 
       detail : {
-        check_Yn    : false,  // 삭제프로그램/소스취약점포함
+        /* 상세내용 변수 */
+
+        // 공통 sessionStorage 데이터
+        login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
+        login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
+        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+
+        bkup_id     : bkup_id,                         // 백업ID
+        prjt_id     : prjt_id,                         // 프로젝트ID
+        ntar_bzcd   : ntar_bzcd,                       // 공지구분
+        bkup_id_selected  : bkup_id[0].value,           // 백업ID
+        prjt_id_selected  : prjt_id[0].value,           // 프로젝트명
+        ntar_bzcd_selected : ntar_bzcd[0].value,       // 공지구분
+        mng_id:this.mng_id,                            // 관리ID
+        rgs_dt:this.rgs_dt,                            // 요청일자
+        titl_txt:this.titl_txt,                        // 제목내용
+        ancpt:this.ancpt,                              // 공지내역
+        rgs_no:this.rgs_no,                            // 등록자번호
+        rgs_nm:this.rgs_nm,                            // 등록자번호
+        atfl_mng_id:this.atfl_mng_id,                  // 첨부파일관리ID
+        check_Yn    : false,                           // 공지사항 삭제 체크박스
+        del_yn : 'N',                                  // 공지사항 삭제
       },
 
       addRow : {
@@ -486,7 +683,7 @@ export default {
         },
         {
           header: '처리건수',
-          align: 'left',
+          align: 'right',
           name: 'proc_cnt',
         },
       ],
@@ -501,22 +698,20 @@ export default {
           header: '시작일자',
           width: 120,
           align: 'center',
-          name: 'stdt',
+          name: 'pln_sta_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker',
         },
         {
           header: '종료일자',
           width: 120,
           align: 'center',
-          name: 'endt',
+          name: 'pln_end_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker',
         },
         {
           header: '결함내용',
           align: 'left',
-          name: 'err_txt',
+          name: 'rmrk',
         },
       ],
       columns3: [
