@@ -4,7 +4,7 @@
       <div class="item-con">프로젝트명
         <select
             v-model = "prjt_nm_selected"
-            style   = "width: 167px"
+            style   = "width: 180px"
             :disabled="read"
             @change="prjt_nm_chage"
         >
@@ -21,7 +21,7 @@
       <div class="item-con">백업ID
         <select
             v-model = "bkup_id_selected"
-            style   = "width: 120px"
+            style   = "width: 167px"
             @change = "bkup_id_change"
         >
           <option
@@ -50,56 +50,22 @@
         </select>
       </div>
     </li>
-    <!--  관리구분코드  -->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C12'">
-      <div class="item-con">관리구분
-        <select
-            v-model="rgs_dis_cd_selected"
-            style="width: 120px"
-        >
-          <option
-              v-for="(rgs_dis_cd, idx) in CD1000000012T"
-              :key="idx"
-              v-text="rgs_dis_cd.text"
-              :value="rgs_dis_cd.value"
-          ></option>
-        </select>
-      </div>
-    </li>
-    <!--  요청구분코드  -->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C13'">
-      <div class="item-con">요청구분
-        <select
-            v-model="req_dis_cd_selected"
-            style="width: 120px"
-        >
-          <option
-              v-for="(req_dis_cd, idx) in CD1000000013T"
-              :key="idx"
-              v-text="req_dis_cd.text"
-              :value="req_dis_cd.value"
-          ></option>
-        </select>
-      </div>
-    </li>
-<!--  처리단계코드  -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C2'">
-      <div class="item-con">처리단계
+      <div class="item-con">개발구분
         <select
-            v-model = "prc_step_cd_selected"
+            v-model = "dvlp_dis_cd_selected"
             style   = "width: 94px"
-            @change = "prc_step_cd_change"
+            @change = "dvlp_dis_cd_change"
         >
           <option
-              v-for  = "(prc_step_cd, idx) in CD1000000002T"
+              v-for  = "(dvlp_dis_cd, idx) in CD1000000002T"
               :key   = "idx"
-              v-text = "prc_step_cd.text"
-              :value = "prc_step_cd.value"
+              v-text = "dvlp_dis_cd.text"
+              :value = "dvlp_dis_cd.value"
           ></option>
         </select>
       </div>
     </li>
-<!--  차수구분코드  -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C6'">
       <div class="item-con">차수
         <select
@@ -116,7 +82,6 @@
         </select>
       </div>
     </li>
-<!--  통합테스트처리코드  -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C26'">
       <div class="item-con">처리단계
         <select
@@ -133,24 +98,22 @@
         </select>
       </div>
     </li>
-<!--  개발구분코드  -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
-      <div class="item-con">개발구분
+      <div class="item-con">처리단계
         <select
-            v-model = "dvlp_dis_cd_selected"
+            v-model = "prc_step_cd_selected"
             style   = "width: 80px"
-            @change = "dvlp_dis_cd_change"
+            @change = "prc_step_cd_change"
         >
           <option
-              v-for  = "(dvlp_dis_cd, idx) in CD1000000003T"
+              v-for  = "(prc_step_cd, idx) in CD1000000003T"
               :key   = "idx"
-              v-text = "dvlp_dis_cd.text"
-              :value = "dvlp_dis_cd.value"
+              v-text = "prc_step_cd.text"
+              :value = "prc_step_cd.value"
           ></option>
         </select>
       </div>
     </li>
-<!--  프로그램구분코드  -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C4'">
       <div class="item-con">프로그램구분
         <select
@@ -179,6 +142,40 @@
               :key="idx"
               v-text="err_prc_step_cd.text"
               :value="err_prc_step_cd.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C10'">
+      <div class="item-con">신청구분
+        <select
+            v-model = "req_dscd_selected"
+            style   = "width: 80px"
+            @change = "req_dscd_change"
+        >
+          <option
+              v-for  = "(req_dscd, idx) in CD1000000010T"
+              :key   = "idx"
+              v-text = "req_dscd.text"
+              :value = "req_dscd.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C11'">
+      <div class="item-con">처리상태
+        <select
+            v-model = "req_prc_step_cd_selected"
+            style   = "width: 80px"
+            @change = "req_prc_step_cd_change"
+        >
+          <option
+              v-for  = "(req_prc_step_cd, idx) in CD1000000011T"
+              :key   = "idx"
+              v-text = "req_prc_step_cd.text"
+              :value = "req_prc_step_cd.value"
           ></option>
         </select>
       </div>
@@ -269,6 +266,12 @@ export default {
       rgs_dis_cd_selected : "",
       // 요청구분
       req_dis_cd_selected : "",
+      //신청구분
+      req_dscd_selected:"",
+      req_dscd:"",
+      //처리상태
+      req_prc_step_cd_selected:"",
+      req_prc_step_cd:""
     }
   },
   methods: {
@@ -290,6 +293,8 @@ export default {
     prjt_nm_chage()            {  this.$emit('prjt_nm_chage',           this.prjt_nm_selected)},          // 프로젝트명
     sqn_cd_change()            {  this.$emit('sqn_cd_change',           this.sqn_cd_selected)},           // 차수구분코드
     itg_tst_prc_cd_change()    {  this.$emit('itg_tst_prc_cd_change',   this.itg_tst_prc_cd_selected)},   // 통합테스트 처리구분코드
+    req_dscd_change()          {  this.$emit('req_dscd_change',   this.req_dscd_selected)},         // 신청구분코드
+    req_prc_step_cd_change()   {  this.$emit('req_prc_step_cd_change',   this.req_prc_step_cd_selected)},  // 신청처리단계구분코드
 
     setCombo(data) {
 
@@ -324,6 +329,12 @@ export default {
                 } else if (i === 8) {
                   this.CD1000000008T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                   this.CD1000000008N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+                } else if (i === 10) {
+                  this.CD1000000010T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                  this.CD1000000010N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+                } else if (i === 11) {
+                  this.CD1000000011T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                  this.CD1000000011N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
                 } else if (i === 9) {
                   this.CD1000000009T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                   this.CD1000000009N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -374,6 +385,14 @@ export default {
               this.CD1000000008T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000008N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 10) {
+              this.CD1000000010T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000010N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 11) {
+              this.CD1000000011T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000011N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 9) {
               this.CD1000000009T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000009N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -407,6 +426,8 @@ export default {
             if(this.CD1000000007T.length !== 0)  this.sqn_cd_selected           = this.CD1000000007T[0].value
             if(this.CD1000000008T.length !== 0)  this.sqn_cd_selected           = this.CD1000000008T[0].value
             if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected  = this.CD1000000009T[0].value
+            if(this.CD1000000010T.length !== 0)  this.req_dscd_selected       = this.CD1000000010T[0].value
+            if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected= this.CD1000000011T[0].value
             if(this.CD1000000012T.length !== 0)  this.req_dis_cd_selected       = this.CD1000000012T[0].value
             if(this.CD1000000013T.length !== 0)  this.rgs_dis_cd_selected       = this.CD1000000013T[0].value
             if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected   = this.CD1000000026T[0].value
@@ -418,6 +439,7 @@ export default {
       }
     },
     setCdAll() {
+      this.bzcd_n.push(this.CD1000000001N)
       this.cd_all.push(this.CD0000000000N)
       this.cd_all.push(this.CD1000000001N)
       this.cd_all.push(this.CD1000000002N)
@@ -456,11 +478,21 @@ export default {
 
       this.code_it =
           [
-            "0000000000", "1000000001", "1000000002",
-            "1000000003", "1000000004", "1000000005",
-            "1000000006", "1000000007", "1000000008",
-            "1000000009", "1000000010", "1000000011",
-            "1000000012", "1000000013", "1000000014",
+            "0000000000",
+            "1000000001",
+            "1000000002",
+            "1000000003",
+            "1000000004",
+            "1000000005",
+            "1000000006",
+            "1000000007",
+            "1000000008",
+            "1000000009",
+            "1000000010",
+            "1000000011",
+            "1000000012",
+            "1000000013",
+            "1000000014",
             "1000000015",
             "1000000016",
             "1000000017",
