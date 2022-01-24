@@ -1,7 +1,7 @@
 <template> 
     <header class="GNB"> 
         <div class="gnb-logo"> 
-            <a href="./main.html"> 
+            <a href="./main.html">
                 <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
             </a> 
         </div> 
