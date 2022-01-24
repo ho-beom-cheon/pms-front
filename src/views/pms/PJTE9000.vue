@@ -52,73 +52,69 @@
           <div class="div0-c">
             <div class="div1-c">
               <div class="div1-1-c">
-              <div class="div-header-c"><h2>PMS관리</h2>
-              </div>
+                <section class="filter">
                   <ul class="filter-con clear-fix">
-                    <li class="filter-item-a">
-                      <div class="item-con">
-                        <label>파일구분</label>
+                    <li class="filter-item">
+                      <div class="item-con">프로젝트명
                         <select
-                            v-model = "popinfo.file_rgs_dscd_selected"
-                            style   = "width: 280px"
+                            id="id.bkup_id"
+                            v-model="info.bkup_id_selected"
+                            style="width: 167px"
+                            :disabled = true
                         >
                           <option
-                              v-for  = "(file_rgs_dscd, idx) in popinfo.file_rgs_dscd"
-                              :key   = "idx"
-                              v-text = "file_rgs_dscd.text"
-                              :value = "file_rgs_dscd.value"
+                              v-for="(bkup_id, idx) in info.bkup_id"
+                              :key="idx"
+                              v-text="bkup_id.text"
+                              :value="bkup_id.value"
                           ></option>
                         </select>
-                        <div class="btn btn-filter-d" style="margin-bottom: 4px; margin-left: 10px; margin-right: 130px">
-                          <a href="#" @click="fnSearch">PMS 테이블백업</a>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="filter-item-a">
-                      <div class="item-con">
-                        팝업정보ID/경로/화면명
-                        <input type="text"
-                               placeholder="팝업정보ID"
-                               v-model="popinfo.scrn_id"
-                               @keyup.enter="fnSearch"
-                               style   = "width: 145px; margin-right: 5px"
-                        >
-                        <input type="text"
-                               placeholder="경로"
-                               v-model="popinfo.file_path"
-                               @keyup.enter="fnSearch"
-                               style   = "width: 145px;  margin-right: 5px"
-                        >
-                        <input type="text"
-                               placeholder="화면명"
-                               v-model="popinfo.scrn_nm"
-                               @keyup.enter="fnSearch"
-                               style   = "width: 145px;  margin-right: 5px"
-                        >
-                        <div class="btn btn-filter-d" style="margin-bottom: 4px; margin-left: 5px">
-                          <a href="#" @click="open_page">팝업</a>
-                        </div>
                       </div>
                     </li>
                     <li class="filter-item">
-
+                      <div class="item-con">프로젝트명
+                        <select
+                            id="id.prjt_id"
+                            v-model="info.prjt_id_selected"
+                            style="width: 167px"
+                            :disabled = true
+                        >
+                          <option
+                              v-for="(prjt_id, idx) in info.prjt_id"
+                              :key="idx"
+                              v-text="prjt_id.text"
+                              :value="prjt_id.value"
+                          ></option>
+                        </select>
+                      </div>
                     </li>
+                    <div class="btn btn-filter-p" style = "margin-top: 5px">
+                      <a href="#" @click="fnSearch">재조회</a>
+                    </div>
                   </ul>
-                  <ul class="filter-btn" style="margin-right: 37px">
-                    <label style="margin-top: 7px">첨부파일</label>
-                    <label for="file-upload-btn">
-                      <input type="file" id="file-upload-btn">
-                    </label>
-                    <div class="upload-nameWrap">
-                      <input type="text" class="upload-name" disabled>
-                      <a href="#" class="upload-delete" onclick="alert('delete-file')"></a>
-                    </div>
-                    <div class="btn btn-line-p">
-                      <a href="#" @click="gridExcelExport">다운로드</a>
-                    </div>
-                 </ul>
+                </section>
                 <div class="div-grid-c">
                 </div>
+                <ul class="filter-btn" style="margin-top: 25px">
+                  <div class="btn btn-filter-e">
+                    <a href="#" @click="gridExcelImport">엑셀업로드</a>
+                  </div>
+                  <div class="btn btn-filter-e">
+                    <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  </div>
+                  <div class="btn btn-filter-b" style = "margin-left: 20px;">
+                    <a href="#" @click="gridAddRow" >행추가</a>
+                  </div>
+                  <div class="btn btn-filter-b">
+                    <a href="#" @click="gridDelRow">행삭제</a>
+                  </div>
+                  <div class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C">
+                    <a href="#" @click="fnSearch">로그인변경</a>
+                  </div>
+                  <div class="btn btn-filter-p" style = "margin-left: 20px">
+                    <a href="#" @click="fnSave">저장</a>
+                  </div>
+                </ul>
               </div>
               <div class="div1-2-c">
                 <div class="div-grid-c">
@@ -131,136 +127,86 @@
                       :showDummyRows="showDummyRows"
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
-                      :rowHeaders="rowHeaders"
                       @click="onClick"
                   ></grid>
                 </div>
               </div>
             </div>
             <div class="div2-c">
-              <ul class="filter-btn" style="margin-bottom: 40px">
+              <div class="div2-1-c">
+                <section class="filter" style="padding: 0px">
+                  <ul class="filter-con clear-fix">
+                    <li class="filter-item">
+                      <div class="item-con">신규생성년도
+                        <input type="text"
+                               placeholder="입력"
+                               v-model="info.empno"
+                               @keyup.enter="fnSearch"
+                               style   = "width: 150px;"
+                        >
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="filter-btn">
+                    <div class="btn btn-filter-p" style = "margin-bottom: 5px">
+                      <a href="#" @click="fnSearch">생성</a>
+                    </div>
+                  </ul>
+                  <ul class="filter-con clear-fix">
+                    <li class="filter-item">
+                      <div class="item-con">조회년월일
+                        <input type="text"
+                               placeholder="입력"
+                               v-model="info.empno"
+                               @keyup.enter="fnSearch"
+                               style   = "width: 150px; margin-left: 11px"
+                        >
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="filter-btn">
+                    <div class="btn btn-filter-p" style = "margin-bottom: 5px">
+                      <a href="#" @click="fnSearch">조회</a>
+                    </div>
+                  </ul>
+                </section>
+              <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridAddRow">사용자변경</a>
+                  <a href="#" @click="gridAddRow">행추가</a>
                 </div>
-                <div class="btn btn-filter-p" style = "margin-left: 20px">
-                  <a href="#" @click="fnSave">저장</a>
-                </div>
-                <div class="btn btn-filter-p">
-                  <a href="#" @click="fnSearch">조회</a>
+                <div class="btn btn-filter-b">
+                  <a href="#" @click="gridDelRow">행삭제</a>
                 </div>
               </ul>
-              <ul class="filter-con clear-fix">
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>사번</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="info.empno"
-                           @keyup.enter="fnSearch"
-                           style   = "width: 220px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>이름</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="info.empnm"
-                           @keyup.enter="fnSearch"
-                           style   = "width: 220px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>프로젝트명</label>
-                    <select
-                        v-model = "info.prjt_id_selected"
-                        style   = "width: 220px"
-                    >
-                      <option
-                          v-for  = "(prjt_id, idx) in info.prjt_id"
-                          :key   = "idx"
-                          v-text = "prjt_id.text"
-                          :value = "prjt_id.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>업무</label>
-                    <select
-                        v-model = "info.bzcd_selected"
-                        style   = "width: 220px"
-                    >
-                      <option
-                          v-for  = "(bzcd, idx) in info.bzcd"
-                          :key   = "idx"
-                          v-text = "bzcd.text"
-                          :value = "bzcd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>사용자권한</label>
-                    <select
-                        v-model = "info.aut_cd_selected"
-                        style   = "width: 220px"
-                    >
-                      <option
-                          v-for  = "(aut_cd, idx) in info.aut_cd"
-                          :key   = "idx"
-                          v-text = "aut_cd.text"
-                          :value = "aut_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>비밀번호</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="info.lgn_pwd"
-                           @keyup.enter="fnSearch"
-                           style   = "width: 220px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>IP</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="info.ip_addr"
-                           @keyup.enter="fnSearch"
-                           style   = "width: 220px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>핸드폰번호</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="info.cpno"
-                           @keyup.enter="fnSearch"
-                           style   = "width: 220px"
-                    >
-                  </div>
-                </li>
-              </ul>
+              </div>
+              <div class="div2-2-c">
+              <div class="div-grid-c">
+                <grid
+                    ref="grid1"
+                    :data="dataSource"
+                    :header="header"
+                    :columns="columns2"
+                    :bodyHeight="150"
+                    :showDummyRows="showDummyRows"
+                    :columnOptions="columnOptions"
+                    :rowHeight="rowHeight"
+                    @click="onClick"
+                ></grid>
+              </div>
+              </div>
             </div>
           </div>
           <div class="div3-c">
             <div class="div-header-c"><h2>코드유형</h2>
                 <ul class="filter-btn">
-                  <div class="btn btn-filter-p" style = "margin-left: 10px">
-                    <a href="#" @click="fnSearchCode">조회</a>
+                  <div class="btn btn-filter-b">
+                    <a href="#" @click="gridAddRow">행추가</a>
+                  </div>
+                  <div class="btn btn-filter-b">
+                    <a href="#" @click="gridDelRow">행삭제</a>
+                  </div>
+                  <div class="btn btn-filter-p" style = "margin-left: 20px">
+                    <a href="#" @click="fnSave">저장</a>
                   </div>
                 </ul>
             </div>
@@ -269,7 +215,7 @@
                   ref="grid2"
                   :data="dataSource"
                   :header="header"
-                  :columns="columns2"
+                  :columns="columns3"
                   :bodyHeight="235"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
@@ -298,7 +244,7 @@
                   ref="grid3"
                   :data="dataSource"
                   :header="header"
-                  :columns="columns3"
+                  :columns="columns4"
                   :bodyHeight="bodyHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
@@ -306,210 +252,6 @@
                   :rowHeaders="rowHeaders"
                   @click="onClick"
               ></grid>
-            </div>
-          </div>
-          <div class="div5-c">
-            <div class="div-header-c"><h2>코드유형등록</h2>
-              <ul class="filter-btn">
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="open_page">신규</a>
-                </div>
-                <div class="btn btn-filter-p" style = "margin-left: 20px">
-                  <a href="#" @click="fnSave">저장</a>
-                </div>
-              </ul>
-            </div>
-            <div class="div-body-c">
-              <div class="div1-body-c">
-                <ul class="filter-con clear-fix">
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>그룹유형코드</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명1</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명6</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명11</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="div2-body-c">
-                <ul class="filter-con clear-fix">
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>그룹유형명</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 1205px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명2</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명3</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명4</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명5</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명7</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명8</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명9</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명10</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명12</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label>헤더명13</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label >정렬</label>
-                      <input type="text"
-                             placeholder="입력"
-                             v-model="info.pgm_id"
-                             @keyup.enter="fnSearch"
-                             style   = "width: 230px"
-                      >
-                    </div>
-                  </li>
-                  <li class="filter-item-a">
-                    <div class="item-con">
-                      <label style="margin-bottom: 7px">사용여부</label>
-                      <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
-                    </div>
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -732,7 +474,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 235,
+      bodyHeight: 345,
       rowHeight: 30,
       showDummyRows: true,
       open: false,
@@ -802,42 +544,100 @@ export default {
       columnOptions: {
         resizable: true
       },
-      rowHeaders:['checkbox', 'rowNum'],
+      rowHeaders:['rowNum'],
       header:{
-        height: 40
+        height: 25
       },
       columns1: [
         {
-          header: '프로그램ID',
+          header: '프로젝트',
           width: 150,
           name: 'atfl_mng_id',
         },
         {
-          header: '순번',
-          width: 50,
+          header: '직원번호',
+          width: 120,
           name: 'sqno',
         },
         {
-          header: '파일구분',
+          header: '지원명',
           width: 120,
           name: 'file_rgs_dscd',
         },
         {
-          header: '파일경로',
-          width: 300,
+          header: '직급',
+          width: 120,
           name: 'file_path',
         },
         {
-          header: '파일명',
-          width: 300,
+          header: '이메일',
+          width: 120,
           name: 'file_nm',
         },
         {
-          header: 'PMS변경내용',
+          header: '휴대폰번호',
+          width: 120,
           name: 'rmrmk',
+        },
+        {
+          header: '구성원',
+          width: 120,
+          name: 'rmrmk',
+        },
+        {
+          header: '권한',
+          width: 120,
+          name: 'rmrmk',
+        },
+        {
+          header: 'IP',
+          width: 120,
+          name: 'rmrmk',
+        },
+        {
+          header: '시작일자',
+          width: 120,
+          align: 'center',
+          name: 'pln_sta_dt',
+          format: 'yyyy-mm-dd',
+        },
+        {
+          header: '종료일자',
+          width: 120,
+          align: 'center',
+          name: 'pln_end_dt',
+          format: 'yyyy-mm-dd',
+        },
+        {
+          header: '시작일자',
+          width: 120,
+          align: 'center',
+          name: 'pln_sta_dt',
+          format: 'yyyy-mm-dd',
+        },
+        {
+          header: '종료일자',
+          width: 120,
+          align: 'center',
+          name: 'pln_end_dt',
+          format: 'yyyy-mm-dd',
         },
       ],
       columns2: [
+        {
+          header: '일자',
+          name: 'file_nm',
+        },
+        {
+          header: '요일구분',
+          name: 'file_nm',
+        },
+        {
+          header: '휴일구분',
+          name: 'file_nm',
+        },
+      ],
+      columns3: [
         {
           header: '그룹유형코드',
           width: 100,
@@ -845,10 +645,121 @@ export default {
         },
         {
           header: '그룹유형명',
-          name: 'grp_tymm',
+          width: 100,
+          name: 'dtls_tycd',
+        },
+        {
+          header: '정렬',
+          width: 100,
+          name: 'dtls_tynm',
+        },
+        {
+          header: '사용',
+          width: 100,
+          name: 'dtls_tynm',
+        },
+        {
+          header: '그리드컬럼명1',
+          width: 150,
+          name: 'etc_txt1',
+        },
+        {
+          header: '그리드컬럼명2',
+          width: 150,
+          name: 'etc_txt2',
+        },
+        {
+          header: '그리드컬럼명3',
+          width: 150,
+          name: 'etc_txt3',
+        },
+        {
+          header: '그리드컬럼명4',
+          width: 150,
+          name: 'etc_txt4',
+        },
+        {
+          header: '그리드컬럼명5',
+          width: 150,
+          name: 'etc_txt5',
+        },
+        {
+          header: '그리드컬럼명6',
+          width: 150,
+          name: 'etc_txt6',
+        },
+        {
+          header: '그리드컬럼명7',
+          width: 150,
+          name: 'etc_txt7',
+        },
+        {
+          header: '그리드컬럼명8',
+          width: 150,
+          name: 'etc_txt8',
+        },
+        {
+          header: '그리드컬럼명9',
+          width: 150,
+          name: 'etc_txt9',
+        },
+        {
+          header: '그리드컬럼명10',
+          width: 150,
+          name: 'etc_txt10',
+        },
+        {
+          header: '그리드컬럼명11',
+          width: 150,
+          name: 'etc_txt11',
+        },
+        {
+          header: '그리드컬럼명12',
+          width: 150,
+          name: 'etc_txt12',
+        },
+        {
+          header: '그리드컬럼명13',
+          width: 150,
+          name: 'etc_txt13',
+        },
+        {
+          header: '그리드컬럼명14',
+          width: 150,
+          name: 'etc_txt14',
+        },
+        {
+          header: '그리드컬럼명15',
+          width: 150,
+          name: 'etc_txt15',
+        },
+        {
+          header: '그리드컬럼명16',
+          width: 150,
+          name: 'etc_txt16',
+        },
+        {
+          header: '그리드컬럼명17',
+          width: 150,
+          name: 'etc_txt17',
+        },
+        {
+          header: '그리드컬럼명18',
+          width: 150,
+          name: 'etc_txt18',
+        },
+        {
+          header: '그리드컬럼명19',
+          width: 150,
+          name: 'etc_txt19',
+        },
+        {
+          header: '그리드컬럼명20',
+          width: 150,
+          name: 'etc_txt20',
         },
       ],
-      columns3: [
+      columns4: [
         {
           header: '그룹유형코드',
           width: 100,
@@ -862,6 +773,16 @@ export default {
         {
           header: '세부유형명',
           width: 150,
+          name: 'dtls_tynm',
+        },
+        {
+          header: '정렬',
+          width: 100,
+          name: 'dtls_tynm',
+        },
+        {
+          header: '사용',
+          width: 100,
           name: 'dtls_tynm',
         },
         {
@@ -898,6 +819,71 @@ export default {
           header: '기타내용7',
           width: 150,
           name: 'etc_txt7',
+        },
+        {
+          header: '기타내용8',
+          width: 150,
+          name: 'etc_txt8',
+        },
+        {
+          header: '기타내용9',
+          width: 150,
+          name: 'etc_txt9',
+        },
+        {
+          header: '기타내용10',
+          width: 150,
+          name: 'etc_txt10',
+        },
+        {
+          header: '기타내용11',
+          width: 150,
+          name: 'etc_txt11',
+        },
+        {
+          header: '기타내용12',
+          width: 150,
+          name: 'etc_txt12',
+        },
+        {
+          header: '기타내용13',
+          width: 150,
+          name: 'etc_txt13',
+        },
+        {
+          header: '기타내용14',
+          width: 150,
+          name: 'etc_txt14',
+        },
+        {
+          header: '기타내용15',
+          width: 150,
+          name: 'etc_txt15',
+        },
+        {
+          header: '기타내용16',
+          width: 150,
+          name: 'etc_txt16',
+        },
+        {
+          header: '기타내용17',
+          width: 150,
+          name: 'etc_txt17',
+        },
+        {
+          header: '기타내용18',
+          width: 150,
+          name: 'etc_txt18',
+        },
+        {
+          header: '기타내용19',
+          width: 150,
+          name: 'etc_txt19',
+        },
+        {
+          header: '기타내용20',
+          width: 150,
+          name: 'etc_txt20',
         },
       ]
     }
