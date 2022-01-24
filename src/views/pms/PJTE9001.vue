@@ -101,6 +101,7 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
+import PJTE3000 from "@/views/pms/PJTE3000";
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
@@ -183,6 +184,18 @@ export default {
         } else if (btn_id === 'btn.crpe') {
           opener.document.getElementById('id.crpe_nm').value = this.info.empnm  // 담당자 직원명
           opener.document.getElementById('id.crpe_no').value = this.info.empno  // 담당자 직원번호
+          window.close();
+        } else if (btn_id === 'btn.rgpe') {
+          opener.document.getElementById('id.rgpe_nm').value = this.info.empnm  // 결함등록자 직원명
+          opener.document.getElementById('id.rgpe_no').value = this.info.empno  // 결함등록자 직원번호
+          window.close();
+        } else if (btn_id === 'btn.rgs') {
+          opener.document.getElementById('id.rgs_nm').value = this.info.empnm  // 공지자 직원명
+          opener.document.getElementById('id.rgs_no').value = this.info.empno  // 공지자 직원번호
+          window.close();
+        } else if (grid_btn_id === 'rgpe_btn') {
+          opener.document.getElementById('id.grid_nm').value = this.info.empnm  // 결함등록자 직원명
+          opener.document.getElementById('id.grid_no').value = this.info.empno  // 결함등록자 직원번호
           window.close();
         }
       } else {
