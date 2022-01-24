@@ -112,16 +112,45 @@
           <td colspan="3">
             <table>
               <tr>
-                <th>처리자</th>
-                <td>
-                  <input type="text" v-model="prcpe_nm"/>
+                <th>
+                  처리자
+                </th>
+                <td style="width:100px">
+                  <input type="text"
+                         placeholder="직원명"
+                         id="id.crpe_nm"
+                         v-model="prcpe_nm"
+                         style="width: 80px"
+                  >
+
+                </td>
+                <td style="width: 20px">
+                  <div class="input-searchWrap" style="width:15px">
+                    <button class="search-btn"
+                            id="btn.crpe"
+                            @click="open_pjte9001"
+                    ></button>
+                  </div>
                 </td>
                 <td>
-                  <button class="btn btn-filter-p">조회</button>
+                  <input type="text"
+                         placeholder="직원번호"
+                         id="id.crpe_no"
+                         style="width: 80px; background-color: #f2f2f2;"
+                         v-model="prcpe_no"
+                         :disabled = true
+                  >
+
                 </td>
-                <td>
-                  <input type="text" v-model="prcpe_no" :disabled="read"/>
-                </td>
+<!--                <td>-->
+<!--                  <input type="text" v-model="prcpe_nm"/>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <button class="btn btn-filter-p">조회</button>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <input type="text" v-model="prcpe_no" :disabled="read"/>-->
+<!--                </td>-->
                 <th>
                   처리일자
                 </th>
@@ -243,6 +272,11 @@ export default {
     },
   },
   methods: {
+    // 직원 조회 팝업
+    open_pjte9001(event) {
+      const targetId = event.currentTarget.id;
+      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    },
     // 첨부파일등록 팝업 오픈
     open_file_page(){
       let bkup_id='0000000000', prjt_id=this.prjt_id, atfl_mng_id=this.atfl_mng_id, file_rgs_dscd='500', mng_id = this.mng_id
@@ -334,6 +368,7 @@ export default {
     // 저장(mng_id 있는 경우, update 쿼리)
     updateRegisterData() {
       console.log('update')
+      console.log(this.prcpe_no)
       if(this.req_prc_step_cd_selected === '400' && (this.prc_txt == null || this.prc_txt === '' || this.prc_txt === undefined)){
         alert('처리완료 선택시에는 처리내용을 작성해주셔야 합니다.');
         this.$refs.prc_txt.focus();
