@@ -16,7 +16,7 @@
         <tr>
           <th>프로젝트</th>
           <td>
-            <select v-model="pjt_selected" style="width: 300px;" :disabled="read">
+            <select v-model="pjt_selected" style="width: 300px; background-color: #f2f2f2" :disabled="read">
               <option
                   v-for   = "(pjt_list,idx) in pjt_list"
                   :key    ="idx"
@@ -33,8 +33,8 @@
               <option
                   v-for   = "(file_rgs_dscd,idx) in file_rgs_dscds"
                   :key    ="idx"
-                  v-text  ="file_rgs_dscd"
-                  :value  ="file_rgs_dscd"
+                  v-text  ="file_rgs_dscd.text"
+                  :value  ="file_rgs_dscd.value"
               ></option>
             </select>
           </td>
@@ -128,7 +128,20 @@ export default {
       pjt_list: [],
       pjt_selected:'',
       file_rgs_dscd_selected: this.$route.query.file_rgs_dscd,
-      file_rgs_dscds : [100, 101, 200, 300, 400, 500, 600, 700, 900],
+      file_rgs_dscds : [
+        {text: "단위테스트증빙", value:"100"},
+        {text: "설계서파일", value:"101"},
+        {text: "통합테스트증빙", value:"200"},
+        {text: "결함오류파일", value:"300"},
+        {text: "결함조치파일", value:"400"},
+        {text: "신청요청파일", value:"500"},
+        {text: "공지사항파일", value:"600"},
+        {text: "WBS관리파일", value:"700"},
+        {text: "산출물양식", value:"900"},
+        {text: "엑셀업로드양식", value:"901"},
+        {text: "Project Eyes 가이드", value:"902"},
+
+      ],
       fileLists : [],
       afterSearch:false,
       check_array:[],
