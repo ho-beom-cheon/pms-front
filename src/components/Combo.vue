@@ -520,6 +520,17 @@ export default {
 
       });
 
+      // 조회영역 권한 체크
+      axiosService.get("/PJTE2100/combo", {
+        params: {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID")
+        }
+      }).then(res => {
+        this.setCombo(res.data.data.contents);
+        this.setTest();
+      }).catch(e => {
+
+      });
     },
   }
 }
