@@ -1,11 +1,10 @@
 {
   "name": "iteyespms",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --mode dev",
     "prod": "vue-cli-service serve --mode prod",
-    "build": "npm run build",
+    "build": "vue-cli-service serve --mode dev",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -38,5 +37,8 @@
     "stylus": "^0.56.0",
     "stylus-loader": "^6.2.0",
     "vue-template-compiler": "^2.6.6"
-  }
+  },
+  "publishConfig": {
+      "registry": "https://nexus3.iteyes-lab.gurmwi.io/repository/npm-private"
+    }
 }
