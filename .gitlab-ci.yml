@@ -15,7 +15,7 @@ stages:
 
 before_script:
   - npm cache clean --force
-  - npm install -g @vue/cli
+  - npm install @vue/cli
   - yarn
 
 sonarqube_master:
