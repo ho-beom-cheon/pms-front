@@ -162,45 +162,9 @@ export default {
         document.getElementById('id.prjt_id').disabled = false;
       }
     },
-    fnChoice() {  // 선택 버튼 클릭 시 Button의 targetId 에 따라 값을 넘김
-      const btn_id = opener.document.activeElement.id;
-      if(typeof this.info.empno!=="undefined" && this.info.empno !== '' && this.info.empno !== null) {
-        if (btn_id === 'btn.achi_nm') {
-          opener.document.getElementById(opener.document.getElementById('id.achi_nm').id).value = this.info.empnm // 요청자 직원명
-          opener.document.getElementById(opener.document.getElementById('id.achi_no').id).value = this.info.empno // 요청자 직원번호
-          window.close();
-        } else if (btn_id === 'btn.ttmn_crpe_nm') {
-          opener.document.getElementById('id.ttmn_crpe_nm').value = this.info.empnm  // 조치담당자 직원명
-          opener.document.getElementById('id.ttmn_crpe_no').value = this.info.empno  // 조치담당자 직원번호
-          window.close();
-        } else if (btn_id === 'btn.dvlpe') {
-          opener.document.getElementById('id.dvlpe_nm').value = this.info.empnm  // 개발자 직원명
-          opener.document.getElementById('id.dvlpe_no').value = this.info.empno  // 개발자 직원번호
-          window.close();
-        } else if (btn_id === 'btn.pl') {
-          opener.document.getElementById('id.pl_nm').value = this.info.empnm  // 담당자 직원명
-          opener.document.getElementById('id.pl_no').value = this.info.empno  // 담당자 직원번호
-          window.close();
-        } else if (btn_id === 'btn.crpe') {
-          opener.document.getElementById('id.crpe_nm').value = this.info.empnm  // 담당자 직원명
-          opener.document.getElementById('id.crpe_no').value = this.info.empno  // 담당자 직원번호
-          window.close();
-        } else if (btn_id === 'btn.rgpe') {
-          opener.document.getElementById('id.rgpe_nm').value = this.info.empnm  // 결함등록자 직원명
-          opener.document.getElementById('id.rgpe_no').value = this.info.empno  // 결함등록자 직원번호
-          window.close();
-        } else if (btn_id === 'btn.rgs') {
-          opener.document.getElementById('id.rgs_nm').value = this.info.empnm  // 공지자 직원명
-          opener.document.getElementById('id.rgs_no').value = this.info.empno  // 공지자 직원번호
-          window.close();
-        } else if (grid_btn_id === 'rgpe_btn') {
-          opener.document.getElementById('id.grid_nm').value = this.info.empnm  // 결함등록자 직원명
-          opener.document.getElementById('id.grid_no').value = this.info.empno  // 결함등록자 직원번호
-          window.close();
-        }
-      } else {
-        alert('선택 항목이 없습니다.');
-      }
+    fnChoice() {  // 선택 버튼 클릭 시
+      opener.empData(this.info.empnm, this.info.empno, this.info.open_btn_id);
+      window.close();
     },
     change() {
       console.log();
@@ -254,16 +218,16 @@ export default {
     return {
       info: {
         /* 필터 변수 */
-        prjt_id: prjt_id,                    // 프로젝트명
-        bzcd: bzcd,                          // 업무구분
-        empno  : this.empno,               // 직원번호
-        empnm  : this.empnm,               // 직원명
-
-        prjt_id_selected: prjt_id[0].value,  // 선택 된 프로젝트명
-        bzcd_selected: bzcd[0].value,        // 선택 된 업무구분
-
+        prjt_id: prjt_id,                            // 프로젝트명
+        bzcd: bzcd,                                  // 업무구분
+        empno  : this.empno,                         // 직원번호
+        empnm  : this.$route.query.empnm,            // 직원명
+        prjt_id_selected: this.$route.query.prjt_id, // 선택 된 프로젝트명
+        bzcd_selected: bzcd[0].value,                // 선택 된 업무구분
         login_prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
         login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
+
+        open_btn_id : this.$route.query.btn_id,      // 오픈한 main화면에서 넘겨받은 btn id
       },
 
       addRow: {
