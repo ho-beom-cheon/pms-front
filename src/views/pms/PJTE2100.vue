@@ -219,7 +219,6 @@ import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 
-
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
 class CustomRenderer {
   constructor(props) {
@@ -265,22 +264,23 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
-
     console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
+
     console.log("created")
   },
   beforeMount() {
+
     console.log("beforeMount");
   },
   mounted() {
     // 화면 초기화
     this.init();
     // 화면 접속 시 데이터 조회
-    // this.fnSearch();
+    this.fnSearch();
     console.log("mounted");
   },
   beforeUpdate() {
@@ -353,6 +353,7 @@ export default {
         alert("변경된 내용이 없습니다.");
         return;
       }
+      debugger;
       // 데이터 로그 확인
       console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
       console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);

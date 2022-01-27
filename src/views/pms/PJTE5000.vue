@@ -51,98 +51,60 @@
       <section class="filter">
         <div class="col">
           <ul class="filter-con clear-fix">
+            <combo
+                :comboArray = "this.comboList"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @bzcd_change="bzcd_change"
+                @mng_cd_change="mng_cd_change"
+                @wbs_prc_sts_cd_change="wbs_prc_sts_cd_change"
+                @wbs_mng_cd_change="wbs_mng_cd_change"
+            ></combo>
+
             <li class="filter-item">
-              <div class="item-con">프로젝트명
-                <select
-                    v-model="info.prjt_nm_selected"
-                    style="width: 167px"
-                >
-                  <option
-                      v-for="(prjt_nm, idx) in info.prjt_nm"
-                      :key="idx"
-                      v-text="prjt_nm.text"
-                      :value="prjt_nm.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">업무구분
-                <select
-                    v-model="info.bzcd_selected"
-                    style="width: 145px"
-                >
-                  <option
-                      v-for="(bzcd, idx) in info.bzcd"
-                      :key="idx"
-                      v-text="bzcd.text"
-                      :value="bzcd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">진행상태
-                <select
-                    v-model="info.dvlp_dis_cd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(dvlp_dis_cd, idx) in info.dvlp_dis_cd"
-                      :key="idx"
-                      v-text="dvlp_dis_cd.text"
-                      :value="dvlp_dis_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">레벨단계
-                <select
-                    v-model="info.pgm_dis_cd"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(pgm_dis_cd, idx) in info.pgm_dis_cd"
-                      :key="idx"
-                      v-text="pgm_dis_cd.text"
-                      :value="pgm_dis_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">타스크명
+              <div class="item-con">Task명
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.pl_no"
-                       @keyup.enter="fnSearcha"
-                       style="width: 330px"
+                       v-model="info.task_nm"
+                       style="width: 250px"
                 >
               </div>
             </li>
-            <li class="filter-item">
-              <div class="item-con">담당자명
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.pl_no"
-                       @keyup.enter="fnSearcha"
-                       style="width: 145px"
-                >
-              </div>
-            </li>
+            <li class="filter-item-n">
+                          <div class="input-searchWrap">담당자명
+                            <input type="text"
+                                   id="id.crpe_nm"
+                                   placeholder="입력"
+                                   v-model="info.crpe_nm"
+                                   style="width: 90px"
+                            >
+                            <button class="search-btn"
+                                    id="btn.crpe"
+                                    @click="open_pjte9001"
+                            ></button>
+                          </div>
+                        </li>
+                        <li class="filter-item">
+                        <input type="text"
+                               placeholder="직원번호"
+                               id="id.crpe_no"
+                               v-model="info.crpe_no"
+                               style="width: 70px; background-color: #f2f2f2;"
+                               :disabled = true
+                            >
+                        </li>
             <li class="filter-item">
               <div class="item-con">계획종료일자
-                <div class="input-dateWrap"><input type="date" :max="frcs_end_dt" v-model="frcs_sta_dt"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.pln_end_dt" v-model="info.pln_sta_dt"></div>
                 -
-                <div class="input-dateWrap"><input type="date" :min="frcs_sta_dt" v-model="frcs_end_dt"></div>
+                <div class="input-dateWrap"><input type="date" :min="info.pln_sta_dt" v-model="info.pln_end_dt"></div>
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">실제종료일자
-                <div class="input-dateWrap"><input type="date" :max="end_dt" v-model="sta_dt"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.acl_end_dt" v-model="info.acl_sta_dt"></div>
                 -
-                <div class="input-dateWrap"><input type="date" :max="sta_dt" v-model="end_dt"></div>
+                <div class="input-dateWrap"><input type="date" :max="info.acl_sta_dt" v-model="info.acl_end_dt"></div>
               </div>
             </li>
             <li class="filter-item">
@@ -153,39 +115,15 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <div class="btn btn-filter-b">
-              <a href="#" @click="open_page">기타항목수정</a>
-            </div>
-            <div class="btn btn-filter-d">
-              <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
-            </div>
-            <div class="btn btn-filter-d">
-              <a href="#" @click="gridExcelExport">코드범례</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀업로드</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-            </div>
-            <div class="btn btn-filter-b" style="margin-left: 20px">
-              <a href="#" @click="gridAddRow">+ 행위로</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="gridDelRow">- 행아래</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="gridAddRow">행추가</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="gridDelRow">행삭제</a>
-            </div>
-            <div class="btn btn-filter-p" style="margin-left: 20px">
-              <a href="#" @click="fnSave">저장</a>
-            </div>
-            <div class="btn btn-filter-p">
-              <a href="#" @click="fnSearch">조회</a>
-            </div>
+              <button class="btn btn-filter-p" @click="gridExcelExport" :disabled="validated">진행률계산</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated" style="margin-left: 20px"> 엑셀업로드</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+              <button class="btn btn-filter-b" @click="gridAddRow" :disabled="validated" style="margin-left: 20px">+ 행위로</button>
+              <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">- 행아래</button>
+              <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="validated">행추가</button>
+              <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
+              <button class="btn btn-filter-p" @click="fnSave" :disabled="false" style="margin-left: 20px">저장</button>
+              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
@@ -204,7 +142,6 @@
               :columnOptions="columnOptions"
               :rowHeight="rowHeight"
               :rowHeaders="rowHeaders"
-              :draggable="draggable"
               @click="onClick"
           ></grid>
         </div>
@@ -216,31 +153,50 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
-import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
-import axios from 'axios';
+import Combo from "@/components/Combo"
+import 'tui-date-picker/dist/tui-date-picker.css';
+import axios from "axios";
+import {axiosService} from "@/api/http"; // Date-picker 스타일적용
+
+// 커스텀 이미지 버튼을 만들기 위한 클래스 생성
+class CustomRenderer {
+  constructor(props) {
+    const el = document.createElement('img');
+    el.src = 'some-image-link';
+
+    this.el = el;
+    this.render(props);
+  }
+  getElement() {
+    return this.el;
+  }
+  render(props) {
+    // 결함등록 버튼 img
+    this.el.src = '/img/ic_logOut.8c60a751.svg';
+  }
+}
 
 //그리드 아이템 예제 
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_nm = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
 
 // 레벨구분
 const level = [
-  {text: "1레벨", value: '1'},
-  {text: "2레벨", value: '2'},
-  {text: "3레벨", value: "3"},
-  {text: "4레벨", value: "4"},
-  {text: "5레벨", value: "5"},
+  {text: "1레벨", value: '100'},
+  {text: "2레벨", value: '200'},
+  {text: "3레벨", value: "300"},
+  {text: "4레벨", value: "400"},
+  {text: "5레벨", value: "500"},
 ];
 // 업무구분 
 const bzcd = [
-  {text: "전체", value: '000'},
+  {text: " ", value: 'NNN'},
   {text: "신용", value: 'AAA'},
   {text: "재무제표", value: "BBB"},
   {text: "신용평가", value: "CCC"},
 ];
-// 개발구분 
-const dvlp_dis_cd = [
-  {text: "전체", value: "000"},
+// 관리구분
+const mng_cd = [
+  {text: " ", value: "NNN"},
   {text: "신규", value: "100"},
   {text: "변경", value: "200"},
   {text: "이행", value: "300"},
@@ -248,34 +204,31 @@ const dvlp_dis_cd = [
 ];
 // 프로그램구분 
 const pgm_dis_cd = [
-  {text: "전체", value: "000"},
+  {text: " ", value: "NNN"},
   {text: "화면", value: "100"},
   {text: "프로그램", value: "200"},
   {text: "보고서", value: "300"},
   {text: "배치", value: "400"}
 ];
 // 프로그램 세부 구분 
-const enlpe_nm = [
-  {text: "전체", value: '000'},
-  {text: "JSP", value: "100"},
-  {text: "JAVA", value: "200"},
-  {text: "RD", value: "300"}
+const wbs_prc_sts_cd = [
+  {text: " ", value: 'NNN'},
+  {text: "WBS관리", value: "100"},
+  {text: "이행관리", value: "200"},
 ];
 // 처리단계 
 const prc_step_cd = [
-  {text: "전체", value: "0"},
-  {text: "미개발", value: "1"},
-  {text: "개발중", value: "2"},
-  {text: "개발완료", value: "3"},
-  {text: "PL완료", value: "4"},
-  {text: "삭제", value: "5"},
-  {text: "개발종료", value: "6"}
+  {text: " ", value: "NNN"},
+  {text: "대기", value: "100"},
+  {text: "진행중", value: "200"},
+  {text: "완료", value: "300"},
 ];
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언) 
   components: {
     grid: Grid,
+    Combo,
     WindowPopup
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수 
@@ -289,7 +242,6 @@ export default {
 // 변수 초기화 
   created() {
     console.log("created");
-
   },
   beforeMount() {
     console.log("beforeMount");
@@ -320,37 +272,82 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분  
   methods: {
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    mng_cd_change(params) {this.info.mng_cd_selected = params},
+    wbs_mng_cd_change(params) {this.info.wbs_mng_cd_selected = params},
+    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+      this.info.mng_cd_selected = this.$children[0].$data.mng_cd_selected;
+      this.info.wbs_prc_sts_cd_selected = this.$children[0].$data.wbs_prc_sts_cd_selected;
+      this.info.wbs_mng_cd_selected = this.$children[0].$data.wbs_mng_cd_selected;
+    },
+
     change() {
       console.log("change");
     },
     fnSave() {
-      this.$refs.grid.invoke("modifyData");
-      console.log("modify");
+        this.rowData = this.$refs.grid.invoke("getData")
+
+        axiosService.post("/PJTE5000/insert",{
+            rowData : this.rowData,
+        }).then(res => {
+          console.log("resData ::", res)
+        }).catch(e => {
+        });
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+
+      if(ev.columnName === 'btn_popup') {
+        this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
+      }
     },
     fnSearch() {
+      this.comboSetData();
+
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
+
+
+      // 버튼 활성화
+      if(
+          this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
+          this.info.wbs_mng_cd_selected !== 'TTT' && this.info.wbs_prc_sts_cd_selected === 'TTT' &&
+          this.info.crpe_nm === undefined && this.info.acl_sta_dt === null && this.info.acl_end_dt === null &&
+          this.info.pln_sta_dt=== null && this.info.pln_end_dt === null
+      ){
+          this.validated = false;
+      } else {
+        this.validated = true;
+      }
+    },
+    open_pjte9001() {
+      this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");
     },
     gridInit() {
       this.$refs.grid.invoke("clear");
     },
     gridAddRow() {
-
       this.$refs.grid.invoke("appendRow", {col1: "1", col3: "개발", col4: "SWZP0010", col5: "PMS구축"}, {focus: true});
     },
     gridDelRow() {
       this.$refs.grid.invoke("removeRow", this.curRow);
-// DB 데이터 삭제로직 추가 
+    // DB 데이터 삭제로직 추가
     },
     gridADelRow() {
-// DB 데이터 삭제로직 추가  
+    // DB 데이터 삭제로직 추가
     },
     gridIns() {
-// DB 데이터 삭제로직 추가  
+    // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
@@ -375,32 +372,33 @@ export default {
 // 변수 선언부분 
   data() {
     return {
+      validated : true,
+      comboList : ["C27","C0","C1","C19","C35"],
+
       info: {
         pgm_id: this.pgm_id,    // 프로그램ID
         pgm_nm: this.pgm_nm,    // 프로그램명
-        dvlpe_no: this.dvlpe_no,    // 개발자명
-        pl_no: this.pl_no,    // 담당PL명
+        task_nm: this.task_nm,  // task명
+        crpe_nm: this.crpe_nm,  // 담당자명
 
-        dvlp_dis_cd: dvlp_dis_cd,// 개발구분
-        prjt_nm: prjt_nm,    // 프로젝트명
-        bzcd: bzcd,    // 업무구분
-        pgm_dis_cd: pgm_dis_cd,    // 프로그램구분
-        prc_step_cd: prc_step_cd,    // 처리단계
+        prjt_nm_selected         : null,
+        bkup_id_selected         : null,
+        bzcd_selected            : null,
+        mng_cd_selected          : null,
+        wbs_prc_sts_cd_selected  : null,
+        wbs_mng_cd_selected      : null,
 
-        /* select 박스 */
-        dvlp_dis_cd_selected: dvlp_dis_cd[0].value,  // 개발구분
-        prjt_nm_selected: prjt_nm[0].value,      // 프로젝트명
-        bzcd_selected: bzcd[0].value,         // 업무구분
-        pgm_dis_cd_selected: pgm_dis_cd[0].value    // 프로그램구분
+        acl_sta_dt : null,
+        acl_end_dt : null,
+        pln_sta_dt : null,
+        pln_end_dt : null,
 
       },
       addRow: {
         grid: this.grid,
       },
-      frcs_sta_dt: '',    // 계획일자STA
-      frcs_end_dt: '',    // 계획일자END
-      sta_dt: '',    // 실제일자STA
-      end_dt: '',    // 실제일자END
+
+      rowData : [],
 
       check_Yn: false,  // 삭제프로그램/소스취약점포함
 
@@ -414,7 +412,7 @@ export default {
       rowHeight: 25,
       showDummyRows: true,
       open: false,
-      draggable: true,
+      //draggable: true,
       menu_list: [
         {
           id: 'PJTE1000',
@@ -484,17 +482,47 @@ export default {
       columnOptions: {
         resizable: true
       },
-      rowHeaders: ['checkbox', 'rowNum'],
+      rowHeaders: ['rowNum'],
       header: {
         height: 40
       },
       columns: [
         {
+          header: '관리구분',
+          width: 100,
+          minWidth: 50,
+          maxWidth: 250,
+          name: 'mng_cd',
+          align: 'center',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: mng_cd
+            }
+          }
+        },
+        {
+          header: '업무구분',
+          width: 100,
+          minWidth: 50,
+          maxWidth: 250,
+          name: 'bzcd',
+          align: 'center',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: bzcd
+            }
+          }
+        },
+        {
           header: '레벨',
           width: 100,
           minWidth: 50,
           maxWidth: 250,
-          name: 'level',
+          name: 'step_cd',
           align: 'center',
           formatter: 'listItemText',
           editor: {
@@ -505,235 +533,155 @@ export default {
           }
         },
         {
-          header: '업무세부',
-          width: 180,
-          align: 'left',
-          name: 'bz_dtls_txt',
-        },
-        {
-          header: '프로그램ID',
-          width: 150,
-          align: 'left',
-          name: 'pgm_id',
-
-        },
-        {
-          header: '프로그램명',
-          width: 280,
-          align: 'left',
-          name: 'pgm_nm',
-
-        },
-        {
-          header: '업무구분',
-          width: 100,
+          header: '관리 ID',
+          width: 130,
           align: 'center',
-          name: 'bzcd',
+          name: 'mng_id',
+        },
+        {
+          header: '상위관리 ID',
+          width: 130,
+          align: 'center',
+          name: 'hgrn_mng_id',
+        },
+        {
+          header: 'ACTIVITY명',
+          width: 120,
+          align: 'center',
+          name: 'acvt_nm',
           type: 'text'
         },
         {
-          header: '개발구분',
+          header: '태스크명',
           width: 80,
           align: 'center',
-          name: 'dvlp_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: dvlp_dis_cd
-            }
-          }
+          name: 'task_nm',
         },
         {
-          header: '프로그램구분',
+          header: '첨부',
+          width: 120,
+          name: 'btn_popup',
+          align: 'center',
+          renderer: CustomRenderer,
+        },
+        {
+          header: '담당자',
           width: 120,
           align: 'center',
-          name: 'pgm_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: pgm_dis_cd
-            }
-          }
-        },
-        {
-          header: '프로그램세부구분',
-          width: 120,
-          align: 'center',
-          name: 'enlpe_nm',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: enlpe_nm
-            }
-          }
-        },
-        {
-          header: '예상시작일',
-          width: 110,
-          align: 'center',
-          name: 'frcs_sta_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker'
-        },
-        {
-          header: '예상종료일',
-          width: 110,
-          align: 'center',
-          type: 'date',
-          name: 'frcs_end_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: '개발자완료일자',
-          width: 110,
-          align: 'center',
-          name: 'dvlpe_cnf_dt',
-          editor: 'datePicker'
-        },
-        {
-          header: 'PL확인일자',
-          width: 110,
-          align: 'center',
-          name: 'pl_cnf_dt',
-          editor: 'datePicker'
+          name: 'crpe_nm',
         },
         {
           header: '처리단계',
           width: 80,
           align: 'center',
-          name: 'prc_step_cd',
+          name: 'wbs_prc_sts_cd',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: listItem
+              listItems: prc_step_cd
             }
           }
         },
         {
-          header: '개발자',
+          header: '일자',
+          width: 110,
+          align: 'center',
+          name: 'pln_sta_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker'
+        },
+        {
+          header: '시간',
+          width: 110,
+          align: 'center',
+          type: 'date',
+          name: 'pln_sta_tim',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker'
+        },
+        {
+          header: '일자',
+          width: 110,
+          align: 'center',
+          name: 'pln_end_dt',
+          editor: 'datePicker'
+        },
+        {
+          header: '시간',
+          width: 110,
+          align: 'center',
+          name: 'pnl_end_tim',
+          editor: 'datePicker'
+        },
+        {
+          header: '일자',
+          width: 80,
+          align: 'center',
+          name: 'acl_sta_dt',
+        },
+        {
+          header: '시간',
           width: 160,
           align: 'center',
-          name: 'dvlpe_no',
-
+          name: 'acl_sta_tim',
         },
         {
-          header: '담당PL',
+          header: '일자',
+          width: 80,
+          align: 'center',
+          name: 'acl_end_dt',
+        },
+        {
+          header: '시간',
           width: 160,
           align: 'center',
-          name: 'pl_no',
-
+          name: 'acl_end_tim',
         },
         {
-          header: '현업',
+          header: '가중치',
           width: 160,
           align: 'center',
-          name: 'opr_no',
-
+          name: 'wgt_rt',
         },
         {
-          header: '단위테스트증빙첨부',
-          width: 150,
+          header: '진행율',
+          width: 160,
           align: 'center',
-          name: 'atfl_mng_id',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: listItem
-            }
-          }
+          name: 'prg_rt',
         },
         {
-          header: '총건수',
+          header: '비고',
+          width: 200,
+          align: 'center',
+          name: 'rmrk',
+        },
+        {
+          header: '정렬',
           width: 80,
           align: 'right',
-          name: 'col19',
-
+          name: 'sort',
         },
         {
-          header: '완료',
-          width: 80,
+          header: '첨부파일관리ID',
+          width: 160,
           align: 'center',
-          name: 'col20',
-
+          name: 'atfl_mng_id',
+          hidden: true,
         },
         {
-          header: '미완료',
-          width: 80,
+          header: '프로젝트ID',
+          width: 150,
           align: 'center',
-          name: 'col21',
-
+          name: 'prjt_id',
+          hidden: true,
         },
         {
-          header: '결함등록',
-          width: 120,
-          name: 'col22',
-        },
-        {
-          header: '요구사항ID',
-          width: 150,
-          name: 'col23',
-        },
-        {
-          header: '미진사유',
-          width: 400,
-          name: 'col24',
-        },
-        {
-          header: '해당화면ID',
-          width: 200,
-          name: 'col25',
-        },
-        {
-          header: '소스경로',
-          width: 140,
-          name: 'col26'
-        },
-        {
-          header: '일자',
-          width: 90,
-          name: 'col27'
-        },
-        {
-          header: '이행시간',
-          width: 90,
-          name: 'col28'
-        },
-        {
-          header: '담당자',
-          width: 90,
-          name: 'col29'
-        },
-        {
-          header: '일자',
-          width: 90,
-          name: 'col30'
-        },
-        {
-          header: '점검시간',
-          width: 90,
-          name: 'col31'
-        },
-        {
-          header: '담당자',
-          width: 90,
-          name: 'col32'
-        },
-        {
-          header: '이행진행구분',
-          width: 150,
-          name: 'col33',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: listItem
-            }
-          }
+          header: '하위건수',
+          width: 80,
+          align: 'right',
+          name: 'wbs_cnt',
+          hidden: true,
         },
       ]
     }
