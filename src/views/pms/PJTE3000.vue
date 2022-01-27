@@ -187,25 +187,6 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <!-- Modal popup contents -->
-        <Modal :show.sync="modals.txt_modal1">
-          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
-          <tr>
-            <textarea id="modalId"
-                      cols="73"
-                      rows="20"
-                      style="margin-bottom: 10px; background-color: #f2f2f2;"
-                      v-model="modalTxt"
-                      disabled=true
-            ></textarea>
-          </tr>
-          <tr>
-            <div style="float: right">
-<!--              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>-->
-              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
-            </div>
-          </tr>
-        </Modal>
         <!-- grid contents -->
         <div class="gridWrap" style="min-width: 750px;">
           <grid
@@ -309,7 +290,6 @@ const err_prc_step_cd = [
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
-    Modal,
     Combo,
     grid: Grid,
   },
@@ -371,6 +351,8 @@ export default {
     },
 
     init() {
+      //그리드 셀 비활성화
+      this.$refs.grid.invoke("disable");
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
       // 조회 필터 초기화
@@ -380,16 +362,6 @@ export default {
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
-      // 그리드 내용 클릭 시 상세보기 모달팝업
-      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if (ev.columnName == 'ttmn_txt') {  // 컬럼명이 <조치내용>일 때만 팝업
-        this.modals.txt_modal1 = true;
-        this.modalTxt = currentCellData.value;
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      }
-      if(ev.columnName === 'rgpe_btn') {
-        this.pop = window.open("../PJTE9001/", currentCellData, "width=700, height=600");
-      }
     },
     /*그리드 더블클릭 이벤트*/
     dblonClick(ev) {
@@ -403,13 +375,7 @@ export default {
         this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
       }
     },
-    fnEdit() {   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-      this.$refs.grid.invoke("setValue", this.curRow, "ttmn_txt", document.getElementById("modalId").value);
-      this.modals.txt_modal1 = false;
-    },
-    fnCloseModal() {  // 모달창 닫기
-      this.modals.txt_modal1 = false;
-    },
+
     fnSearch() {
       this.comboSetData();
 
@@ -507,9 +473,13 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C9"],
 
-      emp_btn_id : '',
-      emp_nm : '',
-      emp_no : '',
+      /*직원조회 팝업 변수*/
+      emp_btn_id : '',  // 직원조회팝업 버튼ID
+      emp_nm : '',      // 직원조회팝업 직원명
+      emp_no : '',      // 직원조회팝업 직원번호
+
+      // emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
+      // emp_colName : '',  // 직원조회팝업 (그리드) colName
 
       info: {
         // 콤보
@@ -547,11 +517,6 @@ export default {
       },
 
       addRow: {},
-      /* 그리드 상세보기 모달 속성 */
-      modals: {
-        txt_modal1: false,
-      },
-      modalTxt: this.modalTxt,
 
       count: 0,
       curRow: -1,
@@ -650,19 +615,19 @@ export default {
           {
             header: '결함등록자',
             name: 'mergeColumn3',
-            childNames: ['rgpe_nm', 'rgpe_btn', 'rgpe_no'],
+            childNames: ['rgpe_nm', 'rgpe_no'],
             hideChildHeaders : true,
           },
           {
             header: '조치자명',
             name: 'mergeColumn4',
-            childNames: ['dvlpe_nm', 'dvlpe_btn', 'dvlpe_no'],
+            childNames: ['dvlpe_nm', 'dvlpe_no'],
             hideChildHeaders : true,
           },
           {
             header: 'PL명',
             name: 'mergeColumn5',
-            childNames: ['pl_nm', 'pl_btn', 'pl_no'],
+            childNames: ['pl_nm', 'pl_no'],
             hideChildHeaders : true,
           },
         ]
@@ -752,13 +717,6 @@ export default {
         },
         {
           header: '결함등록자',
-          width: 40,
-          align: 'center',
-          name: 'rgpe_btn',
-          renderer: SearchBtn,
-        },
-        {
-          header: '결함등록자',
           width: 80,
           align: 'center',
           name: 'rgpe_no',
@@ -801,13 +759,6 @@ export default {
         },
         {
           header: '조치자명',
-          width: 40,
-          align: 'center',
-          name: 'dvlpe_btn',
-          renderer: SearchBtn,
-        },
-        {
-          header: '조치자명',
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
@@ -818,13 +769,6 @@ export default {
           align: 'center',
           name: 'pl_nm',
           editor: 'text',
-        },
-        {
-          header: 'PL명',
-          width: 40,
-          align: 'center',
-          name: 'pl_btn',
-          renderer: SearchBtn,
         },
         {
           header: 'PL명',
