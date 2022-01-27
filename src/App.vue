@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+      {{ data }}}
         <router-view name="header"></router-view>
         <main>
             <fade-transition origin="center" mode="out-in" :duration="250">
@@ -16,6 +17,12 @@ export default {
   components: {
     FadeTransition
   },
+  data: () => ({
+    data : "",
+  }),
+  mounted() {
+    this.data = process.env.VUE_APP_API
+  }
 };
 </script>
 <style>
