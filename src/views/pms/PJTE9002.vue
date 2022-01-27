@@ -124,6 +124,7 @@ export default {
     return {
       bkup_id: this.$route.query.bkup_id,
       atfl_mng_id : this.$route.query.atfl_mng_id,
+      atfl_num : this.$route.query.num,
       read : true,
       pjt_list: [],
       pjt_selected:'',
@@ -278,6 +279,7 @@ export default {
 
     //닫기
     close() {
+      console.log(this.atfl_num)
       opener.fileData(this.fileLists);
       window.close();
 
@@ -326,7 +328,7 @@ export default {
         // console.log(res.data);
         if(res.data == "success"){
           alert("첨부파일이 저장되었습니다.")
-          opener.fileData(this.fileLists);
+          opener.fileData(this.fileLists, this.atfl_num );
           window.close();
         }
       })
