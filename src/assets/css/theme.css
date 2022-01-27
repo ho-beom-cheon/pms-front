@@ -122,13 +122,24 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     position: relative;
 }
 .input-searchWrap input {
-    padding-right: 28px;
     width: 100%;
 }
 .input-searchWrap .search-btn {
     position: absolute;
     top: 0;
     right: 0;
+    bottom: 0;
+    display: block;
+    width: 28px;
+    height: 24px;
+    background: url(../../assets/img/PE-icon/ic_search.svg) center/16px no-repeat;
+    background-color: #B8B8B8;
+    border: 0;
+}
+.input-searchWrap .search-btn2 {
+    position: absolute;
+    top: 0;
+    right: 41%;
     bottom: 0;
     display: block;
     width: 28px;

@@ -51,114 +51,28 @@
       <section class="filter">
         <div class="col">
           <ul class="filter-con clear-fix">
-            <li class="filter-item">
-              <div class="item-con">프로젝트명
-                <select
-                    v-model="info.prjt_id_selected"
-                    style="width: 165px"
-                >
-                  <option
-                      v-for="(prjt_id, idx) in info.prjt_id"
-                      :key="idx"
-                      v-text="prjt_id.text"
-                      :value="prjt_id.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">백업ID
-                <select
-                    v-model="info.bkup_id_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(bkup_id, idx) in info.bkup_id"
-                      :key="idx"
-                      v-text="bkup_id.text"
-                      :value="bkup_id.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">업무구분
-                <select
-                    v-model="info.bzcd_selected"
-                    style="width: 145px"
-                >
-                  <option
-                      v-for="(bzcd, idx) in info.bzcd"
-                      :key="idx"
-                      v-text="bzcd.text"
-                      :value="bzcd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">등록단계
-                <select
-                    v-model="info.rgs_dscd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(rgs_dscd, idx) in info.rgs_dscd"
-                      :key="idx"
-                      v-text="rgs_dscd.text"
-                      :value="rgs_dscd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">결함유형
-                <select
-                    v-model="info.err_tycd_selected"
-                    style="width: 100px"
-                >
-                  <option
-                      v-for="(err_tycd, idx) in info.err_tycd"
-                      :key="idx"
-                      v-text="err_tycd.text"
-                      :value="err_tycd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">처리단계
-                <select
-                    v-model="info.err_prc_step_cd_selected"
-                    style="width: 128px"
-                >
-                  <option
-                      v-for="(err_prc_step_cd, idx) in info.err_prc_step_cd"
-                      :key="idx"
-                      v-text="err_prc_step_cd.text"
-                      :value="err_prc_step_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
+            <combo
+                :comboArray = "this.comboList"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @bzcd_change="bzcd_change"
+            ></combo>
             <li class="filter-item-n">
               <div class="input-searchWrap">결함등록자
                 <input type="text"
                        placeholder="직원명"
-                       id="id.rgpe_nm"
                        v-model="info.rgpe_nm"
                        style="width: 90px"
+                       @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn"
-                        id="btn.rgpe"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(1)"
                 ></button>
               </div>
             </li>
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.rgpe_no"
                      v-model="info.rgpe_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled=true
@@ -168,20 +82,18 @@
               <div class="input-searchWrap">조치자
                 <input type="text"
                        placeholder="직원명"
-                       id="id.dvlpe_nm"
                        v-model="info.dvlpe_nm"
                        style="width: 90px"
+                       @keyup.enter="open_pjte9001(2)"
                 >
                 <button class="search-btn"
-                        id="btn.dvlpe"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(2)"
                 ></button>
               </div>
             </li>
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.dvlpe_no"
                      v-model="info.dvlpe_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled=true
@@ -191,20 +103,18 @@
               <div class="input-searchWrap">담당PL
                 <input type="text"
                        placeholder="직원명"
-                       id="id.pl_nm"
                        v-model="info.pl_nm"
                        style="width: 90px"
+                       @keyup.enter="open_pjte9001(3)"
                 >
                 <button class="search-btn"
-                        id="btn.pl"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(3)"
                 ></button>
               </div>
             </li>
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.pl_no"
                      v-model="info.pl_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled=true
@@ -265,11 +175,11 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+            <div class="btn btn-filter-e"  @click="gridExcelExport">
+              <a href="#">엑셀다운로드</a>
             </div>
-            <div class="btn btn-filter-p" style="margin-left: 20px">
-              <a href="#" @click="fnSearch">조회</a>
+            <div class="btn btn-filter-p" style="margin-left: 20px" @click="fnSearch">
+              <a href="#" >조회</a>
             </div>
           </ul>
         </div>
@@ -281,11 +191,17 @@
         <Modal :show.sync="modals.txt_modal1">
           <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
           <tr>
-            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+            <textarea id="modalId"
+                      cols="73"
+                      rows="20"
+                      style="margin-bottom: 10px; background-color: #f2f2f2;"
+                      v-model="modalTxt"
+                      disabled=true
+            ></textarea>
           </tr>
           <tr>
             <div style="float: right">
-              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+<!--              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>-->
               <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
             </div>
           </tr>
@@ -314,11 +230,34 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
+import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css';
 import axios from "axios";
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import Modal from "@/components/Modal";
 import PJTE9001 from "@/views/pms/PJTE9001";
+
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id) => {
+  window.pms_register.emp_nm = empnm;
+  window.pms_register.emp_no = empno;
+  window.pms_register.emp_btn_id = btn_id;
+}
+
+// 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
+class SearchBtn {
+  constructor(props) {
+    const el = document.createElement('img');
+    el.src = 'some-image-link';
+    this.el = el;
+    this.render(props);
+  }
+  getElement() {return this.el;}
+  render(props) {
+    // 결함등록 버튼 img
+    this.el.src = '/img/ic_search.21e28c8b.svg';
+  }
+}
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
@@ -371,6 +310,7 @@ export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Modal,
+    Combo,
     grid: Grid,
   },
   // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
@@ -393,6 +333,7 @@ export default {
   mounted() {
     this.init();
     this.fnSearch();
+    window.pms_register = this;
     console.log("mounted");
   },
   beforeUpdate() {
@@ -417,12 +358,25 @@ export default {
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+    },
+
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
       // 조회 필터 초기화
       this.info.cmpl_yn = false
     },
+    /*그리드 클릭 이벤트*/
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
@@ -433,9 +387,21 @@ export default {
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
+      if(ev.columnName === 'rgpe_btn') {
+        this.pop = window.open("../PJTE9001/", currentCellData, "width=700, height=600");
+      }
     },
+    /*그리드 더블클릭 이벤트*/
     dblonClick(ev) {
       this.curRow = ev.rowKey;
+      // 컬럼명이 테스트케이스ID(프로그램ID) / 테스트케이스명(프로그램명) 일 때 결함팝업 호출
+      if(ev.columnName === 'cctn_id' || ev.columnName === 'cctn_nm') {
+        let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id');
+        let bkup_id='0000000000';
+        let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');
+        let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm');
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+      }
     },
     fnEdit() {   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "ttmn_txt", document.getElementById("modalId").value);
@@ -445,13 +411,7 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSearch() {
-      // 조회 버튼 클릭 시 직원조회팝업에서 받아온 직원데이터를 v-model에 넣는다.
-      this.info.rgpe_no = document.getElementById("id.rgpe_no").value      // 결함등록자 이름 설정
-      this.info.rgpe_nm = document.getElementById("id.rgpe_nm").value      // 결함등록자 이름 설정
-      this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value    // 조치자 이름 설정
-      this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value    // 조치자 이름 설정
-      this.info.pl_no = document.getElementById("id.pl_no").value          // 담당PL 이름 설정
-      this.info.pl_nm = document.getElementById("id.pl_nm").value          // 담당PL 이름 설정
+      this.comboSetData();
 
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -480,12 +440,42 @@ export default {
     open_page() {
       this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
     },
-    open_pjte9001(event) {
-
-
-      const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
-    },
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      if (btn_id == '1') {
+        empnm = this.info.rgpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.info.dvlpe_nm
+      } else if (btn_id == '3') {
+        empnm = this.info.pl_nm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.rgpe_no = res.data.data.contents[0].empno
+                } else if (btn_id == '2') {
+                  this.info.dvlpe_no = res.data.data.contents[0].empno
+                } else if (btn_id == '3') {
+                  this.info.pl_no = res.data.data.contents[0].empno
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    }
 
   },
   // 특정 데이터에 실행되는 함수를 선언하는 부분
@@ -495,11 +485,32 @@ export default {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
       console.log("old Value :: " + b);
+    },
+    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
+       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
+    emp_btn_id() {
+      if(this.emp_btn_id == '1'){       // 결함등록자
+        this.info.rgpe_no = this.emp_no
+        this.info.rgpe_nm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 조치자
+        this.info.dvlpe_no = this.emp_no
+        this.info.dvlpe_nm = this.emp_nm
+      }else if(this.emp_btn_id == '3'){ // 담당PL
+        this.info.pl_no = this.emp_no
+        this.info.pl_nm = this.emp_nm
+      }
     }
   },
   // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C1","C9"],
+
+      emp_btn_id : '',
+      emp_nm : '',
+      emp_no : '',
+
       info: {
         // 콤보
         prjt_id: prjt_id,    		            // 프로젝트명
@@ -636,6 +647,24 @@ export default {
             name: 'mergeColumn2',
             childNames: ['cctn_nm']
           },
+          {
+            header: '결함등록자',
+            name: 'mergeColumn3',
+            childNames: ['rgpe_nm', 'rgpe_btn', 'rgpe_no'],
+            hideChildHeaders : true,
+          },
+          {
+            header: '조치자명',
+            name: 'mergeColumn4',
+            childNames: ['dvlpe_nm', 'dvlpe_btn', 'dvlpe_no'],
+            hideChildHeaders : true,
+          },
+          {
+            header: 'PL명',
+            name: 'mergeColumn5',
+            childNames: ['pl_nm', 'pl_btn', 'pl_no'],
+            hideChildHeaders : true,
+          },
         ]
       },
       columns: [
@@ -646,6 +675,13 @@ export default {
           maxWidth: 250,
           align: 'center',
           name: 'bzcd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: bzcd
+            }
+          }
         },
         {
           header: '등록단계',
@@ -662,7 +698,7 @@ export default {
         },
         {
           header: '테스트케이스ID',
-          width: 180,
+          width: 120,
           align: 'center',
           name: 'cctn_id'
         },
@@ -688,9 +724,16 @@ export default {
         },
         {
           header: '처리단계',
-          width: 80,
+          width: 120,
           align: 'center',
-          name: 'err_prc_step_cd'
+          name: 'err_prc_step_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: err_prc_step_cd
+            }
+          }
         },
         {
           header: '결함등록일자',
@@ -702,9 +745,23 @@ export default {
         },
         {
           header: '결함등록자',
-          width: 120,
+          width: 80,
           align: 'center',
-          name: 'rgpe_nm'
+          name: 'rgpe_nm',
+          editor: 'text',
+        },
+        {
+          header: '결함등록자',
+          width: 40,
+          align: 'center',
+          name: 'rgpe_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: '결함등록자',
+          width: 80,
+          align: 'center',
+          name: 'rgpe_no',
         },
         {
           header: '결함내용',
@@ -737,15 +794,43 @@ export default {
         },
         {
           header: '조치자명',
-          width: 110,
+          width: 80,
           align: 'center',
-          name: 'dvlpe_nm'/*컬럼명 name 애매모호 ...db 보고 확인 */
+          name: 'dvlpe_nm',
+          editor: 'text',
+        },
+        {
+          header: '조치자명',
+          width: 40,
+          align: 'center',
+          name: 'dvlpe_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: '조치자명',
+          width: 80,
+          align: 'center',
+          name: 'dvlpe_no',
         },
         {
           header: 'PL명',
           width: 80,
           align: 'center',
-          name: 'pl_nm'
+          name: 'pl_nm',
+          editor: 'text',
+        },
+        {
+          header: 'PL명',
+          width: 40,
+          align: 'center',
+          name: 'pl_btn',
+          renderer: SearchBtn,
+        },
+        {
+          header: 'PL명',
+          width: 80,
+          align: 'center',
+          name: 'pl_no',
         },
         {
           header: '이관전업무',

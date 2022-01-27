@@ -83,8 +83,8 @@
               </select>
             </div>
           </li>
-          <div class="btn btn-filter-p" style = "margin-top: 5px">
-            <a href="#" @click="fnSearch">재조회</a>
+          <div class="btn btn-filter-p" style = "margin-top: 5px"  @click="fnSearch">
+            <a href="#">재조회</a>
           </div>
         </ul>
         <ul class="filter-btn">
@@ -246,11 +246,11 @@
                   <div class="btn btn-line-p">
                     <a href="#">다운로드</a>
                   </div>
-                  <div class="btn btn-filter-b" style = "margin-left: 20px">
-                    <a href="#" @click="fnClear">공지추가</a>
+                  <div class="btn btn-filter-b" style = "margin-left: 20px" @click="fnClear">
+                    <a href="#" >공지추가</a>
                   </div>
-                  <div class="btn btn-filter-p">
-                    <a href="#" @click="fnSave">저장</a>
+                  <div class="btn btn-filter-p" @click="fnSave">
+                    <a href="#">저장</a>
                   </div>
                 </ul>
 
