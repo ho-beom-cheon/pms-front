@@ -701,6 +701,9 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     init() {
+      // 특정 열 비활성화
+      this.$refs.grid.invoke("disable");
+      this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
       // 조회 필터 초기화
@@ -1105,7 +1108,7 @@ export default {
       columnOptions: {
         resizable: true
       },
-      rowHeaders: ['checkbox', 'rowNum'],
+      rowHeaders: ['rowNum'],
       header: {
         height: 40
       },
@@ -1117,7 +1120,7 @@ export default {
           name: 'rgs_dis_cd',
           formatter: 'listItemText',
           editor: {
-            type: 'text',
+            type: 'select',
             options:{
               listItems: rgs_dis_cd
             }
@@ -1148,6 +1151,13 @@ export default {
           width: 110,
           align: 'left',
           name: 'req_dis_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: req_dis_cd
+            }
+          }
         },
         {
           header: '요청일자',
@@ -1167,6 +1177,13 @@ export default {
           width: 110,
           align: 'left',
           name: 'prc_step_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: prc_step_cd
+            }
+          }
         },
         {
           header: '조치업무명',
@@ -1213,13 +1230,28 @@ export default {
           width: 110,
           align: 'left',
           name: 'urgn_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: urgn_cd
+            }
+          }
         },
         {
           header: '영향도',
           width: 110,
           align: 'left',
           name: 'ifnc_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: ifnc_cd
+            }
+          }
         },
+
         {
           header: '등급',
           width: 110,
