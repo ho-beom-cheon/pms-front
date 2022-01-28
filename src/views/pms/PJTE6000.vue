@@ -62,12 +62,11 @@
                     <div class="input-searchWrap">신청자
                       <input type="text"
                              placeholder="직원명"
-                             id="id.pl_nm"
+                             v-model="info.reqpe_nm"
                              style="width: 90px"
                       >
                       <button class="search-btn"
-                              id="btn.pl"
-                              @click="open_pjte9001"
+                              @click="open_pjte9001(1)"
                       ></button>
                     </div>
                   </li>
@@ -75,7 +74,6 @@
                     <input type="text"
                            placeholder="직원번호"
                            v-model="info.reqpe_no"
-                           id="id.pl_no"
                            style="width: 70px; background-color: #f2f2f2;"
                            :disabled = true
                     >
@@ -84,12 +82,11 @@
                     <div class="input-searchWrap">처리자
                       <input type="text"
                              placeholder="직원명"
-                             id="id.crpe_nm"
+                             v-model="info.prcpe_nm"
                              style="width: 90px"
                       >
                       <button class="search-btn"
-                              id="btn.crpe"
-                              @click="open_pjte9001"
+                              @click="open_pjte9001(2)"
                       ></button>
                     </div>
                   </li>
@@ -97,7 +94,6 @@
                     <input type="text"
                            placeholder="직원번호"
                            v-model="info.prcpe_no"
-                           id="id.crpe_no"
                            style="width: 70px; background-color: #f2f2f2;"
                            :disabled = true
                     >
@@ -176,6 +172,17 @@ import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import combo from '@/components/Combo';
 
+window.empData = (empnm, empno, btn_id) => {
+  //
+  if(btn_id === '1'){
+    window.pms_manage.info.reqpe_nm = empnm
+    window.pms_manage.info.reqpe_no = empno
+  }else{
+    window.pms_manage.info.prcpe_nm = empnm
+    window.pms_manage.info.prcpe_no = empno
+  }
+}
+
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
 var prjt_id  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
@@ -239,6 +246,7 @@ export default {
 	},
 	mounted() {
     this.fnSearch();
+    window.pms_manage = this;
 		console.log("mounted");
 	},
 	beforeUpdate() {
@@ -263,9 +271,8 @@ export default {
 	},
 	// 일반적인 함수를 선언하는 부분 
 	methods: {
-    open_pjte9001(event) {
-      const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    open_pjte9001(btn_id) {
+      this.pop = window.open(`../PJTE9001/?btn_id=${btn_id}`,"open_pjte9001", "width=700, height=600");
     },
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
@@ -360,8 +367,10 @@ export default {
       comboList : ["C27","C0","C1","C10","C11"],
 				info : {
 
-          reqpe_no    : this.reqpe_no,    // 신청자
-          prcpe_no    : this.prcpe_no,    	// 처리자
+          reqpe_nm    : this.reqpe_nm,    // 신청자
+          reqpe_no    : this.reqpe_no,    // 신청자 번호
+          prcpe_nm    : this.prcpe_nm,    	// 처리자
+          prcpe_no    : this.prcpe_no,    	// 처리자 번호
           req_txt     : this.req_txt,//신청내용
 					// prjt_id     : prjt_id,    		// 프로젝트명
 					// bzcd        : bzcd,    		  	// 업무구분
