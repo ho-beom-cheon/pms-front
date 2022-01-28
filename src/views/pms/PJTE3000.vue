@@ -366,14 +366,13 @@ export default {
     /*그리드 더블클릭 이벤트*/
     dblonClick(ev) {
       this.curRow = ev.rowKey;
-      // 컬럼명이 테스트케이스ID(프로그램ID) / 테스트케이스명(프로그램명) 일 때 결함팝업 호출
-      if(ev.columnName === 'cctn_id' || ev.columnName === 'cctn_nm') {
-        let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id');
-        let bkup_id='0000000000';
-        let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');
-        let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm');
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
-      }
+      // 그리드 ROW 더블클릭 시 결함팝업 호출
+      let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id');
+      let bkup_id='0000000000';
+      let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');
+      let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm');
+      this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+
     },
 
     fnSearch() {

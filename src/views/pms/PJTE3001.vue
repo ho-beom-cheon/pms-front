@@ -1,226 +1,233 @@
 <template>
-<!--  -->
-    <section class="popup">
-        <div class="pop-header">
-            <h1>결함상세관리</h1>
-        </div>
-        <div class="pop-body">
-            <table>
-                <colgroup>
-                    <col width="140px">
-                    <col width="*">
-                    <col width="140px">
-                    <col width="*">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>프로그램/ 테스트케이스ID</th>
-                        <td colspan="2">
-                            <input type="text" v-model="cctn_id" :disabled= true style="width: calc(100%); float:left; background-color: #f2f2f2;">
-                        </td>
-                        <th>프로그램/테스트케이스명</th>
-                        <td colspan="2">
-                            <input type="text" v-model="cctn_nm" :disabled= true style="background-color: #f2f2f2;">
-                        </td>
-                    </tr>
-                    <tr>
-                      <th>결함등록자</th>
-                      <td>
-                        <input type="text" v-model="rgpe_nm" :disabled= true style="width: 73px; background-color: #f2f2f2;">
-                        <input type="text" v-model="rgpe_no" :disabled= true style="width: 73px; background-color: #f2f2f2;">
-                      </td>
-                      <th>결함등록일자</th>
-                      <td>
-                        <div class="input-dateWrap">
-                          <input type="date" v-model="rgs_dt" :disabled= true style="background-color: #f2f2f2;">
-                        </div>
-                      </td>
-                      <th>　　결함ID</th>
-                      <td>
-                        <input type="text" v-model="mng_id" placeholder="입력불가" :disabled= true style="background-color: #f2f2f2;">
-                      </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr>
-            <h2>
-                결함내역
-            </h2>
-            <table>
-                <colgroup>
-                    <col width="140px">
-                    <col width="*">
-                    <col width="140px">
-                    <col width="*">
-                </colgroup>
-                <tbody>
-                    <tr>
-                      <th>결함유형</th>
-                      <td colspan="2">
-                        <select ref="err_tycd" v-model="err_tycd_selected">
-                          <option
-                              v-for   = "(err_tycd,idx) in err_tycd"
-                              :key    ="idx"
-                              v-text  ="err_tycd.text"
-                              :value  ="err_tycd.value"
-                          ></option>
-                        </select>
-                      </td>
-                      <th>등록단계</th>
-                      <td colspan="2">
-                        <select ref="rgs_dscd" v-model="rgs_dscd_selected" disabled = true  style="background-color: #f2f2f2;" >
-                          <option
-                              v-for   = "(rgs_dscd,idx) in rgs_dscd"
-                              :key    ="idx"
-                              v-text  ="rgs_dscd.text"
-                              :value  ="rgs_dscd.value"
-                          ></option>
-                        </select>
-                      </td>
-                    </tr>
-                    <tr v-if="mng_id">
-                        <th>
-                            결함내용
-                        </th>
-                        <td colspan="5">
-                            <textarea cols="30" rows="10" v-model="err_txt" disabled = true  style="background-color: #f2f2f2;"></textarea>
-                        </td>
-                    </tr>
-                    <tr v-else>
-                      <th>
-                        결함내용
-                      </th>
-                      <td colspan="5">
-                        <textarea cols="30" rows="10" v-model="err_txt" placeholder="결함내용을 입력해주세요"></textarea>
-                      </td>
-                    </tr>
-                    <tr v-if="mng_id">
-                      <th>첨부파일</th>
-                      <td colspan="4">
-                        <input type="text" :disabled=true v-model="rgs_atfl_nm" style="background-color: #f2f2f2;">
-                      </td>
-                      <th>
-                        <button class="btn btn-filter-p" @click="open_file_page(1)">첨부</button>
-                      </th>
-                    </tr>
-                    <tr v-else>
-                      <th>첨부파일</th>
-                      <td colspan="4">
-                        <span>첨부파일등록은 저장 후 가능합니다.</span>
+  <!--  -->
+  <section class="popup">
+    <div class="pop-header">
+      <h1>결함상세관리</h1>
+    </div>
+    <div class="pop-body">
+      <table>
+        <colgroup>
+          <col width="140px">
+          <col width="*">
+          <col width="140px">
+          <col width="*">
+        </colgroup>
+        <tbody>
+        <tr>
+          <th>프로그램/ 테스트케이스ID</th>
+          <td colspan="2">
+            <input type="text" v-model="cctn_id" :disabled= true style="width: calc(100%); float:left; background-color: #f2f2f2;">
+          </td>
+          <th>프로그램/테스트케이스명</th>
+          <td colspan="2">
+            <input type="text" v-model="cctn_nm" :disabled= true style="background-color: #f2f2f2;">
+          </td>
+        </tr>
+        <tr>
+          <th>결함등록자</th>
+          <td>
+            <input type="text" v-model="rgpe_nm" :disabled= true style="width: 73px; background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_no" :disabled= true style="width: 73px; background-color: #f2f2f2;">
+          </td>
+          <th>결함등록일자</th>
+          <td>
+            <div class="input-dateWrap">
+              <input type="date" v-model="rgs_dt" :disabled= true style="background-color: #f2f2f2;">
+            </div>
+          </td>
+          <th>　　결함ID</th>
+          <td>
+            <input type="text" v-model="mng_id" placeholder="입력불가" :disabled= true style="background-color: #f2f2f2;">
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <hr>
+      <h2>
+        결함내역
+      </h2>
+      <table>
+        <colgroup>
+          <col width="140px">
+          <col width="*">
+          <col width="140px">
+          <col width="*">
+        </colgroup>
+        <tbody>
+        <tr>
+          <th>결함유형</th>
+          <td colspan="2">
+            <select ref="err_tycd" v-model="err_tycd_selected">
+              <option
+                  v-for   = "(err_tycd,idx) in err_tycd"
+                  :key    ="idx"
+                  v-text  ="err_tycd.text"
+                  :value  ="err_tycd.value"
+              ></option>
+            </select>
+          </td>
+          <th>등록단계</th>
+          <td colspan="2">
+            <select ref="rgs_dscd" v-model="rgs_dscd_selected" disabled = true  style="background-color: #f2f2f2;" >
+              <option
+                  v-for   = "(rgs_dscd,idx) in rgs_dscd"
+                  :key    ="idx"
+                  v-text  ="rgs_dscd.text"
+                  :value  ="rgs_dscd.value"
+              ></option>
+            </select>
+          </td>
+        </tr>
+        <tr v-if="mng_id">
+          <th>
+            결함내용
+          </th>
+          <td colspan="5">
+            <textarea cols="30" rows="10" v-model="err_txt" disabled = true  style="background-color: #f2f2f2;"></textarea>
+          </td>
+        </tr>
+        <tr v-else>
+          <th>
+            결함내용
+          </th>
+          <td colspan="5">
+            <textarea cols="30" rows="10" v-model="err_txt" placeholder="결함내용을 입력해주세요"></textarea>
+          </td>
+        </tr>
+        <tr v-if="mng_id">
+          <th>첨부파일</th>
+          <td colspan="4">
+            <input type="text" :disabled=true v-model="rgs_atfl_nm" style="background-color: #f2f2f2;">
+          </td>
+          <th>
+            <button class="btn btn-filter-p" @click="open_file_page(1)">첨부</button>
+          </th>
+        </tr>
+        <tr v-else>
+          <th>첨부파일</th>
+          <td colspan="4">
+            <span>첨부파일등록은 저장 후 가능합니다.</span>
 
-                      </td>
-                    </tr>
-                </tbody>
-            </table>
-            <hr>
-            <table>
-                <colgroup>
-                    <col width="140px">
-                    <col width="*">
-                    <col width="140px">
-                    <col width="*">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>업무</th>
-                        <td>
-                          <select ref="bzcd" v-model="bzcd_selected">
-                            <option
-                                v-for   = "(bzcd,idx) in bzcd"
-                                :key    ="idx"
-                                v-text  ="bzcd.text"
-                                :value  ="bzcd.value"
-                            ></option>
-                          </select>
-                        </td>
-                        <th>처리상태</th>
-                        <td>
-                          <select ref="err_prc_step_cd" v-model="err_prc_step_cd_selected">
-                            <option
-                                v-for   = "(err_prc_step_cd,idx) in err_prc_step_cd"
-                                :key    ="idx"
-                                v-text  ="err_prc_step_cd.text"
-                                :value  ="err_prc_step_cd.value"
-                            ></option>
-                          </select>
-                        </td>
-                        <th>　　조치예정일자</th>
-                        <td>
-                          <div class="input-dateWrap">
-                            <input type="date" v-model="ttmn_scd_dt">
-                          </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                          조치담당자
-                        </th>
-                        <td>
-                          <div class="input-searchWrap">
-                            <input type="text" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" disabled >
-                            <button class="search-btn2" onclick="alert('open : search-modal')"></button>
-                            <input type="text" v-model="dvlpe_no"  placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled >
-                          </div>
-                        </td>
-                        <th>
-                            업무PL
-                        </th>
-                        <td>
-                            <div class="input-searchWrap">
-                              <input type="text" v-model="pl_nm" placeholder="직원명" style="width: 92px;" disabled >
-                              <button class="search-btn2" onclick="alert('open : search-modal')"></button>
-                              <input type="text" v-model="pl_no"  placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled >
-                            </div>
-                        </td>
-                        <th>　　조치일자</th>
-                        <td>
-                          <div class="input-dateWrap">
-                            <input type="date" v-model="ttmn_dt">
-                          </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            조치내용
-                        </th>
-                        <td colspan="5">
-                            <textarea cols="30" rows="10" placeholder="조치내용을 입력해주세요"  v-model="ttmn_txt"></textarea>
-                        </td>
-                    </tr>
-                    <tr v-if="mng_id">
-                      <th>첨부파일</th>
-                      <td colspan="4">
-                        <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="background-color: #f2f2f2;">
-                      </td>
-                      <th>
-                        <button class="btn btn-filter-p" @click="open_file_page(2)">첨부</button>
-                      </th>
-                    </tr>
-                    <tr v-else>
-                      <th>첨부파일</th>
-                      <td colspan="4">
-                        <span>첨부파일등록은 저장 후 가능합니다.</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <hr>
+      <table>
+        <colgroup>
+          <col width="140px">
+          <col width="*">
+          <col width="140px">
+          <col width="*">
+        </colgroup>
+        <tbody>
+        <tr>
+          <th>업무</th>
+          <td>
+            <select ref="bzcd" v-model="bzcd_selected">
+              <option
+                  v-for   = "(bzcd,idx) in bzcd"
+                  :key    ="idx"
+                  v-text  ="bzcd.text"
+                  :value  ="bzcd.value"
+              ></option>
+            </select>
+          </td>
+          <th>처리상태</th>
+          <td>
+            <select ref="err_prc_step_cd" v-model="err_prc_step_cd_selected">
+              <option
+                  v-for   = "(err_prc_step_cd,idx) in err_prc_step_cd"
+                  :key    ="idx"
+                  v-text  ="err_prc_step_cd.text"
+                  :value  ="err_prc_step_cd.value"
+              ></option>
+            </select>
+          </td>
+          <th>　　조치예정일자</th>
+          <td>
+            <div class="input-dateWrap">
+              <input type="date" v-model="ttmn_scd_dt">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            조치담당자
+          </th>
+          <td>
+            <div class="input-searchWrap">
+              <input type="text" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
+              <button class="search-btn2" @click="open_pjte9001(1)"></button>
+              <input type="text" v-model="dvlpe_no"  placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
+            </div>
+          </td>
+          <th>
+            업무PL
+          </th>
+          <td>
+            <div class="input-searchWrap">
+              <input type="text" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
+              <button class="search-btn2" @click="open_pjte9001(2)"></button>
+              <input type="text" v-model="pl_no"  placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
+            </div>
+          </td>
+          <th>　　조치일자</th>
+          <td>
+            <div class="input-dateWrap">
+              <input type="date" v-model="ttmn_dt">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            조치내용
+          </th>
+          <td colspan="5">
+            <textarea cols="30" rows="10" placeholder="조치내용을 입력해주세요"  v-model="ttmn_txt"></textarea>
+          </td>
+        </tr>
+        <tr v-if="mng_id">
+          <th>첨부파일</th>
+          <td colspan="4">
+            <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="background-color: #f2f2f2;">
+          </td>
+          <th>
+            <button class="btn btn-filter-p" @click="open_file_page(2)">첨부</button>
+          </th>
+        </tr>
+        <tr v-else>
+          <th>첨부파일</th>
+          <td colspan="4">
+            <span>첨부파일등록은 저장 후 가능합니다.</span>
 
-                      </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pop-footer">
-            <button class="btn btn-filter-b" @click="close">닫기</button>
-            <button class="btn btn-filter-p" @click="updateRegisterData" v-if="mng_id">저장</button>
-            <button class="btn btn-filter-p" @click="saveRegisterData" v-else>저장</button>
-        </div>
-    </section>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pop-footer">
+      <button class="btn btn-filter-b" @click="close">닫기</button>
+      <button class="btn btn-filter-p" @click="updateRegisterData" v-if="mng_id">저장</button>
+      <button class="btn btn-filter-p" @click="saveRegisterData" v-else>저장</button>
+    </div>
+  </section>
 </template>
 <script>
 
 import {axiosService} from "@/api/http";
 
+// 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
   console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
   window.pms_register.atfl_num = num
+}
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id) => {
+  window.pms_register.emp_nm = empnm;
+  window.pms_register.emp_no = empno;
+  window.pms_register.emp_btn_id = btn_id;
 }
 
 export default {
@@ -466,7 +473,39 @@ export default {
               window.close();
             }
           })
-    }
+    },
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      if (btn_id == '1') {
+        empnm = this.dvlpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.pl_nm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.dvlpe_no = res.data.data.contents[0].empno
+                } else if (btn_id == '2') {
+                  this.pl_no = res.data.data.contents[0].empno
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
 
 
   },
@@ -477,6 +516,17 @@ export default {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
       console.log("old Value :: " + b);
+    },
+    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
+       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
+    emp_btn_id() {
+      if(this.emp_btn_id == '1'){       // 요청자
+        this.dvlpe_no = this.emp_no
+        this.dvlpe_nm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 조치담당자
+        this.pl_no = this.emp_no
+        this.pl_nm = this.emp_nm
+      }
     },
     file_name_list() {
       // 1. 첨부파일 1개만 보여줄 때
@@ -506,6 +556,14 @@ export default {
 // 변수 선언부분
   data() {
     return {
+
+      /*직원조회 팝업 변수*/
+      emp_btn_id : '',  // 직원조회팝업 버튼ID
+      emp_nm : '',      // 직원조회팝업 직원명
+      emp_no : '',      // 직원조회팝업 직원번호
+      // emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
+      // emp_colName : '',  // 직원조회팝업 (그리드) colName
+
       // bkup_id : '0000000000',   // 백업ID
       // prjt_id : '1000000001',   // 프로젝트 ID
       // mng_id : 'E100000000',     // 결함 ID
