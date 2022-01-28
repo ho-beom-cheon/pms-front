@@ -54,42 +54,13 @@
               <div class="div1-1-c">
                 <section class="filter">
                   <ul class="filter-con clear-fix">
-                    <li class="filter-item">
-                      <div class="item-con">프로젝트명
-                        <select
-                            id="id.bkup_id"
-                            v-model="info.bkup_id_selected"
-                            style="width: 167px"
-                            :disabled = true
-                        >
-                          <option
-                              v-for="(bkup_id, idx) in info.bkup_id"
-                              :key="idx"
-                              v-text="bkup_id.text"
-                              :value="bkup_id.value"
-                          ></option>
-                        </select>
-                      </div>
-                    </li>
-                    <li class="filter-item">
-                      <div class="item-con">프로젝트명
-                        <select
-                            id="id.prjt_id"
-                            v-model="info.prjt_id_selected"
-                            style="width: 167px"
-                            :disabled = true
-                        >
-                          <option
-                              v-for="(prjt_id, idx) in info.prjt_id"
-                              :key="idx"
-                              v-text="prjt_id.text"
-                              :value="prjt_id.value"
-                          ></option>
-                        </select>
-                      </div>
-                    </li>
+                    <combo
+                        :comboArray = "this.comboList"
+                        @bkup_id_change="bkup_id_change"
+                        @prjt_nm_chage="prjt_nm_chage"
+                    ></combo>
                     <div class="btn btn-filter-p" style = "margin-top: 5px">
-                      <a href="#" @click="fnSearch">재조회</a>
+                      <a href="#" >테이블백업</a>
                     </div>
                   </ul>
                 </section>
@@ -103,16 +74,16 @@
                     <a href="#" @click="gridExcelExport">엑셀다운로드</a>
                   </div>
                   <div class="btn btn-filter-b" style = "margin-left: 20px;">
-                    <a href="#" @click="gridAddRow" >행추가</a>
+                    <a href="#" @click="gridAddRow(1)" >행추가</a>
                   </div>
                   <div class="btn btn-filter-b">
-                    <a href="#" @click="gridDelRow">행삭제</a>
+                    <a href="#" @click="gridDelRow(1)">행삭제</a>
                   </div>
                   <div class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C">
-                    <a href="#" @click="fnSearch">로그인변경</a>
+                    <a href="#" @click="loginChange">로그인변경</a>
                   </div>
                   <div class="btn btn-filter-p" style = "margin-left: 20px">
-                    <a href="#" @click="fnSave">저장</a>
+                    <a href="#" @click="fnSave(1)">저장</a>
                   </div>
                 </ul>
               </div>
@@ -127,7 +98,7 @@
                       :showDummyRows="showDummyRows"
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
-                      @click="onClick"
+                      @click="onClick($event, 1)"
                   ></grid>
                 </div>
               </div>
@@ -140,8 +111,7 @@
                       <div class="item-con">신규생성년도
                         <input type="text"
                                placeholder="입력"
-                               v-model="info.empno"
-                               @keyup.enter="fnSearch"
+                               v-model="info.new_yyyy"
                                style   = "width: 150px;"
                         >
                       </div>
@@ -149,7 +119,7 @@
                   </ul>
                   <ul class="filter-btn">
                     <div class="btn btn-filter-p" style = "margin-bottom: 5px">
-                      <a href="#" @click="fnSearch">생성</a>
+                      <a href="#" @click="createNewYear">생성</a>
                     </div>
                   </ul>
                   <ul class="filter-con clear-fix">
@@ -157,8 +127,7 @@
                       <div class="item-con">조회년월일
                         <input type="text"
                                placeholder="입력"
-                               v-model="info.empno"
-                               @keyup.enter="fnSearch"
+                               v-model="info.sel_yyyymmdd"
                                style   = "width: 150px; margin-left: 11px"
                         >
                       </div>
@@ -166,26 +135,29 @@
                   </ul>
                   <ul class="filter-btn">
                     <div class="btn btn-filter-p" style = "margin-bottom: 5px">
-                      <a href="#" @click="fnSearch">조회</a>
+                      <a href="#" @click="dateSearch">조회</a>
                     </div>
                   </ul>
                 </section>
               <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridAddRow">행추가</a>
+                  <a href="#" @click="gridAddRow(4)">행추가</a>
                 </div>
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridDelRow">행삭제</a>
+                  <a href="#" @click="gridDelRow(4)">행삭제</a>
                 </div>
+<!--                <div class="btn btn-filter-p" style = "margin-left: 20px">-->
+<!--                  <a href="#" @click="fnSave(4)">저장</a>-->
+<!--                </div>-->
               </ul>
               </div>
               <div class="div2-2-c">
               <div class="div-grid-c">
                 <grid
-                    ref="grid1"
-                    :data="dataSource"
+                    ref="grid4"
+                    :data="dataSource4"
                     :header="header"
-                    :columns="columns2"
+                    :columns="columns4"
                     :bodyHeight="150"
                     :showDummyRows="showDummyRows"
                     :columnOptions="columnOptions"
@@ -200,51 +172,53 @@
             <div class="div-header-c"><h2>코드유형</h2>
                 <ul class="filter-btn">
                   <div class="btn btn-filter-b">
-                    <a href="#" @click="gridAddRow">행추가</a>
+                    <a href="#" @click="gridAddRow(2)">행추가</a>
                   </div>
                   <div class="btn btn-filter-b">
-                    <a href="#" @click="gridDelRow">행삭제</a>
+                    <a href="#" @click="gridDelRow(2)">행삭제</a>
                   </div>
                   <div class="btn btn-filter-p" style = "margin-left: 20px">
-                    <a href="#" @click="fnSave">저장</a>
+                    <a href="#" @click="fnSave(2)">저장</a>
                   </div>
                 </ul>
             </div>
             <div class="div-grid-c">
               <grid
                   ref="grid2"
-                  :data="dataSource"
+                  :data="dataSource2"
                   :header="header"
-                  :columns="columns3"
+                  :columns="columns2"
                   :bodyHeight="235"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
                   :rowHeaders="rowHeaders"
-                  @click="onClick"
+                  @click="onClick($event, 2)"
               ></grid>
             </div>
           </div>
           <div class="div4-c">
-            <div class="div-header-c"><h2>코드상세</h2>
+            <div class="div-header-c">
+              <h2 v-if="grp_tymm">{{ grp_tymm }}</h2>
+              <h2 v-else>코드상세</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridAddRow">행추가</a>
+                  <a href="#" @click="gridAddRow(3)">행추가</a>
                 </div>
                 <div class="btn btn-filter-b">
-                  <a href="#" @click="gridDelRow">행삭제</a>
+                  <a href="#" @click="gridDelRow(3)">행삭제</a>
                 </div>
                 <div class="btn btn-filter-p" style = "margin-left: 20px">
-                  <a href="#" @click="fnSave">저장</a>
+                  <a href="#" @click="fnSave(3)">저장</a>
                 </div>
               </ul>
             </div>
             <div class="div-grid-c">
               <grid
                   ref="grid3"
-                  :data="dataSource"
+                  :data="dataSource3"
                   :header="header"
-                  :columns="columns4"
+                  :columns="columns3"
                   :bodyHeight="bodyHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
@@ -267,7 +241,9 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
-import axios from 'axios';
+import {axiosService} from "@/api/http";
+import combo from '@/components/Combo';
+const storage = window.sessionStorage;
 
 //그리드 아이템 예제
 const listItem = [
@@ -276,56 +252,12 @@ const listItem = [
     {text:"이관", value:"3"}
 ];
 
-// 파일등록구분
-const file_rgs_dscd = [
-  {text:"단위테스트증빙", value:'100'},
-  {text:"설계서", value:'101'},
-  {text:"통합테스트증빙", value:"200"},
-  {text:"통합테스트양식", value:"201"},
-  {text:"결함오류파일", value:"300"},
-  {text:"결함조치파일", value:"400"},
-  {text:"신청요청파일", value:"500"},
-  {text:"공지사항파일", value:"600"},
-  {text:"WBS관리파일", value:"700"},
-  {text:"업로드약식", value:"900"},
-];
-
-// 프로젝트ID
-const prjt_id = [
-  {text: "전체", value: "999"},
-  {text: "PMS프로젝트", value: "1000000001"},
-  {text: "PMS프로젝트2", value: "1000000001"},
-  {text: "PMS프로젝트3", value: "1000000001"}
-];
-
-// 업무구분
-const bzcd = [
-  {text: "전체", value: '999'},
-  {text: "신용", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
-];
-
-// 사용자권한
-const aut_cd = [
-  {text: "전체", value: '999'},
-  {text: "개발자", value: '100'},
-  {text: "PL", value: "200"},
-  {text: "IT", value: "300"},
-  {text: "현업", value: "400"},
-  {text: "PM", value: "500"},
-  {text: "PMO", value: "600"},
-];
-
-var file_rgs_dscd_selected;
-var prjt_id_selected;
-var bzcd_selected;
-var aut_cd_selected;
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
+    combo
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -343,8 +275,9 @@ export default {
   beforeMount() {
     console.log("beforeMount");
   },
-  mounted() {
-    console.log("mounted");
+  async mounted() {
+    await this.fnSearch();
+    await this.fnSearchCode();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -368,36 +301,519 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    loginChange() {
+      if(confirm("로그인변경시 저장하지 않은 수정데이터는 저장되지 않습니다.")){
+        this.sessionClear();
+        axiosService.post("/user/signin", {
+          userId: this.changeUserId,
+          password: this.changeUserPassword,
+          pjt_selected: this.changeUserPrjtId,
+        })
+            .then(res => {
+              if (res.data.status) {
+                this.message = res.data.data[0].empnm + "로 로그인 되었습니다.";
+
+                // this.setInfo(
+                //     "성공",
+                //     res.data.auth_token,
+                //     JSON.stringify(res.data.data)
+                // );
+                if (res.data.data[0].login_yn === "Y") {
+
+
+                  /* 세션 스토리지 값 저장 */
+                  storage.setItem("jwt-auth-token", res.data.auth_token);       // 인증토큰
+                  storage.setItem("LOGIN_EMP_NO", res.data.data[0].empno);             // 직원번호
+                  storage.setItem("LOGIN_EMP_NM", res.data.data[0].empnm);             // 직원명
+                  storage.setItem("LOGIN_PROJ_ID", res.data.data[0].prjt_id);         // 프로젝트ID
+                  storage.setItem("LOGIN_BZCD", res.data.data[0].bzcd);               // 업무구분
+                  storage.setItem("LOGIN_CATN_DCD", res.data.data[0].catn_dcd);       // 구성원 구분코드
+                  storage.setItem("LOGIN_AUT_CD", res.data.data[0].aut_cd);           // 권한ID
+                  storage.setItem("LOGIN_YN", res.data.data[0].login_yn);       // 로그인상태
+
+                  window.location.reload()
+
+                } else if (res.data.data[0].login_yn === 'N') {
+                  alert("비밀번호가 틀렸습니다.")
+                }
+              } else {
+                this.setInfo("", "", "");
+                alert("입력 정보를 확인하세요.");
+              }
+            })
+            .catch(e => {
+              alert("사용자가 없습니다.");
+              console.log(e)
+              // this.setInfo("실패", "", JSON.stringify(e.response || e.message));
+            });
+      }
+
+    },
+    /* 세션 초기화 */
+    sessionClear() {
+      storage.setItem("jwt-auth-token", "");          // 인증토큰
+      storage.setItem("LOGIN_EMP_NO", "");            // 직원번호
+      storage.setItem("LOGIN_EMP_NM", "");            // 직원명
+      storage.setItem("LOGIN_PROJ_ID", "");           // 프로젝트ID
+      storage.setItem("LOGIN_BZCD", "");              // 업무구분
+      storage.setItem("LOGIN_CATN_DCD", "");          // 구성원 구분코드
+      storage.setItem("LOGIN_AUT_CD", "");            // 권한ID
+      storage.setItem("LOGIN_YN", "");                // 로그인상태
+    },
+    createNewYear() {
+      if(this.info.new_yyyy == null || this.info.new_yyyy === undefined || this.info.new_yyyy === ''){
+        alert("신규생성년도의 값이 없습니다.")
+        return false;
+      }
+      let currentYear = new Date();
+      if(this.info.new_yyyy*1 <= currentYear.getFullYear()){
+        alert(`신규생성년도는 현재 해(${currentYear.getFullYear()}년) 보다 작거나 같을 수 없습니다.`)
+      }else{
+        try {
+          axiosService.post('/PJTE9000/create4', {
+            prjt_id : this.info.prjt_nm_selected,
+            new_yyyy : this.info.new_yyyy
+          })
+              .then(res => {
+                console.log(res.data)
+                alert("생성이 완료되었습니다.")
+              })
+          this.info.sel_yyyymmdd = this.info.new_yyyy;
+          this.$refs.grid4.invoke("setRequestParams", this.info);
+          this.$refs.grid4.invoke("reloadData");
+
+        }catch (e){
+          console.log(e)
+        }
+      }
+
+    },
+    dateSearch() {
+      this.$refs.grid4.invoke("setRequestParams", this.info);
+      this.$refs.grid4.invoke("readData");
+    },
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+    },
     change(){
       console.log("change");
     },
-    fnSave(){
-      debugger;
-      this.$refs.grid1.invoke("modifyData");
-      console.log("modify");
+    fnSave(grid_num){
+      // debugger;
+      let grid_arr = [];
+      let check = true;
+
+
+
+      // 그리드 1 저장
+      if(grid_num === 1){
+        // 데이터 로그 확인
+        console.log("updatedRows ::" ,this.$refs.grid1.invoke("getModifiedRows").updatedRows);
+        console.log("createdRows ::" ,this.$refs.grid1.invoke("getModifiedRows").createdRows);
+        console.log("deletedRows ::" ,this.$refs.grid1.invoke("getModifiedRows").deletedRows);
+
+
+        // 변경 데이터 저장
+        this.updatedRows = this.$refs.grid1.invoke("getModifiedRows").updatedRows;
+        this.deletedRows = this.$refs.grid1.invoke("getModifiedRows").deletedRows;
+        this.createdRows = this.$refs.grid1.invoke("getModifiedRows").createdRows;
+
+        // grid_arr = this.$refs.grid1.invoke("getData")
+        // for(let i = 0; i<grid_arr.length; i++){
+        //   // 프로젝트 ID 값 체크
+        //   if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id==='' || grid_arr[i].prjt_id === undefined){
+        //     alert(`${i+1}번째 행의 프로젝트ID 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //   // 직원번호 체크
+        //   if(grid_arr[i].empno == null || grid_arr[i].empno==='' || grid_arr[i].empno === undefined){
+        //     alert(`${i+1}번째 행 직원번호 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //   // 직원명 체크
+        //   if(grid_arr[i].empnm == null || grid_arr[i].empnm==='' || grid_arr[i].empnm === undefined){
+        //     alert(`${i+1}번째 행 직원명 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //   // 로그인 비밀번호 체크
+        //   if(grid_arr[i].lgn_pwd == null || grid_arr[i].lgn_pwd==='' || grid_arr[i].lgn_pwd === undefined){
+        //     alert(`${i+1}번째 행 로그인 비밀번호 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //   // 권한구분코드 체크
+        //   if(grid_arr[i].aut_cd == null || grid_arr[i].aut_cd==='' || grid_arr[i].aut_cd === undefined){
+        //     alert(`${i+1}번째 행 권한구분코드 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //   // IP 주소 체크
+        //   if(grid_arr[i].ip_addr == null || grid_arr[i].ip_addr==='' || grid_arr[i].ip_addr === undefined){
+        //     alert(`${i+1}번째 행 IP주소 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //   //계획투입시작일자 체크
+        //   if(grid_arr[i].plan_thw_stdt == null || grid_arr[i].plan_thw_stdt==='' || grid_arr[i].plan_thw_stdt === undefined){
+        //     alert(`${i+1}번째 행 계획투입시작일자 값이 없습니다.`);
+        //     check = false;
+        //     break;
+        //   }
+        //
+        // }
+
+        if(check){
+          if(this.createdRows.length != 0){
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.createdRows));
+              // create api 요청
+              this.createDataUrl = process.env.VUE_APP_API + '/PJTE9000/create'
+                  this.$refs.grid1.invoke("request", "createData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+              this.info.grid_num = 1;
+              this.$refs.grid1.invoke("setRequestParams", this.info);
+              this.$refs.grid1.invoke("reloadData");
+            } catch (e){
+              console.log(e);
+            }
+          }
+
+          if(this.updatedRows.length != 0){
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+              // create api 요청
+              this.updateDataUrl = process.env.VUE_APP_API + '/PJTE9000/update'
+              this.$refs.grid1.invoke("request", "updateData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+              this.info.grid_num = 1;
+              this.$refs.grid1.invoke("setRequestParams", this.info);
+              this.$refs.grid1.invoke("reloadData");
+            } catch (e){
+              console.log(e);
+            }
+          }
+
+        }else{
+          return false;
+        }
+
+
+      }else if(grid_num === 2){       // 그리드 2 저장
+
+        // 데이터 로그 확인
+        console.log("updatedRows ::" ,this.$refs.grid2.invoke("getModifiedRows").updatedRows);
+        console.log("createdRows ::" ,this.$refs.grid2.invoke("getModifiedRows").createdRows);
+        console.log("deletedRows ::" ,this.$refs.grid2.invoke("getModifiedRows").deletedRows);
+
+        // 변경 데이터 저장
+        this.updatedRows2 = this.$refs.grid2.invoke("getModifiedRows").updatedRows;
+        this.deletedRows2 = this.$refs.grid2.invoke("getModifiedRows").deletedRows;
+        this.createdRows2 = this.$refs.grid2.invoke("getModifiedRows").createdRows;
+
+        // 필수항목 체크
+        grid_arr = this.$refs.grid2.invoke("getData")
+
+        // for(let i=0; i<grid_arr.length; i++){
+        //   // 프로젝트 ID 체크
+        //   if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id ==='' || grid_arr[i].prjt_id === undefined){
+        //     alert(`${i+1}번째 행 프로젝트 ID 값이 없습니다.`)
+        //     check = false
+        //     break;
+        //
+        //   }
+        //
+        //   // 그룹유형코드 체크
+        //   if(grid_arr[i].grp_tycd == null || grid_arr[i].grp_tycd ==='' || grid_arr[i].grp_tycd === undefined){
+        //     alert(`${i+1}번째 행 그룹유형코드 값이 없습니다.`)
+        //     check = false
+        //     break;
+        //
+        //   }
+        //
+        //   //그룹유형명 체크
+        //   if(grid_arr[i].grp_tymm == null || grid_arr[i].grp_tymm ==='' || grid_arr[i].grp_tymm === undefined){
+        //     alert(`${i+1}번째 행 그룹유형명 값이 없습니다.`)
+        //     check = false
+        //     break;
+        //
+        //   }
+        //
+        //   //정렬순서 체크
+        //   if(grid_arr[i].sort_seq == null || grid_arr[i].sort_seq ==='' || grid_arr[i].sort_seq === undefined){
+        //     alert(`${i+1}번째 행 정렬순서 값이 없습니다.`)
+        //     check = false
+        //     break;
+        //
+        //   }
+        //
+        //   //사용여부 체크
+        //   if(grid_arr[i].usg_yn == null || grid_arr[i].usg_yn ==='' || grid_arr[i].usg_yn === undefined){
+        //     alert(`${i+1}번째 행 사용여부 값이 없습니다.`)
+        //     check = false
+        //     break;
+        //
+        //   }
+        // }
+
+        // 필수값 체크 이상 없을 때 저장장
+        if(check){
+          if(this.createdRows2.length != 0){
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.createdRows));
+              // create api 요청
+              this.$refs.grid2.invoke("request", "createData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+              this.info.grid_num = 2;
+              this.$refs.grid2.invoke("setRequestParams", this.info);
+              this.$refs.grid2.invoke("reloadData");
+            } catch (e){
+              console.log(e);
+            }
+          }
+
+          if(this.updatedRows2.length != 0){
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+              // update api 요청
+              this.$refs.grid2.invoke("request", "updateData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+              this.info.grid_num = 2;
+              this.$refs.grid2.invoke("setRequestParams", this.info);
+              this.$refs.grid2.invoke("reloadData");
+            } catch (e){
+              console.log(e);
+            }
+          }
+
+        }else{
+          return false;
+        }
+
+
+      }else if(grid_num === 3){
+        // 데이터 로그 확인
+        console.log("updatedRows ::" ,this.$refs.grid3.invoke("getModifiedRows").updatedRows);
+        console.log("createdRows ::" ,this.$refs.grid3.invoke("getModifiedRows").createdRows);
+        console.log("deletedRows ::" ,this.$refs.grid3.invoke("getModifiedRows").deletedRows);
+
+        // 변경 데이터 저장
+        this.updatedRows3 = this.$refs.grid3.invoke("getModifiedRows").updatedRows;
+        this.deletedRows3 = this.$refs.grid3.invoke("getModifiedRows").deletedRows;
+        this.createdRows3 = this.$refs.grid3.invoke("getModifiedRows").createdRows;
+
+        // 필수항목 체크
+        grid_arr = this.$refs.grid3.invoke("getData")
+
+        for(let i=0; i<grid_arr.length; i++){
+          // 프로젝트 ID 체크
+          if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id ==='' || grid_arr[i].prjt_id === undefined){
+            alert(`${i+1}번째 행 프로젝트 ID 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          // 그룹유형코드 체크
+          if(grid_arr[i].grp_tycd == null || grid_arr[i].grp_tycd ==='' || grid_arr[i].grp_tycd === undefined){
+            alert(`${i+1}번째 행 그룹유형코드 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //세부유형코드 체크
+          if(grid_arr[i].dtls_tycd == null || grid_arr[i].dtls_tycd ==='' || grid_arr[i].dtls_tycd === undefined){
+            alert(`${i+1}번째 행 세부유형코드 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //세부유형명 체크
+          if(grid_arr[i].dtls_tynm == null || grid_arr[i].dtls_tynm ==='' || grid_arr[i].dtls_tynm === undefined){
+            alert(`${i+1}번째 행 세부유형명 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //정렬순서 체크
+          if(grid_arr[i].sort_seq == null || grid_arr[i].sort_seq ==='' || grid_arr[i].sort_seq === undefined){
+            alert(`${i+1}번째 행 정렬순서 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //사용여부 체크
+          if(grid_arr[i].use_yn == null || grid_arr[i].use_yn ==='' || grid_arr[i].use_yn === undefined){
+            alert(`${i+1}번째 행 사용여부 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+        }
+
+
+        // 필수값 체크 이상 없을 때 저장장
+        if(check){
+          if(this.createdRows3.length == 0 && this.updatedRows3.length == 0 && this.deletedRows3.length == 0){
+            alert('변경된 정보가 없습니다')
+            return false;
+          }else{
+            try {
+              // this.$refs.grid3.invoke("setRequestParams", JSON.stringify(grid_arr));
+              // this.$refs.grid3.invoke("request", "createData", {showConfirm: false});
+              axiosService.post('/PJTE9000/create3', {
+                rowDatas : grid_arr
+              })
+              .then(res => {
+                console.log(res)
+              })
+              alert("저장이 완료되었습니다.")
+              this.info.grid_num = 3;
+              this.$refs.grid3.invoke("setRequestParams", this.info);
+              this.$refs.grid3.invoke("reloadData");
+
+            }catch (e){
+              console.log(e)
+            }
+
+          }
+
+        }else{
+          return false;
+        }
+
+      }else if(grid_num === 4){
+        // 데이터 로그 확인
+        console.log("updatedRows ::" ,this.$refs.grid4.invoke("getModifiedRows").updatedRows);
+        console.log("createdRows ::" ,this.$refs.grid4.invoke("getModifiedRows").createdRows);
+        console.log("deletedRows ::" ,this.$refs.grid4.invoke("getModifiedRows").deletedRows);
+
+        // 변경 데이터 저장
+        this.updatedRows4 = this.$refs.grid4.invoke("getModifiedRows").updatedRows;
+        this.deletedRows4 = this.$refs.grid4.invoke("getModifiedRows").deletedRows;
+        this.createdRows4 = this.$refs.grid4.invoke("getModifiedRows").createdRows;
+
+        // 필수항목 체크
+        grid_arr = this.$refs.grid4.invoke("getData")
+        if(this.info.sel_yyyymmdd == null || this.info.sel_yyyymmdd === undefined || this.info.sel_yyyymmdd === ''){
+          alert("조회년월일의 값이 없습니다.");
+          check = false;
+        }
+
+        // 필수값 체크 이상 없을 때 저장장
+        if(check){
+          if(this.createdRows4.length == 0 && this.updatedRows4.length == 0 && this.deletedRows4.length == 0){
+            alert('변경된 정보가 없습니다')
+            return false;
+          }else{
+            try {
+              axiosService.post('/PJTE9000/update4', {
+                rowDatas : grid_arr,
+                sel_yyyymmdd : this.info.sel_yyyymmdd
+              })
+              .then(res => {
+                console.log(res.data)
+                alert("저장이 완료되었습니다.")
+              })
+
+              this.$refs.grid4.invoke("setRequestParams", this.info);
+              this.$refs.grid4.invoke("reloadData");
+
+            }catch (e){
+              console.log(e)
+            }
+
+          }
+
+        }else{
+          return false;
+        }
+      }
+
+
+      console.log(check)
+      // this.$refs.grid1.invoke("modifyData");
+      // console.log("modify");
     },
-    onClick(ev) {
+    onClick(ev, grid_num) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+      // 그리드 1 클릭시 로그인 변경 위한 데이터 셋팅
+      if(grid_num === 1){
+        let grid_arr = this.$refs.grid1.invoke("getData")
+        this.changeUserId = grid_arr[this.curRow].empno
+        this.changeUserPassword = grid_arr[this.curRow].lgn_pwd
+        this.changeUserPrjtId = grid_arr[this.curRow].prjt_id
+      }
+      // 그리드 2 클릭 시 그리드 3 변화
+      if(grid_num === 2){
+        let grid_arr = this.$refs.grid2.invoke("getData")
+        this.grp_tymm = grid_arr[this.curRow].grp_tymm
+        this.info.grp_tycd = grid_arr[this.curRow].grp_tycd
+        this.info.grid_num = 3;
+        this.$refs.grid3.invoke("setRequestParams", this.info);
+        this.$refs.grid3.invoke("readData");
+      }
     },
     fnSearch(){
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
     },
     fnSearchCode(){
+      this.info.grid_num = 2;
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
+
+      this.info.grid_num = 3;
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
     },
     gridInit(){
       this.$refs.grid1.invoke("clear");
     },
-    gridAddRow(){
-      this.$refs.grid1.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0010", col5:"PMS구축"},{focus:true}) ;
+    gridAddRow(grid_num){
+      if(grid_num === 1){
+        this.$refs.grid1.invoke("appendRow",{ },{focus:true}) ;
+      }else if(grid_num === 2){
+        let grid_arr = this.$refs.grid2.invoke("getData")
+        this.$refs.grid2.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected, grp_tycd : grid_arr[grid_arr.length-1].grp_tycd*1+1 },{focus:true}) ;
+      }else if(grid_num === 3){
+        let grid_arr = this.$refs.grid3.invoke("getData")
+        if(grid_arr.length != 0){
+          this.$refs.grid3.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected, grp_tycd : grid_arr[grid_arr.length-1].grp_tycd },{focus:true}) ;
+        }else{
+          this.$refs.grid3.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected, grp_tycd : this.info.grp_tycd, bkup_id : this.info.bkup_id_selected },{focus:true}) ;
+        }
+      }else if(grid_num === 4){
+        this.$refs.grid4.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected },{focus:true}) ;
+      }
     },
-    gridDelRow(){
-      this.$refs.grid1.invoke("removeRow", this.curRow);
+    gridDelRow(grid_num){
+      if(grid_num === 1){
+        this.$refs.grid1.invoke("removeRow", this.curRow);
+      }else if(grid_num === 2){
+        this.$refs.grid2.invoke("removeRow", this.curRow);
+      }else if(grid_num === 3){
+        this.$refs.grid3.invoke("removeRow", this.curRow);
+      }else if(grid_num === 4){
+        this.$refs.grid4.invoke("removeRow", this.curRow);
+      }
 // DB 데이터 삭제로직 추가
     },
     gridADelRow(){
@@ -431,31 +847,19 @@ export default {
 // 변수 선언부분
   data() {
     return {
+      comboList : ["C27","C0"],
+      grp_tymm : '',
+      changeUserId : '',
+      changeUserPassword : '',
+      changeUserPrjtId : '',
       info : {
-        /* 사용자 조회 버튼 */
-        empno      : this.empno,    // 사번(직원번호)
-        empnm      : this.empnm,    // 이름(직원명)
-        lgn_pwd    : this.lgn_pwd,  // 비밀번호
-        ip_addr    : this.ip_addr,  // IP
-        cpno       : this.cpno,     // 핸드폰번호
-
-        prjt_id     : prjt_id,       // 프로젝트ID
-        bzcd        : bzcd,          // 업무구분
-        aut_cd      : aut_cd,        // 사용자권한
-
-        prjt_id_selected     : prjt_id[0].value,      // 프로젝트ID
-        bzcd_selected        : bzcd[0].value,         // 업무구분
-        aut_cd_selected      : aut_cd[0].value,       // 사용자권한
-
-      },
-      popinfo : {
-        /* PMS관리 - 파일구분, 팝업정보ID/경로/화면명 */
-        file_rgs_dscd : file_rgs_dscd, // 파일구분
-        file_rgs_dscd_selected : file_rgs_dscd[0].value, // 파일구분코드
-
-        scrn_id: this.scrn_id,    // 팝업정보ID
-        file_path: this.file_path,    // 파일경로
-        scrn_nm  : this.scrn_nm,  // 화면명
+        bkup_id_selected : '0000000000',
+        prjt_nm_selected : sessionStorage.getItem("LOGIN_PROJ_ID"),
+        grid_num: 1,
+        login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+        grp_tycd : '1000000001',
+        sel_yyyymmdd: '',
+        new_yyyy : '',
 
       },
 
@@ -537,9 +941,45 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: 'http://localhost:8080/PJTE9000/select', method: 'GET' },
+          readData: { url: process.env.VUE_APP_API + '/PJTE9000/select', method: 'GET' },
+          createData : { url: process.env.VUE_APP_API + '/PJTE9000/create1', method: 'POST'},
+          updateData : { url: process.env.VUE_APP_API + '/PJTE9000/update1' , method: 'PUT'},
         },
         initialRequest: false,
+        contentType: 'application/json;',
+        headers: {'x-custom-header': 'custom-header'},
+        withCredentials: false
+      },
+      dataSource2: {
+        api: {
+          readData: { url: process.env.VUE_APP_API + '/PJTE9000/select', method: 'GET' },
+          createData : { url: process.env.VUE_APP_API + '/PJTE9000/create2', method: 'POST'},
+          updateData : { url: process.env.VUE_APP_API + '/PJTE9000/update2' , method: 'PUT'},
+        },
+        initialRequest: false,
+        contentType: 'application/json;',
+        headers: {'x-custom-header': 'custom-header'},
+        withCredentials: false
+      },
+      dataSource3: {
+        api: {
+          readData: { url: process.env.VUE_APP_API + '/PJTE9000/select', method: 'GET' },
+          createData : { url: process.env.VUE_APP_API + '/PJTE9000/create3' , method: 'POST'},
+        },
+        initialRequest: false,
+        contentType: 'application/json;',
+        headers: {'x-custom-header': 'custom-header'},
+        withCredentials: false
+      },
+      dataSource4: {
+        api: {
+          readData: { url: process.env.VUE_APP_API + '/PJTE9000/select4', method: 'GET' },
+          createData : { url: process.env.VUE_APP_API + '' , method: 'POST'},
+        },
+        initialRequest: false,
+        contentType: 'application/json;',
+        headers: {'x-custom-header': 'custom-header'},
+        withCredentials: false
       },
       columnOptions: {
         resizable: true
@@ -550,216 +990,282 @@ export default {
       },
       columns1: [
         {
+          header: '백업ID',
+          width: 100,
+          name: 'bkup_id',
+          hidden : true,
+        },
+        {
           header: '프로젝트',
           width: 150,
-          name: 'atfl_mng_id',
+          name: 'prjt_id',
+          editor : 'text'
         },
         {
           header: '직원번호',
           width: 120,
-          name: 'sqno',
+          name: 'empno',
+          editor : 'text'
         },
         {
-          header: '지원명',
+          header: '직원명',
           width: 120,
-          name: 'file_rgs_dscd',
+          name: 'empnm',
+          editor : 'text'
         },
         {
-          header: '직급',
+          header: '직급명',
           width: 120,
-          name: 'file_path',
+          name: 'rank_nm',
+          editor : 'text'
         },
         {
-          header: '이메일',
+          header: '이메일주소',
           width: 120,
-          name: 'file_nm',
+          name: 'email_addr',
+          editor : 'text'
         },
         {
           header: '휴대폰번호',
           width: 120,
-          name: 'rmrmk',
+          name: 'cpno',
+          editor : 'text'
         },
         {
-          header: '구성원',
+          header: '로그인비밀번호',
           width: 120,
-          name: 'rmrmk',
+          name: 'lgn_pwd',
+          editor : 'text'
         },
         {
-          header: '권한',
+          header: '업무구분코드',
           width: 120,
-          name: 'rmrmk',
+          name: 'bzcd',
+          editor : 'text'
         },
         {
-          header: 'IP',
+          header: '구성원구분코드',
           width: 120,
-          name: 'rmrmk',
+          name: 'catn_dcd',
+          editor : 'text'
         },
         {
-          header: '시작일자',
+          header: '권한구분코드',
           width: 120,
-          align: 'center',
-          name: 'pln_sta_dt',
-          format: 'yyyy-mm-dd',
+          name: 'aud_cd',
+          editor : 'text'
         },
         {
-          header: '종료일자',
+          header: 'IP주소',
           width: 120,
-          align: 'center',
-          name: 'pln_end_dt',
-          format: 'yyyy-mm-dd',
+          name: 'ip_addr',
+          editor : 'text'
         },
         {
-          header: '시작일자',
-          width: 120,
-          align: 'center',
-          name: 'pln_sta_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '종료일자',
+          header: '계획투입시작일자',
           width: 120,
           align: 'center',
-          name: 'pln_end_dt',
+          name: 'plan_thw_stdt',
           format: 'yyyy-mm-dd',
+          editor : 'datePicker'
+        },
+        {
+          header: '계획투입종료일자',
+          width: 120,
+          align: 'center',
+          name: 'plan_thw_endt',
+          format: 'yyyy-mm-dd',
+          editor : 'datePicker'
+        },
+        {
+          header: '실제투입시작일자',
+          width: 120,
+          align: 'center',
+          name: 'real_thw_stdt',
+          format: 'yyyy-mm-dd',
+          editor : 'datePicker'
+        },
+        {
+          header: '실제투입종료일자',
+          width: 120,
+          align: 'center',
+          name: 'real_thw_endt',
+          format: 'yyyy-mm-dd',
+          editor : 'datePicker'
         },
       ],
       columns2: [
         {
-          header: '일자',
-          name: 'file_nm',
+          header: '백업ID',
+          width: 100,
+          name: 'bkup_id',
+          hidden : true,
         },
         {
-          header: '요일구분',
-          name: 'file_nm',
+          header: '프로젝트ID',
+          width: 100,
+          name: 'prjt_id',
+          hidden : 'true'
         },
-        {
-          header: '휴일구분',
-          name: 'file_nm',
-        },
-      ],
-      columns3: [
         {
           header: '그룹유형코드',
           width: 100,
           name: 'grp_tycd',
+          hidden : 'true'
         },
         {
           header: '그룹유형명',
           width: 100,
-          name: 'dtls_tycd',
+          name: 'grp_tymm',
+          editor : 'text'
         },
         {
           header: '정렬',
           width: 100,
-          name: 'dtls_tynm',
+          name: 'sort_seq',
+          editor : 'text'
         },
         {
           header: '사용',
           width: 100,
-          name: 'dtls_tynm',
+          name: 'usg_yn',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명1',
           width: 150,
-          name: 'etc_txt1',
+          name: 'grid_colm_nm1',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명2',
           width: 150,
-          name: 'etc_txt2',
+          name: 'grid_colm_nm2',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명3',
           width: 150,
-          name: 'etc_txt3',
+          name: 'grid_colm_nm3',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명4',
           width: 150,
-          name: 'etc_txt4',
+          name: 'grid_colm_nm4',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명5',
           width: 150,
-          name: 'etc_txt5',
+          name: 'grid_colm_nm5',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명6',
           width: 150,
-          name: 'etc_txt6',
+          name: 'grid_colm_nm6',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명7',
           width: 150,
-          name: 'etc_txt7',
+          name: 'grid_colm_nm7',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명8',
           width: 150,
-          name: 'etc_txt8',
+          name: 'grid_colm_nm8',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명9',
           width: 150,
-          name: 'etc_txt9',
+          name: 'grid_colm_nm9',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명10',
           width: 150,
-          name: 'etc_txt10',
+          name: 'grid_colm_nm10',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명11',
           width: 150,
-          name: 'etc_txt11',
+          name: 'grid_colm_nm11',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명12',
           width: 150,
-          name: 'etc_txt12',
+          name: 'grid_colm_nm12',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명13',
           width: 150,
-          name: 'etc_txt13',
+          name: 'grid_colm_nm13',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명14',
           width: 150,
-          name: 'etc_txt14',
+          name: 'grid_colm_nm14',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명15',
           width: 150,
-          name: 'etc_txt15',
+          name: 'grid_colm_nm15',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명16',
           width: 150,
-          name: 'etc_txt16',
+          name: 'grid_colm_nm16',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명17',
           width: 150,
-          name: 'etc_txt17',
+          name: 'grid_colm_nm17',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명18',
           width: 150,
-          name: 'etc_txt18',
+          name: 'grid_colm_nm18',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명19',
           width: 150,
-          name: 'etc_txt19',
+          name: 'grid_colm_nm19',
+          editor : 'text'
         },
         {
           header: '그리드컬럼명20',
           width: 150,
-          name: 'etc_txt20',
+          name: 'grid_colm_nm20',
+          editor : 'text'
         },
       ],
-      columns4: [
+
+      columns3: [
+        {
+          header: '백업ID',
+          width: 100,
+          name: 'bkup_id',
+          hidden : 'true'
+        },
+        {
+          header: '프로젝트ID',
+          width: 100,
+          name: 'prjt_id',
+          hidden : 'true'
+        },
         {
           header: '그룹유형코드',
           width: 100,
@@ -769,123 +1275,200 @@ export default {
           header: '세부유형코드',
           width: 100,
           name: 'dtls_tycd',
+          editor : 'text',
         },
         {
           header: '세부유형명',
           width: 150,
           name: 'dtls_tynm',
+          editor : 'text',
         },
         {
           header: '정렬',
           width: 100,
-          name: 'dtls_tynm',
+          name: 'sort_seq',
+          editor : 'text',
         },
         {
           header: '사용',
           width: 100,
-          name: 'dtls_tynm',
+          name: 'use_yn',
+          editor : 'text',
         },
         {
           header: '기타내용1',
           width: 150,
           name: 'etc_txt1',
+          editor : 'text',
         },
         {
           header: '기타내용2',
           width: 150,
           name: 'etc_txt2',
+          editor : 'text',
         },
         {
           header: '기타내용3',
           width: 150,
           name: 'etc_txt3',
+          editor : 'text',
         },
         {
           header: '기타내용4',
           width: 150,
           name: 'etc_txt4',
+          editor : 'text',
         },
         {
           header: '기타내용5',
           width: 150,
           name: 'etc_txt5',
+          editor : 'text',
         },
         {
           header: '기타내용6',
           width: 150,
           name: 'etc_txt6',
+          editor : 'text',
         },
         {
           header: '기타내용7',
           width: 150,
           name: 'etc_txt7',
+          editor : 'text',
         },
         {
           header: '기타내용8',
           width: 150,
           name: 'etc_txt8',
+          editor : 'text',
         },
         {
           header: '기타내용9',
           width: 150,
           name: 'etc_txt9',
+          editor : 'text',
         },
         {
           header: '기타내용10',
           width: 150,
           name: 'etc_txt10',
+          editor : 'text',
         },
         {
           header: '기타내용11',
           width: 150,
-          name: 'etc_txt11',
+          name: 'dtl_txt1',
+          editor : 'text',
         },
         {
           header: '기타내용12',
           width: 150,
-          name: 'etc_txt12',
+          name: 'dtl_txt2',
+          editor : 'text',
         },
         {
           header: '기타내용13',
           width: 150,
-          name: 'etc_txt13',
+          name: 'dtl_txt3',
+          editor : 'text',
         },
         {
           header: '기타내용14',
           width: 150,
-          name: 'etc_txt14',
+          name: 'dtl_txt4',
+          editor : 'text',
         },
         {
           header: '기타내용15',
           width: 150,
-          name: 'etc_txt15',
+          name: 'dtl_txt5',
+          editor : 'text',
         },
         {
           header: '기타내용16',
           width: 150,
-          name: 'etc_txt16',
+          name: 'dtl_txt6',
+          editor : 'text',
         },
         {
           header: '기타내용17',
           width: 150,
-          name: 'etc_txt17',
+          name: 'dtl_txt7',
+          editor : 'text',
         },
         {
           header: '기타내용18',
           width: 150,
-          name: 'etc_txt18',
+          name: 'dtl_txt8',
+          editor : 'text',
         },
         {
           header: '기타내용19',
           width: 150,
-          name: 'etc_txt19',
+          name: 'dtl_txt9',
+          editor : 'text',
         },
         {
           header: '기타내용20',
           width: 150,
-          name: 'etc_txt20',
+          name: 'dtl_txt10',
+          editor : 'text',
         },
-      ]
+      ],
+
+      columns4: [
+        {
+          header: '프로젝트ID',
+          width: 100,
+          name: 'prjt_id',
+          hidden : 'true'
+        },
+        {
+          header: '일자',
+          name: 'date',
+          format:'yyyy-mm-dd',
+          editor:'datePicker'
+        },
+        {
+          header: '요일구분',
+          name: 'date_cd',
+          formatter : 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text":"월요일","value":"1"},
+                    {"text":"화요일","value":"2"},
+                    {"text":"수요일","value":"3"},
+                    {"text":"목요일","value":"4"},
+                    {"text":"금요일","value":"5"},
+                    {"text":"토요일","value":"6"},
+                    {"text":"일요일","value":"7"}
+                  ]
+            }
+          }
+        },
+        {
+          header: '휴일구분',
+          name: 'holiday_cd',
+          formatter : 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text":"영업일","value":"1"},
+                    {"text":"휴일","value":"2"},
+                    {"text":"명절","value":"3"},
+                    {"text":"국경일","value":"4"},
+                    {"text":"휴일","value":"5"},
+                  ]
+            }
+          }
+        },
+      ],
     }
   },
 };
