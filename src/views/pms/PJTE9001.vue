@@ -163,7 +163,7 @@ export default {
       }
     },
     fnChoice() {  // 선택 버튼 클릭 시
-      opener.empData(this.info.empnm, this.info.empno, this.info.open_btn_id);
+      opener.empData(this.info.empnm, this.info.empno, this.open_btn_id, this.open_emprow, this.open_empcol);
       window.close();
     },
     change() {
@@ -216,6 +216,11 @@ export default {
   // 변수 선언부분
   data() {
     return {
+      open_btn_id : this.$route.query.btn_id,      // 오픈한 main화면에서 넘겨받은 btn id
+
+      open_emprow : this.$route.query.emp_row,
+      open_empcol : this.$route.query.emp_col,
+
       info: {
         /* 필터 변수 */
         prjt_id: prjt_id,                            // 프로젝트명
@@ -226,8 +231,6 @@ export default {
         bzcd_selected: bzcd[0].value,                // 선택 된 업무구분
         login_prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
         login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
-
-        open_btn_id : this.$route.query.btn_id,      // 오픈한 main화면에서 넘겨받은 btn id
       },
 
       addRow: {
