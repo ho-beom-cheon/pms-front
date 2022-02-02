@@ -118,7 +118,6 @@
                 <td style="width:100px">
                   <input type="text"
                          placeholder="직원명"
-                         id="id.crpe_nm"
                          v-model="prcpe_nm"
                          style="width: 80px"
                   >
@@ -127,7 +126,6 @@
                 <td style="width: 20px">
                   <div class="input-searchWrap" style="width:15px">
                     <button class="search-btn"
-                            id="btn.crpe"
                             @click="open_pjte9001"
                     ></button>
                   </div>
@@ -135,7 +133,6 @@
                 <td>
                   <input type="text"
                          placeholder="직원번호"
-                         id="id.crpe_no"
                          style="width: 80px; background-color: #f2f2f2;"
                          v-model="prcpe_no"
                          :disabled = true
@@ -197,6 +194,13 @@ import {axiosService} from "@/api/http";
 window.fileData = (fileLists) => {
   console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
+}
+
+window.empData = (empnm, empno) => {
+  //
+  window.pms_register.prcpe_nm = empnm;
+  window.pms_register.prcpe_no = empno;
+
 }
 
 export default {
@@ -275,7 +279,7 @@ export default {
     // 직원 조회 팝업
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+      this.pop = window.open("../PJTE9001/", "open_pjte9001", "width=700, height=600");
     },
     // 첨부파일등록 팝업 오픈
     open_file_page(){

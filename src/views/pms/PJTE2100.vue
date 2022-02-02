@@ -92,13 +92,12 @@
               <div class="input-searchWrap">개발자명
                 <input type="text"
                        placeholder="직원명"
-                       id="id.dvlpe_nm"
                        v-model="info.dvlpe_nm"
                        style   = "width: 90px"
+                       @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn"
-                        id="btn.dvlpe"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(1)"
                 ></button>
               </div>
             </li>
@@ -115,13 +114,12 @@
               <div class="input-searchWrap">담당PL명
                 <input type="text"
                        placeholder="직원명"
-                       id="id.pl_nm"
                        v-model="info.pl_nm"
                        style   = "width: 90px"
+                       @keyup.enter="open_pjte9001(2)"
                 >
                 <button class="search-btn"
-                        id="btn.pl"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(2)"
                 ></button>
               </div>
             </li>
@@ -202,6 +200,7 @@
               :showDummyRows="showDummyRows"
               :columnOptions="columnOptions"
               :rowHeight="rowHeight"
+              :minRowHeight="minRowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
               @dblclick="dblonClick"
@@ -218,6 +217,15 @@ import { Grid } from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
+
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
+  window.pms_register.emp_nm = empnm;
+  window.pms_register.emp_no = empno;
+  window.pms_register.emp_btn_id = btn_id;
+  window.pms_register.emp_rowKey = emprow;
+  window.pms_register.emp_colName = empcol;
+}
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
 class CustomRenderer {
@@ -264,23 +272,22 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
+
     console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
-
     console.log("created")
   },
   beforeMount() {
-
     console.log("beforeMount");
   },
   mounted() {
     // 화면 초기화
     this.init();
     // 화면 접속 시 데이터 조회
-    this.fnSearch();
+    // this.fnSearch();
     console.log("mounted");
   },
   beforeUpdate() {
@@ -353,7 +360,6 @@ export default {
         alert("변경된 내용이 없습니다.");
         return;
       }
-      debugger;
       // 데이터 로그 확인
       console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
       console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
@@ -452,6 +458,56 @@ export default {
       if(ev.columnName === 'pal_atfl_mng_id') {
         this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
       }
+
+      // 결함등록 Column 클릭 시 결함등록팝업 호출
+      if(ev.columnName === 'err_btn') {
+        let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_id');
+        let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_nm');
+        let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&`, "open_page", "width=1000, height=800");
+      }
+
+      // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
+      if(ev.columnName === 'rgpe_btn' || ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn') {
+        let empnm = ''
+        if(ev.columnName === 'dvlpe_btn'){
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_nm')
+        } else if(ev.columnName === 'pl_btn') {
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'pl_nm')
+        } else if(ev.columnName === 'crpe_btn') {
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'crpe_nm')
+        }
+
+        if (empnm != null && empnm != '') {
+          axiosService.get("/PJTE9001/select", {
+            params: {
+              empnm
+            }
+          })
+              .then(res => {
+                let res_data = res.data.data.contents;
+                // console.log(res_data)
+                if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                  debugger
+                  if (ev.columnName == 'dvlpe_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', res.data.data.contents[0].empno);
+                  } else if (ev.columnName == 'pl_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'pl_no', res.data.data.contents[0].empno);
+                  } else if (ev.columnName == 'crpe_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'crpe_no', res.data.data.contents[0].empno);
+                  }
+                } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                  debugger
+                  let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+                  window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+                }
+              })
+        } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+          let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+        }
+      }
+
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
         if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
           this.modals.txt_modal1 = true;
@@ -521,14 +577,39 @@ export default {
     gridExcelImport(){
       this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀업로드"});
     },
-    open_pjte9001(event) {
-      const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      if (btn_id == '1') {
+        empnm = this.info.dvlpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.info.pl_nm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.dvlpe_no = res.data.data.contents[0].empno
+                } else if (btn_id == '2') {
+                  this.info.pl_no = res.data.data.contents[0].empno
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
     },
-    // 팝업 호출
-    open_page(){
-      this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
-    },
+
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
       if(this.info.pl_nm === "") this.info.pl_no = "";
@@ -597,6 +678,30 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
+    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
+   버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
+    emp_btn_id() {  // 필터에 있는 직원조회 팝업 (btn_id로 구분)
+      if(this.emp_btn_id == '1'){       // 개발자명
+        this.info.dvlpe_no = this.emp_no
+        this.info.dvlpe_nm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 담당PL
+        this.info.pl_no = this.emp_no
+        this.info.pl_nm = this.emp_nm
+      }
+    },
+    emp_rowKey() {  // 그리드에 있는 직원조회 팝업 (emp_colName과 emp_rowKey로 구분)
+      if(this.emp_colName == 'dvlpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
+      } else if(this.emp_colName == 'pl_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_no', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_nm', this.emp_nm);
+      } else if(this.emp_colName == 'crpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
+      }
+
+    }
   },
 
 // 변수 선언부분
@@ -604,6 +709,14 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C2","C3","C4"],
+
+      /*직원조회 팝업 변수*/
+      emp_btn_id : '',  // 직원조회팝업 버튼ID
+      emp_nm : '',      // 직원조회팝업 직원명
+      emp_no : '',      // 직원조회팝업 직원번호
+
+      emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
+      emp_colName : '',  // 직원조회팝업 (그리드) colName
 
       info : {
         pgm_id                : this.pgm_id,          // 프로그램ID
@@ -666,6 +779,7 @@ export default {
       scrollX:false,
       scrollY:false,
       bodyHeight: 610,
+      minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
       open: true,
