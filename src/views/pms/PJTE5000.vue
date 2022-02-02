@@ -71,28 +71,28 @@
               </div>
             </li>
             <li class="filter-item-n">
-                          <div class="input-searchWrap">담당자명
-                            <input type="text"
-                                   id="id.crpe_nm"
-                                   placeholder="입력"
-                                   v-model="info.crpe_nm"
-                                   style="width: 90px"
-                            >
-                            <button class="search-btn"
-                                    id="btn.crpe"
-                                    @click="open_pjte9001"
-                            ></button>
-                          </div>
-                        </li>
-                        <li class="filter-item">
-                        <input type="text"
-                               placeholder="직원번호"
-                               id="id.crpe_no"
-                               v-model="info.crpe_no"
-                               style="width: 70px; background-color: #f2f2f2;"
-                               :disabled = true
-                            >
-                        </li>
+              <div class="input-searchWrap">담당자명
+                <input type="text"
+                       id="id.crpe_nm"
+                       placeholder="입력"
+                       v-model="info.crpe_nm"
+                       style="width: 90px"
+                >
+                <button class="search-btn"
+                        id="btn.crpe"
+                        @click="open_pjte9001"
+                ></button>
+              </div>
+            </li>
+            <li class="filter-item">
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.crpe_no"
+                     v-model="info.crpe_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
+            </li>
             <li class="filter-item">
               <div class="item-con">계획종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.pln_end_dt" v-model="info.pln_sta_dt"></div>
@@ -115,15 +115,15 @@
             </li>
           </ul>
           <ul class="filter-btn">
-              <button class="btn btn-filter-p" @click="gridExcelExport" :disabled="validated">진행률계산</button>
-              <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated" style="margin-left: 20px"> 엑셀업로드</button>
-              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-b" @click="gridAddRow" :disabled="validated" style="margin-left: 20px">+ 행위로</button>
-              <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">- 행아래</button>
-              <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="validated">행추가</button>
-              <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
-              <button class="btn btn-filter-p" @click="fnSave" :disabled="false" style="margin-left: 20px">저장</button>
-              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
+            <button class="btn btn-filter-p" @click="prgRtCalc" :disabled="false">진행률계산</button>
+            <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated" style="margin-left: 20px"> 엑셀업로드</button>
+            <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+            <button class="btn btn-filter-b" @click="gridUpRow" :disabled="false" style="margin-left: 20px">+ 행위로</button>
+            <button class="btn btn-filter-b" @click="gridDownRow" :disabled="false">- 행아래</button>
+            <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="false">행추가</button>
+            <button class="btn btn-filter-b" @click="gridDelRow" :disabled="false">행삭제</button>
+            <button class="btn btn-filter-p" @click="fnSave" :disabled="false" style="margin-left: 20px">저장</button>
+            <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
@@ -172,7 +172,7 @@ class CustomRenderer {
   }
   render(props) {
     // 결함등록 버튼 img
-    this.el.src = '/img/ic_logOut.8c60a751.svg';
+    this.el.src = 'src/assets/img/ic_upload.svg';
   }
 }
 
@@ -265,50 +265,70 @@ export default {
 // 함수를 선언하는 부분 
 // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점. 
   computed: {
-    getCount() {
-      return this.count;
-    }
-
   },
 // 일반적인 함수를 선언하는 부분  
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
-    bzcd_change(params) {this.info.bzcd_selected = params},
-    mng_cd_change(params) {this.info.mng_cd_selected = params},
-    wbs_mng_cd_change(params) {this.info.wbs_mng_cd_selected = params},
+    bkup_id_change(params)        {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
+    bzcd_change(params)           {this.info.bzcd_selected = params},
+    mng_cd_change(params)         {this.info.mng_cd_selected = params},
+    wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
     // 콤보 처음 값 저장
     comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-      this.info.mng_cd_selected = this.$children[0].$data.mng_cd_selected;
+      this.info.bkup_id_selected        = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected        = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected           = this.$children[0].$data.bzcd_selected;
+      this.info.mng_cd_selected         = this.$children[0].$data.mng_cd_selected;
       this.info.wbs_prc_sts_cd_selected = this.$children[0].$data.wbs_prc_sts_cd_selected;
-      this.info.wbs_mng_cd_selected = this.$children[0].$data.wbs_mng_cd_selected;
+      this.info.wbs_mng_cd_selected     = this.$children[0].$data.wbs_mng_cd_selected;
     },
 
-    change() {
-      console.log("change");
-    },
     fnSave() {
-        this.rowData = this.$refs.grid.invoke("getData")
+      this.rowData = this.$refs.grid.invoke("getData")
 
+      axiosService.delete("/PJTE5000/delete",{
+        data: {
+          bkup_id : this.info.bkup_id_selected,
+          prjt_id : this.info.prjt_nm_selected,
+          bzcd : this.info.bzcd_selected,
+          mng_cd : this.info.wbs_mng_cd_selected,
+          rowData : this.rowData,
+        },
+      }).then(res => {
+        console.log("Delete Success!")
         axiosService.post("/PJTE5000/insert",{
-            rowData : this.rowData,
+          rowData : this.rowData,
         }).then(res => {
-          console.log("resData ::", res)
+          console.log("Insert Success!")
+          alert("저장이 완료되었습니다.")
         }).catch(e => {
         });
+      }).catch(e => {
+      });
+
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
+      this.upCount = 0;
+      this.downCount = 0;
+
       this.curRow = ev.rowKey;
 
       if(ev.columnName === 'btn_popup') {
         this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
+      }
+
+      let totRows = this.$refs.grid.invoke("getData").length;
+      let i;
+
+      for(i=0; i<totRows; i++){
+        if(this.$refs.grid.invoke("getValue", i, "step_cd") === '100'){
+
+            this.$refs.grid.invoke("disabledCell", i, 'prg_rt');
+        }
       }
     },
     fnSearch() {
@@ -316,19 +336,16 @@ export default {
 
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-
-
       // 버튼 활성화
-      if(
-          this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
+      if(this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
           this.info.wbs_mng_cd_selected !== 'TTT' && this.info.wbs_prc_sts_cd_selected === 'TTT' &&
           this.info.crpe_nm === undefined && this.info.acl_sta_dt === null && this.info.acl_end_dt === null &&
-          this.info.pln_sta_dt=== null && this.info.pln_end_dt === null
-      ){
-          this.validated = false;
+          this.info.pln_sta_dt=== null && this.info.pln_end_dt === null){
+        this.validated = false;
       } else {
         this.validated = true;
       }
+      this.$refs.grid.invoke("disableCell", 2, 'prg_rt');
     },
     open_pjte9001() {
       this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");
@@ -337,23 +354,72 @@ export default {
       this.$refs.grid.invoke("clear");
     },
     gridAddRow() {
-      this.$refs.grid.invoke("appendRow", {col1: "1", col3: "개발", col4: "SWZP0010", col5: "PMS구축"}, {focus: true});
+      this.$refs.grid.invoke("appendRow",
+          {
+            bzcd    : sessionStorage.getItem("LOGIN_BZCD"),
+            save_yn : "N", //행르 추가하면 등록여부 'N'
+            prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
+            bkup_id : "0000000000",
+            sort    : this.$refs.grid.invoke("getData").length+1,
+          },
+          {focus:true}) ;
     },
     gridDelRow() {
       this.$refs.grid.invoke("removeRow", this.curRow);
-    // DB 데이터 삭제로직 추가
+      // DB 데이터 삭제로직 추가
     },
     gridADelRow() {
-    // DB 데이터 삭제로직 추가
+      // DB 데이터 삭제로직 추가
+    },
+    gridUpRow() {
+        this.upCount++;
+        this.upDownCount = (this.curRow + this.downCount) - this.upCount;
+        this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
+    },
+    gridDownRow() {
+        this.downCount++;
+        this.upDownCount = (this.curRow - this.upCount) + this.downCount ;
+        this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
     },
     gridIns() {
-    // DB 데이터 삭제로직 추가
+      // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
     gridExcelImport() {
 // 엑셀파일 업로드 로직 추가 
+    },
+    // 진행률 계산 함수
+    prgRtCalc() {
+      let i, x, y, z, wbsCnt, roCnt, iMaxRow;
+      let mngid, hgrnMngid;
+      let wgtRt, prtRt, totWgtRt;
+
+      iMaxRow = this.$refs.grid.invoke("getData").length; // 최대 row 수
+
+      for(z=1; z<=5; z++) {
+        for(i=0; i<iMaxRow; i++) {
+          totWgtRt = 0;
+          mngid = this.$refs.grid.invoke("getValue", i, "mng_id");
+          wbsCnt = this.$refs.grid.invoke("getValue", i, "wbs_cnt");
+
+          if (wbsCnt > 0) {
+            for (x = i+1; x < iMaxRow; x++) {
+              hgrnMngid = this.$refs.grid.invoke("getValue", x, "hgrn_mng_id");
+              wgtRt = this.$refs.grid.invoke("getValue", x, "wgt_rt");
+              prtRt = this.$refs.grid.invoke("getValue", x, "prg_rt");
+
+              if (mngid === hgrnMngid) {
+                totWgtRt = totWgtRt + wgtRt * prtRt
+              }
+            }
+              // 진행율결과값 셋팅
+            this.$refs.grid.invoke("setValue", i, "prg_rt", totWgtRt);
+
+          }
+        }
+      }
     },
     open_page() {
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
@@ -363,11 +429,6 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분 
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음 
   watch: {
-    count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
-    }
   },
 // 변수 선언부분 
   data() {
@@ -402,7 +463,8 @@ export default {
 
       check_Yn: false,  // 삭제프로그램/소스취약점포함
 
-      count: 0,
+      downCount: 0,
+      upCount : 0,
       curRow: -1,
       title: "",
       scrollX: false,
@@ -537,19 +599,21 @@ export default {
           width: 130,
           align: 'center',
           name: 'mng_id',
+          editor: 'text'
         },
         {
           header: '상위관리 ID',
           width: 130,
           align: 'center',
           name: 'hgrn_mng_id',
+          editor: 'text'
         },
         {
           header: 'ACTIVITY명',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'acvt_nm',
-          type: 'text'
+          editor: 'text'
         },
         {
           header: '태스크명',
@@ -559,7 +623,7 @@ export default {
         },
         {
           header: '첨부',
-          width: 120,
+          width: 80,
           name: 'btn_popup',
           align: 'center',
           renderer: CustomRenderer,
@@ -595,10 +659,8 @@ export default {
           header: '시간',
           width: 110,
           align: 'center',
-          type: 'date',
           name: 'pln_sta_tim',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
         },
         {
           header: '일자',
@@ -611,8 +673,7 @@ export default {
           header: '시간',
           width: 110,
           align: 'center',
-          name: 'pnl_end_tim',
-          editor: 'datePicker'
+          name: 'pln_end_tim',
         },
         {
           header: '일자',
@@ -649,6 +710,7 @@ export default {
           width: 160,
           align: 'center',
           name: 'prg_rt',
+          editor: 'text',
         },
         {
           header: '비고',
