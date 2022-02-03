@@ -60,7 +60,7 @@
                         @prjt_nm_chage="prjt_nm_chage"
                     ></combo>
                     <div class="btn btn-filter-p" style = "margin-top: 5px">
-                      <a href="#" >테이블백업</a>
+                      <a href="#" @click="tableBackUp">테이블백업</a>
                     </div>
                   </ul>
                 </section>
@@ -301,6 +301,24 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    tableBackUp() {
+      axiosService.get("/PJTE9000/backup_select")
+      .then(res => {
+        this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
+        this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
+        if(res.data.data.contents.length){
+          axiosService.post("/PJTE9000/backup_update", {
+              new_bkup_id : this.info.new_bkup_id,
+              new_bkup_nm : this.info.new_bkup_nm,
+              prjt_id : this.info.prjt_nm_selected,
+              login_emp_no : this.info.login_emp_no
+          })
+        }
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    },
     loginChange() {
       if(confirm("로그인변경시 저장하지 않은 수정데이터는 저장되지 않습니다.")){
         this.sessionClear();
@@ -424,52 +442,52 @@ export default {
         this.deletedRows = this.$refs.grid1.invoke("getModifiedRows").deletedRows;
         this.createdRows = this.$refs.grid1.invoke("getModifiedRows").createdRows;
 
-        // grid_arr = this.$refs.grid1.invoke("getData")
-        // for(let i = 0; i<grid_arr.length; i++){
-        //   // 프로젝트 ID 값 체크
-        //   if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id==='' || grid_arr[i].prjt_id === undefined){
-        //     alert(`${i+1}번째 행의 프로젝트ID 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //   // 직원번호 체크
-        //   if(grid_arr[i].empno == null || grid_arr[i].empno==='' || grid_arr[i].empno === undefined){
-        //     alert(`${i+1}번째 행 직원번호 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //   // 직원명 체크
-        //   if(grid_arr[i].empnm == null || grid_arr[i].empnm==='' || grid_arr[i].empnm === undefined){
-        //     alert(`${i+1}번째 행 직원명 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //   // 로그인 비밀번호 체크
-        //   if(grid_arr[i].lgn_pwd == null || grid_arr[i].lgn_pwd==='' || grid_arr[i].lgn_pwd === undefined){
-        //     alert(`${i+1}번째 행 로그인 비밀번호 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //   // 권한구분코드 체크
-        //   if(grid_arr[i].aut_cd == null || grid_arr[i].aut_cd==='' || grid_arr[i].aut_cd === undefined){
-        //     alert(`${i+1}번째 행 권한구분코드 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //   // IP 주소 체크
-        //   if(grid_arr[i].ip_addr == null || grid_arr[i].ip_addr==='' || grid_arr[i].ip_addr === undefined){
-        //     alert(`${i+1}번째 행 IP주소 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //   //계획투입시작일자 체크
-        //   if(grid_arr[i].plan_thw_stdt == null || grid_arr[i].plan_thw_stdt==='' || grid_arr[i].plan_thw_stdt === undefined){
-        //     alert(`${i+1}번째 행 계획투입시작일자 값이 없습니다.`);
-        //     check = false;
-        //     break;
-        //   }
-        //
-        // }
+        grid_arr = this.$refs.grid1.invoke("getData")
+        for(let i = 0; i<grid_arr.length; i++){
+          // 프로젝트 ID 값 체크
+          if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id==='' || grid_arr[i].prjt_id === undefined){
+            alert(`${i+1}번째 행의 프로젝트ID 값이 없습니다.`);
+            check = false;
+            break;
+          }
+          // 직원번호 체크
+          if(grid_arr[i].empno == null || grid_arr[i].empno==='' || grid_arr[i].empno === undefined){
+            alert(`${i+1}번째 행 직원번호 값이 없습니다.`);
+            check = false;
+            break;
+          }
+          // 직원명 체크
+          if(grid_arr[i].empnm == null || grid_arr[i].empnm==='' || grid_arr[i].empnm === undefined){
+            alert(`${i+1}번째 행 직원명 값이 없습니다.`);
+            check = false;
+            break;
+          }
+          // 로그인 비밀번호 체크
+          if(grid_arr[i].lgn_pwd == null || grid_arr[i].lgn_pwd==='' || grid_arr[i].lgn_pwd === undefined){
+            alert(`${i+1}번째 행 로그인 비밀번호 값이 없습니다.`);
+            check = false;
+            break;
+          }
+          // 권한구분코드 체크
+          if(grid_arr[i].aut_cd == null || grid_arr[i].aut_cd==='' || grid_arr[i].aut_cd === undefined){
+            alert(`${i+1}번째 행 권한구분코드 값이 없습니다.`);
+            check = false;
+            break;
+          }
+          // IP 주소 체크
+          if(grid_arr[i].ip_addr == null || grid_arr[i].ip_addr==='' || grid_arr[i].ip_addr === undefined){
+            alert(`${i+1}번째 행 IP주소 값이 없습니다.`);
+            check = false;
+            break;
+          }
+          //계획투입시작일자 체크
+          if(grid_arr[i].plan_thw_stdt == null || grid_arr[i].plan_thw_stdt==='' || grid_arr[i].plan_thw_stdt === undefined){
+            alert(`${i+1}번째 행 계획투입시작일자 값이 없습니다.`);
+            check = false;
+            break;
+          }
+
+        }
 
         if(check){
           if(this.createdRows.length != 0){
@@ -524,47 +542,47 @@ export default {
         // 필수항목 체크
         grid_arr = this.$refs.grid2.invoke("getData")
 
-        // for(let i=0; i<grid_arr.length; i++){
-        //   // 프로젝트 ID 체크
-        //   if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id ==='' || grid_arr[i].prjt_id === undefined){
-        //     alert(`${i+1}번째 행 프로젝트 ID 값이 없습니다.`)
-        //     check = false
-        //     break;
-        //
-        //   }
-        //
-        //   // 그룹유형코드 체크
-        //   if(grid_arr[i].grp_tycd == null || grid_arr[i].grp_tycd ==='' || grid_arr[i].grp_tycd === undefined){
-        //     alert(`${i+1}번째 행 그룹유형코드 값이 없습니다.`)
-        //     check = false
-        //     break;
-        //
-        //   }
-        //
-        //   //그룹유형명 체크
-        //   if(grid_arr[i].grp_tymm == null || grid_arr[i].grp_tymm ==='' || grid_arr[i].grp_tymm === undefined){
-        //     alert(`${i+1}번째 행 그룹유형명 값이 없습니다.`)
-        //     check = false
-        //     break;
-        //
-        //   }
-        //
-        //   //정렬순서 체크
-        //   if(grid_arr[i].sort_seq == null || grid_arr[i].sort_seq ==='' || grid_arr[i].sort_seq === undefined){
-        //     alert(`${i+1}번째 행 정렬순서 값이 없습니다.`)
-        //     check = false
-        //     break;
-        //
-        //   }
-        //
-        //   //사용여부 체크
-        //   if(grid_arr[i].usg_yn == null || grid_arr[i].usg_yn ==='' || grid_arr[i].usg_yn === undefined){
-        //     alert(`${i+1}번째 행 사용여부 값이 없습니다.`)
-        //     check = false
-        //     break;
-        //
-        //   }
-        // }
+        for(let i=0; i<grid_arr.length; i++){
+          // 프로젝트 ID 체크
+          if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id ==='' || grid_arr[i].prjt_id === undefined){
+            alert(`${i+1}번째 행 프로젝트 ID 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          // 그룹유형코드 체크
+          if(grid_arr[i].grp_tycd == null || grid_arr[i].grp_tycd ==='' || grid_arr[i].grp_tycd === undefined){
+            alert(`${i+1}번째 행 그룹유형코드 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //그룹유형명 체크
+          if(grid_arr[i].grp_tymm == null || grid_arr[i].grp_tymm ==='' || grid_arr[i].grp_tymm === undefined){
+            alert(`${i+1}번째 행 그룹유형명 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //정렬순서 체크
+          if(grid_arr[i].sort_seq == null || grid_arr[i].sort_seq ==='' || grid_arr[i].sort_seq === undefined){
+            alert(`${i+1}번째 행 정렬순서 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+
+          //사용여부 체크
+          if(grid_arr[i].usg_yn == null || grid_arr[i].usg_yn ==='' || grid_arr[i].usg_yn === undefined){
+            alert(`${i+1}번째 행 사용여부 값이 없습니다.`)
+            check = false
+            break;
+
+          }
+        }
 
         // 필수값 체크 이상 없을 때 저장장
         if(check){
@@ -697,6 +715,22 @@ export default {
         }else{
           return false;
         }
+
+        // 신규 프로젝트 추가시 코드정보 신규프로젝트로 데이터 복사
+        // try{
+        //   axiosService.post('/PJTE9000/create_new_project_data', {
+        //     // new_prjt_id : this.info.new_prjt_id,
+        //     new_prjt_id : '1000000003',
+        //     login_emp_no : this.info.login_emp_no
+        //   })
+        //   .then(res => {
+        //     console.log(res.data)
+        //     alert("저장이 완료되었습니다.")
+        //   })
+        // }catch(e) {
+        //   console.log(e)
+        // }
+
 
       }else if(grid_num === 4){
         // 데이터 로그 확인
@@ -858,6 +892,9 @@ export default {
         grid_num: 1,
         login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
         grp_tycd : '1000000001',
+        new_prjt_id : '',
+        new_bkup_id : '',
+        new_bkup_nm : '',
         sel_yyyymmdd: '',
         new_yyyy : '',
 
