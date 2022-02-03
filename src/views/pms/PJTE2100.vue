@@ -104,6 +104,7 @@
             <li class="filter-item">
                 <input type="text"
                        placeholder="직원번호"
+                       id="id.dvlpe_no"
                        v-model="info.dvlpe_no"
                        style="width: 70px; background-color: #f2f2f2;"
                        :disabled = true
@@ -125,6 +126,7 @@
             <li class="filter-item">
                 <input type="text"
                        placeholder="직원번호"
+                       id="id.pl_no"
                        v-model="info.pl_no"
                        style="width: 70px; background-color: #f2f2f2;"
                        :disabled = true
@@ -215,7 +217,6 @@ import { Grid } from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
-import {axiosService} from "@/api/http";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
@@ -285,7 +286,6 @@ export default {
   mounted() {
     // 화면 초기화
     this.init();
-    window.pms_register = this;
     // 화면 접속 시 데이터 조회
     // this.fnSearch();
     console.log("mounted");
@@ -532,6 +532,12 @@ export default {
         return;
       }
       this.comboSetData();
+
+      // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
+      this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value            // 조회한 요청자 이름 설정
+      this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value            // 조회한 요청자 이름 설정
+      this.info.pl_no = document.getElementById("id.pl_no").value  // 조회한 조치담당자 이름 설정
+      this.info.pl_nm = document.getElementById("id.pl_nm").value  // 조회한 조치담당자 이름 설정
 
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
