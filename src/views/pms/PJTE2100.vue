@@ -142,33 +142,15 @@
           </ul>
           <div class="mt-1">
             <ul class="filter-btn">
-              <div class="btn btn-filter-d">
-                <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
-              </div>
-              <div class="btn btn-filter-d">
-                <a href="#" @click="gridExcelExport">양식다운로드ⓘ</a>
-              </div>
-              <div class="btn btn-filter-e">
-                <a href="#" @click="gridExcelImport">엑셀업로드</a>
-              </div>
-              <div class="btn btn-filter-e">
-                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-              </div>
-              <div class="btn btn-filter-b">
-                <a href="#" @click="gridAddRow">행추가</a>
-              </div>
-              <div class="btn btn-filter-b">
-                <a href="#" @click="gridDelRow">행삭제</a>
-              </div>
-              <div class="btn btn-filter-b">
-                <a href="#" @click="fnEtcSave">기타항목수정</a>
-              </div>
-              <div class="btn btn-filter-p" style = "margin-left: 20px">
-                <a href="#" @click="fnSave">저장</a>
-              </div>
-              <div class="btn btn-filter-p">
-                <a href="#" @click="fnSearch">조회</a>
-              </div>
+              <button class="btn btn-filter-d" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</button>
+              <button class="btn btn-filter-d" @click="gridExcelExport">양식다운로드ⓘ</button>
+              <button class="btn btn-filter-e" @click="gridExcelImport">엑셀업로드</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+              <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
+              <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
+              <button class="btn btn-filter-b" @click="fnEtcSave">기타항목수정</button>
+              <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
             </ul>
           </div>
         </div>
@@ -217,6 +199,7 @@ import { Grid } from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
+import {axiosService} from "@/api/http";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
@@ -289,6 +272,7 @@ export default {
     // 화면 접속 시 데이터 조회
     // this.fnSearch();
     console.log("mounted");
+    window.pms_register = this;
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -468,7 +452,7 @@ export default {
       }
 
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
-      if(ev.columnName === 'rgpe_btn' || ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn') {
+      if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
         let empnm = ''
         if(ev.columnName === 'dvlpe_btn'){
           empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_nm')
@@ -488,7 +472,6 @@ export default {
                 let res_data = res.data.data.contents;
                 // console.log(res_data)
                 if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                  debugger
                   if (ev.columnName == 'dvlpe_btn') {
                     this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', res.data.data.contents[0].empno);
                   } else if (ev.columnName == 'pl_btn') {
@@ -497,7 +480,6 @@ export default {
                     this.$refs.grid.invoke("setValue", this.curRow, 'crpe_no', res.data.data.contents[0].empno);
                   }
                 } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                  debugger
                   let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
                   window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
                 }
@@ -532,12 +514,6 @@ export default {
         return;
       }
       this.comboSetData();
-
-      // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
-      this.info.dvlpe_no = document.getElementById("id.dvlpe_no").value            // 조회한 요청자 이름 설정
-      this.info.dvlpe_nm = document.getElementById("id.dvlpe_nm").value            // 조회한 요청자 이름 설정
-      this.info.pl_no = document.getElementById("id.pl_no").value  // 조회한 조치담당자 이름 설정
-      this.info.pl_nm = document.getElementById("id.pl_nm").value  // 조회한 조치담당자 이름 설정
 
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -678,6 +654,7 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
+    deep : true,
     /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
    버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
     emp_btn_id() {  // 필터에 있는 직원조회 팝업 (btn_id로 구분)
@@ -689,6 +666,8 @@ export default {
         this.info.pl_nm = this.emp_nm
       }
     },
+    /*watch에서 emp_rowKey가 변경되거나 emp_colName의 값이 변경되었을 때
+     버튼에 따라 직원명과 직원번호를 입력한다.*/
     emp_rowKey() {  // 그리드에 있는 직원조회 팝업 (emp_colName과 emp_rowKey로 구분)
       if(this.emp_colName == 'dvlpe_btn') {
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
@@ -700,7 +679,19 @@ export default {
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
       }
-
+    },
+    emp_colName() {  // 그리드에 있는 직원조회 팝업 (emp_colName과 emp_rowKey로 구분)
+      debugger
+      if(this.emp_colName == 'dvlpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
+      } else if(this.emp_colName == 'pl_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_no', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_nm', this.emp_nm);
+      } else if(this.emp_colName == 'crpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
+      }
     }
   },
 

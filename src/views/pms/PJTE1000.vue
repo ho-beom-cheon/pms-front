@@ -52,26 +52,9 @@
           <li class="filter-item">
             <div class="item-con">프로젝트명
               <select
-                  id="id.bkup_id"
-                  v-model="info.bkup_id_selected"
-                  style="width: 167px"
-                  :disabled = true
-              >
-                <option
-                    v-for="(bkup_id, idx) in info.bkup_id"
-                    :key="idx"
-                    v-text="bkup_id.text"
-                    :value="bkup_id.value"
-                ></option>
-              </select>
-            </div>
-          </li>
-          <li class="filter-item">
-            <div class="item-con">프로젝트명
-              <select
                   id="id.prjt_id"
                   v-model="info.prjt_id_selected"
-                  style="width: 167px"
+                  style="width: 167px; background-color: #f2f2f2;"
                   :disabled = true
               >
                 <option
@@ -83,14 +66,29 @@
               </select>
             </div>
           </li>
-          <div class="btn btn-filter-p" style = "margin-top: 5px"  @click="fnSearch">
-            <a href="#">재조회</a>
-          </div>
+          <li class="filter-item">
+            <div class="item-con">백업ID
+              <select
+                  id="id.bkup_id"
+                  v-model="info.bkup_id_selected"
+                  style="width: 167px"
+              >
+                <option
+                    v-for="(bkup_id, idx) in info.bkup_id"
+                    :key="idx"
+                    v-text="bkup_id.text"
+                    :value="bkup_id.value"
+                ></option>
+              </select>
+            </div>
+          </li>
+          <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
         <ul class="filter-btn">
-          <div class="btn btn-filter-p" style = "margin-left: 10px; background-color: #9FC93C">
-            <a href="#" @click="fnSearch">ProjectEyes 가이드 ⓘ</a>
-          </div>
+            <button class="btn btn-filter-p"
+                    style = "margin-left: 10px; background-color: #9FC93C"
+                    @click="open_file_page(1)">ProjectEyes 가이드 ⓘ
+            </button>
         </ul>
       </section>
       <!-- page contents -->
@@ -175,7 +173,13 @@
                     </li>
                   <li class="filter-item">
                     <div class="item-con">공지일자
-                      <div class="input-dateWrap"><input type="date" v-model="detail.rgs_dt"></div>
+                      <div class="input-dateWrap">
+                        <input type="date"
+                               v-model="detail.rgs_dt"
+                               :disabled = true
+                               style="background-color: #f2f2f2;"
+                        >
+                      </div>
                     </div>
                   </li>
                   <li class="filter-item-n">
@@ -184,12 +188,9 @@
                              placeholder="직원명"
                              id="id.rgs_nm"
                              v-model="detail.rgs_nm"
-                             style="width: 90px"
+                             style="width: 80px; background-color: #f2f2f2;"
+                             :disabled = true
                       >
-                      <button class="search-btn"
-                              id="btn.rgs"
-                              @click="open_pjte9001"
-                      ></button>
                     </div>
                   </li>
                   <li class="filter-item">
@@ -197,13 +198,13 @@
                            placeholder="직원번호"
                            id="id.rgs_no"
                            v-model="detail.rgs_no"
-                           style="width: 70px; background-color: #f2f2f2;"
+                           style="width: 80px; background-color: #f2f2f2;"
                            :disabled = true
                     >
                   </li>
-                  <li class="filter-item">
+                  <li  v-if="this.detail.mng_id" class="filter-item">
                     <div class="item-con">
-                      <input type="checkbox" id="check_Yn" v-model="detail.check_Yn">
+                      <input type="checkbox" id="del_yn" v-model="detail.del_yn">
                       <label>　공지사항삭제</label>
                     </div>
                   </li>
@@ -226,7 +227,7 @@
                         <td>
                           <textarea cols="145"
                                     rows="20"
-                                    style   = "width: 890px; height: 240px"
+                                    style   = "width: 890px; height: 240px; line-height: normal;"
                                     placeholder="공지사항을 입력해주세요"
                                     v-model="detail.ancpt"
                           ></textarea>
@@ -236,22 +237,21 @@
 
                 </ul>
                 <ul class="filter-btn" style="margin-top: 7px">
-                  <label for="file-upload-btn">
-                    <input type="file" id="file-upload-btn">
-                  </label>
-                  <div class="upload-nameWrap">
-                    <input type="text" class="upload-name" disabled>
-                    <a href="#" class="upload-delete" onclick="alert('delete-file')"></a>
-                  </div>
-                  <div class="btn btn-line-p">
-                    <a href="#">다운로드</a>
-                  </div>
-                  <div class="btn btn-filter-b" style = "margin-left: 20px" @click="fnClear">
-                    <a href="#" >공지추가</a>
-                  </div>
-                  <div class="btn btn-filter-p" @click="fnSave">
-                    <a href="#">저장</a>
-                  </div>
+                  <ul class="filter-btn"  v-if="this.detail.mng_id">
+                    <th style="margin-top: 5px; margin-right: 10px">첨부파일</th>
+                    <input type="text"
+                           :disabled=true
+                           v-model="detail.org_file_nm"
+                           style="background-color: #f2f2f2; width: 500px;"
+                    >
+                    <button class="btn btn-filter-p" style="margin-right: 140px" @click="open_file_page(2)">첨부</button>
+                  </ul>
+                  <ul class="filter-btn" v-else>
+                    <th style="margin-top: 5px; margin-right: 21px">첨부파일</th>
+                    <th style="margin-top: 5px; ;margin-right: 535px">첨부파일등록은 저장 후 가능합니다.</th>
+                  </ul>
+                  <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">공지추가</button>
+                  <button class="btn btn-filter-p" @click="fnSave">저장</button>
                 </ul>
 
               </div>
@@ -270,6 +270,11 @@ import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 import axios from "axios";
+
+window.fileData = (fileLists) => {
+  console.log(fileLists);
+  window.pms_register.file_name_list = fileLists;
+}
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
@@ -299,7 +304,6 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
-    WindowPopup
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -319,8 +323,10 @@ export default {
   },
   mounted() {
     console.log("mounted");
+    this.init();
     this.setCombo();
     this.fnSearch();
+    window.pms_register = this;
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -344,92 +350,123 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    init() {
+      // 특정 열 비활성화
+      this.$refs.grid1.invoke("disable");
+      this.$refs.grid1.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      this.$refs.grid2.invoke("disable");
+      this.$refs.grid2.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      this.$refs.grid3.invoke("disable");
+      this.$refs.grid3.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      // 그리드 초기화
+      this.$refs.grid1.invoke("clear");
+      this.$refs.grid2.invoke("clear");
+      this.$refs.grid3.invoke("clear");
+      // 공지사항 상세 내용 초기화
+      this.detail.ntar_bzcd_selected = ntar_bzcd[0].value              // (상세)공지구분
+      this.detail.mng_id = ''                                          // (상세)관리ID
+      this.detail.rgs_dt = this.getToday()                             // (상세)요청일자
+      this.detail.titl_txt = ''                                        // (상세)제목내용
+      this.detail.ancpt = ''                                           // (상세)공지내역
+      this.detail.rgs_no = sessionStorage.getItem("LOGIN_EMP_NO")  // (상세)등록자번호
+      this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM")  // (상세)등록자번호
+      this.detail.atfl_mng_id = ''                                      // (상세)첨부파일관리ID
+      this.detail.del_yn = false                                      // 공지사항 삭제 체크박스
+    },
     setCombo() {  // 권한에 따른 콤보박스 활성화/비활성화
       const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      if (aut_cd == '500' || aut_cd == '600') {  //     권한ID가 500, 600인 경우  <프로젝트명> 콤보 활성화
-        document.getElementById('id.prjt_id').disabled = false;
-      }
+      // if (aut_cd == '500' || aut_cd == '600') {  //     권한ID가 500, 600인 경우  <프로젝트명> 콤보 활성화
+      //   document.getElementById('id.prjt_id').disabled = false;
+      // }
     },
     fnSave(){
-      //필수항목 확인
-      if (this.checkPrimary() == true) {
-        //확인창
-        if (confirm("정말 저장하시겠습니까??") == true) {
-          // 관리ID가 없으면 INSERT
-          if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
-            ai.post("/insert",
-                {
-                  bkup_id:this.detail.bkup_id_selected,                // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                // (상세)프로젝트ID
-                  ntar_bzcd:this.detail.ntar_bzcd_selected,               // (상세)공지구분
-                  mng_id: this.detail.mng_id,                          // (상세)관리ID
-                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),    // (상세)공지일자
-                  titl_txt: this.detail.titl_txt,                      // (상세)제목내용
-                  ancpt: this.detail.ancpt,                            // (상세)공지내역
-                  rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
-                  rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
-                  atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
-                  check_Yn: this.detail.check_Yn,                      // (상세)삭제여부
-                  del_yn: this.detail.del_yn,                          // (상세)삭제여부
-                }
-            )
-                .then(res => {
-                  if (res.status == 200) {
-                    console.log(res.data);
+      if(this.detail.bkup_id_selected == '0000000000') {
+        //필수항목 확인
+        if (this.checkPrimary() == true) {
+          //확인창
+          if (confirm("정말 저장하시겠습니까??") == true) {
+            // 관리ID가 없으면 INSERT
+            if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
+              ai.post("/insert",
+                  {
+                    bkup_id: this.detail.bkup_id_selected,               // (상세)백업ID
+                    prjt_id: this.detail.prjt_id_selected,               // (상세)프로젝트ID
+                    ntar_bzcd: this.detail.ntar_bzcd_selected,           // (상세)공지구분
+                    mng_id: this.detail.mng_id,                          // (상세)관리ID
+                    rgs_dt: this.detail.rgs_dt,                          // (상세)공지일자
+                    titl_txt: this.detail.titl_txt,                      // (상세)제목내용
+                    ancpt: this.detail.ancpt,                            // (상세)공지내역
+                    rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
+                    rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
+                    atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
                   }
-                }).catch(e => {
-              alert("필수값을 입력해주세요.");
-            })
+              )
+                  .then(res => {
+                    if (res.status == 200) {
+                      // console.log(res.data);
+                      alert("공지사항 추가 성공.");
+                      //insert 후 재조회
+                      this.$refs.grid3.invoke("reloadData");
+                    }
+                  }).catch(e => {
+                alert("신규 저장 실패.");
+              })
 
-            // 관리ID가 있으면 UPDATE
-          } else {
-            if(check_Yn === true){
-              this.detail.del_yn = 'Y'
+              // 관리ID가 있으면 UPDATE
+            } else {
+              if (this.detail.rgs_no == sessionStorage.getItem("LOGIN_EMP_NO")) { // 공지 등록자가 본인인지 체크
+                ai.put("/update",
+                    {
+                      bkup_id: this.detail.bkup_id_selected,                // (상세)백업ID
+                      prjt_id: this.detail.prjt_id_selected,                // (상세)프로젝트ID
+                      ntar_bzcd: this.detail.ntar_bzcd_selected,            // (상세)공지구분
+                      mng_id: this.detail.mng_id,                           // (상세)관리ID
+                      rgs_dt: this.detail.rgs_dt,                           // (상세)공지일자
+                      titl_txt: this.detail.titl_txt,                       // (상세)제목내용
+                      ancpt: this.detail.ancpt,                             // (상세)공지내역
+                      rgs_no: this.detail.rgs_no,                           // (상세)등록자번호
+                      rgs_nm: this.detail.rgs_nm,                           // (상세)등록자명
+                      atfl_mng_id: this.detail.atfl_mng_id,                 // (상세)첨부파일관리ID
+                      del_yn: this.detail.del_yn,                       // (상세)삭제여부체크박스
+                    }
+                )
+                    .then(res => {
+                      if (res.status == 200) {
+                        // console.log(res.data);
+                        alert("공지사항 수정 성공.");
+                        //update 후 재조회
+                        this.$refs.grid3.invoke("reloadData");
+                      }
+                    }).catch(e => {
+                  alert("저장 실패.");
+                })
+              } else {
+                alert('수정 권한 없음.');
+              }
             }
-            ai.put("/update",
-                {
-                  bkup_id:this.detail.bkup_id_selected,                // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                // (상세)프로젝트ID
-                  ntar_bzcd:this.detail.ntar_bzcd_selected,               // (상세)공지구분
-                  mng_id: this.detail.mng_id,                          // (상세)관리ID
-                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),    // (상세)공지일자
-                  titl_txt: this.detail.titl_txt,                      // (상세)제목내용
-                  ancpt: this.detail.ancpt,                            // (상세)공지내역
-                  rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
-                  rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
-                  atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
-                  check_yn: this.detail.check_Yn,                      // (상세)삭제여부체크박스
-                  del_yn: this.detail.del_yn,                          // (상세)삭제여부
-                }
-            )
-                .then(res => {
-                  if (res.status == 200) {
-                    console.log(res.data);
-                  }
-                }).catch(e => {
-              alert("저장 실패.");
-            })
+
+          } else {   //취소
+            return;
           }
-          //update / insert 후 재조회
-          this.$refs.grid3.invoke("reloadData");
-        } else {   //취소
-          return;
+        } else {
+          //필수 항목 미입력 시
+          alert("필수항목을 입력해 주세요.");
         }
       } else {
-        //필수 항목 미입력 시
-        alert("필수항목을 입력해 주세요.");
+        alert('백업정보는 저장할 수 없습니다.');
       }
     },
     fnClear() {
       // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
-      this.detail.ntar_bzcd_selected = ntar_bzcd[0].value         // (상세)공지구분
+      this.detail.ntar_bzcd_selected = ntar_bzcd[0].value             // (상세)공지구분
       this.detail.mng_id = ''                                         // (상세)관리ID
-      this.detail.rgs_dt = this.getToday()                                         // (상세)요청일자
-      this.detail.titl_txt = ''                                         // (상세)제목내용
-      this.detail.ancpt = ''                                         // (상세)공지내역
-      this.detail.rgs_no = sessionStorage.getItem("LOGIN_EMP_NO")  // (상세)등록자번호
-      this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM")  // (상세)등록자번호
-      this.detail.atfl_mng_id = ''                                           // (상세)첨부파일관리ID
+      this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
+      this.detail.titl_txt = ''                                       // (상세)제목내용
+      this.detail.ancpt = ''                                          // (상세)공지내역
+      this.detail.rgs_no = sessionStorage.getItem("LOGIN_EMP_NO") // (상세)등록자번호
+      this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)등록자번호
+      this.detail.atfl_mng_id = ''                                    // (상세)첨부파일관리ID
+      this.detail.del_yn = false                                    // 공지사항 삭제 체크박스
     },
     onClick(ev) {
       // TO-DO현황 ROW클릭 시 클릭한ROW의 rowNum으로 TO-DO상세내역 재조회
@@ -450,14 +487,15 @@ export default {
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
-      this.detail.ntar_bzcd_selected = currentRowData.ntar_bzcd;       // (상세)공지구분
+      this.detail.ntar_bzcd_selected = currentRowData.ntar_bzcd;         // (상세)공지구분
       this.detail.mng_id = currentRowData.mng_id;                        // (상세)관리ID
-      this.detail.rgs_dt = this.getFormatDate(currentRowData.rgs_dt);    // (상세)공지일자
+      this.detail.rgs_dt = currentRowData.rgs_dt;                        // (상세)공지일자
       this.detail.titl_txt = currentRowData.titl_txt;                    // (상세)제목내용
       this.detail.ancpt = currentRowData.ancpt;                          // (상세)공지내역
       this.detail.rgs_no = currentRowData.rgs_no;                        // (상세)공지자 번호
       this.detail.rgs_nm = currentRowData.rgs_nm;                        // (상세)공지자 이름
       this.detail.atfl_mng_id = currentRowData.atfl_mng_id;              // (상세)첨부파일관리ID
+      this.detail.org_file_nm = currentRowData.org_file_nm;              // (상세)원파일명
     },
     fnSearch(){
       /*조회 시 그리드 구분코드 this.info.gubun를 파라메터로 넘겨서 조회*/
@@ -474,14 +512,24 @@ export default {
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
     },
-    gridInit(){
-      this.$refs.grid1.invoke("clear");
-      this.$refs.grid2.invoke("clear");
-      this.$refs.grid3.invoke("clear");
-    },
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    },
+    // 첨부파일등록 팝업 오픈
+    open_file_page(num){
+      console.log(num)
+      let file_rgs_dscd=''
+      let atfl_mng_id=''
+      if(num == 1) {  // ProjectEyes가이드 파라미터 file_rgs_dscd = 902
+        file_rgs_dscd='902'
+        atfl_mng_id= '0000000000'
+      } else if (num == 2) {   // 공지사항첨부파일 파라미터 file_rgs_dscd = 600
+        file_rgs_dscd='600'
+        atfl_mng_id= this.detail.atfl_mng_id
+      }
+      let bkup_id='0000000000', prjt_id=this.detail.prjt_id_selected, mng_id = this.detail.mng_id
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
     /* YYYY-MM-DD형태의 오늘 날짜를 구하는 함수*/
     getToday() {
@@ -492,43 +540,16 @@ export default {
 
       return year + '-' + month + '-' + day;
     },
-    /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
-    getFormatDate(date) {
-      if (date == null || date === '') {
-        return;
-      } else {
-        let year = date.substr(0, 4);
-        let month = date.substr(4, 2);
-        let day = date.substr(6, 2);
-
-        return year + '-' + month + '-' + day;
-      }
-    },
-    /* YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환 */
-    getUnFormatDate(date) {
-      if (date == null || date === '') {
-        return;
-      } else {
-        let year = date.substr(0, 4);
-        let month = date.substr(5, 2);
-        let day = date.substr(8, 2);
-
-        return year + month + day;
-      }
-    },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.bkup_id == "" || this.detail.bkup_id == "null") {            // 백업ID
+      debugger
+      if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 공지일자
         return false;
-      } else if (this.detail.d_ntar_bzcd == "" || this.detail.d_ntar_bzcd == "null") {   // 공지구분
+      } else if (this.detail.titl_txt == "" || this.detail.titl_txt == "null") {      // 제목내용
         return false;
-      } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 공지일자
+      } else if (this.detail.ancpt == "" || this.detail.ancpt == "null") {            // 공지내역
         return false;
-      } else if (this.detail.titl_txt == "" || this.detail.titl_txt == "null") {           // 제목내용
-        return false;
-      } else if (this.detail.ancpt == "" || this.detail.ancpt == "null") {           // 공지내역
-        return false;
-      } else if (this.detail.rgs_no == "" || this.detail.rgs_no == "null") {   // 등록자번호
+      } else if (this.detail.rgs_no == "" || this.detail.rgs_no == "null") {          // 등록자번호
         return false;
       } else {
         return true;  // 필수 값 모두 입력 시 true
@@ -543,7 +564,20 @@ export default {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
       console.log("old Value :: " + b);
-    }
+    },
+    file_name_list() {
+      // 1. 첨부파일 1개만 보여줄 때
+      this.detail.org_file_nm = this.file_name_list[0].org_file_nm
+
+      // 2. 첨부파일 모두 보여줄 때
+      // this.file_name_list.map(e => {
+      //   if(this.org_file_nm === ''){
+      //     this.org_file_nm += e.org_file_nm
+      //   }else{
+      //     this.org_file_nm += ' / ' + e.org_file_nm
+      //   }
+      // })
+    },
   },
 // 변수 선언부분
   data() {
@@ -576,8 +610,8 @@ export default {
         bkup_id     : bkup_id,                         // 백업ID
         prjt_id     : prjt_id,                         // 프로젝트ID
         ntar_bzcd   : ntar_bzcd,                       // 공지구분
-        bkup_id_selected  : bkup_id[0].value,           // 백업ID
-        prjt_id_selected  : prjt_id[0].value,           // 프로젝트명
+        bkup_id_selected  : bkup_id[0].value,          // 백업ID
+        prjt_id_selected  : prjt_id[0].value,          // 프로젝트명
         ntar_bzcd_selected : ntar_bzcd[0].value,       // 공지구분
         mng_id:this.mng_id,                            // 관리ID
         rgs_dt:this.rgs_dt,                            // 요청일자
@@ -586,9 +620,10 @@ export default {
         rgs_no:this.rgs_no,                            // 등록자번호
         rgs_nm:this.rgs_nm,                            // 등록자번호
         atfl_mng_id:this.atfl_mng_id,                  // 첨부파일관리ID
-        check_Yn    : false,                           // 공지사항 삭제 체크박스
-        del_yn : 'N',                                  // 공지사항 삭제
+        org_file_nm:this.org_file_nm,                  // 원파일명
+        del_yn    : false,                           // 공지사항 삭제 체크박스
       },
+      file_name_list : [],
 
       addRow : {
         grid : this.grid,
@@ -727,6 +762,13 @@ export default {
           width: 150,
           align: 'left',
           name: 'ntar_bzcd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: ntar_bzcd
+            }
+          }
         },
         {
           header: '제목',
