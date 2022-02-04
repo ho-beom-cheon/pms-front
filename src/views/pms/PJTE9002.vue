@@ -156,7 +156,7 @@ export default {
       let sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
       let file_path = '', file_nm = '', org_file_nm = '', rmrmk=''
       this.fileLists.push({
-        sqno,file_path, file_nm, org_file_nm, rmrmk
+        sqno,file_path, file_nm, org_file_nm, rmrmk,
       })
     },
     // 행 삭제
@@ -325,9 +325,11 @@ export default {
         }
       })
       .then(res => {
-        // console.log(res.data);
-        if(res.data == "success"){
+        if(res.data.split('/')[0] === "success"){
           alert("첨부파일이 저장되었습니다.")
+          this.fileLists.push({
+            atfl_mng_id: res.data.split('/')[1]
+          })
           opener.fileData(this.fileLists, this.atfl_num );
           window.close();
         }

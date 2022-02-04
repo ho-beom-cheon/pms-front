@@ -194,6 +194,7 @@ import {axiosService} from "@/api/http";
 window.fileData = (fileLists) => {
   console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
+  window.pms_register.atfl_mng_id = fileLists[fileLists.length-1].atfl_mng_id;
 }
 
 window.empData = (empnm, empno) => {
