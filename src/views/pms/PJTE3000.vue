@@ -175,12 +175,8 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <div class="btn btn-filter-e"  @click="gridExcelExport">
-              <a href="#">엑셀다운로드</a>
-            </div>
-            <div class="btn btn-filter-p" style="margin-left: 20px" @click="fnSearch">
-              <a href="#" >조회</a>
-            </div>
+            <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
@@ -311,7 +307,9 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    // 초기화
     this.init();
+    // 최초조회
     this.fnSearch();
     window.pms_register = this;
     console.log("mounted");
@@ -376,7 +374,7 @@ export default {
     },
 
     fnSearch() {
-      this.comboSetData();
+      // this.comboSetData();
 
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);

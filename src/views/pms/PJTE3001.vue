@@ -285,30 +285,7 @@ export default {
 
       return year + '-' + month + '-' + day;
     },
-    /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
-    getFormatDate(date) {
-      if (date == null || date === '') {
-        return;
-      } else {
-        let year = date.substr(0, 4);
-        let month = date.substr(4, 2);
-        let day = date.substr(6, 2);
 
-        return year + '-' + month + '-' + day;
-      }
-    },
-    /* YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환 */
-    getUnFormatDate(date) {
-      if (date == null || date === '') {
-        return;
-      } else {
-        let year = date.substr(0, 4);
-        let month = date.substr(5, 2);
-        let day = date.substr(8, 2);
-
-        return year + month + day;
-      }
-    },
     // 첨부파일등록 팝업 오픈
     open_file_page(num){
       console.log(num)
@@ -340,16 +317,16 @@ export default {
             this.cctn_nm = res_data.cctn_nm
             this.rgpe_nm = res_data.rgpe_nm
             this.rgpe_no = res_data.rgpe_no
-            this.rgs_dt = this.getFormatDate(res_data.rgs_dt)
+            this.rgs_dt = res_data.rgs_dt
             this.err_txt = res_data.err_txt
             this.rgs_atfl_nm = res_data.rgs_atfl_nm
             this.rgs_atfl_mng_id = res_data.rgs_atfl_mng_id
-            this.ttmn_scd_dt = this.getFormatDate(res_data.ttmn_scd_dt)
+            this.ttmn_scd_dt = res_data.ttmn_scd_dt
             this.dvlpe_nm = res_data.dvlpe_nm
             this.dvlpe_no = res_data.dvlpe_no
             this.pl_nm = res_data.pl_nm
             this.pl_no = res_data.pl_no
-            this.ttmn_dt = this.getFormatDate(res_data.ttmn_dt)
+            this.ttmn_dt = res_data.ttmn_dt
             this.ttmn_txt = res_data.ttmn_txt
             this.ttmn_atfl_nm = res_data.ttmn_atfl_nm
             this.ttmn_atfl_mng_id = res_data.ttmn_atfl_mng_id
@@ -398,12 +375,12 @@ export default {
         err_txt : this.err_txt,                                        // 결함내용
         bzcd : this.bzcd_selected,                                     // 업무구분코드
         err_prc_step_cd : this.err_prc_step_cd_selected,               // 결함처리단계구분코드
-        ttmn_scd_dt : this.getUnFormatDate(this.ttmn_scd_dt),          // 조치예정일자
+        ttmn_scd_dt : this.ttmn_scd_dt,                                // 조치예정일자
         dvlpe_nm : this.dvlpe_nm,                                      // 조치자명
         dvlpe_no : this.dvlpe_no,                                      // 조치자번호
         pl_nm : this.pl_nm,                                            // PL명
         pl_no : this.pl_no,                                            // PL번호
-        ttmn_dt : this.getUnFormatDate(this.ttmn_dt),                  // 조치일자
+        ttmn_dt : this.ttmn_dt,                                        // 조치일자
         ttmn_txt : this.ttmn_txt,                                      // 조치내용
 
         bfjr_bzcd : this.bfjr_bzcd,                                    // 이관전업무
@@ -441,7 +418,7 @@ export default {
         cctn_nm : this.cctn_nm,                                        // (프로그램명/테스트케이스명)
         rgpe_nm : this.rgpe_nm,                                        // 등록자이름
         rgpe_no : this.rgpe_no,                                        // 등록자번호
-        rgs_dt : this.getUnFormatDate(this.rgs_dt),                    // 결함등록일자
+        rgs_dt : this.rgs_dt,                                          // 결함등록일자
 
         err_tycd : this.err_tycd_selected,                             // 결함유형코드
         rgs_dscd : this.rgs_dscd_selected,                             // 결함등록단계구분코드
@@ -451,12 +428,12 @@ export default {
 
         bzcd : this.bzcd_selected,                                     // 업무구분코드
         err_prc_step_cd : this.err_prc_step_cd_selected,               // 결함처리단계구분코드
-        ttmn_scd_dt : this.getUnFormatDate(this.ttmn_scd_dt),          // 조치예정일자
+        ttmn_scd_dt : this.ttmn_scd_dt,                                // 조치예정일자
         dvlpe_nm : this.dvlpe_nm,                                      // 조치자명
         dvlpe_no : this.dvlpe_no,                                      // 조치자번호
         pl_nm : this.pl_nm,                                            // PL명
         pl_no : this.pl_no,                                            // PL번호
-        ttmn_dt : this.getUnFormatDate(this.ttmn_dt),                  // 조치일자
+        ttmn_dt : this.ttmn_dt,                                        // 조치일자
         ttmn_txt : this.ttmn_txt,                                      // 조치내용
         ttmn_atfl_nm : this.ttmn_atfl_nm,                              // 조치파일명
         ttmn_atfl_mng_id : this.ttmn_atfl_mng_id,                      // 조치첨부파일관리ID

@@ -139,20 +139,18 @@
               <div class="input-searchWrap">요청자
                 <input type="text"
                        placeholder="직원명"
-                       id="id.achi_nm"
                        v-model="info.achi_nm"
                        style="width: 90px"
+                       @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn"
-                        id="btn.achi_nm"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(1)"
                 ></button>
               </div>
             </li>
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.achi_no"
                      v-model="info.achi_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
@@ -162,13 +160,12 @@
               <div class="input-searchWrap">조치담당자
                 <input type="text"
                        placeholder="직원명"
-                       id="id.ttmn_crpe_nm"
                        v-model="info.ttmn_crpe_nm"
                        style="width: 90px"
+                       @keyup.enter="open_pjte9001(2)"
                 >
                 <button class="search-btn"
-                        id="btn.ttmn_crpe_nm"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(2)"
                 ></button>
               </div>
             </li>
@@ -259,12 +256,8 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-            </div>
-            <div class="btn btn-filter-p" style="margin-left: 20px">
-              <a href="#" @click="fnSearch">조회</a>
-            </div>
+            <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
@@ -290,12 +283,8 @@
           <div class="div3-b">
             <div class="div-header-b"><h2>상세내용</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
-                <div class="btn btn-filter-b" style="margin-left: 20px">
-                  <a href="#" @click="fnClear">신규초기화</a>
-                </div>
-                <div class="btn btn-filter-p" style="margin-left: 20px">
-                  <a href="#" @click="fnSave">저장</a>
-                </div>
+                <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
+                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
               </ul>
             </div>
             <div class="div2-body-c">
@@ -368,7 +357,8 @@
                     <div class="input-dateWrap">
                       <input type="date"
                              v-model="detail.rgs_dt"
-                             style="width: 150px"
+                             :disabled= true
+                             style="width: 150px; background-color: #f2f2f2;"
                       ></div>
                   </div>
                 </li>
@@ -483,10 +473,10 @@
                     </th>
                     <td>
                       <textarea cols="140"
-                                rows="6"
+                                rows="5"
                                 placeholder="결함내용을 입력해주세요"
                                 v-model="detail.d_req_dis_txt"
-                                style="width: 885px"
+                                style="width: 885px; line-height: normal;"
                       ></textarea>
                     </td>
                   </div>
@@ -498,10 +488,10 @@
                     </th>
                     <td>
                       <textarea cols="140"
-                                rows="6"
+                                rows="5"
                                 placeholder="조치내용을 입력해주세요"
                                 v-model="detail.d_ttmn_txt"
-                                style="width: 885px"
+                                style="width: 885px; line-height: normal;"
                       ></textarea>
                     </td>
                   </div>
@@ -513,10 +503,10 @@
                     </th>
                     <td>
                       <textarea cols="140"
-                                rows="6"
+                                rows="5"
                                 placeholder="해결방안내용을 입력해주세요"
                                 v-model="detail.d_slv_mpln_txt"
-                                style="width: 885px"
+                                style="width: 885px; line-height: normal;"
                       ></textarea>
                     </td>
                   </div>
@@ -528,10 +518,10 @@
                     </th>
                     <td>
                       <textarea cols="140"
-                                rows="5"
+                                rows="2"
                                 placeholder="비고를 입력해주세요"
                                 v-model="detail.rmrk"
-                                style="width: 885px"
+                                style="width: 885px; line-height: normal;"
                       ></textarea>
                     </td>
                   </div>
@@ -542,12 +532,8 @@
           <div class="div4-b">
             <div class="div-header-b"><h2>상세내용확대보기</h2>
               <ul class="filter-btn">
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="textSizeUP">+ 확대</a>
-                </div>
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="textSizeDown">- 축소</a>
-                </div>
+                <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
+                <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
               </ul>
             </div>
             <div class="div2-body-c">
@@ -559,7 +545,7 @@
                               id="detailTextArea"
                               v-model="detail.d_req_dis_txt"
                               :disabled = true
-                              style="height: 428px; width: 647px; background-color: #f2f2f2; border: none"
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
                     ></textarea>
                   </td>
                 </li>
@@ -577,6 +563,7 @@ import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import axios from "axios";
 import PJTE9001 from "@/views/pms/PJTE9001";
+import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
 
@@ -677,6 +664,7 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
+    window.pms_register = this;
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -713,7 +701,7 @@ export default {
       this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
-      this.detail.rgs_dt = ''                                         // (상세)요청일자
+      this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
       this.detail.d_achi_nm = ''                                      // (상세)요청자
       this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
       this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
@@ -739,27 +727,27 @@ export default {
           if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
             ai.post("/insert",
                 {
-                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                                                                             // (상세)관리구분
-                  titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
-                  req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
-                  req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
-                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),                  // (상세)요청일자
-                  achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
-                  prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
-                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
-                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
-                  ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),        // (상세)조치예정일자
-                  ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),                // (상세)조치일자
-                  ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
-                  slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
-                  ifnc_cd: this.detail.ifnc_cd_selected,                             // (상세)영향도
-                  gd_txt: this.detail.gd_txt,                                        // (상세)등급
-                  urgn_cd: this.detail.urgn_cd_selected,                             // (상세)긴급성
-                  rmrk: this.detail.rmrk,                                            // (상세)비고
-                  login_emp_no:this.detail.login_emp_no,                             // (상세)Session 직원 번호
-                  bkup_id:this.detail.bkup_id_selected,                              // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                              // (상세)프로젝트ID
-                  mng_id: this.detail.mng_id,                                        // (상세)관리ID
+                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,        // (상세)관리구분
+                  titl_nm: this.detail.d_titl_nm,                       // (상세)제목
+                  req_dis_txt: this.detail.d_req_dis_txt,               // (상세)요청내용
+                  req_dis_cd: this.detail.d_req_dis_cd_selected,        // (상세)요청구분
+                  rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
+                  achi_nm: this.detail.d_achi_nm,                       // (상세)요청자
+                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리상태
+                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                 // (상세)조치업무명
+                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,             // (상세)조치담당자
+                  ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
+                  ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
+                  ttmn_txt: this.detail.d_ttmn_txt,                     // (상세)조치내용
+                  slv_mpln_txt: this.detail.d_slv_mpln_txt,             // (상세)해결방안내용
+                  ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
+                  gd_txt: this.detail.gd_txt,                           // (상세)등급
+                  urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
+                  rmrk: this.detail.rmrk,                               // (상세)비고
+                  login_emp_no:this.detail.login_emp_no,                // (상세)Session 직원 번호
+                  bkup_id:this.detail.bkup_id_selected,                 // (상세)백업ID
+                  prjt_id:this.detail.prjt_id_selected,                 // (상세)프로젝트ID
+                  mng_id: this.detail.mng_id,                           // (상세)관리ID
                 }
             )
                 .then(res => {
@@ -774,27 +762,27 @@ export default {
           } else {
             ai.put("/update",
                 {
-                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,                   // (상세)관리구분
-                  titl_nm: this.detail.d_titl_nm,                                  // (상세)제목
-                  req_dis_txt: this.detail.d_req_dis_txt,                          // (상세)요청내용
-                  req_dis_cd: this.detail.d_req_dis_cd_selected,                   // (상세)요청구분
-                  rgs_dt: this.getUnFormatDate(this.detail.rgs_dt),                // (상세)요청일자
-                  achi_nm: this.detail.d_achi_nm,                                  // (상세)요청자
-                  prc_step_cd: this.detail.d_prc_step_cd_selected,                 // (상세)처리상태
-                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                            // (상세)조치업무명
-                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,                        // (상세)조치담당자
-                  ttmn_scd_dt: this.getUnFormatDate(this.detail.ttmn_scd_dt),      // (상세)조치예정일자
-                  ttmn_dt: this.getUnFormatDate(this.detail.ttmn_dt),              // (상세)조치일자
-                  ttmn_txt: this.detail.d_ttmn_txt,                                // (상세)조치내용
-                  slv_mpln_txt: this.detail.d_slv_mpln_txt,                        // (상세)해결방안내용
-                  ifnc_cd: this.detail.ifnc_cd_selected,                           // (상세)영향도
-                  gd_txt: this.detail.gd_txt,                                      // (상세)등급
-                  urgn_cd: this.detail.urgn_cd_selected,                           // (상세)긴급성
-                  rmrk: this.detail.rmrk,                                          // (상세)비고
-                  login_emp_no:this.detail.login_emp_no,                           // (상세)Session 직원 번호
-                  bkup_id:this.detail.bkup_id_selected,                            // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                            // (상세)프로젝트ID
-                  mng_id: this.detail.mng_id,                                      // (상세)관리ID
+                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,        // (상세)관리구분
+                  titl_nm: this.detail.d_titl_nm,                       // (상세)제목
+                  req_dis_txt: this.detail.d_req_dis_txt,               // (상세)요청내용
+                  req_dis_cd: this.detail.d_req_dis_cd_selected,        // (상세)요청구분
+                  rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
+                  achi_nm: this.detail.d_achi_nm,                       // (상세)요청자
+                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리상태
+                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                 // (상세)조치업무명
+                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,             // (상세)조치담당자
+                  ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
+                  ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
+                  ttmn_txt: this.detail.d_ttmn_txt,                     // (상세)조치내용
+                  slv_mpln_txt: this.detail.d_slv_mpln_txt,             // (상세)해결방안내용
+                  ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
+                  gd_txt: this.detail.gd_txt,                           // (상세)등급
+                  urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
+                  rmrk: this.detail.rmrk,                               // (상세)비고
+                  login_emp_no:this.detail.login_emp_no,                // (상세)Session 직원 번호
+                  bkup_id:this.detail.bkup_id_selected,                 // (상세)백업ID
+                  prjt_id:this.detail.prjt_id_selected,                 // (상세)프로젝트ID
+                  mng_id: this.detail.mng_id,                           // (상세)관리ID
                 }
             )
                 .then(res => {
@@ -821,7 +809,7 @@ export default {
       this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
-      this.detail.rgs_dt = ''                                         // (상세)요청일자
+      this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
       this.detail.d_achi_nm = ''                                      // (상세)요청자
       this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
       this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
@@ -849,12 +837,12 @@ export default {
       this.detail.d_prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리상태
       this.detail.mng_id = currentRowData.mng_id;                              // (상세)관리ID
       this.detail.d_req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
-      this.detail.rgs_dt = this.getFormatDate(currentRowData.rgs_dt)           // (상세)요청일자
+      this.detail.rgs_dt = currentRowData.rgs_dt;                              // (상세)요청일자
       this.detail.d_achi_nm = currentRowData.achi_nm;                          // (상세)요청자
       this.detail.d_ttmn_crpe_nm = currentRowData.ttmn_crpe_nm;                // (상세)조치담당자
       this.detail.d_tgt_biz_nm = currentRowData.tgt_biz_nm;                    // (상세)조치업무명
-      this.detail.ttmn_scd_dt = this.getFormatDate(currentRowData.ttmn_scd_dt) // (상세)조치예정일자
-      this.detail.ttmn_dt = this.getFormatDate(currentRowData.ttmn_dt)         // (상세)조치일자
+      this.detail.ttmn_scd_dt = currentRowData.ttmn_scd_dt;                    // (상세)조치예정일자
+      this.detail.ttmn_dt = currentRowData.ttmn_dt;                            // (상세)조치일자
       this.detail.ifnc_cd_selected = currentRowData.ifnc_cd;                   // (상세)영향도
       this.detail.urgn_cd_selected = currentRowData.urgn_cd;                   // (상세)긴급성
       this.detail.gd_txt = currentRowData.gd_txt;                              // (상세)등급
@@ -867,11 +855,6 @@ export default {
     },
     /* 저장 */
     fnSearch() {
-      // 조회 버튼 클릭 시 팝업에서 받아온 데이터를 v-model에 넣는다.
-      this.info.achi_no = document.getElementById("id.achi_no").value            // 조회한 요청자 이름 설정
-      this.info.achi_nm = document.getElementById("id.achi_nm").value            // 조회한 요청자 이름 설정
-      this.info.ttmn_crpe_no = document.getElementById("id.ttmn_crpe_no").value  // 조회한 조치담당자 이름 설정
-      this.info.ttmn_crpe_nm = document.getElementById("id.ttmn_crpe_nm").value  // 조회한 조치담당자 이름 설정
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -882,9 +865,46 @@ export default {
     gridExcelImport() {
 
     },
-    open_pjte9001(event) {
-      const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
+    /* YYYY-MM-DD형태의 오늘 날짜를 구하는 함수*/
+    getToday() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = ("0" + (1 + date.getMonth())).slice(-2);
+      var day = ("0" + date.getDate()).slice(-2);
+
+      return year + '-' + month + '-' + day;
+    },
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      if (btn_id == '1') {
+        empnm = this.info.achi_nm
+      } else if (btn_id == '2') {
+        empnm = this.info.ttmn_crpe_nm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.achi_no = res.data.data.contents[0].empno
+                } else if (btn_id == '2') {
+                  this.info.ttmn_crpe_no = res.data.data.contents[0].empno
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
     },
     textSizeUP() {  //상세내용 확대보기  (+확대버튼)
       this.defaultFontSize++;
@@ -893,30 +913,6 @@ export default {
     textSizeDown() {  //상세내용 확대보기  (-축소버튼)
       this.defaultFontSize--;
       document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
-    },
-    /* YYYYMMDD 형태의 Date를 YYYY-MM-DD로 변환 */
-    getFormatDate(date) {
-      if (date == null || date === '') {
-        return;
-      } else {
-        let year = date.substr(0, 4);
-        let month = date.substr(4, 2);
-        let day = date.substr(6, 2);
-
-        return year + '-' + month + '-' + day;
-      }
-    },
-    /* YYYY-MM-DD 형태의 Date를 YYYYMMDD로 변환 */
-    getUnFormatDate(date) {
-      if (date == null || date === '') {
-        return;
-      } else {
-        let year = date.substr(0, 4);
-        let month = date.substr(5, 2);
-        let day = date.substr(8, 2);
-
-        return year + month + day;
-      }
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
@@ -946,11 +942,31 @@ export default {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
       console.log("old Value :: " + b);
+    },
+    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
+       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
+    emp_btn_id() {
+      if(this.emp_btn_id == '1'){       // 요청자
+        this.info.achi_no = this.emp_no
+        this.info.achi_nm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 조치담당자
+        this.info.ttmn_crpe_no = this.emp_no
+        this.info.ttmn_crpe_nm = this.emp_nm
+      }
     }
   },
 // 변수 선언부분
   data() {
     return {
+
+      /*직원조회 팝업 변수*/
+      emp_btn_id : '',  // 직원조회팝업 버튼ID
+      emp_nm : '',      // 직원조회팝업 직원명
+      emp_no : '',      // 직원조회팝업 직원번호
+
+      // emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
+      // emp_colName : '',  // 직원조회팝업 (그리드) colName
+
       info: {
         /* 필터 변수 */
         // 공통 sessionStorage 데이터
@@ -1004,7 +1020,7 @@ export default {
         d_prc_step_cd: d_prc_step_cd,           // (상세)처리상태
         mng_id: '',                             // (상세)관리ID
         d_req_dis_cd: d_req_dis_cd,             // (상세)요청구분
-        rgs_dt: '',                             // (상세)요청일자
+        rgs_dt: this.getToday(),                // (상세)요청일자
         d_achi_nm: this.d_achi_nm,              // (상세)요청자
         d_ttmn_crpe_nm: this.d_ttmn_crpe_nm,    // (상세)조치담당자
         d_tgt_biz_nm: this.d_tgt_biz_nm,        // (상세)조치업무명
