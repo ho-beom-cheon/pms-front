@@ -51,81 +51,15 @@
       <section class="filter">
         <div class="col">
           <ul class="filter-con clear-fix">
-            <li class="filter-item">
-              <div class="item-con">프로젝트명
-                <select
-                    v-model="info.prjt_id_selected"
-                    style="width: 167px"
-                >
-                  <option
-                      v-for="(prjt_id, idx) in info.prjt_id"
-                      :key="idx"
-                      v-text="prjt_id.text"
-                      :value="prjt_id.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">백업ID
-                <select
-                    v-model="info.bkup_id_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(bkup_id, idx) in info.bkup_id"
-                      :key="idx"
-                      v-text="bkup_id.text"
-                      :value="bkup_id.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">관리구분
-                <select
-                    v-model="info.rgs_dis_cd_selected"
-                    style="width: 145px"
-                >
-                  <option
-                      v-for="(rgs_dis_cd, idx) in info.rgs_dis_cd"
-                      :key="idx"
-                      v-text="rgs_dis_cd.text"
-                      :value="rgs_dis_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">요청구분
-                <select
-                    v-model="info.req_dis_cd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(req_dis_cd, idx) in info.req_dis_cd"
-                      :key="idx"
-                      v-text="req_dis_cd.text"
-                      :value="req_dis_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">처리상태
-                <select
-                    v-model="info.prc_step_cd_selected"
-                    style="width: 120px"
-                >
-                  <option
-                      v-for="(prc_step_cd, idx) in info.prc_step_cd"
-                      :key="idx"
-                      v-text="prc_step_cd.text"
-                      :value="prc_step_cd.value"
-                  ></option>
-                </select>
-              </div>
-            </li>
+            <combo
+                :comboArray = "this.comboList"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @rgs_dis_cd_change="rgs_dis_cd_change"
+                @req_dis_cd_change="req_dis_cd_change"
+                @prc_step_cd_change="prc_step_cd_change"
+            >
+            </combo>
             <li class="filter-item">
               <div class="item-con">조치업무명
                 <input type="text"
@@ -560,6 +494,7 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
+import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import axios from "axios";
 import PJTE9001 from "@/views/pms/PJTE9001";
@@ -641,6 +576,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
+    Combo,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -684,10 +620,25 @@ export default {
     getCount() {
       return this.count;
     }
-
   },
-// 일반적인 함수를 선언하는 부분
+  // 일반적인 함수를 선언하는 부분
   methods: {
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params)             {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params)              {this.info.prjt_nm_selected = params},
+    rgs_dis_cd_change(params)          {this.info.rgs_dis_cd_selected = params},
+    req_dis_cd_change(params)          {this.info.req_dis_cd_selected = params},
+    prc_step_cd_change(params)         {this.info.prc_step_cd_selected = params},
+
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected         = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected         = this.$children[0].$data.prjt_nm_selected;
+      this.info.rgs_dis_cd_selected      = this.$children[0].$data.rgs_dis_cd_selected;
+      this.info.req_dis_cd_selected      = this.$children[0].$data.req_dis_cd_selected;
+      this.info.prc_step_cd_selected     = this.$children[0].$data.prc_step_cd_selected;
+    },
     init() {
       // 특정 열 비활성화
       this.$refs.grid.invoke("disable");
@@ -958,7 +909,7 @@ export default {
 // 변수 선언부분
   data() {
     return {
-
+      comboList : ["C27","C0","C12","C13","C3"],
       /*직원조회 팝업 변수*/
       emp_btn_id : '',  // 직원조회팝업 버튼ID
       emp_nm : '',      // 직원조회팝업 직원명

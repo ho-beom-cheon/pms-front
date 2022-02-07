@@ -49,39 +49,11 @@
       <!-- 필터영역 -->
       <section class="filter">
         <ul class="filter-con clear-fix">
-          <li class="filter-item">
-            <div class="item-con">프로젝트명
-              <select
-                  id="id.prjt_id"
-                  v-model="info.prjt_id_selected"
-                  style="width: 167px; background-color: #f2f2f2;"
-                  :disabled = true
-              >
-                <option
-                    v-for="(prjt_id, idx) in info.prjt_id"
-                    :key="idx"
-                    v-text="prjt_id.text"
-                    :value="prjt_id.value"
-                ></option>
-              </select>
-            </div>
-          </li>
-          <li class="filter-item">
-            <div class="item-con">백업ID
-              <select
-                  id="id.bkup_id"
-                  v-model="info.bkup_id_selected"
-                  style="width: 167px"
-              >
-                <option
-                    v-for="(bkup_id, idx) in info.bkup_id"
-                    :key="idx"
-                    v-text="bkup_id.text"
-                    :value="bkup_id.value"
-                ></option>
-              </select>
-            </div>
-          </li>
+          <combo
+              :comboArray = "this.comboList"
+              @bkup_id_change="bkup_id_change"
+              @prjt_nm_chage="prjt_nm_chage"
+          ></combo>
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
         <ul class="filter-btn">
@@ -156,21 +128,11 @@
             <section class="filter-1000">
               <div class = "col">
                 <ul class="filter-con clear-fix">
-                    <li class="filter-item">
-                      <div class="item-con">공지업무
-                        <select
-                            v-model="detail.ntar_bzcd_selected"
-                            style="width: 165px; margin-left: 8px"
-                        >
-                          <option
-                              v-for="(ntar_bzcd, idx) in detail.ntar_bzcd"
-                              :key="idx"
-                              v-text="ntar_bzcd.text"
-                              :value="ntar_bzcd.value"
-                          ></option>
-                        </select>
-                      </div>
-                    </li>
+                  <combo
+                    :comboArray = "this.comboList2"
+                    @ntar_bzcd_change="ntar_bzcd_change"
+                    >
+                  </combo>
                   <li class="filter-item">
                     <div class="item-con">공지일자
                       <div class="input-dateWrap">
@@ -266,7 +228,7 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
-import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
+import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 import axios from "axios";
@@ -304,6 +266,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
+    Combo,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -350,6 +313,17 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    ntar_bzcd_change(params) {this.detail.ntar_bzcd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
+      this.detail.ntar_bzcd_change = this.$children[0].$data.ntar_bzcd_selected;
+    },
+
     init() {
       // 특정 열 비활성화
       this.$refs.grid1.invoke("disable");
@@ -582,6 +556,10 @@ export default {
 // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0"],
+      comboList2 : ["C18"],
+
       info : {
         // 그리드 조회 변수
         gubun : '',               // 그리드 구분자

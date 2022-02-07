@@ -9,10 +9,10 @@
             @change="prjt_nm_chage"
         >
           <option
-              v-for  = "(prjt_nm, idx) in CD0000000000T"
+              v-for  = "(item, idx) in CD0000000000T"
               :key   = "idx"
-              v-text = "prjt_nm.text"
-              :value = "prjt_nm.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -21,14 +21,14 @@
       <div class="item-con">백업ID
         <select
             v-model = "bkup_id_selected"
-            style   = "width: 167px"
+            style   = "width: 120px"
             @change = "bkup_id_change"
         >
           <option
-              v-for  = "(bkup_id, idx) in CD1000000027T"
+              v-for  = "(item, idx) in CD1000000027T"
               :key   = "idx"
-              v-text = "bkup_id.text"
-              :value = "bkup_id.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -42,10 +42,10 @@
             :disabled="read"
         >
           <option
-              v-for  = "(bzcd, idx) in CD1000000001T"
+              v-for  = "(item, idx) in CD1000000001T"
               :key   = "idx"
-              v-text = "bzcd.text"
-              :value = "bzcd.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -58,10 +58,10 @@
             @change = "dvlp_dis_cd_change"
         >
           <option
-              v-for  = "(dvlp_dis_cd, idx) in CD1000000002T"
+              v-for  = "(item, idx) in CD1000000002T"
               :key   = "idx"
-              v-text = "dvlp_dis_cd.text"
-              :value = "dvlp_dis_cd.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -74,10 +74,10 @@
             @change = "sqn_cd_change"
         >
           <option
-              v-for  = "(sqn_cd, idx) in CD1000000006T"
+              v-for  = "(item, idx) in CD1000000006T"
               :key   = "idx"
-              v-text = "sqn_cd.text"
-              :value = "sqn_cd.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -90,10 +90,10 @@
             @change = "itg_tst_prc_cd_change"
         >
           <option
-              v-for  = "(itg_tst_prc_cd, idx) in CD1000000026T"
+              v-for  = "(item, idx) in CD1000000026T"
               :key   = "idx"
-              v-text = "itg_tst_prc_cd.text"
-              :value = "itg_tst_prc_cd.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -102,14 +102,32 @@
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C12'">
       <div class="item-con">관리구분
         <select
-            v-model="mng_cd_selected"
-            style="width: 120px"
+            v-model="rgs_dis_cd_selected"
+            style="width: 145px"
+            @change = "rgs_dis_cd_change"
         >
           <option
-              v-for="(mng_cd, idx) in CD1000000012T"
+              v-for="(item, idx) in CD1000000012T"
               :key="idx"
-              v-text="mng_cd.text"
-              :value="mng_cd.value"
+              v-text="item.text"
+              :value="item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!--   요청구분코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C13'">
+      <div class="item-con">요청구분
+        <select
+            v-model="req_dis_cd_selected"
+            style="width: 120px"
+            @change = "req_dis_cd_change"
+        >
+          <option
+              v-for="(item, idx) in CD1000000013T"
+              :key="idx"
+              v-text="item.text"
+              :value="item.value"
           ></option>
         </select>
       </div>
@@ -123,10 +141,10 @@
             @change = "prc_step_cd_change"
         >
           <option
-              v-for  = "(prc_step_cd, idx) in CD1000000003T"
+              v-for  = "(item, idx) in CD1000000003T"
               :key   = "idx"
-              v-text = "prc_step_cd.text"
-              :value = "prc_step_cd.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -140,10 +158,42 @@
             @change = "pgm_dis_cd_change"
         >
           <option
-              v-for  = "(pgm_dis_cd, idx) in CD1000000004T"
+              v-for  = "(item, idx) in CD1000000004T"
               :key   = "idx"
-              v-text = "pgm_dis_cd.text"
-              :value = "pgm_dis_cd.value"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C7'">
+      <div class="item-con">결함등록단계구분코드
+        <select
+            v-model = "err_rgs_dscd_selected"
+            style   = "width: 110px"
+            @change = "err_rgs_dscd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000007T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C8'">
+      <div class="item-con">결함유형코드
+        <select
+            v-model = "err_tycd_selected"
+            style   = "width: 80px"
+            @change = "err_tycd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000008T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -154,12 +204,13 @@
         <select
             v-model="err_prc_step_cd_selected"
             style="width: 120px"
+            @change = "err_prc_step_cd_change"
         >
           <option
-              v-for="(err_prc_step_cd, idx) in CD1000000009T"
+              v-for="(item, idx) in CD1000000009T"
               :key="idx"
-              v-text="err_prc_step_cd.text"
-              :value="err_prc_step_cd.value"
+              v-text="item.text"
+              :value="item.value"
           ></option>
         </select>
       </div>
@@ -173,10 +224,10 @@
             @change = "req_dscd_change"
         >
           <option
-              v-for  = "(req_dscd, idx) in CD1000000010T"
+              v-for  = "(item, idx) in CD1000000010T"
               :key   = "idx"
-              v-text = "req_dscd.text"
-              :value = "req_dscd.value"
+              v-text = "item.text"
+              :value = "item.value"
           ></option>
         </select>
       </div>
@@ -190,10 +241,27 @@
             @change = "req_prc_step_cd_change"
         >
           <option
-              v-for  = "(req_prc_step_cd, idx) in CD1000000011T"
+              v-for  = "(item, idx) in CD1000000011T"
               :key   = "idx"
-              v-text = "req_prc_step_cd.text"
-              :value = "req_prc_step_cd.value"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!--    공지업무코드-->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C18'">
+      <div class="item-con">공지업무
+        <select
+            v-model="ntar_bzcd_selected"
+            style="width: 165px; margin-left: 8px"
+            @change = "ntar_bzcd_change"
+        >
+          <option
+              v-for="(ntar_bzcd, idx) in CD1000000018T"
+              :key="idx"
+              v-text="ntar_bzcd.text"
+              :value="ntar_bzcd.value"
           ></option>
         </select>
       </div>
@@ -232,7 +300,59 @@
         </select>
       </div>
     </li>
+    <!--   검출구분코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C21'">
+      <div class="item-con">검증구분
+        <select
+            v-model = "check_cd_selected"
+            style   = "width: 200px"
+            @change = "check_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000021T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!--   산출물구분코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C22'">
+      <div class="item-con">산출물구분
+        <select
+            v-model = "file_cd_selected"
+            style   = "width: 180px"
+            @change = "file_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000022T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!--   검색항목코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C36'">
+      <div class="item-con">검색항목
+        <select
+            v-model = "search_cd_selected"
+            style   = "width: 100px"
+            @change = "search_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000036T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
   </div>
+
 
 </template>
 
@@ -288,6 +408,7 @@ export default {
       CD1000000033T : [],  CD1000000033N : [],
       CD1000000034T : [],  CD1000000034N : [],
       CD1000000035T : [],  CD1000000035N : [],
+      CD1000000036T : [],  CD1000000036N : [],
 
       comboList: this.comboArray,
       code_it : [],
@@ -298,50 +419,49 @@ export default {
 
       // 백업ID
       bkup_id_selected : "",
-      bkup_id : "",
       // 프로젝트명
       prjt_nm_selected : "",
-      prjt_nm : "",
       // 업무구분
       bzcd_selected : "",
-      bzcd : "",
       bzcd_n : [],
       // 프로그램구분
       pgm_dis_cd_selected : "",
-      pgm_dis_cd : "",
       // 개발구분
       dvlp_dis_cd_selected : "",
-      dvlp_dis_cd : "",
       // 처리단계
       prc_step_cd_selected : "",
-      prc_step_cd : "",
       // 차수
       sqn_cd_selected : "",
-      sqn_cd : "",
       // 통합테스트 처리단계
       itg_tst_prc_cd_selected : "",
-      itg_tst_prc_cd : "",
       // 결함 처리 단계
       err_prc_step_cd_selected : "",
+      // 결함 유형 코드
+      err_tycd_selected : "",
+      // 결함 등록 단계 구분코드
+      err_rgs_dscd_selected : "",
       // 관리구분
       rgs_dis_cd_selected : "",
       // 요청구분
       req_dis_cd_selected : "",
       //신청구분
       req_dscd_selected:"",
-      req_dscd:"",
       //처리상태
       req_prc_step_cd_selected:"",
-      req_prc_step_cd:"",
       //관리구분
       mng_cd_selected:"",
-      mng_cd:"",
       //WBS_진행상태
       wbs_prc_sts_cd_selected:"",
-      wbs_prc_sts_cd:"",
       //WBS_관리구분
       wbs_mng_cd_selected:"",
-      wbs_mng_cd:"",
+      //공지업무
+      ntar_bzcd_selected:"",
+      //검출코드
+      check_cd_selected:"",
+      //검색항목코드
+      search_cd_selected:"",
+      //산출물구분
+      file_cd_selected:"",
     }
   },
   methods: {
@@ -363,13 +483,21 @@ export default {
     prjt_nm_chage()            {  this.$emit('prjt_nm_chage',           this.prjt_nm_selected)},           // 프로젝트명
     sqn_cd_change()            {  this.$emit('sqn_cd_change',           this.sqn_cd_selected)},            // 차수구분코드
     itg_tst_prc_cd_change()    {  this.$emit('itg_tst_prc_cd_change',   this.itg_tst_prc_cd_selected)},    // 통합테스트 처리구분코드
+    req_dis_cd_change()        {  this.$emit('req_dis_cd_change',       this.req_dis_cd_selected)},        // 요청구분코드
+    rgs_dis_cd_change()        {  this.$emit('rgs_dis_cd_change',       this.rgs_dis_cd_selected)},        // 관리구분코드
     req_dscd_change()          {  this.$emit('req_dscd_change',         this.req_dscd_selected)},          // 신청구분코드
     req_prc_step_cd_change()   {  this.$emit('req_prc_step_cd_change',  this.req_prc_step_cd_selected)},   // 신청처리단계구분코드
     wbs_prc_sts_cd_change()    {  this.$emit('wbs_prc_sts_cd_change',   this.wbs_prc_sts_cd_selected)},    // WBS 진행상태코드
     wbs_mng_cd_change()        {  this.$emit('wbs_mng_cd_change',       this.wbs_mng_cd_selected)},        // WBS 관리구분코드
+    ntar_bzcd_change()         {  this.$emit('ntar_bzcd_change',        this.ntar_bzcd_selected)},         // 공지업무코드
+    err_tycd_change()          {  this.$emit('err_tycd_change',         this.err_tycd_selected)},          // 결함유형구분코드
+    err_rgs_dscd_change()      {  this.$emit('err_rgs_dscd_change',     this.err_rgs_dscd_selected)},      // 결함등록단계구분코드
+    err_prc_step_cd_change()   {  this.$emit('err_prc_step_cd_change',  this.err_prc_step_cd_selected)},   // 결함처리단계구분코드
+    file_cd_change()           {  this.$emit('file_cd_change',          this.file_cd_selected)},           // 산출물구분코드
+    search_cd_change()         {  this.$emit('search_cd_change',        this.search_cd_selected)},         // 검색항목코드
+    check_cd_change()          {  this.$emit('check_cd_change',         this.check_cd_selected)},          // 검출구분코드
 
     setCombo(data) {
-
       for(let i=0; i<this.code_it.length; i++) {
         this.set_yn = "N";
         this.row = 0;
@@ -419,12 +547,18 @@ export default {
               } else if (i === 19) {
                 this.CD1000000019T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000019N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 22) {
+                this.CD1000000022T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000022N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 26) {
                 this.CD1000000026T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000026N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 35) {
                 this.CD1000000035T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000035N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 36) {
+                this.CD1000000036T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000036N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -483,11 +617,24 @@ export default {
               this.CD1000000013T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000013N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 18) {
+              this.CD1000000018T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000018N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 19) {
               this.CD1000000019T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000019N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
-            } else if(i === 26) {
+            } else if(i === 21) {
+              this.CD1000000021T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000021N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 22) {
+              this.CD1000000022T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000022N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            }
+            else if(i === 26) {
               this.CD1000000026T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000026N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
@@ -498,6 +645,10 @@ export default {
             } else if(i === 35) {
               this.CD1000000035T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000035N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 36) {
+              this.CD1000000036T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000036N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
 
@@ -510,17 +661,21 @@ export default {
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected      = this.CD1000000003T[0].value
           if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected       = this.CD1000000004T[0].value
           if(this.CD1000000006T.length !== 0)  this.sqn_cd_selected           = this.CD1000000006T[0].value
-          if(this.CD1000000007T.length !== 0)  this.sqn_cd_selected           = this.CD1000000007T[0].value
-          if(this.CD1000000008T.length !== 0)  this.sqn_cd_selected           = this.CD1000000008T[0].value
+          if(this.CD1000000007T.length !== 0)  this.err_tycd_selected         = this.CD1000000007T[0].value
+          if(this.CD1000000008T.length !== 0)  this.err_rgs_dscd_selected     = this.CD1000000008T[0].value
           if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected  = this.CD1000000009T[0].value
           if(this.CD1000000010T.length !== 0)  this.req_dscd_selected         = this.CD1000000010T[0].value
           if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected  = this.CD1000000011T[0].value
-          if(this.CD1000000012T.length !== 0)  this.mng_cd_selected           = this.CD1000000012T[0].value
-          if(this.CD1000000013T.length !== 0)  this.rgs_dis_cd_selected       = this.CD1000000013T[0].value
+          if(this.CD1000000012T.length !== 0)  this.rgs_dis_cd_selected       = this.CD1000000012T[0].value
+          if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected       = this.CD1000000013T[0].value
+          if(this.CD1000000018T.length !== 0)  this.ntar_bzcd_selected        = this.CD1000000018T[0].value
           if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected       = this.CD1000000019T[0].value
+          if(this.CD1000000021T.length !== 0)  this.check_cd_selected         = this.CD1000000021T[0].value
+          if(this.CD1000000022T.length !== 0)  this.file_cd_selected          = this.CD1000000022T[0].value
           if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected   = this.CD1000000026T[0].value
           if(this.CD1000000027T.length !== 0)  this.bkup_id_selected          = this.CD1000000027T[0].value
-          if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected    = this.CD1000000035T[0].value
+          if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected   = this.CD1000000035T[0].value
+          if(this.CD1000000036T.length !== 0)  this.search_cd_selected        = this.CD1000000036T[0].value
         }
         this.setCdAll()
       }
@@ -563,6 +718,7 @@ export default {
       this.cd_all.push(this.CD1000000033N)
       this.cd_all.push(this.CD1000000034N)
       this.cd_all.push(this.CD1000000035N)
+      this.cd_all.push(this.CD1000000036N)
     },
     init()  {
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
