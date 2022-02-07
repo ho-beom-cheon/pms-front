@@ -49,66 +49,15 @@
             <!-- 필터영역 -->
             <section class="filter">
                 <ul class="filter-con clear-fix">
-                    <li class="filter-item">
-                        <div class="item-con">업무구분
-                            <select
-                                v-model = "info.bzcd_selected"
-                                style   = "width: 180px"
-                            >
-                                <option
-                                    v-for  = "(bzcd, idx) in info.bzcd"
-                                    :key   = "idx"
-                                    v-text = "bzcd.text"
-                                    :value = "bzcd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">산출물구분
-                            <select
-                                v-model = "info.file_cd_selected"
-                                style   = "width: 180px"
-                            >
-                                <option
-                                    v-for  = "(file_cd, idx) in info.file_cd"
-                                    :key   = "idx"
-                                    v-text = "file_cd.text"
-                                    :value = "file_cd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">검증구분
-                            <select
-                                v-model = "info.check_cd_selected"
-                                style   = "width: 200px"
-                            >
-                                <option
-                                    v-for  = "(check_cd, idx) in info.check_cd"
-                                    :key   = "idx"
-                                    v-text = "check_cd.text"
-                                    :value = "check_cd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
-                    <li class="filter-item">
-                        <div class="item-con">검색항목
-                            <select
-                                v-model = "info.search_cd_selected"
-                                style   = "width: 100px"
-                            >
-                                <option
-                                    v-for  = "(search_cd, idx) in info.search_cd"
-                                    :key   = "idx"
-                                    v-text = "search_cd.text"
-                                    :value = "search_cd.value"
-                                ></option>
-                            </select>
-                        </div>
-                    </li>
+                  <combo
+                      :comboArray = "this.comboList"
+                      @bkup_id_change="bkup_id_change"
+                      @prjt_nm_chage="prjt_nm_chage"
+                      @bzcd_change="bzcd_change"
+                      @check_cd_change="check_cd_change"
+                      @file_cd_change="file_cd_change"
+                      @search_cd_change="search_cd_change"
+                  ></combo>
                     <li class="filter-item">
                         <div class="item-con">
                             <input type="text" placeholder="입력" v-model="info.searchbox_cd" style = "width: 330px">
@@ -206,6 +155,7 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
+import Combo from "@/components/Combo";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 //그리드 아이템 예제
@@ -247,6 +197,7 @@ export default {
 	// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
+    Combo,
 	},
 	// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 	// "라이프사이클 훅"이라고 함.
@@ -263,7 +214,6 @@ export default {
 	},
 	mounted() {
 		console.log("mounted");
-    this.fnSearch()
 	},
 	beforeUpdate() {
 		console.log("beforeUpdate");
@@ -286,6 +236,24 @@ export default {
 	},
 	// 일반적인 함수를 선언하는 부분
 	methods: {
+    // Combo.vue 에서 받아온 값
+    bkup_id_change(params)         {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params)          {this.info.prjt_nm_selected = params},
+    bzcd_change(params)            {this.info.bzcd_selected = params},
+    check_cd_change(params)        {this.info.check_cd_selected = params},
+    search_cd_change(params)       {this.info.search_cd_selected = params},
+    file_cd_change(params)         {this.info.file_cd_selected = params},
+
+    // 콤보 처음 값 저장
+    comboSetData(){
+      this.info.bkup_id_selected         = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected         = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected            = this.$children[0].$data.bzcd_selected;
+      this.info.check_cd_selected        = this.$children[0].$data.check_cd_selected;
+      this.info.search_cd_selected       = this.$children[0].$data.search_cd_selected;
+      this.info.file_cd_selected         = this.$children[0].$data.file_cd_selected;
+    },
+
 		change(){
 			console.log();
 		},
@@ -333,11 +301,16 @@ export default {
 	// 변수 선언부분
 	data() {
 		return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C27","C0","C1","C21","C22","C36"],
+
       info: {
-        bzcd_selected: bzcd[0].value,            // 업무구분
-        file_cd_selected: file_cd[0].value,      // 산출물구분
-        check_cd_selected: check_cd[0].value,    // 검증구분
-        search_cd_selected: search_cd[0].value,  // 검색항목구분
+        bkup_id_selected: '',        // 백업 id
+        prjt_nm_selected: '',        // 프로젝트명
+        bzcd_selected: '',           // 업무구분
+        file_cd_selected: '',        // 산출물구분
+        check_cd_selected: '',       // 검증구분
+        search_cd_selected: '',      // 검색항목구분
 
         bzcd: bzcd,                  // 업무구분
         file_cd: file_cd,            // 산출물구분
