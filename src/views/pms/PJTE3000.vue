@@ -56,6 +56,9 @@
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
+                @err_tycd_change="err_tycd_change"
+                @err_rgs_dscd_change="err_rgs_dscd_change"
+                @err_prc_step_cd_change="err_prc_step_cd_change"
             ></combo>
             <li class="filter-item-n">
               <div class="input-searchWrap">결함등록자
@@ -332,20 +335,25 @@ export default {
     getCount() {
       return this.count;
     }
-
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
-    bzcd_change(params) {this.info.bzcd_selected = params},
+    bkup_id_change(params)         {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params)          {this.info.prjt_nm_selected = params},
+    bzcd_change(params)            {this.info.bzcd_selected = params},
+    err_tycd_change(params)        {this.info.err_tycd_selected = params},
+    err_rgs_dscd_change(params)    {this.info.err_rgs_dscd_selected = params},
+    err_prc_step_cd_change(params) {this.info.err_prc_step_cd_selected = params},
 
     // 콤보 처음 값 저장
     comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
+      this.info.bkup_id_selected         = this.$children[0].$data.bkup_id_selected;
+      this.info.prjt_nm_selected         = this.$children[0].$data.prjt_nm_selected;
+      this.info.bzcd_selected            = this.$children[0].$data.bzcd_selected;
+      this.info.err_tycd_selected        = this.$children[0].$data.err_tycd_selected;
+      this.info.err_rgs_dscd_selected    = this.$children[0].$data.err_rgs_dscd_selected;
+      this.info.err_prc_step_cd_selected = this.$children[0].$data.err_prc_step_cd_selected;
     },
 
     init() {
@@ -468,7 +476,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C1","C9"],
+      comboList : ["C27","C0","C1","C7","C8","C9"],
 
       /*직원조회 팝업 변수*/
       emp_btn_id : '',  // 직원조회팝업 버튼ID
@@ -490,7 +498,7 @@ export default {
         prjt_id_selected: prjt_id[0].value,                 // 프로젝트명
         bkup_id_selected: bkup_id[0].value,                 // 백업ID
         bzcd_selected: bzcd[0].value,                       // 업무구분
-        rgs_dscd_selected: rgs_dscd[0].value,               // 등록단계구분
+        err_rgs_dscd_selected: rgs_dscd[0].value,               // 등록단계구분
         err_tycd_selected: err_tycd[0].value,               // 결함유형
         err_prc_step_cd_selected: err_prc_step_cd[0].value, // 처리단계
 

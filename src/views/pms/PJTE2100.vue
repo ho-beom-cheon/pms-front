@@ -61,7 +61,6 @@
                 @pgm_dis_cd_change="pgm_dis_cd_change"
                 @prc_step_cd_change="prc_step_cd_change"
             ></combo>
-
             <li class="filter-item">
               <div class="item-con">예상종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
