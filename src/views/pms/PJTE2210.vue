@@ -244,9 +244,10 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    this.init();
     console.log("mounted");
     // 최초조회
-    //this.fnSearch();
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -279,21 +280,28 @@ export default {
       this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
     },
     init() {
-      axiosService.get(
-          "/dayCalc",
-          {
-          },
-      ).then(res => {
+      axiosService.get("/PJTE1000/days", {
+        params: {
+          prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id_selected: '0000000000',
+        }
+      }).then(res => {
+        this.setDays(res.data.data.contents[0]);
       }).catch(e => {
 
       });
-      // '500', '600' 권한,조회 영역 활성화
-      if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
-
-      }
       // 정렬
       //this.$refs.grid.invoke("sort",);
     },
+
+    setDays(data) {
+       this.s_day = data.s_day;
+       this.proc_dt = data.proc_dt;
+       this.err_proc_dt = data.err_proc_dt;
+       this.proc_days = data.proc_days;
+       this.err_proc_days = data.err_proc_days;
+    },
+
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
@@ -353,6 +361,13 @@ export default {
         sqn_cd_selected : this.sqn_cd_selected,       // 차수구분
         gubun : '',
       },
+
+      s_day               : '',
+      proc_dt             : '',
+      err_proc_dt         : '',
+      proc_days           : '',
+      err_proc_days       : '',
+
       addRow : {
         grid1 : this.grid1,
       },

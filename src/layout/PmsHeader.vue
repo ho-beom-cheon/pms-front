@@ -7,7 +7,7 @@
         </div> 
         <div class="gnb-con"> 
             <ul class="gnb-menu"> 
-                <li class="active"><a href="#">{{this.$route.path}}</a></li>
+                <li class="active"><a href="#">{{this.$route.path.substr(1,this.$route.path.length-1)}}</a></li>
                 <li><a href="#"></a></li>
             </ul> 
             <div class="gnb-etc"> 
@@ -32,11 +32,14 @@ export default {
     BaseNav, 
     CloseButton, 
     BaseDropdown 
-  }, 
+  },
+  created() {
+    sessionStorage.setItem("VIEW_ID", this.$route.path.substr(1,this.$route.path.length-1))
+  },
   data() { 
-    return { 
-empnm : sessionStorage.getItem('LOGIN_EMP_NM'),
-        list: this.$router.options.routes
+    return {
+      empnm : sessionStorage.getItem('LOGIN_EMP_NM'),
+              list: this.$router.options.routes
     } 
   }, 
   methods:{
@@ -49,6 +52,7 @@ empnm : sessionStorage.getItem('LOGIN_EMP_NM'),
       sessionStorage.setItem("LOGIN_CATN_DCD", "");          // 구성원 구분코드
       sessionStorage.setItem("LOGIN_AUT_CD", "");            // 권한ID
       sessionStorage.setItem("LOGIN_YN", "");                // 로그인상태
+      sessionStorage.setItem("VIEW_ID", "");                 // 화면 ID
       this.$router.push('/login')
     },
   }
