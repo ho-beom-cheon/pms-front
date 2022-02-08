@@ -1261,3 +1261,7 @@ aside dl dd + dd a {
     border-top: 1px solid var(--primary);
     gap: 4px;
 }
+.tui-grid-cell-disabled {
+    background-color: #f2f2f2 !important;
+    color: black !important;
+}
