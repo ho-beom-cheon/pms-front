@@ -101,13 +101,13 @@
               </div>
             </li>
             <li class="filter-item">
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.dvlpe_no"
-                       v-model="info.dvlpe_no"
-                       style="width: 70px; background-color: #f2f2f2;"
-                       :disabled = true
-                >
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.dvlpe_no"
+                     v-model="info.dvlpe_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
             </li>
             <li class="filter-item-n">
               <div class="input-searchWrap">담당PL명
@@ -123,13 +123,13 @@
               </div>
             </li>
             <li class="filter-item">
-                <input type="text"
-                       placeholder="직원번호"
-                       id="id.pl_no"
-                       v-model="info.pl_no"
-                       style="width: 70px; background-color: #f2f2f2;"
-                       :disabled = true
-                >
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.pl_no"
+                     v-model="info.pl_no"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
             </li>
             <li class="filter-item">
               <div class="item-con">개발자완료일자
@@ -200,6 +200,14 @@ import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
 
+// 첨부파일 팝업에서 받은 값
+window.fileData = (fileLists, num) => {
+  console.log(fileLists);
+  window.pms_register.file_name_list = fileLists;
+  window.pms_register.atfl_num = num;
+  window.pms_register.atfl_mng_id_YN = fileLists[1].atfl_mng_id;
+  window.pms_register.atfl_mng_id = fileLists[1].atfl_mng_id;
+}
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
   window.pms_register.emp_nm = empnm;
@@ -254,7 +262,6 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
-
     console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
@@ -269,7 +276,7 @@ export default {
     // 화면 초기화
     this.init();
     // 화면 접속 시 데이터 조회
-    // this.fnSearch();
+    this.fnSearch();
     console.log("mounted");
     window.pms_register = this;
   },
@@ -303,16 +310,6 @@ export default {
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     prc_step_cd_change(params) {this.info.prc_step_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-      this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
-      this.info.pgm_dis_cd_selected = this.$children[0].$data.pgm_dis_cd_selected;
-      this.info.itg_tst_prc_cd_selected = this.$children[0].$data.itg_tst_prc_cd_selected;
-    },
-
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
@@ -339,10 +336,10 @@ export default {
     // 저장 버튼
     fnSave(){
       // 변경 사항 유무 체크
-      if(this.$refs.grid.invoke("isModified") === false){
-        alert("변경된 내용이 없습니다.");
-        return;
-      }
+      // if(this.$refs.grid.invoke("isModified") === false){
+      //   alert("변경된 내용이 없습니다.");
+      //   return;
+      // }
       // 데이터 로그 확인
       console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
       console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
@@ -382,7 +379,7 @@ export default {
             console.log("업데이트 오류 ::", e);
           }
         } else {
-           this.$refs.grid.invoke("reloadData");
+          this.$refs.grid.invoke("reloadData");
         }
       }
       if(this.deletedRows.length !== 0){
@@ -431,15 +428,17 @@ export default {
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
-      this.$refs.grid.invoke("getRow",this.curRow);
+      let gridData = this.$refs.grid.invoke("getRow",this.curRow);
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id') {
-        this.pop = window.open("../PJTE9002/", "open_page", "width=100, height=400");
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
       if(ev.columnName === 'pal_atfl_mng_id') {
-        this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&pal_atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -490,15 +489,16 @@ export default {
       }
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-        if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
-          this.modals.txt_modal1 = true;
-          this.modalTxt = currentCellData.value;
-          const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-        }
+      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
     },
     // 그리드 내용 더블클릭 시 상세보기 모달팝업
     dblonClick(ev) {
       this.curRow = ev.rowKey;
+      debugger;
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -512,7 +512,6 @@ export default {
       if(this.searchVaildation() === false) {
         return;
       }
-      this.comboSetData();
 
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -595,7 +594,6 @@ export default {
       //if(this.bkup_id_selected === null) { alert("백업 ID는 필수 입력 사항입니다"); return false;}
       //if(this.prjt_nm_selected === null) { alert("프로그램 ID는 필수 입력 사항입니다"); return false;}
       return true;
-
     },
     // 유효값 검증
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
@@ -642,11 +640,10 @@ export default {
         if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
         if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
 
-        // if(data[i].prc_step_cd >= "200"){
-        //   if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-        // }
+        if(data[i].prc_step_cd >= "200"){
+          if(data[i].atfl_mng_id === 'N')  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+        }
       }
-
       return  true;
     },
   },
@@ -680,7 +677,6 @@ export default {
       }
     },
     emp_colName() {  // 그리드에 있는 직원조회 팝업 (emp_colName과 emp_rowKey로 구분)
-      debugger
       if(this.emp_colName == 'dvlpe_btn') {
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
@@ -691,7 +687,18 @@ export default {
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
         this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
       }
+    },
+    atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
+      if(this.atfl_mng_id_YN !== '') {
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id_YN);
+      }
+    },
+    pal_atfl_mng_id(){
+      if(this.pal_atfl_mng_id !== '') {
+        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', 'Y');
+      }
     }
+
   },
 
 // 변수 선언부분
@@ -701,12 +708,14 @@ export default {
       comboList : ["C27","C0","C1","C2","C3","C4"],
 
       /*직원조회 팝업 변수*/
-      emp_btn_id : '',  // 직원조회팝업 버튼ID
-      emp_nm : '',      // 직원조회팝업 직원명
-      emp_no : '',      // 직원조회팝업 직원번호
+      emp_btn_id          : '',  // 직원조회팝업 버튼ID
+      emp_nm              : '',  // 직원조회팝업 직원명
+      emp_no              : '',  // 직원조회팝업 직원번호
 
-      emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
-      emp_colName : '',  // 직원조회팝업 (그리드) colName
+      emp_rowKey          : '',  // 직원조회팝업 (그리드) rowKey
+      emp_colName         : '',  // 직원조회팝업 (그리드) colName
+      atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
+      pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
 
       info : {
         pgm_id                : this.pgm_id,          // 프로그램ID
@@ -719,13 +728,15 @@ export default {
         frcs_end_dt           : this.frcs_end_dt,     // 계획일자END
         dvlpe_sta_dt          : this.dvlpe_sta_dt,    // 실제일자STA
         dvlpe_end_dt          : this.dvlpe_end_dt,    // 실제일자END
+        atfl_mng_id           : this.atfl_mng_id,
+        pal_atfl_mng_id       : this.pal_atfl_mng_id,
 
-        prjt_nm_selected      : null,
-        bkup_id_selected      : null,
-        bzcd_selected         : null,
-        dvlp_dis_cd_selected  : null,
-        pgm_dis_cd_selected   : null,
-        prc_step_cd_selected  : null,
+        prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
+        bkup_id_selected      : '0000000000',
+        bzcd_selected         : sessionStorage.getItem("LOGIN_BZCD"),
+        dvlp_dis_cd_selected  : 'TTT',
+        pgm_dis_cd_selected   : 'TTT',
+        prc_step_cd_selected  : 'TTT',
       },
       login : {
         login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
@@ -737,7 +748,7 @@ export default {
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
       createdRows : this.createdRows,
-
+      rowData : this.$store.state["pms"].CD0000000000N,
       addRow : {
         grid : this.grid,
       },
@@ -793,12 +804,14 @@ export default {
       header:{
         height: 45,
         complexColumns: [
-          {header: '계획',      name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
-          {header: '실적',      name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']},
-          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_nm', 'dvlpe_btn','dvlpe_no'], hideChildHeaders : true},
-          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], hideChildHeaders : true},
-          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], hideChildHeaders : true},
+          {header: '계획',             name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
+          {header: '실적',             name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
+          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']},
+          {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_nm', 'dvlpe_btn','dvlpe_no'], hideChildHeaders : true},
+          {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], hideChildHeaders : true},
+          {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], hideChildHeaders : true},
+          {header: '단위테스트케이스',   name: 'mergeColumn7', childNames: ['atfl_mng_id']},
+          {header: '설계서',           name: 'mergeColumn8', childNames: ['pal_atfl_mng_id']},
         ]
       },
       columns: [
@@ -853,6 +866,8 @@ export default {
           align: 'center',
           name: 'dvlp_dis_cd',
           formatter: 'listItemText',
+          type:'text',
+          rowSpan: true,
           editor: {
             type: 'select',
             options:{
@@ -866,7 +881,6 @@ export default {
                   ]
             }
           },
-
         },
         {
           header: '프로그램구분',
@@ -885,7 +899,7 @@ export default {
                     {"text":"보고서","value":"300"},
                     {"text":"배치","value":"400"}
                   ]
-             }
+            }
           }
         },
         {
@@ -926,7 +940,6 @@ export default {
           align: 'center',
           name: 'dvlpe_cnf_dt',
           editor: 'datePicker',
-
         },
         {
           header: 'PL확인일자',
@@ -958,19 +971,6 @@ export default {
             }
           }
         },
-        // {
-        //   header: '진행현황',
-        //   width: 160,
-        //   align: 'center',
-        //   name: 'prg_txt',
-        //   formatter: 'listItemText',
-        //   editor: {
-        //     type: 'select',
-        //     options:{
-        //       listItems: listItem
-        //     }
-        //   }
-        // },
         {
           header: '개발자',
           width: 80,
@@ -1033,6 +1033,14 @@ export default {
           name: 'crpe_no',
         },
         {
+          header: '첨부파일관리ID',
+          width: 130,
+          align: 'center',
+          name: 'atfl_mng_id',
+          type : 'text',
+          defaultValue: 'N',
+        },
+        {
           header: '전체',
           width: 80,
           align: 'right',
@@ -1069,29 +1077,20 @@ export default {
           editor: 'text',
         },
         {
+          header: '첨부파일관리ID',
+          width: 150,
+          align: 'center',
+          name: 'pal_atfl_mng_id',
+          // hidden : true,
+          defaultValue: 'N',
+        },
+        {
           header: '비고',
           width: 220,
           align: 'left',
           name: 'rmrk',
           editor: 'text',
           ellipsis : true,
-        },
-        {
-          header: '단위테스트결과서\n첨부파일관리ID',
-          width: 150,
-          align: 'center',
-          //hidden : true,
-          name: 'atfl_mng_id',
-          renderer: CustomRenderer,
-          // hidden : true,
-        },
-        {
-          header: '설계서 첨부파일관리ID',
-          width: 150,
-          align: 'center',
-          name: 'pal_atfl_mng_id',
-          renderer: CustomRenderer,
-          // hidden : true,
         },
         {
           header: '개발자사번',
