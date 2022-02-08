@@ -61,29 +61,6 @@
               <div class="input-dateWrap"><input type="date" v-model="info.inq_date"></div>
             </div>
           </li>
-          <li class="filter-item-n">
-            <div class="input-searchWrap">담당PL명
-              <input type="text"
-                     placeholder="직원명"
-                     id="id.pl_nm"
-                     v-model="info.pl_nm"
-                     style   = "width: 90px"
-              >
-              <button class="search-btn"
-                      id="btn.pl"
-                      @click="open_pjte9001"
-              ></button>
-            </div>
-          </li>
-          <li class="filter-item">
-            <input type="text"
-                   placeholder="직원번호"
-                   id="id.pl_no"
-                   v-model="info.pl_no"
-                   style="width: 70px; background-color: #f2f2f2;"
-                   :disabled = true
-            >
-          </li>
         </ul>
         <ul class="filter-con clear-fix" :hidden="true">
           <li class="filter-item">
@@ -127,7 +104,7 @@
             <div class="div-header"><h2>업무별 개발현황</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport1">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -150,7 +127,7 @@
             <div class="div-header"><h2>담당자별 개발현황</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport2">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -173,7 +150,7 @@
             <div class="div-header"><h2>결함현황</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport3">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -196,7 +173,7 @@
             <div class="div-header"><h2>개발 및 결함 미진내역</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport4">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -226,6 +203,14 @@ import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
+
+// 현재 날짜
+let today = new Date();
+let year = today.getFullYear();
+let month = ('0' + (today.getMonth() + 1)).slice(-2);
+let day = ('0' + today.getDate()).slice(-2);
+let dateString = year + '-' + month  + '-' + day;
+
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
@@ -268,7 +253,7 @@ export default {
   mounted() {
     console.log("mounted");
     // 최초조회
-    //this.fnSearch();
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -292,13 +277,6 @@ export default {
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     bzcd_change(params) {this.info.bzcd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      debugger;
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-    },
     init() {
       axiosService.get(
           "/dayCalc",
@@ -320,7 +298,6 @@ export default {
       this.curRow = ev.rowKey;
     },
     fnSearch() {
-      this.comboSetData();
       this.info.gubun = "1";
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
@@ -340,12 +317,11 @@ export default {
       this.$refs.grid3.invoke("clear");
       this.$refs.grid4.invoke("clear");
     },
-    gridExcelExport() {
-      this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-      this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-      this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-      this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-    },
+    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
+    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
+    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
+    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
+
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
@@ -365,12 +341,12 @@ export default {
       comboList : ["C27","C0","C1"],
 
       info: {
-        crpe_no: this.crpe_no,       // 담당자 사번
-        inq_date: this.inq_date,         // 기준일자
+        crpe_no: this.crpe_no,             // 담당자 사번
+        inq_date: dateString,         // 기준일자
         /* select 박스 */
-        bkup_id_selected: this.bkup_id_selected,      // 프로젝트명
-        prjt_nm_selected: this.prjt_nm_selected,      // 프로젝트명
-        bzcd_selected: this.bzcd_selected,         // 업무구분
+        bkup_id_selected: "0000000000",      // 프로젝트명
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),      // 프로젝트명
+        bzcd_selected: sessionStorage.getItem("LOGIN_BZCD"),         // 업무구분
         gubun : '',
       },
       addRow : {
@@ -629,6 +605,7 @@ export default {
           width: 100,
           align: 'left',
           name: 'bzcd',
+          type:'text',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -642,6 +619,7 @@ export default {
           width: 65,
           align: 'right',
           name: 'tot_err_cnt',
+
         },
         {
           header: '결함',

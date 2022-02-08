@@ -594,12 +594,12 @@ export default {
         crpe_eno     : this.crpe_eno,        // 담당현업명
         rqu_sbh_id   : this.rqu_sbh_id,      // 요구사항 ID
 
-        prjt_nm_selected         : null,
-        bkup_id_selected         : null,
-        bzcd_selected            : null,
-        sqn_cd_selected          : null,
-        pgm_dis_cd_selected      : null,
-        itg_tst_prc_cd_selected  : null,
+        prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
+        bkup_id_selected         : '0000000000',
+        bzcd_selected            : sessionStorage.getItem("LOGIN_BZCD"),
+        sqn_cd_selected          : 'TTT',
+        pgm_dis_cd_selected      : 'TTT',
+        itg_tst_prc_cd_selected  : 'TTT',
 
         frcs_end_dt01: '',        // 예상종료일자 (시작)
         frcs_end_dt02: '',        // 예상종료일자 (종료)
