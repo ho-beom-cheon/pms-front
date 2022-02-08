@@ -155,7 +155,6 @@ import {Grid} from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css';
-import axios from "axios";
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -172,10 +171,9 @@ class CustomRenderer {
   }
   render(props) {
     // 결함등록 버튼 img
-    this.el.src = 'src/assets/img/ic_upload.svg';
+    this.el.src = '/img/ic_logOut.8c60a751.svg';
   }
 }
-
 //그리드 아이템 예제 
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
 
@@ -276,16 +274,6 @@ export default {
     wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected        = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected        = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected           = this.$children[0].$data.bzcd_selected;
-      this.info.mng_cd_selected         = this.$children[0].$data.mng_cd_selected;
-      this.info.wbs_prc_sts_cd_selected = this.$children[0].$data.wbs_prc_sts_cd_selected;
-      this.info.wbs_mng_cd_selected     = this.$children[0].$data.wbs_mng_cd_selected;
-    },
-
     fnSave() {
       this.rowData = this.$refs.grid.invoke("getData")
 
@@ -320,19 +308,9 @@ export default {
       if(ev.columnName === 'btn_popup') {
         this.pop = window.open("../PJTE9002/", "open_page", "width=1000, height=800");
       }
-
-      let totRows = this.$refs.grid.invoke("getData").length;
-      let i;
-
-      for(i=0; i<totRows; i++){
-        if(this.$refs.grid.invoke("getValue", i, "step_cd") === '100'){
-
-            this.$refs.grid.invoke("disabledCell", i, 'prg_rt');
-        }
-      }
     },
     fnSearch() {
-      this.comboSetData();
+      //this.comboSetData();
 
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -345,7 +323,6 @@ export default {
       } else {
         this.validated = true;
       }
-      this.$refs.grid.invoke("disableCell", 2, 'prg_rt');
     },
     open_pjte9001() {
       this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");
@@ -410,6 +387,9 @@ export default {
               wgtRt = this.$refs.grid.invoke("getValue", x, "wgt_rt");
               prtRt = this.$refs.grid.invoke("getValue", x, "prg_rt");
 
+              if(hgrnMngid === "1000000001"){
+                this.$refs.grid.invoke("disableCell", x,"prg_rt");
+              }
               if (mngid === hgrnMngid) {
                 totWgtRt = totWgtRt + wgtRt * prtRt
               }
@@ -424,7 +404,6 @@ export default {
     open_page() {
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
     }
-
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분 
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음 
@@ -442,12 +421,12 @@ export default {
         task_nm: this.task_nm,  // task명
         crpe_nm: this.crpe_nm,  // 담당자명
 
-        prjt_nm_selected         : null,
-        bkup_id_selected         : null,
-        bzcd_selected            : null,
-        mng_cd_selected          : null,
-        wbs_prc_sts_cd_selected  : null,
-        wbs_mng_cd_selected      : null,
+        prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
+        bkup_id_selected         : '0000000000',
+        bzcd_selected            : sessionStorage.getItem("LOGIN_BZCD"),
+        mng_cd_selected          : 'TTT',
+        wbs_prc_sts_cd_selected  : 'TTT',
+        wbs_mng_cd_selected      : 'TTT',
 
         acl_sta_dt : null,
         acl_end_dt : null,
