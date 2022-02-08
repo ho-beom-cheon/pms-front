@@ -335,6 +335,7 @@ export default {
     getCount() {
       return this.count;
     }
+
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
@@ -413,6 +414,7 @@ export default {
     },
     open_pjte9001(btn_id) {
       let empnm = ''
+      let prjt_id_selected = this.info.prjt_id_selected
       if (btn_id == '1') {
         empnm = this.info.rgpe_nm
       } else if (btn_id == '2') {
@@ -423,27 +425,33 @@ export default {
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
           params: {
-            empnm
+            empnm,
+            prjt_id_selected
           }
         })
             .then(res => {
               let res_data = res.data.data.contents;
-              // console.log(res_data)
+              console.log('직원조회 값:', res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                if (btn_id == '1') {
-                  this.info.rgpe_no = res.data.data.contents[0].empno
-                } else if (btn_id == '2') {
-                  this.info.dvlpe_no = res.data.data.contents[0].empno
-                } else if (btn_id == '3') {
-                  this.info.pl_no = res.data.data.contents[0].empno
+                if(empnm == res_data[0].empnm) {
+                  if (btn_id == '1') {
+                    this.info.rgpe_no = res.data.data.contents[0].empno
+                  } else if (btn_id == '2') {
+                    this.info.dvlpe_no = res.data.data.contents[0].empno
+                  } else if (btn_id == '3') {
+                    this.info.pl_no = res.data.data.contents[0].empno
+                  }
+                } else {
+                  let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
+                  window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     }
@@ -495,12 +503,12 @@ export default {
         err_tycd: err_tycd,                 //결함유형
         err_prc_step_cd: err_prc_step_cd,   //처리단계
 
-        prjt_id_selected: prjt_id[0].value,                 // 프로젝트명
-        bkup_id_selected: bkup_id[0].value,                 // 백업ID
-        bzcd_selected: bzcd[0].value,                       // 업무구분
-        err_rgs_dscd_selected: rgs_dscd[0].value,               // 등록단계구분
-        err_tycd_selected: err_tycd[0].value,               // 결함유형
-        err_prc_step_cd_selected: err_prc_step_cd[0].value, // 처리단계
+        prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
+        bkup_id_selected      : '0000000000',
+        bzcd_selected: 'TTT',                       // 업무구분
+        err_rgs_dscd_selected: 'TTT',               // 등록단계구분
+        err_tycd_selected: 'TTT',               // 결함유형
+        err_prc_step_cd_selected: 'TTT', // 처리단계
 
         rgpe_no: this.rgpe_no,       // 결함등록자번호
         rgpe_nm: this.rgpe_nm,       // 결함등록자명
@@ -668,13 +676,13 @@ export default {
         },
         {
           header: '테스트케이스ID',
-          width: 120,
+          width: 150,
           align: 'center',
           name: 'cctn_id'
         },
         {
           header: '테스트케이스명',
-          width: 180,
+          width: 250,
           align: 'left',
           name: 'cctn_nm'
         },

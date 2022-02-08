@@ -65,52 +65,27 @@
                 <input type="text"
                        placeholder="입력"
                        v-model="info.tgt_biz_nm"
-                       style="width: 110px"
+                       style="width: 170px"
                 >
               </div>
             </li>
-            <li class="filter-item-n">
+            <li class="filter-item">
               <div class="input-searchWrap">요청자
                 <input type="text"
                        placeholder="직원명"
                        v-model="info.achi_nm"
-                       style="width: 90px"
-                       @keyup.enter="open_pjte9001(1)"
+                       style="width: 120px"
                 >
-                <button class="search-btn"
-                        @click="open_pjte9001(1)"
-                ></button>
               </div>
             </li>
             <li class="filter-item">
-              <input type="text"
-                     placeholder="직원번호"
-                     v-model="info.achi_no"
-                     style="width: 70px; background-color: #f2f2f2;"
-                     :disabled = true
-              >
-            </li>
-            <li class="filter-item-n">
               <div class="input-searchWrap">조치담당자
                 <input type="text"
                        placeholder="직원명"
                        v-model="info.ttmn_crpe_nm"
-                       style="width: 90px"
-                       @keyup.enter="open_pjte9001(2)"
+                       style="width: 120px"
                 >
-                <button class="search-btn"
-                        @click="open_pjte9001(2)"
-                ></button>
               </div>
-            </li>
-            <li class="filter-item">
-              <input type="text"
-                     placeholder="직원번호"
-                     id="id.ttmn_crpe_no"
-                     v-model="info.ttmn_crpe_no"
-                     style="width: 70px; background-color: #f2f2f2;"
-                     :disabled = true
-              >
             </li>
             <li class="filter-item">
               <div class="item-con">요청일자
@@ -229,7 +204,7 @@
                     <input type="text"
                            placeholder="입력 불가"
                            v-model="detail.mng_id"
-                           :disabled = true
+                           :disabled=true
                            style="background-color: #f2f2f2 ; width: 150px"
                     >
                   </div>
@@ -254,7 +229,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>*처리상태</label>
+                    <label>*처리단계</label>
                     <select
                         v-model="detail.d_prc_step_cd_selected"
                         style="width: 150px; margin-right: 150px"
@@ -291,7 +266,7 @@
                     <div class="input-dateWrap">
                       <input type="date"
                              v-model="detail.rgs_dt"
-                             :disabled= true
+                             :disabled=true
                              style="width: 150px; background-color: #f2f2f2;"
                       ></div>
                   </div>
@@ -411,6 +386,7 @@
                                 placeholder="결함내용을 입력해주세요"
                                 v-model="detail.d_req_dis_txt"
                                 style="width: 885px; line-height: normal;"
+                                @click="enlarged_view(1)"
                       ></textarea>
                     </td>
                   </div>
@@ -426,6 +402,7 @@
                                 placeholder="조치내용을 입력해주세요"
                                 v-model="detail.d_ttmn_txt"
                                 style="width: 885px; line-height: normal;"
+                                @click="enlarged_view(2)"
                       ></textarea>
                     </td>
                   </div>
@@ -441,6 +418,7 @@
                                 placeholder="해결방안내용을 입력해주세요"
                                 v-model="detail.d_slv_mpln_txt"
                                 style="width: 885px; line-height: normal;"
+                                @click="enlarged_view(3)"
                       ></textarea>
                     </td>
                   </div>
@@ -456,6 +434,7 @@
                                 placeholder="비고를 입력해주세요"
                                 v-model="detail.rmrk"
                                 style="width: 885px; line-height: normal;"
+                                @click="enlarged_view(4)"
                       ></textarea>
                     </td>
                   </div>
@@ -464,7 +443,12 @@
             </div>
           </div>
           <div class="div4-b">
-            <div class="div-header-b"><h2>상세내용확대보기</h2>
+            <div class="div-header-b">
+              <h2 v-if="this.large_num == ''">상세내용 확대보기</h2>
+              <h2 v-if="this.large_num == '1'">요청내용 확대보기</h2>
+              <h2 v-if="this.large_num == '2'">조치내용 확대보기</h2>
+              <h2 v-if="this.large_num == '3'">해결방안내용 확대보기</h2>
+              <h2 v-if="this.large_num == '4'">비고 확대보기</h2>
               <ul class="filter-btn">
                 <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
                 <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
@@ -474,11 +458,44 @@
               <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
                   <td>
-                    <textarea cols="103"
+                    <textarea v-if="this.large_num == ''"
+                              cols="103"
                               rows="33"
                               id="detailTextArea"
                               v-model="detail.d_req_dis_txt"
-                              :disabled = true
+                              :disabled=true
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                    ></textarea>
+                    <textarea v-else-if="this.large_num == '1'"
+                              cols="103"
+                              rows="33"
+                              id="detailTextArea"
+                              v-model="detail.d_req_dis_txt"
+                              :disabled=true
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                    ></textarea>
+                    <textarea v-else-if="this.large_num == '2'"
+                              cols="103"
+                              rows="33"
+                              id="detailTextArea"
+                              v-model="detail.d_ttmn_txt"
+                              :disabled=true
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                    ></textarea>
+                    <textarea v-else-if="this.large_num == '3'"
+                              cols="103"
+                              rows="33"
+                              id="detailTextArea"
+                              v-model="detail.d_slv_mpln_txt"
+                              :disabled=true
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                    ></textarea>
+                    <textarea v-else-if="this.large_num == '4'"
+                              cols="103"
+                              rows="33"
+                              id="detailTextArea"
+                              v-model="detail.rmrk"
+                              :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
                     ></textarea>
                   </td>
@@ -494,17 +511,19 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
-import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import axios from "axios";
-import PJTE9001 from "@/views/pms/PJTE9001";
+import Combo from "@/components/Combo"
 import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {text: "PMS프로젝트3", value: "1000000003"}];
+var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {
+  text: "PMS프로젝트3",
+  value: "1000000003"
+}];
 var bkup_id = [{text: "백업", value: "0000000000"}];
 
 
@@ -523,7 +542,7 @@ const req_dis_cd = [
   {text: "협의사항", value: "300"},
   {text: "기타", value: "900"},
 ];
-// 처리상태(이슈처리단계구분코드)
+// 처리단계(이슈처리단계구분코드)
 const prc_step_cd = [
   {text: "전체", value: 'TTT'},
   {text: "발생", value: "100"},
@@ -545,7 +564,7 @@ const d_req_dis_cd = [
   {text: "협의사항", value: "300"},
   {text: "기타", value: "900"},
 ];
-// 상세내용 처리상태(이슈처리단계구분코드)
+// 상세내용 처리단계(이슈처리단계구분코드)
 const d_prc_step_cd = [
   {text: "발생", value: "100"},
   {text: "요청", value: "200"},
@@ -575,8 +594,8 @@ const ai = axios.create({
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
-    grid: Grid,
     Combo,
+    grid: Grid,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
 // "라이프사이클 훅"이라고 함.
@@ -600,7 +619,6 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
-    window.pms_register = this;
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -620,8 +638,9 @@ export default {
     getCount() {
       return this.count;
     }
+
   },
-  // 일반적인 함수를 선언하는 부분
+// 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params)             {this.info.bkup_id_selected = params},
@@ -639,6 +658,7 @@ export default {
       this.info.req_dis_cd_selected      = this.$children[0].$data.req_dis_cd_selected;
       this.info.prc_step_cd_selected     = this.$children[0].$data.prc_step_cd_selected;
     },
+
     init() {
       // 특정 열 비활성화
       this.$refs.grid.invoke("disable");
@@ -649,7 +669,7 @@ export default {
       this.info.cmpl_yn = false
       // 상세내용 초기화
       this.detail.d_rgs_dis_cd_selected = d_rgs_dis_cd[0].value       // (상세)관리구분
-      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
+      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리단계
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
@@ -684,7 +704,7 @@ export default {
                   req_dis_cd: this.detail.d_req_dis_cd_selected,        // (상세)요청구분
                   rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
                   achi_nm: this.detail.d_achi_nm,                       // (상세)요청자
-                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리상태
+                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리단계
                   tgt_biz_nm: this.detail.d_tgt_biz_nm,                 // (상세)조치업무명
                   ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,             // (상세)조치담당자
                   ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
@@ -695,9 +715,9 @@ export default {
                   gd_txt: this.detail.gd_txt,                           // (상세)등급
                   urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
                   rmrk: this.detail.rmrk,                               // (상세)비고
-                  login_emp_no:this.detail.login_emp_no,                // (상세)Session 직원 번호
-                  bkup_id:this.detail.bkup_id_selected,                 // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                 // (상세)프로젝트ID
+                  login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
+                  bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
+                  prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
                   mng_id: this.detail.mng_id,                           // (상세)관리ID
                 }
             )
@@ -719,7 +739,7 @@ export default {
                   req_dis_cd: this.detail.d_req_dis_cd_selected,        // (상세)요청구분
                   rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
                   achi_nm: this.detail.d_achi_nm,                       // (상세)요청자
-                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리상태
+                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리단계
                   tgt_biz_nm: this.detail.d_tgt_biz_nm,                 // (상세)조치업무명
                   ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,             // (상세)조치담당자
                   ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
@@ -730,9 +750,9 @@ export default {
                   gd_txt: this.detail.gd_txt,                           // (상세)등급
                   urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
                   rmrk: this.detail.rmrk,                               // (상세)비고
-                  login_emp_no:this.detail.login_emp_no,                // (상세)Session 직원 번호
-                  bkup_id:this.detail.bkup_id_selected,                 // (상세)백업ID
-                  prjt_id:this.detail.prjt_id_selected,                 // (상세)프로젝트ID
+                  login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
+                  bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
+                  prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
                   mng_id: this.detail.mng_id,                           // (상세)관리ID
                 }
             )
@@ -750,14 +770,13 @@ export default {
           return;
         }
       } else {
-        //필수 항목 미입력 시
-        alert("필수항목을 입력해 주세요.");
+
       }
 
     },
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
       this.detail.d_rgs_dis_cd_selected = d_rgs_dis_cd[0].value       // (상세)관리구분
-      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리상태
+      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리단계
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
@@ -778,14 +797,14 @@ export default {
     onClick(ev) {
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
-      if(currentRowData != null) {
+      if (currentRowData != null) {
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
       }
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
       this.detail.d_rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
-      this.detail.d_prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리상태
+      this.detail.d_prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리단계
       this.detail.mng_id = currentRowData.mng_id;                              // (상세)관리ID
       this.detail.d_req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
       this.detail.rgs_dt = currentRowData.rgs_dt;                              // (상세)요청일자
@@ -825,36 +844,15 @@ export default {
 
       return year + '-' + month + '-' + day;
     },
-    open_pjte9001(btn_id) {
-      let empnm = ''
-      if (btn_id == '1') {
-        empnm = this.info.achi_nm
-      } else if (btn_id == '2') {
-        empnm = this.info.ttmn_crpe_nm
-      }
-      if (empnm != null && empnm != '') {
-        axiosService.get("/PJTE9001/select", {
-          params: {
-            empnm
-          }
-        })
-            .then(res => {
-              let res_data = res.data.data.contents;
-              // console.log(res_data)
-              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                if (btn_id == '1') {
-                  this.info.achi_no = res.data.data.contents[0].empno
-                } else if (btn_id == '2') {
-                  this.info.ttmn_crpe_no = res.data.data.contents[0].empno
-                }
-              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
-                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
-              }
-            })
-      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+    enlarged_view(num){
+      if (num == 1) {
+        this.large_num = '1'
+      } else if (num == 2) {
+        this.large_num = '2'
+      } else if (num == 3) {
+        this.large_num = '3'
+      } else if (num == 4) {
+        this.large_num = '4'
       }
     },
     textSizeUP() {  //상세내용 확대보기  (+확대버튼)
@@ -868,18 +866,25 @@ export default {
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
       if (this.detail.d_rgs_dis_cd == "" || this.detail.d_rgs_dis_cd == "null") {            // 관리구분
+        alert('관리구분이 없습니다.');
         return false;
-      } else if (this.detail.d_prc_step_cd == "" || this.detail.d_prc_step_cd == "null") {   // 처리상태
+      } else if (this.detail.d_prc_step_cd == "" || this.detail.d_prc_step_cd == "null") {   // 처리단계
+        alert('처리단계가 없습니다.');
         return false;
       } else if (this.detail.d_req_dis_cd == "" || this.detail.d_req_dis_cd == "null") {     // 요청구분
+        alert('요청구분이 없습니다.');
         return false;
       } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 요청일자
+        alert('요청일자를 입력해주세요.');
         return false;
       } else if (this.detail.d_achi_nm == "" || this.detail.d_achi_nm == "null") {           // 요청자
+        alert('요청자를 입력해주세요.');
         return false;
       } else if (this.detail.d_titl_nm == "" || this.detail.d_titl_nm == "null") {           // 제목
+        alert('제목을 입력해주세요.');
         return false;
       } else if (this.detail.d_req_dis_txt == "" || this.detail.d_req_dis_txt == "null") {   // 요청내용
+        alert('요청내용을 입력해주세요.');
         return false;
       } else {
         return true;  // 필수 값 모두 입력 시 true
@@ -894,37 +899,22 @@ export default {
       console.log("new Value :: " + a);
       console.log("old Value :: " + b);
     },
-    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
-       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
-    emp_btn_id() {
-      if(this.emp_btn_id == '1'){       // 요청자
-        this.info.achi_no = this.emp_no
-        this.info.achi_nm = this.emp_nm
-      }else if(this.emp_btn_id == '2'){ // 조치담당자
-        this.info.ttmn_crpe_no = this.emp_no
-        this.info.ttmn_crpe_nm = this.emp_nm
-      }
-    }
   },
 // 변수 선언부분
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C12","C13","C3"],
-      /*직원조회 팝업 변수*/
-      emp_btn_id : '',  // 직원조회팝업 버튼ID
-      emp_nm : '',      // 직원조회팝업 직원명
-      emp_no : '',      // 직원조회팝업 직원번호
 
-      // emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
-      // emp_colName : '',  // 직원조회팝업 (그리드) colName
+      large_num : '',
 
       info: {
         /* 필터 변수 */
         // 공통 sessionStorage 데이터
-        login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
-        login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
+        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
         bkup_id: bkup_id,                // 백업ID
         prjt_id: prjt_id,                // 프로젝트ID
@@ -932,16 +922,16 @@ export default {
         req_dis_cd: req_dis_cd,          // 요청구분
         prc_step_cd: prc_step_cd,        // 처리상태
 
-        bkup_id_selected: bkup_id[0].value,          // 백업ID
-        prjt_id_selected: prjt_id[0].value,          // 프로젝트명
-        rgs_dis_cd_selected: rgs_dis_cd[0].value,    // 선택 된 관리구분
-        req_dis_cd_selected: req_dis_cd[0].value,    // 선택 된 요청구분
-        prc_step_cd_selected: prc_step_cd[0].value,  // 선택 된 처리상태
+        bkup_id_selected      : '0000000000',              // 백업ID
+        prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
+        rgs_dis_cd_selected: 'TTT',    // 선택 된 관리구분
+        req_dis_cd_selected: 'TTT',    // 선택 된 요청구분
+        prc_step_cd_selected: 'TTT',  // 선택 된 처리상태
 
-        rgs_sta_dt: '',         // 요청시작일자
-        rgs_end_dt: '',         // 요청종료일자
-        ttmn_sta_dt: '',        // 조치시작일자
-        ttmn_end_dt: '',        // 조치종료일자
+        rgs_sta_dt: this.rgs_sta_dt,         // 요청시작일자
+        rgs_end_dt: this.rgs_end_dt,         // 요청종료일자
+        ttmn_sta_dt: this.ttmn_sta_dt,        // 조치시작일자
+        ttmn_end_dt: this.ttmn_end_dt,        // 조치종료일자
 
         tgt_biz_nm: this.tgt_biz_nm,               // 조치업무명
         achi_nm: this.achi_nm,                     // 요청자
@@ -960,10 +950,10 @@ export default {
       detail: {
         /* 상세내용 변수 */
         // 공통 sessionStorage 데이터
-        login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
-        login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
+        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
         bkup_id: bkup_id,                // 백업ID
         prjt_id: prjt_id,                // 프로젝트ID
@@ -993,6 +983,7 @@ export default {
         d_prc_step_cd_selected: d_prc_step_cd[0].value,    // (상세)선택 된 처리상태
         urgn_cd_selected: urgn_cd[0].value,                // (상세)영향도
         ifnc_cd_selected: ifnc_cd[0].value,                // (상세)긴급성
+
       },
 
       addRow: {
@@ -1088,7 +1079,7 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: rgs_dis_cd
             }
           }
@@ -1104,14 +1095,14 @@ export default {
           width: 230,
           align: 'left',
           name: 'titl_nm',
-          ellipsis : true,
+          ellipsis: true,
         },
         {
           header: '요청내용',
           width: 280,
           align: 'left',
           name: 'req_dis_txt',
-          ellipsis : true,
+          ellipsis: true,
         },
         {
           header: '요청구분',
@@ -1121,7 +1112,7 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: req_dis_cd
             }
           }
@@ -1140,14 +1131,14 @@ export default {
           name: 'achi_nm',
         },
         {
-          header: '처리상태',
+          header: '처리단계',
           width: 110,
           align: 'left',
           name: 'prc_step_cd',
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: prc_step_cd
             }
           }
@@ -1183,14 +1174,14 @@ export default {
           width: 230,
           align: 'left',
           name: 'ttmn_txt',
-          ellipsis : true,
+          ellipsis: true,
         },
         {
           header: '비고',
           width: 230,
           align: 'left',
           name: 'rmrk',
-          ellipsis : true,
+          ellipsis: true,
         },
         {
           header: '긴급성',
@@ -1200,7 +1191,7 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: urgn_cd
             }
           }
@@ -1213,7 +1204,7 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: ifnc_cd
             }
           }
@@ -1230,7 +1221,7 @@ export default {
           width: 230,
           align: 'left',
           name: 'slv_mpln_txt',
-          ellipsis : true,
+          ellipsis: true,
         },
       ]
     }

@@ -19,7 +19,8 @@
         <div class="accordion" id="accordionExample">
           <div class="card">
             <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+                      aria-expanded="true" aria-controls="collapseOne">
                 PMS
               </button>
             </div>
@@ -50,17 +51,17 @@
       <section class="filter">
         <ul class="filter-con clear-fix">
           <combo
-              :comboArray = "this.comboList"
+              :comboArray="this.comboList"
               @bkup_id_change="bkup_id_change"
               @prjt_nm_chage="prjt_nm_chage"
           ></combo>
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
         <ul class="filter-btn">
-            <button class="btn btn-filter-p"
-                    style = "margin-left: 10px; background-color: #9FC93C"
-                    @click="open_file_page(1)">ProjectEyes 가이드 ⓘ
-            </button>
+          <button class="btn btn-filter-p"
+                  style="margin-left: 10px; background-color: #9FC93C"
+                  @click="open_file_page(1)">ProjectEyes 가이드 ⓘ
+          </button>
         </ul>
       </section>
       <!-- page contents -->
@@ -105,78 +106,78 @@
             </div>
           </div>
           <div class="div0-a">
-          <div class="div3-a">
-            <div class="div-header-a"><h2>프로젝트 공지사항</h2>
+            <div class="div3-a">
+              <div class="div-header-a"><h2>프로젝트 공지사항</h2>
+              </div>
+              <div class="div-grid-a">
+                <grid
+                    ref="grid3"
+                    :data="dataSource"
+                    :header="header"
+                    :columns="columns3"
+                    :bodyHeight="320"
+                    :minRowHeight="minRowHeight"
+                    :showDummyRows="showDummyRows"
+                    :columnOptions="columnOptions"
+                    :rowHeight="rowHeight"
+                    :rowHeaders="rowHeaders"
+                    @click="onClick"
+                ></grid>
+              </div>
             </div>
-            <div class="div-grid-a">
-              <grid
-                  ref="grid3"
-                  :data="dataSource"
-                  :header="header"
-                  :columns="columns3"
-                  :bodyHeight="320"
-                  :minRowHeight="minRowHeight"
-                  :showDummyRows="showDummyRows"
-                  :columnOptions="columnOptions"
-                  :rowHeight="rowHeight"
-                  :rowHeaders="rowHeaders"
-                  @click="onClick"
-              ></grid>
-            </div>
-          </div>
-          <div class="div4-a">
-            <section class="filter-1000">
-              <div class = "col">
-                <ul class="filter-con clear-fix">
-                  <combo
-                    :comboArray = "this.comboList2"
-                    @ntar_bzcd_change="ntar_bzcd_change"
+            <div class="div4-a">
+              <section class="filter-1000">
+                <div class="col">
+                  <ul class="filter-con clear-fix">
+                    <combo
+                        :comboArray="this.comboList2"
+                        @ntar_bzcd_change="ntar_bzcd_change"
                     >
-                  </combo>
-                  <li class="filter-item">
-                    <div class="item-con">공지일자
-                      <div class="input-dateWrap">
-                        <input type="date"
-                               v-model="detail.rgs_dt"
-                               :disabled = true
-                               style="background-color: #f2f2f2;"
+                    </combo>
+                    <li class="filter-item">
+                      <div class="item-con">공지일자
+                        <div class="input-dateWrap">
+                          <input type="date"
+                                 v-model="detail.rgs_dt"
+                                 :disabled=true
+                                 style="background-color: #f2f2f2;"
+                          >
+                        </div>
+                      </div>
+                    </li>
+                    <li class="filter-item-n">
+                      <div class="input-searchWrap">공지자
+                        <input type="text"
+                               placeholder="직원명"
+                               id="id.rgs_nm"
+                               v-model="detail.rgs_nm"
+                               style="width: 80px; background-color: #f2f2f2;"
+                               :disabled=true
                         >
                       </div>
-                    </div>
-                  </li>
-                  <li class="filter-item-n">
-                    <div class="input-searchWrap">공지자
+                    </li>
+                    <li class="filter-item">
                       <input type="text"
-                             placeholder="직원명"
-                             id="id.rgs_nm"
-                             v-model="detail.rgs_nm"
+                             placeholder="직원번호"
+                             id="id.rgs_no"
+                             v-model="detail.rgs_no"
                              style="width: 80px; background-color: #f2f2f2;"
-                             :disabled = true
+                             :disabled=true
                       >
-                    </div>
-                  </li>
-                  <li class="filter-item">
-                    <input type="text"
-                           placeholder="직원번호"
-                           id="id.rgs_no"
-                           v-model="detail.rgs_no"
-                           style="width: 80px; background-color: #f2f2f2;"
-                           :disabled = true
-                    >
-                  </li>
-                  <li  v-if="this.detail.mng_id" class="filter-item">
-                    <div class="item-con">
-                      <input type="checkbox" id="del_yn" v-model="detail.del_yn">
-                      <label>　공지사항삭제</label>
-                    </div>
-                  </li>
+                    </li>
+                    <li v-if="this.detail.mng_id" class="filter-item">
+                      <div class="item-con">
+                        <input type="checkbox" id="del_yn" v-model="detail.del_yn">
+                        <label>　공지사항삭제</label>
+                      </div>
+                    </li>
 
                     <li class="filter-item">
                       <div class="item-con">　제목　
                         <input type="text"
                                placeholder="제목을 입력해주세요"
                                v-model="detail.titl_txt"
-                               style   = "width: 890px; margin-left: 6px"
+                               style="width: 890px; margin-left: 6px"
                         >
                       </div>
                     </li>
@@ -189,7 +190,7 @@
                         <td>
                           <textarea cols="145"
                                     rows="20"
-                                    style   = "width: 890px; height: 240px; line-height: normal;"
+                                    style="width: 890px; height: 240px; line-height: normal;"
                                     placeholder="공지사항을 입력해주세요"
                                     v-model="detail.ancpt"
                           ></textarea>
@@ -197,28 +198,29 @@
                       </div>
                     </li>
 
-                </ul>
-                <ul class="filter-btn" style="margin-top: 7px">
-                  <ul class="filter-btn"  v-if="this.detail.mng_id">
-                    <th style="margin-top: 5px; margin-right: 10px">첨부파일</th>
-                    <input type="text"
-                           :disabled=true
-                           v-model="detail.org_file_nm"
-                           style="background-color: #f2f2f2; width: 500px;"
-                    >
-                    <button class="btn btn-filter-p" style="margin-right: 140px" @click="open_file_page(2)">첨부</button>
                   </ul>
-                  <ul class="filter-btn" v-else>
-                    <th style="margin-top: 5px; margin-right: 21px">첨부파일</th>
-                    <th style="margin-top: 5px; ;margin-right: 535px">첨부파일등록은 저장 후 가능합니다.</th>
+                  <ul class="filter-btn" style="margin-top: 7px">
+                    <ul class="filter-btn" v-if="this.detail.mng_id">
+                      <th style="margin-top: 5px; margin-right: 10px">첨부파일</th>
+                      <input type="text"
+                             :disabled=true
+                             v-model="detail.org_file_nm"
+                             style="background-color: #f2f2f2; width: 500px;"
+                      >
+                      <button class="btn btn-filter-p" style="margin-right: 140px" @click="open_file_page(2)">첨부
+                      </button>
+                    </ul>
+                    <ul class="filter-btn" v-else>
+                      <th style="margin-top: 5px; margin-right: 21px">첨부파일</th>
+                      <th style="margin-top: 5px; ;margin-right: 535px">첨부파일등록은 저장 후 가능합니다.</th>
+                    </ul>
+                    <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">공지추가</button>
+                    <button class="btn btn-filter-p" @click="fnSave">저장</button>
                   </ul>
-                  <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">공지추가</button>
-                  <button class="btn btn-filter-p" @click="fnSave">저장</button>
-                </ul>
 
-              </div>
-            </section>
-          </div>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </section>
@@ -227,7 +229,7 @@
 </template>
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
-import { Grid } from '@toast-ui/vue-grid';
+import {Grid} from '@toast-ui/vue-grid';
 import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
@@ -239,23 +241,17 @@ window.fileData = (fileLists) => {
 }
 
 //그리드 아이템 예제
-var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {text: "PMS프로젝트3", value: "1000000003"}];
+var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
+var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {
+  text: "PMS프로젝트3",
+  value: "1000000003"
+}];
 var bkup_id = [{text: "백업", value: "0000000000"}];
-
-
-// 업무구분
-const bzcd = [
-  {text:"전체", value:'TTT'},
-  {text:"신용", value:'AAA'},
-  {text:"재무제표", value:"BBB"},
-  {text:"신용평가", value:"CCC"},
-];
 
 // 공지구분
 const ntar_bzcd = [
-  {text:"프로젝트공지", value:'100'},
-  {text:"업무공지", value:"200"},
+  {text: "프로젝트공지", value: '100'},
+  {text: "업무공지", value: "200"},
 ];
 
 const ai = axios.create({
@@ -279,22 +275,24 @@ export default {
 // 변수 초기화
   created() {
     console.log("created");
-
+    this.detail.ntar_bzcd_selected = this.$children[0].$data.ntar_bzcd_selected
   },
   beforeMount() {
     console.log("beforeMount");
   },
   mounted() {
     console.log("mounted");
+    // 초기 설정
     this.init();
-    this.setCombo();
+    // 그리드 조회
     this.fnSearch();
+
     window.pms_register = this;
   },
   beforeUpdate() {
     console.log("beforeUpdate");
   },
-  updated(){
+  updated() {
     console.log("updated");
   },
   beforeDestroy() {
@@ -313,12 +311,18 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
-    bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
-    ntar_bzcd_change(params) {this.detail.ntar_bzcd_selected = params},
+    bkup_id_change(params) {
+      this.info.bkup_id_selected = params
+    },
+    prjt_nm_chage(params) {
+      this.info.prjt_nm_selected = params
+    },
+    ntar_bzcd_change(params) {
+      this.detail.ntar_bzcd_selected = params
+    },
 
     // 콤보 처음 값 저장
-    comboSetData(){
+    comboSetData() {
       this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
       this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
       this.detail.ntar_bzcd_change = this.$children[0].$data.ntar_bzcd_selected;
@@ -327,17 +331,16 @@ export default {
     init() {
       // 특정 열 비활성화
       this.$refs.grid1.invoke("disable");
-      this.$refs.grid1.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      this.$refs.grid1.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       this.$refs.grid2.invoke("disable");
-      this.$refs.grid2.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      this.$refs.grid2.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       this.$refs.grid3.invoke("disable");
-      this.$refs.grid3.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      this.$refs.grid3.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid1.invoke("clear");
       this.$refs.grid2.invoke("clear");
       this.$refs.grid3.invoke("clear");
       // 공지사항 상세 내용 초기화
-      this.detail.ntar_bzcd_selected = ntar_bzcd[0].value              // (상세)공지구분
       this.detail.mng_id = ''                                          // (상세)관리ID
       this.detail.rgs_dt = this.getToday()                             // (상세)요청일자
       this.detail.titl_txt = ''                                        // (상세)제목내용
@@ -345,16 +348,10 @@ export default {
       this.detail.rgs_no = sessionStorage.getItem("LOGIN_EMP_NO")  // (상세)등록자번호
       this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM")  // (상세)등록자번호
       this.detail.atfl_mng_id = ''                                      // (상세)첨부파일관리ID
-      this.detail.del_yn = false                                      // 공지사항 삭제 체크박스
+      this.detail.del_yn = false                                        // 공지사항 삭제 체크박스
     },
-    setCombo() {  // 권한에 따른 콤보박스 활성화/비활성화
-      const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      // if (aut_cd == '500' || aut_cd == '600') {  //     권한ID가 500, 600인 경우  <프로젝트명> 콤보 활성화
-      //   document.getElementById('id.prjt_id').disabled = false;
-      // }
-    },
-    fnSave(){
-      if(this.detail.bkup_id_selected == '0000000000') {
+    fnSave() {
+      if (this.detail.bkup_id_selected == '0000000000') {
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
@@ -364,7 +361,7 @@ export default {
               ai.post("/insert",
                   {
                     bkup_id: this.detail.bkup_id_selected,               // (상세)백업ID
-                    prjt_id: this.detail.prjt_id_selected,               // (상세)프로젝트ID
+                    prjt_id: this.detail.prjt_nm_selected,               // (상세)프로젝트ID
                     ntar_bzcd: this.detail.ntar_bzcd_selected,           // (상세)공지구분
                     mng_id: this.detail.mng_id,                          // (상세)관리ID
                     rgs_dt: this.detail.rgs_dt,                          // (상세)공지일자
@@ -373,6 +370,8 @@ export default {
                     rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
                     rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
                     atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
+                    login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), // 직원번호
+                    login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                   }
               )
                   .then(res => {
@@ -392,7 +391,7 @@ export default {
                 ai.put("/update",
                     {
                       bkup_id: this.detail.bkup_id_selected,                // (상세)백업ID
-                      prjt_id: this.detail.prjt_id_selected,                // (상세)프로젝트ID
+                      prjt_id: this.detail.prjt_nm_selected,                // (상세)프로젝트ID
                       ntar_bzcd: this.detail.ntar_bzcd_selected,            // (상세)공지구분
                       mng_id: this.detail.mng_id,                           // (상세)관리ID
                       rgs_dt: this.detail.rgs_dt,                           // (상세)공지일자
@@ -402,6 +401,8 @@ export default {
                       rgs_nm: this.detail.rgs_nm,                           // (상세)등록자명
                       atfl_mng_id: this.detail.atfl_mng_id,                 // (상세)첨부파일관리ID
                       del_yn: this.detail.del_yn,                       // (상세)삭제여부체크박스
+                      login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), // 직원번호
+                      login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                     }
                 )
                     .then(res => {
@@ -423,8 +424,7 @@ export default {
             return;
           }
         } else {
-          //필수 항목 미입력 시
-          alert("필수항목을 입력해 주세요.");
+
         }
       } else {
         alert('백업정보는 저장할 수 없습니다.');
@@ -432,7 +432,6 @@ export default {
     },
     fnClear() {
       // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
-      this.detail.ntar_bzcd_selected = ntar_bzcd[0].value             // (상세)공지구분
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
       this.detail.titl_txt = ''                                       // (상세)제목내용
@@ -471,7 +470,7 @@ export default {
       this.detail.atfl_mng_id = currentRowData.atfl_mng_id;              // (상세)첨부파일관리ID
       this.detail.org_file_nm = currentRowData.org_file_nm;              // (상세)원파일명
     },
-    fnSearch(){
+    fnSearch() {
       /*조회 시 그리드 구분코드 this.info.gubun를 파라메터로 넘겨서 조회*/
       //그리드 1
       this.info.gubun = "1";
@@ -491,18 +490,18 @@ export default {
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
     },
     // 첨부파일등록 팝업 오픈
-    open_file_page(num){
+    open_file_page(num) {
       console.log(num)
-      let file_rgs_dscd=''
-      let atfl_mng_id=''
-      if(num == 1) {  // ProjectEyes가이드 파라미터 file_rgs_dscd = 902
-        file_rgs_dscd='902'
-        atfl_mng_id= '0000000000'
+      let file_rgs_dscd = ''
+      let atfl_mng_id = ''
+      if (num == 1) {  // ProjectEyes가이드 파라미터 file_rgs_dscd = 902
+        file_rgs_dscd = '902'
+        atfl_mng_id = '0000000000'
       } else if (num == 2) {   // 공지사항첨부파일 파라미터 file_rgs_dscd = 600
-        file_rgs_dscd='600'
-        atfl_mng_id= this.detail.atfl_mng_id
+        file_rgs_dscd = '600'
+        atfl_mng_id = this.detail.atfl_mng_id
       }
-      let bkup_id='0000000000', prjt_id=this.detail.prjt_id_selected, mng_id = this.detail.mng_id
+      let bkup_id = '0000000000', prjt_id = this.detail.prjt_nm_selected, mng_id = this.detail.mng_id
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
     /* YYYY-MM-DD형태의 오늘 날짜를 구하는 함수*/
@@ -516,14 +515,20 @@ export default {
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      debugger
       if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 공지일자
+        alert('공지일자를 입력해주세요.');
         return false;
       } else if (this.detail.titl_txt == "" || this.detail.titl_txt == "null") {      // 제목내용
+        alert('제목을 입력해주세요.');
         return false;
       } else if (this.detail.ancpt == "" || this.detail.ancpt == "null") {            // 공지내역
+        alert('공지사항을 입력해주세요.');
         return false;
       } else if (this.detail.rgs_no == "" || this.detail.rgs_no == "null") {          // 등록자번호
+        alert('공지자가 없습니다.');
+        return false;
+      } else if (this.detail.prjt_nm_selected == "" || this.detail.prjt_nm_selected == "null") {          // 등록자번호
+        alert('프로젝트가 없습니다.');
         return false;
       } else {
         return true;  // 필수 값 모두 입력 시 true
@@ -533,7 +538,7 @@ export default {
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
-  watch:{
+  watch: {
     count: (a, b) => {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
@@ -557,61 +562,55 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0"],
-      comboList2 : ["C18"],
+      comboList: ["C27", "C0"],
+      comboList2: ["C18"],
 
-      info : {
+      info: {
         // 그리드 조회 변수
-        gubun : '',               // 그리드 구분자
-        rowNum :0,
-        bkup_id     : bkup_id,    // 백업ID
-        prjt_id     : prjt_id,    // 프로젝트ID
-        bkup_id_selected : bkup_id[0].value,      // 백업ID
-        prjt_id_selected : prjt_id[0].value,      // 프로젝트명
+        gubun: '',               // 그리드 구분자
+        rowNum: 0,
+        bkup_id_selected: '0000000000',      // 백업ID
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
 
         // 공통 sessionStorage 데이터
-        login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
-        login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
       },
 
-      detail : {
+      detail: {
         /* 상세내용 변수 */
 
         // 공통 sessionStorage 데이터
-        login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
-        login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),    // 권한ID
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),        // 업무구분
+        login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),    // 직원번호
+        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
-        bkup_id     : bkup_id,                         // 백업ID
-        prjt_id     : prjt_id,                         // 프로젝트ID
-        ntar_bzcd   : ntar_bzcd,                       // 공지구분
-        bkup_id_selected  : bkup_id[0].value,          // 백업ID
-        prjt_id_selected  : prjt_id[0].value,          // 프로젝트명
-        ntar_bzcd_selected : ntar_bzcd[0].value,       // 공지구분
-        mng_id:this.mng_id,                            // 관리ID
-        rgs_dt:this.rgs_dt,                            // 요청일자
-        titl_txt:this.titl_txt,                        // 제목내용
-        ancpt:this.ancpt,                              // 공지내역
-        rgs_no:this.rgs_no,                            // 등록자번호
-        rgs_nm:this.rgs_nm,                            // 등록자번호
-        atfl_mng_id:this.atfl_mng_id,                  // 첨부파일관리ID
-        org_file_nm:this.org_file_nm,                  // 원파일명
-        del_yn    : false,                           // 공지사항 삭제 체크박스
+        bkup_id_selected: '0000000000',                 // 백업ID
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트명
+        ntar_bzcd_selected: '100',                         // 공지구분
+        mng_id: this.mng_id,                            // 관리ID
+        rgs_dt: this.rgs_dt,                            // 요청일자
+        titl_txt: this.titl_txt,                        // 제목내용
+        ancpt: this.ancpt,                              // 공지내역
+        rgs_no: this.rgs_no,                            // 등록자번호
+        rgs_nm: this.rgs_nm,                            // 등록자번호
+        atfl_mng_id: this.atfl_mng_id,                  // 첨부파일관리ID
+        org_file_nm: this.org_file_nm,                  // 원파일명
+        del_yn: false,                                  // 공지사항 삭제 체크박스
       },
-      file_name_list : [],
+      file_name_list: [],
 
-      addRow : {
-        grid : this.grid,
+      addRow: {
+        grid: this.grid,
       },
 
-      count:0,
-      curRow:-1,
-      title:"",
-      scrollX:false,
-      scrollY:false,
+      count: 0,
+      curRow: -1,
+      title: "",
+      scrollX: false,
+      scrollY: false,
       bodyHeight: 325,
       minRowHeight: 10,
       rowHeight: 25,
@@ -676,15 +675,15 @@ export default {
       ],
       dataSource: {
         api: {
-          readData   : { url: process.env.VUE_APP_API + '/PJTE1000/select', method: 'GET' },
+          readData: {url: process.env.VUE_APP_API + '/PJTE1000/select', method: 'GET'},
         },
         initialRequest: false,
       },
       columnOptions: {
         resizable: true
       },
-      rowHeaders:['rowNum'],
-      header:{
+      rowHeaders: ['rowNum'],
+      header: {
         height: 25
       },
       columns1: [
@@ -743,7 +742,7 @@ export default {
           formatter: 'listItemText',
           editor: {
             type: 'select',
-            options:{
+            options: {
               listItems: ntar_bzcd
             }
           }
