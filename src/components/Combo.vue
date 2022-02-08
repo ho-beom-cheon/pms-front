@@ -132,6 +132,23 @@
         </select>
       </div>
     </li>
+    <!--    이슈관리구분코드-->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C14'">
+      <div class="item-con">처리단계
+        <select
+            v-model = "iss_prc_step_cd_selected"
+            style   = "width: 80px"
+            @change = "iss_prc_step_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000014T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <!--    개발구분코드-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
       <div class="item-con">처리단계
@@ -430,6 +447,8 @@ export default {
       dvlp_dis_cd_selected : "",
       // 처리단계
       prc_step_cd_selected : "",
+      // 이슈관리처리단계
+      iss_prc_step_cd_selected : "",
       // 차수
       sqn_cd_selected : "",
       // 통합테스트 처리단계
@@ -479,6 +498,7 @@ export default {
     dvlp_dis_cd_change()       {  this.$emit('dvlp_dis_cd_change',      this.dvlp_dis_cd_selected)},       // 개발구분코드
     pgm_dis_cd_change()        {  this.$emit('pgm_dis_cd_change',       this.pgm_dis_cd_selected)},        // 프로그램구분코드
     prc_step_cd_change()       {  this.$emit('prc_step_cd_change',      this.prc_step_cd_selected)},       // 처리단계코드
+    iss_prc_step_cd_change()   {  this.$emit('iss_prc_step_cd_change',  this.iss_prc_step_cd_selected)},   // 이슈관리처리단계코드
     bkup_id_change()           {  this.$emit('bkup_id_change',          this.bkup_id_selected)},           // 백업 ID
     prjt_nm_chage()            {  this.$emit('prjt_nm_chage',           this.prjt_nm_selected)},           // 프로젝트명
     sqn_cd_change()            {  this.$emit('sqn_cd_change',           this.sqn_cd_selected)},            // 차수구분코드
@@ -544,6 +564,9 @@ export default {
               } else if (i === 13) {
                 this.CD1000000013T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000013N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 14) {
+                this.CD1000000014T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000014N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 19) {
                 this.CD1000000019T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000019N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -617,6 +640,10 @@ export default {
               this.CD1000000013T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000013N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 14) {
+              this.CD1000000013T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000013N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 18) {
               this.CD1000000018T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000018N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -668,6 +695,7 @@ export default {
           if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected  = this.CD1000000011T[0].value
           if(this.CD1000000012T.length !== 0)  this.rgs_dis_cd_selected       = this.CD1000000012T[0].value
           if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected       = this.CD1000000013T[0].value
+          if(this.CD1000000014T.length !== 0)  this.iss_prc_step_cd_selected       = this.CD1000000013T[0].value
           if(this.CD1000000018T.length !== 0)  this.ntar_bzcd_selected        = this.CD1000000018T[0].value
           if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected       = this.CD1000000019T[0].value
           if(this.CD1000000021T.length !== 0)  this.check_cd_selected         = this.CD1000000021T[0].value

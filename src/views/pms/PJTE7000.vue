@@ -461,9 +461,10 @@ export default {
               bkup_id : this.info.bkup_id_selected,
               rowDatas : grid_arr
             }).then(res => {
+              console.log(res);
               if(res.data){
-                alert('업로드 파일이 적용되었습니다.');
-                this.$refs.grid1.invoke('resetData',grid_arr);
+                alert('업로드 파일이 적용되었습니다.')
+                this.$refs.grid1.invoke('resetData',grid_arr)
 
               }
             })
