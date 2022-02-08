@@ -23,7 +23,7 @@
                 disabled
             >
               <option
-                  v-for="(prjt_id, idx) in info.prjt_id"
+                  v-for="(prjt_id, idx) in prjt_id"
                   :key="idx"
                   v-text="prjt_id.text"
                   :value="prjt_id.value"
@@ -36,7 +36,7 @@
                 v-model="info.bzcd_selected"
             >
               <option
-                  v-for="(bzcd, idx) in info.bzcd"
+                  v-for="(bzcd, idx) in bzcd"
                   :key="idx"
                   v-text="bzcd.text"
                   :value="bzcd.value"
@@ -92,6 +92,7 @@
       </section>
     </div>
     <div class="pop-footer">
+      <span>선택버튼을 누르거나 행 더블클릭 시 선택할 수 있습니다.</span>
       <button class="btn btn-filter-b" @click="closePopup">닫기</button>
       <button class="btn btn-filter-p" @click="fnChoice">선택</button>
     </div>
@@ -102,10 +103,16 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import PJTE3000 from "@/views/pms/PJTE3000";
+import {axiosService} from "@/api/http";
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {text: "PMS프로젝트3", value: "1000000003"}];
+// // 프로젝트구분
+// const prjt_id = [
+//   {text: "PMS프로젝트", value: '1000000001'},
+//   {text: "PMS프로젝트2", value: '1000000002'},
+//   {text: "PMS프로젝트3", value: "1000000003"},
+// ];
 
 // 업무구분
 const bzcd = [
@@ -128,14 +135,17 @@ export default {
   created() {
     // 권한에 따른 컬럼 세팅
     console.log("created");
+    this.getCombo();
   },
   beforeMount() {
     console.log("beforeMount");
   },
   mounted() {
     console.log("mounted");
-    this.setCombo();
-    this.fnSearch();    // 최초조회
+    // 초기화
+    this.init();
+    // 최초조회
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -156,14 +166,44 @@ export default {
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
-    setCombo() {  // 권한에 따른 콤보박스 활성화/비활성화
+    getCombo(){
+      axiosService.get("/PJTE9001/combo", {
+        params: {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID")
+        }
+      }).then(res => {
+        this.setCombo(res.data.data);
+      }).catch(e => {
+
+      });
+    },
+    // 프로젝트 리스트 셋팅
+    setCombo(combodata) {
+      this.bzcd.push({"text": "전체", "value": "TTT"});
+      this.info.bzcd_selected = this.bzcd[0].value
+      for(let i=0; i<combodata.contents.length; i++) {
+        if(combodata.contents[i].grp_tycd == '0000000000') {
+          this.prjt_id.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
+        }else if(combodata.contents[i].grp_tycd == '1000000001'){
+          this.bzcd.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
+
+        }
+      }
+      // this.info.prjt_id_selected = this.prjt_id[0].value;
+    },
+    init() {  //초기화 및 초기 값 세팅
+      //그리드 셀 비활성화
+      this.$refs.grid.invoke("disable");
+      // 그리드 초기화
+      this.$refs.grid.invoke("clear");
+
       const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       if (aut_cd == '500' || aut_cd == '600') {  // 권한ID가 500, 600인 경우  <프로젝트명> 콤보 활성화
         document.getElementById('id.prjt_id').disabled = false;
       }
     },
     fnChoice() {  // 선택 버튼 클릭 시
-      opener.empData(this.info.empnm, this.info.empno, this.open_btn_id, this.open_emprow, this.open_empcol);
+      opener.empData(this.send_empnm, this.send_empno, this.open_btn_id, this.open_emprow, this.open_empcol);
       window.close();
     },
     change() {
@@ -173,7 +213,8 @@ export default {
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
       if(currentRowData != null) {
-        this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+        this.send_empno = currentRowData.empno;                              // (상세)관리ID
+        this.send_empnm = currentRowData.empnm;           // (상세)요청구분
       }
     },
     dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
@@ -183,13 +224,13 @@ export default {
         this.fnChoice()
       }
     },
-    /* 그리드 Row onClick클릭 시 상세내용에 Bind */
-    cellDataBind(currentRowData) {
-      this.info.prjt_id_selected = currentRowData.prjt_id;           // (상세)관리구분
-      this.info.bzcd_selected = currentRowData.bzcd;         // (상세)처리상태
-      this.info.empno = currentRowData.empno;                              // (상세)관리ID
-      this.info.empnm = currentRowData.empnm;           // (상세)요청구분
-    },
+    // /* 그리드 Row onClick클릭 시 상세내용에 Bind */
+    // cellDataBind(currentRowData) {
+    //   this.info.prjt_id_selected = currentRowData.prjt_id;           // (상세)관리구분
+    //   this.info.bzcd_selected = currentRowData.bzcd;         // (상세)처리상태
+    //   this.info.empno = currentRowData.empno;                              // (상세)관리ID
+    //   this.info.empnm = currentRowData.empnm;           // (상세)요청구분
+    // },
     closePopup() {
       window.close();
     },
@@ -217,20 +258,24 @@ export default {
   data() {
     return {
       open_btn_id : this.$route.query.btn_id,      // 오픈한 main화면에서 넘겨받은 btn id
-
       open_emprow : this.$route.query.emp_row,
       open_empcol : this.$route.query.emp_col,
 
+      prjt_id : [],            // 프로그램 리스트
+      bzcd : [],               // 업무구분 리스트
+
+      //팝업에서 메인으로 넘길 때 사용하는 변수
+      send_empno : '',
+      send_empnm : '',
+
       info: {
         /* 필터 변수 */
-        prjt_id: prjt_id,                            // 프로젝트명
-        bzcd: bzcd,                                  // 업무구분
         empno  : this.empno,                         // 직원번호
         empnm  : this.$route.query.empnm,            // 직원명
         prjt_id_selected: this.$route.query.prjt_id, // 선택 된 프로젝트명
-        bzcd_selected: bzcd[0].value,                // 선택 된 업무구분
-        login_prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
-        login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
+        // prjt_id_selected: "", // 선택 된 프로젝트명
+        bkup_id_selected: this.$route.query.bkup_id, // 백업 ID
+        bzcd_selected: '',                // 선택 된 업무구분
       },
 
       addRow: {
@@ -265,13 +310,30 @@ export default {
       columns: [
         {
           header: '프로젝트명',
-          align: 'center',
+          align: 'left',
           name: 'prjt_id',
+          width: 180,
         },
         {
-          header: '업무구분',
+          header: '업무구분　　',
           align: 'center',
           name: 'bzcd',
+          width: 100,
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text":" ","value":"NNN"},
+                    {"text":"관리","value":"EEE"},
+                    {"text":"공통","value":"DDD"},
+                    {"text":"신용조사","value":"AAA"},
+                    {"text":"재무제표","value":"BBB"},
+                    {"text":"신용평가","value":"CCC"}
+                  ]
+            }
+          }
         },
         {
           header: '직원번호',
