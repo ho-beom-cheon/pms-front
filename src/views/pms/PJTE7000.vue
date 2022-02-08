@@ -462,8 +462,8 @@ export default {
               rowDatas : grid_arr
             }).then(res => {
               if(res.data){
-                alert('업로드 파일이 적용되었습니다.')
-                this.$refs.grid1.invoke('resetData',grid_arr)
+                alert('업로드 파일이 적용되었습니다.');
+                this.$refs.grid1.invoke('resetData',grid_arr);
 
               }
             })
