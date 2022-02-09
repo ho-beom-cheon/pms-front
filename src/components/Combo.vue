@@ -543,7 +543,7 @@ export default {
 
       } catch(error) {
         console.log("Error Msg : " + error)
-        // 개발용1
+        // 개발용
       }
     },
     bzcd_change()              {  this.$emit('bzcd_change',             this.bzcd_selected)},              // 업무구분코드
@@ -568,6 +568,9 @@ export default {
     file_cd_change()           {  this.$emit('file_cd_change',          this.file_cd_selected)},           // 산출물구분코드
     search_cd_change()         {  this.$emit('search_cd_change',        this.search_cd_selected)},         // 검색항목코드
     check_cd_change()          {  this.$emit('check_cd_change',         this.check_cd_selected)},          // 검출구분코드
+    req_prc_step_cd_change_pop()    {  this.$emit('req_prc_step_cd_change_pop',    this.req_prc_step_cd_selected_pop)},        
+    bzcd_change_pop()               {  this.$emit('bzcd_change_pop',               this.bzcd_selected_pop)},         
+    req_dscd_change_pop()           {  this.$emit('req_dscd_change_pop',            this.req_dscd_selected_pop)},        
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
