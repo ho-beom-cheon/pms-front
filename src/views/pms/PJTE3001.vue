@@ -16,7 +16,7 @@
         <tr>
           <th>프로그램/ 테스트케이스ID</th>
           <td colspan="2">
-            <input type="text" v-model="cctn_id" :disabled= true style="width: calc(100%); float:left; background-color: #f2f2f2;">
+            <input type="text" v-model="cctn_id"  :disabled= true style="width: calc(100%); float:left; background-color: #f2f2f2;">
           </td>
           <th>프로그램/테스트케이스명</th>
           <td colspan="2">
@@ -78,15 +78,7 @@
             </select>
           </td>
         </tr>
-        <tr v-if="mng_id">
-          <th>
-            결함내용
-          </th>
-          <td colspan="5">
-            <textarea cols="30" rows="10" v-model="err_txt" disabled = true  style="background-color: #f2f2f2;"></textarea>
-          </td>
-        </tr>
-        <tr v-else>
+        <tr v-if="mng_id===undefined">
           <th>
             결함내용
           </th>
@@ -94,6 +86,23 @@
             <textarea cols="30" rows="10" v-model="err_txt" placeholder="결함내용을 입력해주세요"></textarea>
           </td>
         </tr>
+        <tr v-else-if="mng_id!==undefined && err_prc_step_cd_selected === '300' && rgpe_no === login_emp_no ">
+          <th>
+            결함내용
+          </th>
+          <td colspan="5">
+            <textarea cols="30" rows="10" v-model="err_txt" placeholder="결함내용을 입력해주세요"></textarea>
+          </td>
+        </tr>
+        <tr v-else>
+          <th>
+            결함내용
+          </th>
+          <td colspan="5">
+            <textarea cols="30" rows="10" v-model="err_txt" disabled = true  style="background-color: #f2f2f2;"></textarea>
+          </td>
+        </tr>
+
         <tr v-if="mng_id">
           <th>첨부파일</th>
           <td colspan="4">
@@ -159,7 +168,7 @@
             <div class="input-searchWrap">
               <input type="text" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
               <button class="search-btn2" @click="open_pjte9001(1)"></button>
-              <input type="text" v-model="dvlpe_no"  placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>
@@ -169,13 +178,15 @@
             <div class="input-searchWrap">
               <input type="text" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
               <button class="search-btn2" @click="open_pjte9001(2)"></button>
-              <input type="text" v-model="pl_no"  placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>　　조치일자</th>
           <td>
             <div class="input-dateWrap">
-              <input type="date" v-model="ttmn_dt">
+<!--              <input v-if="mng_id" type="date" v-model="ttmn_dt">-->
+<!--              <input v-else type="date" v-model="ttmn_dt" disabled=true style="background-color: #f2f2f2;">-->
+              <input type="date" v-model="ttmn_dt" ref="ttmn_dt" disabled=true style="background-color: #f2f2f2;">
             </div>
           </td>
         </tr>
@@ -184,7 +195,7 @@
             조치내용
           </th>
           <td colspan="5">
-            <textarea cols="30" rows="10" placeholder="조치내용을 입력해주세요"  v-model="ttmn_txt"></textarea>
+            <textarea cols="30" rows="10" ref="ttmn_txt" placeholder="조치내용을 입력해주세요"  v-model="ttmn_txt"></textarea>
           </td>
         </tr>
         <tr v-if="mng_id">
@@ -219,7 +230,8 @@ import {axiosService} from "@/api/http";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
-  console.log(fileLists);
+  debugger
+  // console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
   window.pms_register.atfl_num = num
 }
@@ -240,34 +252,34 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
-    console.log("beforeCreate");
+    // console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
-    console.log("created");
+    // console.log("created");
     if(this.mng_id){
-      this.getRegisterData();
+      this.getRegisterData();  // 팝업 데이터 조회
     }
   },
   beforeMount() {
-    console.log("beforeMount");
+    // console.log("beforeMount");
   },
   mounted() {
-    console.log("mounted");
+    // console.log("mounted");
     window.pms_register = this;
   },
   beforeUpdate() {
-    console.log("beforeUpdate");
+    // console.log("beforeUpdate");
   },
   updated(){
-    console.log("updated");
+    // console.log("updated");
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
+    // console.log("beforeDestroy");
   },
   destroyed() {
-    console.log("destroyed");
+    // console.log("destroyed");
   },
 // 함수를 선언하는 부분
 // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
@@ -289,8 +301,17 @@ export default {
     // 첨부파일등록 팝업 오픈
     open_file_page(num){
       console.log(num)
-      let bkup_id='0000000000', prjt_id=this.prjt_id, rgs_atfl_mng_id=this.rgs_atfl_mng_id, file_rgs_dscd='500', mng_id = this.mng_id
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&rgs_atfl_mng_id=${rgs_atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
+      let file_rgs_dscd = ''
+      let atfl_mng_id = ''
+      if(num == 1) {
+        file_rgs_dscd='300'
+        atfl_mng_id = this.rgs_atfl_mng_id
+      } else if(num = 2){
+        file_rgs_dscd='400'
+        atfl_mng_id = this.ttmn_atfl_mng_id
+      }
+      let bkup_id='0000000000', prjt_id=this.prjt_id, mng_id = this.mng_id
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
     // 창 닫기
     close() {
@@ -309,55 +330,53 @@ export default {
           .then(res => {
             let res_data = res.data.data.contents[0];
             console.log(res_data)
-            this.bzcd_selected = res_data.bzcd
-            this.err_tycd_selected = res_data.err_tycd
-            this.rgs_dscd_selected = res_data.rgs_dscd
-            this.err_prc_step_cd_selected = res_data.err_prc_step_cd
-            this.cctn_id = res_data.cctn_id
-            this.cctn_nm = res_data.cctn_nm
-            this.rgpe_nm = res_data.rgpe_nm
-            this.rgpe_no = res_data.rgpe_no
-            this.rgs_dt = res_data.rgs_dt
-            this.err_txt = res_data.err_txt
-            this.rgs_atfl_nm = res_data.rgs_atfl_nm
-            this.rgs_atfl_mng_id = res_data.rgs_atfl_mng_id
-            this.ttmn_scd_dt = res_data.ttmn_scd_dt
-            this.dvlpe_nm = res_data.dvlpe_nm
-            this.dvlpe_no = res_data.dvlpe_no
-            this.pl_nm = res_data.pl_nm
-            this.pl_no = res_data.pl_no
-            this.ttmn_dt = res_data.ttmn_dt
-            this.ttmn_txt = res_data.ttmn_txt
-            this.ttmn_atfl_nm = res_data.ttmn_atfl_nm
-            this.ttmn_atfl_mng_id = res_data.ttmn_atfl_mng_id
-            this.bfjr_bzcd = res_data.bfjr_bzcd
-            this.cctn_bzcd = res_data.cctn_bzcd
-            this.cctn_sqn_cd = res_data.cctn_sqn_cd
+            this.bzcd_selected = res_data.bzcd                          // 업무구분코드
+            this.err_tycd_selected = res_data.err_tycd                  // 결함유형코드
+            this.rgs_dscd_selected = res_data.rgs_dscd                  // 결함등록단계구분코드
+            this.err_prc_step_cd_selected = res_data.err_prc_step_cd    // 결함처리단계구분코드
+            this.cctn_id = res_data.cctn_id                             // 프로그램ID/테스트케이스ID
+            this.cctn_nm = res_data.cctn_nm                             // 프로그램명/테스트케이스명
+            this.rgpe_nm = res_data.rgpe_nm                             // 등록자명
+            this.rgpe_no = res_data.rgpe_no                             // 등록자번호
+            this.rgs_dt = res_data.rgs_dt                               // 결함등록일자
+            this.err_txt = res_data.err_txt                             // 결함내용
+            this.rgs_atfl_nm = res_data.rgs_atfl_nm                     // 요청첨부파일관리명
+            this.rgs_atfl_mng_id = res_data.rgs_atfl_mng_id             // 요청첨부파일관리ID
+            this.ttmn_scd_dt = res_data.ttmn_scd_dt                     // 조치예정일자
+            this.dvlpe_nm = res_data.dvlpe_nm                           // 개발자명
+            this.dvlpe_no = res_data.dvlpe_no                           // 개발자번호
+            this.pl_nm = res_data.pl_nm                                 // PL명
+            this.pl_no = res_data.pl_no                                 // PL번호
+            this.ttmn_dt = res_data.ttmn_dt                             // 조치일자
+            this.ttmn_txt = res_data.ttmn_txt                           // 조치내용
+            this.ttmn_atfl_nm = res_data.ttmn_atfl_nm                   // 조치첨부파일관리명
+            this.ttmn_atfl_mng_id = res_data.ttmn_atfl_mng_id           // 조치첨부파일관리ID
+            this.bfjr_bzcd = res_data.bfjr_bzcd                         // 이관전업무
+            this.cctn_bzcd = res_data.cctn_bzcd                         // 연결업무구분코드
+            this.cctn_sqn_cd = res_data.cctn_sqn_cd                     // 연결차수구분코드
           })
     },
 
     // 저장(신청 ID 없는 경우, insert 쿼리)
     saveRegisterData() {
-      // if(this.bzcd_selected === '' || this.bzcd_selected == null || this.bzcd_selected === undefined){
-      //   alert('업무를 선택해주세요.');
-      //   this.$refs.bzcd.focus();
-      //   return false;
-      // }
-      // if(this.req_dscd_selected === '' || this.req_dscd_selected == null || this.req_dscd_selected === undefined){
-      //   alert('신청구분을 선택해주세요.')
-      //   this.$refs.req_dscd.focus();
-      //   return false;
-      // }
-      // if(this.req_txt === '' || this.req_txt == null || this.req_txt === undefined){
-      //   alert('신청내용을 작성해주세요.')
-      //   this.$refs.req_txt.focus();
-      //   return false;
-      // }
-      // if(this.req_dt === '' || this.req_dt == null || this.req_dt === undefined){
-      //   alert('신청일자를 선택해주세요.')
-      //   this.$refs.req_dt.focus();
-      //   return false;
-      // }
+      // 필수 항목 체크
+      if(this.cctn_id === '' || this.cctn_id == null || this.cctn_id === undefined){
+        alert('프로그램/테스트케이스ID이 없습니다.');
+        return false;
+      } else if (this.rgpe_no === '' || this.rgpe_no == null || this.rgpe_no === undefined) {
+        alert('결함등록자가 없습니다.');
+        return false;
+      } else if (this.rgs_dt === '' || this.rgs_dt == null || this.rgs_dt === undefined) {
+        alert('결함등록일자가 없습니다.');
+        return false;
+      } else if (this.err_tycd_selected === '' || this.err_tycd_selected == null || this.err_tycd_selected === undefined) {
+        alert('선택 된 결함유형이 없습니다.');
+        return false;
+      } else if (this.rgs_dscd_selected === '' || this.rgs_dscd_selected == null || this.rgs_dscd_selected === undefined) {
+        alert('선택 된 등록단계가 없습니다.');
+        return false;
+      }
+
       axiosService.post('/PJTE3001/insert',{
         bkup_id : this.bkup_id,                                        // 백업ID
         prjt_id : this.prjt_id,                                        // 프로젝트ID
@@ -400,13 +419,54 @@ export default {
 
     // 저장(mng_id 있는 경우, update 쿼리)
     updateRegisterData() {
-      console.log('update')
-      console.log(this.prcpe_no)
-      // if(this.req_prc_step_cd_selected === '400' && (this.prc_txt == null || this.prc_txt === '' || this.prc_txt === undefined)){
-      //   alert('처리완료 선택시에는 처리내용을 작성해주셔야 합니다.');
-      //   this.$refs.prc_txt.focus();
-      //   return false;
-      // }
+      // 필수 항목 체크
+      if(this.cctn_id === '' || this.cctn_id == null || this.cctn_id === undefined){
+        alert('프로그램/테스트케이스ID이 없습니다.');
+        return false;
+      } else if (this.rgpe_no === '' || this.rgpe_no == null || this.rgpe_no === undefined) {
+        alert('결함등록자가 없습니다.');
+        return false;
+      } else if (this.rgs_dt === '' || this.rgs_dt == null || this.rgs_dt === undefined) {
+        alert('결함등록일자가 없습니다.');
+        return false;
+      } else if (this.err_tycd_selected === '' || this.err_tycd_selected == null || this.err_tycd_selected === undefined) {
+        alert('선택 된 결함유형이 없습니다.');
+        return false;
+      } else if (this.rgs_dscd_selected === '' || this.rgs_dscd_selected == null || this.rgs_dscd_selected === undefined) {
+        alert('선택 된 등록단계가 없습니다.');
+        return false;
+      }
+
+      // 결함처리단계구분코드가 [200]인 경우 : 조치담당자,PL,조치예정일자 필수
+      if(this.err_prc_step_cd_selected == '200') {
+        if(this.dvlpe_no === '' || this.dvlpe_no == null || this.dvlpe_no === undefined){
+          alert('선택 된 조지담당자가 없습니다.');
+          this.$refs.dvlpe_no.focus();
+          return false;
+        } else if (this.pl_no === '' || this.pl_no == null || this.pl_no === undefined) {
+          alert('선택 된 업무PL이 없습니다.');
+          this.$refs.pl_no.focus();
+          return false;
+        } else if (this.ttmn_dt === '' || this.ttmn_dt == null || this.ttmn_dt === undefined) {
+          alert('선택 된 조치일자가 없습니다.');
+          this.$refs.ttmn_dt.focus();
+          return false;
+        }
+      // 결함처리단계구분코드가 [500, 600]인 경우 : 조치내용 필수(보류인경우 보류 사유 입력)
+      } else if(this.err_prc_step_cd_selected == '600') {
+        if(this.ttmn_txt === '' || this.ttmn_txt == null || this.ttmn_txt === undefined) {
+          alert('조치내용을 입력해주세요.');
+          this.$refs.ttmn_txt.focus();
+          return false;
+        }
+      } else if(this.err_prc_step_cd_selected == '500') {
+        if(this.ttmn_txt === '' || this.ttmn_txt == null || this.ttmn_txt === undefined) {
+          alert('보류 사유를 입력해주세요.');
+          this.$refs.ttmn_txt.focus();
+          return false;
+        }
+      }
+
       axiosService.put('/PJTE3001/update',{
         bkup_id : this.bkup_id,                                        // 백업ID
         prjt_id : this.prjt_id,                                        // 프로젝트ID
@@ -445,6 +505,7 @@ export default {
           .then(res => {
             console.log(res);
             if(res.data){
+              debugger
               alert("저장되었습니다.");
               opener.parent.location.reload();
               window.close();
@@ -489,6 +550,11 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
+    deep: true,
+    // We have to move our method to a handler field
+    handler() {
+    // console.log('The list of colours has changed!');
+    },
     count: (a, b) => {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
@@ -505,6 +571,7 @@ export default {
         this.pl_nm = this.emp_nm
       }
     },
+
     file_name_list() {
       // 1. 첨부파일 1개만 보여줄 때
       // if(document.getElementById('file-upload-btn')){
@@ -515,8 +582,10 @@ export default {
       // }
       if(this.atfl_num == '1'){
         this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
+        this.rgs_atfl_mng_id = this.file_name_list[1].atfl_mng_id
       }else if(this.atfl_num == '2'){
         this.ttmn_atfl_nm = this.file_name_list[0].org_file_nm
+        this.ttmn_atfl_mng_id = this.file_name_list[1].atfl_mng_id
       }
 
 
@@ -587,6 +656,7 @@ export default {
       ],
       err_prc_step_cd_selected : '100',
 
+      login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),        // 로그인ID
       rgpe_nm : sessionStorage.getItem('LOGIN_EMP_NM'),             // 등록자명
       rgpe_no : sessionStorage.getItem('LOGIN_EMP_NO'),             // 등록자번호
       rgs_dt : this.getToday(),              // 결함등록일자

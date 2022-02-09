@@ -57,7 +57,7 @@
                 @prjt_nm_chage="prjt_nm_chage"
                 @rgs_dis_cd_change="rgs_dis_cd_change"
                 @req_dis_cd_change="req_dis_cd_change"
-                @prc_step_cd_change="prc_step_cd_change"
+                @iss_prc_step_cd_change="iss_prc_step_cd_change"
             >
             </combo>
             <li class="filter-item">
@@ -265,6 +265,7 @@
                     <label>*요청일자</label>
                     <div class="input-dateWrap">
                       <input type="date"
+                             ref="rgs_dt"
                              v-model="detail.rgs_dt"
                              :disabled=true
                              style="width: 150px; background-color: #f2f2f2;"
@@ -276,8 +277,10 @@
                     <label>*요청자</label>
                     <input type="text"
                            placeholder="입력"
+                           ref="d_achi_nm"
                            v-model="detail.d_achi_nm"
-                           style="width: 150px; margin-right: 150px"
+                           :disabled=true
+                           style="width: 150px; margin-right: 150px;  background-color: #f2f2f2;"
                     >
                   </div>
                 </li>
@@ -370,6 +373,7 @@
                     <label>*제목</label>
                     <input type="text"
                            placeholder="입력"
+                           ref="d_titl_nm"
                            v-model="detail.d_titl_nm"
                            style="width: 885px"
                     >
@@ -384,6 +388,7 @@
                       <textarea cols="140"
                                 rows="5"
                                 placeholder="결함내용을 입력해주세요"
+                                ref="d_req_dis_txt"
                                 v-model="detail.d_req_dis_txt"
                                 style="width: 885px; line-height: normal;"
                                 @click="enlarged_view(1)"
@@ -647,17 +652,8 @@ export default {
     prjt_nm_chage(params)              {this.info.prjt_nm_selected = params},
     rgs_dis_cd_change(params)          {this.info.rgs_dis_cd_selected = params},
     req_dis_cd_change(params)          {this.info.req_dis_cd_selected = params},
-    prc_step_cd_change(params)         {this.info.prc_step_cd_selected = params},
+    iss_prc_step_cd_change(params)     {this.info.prc_step_cd_selected = params},
 
-
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected         = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected         = this.$children[0].$data.prjt_nm_selected;
-      this.info.rgs_dis_cd_selected      = this.$children[0].$data.rgs_dis_cd_selected;
-      this.info.req_dis_cd_selected      = this.$children[0].$data.req_dis_cd_selected;
-      this.info.prc_step_cd_selected     = this.$children[0].$data.prc_step_cd_selected;
-    },
 
     init() {
       // 특정 열 비활성화
@@ -673,7 +669,7 @@ export default {
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
-      this.detail.d_achi_nm = ''                                      // (상세)요청자
+      this.detail.d_achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
       this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
       this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
       this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
@@ -780,7 +776,7 @@ export default {
       this.detail.mng_id = ''                                         // (상세)관리ID
       this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
-      this.detail.d_achi_nm = ''                                      // (상세)요청자
+      this.detail.d_achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
       this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
       this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
       this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
@@ -875,15 +871,19 @@ export default {
         alert('요청구분이 없습니다.');
         return false;
       } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 요청일자
+        this.$refs.rgs_dt.focus();
         alert('요청일자를 입력해주세요.');
         return false;
       } else if (this.detail.d_achi_nm == "" || this.detail.d_achi_nm == "null") {           // 요청자
+        this.$refs.d_achi_nm.focus();
         alert('요청자를 입력해주세요.');
         return false;
       } else if (this.detail.d_titl_nm == "" || this.detail.d_titl_nm == "null") {           // 제목
+        this.$refs.d_titl_nm.focus();
         alert('제목을 입력해주세요.');
         return false;
       } else if (this.detail.d_req_dis_txt == "" || this.detail.d_req_dis_txt == "null") {   // 요청내용
+        this.$refs.d_req_dis_txt.focus();
         alert('요청내용을 입력해주세요.');
         return false;
       } else {
@@ -904,7 +904,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C12","C13","C3"],
+      comboList : ["C27","C0","C12","C13","C14"],
 
       large_num : '',
 
@@ -962,7 +962,7 @@ export default {
         mng_id: '',                             // (상세)관리ID
         d_req_dis_cd: d_req_dis_cd,             // (상세)요청구분
         rgs_dt: this.getToday(),                // (상세)요청일자
-        d_achi_nm: this.d_achi_nm,              // (상세)요청자
+        d_achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),              // (상세)요청자
         d_ttmn_crpe_nm: this.d_ttmn_crpe_nm,    // (상세)조치담당자
         d_tgt_biz_nm: this.d_tgt_biz_nm,        // (상세)조치업무명
         ttmn_scd_dt: '',                        // (상세)조치예정일자
@@ -1145,7 +1145,7 @@ export default {
         },
         {
           header: '조치업무명',
-          width: 110,
+          width: 140,
           align: 'left',
           name: 'tgt_biz_nm',
         },
