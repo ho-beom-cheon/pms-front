@@ -79,7 +79,7 @@
             <ul class="filter-btn">
               <button class="btn btn-filter-e" v-if="info.file_cd_selected != 'TTT'">
                 <label for="file" @click="checkBzcd">엑셀업로드</label>
-                <input type="file" id="file"  @change="gridExcelImport" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;" :disabled="read"/>
+                <input type="file" id="file"  @change="gridExcelImport" accept="application/vnd.ms-excel.sheet.macroEnabled.12" style="display: none;" :disabled="read"/>
               </button>
               <div class="btn btn-filter-e">
                 <a href="#" @click="gridExcelExport(1)">엑셀다운로드</a>
@@ -92,7 +92,7 @@
                 :data="dataSource"
                 :header="header"
                 :columns="columns1"
-                :bodyHeight="125"
+                :bodyHeight="bodyHeight"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -110,7 +110,7 @@
                 :data="dataSource2"
                 :header="header2"
                 :columns="columns2"
-                :bodyHeight="bodyHeight"
+                :bodyHeight="300"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -354,9 +354,7 @@ export default {
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
 
-
-      // this.$refs.grid3.invoke("setRequestParams", this.info);
-      // this.$refs.grid3.invoke("readData");
+      this.$refs.grid3.invoke("resetData", []);
     },
     gridInit(){
       this.$refs.grid1.invoke("clear");
@@ -391,6 +389,7 @@ export default {
     },
     gridExcelImport(event){
       // 엑셀파일 업로드 로직 추가
+      console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       var input = event.target;
       var reader = new FileReader();
@@ -398,77 +397,61 @@ export default {
         var fileData = reader.result;
         var wb = XLSX.read(fileData, {type : 'binary'});
 
-        wb.SheetNames.forEach((sheetName) => {
-          wb.Sheets[sheetName].A1.w = "sqno"
-          wb.Sheets[sheetName].B1.w = "file_cd"
-          // wb.Sheets[sheetName].C1.w = "sqno"
-          wb.Sheets[sheetName].C1.w = "colm01"
-          wb.Sheets[sheetName].D1.w = "colm02"
-          wb.Sheets[sheetName].E1.w = "colm03"
-          wb.Sheets[sheetName].F1.w = "colm04"
-          wb.Sheets[sheetName].G1.w = "colm05"
-          wb.Sheets[sheetName].H1.w = "colm06"
-          wb.Sheets[sheetName].I1.w = "colm07"
-          wb.Sheets[sheetName].J1.w = "colm08"
-          wb.Sheets[sheetName].K1.w = "colm09"
-          wb.Sheets[sheetName].L1.w = "colm10"
-          wb.Sheets[sheetName].M1.w = "colm11"
-          wb.Sheets[sheetName].N1.w = "colm12"
-          wb.Sheets[sheetName].O1.w = "colm13"
-          wb.Sheets[sheetName].P1.w = "colm14"
-          wb.Sheets[sheetName].Q1.w = "colm15"
-          wb.Sheets[sheetName].R1.w = "colm16"
-          wb.Sheets[sheetName].S1.w = "colm17"
-          var rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-          this.gridExcelData = JSON.parse(JSON.stringify(rowObj));
-
-          // console.log(this.$refs.grid1.invoke("getData"))
-          let grid_arr = this.gridExcelData;
-          grid_arr.map(e => {
-            e.sqno = e.sqno.split('.')[1]
-            if(e.file_cd === '업무기능분할도'){
-              e.file_cd = '050'
-            }else if(e.file_cd === '요구사항정의서'){
-              e.file_cd = '100'
-            }else if(e.file_cd === '화면설계서'){
-              e.file_cd = '200'
-            }else if(e.file_cd === '프로그램설계서'){
-              e.file_cd = '300'
-            }else if(e.file_cd === '보고서설계서'){
-              e.file_cd = '400'
-            }else if(e.file_cd === '인터페이스설계서'){
-              e.file_cd = '500'
-            }else if(e.file_cd === '테이블목록'){
-              e.file_cd = '600'
-            }else if(e.file_cd === '단위테스트결과서'){
-              e.file_cd = '700'
-            }else if(e.file_cd === '통합테스트결과서'){
-              e.file_cd = '800'
-            }else if(e.file_cd === '요구사항추적표'){
-              e.file_cd = '900'
-            }else if(e.file_cd === '메뉴구조도'){
-              e.file_cd = '910'
+        wb.SheetNames.forEach((sheetName, idx) => {
+          if(sheetName === '엑셀업로드작성'){
+            console.log(wb.Sheets[sheetName])
+            wb.Sheets[sheetName].A1.w = "file_cd"
+            wb.Sheets[sheetName].B1.w = "sqno"
+            wb.Sheets[sheetName].C1.w = "colm01"
+            wb.Sheets[sheetName].D1.w = "colm02"
+            wb.Sheets[sheetName].E1.w = "colm03"
+            wb.Sheets[sheetName].F1.w = "colm04"
+            wb.Sheets[sheetName].G1.w = "colm05"
+            wb.Sheets[sheetName].H1.w = "colm06"
+            wb.Sheets[sheetName].I1.w = "colm07"
+            wb.Sheets[sheetName].J1.w = "colm08"
+            wb.Sheets[sheetName].K1.w = "colm09"
+            wb.Sheets[sheetName].L1.w = "colm10"
+            wb.Sheets[sheetName].M1.w = "colm11"
+            wb.Sheets[sheetName].N1.w = "colm12"
+            wb.Sheets[sheetName].O1.w = "colm13"
+            wb.Sheets[sheetName].P1.w = "colm14"
+            wb.Sheets[sheetName].Q1.w = "colm15"
+            wb.Sheets[sheetName].R1.w = "colm16"
+            if(wb.Sheets[sheetName].S1){
+              wb.Sheets[sheetName].S1.w = "colm17"
             }
-          })
-          if(grid_arr[0].file_cd != this.info.file_cd_selected){
-            alert("산출물구분이 일치하지 않는 파일은 업로드할 수 없습니다.")
-            return false;
-          }else{
-            axiosService.post("/PJTE7000/create_grid2",{
-              file_cd : this.info.file_cd_selected,
-              bzcd : this.info.bzcd_selected,
-              prjt_id : this.info.prjt_nm_selected,
-              bkup_id : this.info.bkup_id_selected,
-              rowDatas : grid_arr
-            }).then(res => {
-              console.log(res);
-              if(res.data){
-                alert('업로드 파일이 적용되었습니다.')
-                this.$refs.grid1.invoke('resetData',grid_arr)
 
-              }
+            let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let gridExcelData = JSON.parse(JSON.stringify(rowObj));
+
+            console.log(gridExcelData)
+            // console.log(this.$refs.grid1.invoke("getData"))
+            gridExcelData.map(e => {
+              e.file_cd = String(e.file_cd)
             })
+            if(gridExcelData[0].file_cd != this.info.file_cd_selected){
+              alert("산출물구분이 일치하지 않는 파일은 업로드할 수 없습니다.")
+              return false;
+            }else{
+              axiosService.post("/PJTE7000/create_grid2",{
+                file_cd : this.info.file_cd_selected,
+                bzcd : this.info.bzcd_selected,
+                prjt_id : this.info.prjt_nm_selected,
+                bkup_id : this.info.bkup_id_selected,
+                rowDatas : gridExcelData
+              }).then(res => {
+                console.log(res);
+                if(res.data){
+                  alert('업로드 파일이 적용되었습니다.')
+                  this.$refs.grid1.invoke('resetData',gridExcelData)
+
+                }
+              })
+            }
           }
+
+
 
 
         })
@@ -516,7 +499,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 175,
+      bodyHeight: 80,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
@@ -775,7 +758,7 @@ export default {
         },
         {
           header: '등록',
-          width: 80,
+          width: 50,
           name: 'save_yn',
           align: 'center',
         },
@@ -791,7 +774,7 @@ export default {
         },
         {
           header: '화면목록',
-          width: 120,
+          width: 80,
           name: 'colm_yn03',
         },
         {
@@ -831,7 +814,7 @@ export default {
         },
         {
           header: '메뉴구조도',
-          width: 120,
+          width: 100,
           name: 'colm_yn11',
         },
       ],
