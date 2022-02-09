@@ -100,6 +100,18 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
         <div class="multiGridWrap">
           <div class="div1">
             <div class="div-header"><h2>업무별 통합테스트현황</h2>
@@ -202,6 +214,7 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
+import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 
@@ -214,14 +227,15 @@ let dateString = year + '-' + month  + '-' + day;
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
+
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {"text":"관리","value":"EEE"},
-  {"text":"공통","value":"DDD"},
-  {text: "신용", value: 'AAA'},
+  {text: "신용조사", value: 'AAA'},
   {text: "재무제표", value: "BBB"},
   {text: "신용평가", value: "CCC"},
+  {"text":"관리","value":"EEE"},
+  {"text":"공통","value":"DDD"},
 ];
 
 // 차수구분
@@ -237,6 +251,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    Modal,
     grid: Grid,
   },
   beforeCreate() {
@@ -305,6 +320,20 @@ export default {
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+      const currentCellData = (this.$refs.grid4.invoke("getFocusedCell"));
+      if(ev.columnName == 'nprrn') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid4.invoke("setValue", this.curRow, "nprrn", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
+    },
+
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     fnSearch() {
       this.info.gubun = "1";
@@ -366,6 +395,12 @@ export default {
         err_proc_days       : '',
       },
 
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
+
       addRow : {
         grid1 : this.grid1,
       },
@@ -411,7 +446,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -424,7 +459,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -552,7 +587,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -565,7 +600,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -671,7 +706,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -684,7 +719,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -754,18 +789,15 @@ export default {
       header4: {
         height: 45,
         complexColumns: [
-          {
-            header: '완료여부',
-            name: 'mergeColumn1',
-            childNames: ['pl_yn', 'crpe_yn']
-          },
+          {header: '완료여부', name: 'mergeColumn1', childNames: ['pl_yn', 'crpe_yn']},
+          {header: '테스트완료일자', name: 'mergeColumn5', childNames: ['dvlpe_cnf_dt']},
         ]
       },
       columns4: [
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -778,7 +810,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -813,7 +845,7 @@ export default {
           name: 'frcs_end_dt',
         },
         {
-          header: '개발완료일자조치일자',
+          header: '조치일자',
           width: 150,
           align: 'center',
           name: 'dvlpe_cnf_dt',

@@ -142,8 +142,8 @@
           <div class="mt-1">
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</button>
-              <button class="btn btn-filter-d" @click="gridExcelExport">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e" @click="gridExcelImport">엑셀업로드</button>
+              <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀업로드</button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
               <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
               <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
@@ -505,6 +505,10 @@ export default {
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
       this.modals.txt_modal1 = false;
+    },
+    formDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "" //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}`, "open_file_page", "width=1000, height=500");
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
