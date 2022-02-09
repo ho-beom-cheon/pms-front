@@ -287,11 +287,9 @@ var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {tex
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {"text":"신용조사","value":"100"},
-  {"text":"재무제표","value":"200"},
-  {"text":"신용평가","value":"300"},
-  {"text":"공통","value":"400"},
-  {"text":"관리","value":"500"},
+  {text: "PMO", value: '100'},
+  {text: "업무팀", value: "200"},
+  {text: "공통팀", value: "300"},
 ];
 
 // 통합테스트처리코드 (처리단계)

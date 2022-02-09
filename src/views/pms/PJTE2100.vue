@@ -436,12 +436,14 @@ export default {
 
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn') {
+        this.count = 1
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
       if(ev.columnName === 'pal_atfl_mng_id_yn') {
+        this.count = 2
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, pal_atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&pal_atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -694,17 +696,20 @@ export default {
       }
     },
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
-      if(this.atfl_mng_id_yn !== '') {
-        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
-        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+      debugger
+      if(this.count == 1) {
+        if (this.atfl_mng_id_yn !== '') {
+          this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
+          this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+        }
+      }
+      if(this.count == 2) {
+        if(this.pal_atfl_mng_id_yn !== '') {
+          this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id_yn', '첨부');
+          this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', this.pal_atfl_mng_id);
+        }
       }
     },
-    pal_atfl_mng_id(){
-      if(this.pal_atfl_mng_id_yn !== '') {
-        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id_yn', '첨부');
-        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', this.pal_atfl_mng_id);
-      }
-    }
 
   },
 
@@ -832,26 +837,19 @@ export default {
           name: 'bzcd',
           align: 'center',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options:{
               listItems:
                   [
                     {"text":" ","value":"NNN"},
-                    {text: "신용조사", value: '100'},
-                    {text: "재무제표", value: "200"},
-                    {text: "신용평가", value: "300"},
-                    {"text":"관리","value":"400"},
-                    {"text":"공통","value":"500"},
+                    {text: "PMO", value: '100'},
+                    {text: "업무팀", value: "200"},
+                    {text: "공통팀", value: "300"},
                   ]
             }
           }
-        },
-        {
-          header: '업무세부',
-          width: 180,
-          align: 'left',
-          name: 'bz_dtls_txt',
         },
         {
           header: '프로그램ID',
@@ -867,6 +865,13 @@ export default {
           align: 'left',
           name: 'pgm_nm',
           ellipsis : true,
+          editor: 'text',
+        },
+        {
+          header: '업무세부',
+          width: 180,
+          align: 'left',
+          name: 'bz_dtls_txt',
           editor: 'text',
         },
         {
