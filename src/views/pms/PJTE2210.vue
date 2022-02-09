@@ -66,27 +66,27 @@
         <ul class="filter-con clear-fix" :hidden="true">
           <li class="filter-item">
             <div class="item-con">현재일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.s_day" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">진행일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.proc_dt" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">에러처리일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.err_proc_dt" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">진행일수
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.proc_days" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">에러처리일수
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.err_proc_days" style="width: 100px">
             </div>
           </li>
         </ul>
@@ -205,6 +205,13 @@ import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 
+// 현재 날짜
+let today = new Date();
+let year = today.getFullYear();
+let month = ('0' + (today.getMonth() + 1)).slice(-2);
+let day = ('0' + today.getDate()).slice(-2);
+let dateString = year + '-' + month  + '-' + day;
+
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
 // 업무구분
@@ -244,9 +251,10 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    this.init();
     console.log("mounted");
     // 최초조회
-    //this.fnSearch();
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -271,35 +279,34 @@ export default {
     bzcd_change(params) {this.info.bzcd_selected = params},
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-      this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
-    },
     init() {
-      axiosService.get(
-          "/dayCalc",
-          {
-          },
-      ).then(res => {
+      axiosService.get("/PJTE1000/days", {
+        params: {
+          prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id_selected: '0000000000',
+        }
+      }).then(res => {
+        this.setDays(res.data.data.contents[0]);
       }).catch(e => {
 
       });
-      // '500', '600' 권한,조회 영역 활성화
-      if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
-
-      }
       // 정렬
       //this.$refs.grid.invoke("sort",);
     },
+
+    setDays(data) {
+       this.info.s_day = data.s_day;
+       this.info.proc_dt = data.proc_dt;
+       this.info.err_proc_dt = data.err_proc_dt;
+       this.info.proc_days = data.proc_days;
+       this.info.err_proc_days = data.err_proc_days;
+    },
+
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
     },
     fnSearch() {
-      this.comboSetData();
       this.info.gubun = "1";
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
@@ -344,15 +351,21 @@ export default {
       comboList : ["C27","C0","C1","C6"],
 
       info: {
-        inq_date: this.inq_date,         // 기준일자
+        inq_date: dateString,         // 기준일자
         sqn_cd : this.sqn_cd,
         /* select 박스 */
-        bkup_id_selected: this.bkup_id_selected,      // 프로젝트명
-        prjt_nm_selected: this.prjt_nm_selected,      // 프로젝트명
-        bzcd_selected: this.bzcd_selected,            // 업무구분
-        sqn_cd_selected : this.sqn_cd_selected,       // 차수구분
+        bkup_id_selected: '0000000000',      // 프로젝트명
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),      // 프로젝트명
+        bzcd_selected: sessionStorage.getItem("LOGIN_BZCD"),            // 업무구분
+        sqn_cd_selected : 'TTT',       // 차수구분
         gubun : '',
+        s_day               : '',
+        proc_dt             : '',
+        err_proc_dt         : '',
+        proc_days           : '',
+        err_proc_days       : '',
       },
+
       addRow : {
         grid1 : this.grid1,
       },
@@ -426,90 +439,105 @@ export default {
           width: 65,
           align: 'right',
           name: 'tot_cnt',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
           align: 'right',
           name: 'af_tot_cnt',
+          defaultValue:0,
         },
         {
           header: '계획완료',
           width: 60,
           align: 'right',
           name: 'cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '선완료',
           width: 55,
           align: 'right',
           name: 'af_cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
           align: 'right',
           name: 'ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
           align: 'right',
           name: 'prnr_rt',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
           align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
           align: 'right',
           name: 'cmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
           align: 'right',
           name: 'ncmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
           align: 'right',
           name: 'prnr_rt1',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 60,
           align: 'right',
           name: 'pl_tot_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 60,
           align: 'right',
           name: 'pl_cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 60,
           align: 'right',
           name: 'pl_ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '계획',
           width: 55,
           align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
           align: 'right',
           name: 'cmpl_cnt2',
+          defaultValue:0,
         },
       ],
       header2: {
@@ -550,68 +578,78 @@ export default {
         {
           header: '담당자',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'emp_nm',
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'cmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'ncmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt1',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_tot_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt2',
+          defaultValue:0,
         },
         {
           header: '계획',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_prnr_rt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt2',
+          defaultValue:0,
         },
       ],
       header3: {
@@ -661,48 +699,56 @@ export default {
           width: 65,
           align: 'right',
           name: 'tot_err_cnt',
+          defaultValue:0,
         },
         {
           header: '결함',
           width: 65,
           align: 'right',
           name: 'err_cnt',
+          defaultValue:0,
         },
         {
           header: '개선',
           width: 65,
           align: 'right',
           name: 'impt_cnt',
+          defaultValue:0,
         },
         {
           header: '기타',
           width: 65,
           align: 'right',
           name: 'etc_err_cnt',
+          defaultValue:0,
         },
         {
           header: '결함아님',
           width: 65,
           align: 'right',
           name: 'nerr_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 65,
           align: 'right',
           name: 'cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진행',
           width: 65,
           align: 'right',
           name: 'ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '보류',
           width: 65,
           align: 'right',
           name: 'spnd_cnt',
+          defaultValue:0,
         },
       ],
       header4: {
