@@ -63,6 +63,7 @@
                       <input type="text"
                              placeholder="직원명"
                              v-model="info.reqpe_nm"
+                             @keypress.enter = "open_pjte9001(1)"
                              style="width: 90px"
                       >
                       <button class="search-btn"
@@ -83,6 +84,7 @@
                       <input type="text"
                              placeholder="직원명"
                              v-model="info.prcpe_nm"
+                             @keypress.enter = "open_pjte9001(2)"
                              style="width: 90px"
                       >
                       <button class="search-btn"
@@ -132,15 +134,15 @@
                     </li>
                 </ul>
                 <ul class="filter-btn">
-                    <div class="btn btn-filter-b">
+                    <button class="btn btn-filter-b">
                         <a href="#" @click="open_page()">신규신청</a>
-                    </div>
-                    <div class="btn btn-filter-e">
+                    </button>
+                    <button class="btn btn-filter-e">
                         <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-                    </div>
-                    <div class="btn btn-filter-p" style = "margin-left: 20px">
+                    </button>
+                    <button class="btn btn-filter-p" style = "margin-left: 20px">
                         <a href="#" @click="fnSearch">조회</a>
-                    </div>
+                    </button>
                 </ul>
               </div>
             </section>
@@ -158,7 +160,7 @@
 							:columnOptions="columnOptions"
 							:rowHeight="rowHeight"
 							:rowHeaders="rowHeaders"
-							@click="onClick"
+							@dblclick = "dbClick"
 						></grid>
                 </div>
             </section>
@@ -272,7 +274,12 @@ export default {
 	// 일반적인 함수를 선언하는 부분 
 	methods: {
     open_pjte9001(btn_id) {
-      this.pop = window.open(`../PJTE9001/?btn_id=${btn_id}`,"open_pjte9001", "width=700, height=600");
+      if(this.info.prjt_nm_selected === '' || this.info.prjt_nm_selected == null && this.info.prjt_nm_selected ===undefined){
+        alert("프로젝트가 선택되어 있어야 직원검색이 가능합니다")
+        return false;
+      }
+      let empnm = btn_id === 1 ? this.info.reqpe_nm : this.info.prcpe_nm
+      this.pop = window.open(`../PJTE9001/?bkup_id=${this.info.bkup_id_selected}&prjt_id=${this.info.prjt_nm_selected}&btn_id=${btn_id}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
     },
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
@@ -297,10 +304,11 @@ export default {
 			this.$refs.grid.invoke("modifyData");
 			console.log("modifyData");
 		},
-		onClick(ev) {
-			console.log("클릭" + ev.rowKey);
-			this.curRow = ev.rowKey;
-		},
+    dbClick(ev) {
+      console.log(this.$refs.grid.invoke("getValue", ev.rowKey, "mng_id"))
+      let mng_id = this.$refs.grid.invoke("getValue", ev.rowKey, "mng_id")
+      this.open_page(mng_id)
+    },
 		fnSearch(){
 			this.$refs.grid.invoke("setRequestParams", this.info);
 			this.$refs.grid.invoke("readData");
@@ -385,7 +393,7 @@ export default {
 
           prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
           bkup_id_selected      : '0000000000',
-          bzcd_selected         : 'TTT',
+          bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
           req_dscd_selected     : 'TTT',
           req_prc_step_cd_selected : 'TTT',
           check_Yn : 'N',
@@ -410,7 +418,7 @@ export default {
 					scrollX:false,
 					scrollY:false,
 					bodyHeight: 610,
-					rowHeight: 30,
+					rowHeight: 25,
 					showDummyRows: true,
 					open: false,
       menu_list: [
@@ -480,7 +488,7 @@ export default {
 			columnOptions: {
 				resizable: true
 			},
-			rowHeaders:['checkbox', 'rowNum'],
+			rowHeaders:['rowNum'],
 			header:{ 
 				height: 40
 			},
@@ -499,6 +507,7 @@ export default {
           name: 'bzcd',
           align: 'left',
           formatter: 'listItemText',
+          disabled : true,
           editor: {
             type: 'select',
             options:{
@@ -520,6 +529,7 @@ export default {
 					align: 'left',
 					name: 'req_dscd',
           formatter: 'listItemText',
+          disabled : true,
           editor: {
             type: 'select',
             options:{
@@ -541,7 +551,6 @@ export default {
 					align: 'center',
 					name: 'req_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
 					
 				},
 				{
@@ -564,7 +573,6 @@ export default {
           align: 'center',
           name: 'prc_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
 				},
 				{
 					header: '처리자',
@@ -586,6 +594,7 @@ export default {
           align: 'left',
           name: 'req_prc_step_cd',
           formatter: 'listItemText',
+          disabled : true,
           editor: {
             type: 'select',
             options:{
@@ -607,4 +616,9 @@ export default {
 
 </script>
 <style>
+/* [체크박스 관련 스타일 지정] */
+input[type='checkbox'] {
+  /* [체크박스 클릭 (전) 이미지 설정] */
+  background-image : url(../../assets/img/check_off.png);
+}
 </style>
