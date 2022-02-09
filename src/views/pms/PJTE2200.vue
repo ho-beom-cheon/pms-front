@@ -76,7 +76,7 @@
             <li class="filter-item">
               <div class="item-con">예상종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt02" v-model="info.frcs_end_dt01"></div>
-                -
+                ~
                 <div class="input-dateWrap"><input type="date" :min="info.frcs_end_dt01" v-model="info.frcs_end_dt02"></div>
               </div>
             </li>
@@ -100,18 +100,16 @@
                 >
               </div>
             </li>
-
             <li class="filter-item-n">
               <div class="input-searchWrap">개발자명
                 <input type="text"
                        placeholder="직원명"
-                       id="id.dvlpe_nm"
-                       v-model="info.dvlpe_nm"
+                       v-model="info.dvlpe_enm"
                        style   = "width: 90px"
+                       @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn"
-                        id="btn.dvlpe"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(1)"
                 ></button>
               </div>
             </li>
@@ -119,7 +117,7 @@
               <input type="text"
                      placeholder="직원번호"
                      id="id.dvlpe_no"
-                     v-model="info.dvlpe_no"
+                     v-model="info.dvlpe_eno"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
               >
@@ -128,13 +126,12 @@
               <div class="input-searchWrap">담당PL명
                 <input type="text"
                        placeholder="직원명"
-                       id="id.pl_nm"
-                       v-model="info.pl_nm"
+                       v-model="info.pl_enm"
                        style   = "width: 90px"
+                       @keyup.enter="open_pjte9001(2)"
                 >
                 <button class="search-btn"
-                        id="btn.pl"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(2)"
                 ></button>
               </div>
             </li>
@@ -142,7 +139,7 @@
               <input type="text"
                      placeholder="직원번호"
                      id="id.pl_no"
-                     v-model="info.pl_no"
+                     v-model="info.pl_eno"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
               >
@@ -157,23 +154,23 @@
                 >
                 <button class="search-btn"
                         id="btn.crpe"
-                        @click="open_pjte9001"
+                        @click="open_pjte9001(3)"
                 ></button>
               </div>
             </li>
             <li class="filter-item">
-            <input type="text"
-                   placeholder="직원번호"
-                   id="id.crpe_no"
-                   v-model="info.crpe_eno"
-                   style="width: 70px; background-color: #f2f2f2;"
-                   :disabled = true
-                >
+              <input type="text"
+                     placeholder="직원번호"
+                     id="id.crpe_no"
+                     v-model="info.crpe_eno"
+                     style="width: 70px; background-color: #f2f2f2;"
+                     :disabled = true
+              >
             </li>
             <li class="filter-item">
               <div class="item-con">개발자확인일자
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt02" v-model="info.dvlpe_cnf_dt01"></div>
-                -
+                ~
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt01" v-model="info.dvlpe_cnf_dt02"></div>
               </div>
             </li>
@@ -235,6 +232,25 @@ import {Grid} from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 
+// 첨부파일 팝업에서 받은 값
+window.fileData = (fileLists, num) => {
+  console.log(fileLists);
+  window.pms_register.file_name_list = fileLists;
+  window.pms_register.atfl_num = num;
+  window.pms_register.atfl_mng_id_yn = fileLists[1].atfl_mng_id;
+  window.pms_register.atfl_mng_id = fileLists[1].atfl_mng_id;
+  window.pms_register.pal_atfl_mng_id_yn = fileLists[1].atfl_mng_id;
+  window.pms_register.pal_atfl_mng_id = fileLists[1].atfl_mng_id;
+}
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
+  window.pms_register.emp_nm = empnm;
+  window.pms_register.emp_no = empno;
+  window.pms_register.emp_btn_id = btn_id;
+  window.pms_register.emp_rowKey = emprow;
+  window.pms_register.emp_colName = empcol;
+}
+
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
 class CustomRenderer {
   constructor(props) {
@@ -270,22 +286,17 @@ var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {tex
 
 // 업무구분
 const bzcd = [
-  {text: "선택", value: ' '},
-  {text: "신용", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
+  {"text":" ","value":"NNN"},
+  {"text":"신용조사","value":"100"},
+  {"text":"재무제표","value":"200"},
+  {"text":"신용평가","value":"300"},
+  {"text":"공통","value":"400"},
+  {"text":"관리","value":"500"},
 ];
-// 차수구분
-const sqn_cd = [
-  {text: "선택", value: " "},
-  {text: "신규", value: "100"},
-  {text: "변경", value: "200"},
-  {text: "이행", value: "300"},
-  {text: "삭제", value: "400"}
-];
+
 // 통합테스트처리코드 (처리단계)
 const itg_tst_prc_cd = [
-  {text: "선택", value: " "},
+  {"text":" ","value":"NNN"},
   {text: "테스트전", value: "000"},
   {text: "테스트시작", value: "100"},
   {text: "테스트자완료", value: "200"},
@@ -294,14 +305,20 @@ const itg_tst_prc_cd = [
 ];
 // 유형
 const tp = [
-  {text: "선택", value: " "},
+  {"text":" ","value":"NNN"},
   {text: "화면", value: "100"},
   {text: "프로그램", value: "200"},
   {text: "보고서", value: "300"},
   {text: "배치", value: "400"}
 ];
-
-
+// 차수구분
+const sqn_cd = [
+  {text: " ", value: "NNN"},
+  {text: "1차수", value: "100"},
+  {text: "2차수", value: "200"},
+  {text: "3차수", value: "300"},
+  {text: "4차수", value: "400"},
+];
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -320,7 +337,6 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
-
     console.log("mounted");
     this.fnSearch();    // 최초조회
     this.setColumns();  // 권한에 따른 컬럼 세팅
@@ -354,16 +370,6 @@ export default {
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     itg_tst_prc_cd_change(params) {this.info.itg_tst_prc_cd_selected = params},
-
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-      this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
-      this.info.pgm_dis_cd_selected = this.$children[0].$data.pgm_dis_cd_selected;
-      this.info.itg_tst_prc_cd_selected = this.$children[0].$data.itg_tst_prc_cd_selected;
-    },
 
     setColumns() {    // 권한에 따른 컬럼 세팅
       if (sessionStorage.getItem("aut_cd") === '100') {
@@ -459,12 +465,68 @@ export default {
     onClick(ev) {
       this.curRow = ev.rowKey;
       this.$refs.grid.invoke("getRow", this.curRow);
-      // 결함등록 Column 클릭 시 결함등록팝업 호출
-      if(ev.columnName === 'btn_popup') {
-        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
+// grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
+      if(ev.columnName === 'atfl_mng_id_yn') {
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
-      if(ev.columnName === 'dvlpe_btn') {
-        this.pop = window.open("../PJTE9001/", "open_page", "width=1000, height=600");
+      if(ev.columnName === 'pal_atfl_mng_id_yn') {
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, pal_atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&pal_atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+      }
+
+      // 결함등록 Column 클릭 시 결함등록팝업 호출
+      if(ev.columnName === 'err_btn') {
+        let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_id');
+        let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_nm');
+        let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&`, "open_page", "width=1000, height=800");
+      }
+
+      // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
+      if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
+        let empnm = ''
+        if(ev.columnName === 'dvlpe_btn'){
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_enm')
+        } else if(ev.columnName === 'pl_btn') {
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'pl_enm')
+        } else if(ev.columnName === 'crpe_btn') {
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'crpe_enm')
+        }
+
+        if (empnm != null && empnm != '') {
+          axiosService.get("/PJTE9001/select", {
+            params: {
+              empenm
+            }
+          })
+              .then(res => {
+                let res_data = res.data.data.contents;
+                // console.log(res_data)
+                if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                  if (ev.columnName == 'dvlpe_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_eno', res.data.data.contents[0].empno);
+                  } else if (ev.columnName == 'pl_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'pl_eno', res.data.data.contents[0].empno);
+                  } else if (ev.columnName == 'crpe_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'crpe_eno', res.data.data.contents[0].empno);
+                  }
+                } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                  let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+                  window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+                }
+              })
+        } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+          let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+        }
+      }
+
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
     },
     dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
@@ -478,8 +540,6 @@ export default {
     //   this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
     // },
     fnSearch() {
-      this.comboSetData();
-
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
@@ -528,24 +588,23 @@ export default {
           //권한ID[500:PM,600:PMO] - 모두 가능
         }
         /* 출력 영역  */
-        // if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
-        // if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert("시나리오 ID는 필수 입력 사항입니다");     return false;}
-        // if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert("시나리오명은 필수 입력 사항입니다");      return false;}
-        // if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert("테스트케이스 ID는 필수 입력 사항입니다");  return false;}
-        // if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
-        // if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
-        // if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
-        // if(data[i].dvlpe_cnf_dt === null || data[i].dvlpe_cnf_dt === "")   { alert("개발자확인일자는 필수 입력 사항입니다");   return false;}
-        // if(data[i].rqu_sbh_id === null || data[i].rqu_sbh_id === "")       { alert("요구사항 ID는 필수 입력 사항입니다");     return false;}
-        // if(data[i].tst_rst === null || data[i].tst_rst === "")             { alert("테스트 결과는 필수 입력 사항입니다");     return false;}
-        // if(data[i].tst_achi_rst  === null || data[i].tst_achi_rst  === "") { alert("테스트 수행결과는 필수 입력 사항입니다");  return false;}
-        // if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
-        // if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
-        // if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
+        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
+        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert("시나리오 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert("시나리오명은 필수 입력 사항입니다");      return false;}
+        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert("테스트케이스 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
+        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
+        if(data[i].dvlpe_cnf_dt === null || data[i].dvlpe_cnf_dt === "")   { alert("개발자확인일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].rqu_sbh_id === null || data[i].rqu_sbh_id === "")       { alert("요구사항 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].tst_rst === null || data[i].tst_rst === "")             { alert("테스트 결과는 필수 입력 사항입니다");     return false;}
+        if(data[i].tst_achi_rst  === null || data[i].tst_achi_rst  === "") { alert("테스트 수행결과는 필수 입력 사항입니다");  return false;}
+        if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
+        if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
 
-        // if(data[i].prc_step_cd >= "200"){
-        //   if(data[i].atfl_mng_id === '' || data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-        // }
+        if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+        if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
       }
 
       return  true;
@@ -577,6 +636,58 @@ export default {
   // 특정 데이터에 실행되는 함수를 선언하는 부분
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
+    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
+       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
+    emp_btn_id() {  // 필터에 있는 직원조회 팝업 (btn_id로 구분)
+      if(this.emp_btn_id == '1'){       // 개발자명
+        this.info.dvlpe_eno = this.emp_no
+        this.info.dvlpe_enm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 담당PL
+        this.info.pl_eno = this.emp_no
+        this.info.pl_enm = this.emp_nm
+      } else if(this.emp_btn_id == '3'){ // 담당현업
+        this.info.crpe_eno = this.emp_no
+        this.info.crpe_enm = this.emp_nm
+      }
+    },
+    /*watch에서 emp_rowKey가 변경되거나 emp_colName의 값이 변경되었을 때
+     버튼에 따라 직원명과 직원번호를 입력한다.*/
+    emp_rowKey() {  // 그리드에 있는 직원조회 팝업 (emp_colName과 emp_rowKey로 구분)
+      if(this.emp_colName == 'dvlpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_eno', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_enm', this.emp_nm);
+      } else if(this.emp_colName == 'pl_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_eno', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_enm', this.emp_nm);
+      } else if(this.emp_colName == 'crpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_eno', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_enm', this.emp_nm);
+      }
+    },
+    emp_colName() {  // 그리드에 있는 직원조회 팝업 (emp_colName과 emp_rowKey로 구분)
+      if(this.emp_colName == 'dvlpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_eno', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_enm', this.emp_nm);
+      } else if(this.emp_colName == 'pl_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_eno', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_enm', this.emp_nm);
+      } else if(this.emp_colName == 'crpe_btn') {
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_eno', this.emp_no);
+        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_enm', this.emp_nm);
+      }
+    },
+    atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
+      if(this.atfl_mng_id_yn !== '') {
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+      }
+    },
+    pal_atfl_mng_id(){
+      if(this.pal_atfl_mng_id_yn !== '') {
+        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id_yn', '첨부');
+        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', this.pal_atfl_mng_id);
+      }
+    }
   },
   // 변수 선언부분
   data() {
@@ -584,14 +695,27 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C4","C6","C26"],
 
+      /*직원조회 팝업 변수*/
+      emp_btn_id          : '',  // 직원조회팝업 버튼ID
+      emp_nm              : '',  // 직원조회팝업 직원명
+      emp_no              : '',  // 직원조회팝업 직원번호
+
+      emp_rowKey          : '',  // 직원조회팝업 (그리드) rowKey
+      emp_colName         : '',  // 직원조회팝업 (그리드) colName
+      atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
+      atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
+      pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
+      pal_atfl_mng_id_yn  : '',  // 설계서 첨부파일관리
+
       info: {
         scnr_id      : this.scnr_id,         // 시나리오 ID
         tst_case_id  : this.tst_case_id,     // 테스트케이스 ID
         dvlpe_eno    : this.dvlpe_eno,       // 개발자번호
         dvlpe_enm    : this.dvlpe_enm,       // 개발자명
         pl_eno       : this.pl_eno,          // 담당 PL번호
-        pl_nm        : this.pl_nm,           // 담당 PL명
+        pl_enm       : this.pl_enm,           // 담당 PL명
         crpe_eno     : this.crpe_eno,        // 담당현업명
+        crpe_enm     : this.crpe_enm,        // 담당현업명
         rqu_sbh_id   : this.rqu_sbh_id,      // 요구사항 ID
 
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),

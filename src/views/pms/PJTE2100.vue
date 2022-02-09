@@ -838,11 +838,11 @@ export default {
               listItems:
                   [
                     {"text":" ","value":"NNN"},
-                    {"text":"관리","value":"EEE"},
-                    {"text":"공통","value":"DDD"},
-                    {"text":"신용조사","value":"AAA"},
-                    {"text":"재무제표","value":"BBB"},
-                    {"text":"신용평가","value":"CCC"}
+                    {text: "신용조사", value: '100'},
+                    {text: "재무제표", value: "200"},
+                    {text: "신용평가", value: "300"},
+                    {"text":"관리","value":"400"},
+                    {"text":"공통","value":"500"},
                   ]
             }
           }
