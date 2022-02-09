@@ -15,7 +15,7 @@
         </colgroup>
         <tbody>
         <tr>
-          <th>프로젝트명</th>
+          <th>프로젝트</th>
           <td>
             <select
                 id="id.prjt_id"
@@ -107,20 +107,12 @@ import {axiosService} from "@/api/http";
 
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-// // 프로젝트구분
-// const prjt_id = [
-//   {text: "PMS프로젝트", value: '1000000001'},
-//   {text: "PMS프로젝트2", value: '1000000002'},
-//   {text: "PMS프로젝트3", value: "1000000003"},
-// ];
-
-// 업무구분
-const bzcd = [
-  {text: "전체", value: '999'},
-  {text: "신용", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
+// 프로젝트구분
+const prjt_id = [
+  {text: "IE_기업신용평가 프로젝트", value: '1000000001'},
+  {text: "Project Eye시스템구축", value: '1000000002'},
 ];
+
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -177,19 +169,19 @@ export default {
 
       });
     },
-    // 프로젝트 리스트 셋팅
+    // 프로젝트명, 업무구분 콤보박스 셋팅
     setCombo(combodata) {
+      //프로젝트명 세팅
+      for(let i=0; i<combodata.contents.length; i++) {
+          this.prjt_id.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
+      }
+      //업무구분 세팅
       this.bzcd.push({"text": "전체", "value": "TTT"});
       this.info.bzcd_selected = this.bzcd[0].value
-      for(let i=0; i<combodata.contents.length; i++) {
-        if(combodata.contents[i].grp_tycd == '0000000000') {
-          this.prjt_id.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
-        }else if(combodata.contents[i].grp_tycd == '1000000001'){
-          this.bzcd.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
-
-        }
+      for(let i=0; i<combodata.contents1.length; i++) {
+        this.bzcd.push({"text": combodata.contents1[i].dtls_tynm, "value": combodata.contents1[i].dtls_tycd});
       }
-      // this.info.prjt_id_selected = this.prjt_id[0].value;
+
     },
     init() {  //초기화 및 초기 값 세팅
       //그리드 셀 비활성화
@@ -313,6 +305,13 @@ export default {
           align: 'left',
           name: 'prjt_id',
           width: 180,
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: prjt_id
+            }
+          }
         },
         {
           header: '업무구분　　',
@@ -330,7 +329,10 @@ export default {
                     {"text":"공통","value":"DDD"},
                     {"text":"신용조사","value":"AAA"},
                     {"text":"재무제표","value":"BBB"},
-                    {"text":"신용평가","value":"CCC"}
+                    {"text":"신용평가","value":"CCC"},
+                    {"text": "업무팀", "value": "100"},
+                    {"text": "공통팀", "value": "200"},
+                    {"text": "PMO", "value": "300"},
                   ]
             }
           }

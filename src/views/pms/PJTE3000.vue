@@ -164,7 +164,7 @@
                 <div class="input-dateWrap"><input type="date" :max="info.ttmn_end_dt" v-model="info.ttmn_sta_dt" style="width: 125px">
                 </div>
                 -
-                <div class="input-dateWrap"><input type="date" :max="info.ttmn_sta_dt" v-model="info.ttmn_end_dt" style="width: 125px">
+                <div class="input-dateWrap"><input type="date" :min="info.ttmn_sta_dt" v-model="info.ttmn_end_dt" style="width: 125px">
                 </div>
               </div>
             </li>
@@ -297,37 +297,38 @@ export default {
   // 자세한 사항은 Vue 라이프 사이클 참조
   // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
-    console.log("beforeCreate");
+    // console.log("beforeCreate");
   },
   // 화면 동작 시 제일 처음 실행되는 부분
   // 변수 초기화
   created() {
 
-    console.log("created");
+    // console.log("created");
   },
   beforeMount() {
 
-    console.log("beforeMount");
+    // console.log("beforeMount");
   },
   mounted() {
     // 초기화
     this.init();
+    debugger
     // 최초조회
     this.fnSearch();
     window.pms_register = this;
-    console.log("mounted");
+    // console.log("mounted");
   },
   beforeUpdate() {
-    console.log("beforeUpdate");
+    // console.log("beforeUpdate");
   },
   updated() {
-    console.log("updated");
+    // console.log("updated");
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
+    // console.log("beforeDestroy");
   },
   destroyed() {
-    console.log("destroyed");
+    // console.log("destroyed");
   },
   // 함수를 선언하는 부분
   // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
@@ -347,23 +348,11 @@ export default {
     err_rgs_dscd_change(params)    {this.info.err_rgs_dscd_selected = params},
     err_prc_step_cd_change(params) {this.info.err_prc_step_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected         = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected         = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected            = this.$children[0].$data.bzcd_selected;
-      this.info.err_tycd_selected        = this.$children[0].$data.err_tycd_selected;
-      this.info.err_rgs_dscd_selected    = this.$children[0].$data.err_rgs_dscd_selected;
-      this.info.err_prc_step_cd_selected = this.$children[0].$data.err_prc_step_cd_selected;
-    },
-
     init() {
       //그리드 셀 비활성화
       this.$refs.grid.invoke("disable");
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-      // 조회 필터 초기화
-      this.info.cmpl_yn = false
     },
     /*그리드 클릭 이벤트*/
     onClick(ev) {
@@ -374,16 +363,15 @@ export default {
     dblonClick(ev) {
       this.curRow = ev.rowKey;
       // 그리드 ROW 더블클릭 시 결함팝업 호출
-      let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id');
-      let bkup_id='0000000000';
-      let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');
-      let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm');
+      let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id'); // 결함ID
+      let bkup_id='0000000000';                                                     //백업ID
+      let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
+      let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
       this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
 
     },
 
     fnSearch() {
-      // this.comboSetData();
 
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -507,8 +495,8 @@ export default {
         bkup_id_selected      : '0000000000',
         bzcd_selected: 'TTT',                       // 업무구분
         err_rgs_dscd_selected: 'TTT',               // 등록단계구분
-        err_tycd_selected: 'TTT',               // 결함유형
-        err_prc_step_cd_selected: 'TTT', // 처리단계
+        err_tycd_selected: 'TTT',                   // 결함유형
+        err_prc_step_cd_selected: 'TTT',            // 처리단계
 
         rgpe_no: this.rgpe_no,       // 결함등록자번호
         rgpe_nm: this.rgpe_nm,       // 결함등록자명
@@ -526,7 +514,7 @@ export default {
         ttmn_sta_dt: '',    // 결함조치일자STA
         ttmn_end_dt: '',    // 결함조치일자END
 
-        cmpl_yn: this.cmpl_yn,    // 완료건 포함 여부
+        cmpl_yn: false,    // 완료건 포함 여부
       },
 
       addRow: {},
@@ -701,7 +689,7 @@ export default {
           }
         },
         {
-          header: '처리단계',
+          header: '처리상태',
           width: 120,
           align: 'center',
           name: 'err_prc_step_cd',
