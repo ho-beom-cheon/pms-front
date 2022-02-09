@@ -134,14 +134,14 @@
                     </li>
                 </ul>
                 <ul class="filter-btn">
-                    <button class="btn btn-filter-b">
-                        <a href="#" @click="open_page()">신규신청</a>
+                    <button class="btn btn-filter-b" @click="open_page()">
+                        <a href="#" >신규신청</a>
                     </button>
-                    <button class="btn btn-filter-e">
-                        <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                    <button class="btn btn-filter-e" @click="gridExcelExport">
+                        <a href="#" >엑셀다운로드</a>
                     </button>
-                    <button class="btn btn-filter-p" style = "margin-left: 20px">
-                        <a href="#" @click="fnSearch">조회</a>
+                    <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSearch">
+                        <a href="#" >조회</a>
                     </button>
                 </ul>
               </div>
@@ -159,6 +159,7 @@
 							:showDummyRows="showDummyRows"
 							:columnOptions="columnOptions"
 							:rowHeight="rowHeight"
+              :minRowHeight="25"
 							:rowHeaders="rowHeaders"
 							@dblclick = "dbClick"
 						></grid>
