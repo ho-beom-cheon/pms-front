@@ -252,6 +252,39 @@ class SearchBtn {
   }
 }
 
+// 업무구분
+const bzcd = [
+  {"text":" ","value":"NNN"},
+  {text: "PMO", value: '100'},
+  {text: "업무팀", value: "200"},
+  {text: "공통팀", value: "300"},
+];
+
+const pgm_dis_cd = [
+  {"text":" ","value":"NNN"},
+  {"text":"신규","value":"100"},
+  {"text":"변경","value":"200"},
+  {"text":"이행","value":"300"},
+  {"text":"삭제","value":"900"}
+]
+
+const dvlp_dis_cd = [
+  {"text":" ","value":"NNN"},
+  {"text":"화면","value":"100"},
+  {"text":"프로그램","value":"200"},
+  {"text":"보고서","value":"300"},
+  {"text":"배치","value":"400"}
+]
+const prc_step_cd = [
+  {"text":" ","value":"NNN"},
+  {"text":"개발전","value":"000"},
+  {"text":"개발시작","value":"100"},
+  {"text":"개발자완료","value":"200"},
+  {"text":"PL확인","value":"300"},
+  {"text":"담당자확인","value":"400"},
+  {"text":"현업확인","value":"500"},
+  {"text":"개발종료","value":"600"}
+]
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -319,8 +352,13 @@ export default {
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
-      // 특정 열 비활성화
-      this.$refs.grid.invoke("disableColumn", 'pgm_id');
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' ||sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        // 특정 열 비활성화
+        this.$refs.grid.invoke("disableColumn", 'dvlp_dis_cd');
+        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
+        this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
+      }
+
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
 
       // '100' 권한,개발자명
@@ -436,12 +474,14 @@ export default {
 
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn') {
+        this.count = 1
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
       if(ev.columnName === 'pal_atfl_mng_id_yn') {
+        this.count = 2
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, pal_atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&pal_atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -507,8 +547,8 @@ export default {
       this.modals.txt_modal1 = false;
     },
     formDownload(){
-      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "" //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}`, "open_file_page", "width=1000, height=500");
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
@@ -550,7 +590,8 @@ export default {
     },
     // 엑셀 다운로드
     gridExcelExport(){
-      this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"}, {useFormattedValue : true});
+      // this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"}, {useFormattedValue : true});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드"}, {useFormattedValue : true} );
     },
     // 엑셀파일 업로드(미완성)
     gridExcelImport(){
@@ -694,17 +735,19 @@ export default {
       }
     },
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
-      if(this.atfl_mng_id_yn !== '') {
-        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
-        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+      if(this.count == 1) {
+        if (this.atfl_mng_id_yn !== '') {
+          this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
+          this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+        }
+      }
+      if(this.count == 2) {
+        if(this.pal_atfl_mng_id_yn !== '') {
+          this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id_yn', '첨부');
+          this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', this.pal_atfl_mng_id);
+        }
       }
     },
-    pal_atfl_mng_id(){
-      if(this.pal_atfl_mng_id_yn !== '') {
-        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id_yn', '첨부');
-        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', this.pal_atfl_mng_id);
-      }
-    }
 
   },
 
@@ -832,26 +875,13 @@ export default {
           name: 'bzcd',
           align: 'center',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text":" ","value":"NNN"},
-                    {text: "신용조사", value: '100'},
-                    {text: "재무제표", value: "200"},
-                    {text: "신용평가", value: "300"},
-                    {"text":"관리","value":"400"},
-                    {"text":"공통","value":"500"},
-                  ]
+              listItems: bzcd
             }
           }
-        },
-        {
-          header: '업무세부',
-          width: 180,
-          align: 'left',
-          name: 'bz_dtls_txt',
         },
         {
           header: '프로그램ID',
@@ -870,24 +900,24 @@ export default {
           editor: 'text',
         },
         {
+          header: '업무세부',
+          width: 180,
+          align: 'left',
+          name: 'bz_dtls_txt',
+          editor: 'text',
+        },
+        {
           header: '개발구분',
           width: 100,
           align: 'center',
           name: 'dvlp_dis_cd',
           formatter: 'listItemText',
           type:'text',
-          rowSpan: true,
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text":" ","value":"NNN"},
-                    {"text":"신규","value":"100"},
-                    {"text":"변경","value":"200"},
-                    {"text":"이행","value":"300"},
-                    {"text":"삭제","value":"900"}
-                  ]
+              listItems: dvlp_dis_cd
+
             }
           },
         },
@@ -900,14 +930,8 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text":" ","value":"NNN"},
-                    {"text":"화면","value":"100"},
-                    {"text":"프로그램","value":"200"},
-                    {"text":"보고서","value":"300"},
-                    {"text":"배치","value":"400"}
-                  ]
+              listItems: pgm_dis_cd
+
             }
           }
         },
@@ -966,17 +990,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text":" ","value":"NNN"},
-                    {"text":"개발전","value":"000"},
-                    {"text":"개발시작","value":"100"},
-                    {"text":"개발자완료","value":"200"},
-                    {"text":"PL확인","value":"300"},
-                    {"text":"담당자확인","value":"400"},
-                    {"text":"현업확인","value":"500"},
-                    {"text":"개발종료","value":"600"}
-                  ]
+              listItems: prc_step_cd
             }
           }
         },
