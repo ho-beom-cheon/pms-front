@@ -234,7 +234,7 @@ const bzcd = [
   {"text":" ","value":"NNN"},
   {"text":"관리","value":"EEE"},
   {"text":"공통","value":"DDD"},
-  {text: "신용", value: 'AAA'},
+  {text: "신용조사", value: 'AAA'},
   {text: "재무제표", value: "BBB"},
   {text: "신용평가", value: "CCC"},
 ];
@@ -738,7 +738,7 @@ export default {
       columns4: [
         {
           header: '업무구분',
-          width: 60,
+          width: 100,
           align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
