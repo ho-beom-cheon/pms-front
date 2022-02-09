@@ -38,6 +38,9 @@
       <hr>
       <combo
         :comboArray = "this.comboList"
+        @req_prc_step_cd_change_pop = "req_prc_step_cd_change"
+        @req_dscd_change_pop = "req_dscd_change"
+        @bzcd_change_pop = "bzcd_change"
         >
       </combo>
       <table>
@@ -231,6 +234,11 @@ export default {
     },
   },
   methods: {
+    // Combo.vue 에서 받아온 값
+    req_dscd_change(params) {this.req_dscd_selected = params},
+    req_prc_step_cd_change(params) {this.req_prc_step_cd_selected = params},
+    bzcd_change(params) {this.bzcd_selected = params},
+
     // 직원 조회 팝업
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
