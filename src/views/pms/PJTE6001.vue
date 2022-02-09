@@ -38,6 +38,7 @@
       <hr>
       <combo
         :comboArray = "this.comboList"
+        :req_prc_step_cd_selected_pop = "req_prc_step_cd_selected"
         @req_prc_step_cd_change_pop = "req_prc_step_cd_change"
         @req_dscd_change_pop = "req_dscd_change"
         @bzcd_change_pop = "bzcd_change"
@@ -163,6 +164,12 @@ export default {
     if(this.mng_id){
       this.getRegisterData();
     }
+
+  },
+  beforeUpdate() {
+    this.$children[0].$data.bzcd_selected_pop = this.bzcd_selected
+    this.$children[0].$data.req_prc_step_cd_selected_pop = this.req_prc_step_cd_selected
+    this.$children[0].$data.req_dscd_selected_pop = this.req_dscd_selected
   },
   components: {
     Combo,
@@ -182,30 +189,10 @@ export default {
       reqpe_no : sessionStorage.getItem('LOGIN_EMP_NO'),    // 신청자 직원번호
       req_dt : '',                                               // 신청일자
 
-      bzcd:[
-        {	text:"전체", 	value:'TTT'},
-        {	text:"신용", 	value:'AAA'},
-        {	text:"재무제표", 	value:"BBB"},
-        {	text:"신용평가", 	value:"CCC"},
-      ],                           // 업무
-      bzcd_selected : 'TTT',
-      req_dscd : [
-        {	text:"전체", 	value:'TTT'},
-        {	text:"개발현황관련", 	value:'100'},
-        {	text:"통합테스트관련", 	value:"200"},
-        {	text:"PMS오류관련", 	value:'400'},
-        {	text:"DB관련", 	value:'500'},
-        {	text:"기타", 	value:"600"},
-      ],                          // 신청구분
-      req_dscd_selected : 'TTT',
-      req_prc_step_cd : [
-        {	text:"전체", 	value:'TTT'},
-        {	text:"요청", 	value:'100'},
-        {	text:"담당자배정", 	value:"200"},
-        {	text:"보류", 	value:"300"},
-        {	text:"처리완료", 	value:'400'},
-      ],                          // 처리구분
-      req_prc_step_cd_selected: 'TTT',
+      bzcd_selected : '',                    // 업무
+      req_dscd_selected : '',                // 신청구분
+      req_prc_step_cd_selected: '',          // 처리구분
+
       req_txt : '',               // 신청내용
       prcpe_nm : '',              // 처리자명
       prcpe_no : '',              // 처리자 직원번호
@@ -235,7 +222,10 @@ export default {
   },
   methods: {
     // Combo.vue 에서 받아온 값
-    req_dscd_change(params) {this.req_dscd_selected = params},
+    req_dscd_change(params) {
+      console.log(this.req_dscd_selected, params)
+      this.req_dscd_selected = params
+    },
     req_prc_step_cd_change(params) {this.req_prc_step_cd_selected = params},
     bzcd_change(params) {this.bzcd_selected = params},
 
@@ -365,6 +355,9 @@ export default {
 
   },
   mounted() {
+    if(this.mng_id == null || this.mng_id === '' || this.mng_id === undefined){
+      this.$children[0].$data.req_dscd_selected_pop = '100'
+    }
     window.pms_register = this;
   },
   beforeDestroy() {

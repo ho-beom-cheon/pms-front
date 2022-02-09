@@ -59,32 +59,32 @@
                         @bkup_id_change="bkup_id_change"
                         @prjt_nm_chage="prjt_nm_chage"
                     ></combo>
-                    <div class="btn btn-filter-p" style = "margin-top: 5px">
-                      <a href="#" @click="tableBackUp">테이블백업</a>
-                    </div>
+                    <button class="btn btn-filter-p" style = "margin-top: 5px" @click="tableBackUp">
+                      <a href="#" >테이블백업</a>
+                    </button>
                   </ul>
                 </section>
                 <div class="div-grid-c">
                 </div>
                 <ul class="filter-btn" style="margin-top: 25px">
-                  <div class="btn btn-filter-e">
-                    <a href="#" @click="gridExcelImport">엑셀업로드</a>
-                  </div>
-                  <div class="btn btn-filter-e">
-                    <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-                  </div>
-                  <div class="btn btn-filter-b" style = "margin-left: 20px;">
-                    <a href="#" @click="gridAddRow(1)" >행추가</a>
-                  </div>
-                  <div class="btn btn-filter-b">
-                    <a href="#" @click="gridDelRow(1)">행삭제</a>
-                  </div>
-                  <div class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C">
-                    <a href="#" @click="loginChange">로그인변경</a>
-                  </div>
-                  <div class="btn btn-filter-p" style = "margin-left: 20px">
-                    <a href="#" @click="fnSave(1)">저장</a>
-                  </div>
+                  <button class="btn btn-filter-e"  @click="gridExcelImport">
+                    <a href="#">엑셀업로드</a>
+                  </button>
+                  <button class="btn btn-filter-e" @click="gridExcelExport">
+                    <a href="#" >엑셀다운로드</a>
+                  </button>
+                  <button class="btn btn-filter-b" style = "margin-left: 20px;" @click="gridAddRow(1)">
+                    <a href="#"  >행추가</a>
+                  </button>
+                  <button class="btn btn-filter-b" @click="gridDelRow(1)">
+                    <a href="#" >행삭제</a>
+                  </button>
+                  <button class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C" @click="loginChange">
+                    <a href="#" >로그인변경</a>
+                  </button>
+                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(1)">
+                    <a href="#" >저장</a>
+                  </button>
                 </ul>
               </div>
               <div class="div1-2-c">
@@ -98,6 +98,7 @@
                       :showDummyRows="showDummyRows"
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
+                      :minRowHeight="minRowHeight"
                       @click="onClick($event, 1)"
                   ></grid>
                 </div>
@@ -118,9 +119,9 @@
                     </li>
                   </ul>
                   <ul class="filter-btn">
-                    <div class="btn btn-filter-p" style = "margin-bottom: 5px">
-                      <a href="#" @click="createNewYear">생성</a>
-                    </div>
+                    <button class="btn btn-filter-p" style = "margin-bottom: 5px" @click="createNewYear">
+                      <a href="#" >생성</a>
+                    </button>
                   </ul>
                   <ul class="filter-con clear-fix">
                     <li class="filter-item">
@@ -134,18 +135,18 @@
                     </li>
                   </ul>
                   <ul class="filter-btn">
-                    <div class="btn btn-filter-p" style = "margin-bottom: 5px">
-                      <a href="#" @click="dateSearch">조회</a>
-                    </div>
+                    <button class="btn btn-filter-p" style = "margin-bottom: 5px" @click="dateSearch">
+                      <a href="#" >조회</a>
+                    </button>
                   </ul>
                 </section>
               <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="gridAddRow(4)">행추가</a>
-                </div>
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="gridDelRow(4)">행삭제</a>
-                </div>
+                <button class="btn btn-filter-b" @click="gridAddRow(4)">
+                  <a href="#" >행추가</a>
+                </button>
+                <button class="btn btn-filter-b" @click="gridDelRow(4)">
+                  <a href="#" >행삭제</a>
+                </button>
 <!--                <div class="btn btn-filter-p" style = "margin-left: 20px">-->
 <!--                  <a href="#" @click="fnSave(4)">저장</a>-->
 <!--                </div>-->
@@ -162,6 +163,7 @@
                     :showDummyRows="showDummyRows"
                     :columnOptions="columnOptions"
                     :rowHeight="rowHeight"
+                    :minRowHeight="minRowHeight"
                     @click="onClick"
                 ></grid>
               </div>
@@ -171,15 +173,15 @@
           <div class="div3-c">
             <div class="div-header-c"><h2>코드유형</h2>
                 <ul class="filter-btn">
-                  <div class="btn btn-filter-b">
-                    <a href="#" @click="gridAddRow(2)">행추가</a>
-                  </div>
-                  <div class="btn btn-filter-b">
-                    <a href="#" @click="gridDelRow(2)">행삭제</a>
-                  </div>
-                  <div class="btn btn-filter-p" style = "margin-left: 20px">
-                    <a href="#" @click="fnSave(2)">저장</a>
-                  </div>
+                  <button class="btn btn-filter-b" @click="gridAddRow(2)">
+                    <a href="#" >행추가</a>
+                  </button>
+                  <button class="btn btn-filter-b" @click="gridDelRow(2)">
+                    <a href="#" >행삭제</a>
+                  </button>
+                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(2)">
+                    <a href="#" >저장</a>
+                  </button>
                 </ul>
             </div>
             <div class="div-grid-c">
@@ -192,6 +194,7 @@
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
+                  :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick($event, 2)"
               ></grid>
@@ -202,15 +205,15 @@
               <h2 v-if="grp_tymm">{{ grp_tymm }}</h2>
               <h2 v-else>코드상세</h2>
               <ul class="filter-btn">
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="gridAddRow(3)">행추가</a>
-                </div>
-                <div class="btn btn-filter-b">
-                  <a href="#" @click="gridDelRow(3)">행삭제</a>
-                </div>
-                <div class="btn btn-filter-p" style = "margin-left: 20px">
-                  <a href="#" @click="fnSave(3)">저장</a>
-                </div>
+                <button class="btn btn-filter-b" @click="gridAddRow(3)">
+                  <a href="#" >행추가</a>
+                </button>
+                <button class="btn btn-filter-b" @click="gridDelRow(3)">
+                  <a href="#" >행삭제</a>
+                </button>
+                <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(3)">
+                  <a href="#" >저장</a>
+                </button>
               </ul>
             </div>
             <div class="div-grid-c">
@@ -223,6 +226,7 @@
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :rowHeight="rowHeight"
+                  :minRowHeight="25"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
               ></grid>
@@ -800,6 +804,29 @@ export default {
         let grid_arr = this.$refs.grid2.invoke("getData")
         this.grp_tymm = grid_arr[this.curRow].grp_tymm
         this.info.grp_tycd = grid_arr[this.curRow].grp_tycd
+        this.$refs.grid3.invoke("setColumnHeaders", {
+          dtls_tycd : grid_arr[this.curRow].grid_colm_nm1 ? grid_arr[this.curRow].grid_colm_nm1 : '세부유형코드',
+          dtls_tynm : grid_arr[this.curRow].grid_colm_nm2 ? grid_arr[this.curRow].grid_colm_nm2 : '세부유형명',
+          etc_txt1 : grid_arr[this.curRow].grid_colm_nm3 ? grid_arr[this.curRow].grid_colm_nm3 : '기타내용1',
+          etc_txt2 : grid_arr[this.curRow].grid_colm_nm4 ? grid_arr[this.curRow].grid_colm_nm4 : '기타내용2',
+          etc_txt3 : grid_arr[this.curRow].grid_colm_nm5 ? grid_arr[this.curRow].grid_colm_nm5 : '기타내용3',
+          etc_txt4 : grid_arr[this.curRow].grid_colm_nm6 ? grid_arr[this.curRow].grid_colm_nm6 : '기타내용4',
+          etc_txt5 : grid_arr[this.curRow].grid_colm_nm7 ? grid_arr[this.curRow].grid_colm_nm7 : '기타내용5',
+          etc_txt6 : grid_arr[this.curRow].grid_colm_nm8 ? grid_arr[this.curRow].grid_colm_nm8 : '기타내용6',
+          etc_txt7 : grid_arr[this.curRow].grid_colm_nm9 ? grid_arr[this.curRow].grid_colm_nm9 : '기타내용7',
+          etc_txt8 : grid_arr[this.curRow].grid_colm_nm10 ? grid_arr[this.curRow].grid_colm_nm10 : '기타내용8',
+          etc_txt9 : grid_arr[this.curRow].grid_colm_nm11 ? grid_arr[this.curRow].grid_colm_nm11 : '기타내용9',
+          etc_txt10 : grid_arr[this.curRow].grid_colm_nm12 ? grid_arr[this.curRow].grid_colm_nm12 : '기타내용10',
+          etc_txt11 : grid_arr[this.curRow].grid_colm_nm13 ? grid_arr[this.curRow].grid_colm_nm13 : '기타내용11',
+          etc_txt12 : grid_arr[this.curRow].grid_colm_nm14 ? grid_arr[this.curRow].grid_colm_nm14 : '기타내용12',
+          etc_txt13 : grid_arr[this.curRow].grid_colm_nm15 ? grid_arr[this.curRow].grid_colm_nm15 : '기타내용13',
+          etc_txt14 : grid_arr[this.curRow].grid_colm_nm16 ? grid_arr[this.curRow].grid_colm_nm16 : '기타내용14',
+          etc_txt15 : grid_arr[this.curRow].grid_colm_nm17 ? grid_arr[this.curRow].grid_colm_nm17 : '기타내용15',
+          etc_txt16 : grid_arr[this.curRow].grid_colm_nm18 ? grid_arr[this.curRow].grid_colm_nm18 : '기타내용16',
+          etc_txt17 : grid_arr[this.curRow].grid_colm_nm19 ? grid_arr[this.curRow].grid_colm_nm19 : '기타내용17',
+          etc_txt18 : grid_arr[this.curRow].grid_colm_nm20 ? grid_arr[this.curRow].grid_colm_nm20 : '기타내용17',
+
+        });
         this.info.grid_num = 3;
         this.$refs.grid3.invoke("setRequestParams", this.info);
         this.$refs.grid3.invoke("readData");
@@ -842,9 +869,35 @@ export default {
       if(grid_num === 1){
         this.$refs.grid1.invoke("removeRow", this.curRow);
       }else if(grid_num === 2){
-        this.$refs.grid2.invoke("removeRow", this.curRow);
+        let createdRows = this.$refs.grid2.invoke("getModifiedRows").createdRows
+        let checkCreatedRows = false
+        console.log("createdRows ::" ,this.$refs.grid2.invoke("getModifiedRows").createdRows);
+        for(let i=0; i<createdRows.length; i++){
+          if(createdRows[i].rowKey == this.curRow){
+            checkCreatedRows = true
+            break;
+          }
+        }
+        if(checkCreatedRows){
+          this.$refs.grid2.invoke("removeRow", this.curRow);
+        }else{
+          alert("새로 추가한 행만 행삭제가 가능합니다.")
+        }
       }else if(grid_num === 3){
-        this.$refs.grid3.invoke("removeRow", this.curRow);
+        let createdRows = this.$refs.grid3.invoke("getModifiedRows").createdRows
+        let checkCreatedRows = false
+        console.log("createdRows ::" ,this.$refs.grid3.invoke("getModifiedRows").createdRows);
+        for(let i=0; i<createdRows.length; i++){
+          if(createdRows[i].rowKey == this.curRow){
+            checkCreatedRows = true
+            break;
+          }
+        }
+        if(checkCreatedRows){
+          this.$refs.grid3.invoke("removeRow", this.curRow);
+        }else{
+          alert("새로 추가한 행만 행삭제가 가능합니다.")
+        }
       }else if(grid_num === 4){
         this.$refs.grid4.invoke("removeRow", this.curRow);
       }
@@ -916,7 +969,8 @@ export default {
       scrollX:false,
       scrollY:false,
       bodyHeight: 345,
-      rowHeight: 30,
+      rowHeight: 25,
+      minRowHeight : 25,
       showDummyRows: true,
       open: false,
       menu_list: [
@@ -1078,19 +1132,58 @@ export default {
           header: '업무구분코드',
           width: 120,
           name: 'bzcd',
-          editor : 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text":"PMO","value":"300"},
+                    {"text": "업무팀", "value": '100'},
+                    {"text": "공통팀", "value": "200"},
+                  ]
+            }
+          }
         },
         {
           header: '구성원구분코드',
           width: 120,
           name: 'catn_dcd',
-          editor : 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text": "고객", "value": '100'},
+                    {"text": "정직원", "value": "200"},
+                    {"text": "계약직", "value": "300"},
+                    {"text":"프리랜서","value":"400"},
+                    {"text":"업체직원","value":"500"},
+                    {"text":"기타","value":"900"},
+                  ]
+            }
+          }
         },
         {
           header: '권한구분코드',
           width: 120,
           name: 'aud_cd',
-          editor : 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:
+                  [
+                    {"text": "개발자", "value": '100'},
+                    {"text": "PL", "value": "200"},
+                    {"text": "IT", "value": "300"},
+                    {"text":"현업","value":"400"},
+                    {"text":"PM","value":"500"},
+                    {"text":"PMO","value":"600"},
+                  ]
+            }
+          }
         },
         {
           header: 'IP주소',
@@ -1310,7 +1403,7 @@ export default {
         },
         {
           header: '세부유형코드',
-          width: 100,
+          width: 150,
           name: 'dtls_tycd',
           editor : 'text',
         },

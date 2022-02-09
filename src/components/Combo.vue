@@ -755,7 +755,7 @@ export default {
             this.row++;
           }
           if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected          = sessionStorage.getItem("LOGIN_PROJ_ID")
-          if(this.CD1000000001.length !== 0)  this.bzcd_selected_pop = this.CD1000000001[0].value
+          // if(this.CD1000000001.length !== 0)  this.bzcd_selected_pop = this.CD1000000001[0].value
           if(this.CD1000000001T.length !== 0)  this.bzcd_selected = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
           if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected         = this.CD1000000002T[0].value
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected         = this.CD1000000003T[0].value
@@ -764,9 +764,9 @@ export default {
           if(this.CD1000000007T.length !== 0)  this.err_tycd_selected            = this.CD1000000007T[0].value
           if(this.CD1000000008T.length !== 0)  this.err_rgs_dscd_selected        = this.CD1000000008T[0].value
           if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected     = this.CD1000000009T[0].value
-          if(this.CD1000000010.length !== 0)  this.req_dscd_selected_pop         = this.CD1000000010[0].value
+          // if(this.CD1000000010.length !== 0)  this.req_dscd_selected_pop         = '400'
           if(this.CD1000000010T.length !== 0)  this.req_dscd_selected            = this.CD1000000010T[0].value
-          if(this.CD1000000011.length !== 0)  this.req_prc_step_cd_selected_pop  = this.CD1000000011[0].value
+          // if(this.CD1000000011.length !== 0)  this.req_prc_step_cd_selected_pop  = this.CD1000000011[0].value
           if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected     = this.CD1000000011T[0].value
           if(this.CD1000000012T.length !== 0)  this.rgs_dis_cd_selected          = this.CD1000000012T[0].value
           if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected          = this.CD1000000013T[0].value
