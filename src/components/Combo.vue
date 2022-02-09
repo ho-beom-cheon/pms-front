@@ -1,22 +1,66 @@
 <template>
   <div style="display:inline;">
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
-      <div class="item-con">프로젝트
-        <select
-            v-model = "prjt_nm_selected"
-            style   = "width: 180px"
-            :disabled="read"
-            @change="prjt_nm_chage"
-        >
-          <option
-              v-for  = "(item, idx) in CD0000000000T"
-              :key   = "idx"
-              v-text = "item.text"
-              :value = "item.value"
-          ></option>
-        </select>
-      </div>
-    </li>
+<!--    pms 신청등록-->
+    <table v-for="item in this.comboList" :key="item.id" v-if="item === 'C1-1'">
+            <colgroup>
+              <col width="140px">
+              <col width="*">
+              <col width="140px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>업무</th>
+              <td>
+                  <select
+                    v-model = "bzcd_selected_pop"
+                    @change = "bzcd_change_pop"
+                >
+                  <option
+                      v-for  = "(item, idx) in CD1000000001"
+                      :key   = "idx"
+                      v-text = "item.text"
+                      :value = "item.value"
+                  ></option>
+                </select>
+              </td>
+              <th></th>
+              <td></td>
+            </tr>
+            <tr>
+              <th>신청구분</th>
+              <td>
+                <select
+                      v-model = "req_dscd_selected_pop"
+                      @change = "req_dscd_change_pop"
+                  >
+                    <option
+                        v-for  = "(item, idx) in CD1000000010"
+                        :key   = "idx"
+                        v-text = "item.text"
+                        :value = "item.value"
+                    ></option>
+                </select>
+              </td>
+              <th>
+                처리구분
+              </th>
+              <td>
+                <select
+                    v-model = "req_prc_step_cd_selected_pop"
+                    @change = "req_prc_step_cd_change_pop"
+                >
+                  <option
+                      v-for  = "(item, idx) in CD1000000011"
+                      :key   = "idx"
+                      v-text = "item.text"
+                      :value = "item.value"
+                  ></option>
+                </select>
+              </td>
+            </tr>
+            </tbody>
+          </table>
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C27'">
       <div class="item-con">백업ID
         <select
@@ -388,9 +432,9 @@ export default {
     return {
       // 조회 조건(콤보박스) - 공통
       // T : 검색조건, N : 그리드
-      CD0000000000T : [],  CD0000000000N : [],
-      CD1000000001T : [],  CD1000000001N : [],
-      CD1000000002T : [],  CD1000000002N : [],
+      CD0000000000T : [],  CD0000000000N : [], CD0000000000 : [],
+      CD1000000001T : [],  CD1000000001N : [], CD1000000001 : [],
+      CD1000000002T : [],  CD1000000002N : [], CD1000000002 : [],
       CD1000000003T : [],  CD1000000003N : [],
       CD1000000004T : [],  CD1000000004N : [],
       CD1000000005T : [],  CD1000000005N : [],
@@ -398,8 +442,8 @@ export default {
       CD1000000007T : [],  CD1000000007N : [],
       CD1000000008T : [],  CD1000000008N : [],
       CD1000000009T : [],  CD1000000009N : [],
-      CD1000000010T : [],  CD1000000010N : [],
-      CD1000000011T : [],  CD1000000011N : [],
+      CD1000000010T : [],  CD1000000010N : [], CD1000000010 : [],
+      CD1000000011T : [],  CD1000000011N : [], CD1000000011 : [],
       CD1000000012T : [],  CD1000000012N : [],
       CD1000000013T : [],  CD1000000013N : [],
       CD1000000014T : [],  CD1000000014N : [],
@@ -445,6 +489,7 @@ export default {
       prjt_nm_selected : "",
       // 업무구분
       bzcd_selected : "",
+      bzcd_selected_pop : "",
       bzcd_n : [],
       // 프로그램구분
       pgm_dis_cd_selected : "",
@@ -470,8 +515,10 @@ export default {
       req_dis_cd_selected : "",
       //신청구분
       req_dscd_selected:"",
+      req_dscd_selected_pop:"",
       //처리상태
       req_prc_step_cd_selected:"",
+      req_prc_step_cd_selected_pop:"",
       //관리구분
       mng_cd_selected:"",
       //WBS_진행상태
@@ -592,15 +639,15 @@ export default {
             if(i === 0) {
               this.CD0000000000T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD0000000000N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 1) {
               this.CD1000000001T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000001N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000001.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 2) {
               this.CD1000000002T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000002N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000002.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 3) {
               this.CD1000000003T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000003N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -632,11 +679,11 @@ export default {
             } else if(i === 10) {
               this.CD1000000010T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000010N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000010.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 11) {
               this.CD1000000011T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000011N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000011.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 12) {
               this.CD1000000012T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000012N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -688,28 +735,30 @@ export default {
             this.row++;
           }
           if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected          = sessionStorage.getItem("LOGIN_PROJ_ID")
-          if(this.CD1000000001T.length !== 0)  this.bzcd_selected
-              = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
-          if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected      = this.CD1000000002T[0].value
-          if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected      = this.CD1000000003T[0].value
-          if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected       = this.CD1000000004T[0].value
-          if(this.CD1000000006T.length !== 0)  this.sqn_cd_selected           = this.CD1000000006T[0].value
-          if(this.CD1000000007T.length !== 0)  this.err_tycd_selected         = this.CD1000000007T[0].value
-          if(this.CD1000000008T.length !== 0)  this.err_rgs_dscd_selected     = this.CD1000000008T[0].value
-          if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected  = this.CD1000000009T[0].value
-          if(this.CD1000000010T.length !== 0)  this.req_dscd_selected         = this.CD1000000010T[0].value
-          if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected  = this.CD1000000011T[0].value
-          if(this.CD1000000012T.length !== 0)  this.rgs_dis_cd_selected       = this.CD1000000012T[0].value
-          if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected       = this.CD1000000013T[0].value
-          if(this.CD1000000014T.length !== 0)  this.iss_prc_step_cd_selected       = this.CD1000000013T[0].value
-          if(this.CD1000000018T.length !== 0)  this.ntar_bzcd_selected        = this.CD1000000018T[0].value
-          if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected       = this.CD1000000019T[0].value
-          if(this.CD1000000021T.length !== 0)  this.check_cd_selected         = this.CD1000000021T[0].value
-          if(this.CD1000000022T.length !== 0)  this.file_cd_selected          = this.CD1000000022T[0].value
-          if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected   = this.CD1000000026T[0].value
-          if(this.CD1000000027T.length !== 0)  this.bkup_id_selected          = this.CD1000000027T[0].value
-          if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected   = this.CD1000000035T[0].value
-          if(this.CD1000000036T.length !== 0)  this.search_cd_selected        = this.CD1000000036T[0].value
+          if(this.CD1000000001.length !== 0)  this.bzcd_selected_pop = this.CD1000000001[0].value
+          if(this.CD1000000001T.length !== 0)  this.bzcd_selected = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
+          if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected         = this.CD1000000002T[0].value
+          if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected         = this.CD1000000003T[0].value
+          if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected          = this.CD1000000004T[0].value
+          if(this.CD1000000006T.length !== 0)  this.sqn_cd_selected              = this.CD1000000006T[0].value
+          if(this.CD1000000007T.length !== 0)  this.err_tycd_selected            = this.CD1000000007T[0].value
+          if(this.CD1000000008T.length !== 0)  this.err_rgs_dscd_selected        = this.CD1000000008T[0].value
+          if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected     = this.CD1000000009T[0].value
+          if(this.CD1000000010.length !== 0)  this.req_dscd_selected_pop         = this.CD1000000010[0].value
+          if(this.CD1000000010T.length !== 0)  this.req_dscd_selected            = this.CD1000000010T[0].value
+          if(this.CD1000000011.length !== 0)  this.req_prc_step_cd_selected_pop  = this.CD1000000011[0].value
+          if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected     = this.CD1000000011T[0].value
+          if(this.CD1000000012T.length !== 0)  this.rgs_dis_cd_selected          = this.CD1000000012T[0].value
+          if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected          = this.CD1000000013T[0].value
+          if(this.CD1000000014T.length !== 0)  this.iss_prc_step_cd_selected     = this.CD1000000013T[0].value
+          if(this.CD1000000018T.length !== 0)  this.ntar_bzcd_selected           = this.CD1000000018T[0].value
+          if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected          = this.CD1000000019T[0].value
+          if(this.CD1000000021T.length !== 0)  this.check_cd_selected            = this.CD1000000021T[0].value
+          if(this.CD1000000022T.length !== 0)  this.file_cd_selected             = this.CD1000000022T[0].value
+          if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected      = this.CD1000000026T[0].value
+          if(this.CD1000000027T.length !== 0)  this.bkup_id_selected             = this.CD1000000027T[0].value
+          if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035T[0].value
+          if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
         }
         this.setCdAll()
       }

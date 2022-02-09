@@ -36,6 +36,13 @@
         </tbody>
       </table>
       <hr>
+      <combo
+        :comboArray = "this.comboList"
+        @req_prc_step_cd_change_pop = "req_prc_step_cd_change"
+        @req_dscd_change_pop = "req_dscd_change"
+        @bzcd_change_pop = "bzcd_change"
+        >
+      </combo>
       <table>
         <colgroup>
           <col width="140px">
@@ -44,47 +51,6 @@
           <col width="*">
         </colgroup>
         <tbody>
-        <tr>
-          <th>업무</th>
-          <td>
-            <select ref="bzcd" v-model="bzcd_selected">
-              <option
-              v-for   = "(bzcd,idx) in bzcd"
-              :key    ="idx"
-              v-text  ="bzcd.text"
-              :value  ="bzcd.value"
-              ></option>
-            </select>
-          </td>
-          <th></th>
-          <td></td>
-        </tr>
-        <tr>
-          <th>신청구분</th>
-          <td>
-            <select ref="req_dscd" v-model="req_dscd_selected">
-              <option
-                  v-for   = "(req_dscd,idx) in req_dscd"
-                  :key    ="idx"
-                  v-text  ="req_dscd.text"
-                  :value  ="req_dscd.value"
-              ></option>
-            </select>
-          </td>
-          <th>
-            처리구분
-          </th>
-          <td>
-            <select v-model="req_prc_step_cd_selected">
-              <option
-                  v-for   = "(req_prc_step_cd,idx) in req_prc_step_cd"
-                  :key    ="idx"
-                  v-text  ="req_prc_step_cd.text"
-                  :value  ="req_prc_step_cd.value"
-              ></option>
-            </select>
-          </td>
-        </tr>
         <tr>
           <th style="line-height: 20;">
             신청내용
@@ -93,16 +59,6 @@
             <textarea cols="30" rows="10" placeholder="신청내용을 입력해주세요" v-model="req_txt" ref="req_txt"></textarea>
           </td>
         </tr>
-        </tbody>
-      </table>
-      <table>
-        <colgroup>
-          <col width="140px">
-          <col width="*">
-          <col width="140px">
-          <col width="*">
-        </colgroup>
-        <tbody>
         <tr>
           <th style="line-height: 23;">
             처리내용
@@ -119,7 +75,6 @@
                          v-model="prcpe_nm"
                          style="width: 80px"
                   >
-
                 </td>
                 <td style="width: 20px">
                   <div class="input-searchWrap" style="width:15px">
@@ -186,6 +141,7 @@
 
 <script>
 import {axiosService} from "@/api/http";
+import Combo from "@/components/Combo";
 
 window.fileData = (fileLists) => {
   console.log(fileLists);
@@ -207,10 +163,15 @@ export default {
     if(this.mng_id){
       this.getRegisterData();
     }
-
+  },
+  components: {
+    Combo,
   },
   data() {
     return {
+      // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      comboList : ["C1-1"],
+
       read : true,
 
       bkup_id : this.$route.query.bkup_id,          // 백업ID
@@ -273,6 +234,11 @@ export default {
     },
   },
   methods: {
+    // Combo.vue 에서 받아온 값
+    req_dscd_change(params) {this.req_dscd_selected = params},
+    req_prc_step_cd_change(params) {this.req_prc_step_cd_selected = params},
+    bzcd_change(params) {this.bzcd_selected = params},
+
     // 직원 조회 팝업
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
