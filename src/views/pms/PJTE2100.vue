@@ -141,9 +141,9 @@
           </ul>
           <div class="mt-1">
             <ul class="filter-btn">
-              <button class="btn btn-filter-d" @click="">TC증빙 일괄다운로드ⓘ</button>
+              <button class="btn btn-filter-d" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</button>
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e" @click="">엑셀업로드</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀업로드</button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
               <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
               <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
