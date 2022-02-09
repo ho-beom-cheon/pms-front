@@ -24,9 +24,7 @@
             신청일자
           </th>
           <td>
-            <div class="input-dateWrap">
-              <input type="date" :value="req_dt" :disabled="read" ref="req_dt">
-            </div>
+            <input type="text" :value="req_dt" :disabled="read" ref="req_dt">
           </td>
         </tr>
         <tr>
@@ -104,9 +102,7 @@
                   처리일자
                 </th>
                 <td>
-                  <div class="input-dateWrap">
-                    <input type="date" :value="prc_dt">
-                  </div>
+                  <input type="text" :value="prc_dt">
                 </td>
               </tr>
             </table>
@@ -160,7 +156,7 @@ window.empData = (empnm, empno) => {
 export default {
   created() {
     let today = new Date();
-    this.req_dt = today.getFullYear() + '-' + ('0' + today.getMonth()+1).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)
+    this.req_dt = today.getFullYear() + '-' + ('0' + (today.getMonth()+1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)
     if(this.mng_id){
       this.getRegisterData();
     }
