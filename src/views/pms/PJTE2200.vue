@@ -147,13 +147,12 @@
             <li class="filter-item-n">
               <div class="input-searchWrap">담당현업명
                 <input type="text"
-                       id="id.crpe_nm"
                        placeholder="입력"
                        v-model="info.crpe_enm"
                        style="width: 90px"
+                       @keyup.enter="open_pjte9001(3)"
                 >
                 <button class="search-btn"
-                        id="btn.crpe"
                         @click="open_pjte9001(3)"
                 ></button>
               </div>
@@ -161,7 +160,6 @@
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.crpe_no"
                      v-model="info.crpe_eno"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
@@ -180,7 +178,7 @@
               <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
             </div>
             <div class="btn btn-filter-d">
-              <a href="#" @click="gridExcelExport">양식다운로드ⓘ</a>
+              <a href="#" @click="formDownload">양식다운로드ⓘ</a>
             </div>
             <div class="btn btn-filter-e">
               <a href="#" @click="gridExcelExport">엑셀업로드</a>
@@ -189,7 +187,7 @@
               <a href="#" @click="gridExcelExport">엑셀다운로드</a>
             </div>
             <div class="btn btn-filter-b">
-              <a href="#" @click="open_page">기타항목수정</a>
+              <a href="#" @click="fnEtcSave">기타항목수정</a>
             </div>
             <div class="btn btn-filter-p" style="margin-left: 20px">
               <a href="#" @click="fnSave">저장</a>
@@ -204,6 +202,18 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
         <div class="gridWrap" style="min-width: 750px;">
           <grid
               ref="grid"
@@ -229,8 +239,10 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
+import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
+import {axiosService} from "@/api/http";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
@@ -321,6 +333,8 @@ export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    Modal,
+    WindowPopup,
     grid: Grid,
   },
   beforeCreate() {
@@ -336,8 +350,10 @@ export default {
   },
   mounted() {
     console.log("mounted");
+    this.init();
     this.fnSearch();    // 최초조회
     this.setColumns();  // 권한에 따른 컬럼 세팅
+    window.pms_register = this;
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -376,6 +392,13 @@ export default {
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
       } else {
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
+      }
+    },
+    init() {
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' ||sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        // 특정 열 비활성화
+        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
+        this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
       }
     },
     // 저장 버튼
@@ -462,15 +485,12 @@ export default {
 
     onClick(ev) {
       this.curRow = ev.rowKey;
+      let gridData = this.$refs.grid.invoke("getRow",this.curRow);
       this.$refs.grid.invoke("getRow", this.curRow);
 // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn') {
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
-      }
-      if(ev.columnName === 'pal_atfl_mng_id_yn') {
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, pal_atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&pal_atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -484,6 +504,7 @@ export default {
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
       if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
         let empnm = ''
+        let prjt_id_selected = this.info.prjt_nm_selected
         if(ev.columnName === 'dvlpe_btn'){
           empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_enm')
         } else if(ev.columnName === 'pl_btn') {
@@ -495,7 +516,8 @@ export default {
         if (empnm != null && empnm != '') {
           axiosService.get("/PJTE9001/select", {
             params: {
-              empenm
+              empnm,
+              prjt_id_selected
             }
           })
               .then(res => {
@@ -532,6 +554,17 @@ export default {
       if(ev.columnName === 'tst_case_nm') {
         this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
       }
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
+    },
+    formDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+    },
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     // gridfocusChange(ev) {
     //   this.$refs.grid.invoke("click", {rowkey:this.curRow}, {columnName: 'btn_popup'});
@@ -618,7 +651,7 @@ export default {
       // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드"}, {useFormattedValue : true} );
     },
     gridExcelImport() {
       // 엑셀파일 업로드 로직 추가
@@ -627,9 +660,44 @@ export default {
     open_page() {
       this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
     },
-    open_pjte9001() {
-      this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");
-    },
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      let prjt_id_selected = this.info.prjt_nm_selected
+      if (btn_id == '1') {
+        empnm = this.info.dvlpe_enm
+      } else if (btn_id == '2') {
+        empnm = this.info.pl_enm
+      } else if (btn_id == '3') {
+        empnm = this.info.crpe_enm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm,
+            prjt_id_selected
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.dvlpe_eno = res.data.data.contents[0].empno
+                } else if (btn_id == '2') {
+                  this.info.pl_eno = res.data.data.contents[0].empno
+                } else if (btn_id == '3') {
+                  this.info.crpe_eno = res.data.data.contents[0].empno
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    }
   },
   // 특정 데이터에 실행되는 함수를 선언하는 부분
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
@@ -680,12 +748,6 @@ export default {
         this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
       }
     },
-    pal_atfl_mng_id(){
-      if(this.pal_atfl_mng_id_yn !== '') {
-        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id_yn', '첨부');
-        this.$refs.grid.invoke("setValue", this.curRow, 'pal_atfl_mng_id', this.pal_atfl_mng_id);
-      }
-    }
   },
   // 변수 선언부분
   data() {
@@ -732,6 +794,12 @@ export default {
       updatedRows: this.updatedRows,
       deletedRows: this.deletedRows,
       createdRows: this.createdRows,
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
 
       addRow: {
         grid: this.grid,
@@ -792,6 +860,7 @@ export default {
           {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno'], hideChildHeaders : true},
           {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno'], hideChildHeaders : true},
           {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno'], hideChildHeaders : true},
+          {header: '통합테스트',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn']},
         ]
       },
       columns: [
@@ -803,6 +872,7 @@ export default {
           align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options: {
@@ -816,6 +886,7 @@ export default {
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options: {
@@ -953,17 +1024,19 @@ export default {
           name: 'crpe_eno',
         },
         {
-          header: '통합테스트증빙첨부',
+          header: '증빙첨부',
+          width: 150,
+          align: 'center',
+          name: 'atfl_mng_id_yn',
+          // hidden : true,
+          defaultValue: '미첨부',
+        },
+        {
+          header: '증빙첨부',
           width: 150,
           align: 'center',
           name: 'atfl_mng_id',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: listItem
-            }
-          }
+          hidden : true
         },
         {
           header: '전체',
@@ -986,14 +1059,14 @@ export default {
         {
           header: '결함등록',
           width: 120,
-          name: 'btn_popup',
+          name: 'err_btn',
           align: 'center',
           renderer: CustomRenderer,
         },
         {
           header: '미진사유',
           width: 400,
-          name: 'RMRK',
+          name: 'rmrk',
           editor: "text",
         },
         {
@@ -1034,7 +1107,7 @@ export default {
         },
         {
           header: '테스트설명/절차',
-          width: 90,
+          width: 130,
           name: 'tst_des',
           editor: "text",
         },
@@ -1058,13 +1131,13 @@ export default {
         },
         {
           header: '테스트결과',
-          width: 150,
+          width: 100,
           name: 'oup_mens',
           editor: "text",
         },
         {
           header: '테스트수행결과',
-          width: 150,
+          width: 100,
           name: 'tst_achi_rst',
           editor: "text",
         },
