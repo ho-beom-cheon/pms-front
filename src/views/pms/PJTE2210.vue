@@ -231,11 +231,11 @@ var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {tex
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "신용조사", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
-  {"text":"관리","value":"EEE"},
-  {"text":"공통","value":"DDD"},
+  {text: "신용조사", value: '100'},
+  {text: "재무제표", value: "200"},
+  {text: "신용평가", value: "300"},
+  {"text":"관리","value":"400"},
+  {"text":"공통","value":"500"},
 ];
 
 // 차수구분
@@ -385,7 +385,7 @@ export default {
         /* select 박스 */
         bkup_id_selected: '0000000000',      // 프로젝트명
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),      // 프로젝트명
-        bzcd_selected: sessionStorage.getItem("LOGIN_BZCD"),            // 업무구분
+        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),           // 업무구분
         sqn_cd_selected : 'TTT',       // 차수구분
         gubun : '',
         s_day               : '',
