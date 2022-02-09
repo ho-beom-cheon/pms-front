@@ -187,10 +187,10 @@ const level = [
 ];
 // 업무구분 
 const bzcd = [
-  {text: " ", value: 'NNN'},
-  {text: "신용", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
+  {"text":" ","value":"NNN"},
+  {text: "PMO", value: '100'},
+  {text: "업무팀", value: "200"},
+  {text: "공통팀", value: "300"},
 ];
 // 관리구분
 const mng_cd = [
