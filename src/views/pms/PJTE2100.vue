@@ -501,7 +501,6 @@ export default {
     // 그리드 내용 더블클릭 시 상세보기 모달팝업
     dblonClick(ev) {
       this.curRow = ev.rowKey;
-      debugger;
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -515,10 +514,8 @@ export default {
       if(this.searchVaildation() === false) {
         return;
       }
-
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-      debugger
     },
     // 행추가
     gridAddRow(){

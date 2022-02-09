@@ -55,6 +55,7 @@
               @bkup_id_change="bkup_id_change"
               @prjt_nm_chage="prjt_nm_chage"
               @bzcd_change="bzcd_change"
+              @setDays="setDays"
           ></Combo>
           <li class="filter-item">
             <div class="item-con">기준일
@@ -65,27 +66,27 @@
         <ul class="filter-con clear-fix" :hidden="true">
           <li class="filter-item">
             <div class="item-con">현재일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" id="s_day" v-model="info.s_day" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">진행일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" id="proc_dt" v-model="info.proc_dt" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">에러처리일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" id="err_proc_dt" v-model="info.err_proc_dt" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">진행일수
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" id="proc_days" v-model="info.proc_days" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">에러처리일수
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" id="err_proc_days" v-model="info.err_proc_days" style="width: 100px">
             </div>
           </li>
         </ul>
@@ -99,6 +100,18 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
         <div class="multiGridWrap">
           <div class="div1">
             <div class="div-header"><h2>업무별 개발현황</h2>
@@ -177,6 +190,7 @@
                 </div>
               </ul>
             </div>
+
             <div class="div-grid">
               <grid
                   ref="grid4"
@@ -201,6 +215,7 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
+import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 
@@ -237,6 +252,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    Modal,
     grid: Grid,
   },
   beforeCreate() {
@@ -251,6 +267,7 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    this.init();
     console.log("mounted");
     // 최초조회
     this.fnSearch();
@@ -277,25 +294,46 @@ export default {
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     bzcd_change(params) {this.info.bzcd_selected = params},
 
+    setDays(data) {
+       this.info.s_day = data.s_day;
+       this.info.proc_dt = data.proc_dt;
+       this.info.err_proc_dt = data.err_proc_dt;
+       this.info.proc_days = data.proc_days;
+       this.info.err_proc_days = data.err_proc_days;
+    },
+
     init() {
-      axiosService.get(
-          "/dayCalc",
-          {
-          },
-      ).then(res => {
+      axiosService.get("/PJTE1000/days", {
+        params: {
+          prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id_selected: '0000000000',
+        }
+      }).then(res => {
+        this.setDays(res.data.data.contents[0]);
       }).catch(e => {
 
       });
-      // '500', '600' 권한,조회 영역 활성화
-      if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
-
-      }
       // 정렬
       //this.$refs.grid.invoke("sort",);
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+
+      const currentCellData = (this.$refs.grid4.invoke("getFocusedCell"));
+      if(ev.columnName == 'nprrn') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid4.invoke("setValue", this.curRow, "nprrn", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
+    },
+
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     fnSearch() {
       this.info.gubun = "1";
@@ -331,7 +369,8 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
-    count: (a, b) => {
+    proc_dt(){
+
     }
   },
 // 변수 선언부분
@@ -348,7 +387,19 @@ export default {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),      // 프로젝트명
         bzcd_selected: sessionStorage.getItem("LOGIN_BZCD"),         // 업무구분
         gubun : '',
+        s_day               : '',
+        proc_dt             : '',
+        err_proc_dt         : '',
+        proc_days           : '',
+        err_proc_days       : '',
       },
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
+
       addRow : {
         grid1 : this.grid1,
       },
@@ -394,7 +445,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -507,7 +558,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -526,62 +577,72 @@ export default {
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'cmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'ncmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt1',
+          defaultValue:0,
         },
         {
           header: '계획',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_prnr_rt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt2',
+          defaultValue:0,
         },
       ],
       header3: {
@@ -603,7 +664,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           type:'text',
           formatter: 'listItemText',
@@ -677,8 +738,8 @@ export default {
       columns4: [
         {
           header: '업무구분',
-          width: 100,
-          align: 'left',
+          width: 60,
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -690,13 +751,13 @@ export default {
         },
         {
           header: '미진구분',
-          width: 65,
+          width: 80,
           align: 'left',
           name: 'nprrn_kbn',
         },
         {
           header: '프로그램ID',
-          width: 100,
+          width: 140,
           align: 'left',
           name: 'pgm_id',
         },
@@ -709,31 +770,31 @@ export default {
         {
           header: '예정종료일자',
           width: 90,
-          align: 'left',
+          align: 'center',
           name: 'frcs_end_dt',
         },
         {
           header: '개발완료일자조치일자',
           width: 150,
-          align: 'left',
+          align: 'center',
           name: 'dvlpe_cnf_dt',
         },
         {
           header: '담당자',
           width: 70,
-          align: 'left',
+          align: 'center',
           name: 'dvlpe_nm',
         },
         {
           header: 'PL',
           width: 70,
-          align: 'left',
+          align: 'center',
           name: 'pl_nm',
         },
         {
           header: '담당자',
           width: 70,
-          align: 'left',
+          align: 'center',
           name: 'crpe_yn',
         },
         {

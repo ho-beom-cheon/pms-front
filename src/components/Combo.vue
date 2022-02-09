@@ -434,6 +434,12 @@ export default {
       set_yn : "",
       read : true,
 
+      s_day : '',
+      proc_dt : '',
+      err_proc_dt : '',
+      proc_days : '',
+      err_proc_days : '',
+
       // 백업ID
       bkup_id_selected : "",
       // 프로젝트명
@@ -752,6 +758,8 @@ export default {
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
           sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+        this.read2 = false;
+
         this.read = false;
       }
 
