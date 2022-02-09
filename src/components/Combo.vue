@@ -61,6 +61,23 @@
             </tr>
             </tbody>
           </table>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
+      <div class="item-con">프로젝트
+        <select
+            v-model = "prjt_nm_selected"
+            style   = "width: 180px"
+            :disabled="read"
+            @change="prjt_nm_chage"
+        >
+          <option
+              v-for  = "(item, idx) in CD0000000000T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C27'">
       <div class="item-con">백업ID
         <select
