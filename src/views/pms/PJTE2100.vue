@@ -142,8 +142,8 @@
           <div class="mt-1">
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</button>
-              <button class="btn btn-filter-d" @click="gridExcelExport">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e" @click="gridExcelImport">엑셀업로드</button>
+              <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀업로드</button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
               <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
               <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
@@ -501,11 +501,14 @@ export default {
     // 그리드 내용 더블클릭 시 상세보기 모달팝업
     dblonClick(ev) {
       this.curRow = ev.rowKey;
-      debugger;
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
       this.modals.txt_modal1 = false;
+    },
+    formDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "" //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}`, "open_file_page", "width=1000, height=500");
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
@@ -515,10 +518,8 @@ export default {
       if(this.searchVaildation() === false) {
         return;
       }
-
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-      debugger
     },
     // 행추가
     gridAddRow(){
@@ -837,11 +838,11 @@ export default {
               listItems:
                   [
                     {"text":" ","value":"NNN"},
-                    {"text":"관리","value":"EEE"},
-                    {"text":"공통","value":"DDD"},
-                    {"text":"신용조사","value":"AAA"},
-                    {"text":"재무제표","value":"BBB"},
-                    {"text":"신용평가","value":"CCC"}
+                    {text: "신용조사", value: '100'},
+                    {text: "재무제표", value: "200"},
+                    {text: "신용평가", value: "300"},
+                    {"text":"관리","value":"400"},
+                    {"text":"공통","value":"500"},
                   ]
             }
           }

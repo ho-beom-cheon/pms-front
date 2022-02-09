@@ -1,7 +1,7 @@
 <template>
   <div style="display:inline;">
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
-      <div class="item-con">프로젝트명
+      <div class="item-con">프로젝트
         <select
             v-model = "prjt_nm_selected"
             style   = "width: 180px"
@@ -39,7 +39,6 @@
             v-model = "bzcd_selected"
             style   = "width: 110px"
             @change = "bzcd_change"
-            :disabled="read"
         >
           <option
               v-for  = "(item, idx) in CD1000000001T"
@@ -50,7 +49,7 @@
         </select>
       </div>
     </li>
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C2'">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
       <div class="item-con">개발구분
         <select
             v-model = "dvlp_dis_cd_selected"
@@ -58,7 +57,7 @@
             @change = "dvlp_dis_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000002T"
+              v-for  = "(item, idx) in CD1000000003T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -150,7 +149,7 @@
       </div>
     </li>
     <!--    개발구분코드-->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C2'">
       <div class="item-con">처리단계
         <select
             v-model = "prc_step_cd_selected"
@@ -158,7 +157,7 @@
             @change = "prc_step_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000003T"
+              v-for  = "(item, idx) in CD1000000002T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -434,6 +433,12 @@ export default {
       set_yn : "",
       read : true,
 
+      s_day : '',
+      proc_dt : '',
+      err_proc_dt : '',
+      proc_days : '',
+      err_proc_days : '',
+
       // 백업ID
       bkup_id_selected : "",
       // 프로젝트명
@@ -641,8 +646,8 @@ export default {
               this.CD1000000013N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 14) {
-              this.CD1000000013T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
-              this.CD1000000013N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000014T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000014N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 18) {
               this.CD1000000018T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
@@ -683,7 +688,8 @@ export default {
             this.row++;
           }
           if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected          = sessionStorage.getItem("LOGIN_PROJ_ID")
-          if(this.CD1000000001T.length !== 0)  this.bzcd_selected             = (sessionStorage.getItem("LOGIN_BZCD") !== ""  ? sessionStorage.getItem("LOGIN_BZCD"): this.CD1000000001T[0].value)
+          if(this.CD1000000001T.length !== 0)  this.bzcd_selected
+              = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
           if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected      = this.CD1000000002T[0].value
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected      = this.CD1000000003T[0].value
           if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected       = this.CD1000000004T[0].value

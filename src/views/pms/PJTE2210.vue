@@ -66,27 +66,27 @@
         <ul class="filter-con clear-fix" :hidden="true">
           <li class="filter-item">
             <div class="item-con">현재일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.s_day" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">진행일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.proc_dt" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">에러처리일자
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.err_proc_dt" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">진행일수
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.proc_days" style="width: 100px">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">에러처리일수
-              <input type="text" v-model="info.crpe_no" style="width: 100px">
+              <input type="text" v-model="info.err_proc_days" style="width: 100px">
             </div>
           </li>
         </ul>
@@ -100,6 +100,18 @@
 
       <!-- page contents -->
       <section class="page-contents">
+        <Modal :show.sync="modals.txt_modal1">
+          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+          <tr>
+            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+          </tr>
+          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
         <div class="multiGridWrap">
           <div class="div1">
             <div class="div-header"><h2>업무별 통합테스트현황</h2>
@@ -202,19 +214,28 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
+import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 
+// 현재 날짜
+let today = new Date();
+let year = today.getFullYear();
+let month = ('0' + (today.getMonth() + 1)).slice(-2);
+let day = ('0' + today.getDate()).slice(-2);
+let dateString = year + '-' + month  + '-' + day;
+
 //그리드 아이템 예제
 var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
+
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {"text":"관리","value":"EEE"},
-  {"text":"공통","value":"DDD"},
-  {text: "신용", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
+  {text: "신용조사", value: '100'},
+  {text: "재무제표", value: "200"},
+  {text: "신용평가", value: "300"},
+  {"text":"관리","value":"400"},
+  {"text":"공통","value":"500"},
 ];
 
 // 차수구분
@@ -230,6 +251,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    Modal,
     grid: Grid,
   },
   beforeCreate() {
@@ -244,9 +266,10 @@ export default {
     console.log("beforeMount");
   },
   mounted() {
+    this.init();
     console.log("mounted");
     // 최초조회
-    //this.fnSearch();
+    this.fnSearch();
   },
   beforeUpdate() {
     console.log("beforeUpdate");
@@ -271,35 +294,48 @@ export default {
     bzcd_change(params) {this.info.bzcd_selected = params},
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-      this.info.sqn_cd_selected = this.$children[0].$data.sqn_cd_selected;
-    },
     init() {
-      axiosService.get(
-          "/dayCalc",
-          {
-          },
-      ).then(res => {
+      axiosService.get("/PJTE1000/days", {
+        params: {
+          prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id_selected: '0000000000',
+        }
+      }).then(res => {
+        this.setDays(res.data.data.contents[0]);
       }).catch(e => {
 
       });
-      // '500', '600' 권한,조회 영역 활성화
-      if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
-
-      }
       // 정렬
       //this.$refs.grid.invoke("sort",);
     },
+
+    setDays(data) {
+       this.info.s_day = data.s_day;
+       this.info.proc_dt = data.proc_dt;
+       this.info.err_proc_dt = data.err_proc_dt;
+       this.info.proc_days = data.proc_days;
+       this.info.err_proc_days = data.err_proc_days;
+    },
+
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
+      const currentCellData = (this.$refs.grid4.invoke("getFocusedCell"));
+      if(ev.columnName == 'nprrn') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid4.invoke("setValue", this.curRow, "nprrn", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
+    },
+
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     fnSearch() {
-      this.comboSetData();
       this.info.gubun = "1";
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
@@ -344,15 +380,27 @@ export default {
       comboList : ["C27","C0","C1","C6"],
 
       info: {
-        inq_date: this.inq_date,         // 기준일자
+        inq_date: dateString,         // 기준일자
         sqn_cd : this.sqn_cd,
         /* select 박스 */
-        bkup_id_selected: this.bkup_id_selected,      // 프로젝트명
-        prjt_nm_selected: this.prjt_nm_selected,      // 프로젝트명
-        bzcd_selected: this.bzcd_selected,            // 업무구분
-        sqn_cd_selected : this.sqn_cd_selected,       // 차수구분
+        bkup_id_selected: '0000000000',      // 프로젝트명
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),      // 프로젝트명
+        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),           // 업무구분
+        sqn_cd_selected : 'TTT',       // 차수구분
         gubun : '',
+        s_day               : '',
+        proc_dt             : '',
+        err_proc_dt         : '',
+        proc_days           : '',
+        err_proc_days       : '',
       },
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
+
       addRow : {
         grid1 : this.grid1,
       },
@@ -398,7 +446,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -411,7 +459,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -426,90 +474,105 @@ export default {
           width: 65,
           align: 'right',
           name: 'tot_cnt',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
           align: 'right',
           name: 'af_tot_cnt',
+          defaultValue:0,
         },
         {
           header: '계획완료',
           width: 60,
           align: 'right',
           name: 'cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '선완료',
           width: 55,
           align: 'right',
           name: 'af_cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
           align: 'right',
           name: 'ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
           align: 'right',
           name: 'prnr_rt',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
           align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
           align: 'right',
           name: 'cmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
           align: 'right',
           name: 'ncmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
           align: 'right',
           name: 'prnr_rt1',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 60,
           align: 'right',
           name: 'pl_tot_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 60,
           align: 'right',
           name: 'pl_cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 60,
           align: 'right',
           name: 'pl_ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '계획',
           width: 55,
           align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
           align: 'right',
           name: 'cmpl_cnt2',
+          defaultValue:0,
         },
       ],
       header2: {
@@ -524,7 +587,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -537,7 +600,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -550,68 +613,78 @@ export default {
         {
           header: '담당자',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'emp_nm',
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt1',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'cmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'ncmpl_cnt1',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt1',
+          defaultValue:0,
         },
         {
           header: '전체',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_tot_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '미완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진척율',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'prnr_rt2',
+          defaultValue:0,
         },
         {
           header: '계획',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'pl_prnr_rt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 55,
-          align: 'left',
+          align: 'right',
           name: 'tot_cnt2',
+          defaultValue:0,
         },
       ],
       header3: {
@@ -633,7 +706,7 @@ export default {
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -646,7 +719,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -661,65 +734,70 @@ export default {
           width: 65,
           align: 'right',
           name: 'tot_err_cnt',
+          defaultValue:0,
         },
         {
           header: '결함',
           width: 65,
           align: 'right',
           name: 'err_cnt',
+          defaultValue:0,
         },
         {
           header: '개선',
           width: 65,
           align: 'right',
           name: 'impt_cnt',
+          defaultValue:0,
         },
         {
           header: '기타',
           width: 65,
           align: 'right',
           name: 'etc_err_cnt',
+          defaultValue:0,
         },
         {
           header: '결함아님',
           width: 65,
           align: 'right',
           name: 'nerr_cnt',
+          defaultValue:0,
         },
         {
           header: '완료',
           width: 65,
           align: 'right',
           name: 'cmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '진행',
           width: 65,
           align: 'right',
           name: 'ncmpl_cnt',
+          defaultValue:0,
         },
         {
           header: '보류',
           width: 65,
           align: 'right',
           name: 'spnd_cnt',
+          defaultValue:0,
         },
       ],
       header4: {
         height: 45,
         complexColumns: [
-          {
-            header: '완료여부',
-            name: 'mergeColumn1',
-            childNames: ['pl_yn', 'crpe_yn']
-          },
+          {header: '완료여부', name: 'mergeColumn1', childNames: ['pl_yn', 'crpe_yn']},
+          {header: '테스트완료일자', name: 'mergeColumn5', childNames: ['dvlpe_cnf_dt']},
         ]
       },
       columns4: [
         {
           header: '업무구분',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -732,7 +810,7 @@ export default {
         {
           header: '차수',
           width: 55,
-          align: 'left',
+          align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
           editor: {
@@ -767,7 +845,7 @@ export default {
           name: 'frcs_end_dt',
         },
         {
-          header: '개발완료일자조치일자',
+          header: '조치일자',
           width: 150,
           align: 'center',
           name: 'dvlpe_cnf_dt',

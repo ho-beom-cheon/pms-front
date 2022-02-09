@@ -139,6 +139,7 @@
                         <div class="input-dateWrap">
                           <input type="date"
                                  v-model="detail.rgs_dt"
+                                 ref="rgs_dt"
                                  :disabled=true
                                  style="background-color: #f2f2f2;"
                           >
@@ -165,23 +166,29 @@
                              :disabled=true
                       >
                     </li>
+                  </ul>
+                  <ul class="filter-con clear-fix">
+                    <li class="filter-item" style="width: 40px">
+                      <label>　제목</label>
+                    </li>
+                    <li class="filter-item">
+                      <div class="item-con" style="margin-right: 15px">
+                          <input type="text"
+                                 placeholder="제목을 입력해주세요"
+                                 v-model="detail.titl_txt"
+                                 ref="titl_txt"
+                                 style   = "width: 578px;"
+                          >
+                      </div>
+                    </li>
                     <li v-if="this.detail.mng_id" class="filter-item">
                       <div class="item-con">
                         <input type="checkbox" id="del_yn" v-model="detail.del_yn">
                         <label>　공지사항삭제</label>
                       </div>
                     </li>
-
-                    <li class="filter-item">
-                      <div class="item-con">　제목　
-                        <input type="text"
-                               placeholder="제목을 입력해주세요"
-                               v-model="detail.titl_txt"
-                               style="width: 890px; margin-left: 6px"
-                        >
-                      </div>
-                    </li>
-
+                  </ul>
+                  <ul class="filter-con clear-fix">
                     <li class="filter-item">
                       <div class="item-con">
                         <th style="vertical-align: middle">
@@ -190,14 +197,14 @@
                         <td>
                           <textarea cols="145"
                                     rows="20"
-                                    style="width: 890px; height: 240px; line-height: normal;"
+                                    style="width: 100%; height: 240px; line-height: normal;"
                                     placeholder="공지사항을 입력해주세요"
                                     v-model="detail.ancpt"
+                                    ref="ancpt"
                           ></textarea>
                         </td>
                       </div>
                     </li>
-
                   </ul>
                   <ul class="filter-btn" style="margin-top: 7px">
                     <ul class="filter-btn" v-if="this.detail.mng_id">
@@ -516,12 +523,15 @@ export default {
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
       if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 공지일자
-        alert('공지일자를 입력해주세요.');
+        this.$refs.rgs_dt.focus();
+        alert('공지일자가 없습니다.');
         return false;
       } else if (this.detail.titl_txt == "" || this.detail.titl_txt == "null") {      // 제목내용
+        this.$refs.titl_txt.focus();
         alert('제목을 입력해주세요.');
         return false;
       } else if (this.detail.ancpt == "" || this.detail.ancpt == "null") {            // 공지내역
+        this.$refs.ancpt.focus();
         alert('공지사항을 입력해주세요.');
         return false;
       } else if (this.detail.rgs_no == "" || this.detail.rgs_no == "null") {          // 등록자번호
