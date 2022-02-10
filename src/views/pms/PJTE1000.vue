@@ -102,6 +102,7 @@
                   :rowHeight="rowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
+                  @onGridUpdate="onGridUpdate"
               ></grid>
             </div>
           </div>
@@ -282,7 +283,6 @@ export default {
     this.fnSearch();
 
     window.pms_register = this;
-    this.setColumnHeaders()
   },
   beforeUpdate() {
     // console.log("beforeUpdate");
@@ -314,6 +314,26 @@ export default {
     },
     ntar_bzcd_change(params) {
       this.detail.ntar_bzcd_selected = params
+    },
+    // 그리드가 그려지고 바로 실행됨
+    onGridUpdate(grid) {
+      // 그리드 1의 첫번째  todo_cd로 그리드2 상세내용 컬럼명 변경
+      let todo_cd = this.$refs.grid1.invoke("getValue",0,"todo_cd")
+      if(todo_cd == '10' || todo_cd == '11'|| todo_cd == '12'|| todo_cd == '13'){
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '진행내용'})
+      } else if(todo_cd == '20' || todo_cd == '21'|| todo_cd == '22'|| todo_cd == '23') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '미진사유'})
+      } else if(todo_cd == '30' || todo_cd == '31'|| todo_cd == '32'|| todo_cd == '33') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '결함내용'})
+      } else if(todo_cd == '40' || todo_cd == '41') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '신청내용'})
+      } else if(todo_cd == '50') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '요청및조치내용'})
+      } else if(todo_cd == '60' || todo_cd == '61'|| todo_cd == '62') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '비고내용'})
+      } else {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
+      }
     },
 
     init() {
@@ -451,6 +471,7 @@ export default {
         } else {
           this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
         }
+        this.info.rowNum = ev.rowKey;
         this.$refs.grid2.invoke("setRequestParams", this.info);
         this.$refs.grid2.invoke("readData");
       }
@@ -493,25 +514,6 @@ export default {
 
     },
 
-    setColumnHeaders() {
-      // TO-DO상세내역 그리드 타이틀 변경 (todo_cd에 따라)
-      let todo_cd = this.$refs.grid1.invoke("getValue",0,"todo_cd")
-      if(todo_cd == '10' || todo_cd == '11'|| todo_cd == '12'|| todo_cd == '13'){
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '진행내용'})
-      } else if(todo_cd == '20' || todo_cd == '21'|| todo_cd == '22'|| todo_cd == '23') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '미진사유'})
-      } else if(todo_cd == '30' || todo_cd == '31'|| todo_cd == '32'|| todo_cd == '33') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '결함내용'})
-      } else if(todo_cd == '40' || todo_cd == '41') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '신청내용'})
-      } else if(todo_cd == '50') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '요청및조치내용'})
-      } else if(todo_cd == '60' || todo_cd == '61'|| todo_cd == '62') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '비고내용'})
-      } else {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
-      }
-    },
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
