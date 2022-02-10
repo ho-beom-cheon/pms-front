@@ -56,7 +56,6 @@
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
-                @mng_cd_change="mng_cd_change"
                 @wbs_prc_sts_cd_change="wbs_prc_sts_cd_change"
                 @wbs_mng_cd_change="wbs_mng_cd_change"
             ></combo>
@@ -96,33 +95,27 @@
             <li class="filter-item">
               <div class="item-con">계획종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.pln_end_dt" v-model="info.pln_sta_dt"></div>
-                -
+                ~
                 <div class="input-dateWrap"><input type="date" :min="info.pln_sta_dt" v-model="info.pln_end_dt"></div>
               </div>
             </li>
             <li class="filter-item">
               <div class="item-con">실제종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.acl_end_dt" v-model="info.acl_sta_dt"></div>
-                -
+                ~
                 <div class="input-dateWrap"><input type="date" :max="info.acl_sta_dt" v-model="info.acl_end_dt"></div>
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">
-                <input type="checkbox" id="check_Yn" v-model="info.check_Yn">
-                <label>　이행시나리오</label>
               </div>
             </li>
           </ul>
           <ul class="filter-btn">
-            <button class="btn btn-filter-p" @click="prgRtCalc" :disabled="false">진행률계산</button>
+            <button class="btn btn-filter-p" @click="prgRtCalc" :disabled="validated">진행률계산</button>
             <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated" style="margin-left: 20px"> 엑셀업로드</button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" @click="gridUpRow" :disabled="false" style="margin-left: 20px">+ 행위로</button>
-            <button class="btn btn-filter-b" @click="gridDownRow" :disabled="false">- 행아래</button>
-            <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="false">행추가</button>
-            <button class="btn btn-filter-b" @click="gridDelRow" :disabled="false">행삭제</button>
-            <button class="btn btn-filter-p" @click="fnSave" :disabled="false" style="margin-left: 20px">저장</button>
+            <button class="btn btn-filter-b" @click="gridUpRow" :disabled="validated" style="margin-left: 20px">+ 행위로</button>
+            <button class="btn btn-filter-b" @click="gridDownRow" :disabled="validated">- 행아래</button>
+            <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="validated">행추가</button>
+            <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
+            <button class="btn btn-filter-p" @click="fnSave" :disabled="validated" style="margin-left: 20px">저장</button>
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
@@ -174,8 +167,6 @@ class CustomRenderer {
     this.el.src = '/img/ic_logOut.8c60a751.svg';
   }
 }
-//그리드 아이템 예제 
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
 
 // 레벨구분
 const level = [
@@ -188,25 +179,20 @@ const level = [
 // 업무구분 
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "PMO", value: '100'},
-  {text: "업무팀", value: "200"},
-  {text: "공통팀", value: "300"},
+  {text: "업무팀", value: '100'},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
 // 관리구분
 const mng_cd = [
   {text: " ", value: "NNN"},
-  {text: "신규", value: "100"},
-  {text: "변경", value: "200"},
-  {text: "이행", value: "300"},
-  {text: "삭제", value: "400"}
-];
-// 프로그램구분 
-const pgm_dis_cd = [
-  {text: " ", value: "NNN"},
-  {text: "화면", value: "100"},
-  {text: "프로그램", value: "200"},
-  {text: "보고서", value: "300"},
-  {text: "배치", value: "400"}
+  {text: "테스트전", value: "000"},
+  {text: "테스트시작", value: "100"},
+  {text: "테스트자완료", value: "200"},
+  {text: "PL확인", value: "300"},
+  {text: "담당자확인", value: "400"},
+  {text: "현업확인", value: "500"},
+  {text: "테스트완료", value: "600"},
 ];
 // 프로그램 세부 구분 
 const wbs_prc_sts_cd = [
@@ -246,6 +232,7 @@ export default {
   },
   mounted() {
     console.log("mounted");
+    this.init()
     this.fnSearch()
   },
   beforeUpdate() {
@@ -270,7 +257,6 @@ export default {
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
     bzcd_change(params)           {this.info.bzcd_selected = params},
-    mng_cd_change(params)         {this.info.mng_cd_selected = params},
     wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
@@ -283,6 +269,7 @@ export default {
           prjt_id : this.info.prjt_nm_selected,
           bzcd : this.info.bzcd_selected,
           mng_cd : this.info.wbs_mng_cd_selected,
+          mng_id : this.info.mng_cd_selected,
           rowData : this.rowData,
         },
       }).then(res => {
@@ -329,6 +316,14 @@ export default {
     },
     gridInit() {
       this.$refs.grid.invoke("clear");
+    },
+    init() {
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        // 특정 열 비활성화
+        this.$refs.grid.invoke("disableColumn", 'wgt_rt');
+        this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
+        this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
+      }
     },
     gridAddRow() {
       this.$refs.grid.invoke("appendRow",
@@ -423,8 +418,7 @@ export default {
 
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
-        bzcd_selected            : sessionStorage.getItem("LOGIN_BZCD"),
-        mng_cd_selected          : 'TTT',
+        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         wbs_prc_sts_cd_selected  : 'TTT',
         wbs_mng_cd_selected      : 'TTT',
 
@@ -525,7 +519,13 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 40
+        height: 40,
+        complexColumns: [
+          {header: '계획시작',           name: 'mergeColumn1', childNames: ['pln_sta_dt','pln_sta_tim']},
+          {header: '계획종료',           name: 'mergeColumn2', childNames: ['pln_end_dt','pln_end_tim']},
+          {header: '실제시작',           name: 'mergeColumn3', childNames: ['acl_sta_dt','acl_sta_tim']},
+          {header: '실제종료',           name: 'mergeColumn4', childNames: ['acl_end_dt','acl_end_tim']},
+        ]
       },
       columns: [
         {
@@ -533,13 +533,14 @@ export default {
           width: 100,
           minWidth: 50,
           maxWidth: 250,
-          name: 'mng_cd',
+          name: 'wbs_prc_sts_cd',
           align: 'center',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: mng_cd
+              listItems: wbs_prc_sts_cd
             }
           }
         },
@@ -550,6 +551,7 @@ export default {
           maxWidth: 250,
           name: 'bzcd',
           align: 'center',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -566,6 +568,7 @@ export default {
           name: 'step_cd',
           align: 'center',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options: {
@@ -577,15 +580,14 @@ export default {
           header: '관리 ID',
           width: 130,
           align: 'center',
-          name: 'mng_id',
-          editor: 'text'
+          name: 'mng_cd',
         },
         {
           header: '상위관리 ID',
           width: 130,
           align: 'center',
           name: 'hgrn_mng_id',
-          editor: 'text'
+          editor: 'text',
         },
         {
           header: 'ACTIVITY명',
@@ -595,14 +597,15 @@ export default {
           editor: 'text'
         },
         {
-          header: '태스크명',
+          header: '테스크명',
           width: 80,
           align: 'center',
           name: 'task_nm',
+          editor: 'text'
         },
         {
           header: '첨부',
-          width: 80,
+          width: 70,
           name: 'btn_popup',
           align: 'center',
           renderer: CustomRenderer,
@@ -612,23 +615,24 @@ export default {
           width: 120,
           align: 'center',
           name: 'crpe_nm',
+          editor: 'text'
         },
         {
           header: '처리단계',
-          width: 80,
+          width: 140,
           align: 'center',
-          name: 'wbs_prc_sts_cd',
+          name: 'mng_id',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: prc_step_cd
+              listItems: mng_cd
             }
           }
         },
         {
           header: '일자',
-          width: 110,
+          width: 80,
           align: 'center',
           name: 'pln_sta_dt',
           format: 'yyyy-mm-dd',
@@ -636,57 +640,68 @@ export default {
         },
         {
           header: '시간',
-          width: 110,
+          width: 80,
           align: 'center',
           name: 'pln_sta_tim',
           format: 'yyyy-mm-dd',
+          editor: 'text'
         },
         {
           header: '일자',
-          width: 110,
+          width: 80,
           align: 'center',
           name: 'pln_end_dt',
           editor: 'datePicker'
         },
         {
           header: '시간',
-          width: 110,
+          width: 80,
           align: 'center',
           name: 'pln_end_tim',
+          editor: 'text'
         },
         {
           header: '일자',
           width: 80,
           align: 'center',
           name: 'acl_sta_dt',
+          editor: 'datePicker',
+          disabled: true,
         },
         {
           header: '시간',
-          width: 160,
+          width: 80,
           align: 'center',
           name: 'acl_sta_tim',
+          editor: 'text',
+          disabled: true,
         },
         {
           header: '일자',
           width: 80,
           align: 'center',
           name: 'acl_end_dt',
+          editor: 'datePicker',
+          disabled: true,
         },
         {
           header: '시간',
-          width: 160,
+          width: 80,
           align: 'center',
           name: 'acl_end_tim',
+          editor: 'text',
+          disabled: true,
         },
         {
           header: '가중치',
-          width: 160,
+          width: 80,
           align: 'center',
           name: 'wgt_rt',
+          editor: 'text',
         },
         {
           header: '진행율',
-          width: 160,
+          width: 80,
           align: 'center',
           name: 'prg_rt',
           editor: 'text',
@@ -696,11 +711,12 @@ export default {
           width: 200,
           align: 'center',
           name: 'rmrk',
+          editor: 'text',
         },
         {
           header: '정렬',
-          width: 80,
-          align: 'right',
+          width: 60,
+          align: 'center',
           name: 'sort',
         },
         {
