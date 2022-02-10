@@ -16,8 +16,9 @@
         <tr>
           <th>신청자</th>
           <td>
-            <input type="text" :value="reqpe_nm" :disabled="read" style="width:calc(50%); background-color: #f2f2f2;">
-            <input type="text" :value="reqpe_no" :disabled="read" style="width:calc(50%); background-color: #f2f2f2;">
+            <input type="text" :value="reqpe_nm" :disabled="read" style="width: 48.9%; background-color: #f2f2f2;">
+            &nbsp;
+            <input type="text" :value="reqpe_no" :disabled="read" style="width: 48.9%; background-color: #f2f2f2;">
           </td>
           <th>
             신청일자
@@ -36,11 +37,11 @@
       </table>
       <hr>
       <combo
-          :comboArray = "this.comboList"
-          @req_prc_step_cd_change_pop = "req_prc_step_cd_change"
-          @req_dscd_change_pop = "req_dscd_change"
-          @bzcd_change_pop = "bzcd_change"
-      >
+        :comboArray = "this.comboList"
+        @req_prc_step_cd_change_pop = "req_prc_step_cd_change"
+        @req_dscd_change_pop = "req_dscd_change"
+        @bzcd_change_pop = "bzcd_change"
+        >
       </combo>
       <table>
         <colgroup>
@@ -54,41 +55,68 @@
           <th style="line-height: 20;">
             신청내용
           </th>
-          <td colspan="5">
+          <td colspan="3">
             <textarea cols="30" rows="10" placeholder="신청내용을 입력해주세요" v-model="req_txt" ref="req_txt"></textarea>
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            처리자
-          </th>
-          <td colspan="2">
-            <div class="input-searchWrap">
-              <input type="text" ref="prcpe_nm" v-model="prcpe_nm" placeholder="직원명" style="width: calc(58%);" @keypress.enter="open_pjte9001" >
-              <button class="search-btn2" @click="open_pjte9001"></button>
-              <input type="text" v-model="prcpe_no" ref="prcpe_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
-            </div>
-          </td>
-          <th>
-            처리일자
-          </th>
-          <td colspan="2">
-            <input type="text" :value="prc_dt" :disabled="read" ref="req_dt" style="background-color: #f2f2f2;">
           </td>
         </tr>
         <tr>
           <th style="line-height: 23;">
             처리내용
           </th>
-          <td colspan="5">
+          <td colspan="3">
+            <table>
+              <tr>
+                <th>
+                  처리자
+                </th>
+                <td style="width:100px">
+                  <input type="text"
+                         placeholder="직원명"
+                         v-model="prcpe_nm"
+                         @keypress.enter="open_pjte9001"
+                         style="width: 80px"
+                  >
+                </td>
+                <td style="width: 20px">
+                  <div class="input-searchWrap" style="width:15px">
+                    <button class="search-btn"
+                            @click="open_pjte9001"
+                    ></button>
+                  </div>
+                </td>
+                <td>
+                  <input type="text"
+                         placeholder="직원번호"
+                         style="width: 80px; background-color: #f2f2f2;"
+                         v-model="prcpe_no"
+                         :disabled = true
+                  >
+
+                </td>
+<!--                <td>-->
+<!--                  <input type="text" v-model="prcpe_nm"/>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <button class="btn btn-filter-p">조회</button>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <input type="text" v-model="prcpe_no" :disabled="read"/>-->
+<!--                </td>-->
+                <th>
+                  처리일자
+                </th>
+                <td>
+                  <input type="text" :value="prc_dt" :disabled="read" style="background-color: #f2f2f2;">
+                </td>
+              </tr>
+            </table>
             <textarea cols="30" rows="10" placeholder="" style="width: 100%" v-model="prc_txt" ref="prc_txt"></textarea>
           </td>
         </tr>
         <tr v-if="mng_id">
           <th>첨부파일</th>
-          <td colspan="4">
-            <input type="text" :disabled="read" :value="org_file_nm">
+          <td>
+              <input type="text" :disabled="read" :value="org_file_nm">
           </td>
           <th>
             <button class="btn btn-filter-p" @click="open_file_page">첨부</button>
@@ -254,22 +282,22 @@ export default {
           mng_id : this.mng_id,
         }
       })
-          .then(res => {
-            let res_data = res.data.data.contents[0];
-            console.log(res_data)
-            this.bzcd_selected = res_data.bzcd
-            // this.req_dscd_selected = '300'  // 테스트용
-            this.req_dscd_selected = res_data.req_dscd
-            // this.req_prc_step_cd_selected = '400';    // 테스트용
-            this.req_prc_step_cd_selected = res_data.req_prc_step_cd
-            this.req_txt = res_data.req_txt
-            this.prcpe_nm = res_data.prcpe_nm
-            this.prcpe_no = res_data.prcpe_no
-            this.prc_dt = res_data.prc_dt ? res_data.prc_dt.substr(0,4)+ '-' +res_data.prc_dt.substr(4,2) + '-' + res_data.prc_dt.substr(6) : res_data.prc_dt
-            this.prc_txt = res_data.prc_txt
-            this.org_file_nm = res_data.org_file_nm
-            this.atfl_mng_id = res_data.atfl_mng_id
-          })
+      .then(res => {
+        let res_data = res.data.data.contents[0];
+        console.log(res_data)
+        this.bzcd_selected = res_data.bzcd
+        // this.req_dscd_selected = '300'  // 테스트용
+        this.req_dscd_selected = res_data.req_dscd
+        // this.req_prc_step_cd_selected = '400';    // 테스트용
+        this.req_prc_step_cd_selected = res_data.req_prc_step_cd
+        this.req_txt = res_data.req_txt
+        this.prcpe_nm = res_data.prcpe_nm
+        this.prcpe_no = res_data.prcpe_no
+        this.prc_dt = res_data.prc_dt ? res_data.prc_dt.substr(0,4)+ '-' +res_data.prc_dt.substr(4,2) + '-' + res_data.prc_dt.substr(6) : res_data.prc_dt
+        this.prc_txt = res_data.prc_txt
+        this.org_file_nm = res_data.org_file_nm
+        this.atfl_mng_id = res_data.atfl_mng_id
+      })
     },
 
     // 저장(신청 ID 없는 경우, insert 쿼리)
@@ -305,15 +333,15 @@ export default {
         login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO')
 
       })
-          .then(res => {
-            console.log(res);
-            if(res.data){
-              alert("저장되었습니다.");
-              opener.pmsRegisterData("insert");
-              window.close();
-            }
+      .then(res => {
+        console.log(res);
+        if(res.data){
+          alert("저장되었습니다.");
+          opener.pmsRegisterData("insert");
+          window.close();
+        }
 
-          })
+      })
     },
 
     // 저장(mng_id 있는 경우, update 쿼리)
@@ -339,14 +367,14 @@ export default {
         prjt_id : this.prjt_id,
         mng_id : this.mng_id
       })
-          .then(res => {
-            console.log(res);
-            if(res.data){
-              alert("저장되었습니다.");
-              opener.pmsRegisterData("update");
-              window.close();
-            }
-          })
+      .then(res => {
+        console.log(res);
+        if(res.data){
+          alert("저장되었습니다.");
+          opener.pmsRegisterData("update");
+          window.close();
+        }
+      })
     }
 
   },

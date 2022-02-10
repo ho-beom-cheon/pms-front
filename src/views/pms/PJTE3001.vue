@@ -26,8 +26,8 @@
         <tr>
           <th>결함등록자</th>
           <td>
-            <input type="text" v-model="rgpe_nm" :disabled= true style="width: calc(50%); background-color: #f2f2f2;">
-            <input type="text" v-model="rgpe_no" :disabled= true style="width: calc(50%); background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_nm" :disabled= true style="width: 73px; background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_no" :disabled= true style="width: 73px; background-color: #f2f2f2;">
           </td>
           <th>결함등록일자</th>
           <td>
@@ -166,9 +166,9 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(1)" >
+              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
               <button class="search-btn2" @click="open_pjte9001(1)"></button>
-              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>
@@ -176,9 +176,9 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(2)">
+              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
               <button class="search-btn2" @click="open_pjte9001(2)"></button>
-              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>　　조치일자</th>
@@ -575,6 +575,7 @@ export default {
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.prjt_id
+      let bkup_id_selected = this.bkup_id
       if (btn_id == '1') {
         empnm = this.dvlpe_nm
       } else if (btn_id == '2') {
@@ -584,7 +585,8 @@ export default {
         axiosService.get("/PJTE9001/select", {
           params: {
             empnm,
-            prjt_id_selected
+            prjt_id_selected,
+            bkup_id_selected
           }
         })
             .then(res => {
@@ -599,12 +601,12 @@ export default {
                   this.pl_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.bkup_id, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.bkup_id, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },

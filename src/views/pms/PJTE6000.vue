@@ -287,12 +287,15 @@ export default {
         alert("프로젝트가 선택되어 있어야 직원검색이 가능합니다")
         return false;
       }
+      let prjt_id_selected = this.info.prjt_nm_selected
+      let bkup_id_selected = this.info.bkup_id_selected
       let empnm = btn_id === 1 ? this.info.reqpe_nm : this.info.prcpe_nm
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
           params: {
             empnm,
-            prjt_id_selected : this.info.prjt_nm_selected
+            prjt_id_selected,
+            bkup_id_selected
           }
         })
             .then(res => {
@@ -307,11 +310,13 @@ export default {
                   this.info.prcpe_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                window.open(`../PJTE9001/?bkup_id=${this.info.bkup_id_selected}&prjt_id=${this.info.prjt_nm_selected}&btn_id=${btn_id}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+                let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        window.open(`../PJTE9001/?bkup_id=${this.info.bkup_id_selected}&prjt_id=${this.info.prjt_nm_selected}&btn_id=${btn_id}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+        let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
 
     },
@@ -622,14 +627,13 @@ export default {
 				},
         {
           header: '처리내용',
-          width: 280,
+          width: 350,
           align: 'left',
           name: 'prc_txt',
           type: 'text'
         },
 				{
 					header: '처리상태',
-          width: 120,
           align: 'left',
           name: 'req_prc_step_cd',
           formatter: 'listItemText',
