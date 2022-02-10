@@ -365,13 +365,13 @@ export default {
     },
     gridExcelExport(grid_num){
       if(grid_num === 1){
-        this.$refs.grid1.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+        this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
 
       }else if(grid_num === 2){
-        this.$refs.grid2.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+        this.$refs.grid2.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
 
       }else if(grid_num === 3){
-        this.$refs.grid3.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+        this.$refs.grid3.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
 
       }
     },

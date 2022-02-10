@@ -365,7 +365,7 @@ export default {
 			// DB 데이터 삭제로직 추가 
 		},
 		gridExcelExport(){
-			this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"});
+			this.$refs.grid.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
 		},
 		gridExcelImport(){
 			// 엑셀파일 업로드 로직 추가
