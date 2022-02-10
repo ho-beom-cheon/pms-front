@@ -343,9 +343,26 @@
         </select>
       </div>
     </li>
+    <!--   WBS관리구분코드 -->
+     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C35'">
+       <div class="item-con">관리구분
+         <select
+             v-model="wbs_prc_sts_cd_selected"
+             style="width: 120px"
+             @change = "wbs_prc_sts_cd_change"
+         >
+           <option
+               v-for="(wbs_prc_sts_cd, idx) in CD1000000035T"
+               :key="idx"
+               v-text="wbs_prc_sts_cd.text"
+               :value="wbs_prc_sts_cd.value"
+           ></option>
+         </select>
+       </div>
+     </li>
     <!--   신청 처리 단계 구분코드-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C19'">
-      <div class="item-con">처리상태
+      <div class="item-con">진행상태
         <select
             v-model = "wbs_mng_cd_selected"
             style   = "width: 80px"
@@ -360,23 +377,7 @@
         </select>
       </div>
     </li>
-    <!--   WBS관리구분코드 -->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C35'">
-      <div class="item-con">진행상태
-        <select
-            v-model="wbs_prc_sts_cd_selected"
-            style="width: 120px"
-            @change = "wbs_prc_sts_cd_change"
-        >
-          <option
-              v-for="(wbs_prc_sts_cd, idx) in CD1000000035T"
-              :key="idx"
-              v-text="wbs_prc_sts_cd.text"
-              :value="wbs_prc_sts_cd.value"
-          ></option>
-        </select>
-      </div>
-    </li>
+
     <!--   검출구분코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C21'">
       <div class="item-con">검증구분

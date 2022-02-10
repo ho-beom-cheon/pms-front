@@ -299,9 +299,9 @@ var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {tex
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "PMO", value: '100'},
-  {text: "업무팀", value: "200"},
-  {text: "공통팀", value: "300"},
+  {text: "업무팀", value: '100'},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
 
 // 통합테스트처리코드 (처리단계)
@@ -311,7 +311,9 @@ const itg_tst_prc_cd = [
   {text: "테스트시작", value: "100"},
   {text: "테스트자완료", value: "200"},
   {text: "PL확인", value: "300"},
-  {text: "담당자확인", value: "400"}
+  {text: "담당자확인", value: "400"},
+  {text: "현업확인", value: "500"},
+  {text: "테스트완료", value: "600"}
 ];
 // 유형
 const tp = [
@@ -352,7 +354,7 @@ export default {
     console.log("mounted");
     this.init();
     this.fnSearch();    // 최초조회
-    this.setColumns();  // 권한에 따른 컬럼 세팅
+    // this.setColumns();  // 권한에 따른 컬럼 세팅
     window.pms_register = this;
   },
   beforeUpdate() {
@@ -385,17 +387,17 @@ export default {
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     itg_tst_prc_cd_change(params) {this.info.itg_tst_prc_cd_selected = params},
 
-    setColumns() {    // 권한에 따른 컬럼 세팅
-      if (sessionStorage.getItem("aut_cd") === '100') {
-        this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
-      } else if (sessionStorage.getItem("aut_cd") === '500') {
-        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
-      } else {
-        this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
-      }
-    },
+    // setColumns() {    // 권한에 따른 컬럼 세팅
+    //   if (sessionStorage.getItem("aut_cd") === '100') {
+    //     this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
+    //   } else if (sessionStorage.getItem("aut_cd") === '500') {
+    //     this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
+    //   } else {
+    //     this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
+    //   }
+    // },
     init() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' ||sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
