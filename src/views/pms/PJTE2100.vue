@@ -184,7 +184,7 @@
               :minRowHeight="minRowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
-              @dblclick="dblonClick"
+              @dblclick="dbClick"
           ></grid>
         </div>
       </section>
@@ -218,7 +218,6 @@ window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
   window.pms_register.emp_rowKey = emprow;
   window.pms_register.emp_colName = empcol;
 }
-
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
 class CustomRenderer {
@@ -262,18 +261,25 @@ const bzcd = [
 
 const pgm_dis_cd = [
   {"text":" ","value":"NNN"},
+  {"text":"화면","value":"100"},
+  {"text":"프로그램","value":"200"},
+  {"text":"보고서","value":"300"},
+  {"text":"배치","value":"400"}
+]
+
+const dvlp_dis_cd = [
+  {"text":" ","value":"NNN"},
   {"text":"신규","value":"100"},
   {"text":"변경","value":"200"},
   {"text":"이행","value":"300"},
   {"text":"삭제","value":"900"}
 ]
 
-const dvlp_dis_cd = [
+const dvlp_dis_cd2 = [
   {"text":" ","value":"NNN"},
-  {"text":"화면","value":"100"},
-  {"text":"프로그램","value":"200"},
-  {"text":"보고서","value":"300"},
-  {"text":"배치","value":"400"}
+  {"text":"신규","value":"100"},
+  {"text":"변경","value":"200"},
+  {"text":"이행","value":"300"},
 ]
 const prc_step_cd = [
   {"text":" ","value":"NNN"},
@@ -353,9 +359,7 @@ export default {
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-        debugger
         // 특정 열 비활성화
-        this.$refs.grid.invoke("disableColumn", 'dvlp_dis_cd');
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
       }
@@ -542,16 +546,16 @@ export default {
       }
     },
     // 그리드 내용 더블클릭 시 상세보기 모달팝업
-    dblonClick(ev) {
+    dbClick(ev) {
       this.curRow = ev.rowKey;
-    },
-    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
-      this.modals.txt_modal1 = false;
     },
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
       this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modals.txt_modal1 = false;
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
@@ -593,8 +597,7 @@ export default {
     },
     // 엑셀 다운로드
     gridExcelExport(){
-      // this.$refs.grid.invoke("export", "xlsx", {fileName:"엑셀다운로드"}, {useFormattedValue : true});
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드"}, {useFormattedValue : true} );
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
     // 엑셀파일 업로드(미완성)
     gridExcelImport(){
@@ -896,7 +899,6 @@ export default {
           width: 150,
           align: 'left',
           name: 'pgm_id',
-          editor: 'text',
           ellipsis : true,
         },
         {
@@ -924,8 +926,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: dvlp_dis_cd
-
+              listItems: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? dvlp_dis_cd : dvlp_dis_cd2
             }
           },
         },
@@ -1084,21 +1085,18 @@ export default {
           width: 80,
           align: 'right',
           name: 'err_tot_cnt',
-          editor: 'text',
         },
         {
           header: '완료',
           width: 80,
           align: 'right',
           name: 'err_cmpl_cnt',
-          editor: 'text',
         },
         {
           header: '진행',
           width: 80,
           align: 'right',
           name: 'err_ncmpl_cnt',
-          editor: 'text',
         },
         {
           header: '등록',
