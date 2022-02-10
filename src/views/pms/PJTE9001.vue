@@ -153,7 +153,8 @@ export default {
     getCombo(){
       axiosService.get("/PJTE9001/combo", {
         params: {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID")
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id: this.bkup_id_selected
         }
       }).then(res => {
         this.setCombo(res.data.data);
