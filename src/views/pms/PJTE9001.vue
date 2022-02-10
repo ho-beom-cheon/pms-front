@@ -105,51 +105,42 @@ import {Grid} from '@toast-ui/vue-grid';
 import PJTE3000 from "@/views/pms/PJTE3000";
 import {axiosService} from "@/api/http";
 
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-// 프로젝트구분
-const prjt_id = [
-  {text: "IE_기업신용평가 프로젝트", value: '1000000001'},
-  {text: "Project Eye시스템구축", value: '1000000002'},
-];
-
-
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
   },
   beforeCreate() {
-    console.log("beforeCreate");
+    // console.log("beforeCreate");
   },
   // 화면 동작 시 제일 처음 실행되는 부분
   // 변수 초기화
   created() {
     // 권한에 따른 컬럼 세팅
-    console.log("created");
+    // console.log("created");
     this.getCombo();
   },
   beforeMount() {
-    console.log("beforeMount");
+    // console.log("beforeMount");
   },
   mounted() {
-    console.log("mounted");
+    // console.log("mounted");
     // 초기화
     this.init();
     // 최초조회
     this.fnSearch();
   },
   beforeUpdate() {
-    console.log("beforeUpdate");
+    // console.log("beforeUpdate");
   },
   updated() {
-    console.log("updated");
+    // console.log("updated");
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
+    // console.log("beforeDestroy");
   },
   destroyed() {
-    console.log("destroyed");
+    // console.log("destroyed");
   },
   // 함수를 선언하는 부분
   // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
@@ -158,6 +149,7 @@ export default {
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
+    // 콤보데이터 조회
     getCombo(){
       axiosService.get("/PJTE9001/combo", {
         params: {
@@ -181,9 +173,9 @@ export default {
       for(let i=0; i<combodata.contents1.length; i++) {
         this.bzcd.push({"text": combodata.contents1[i].dtls_tynm, "value": combodata.contents1[i].dtls_tycd});
       }
-
     },
-    init() {  //초기화 및 초기 값 세팅
+    //초기화 및 초기 값 세팅
+    init() {
       //그리드 셀 비활성화
       this.$refs.grid.invoke("disable");
       // 그리드 초기화
@@ -198,9 +190,7 @@ export default {
       opener.empData(this.send_empnm, this.send_empno, this.open_btn_id, this.open_emprow, this.open_empcol);
       window.close();
     },
-    change() {
-      console.log();
-    },
+
     onClick(ev) {
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
@@ -241,9 +231,9 @@ export default {
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
+      // console.log("count의 값이 변경되면 여기도 실행");
+      // console.log("new Value :: " + a);
+      // console.log("old Value :: " + b);
     },
   },
   // 변수 선언부분
@@ -309,7 +299,11 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: prjt_id
+              listItems:
+                  [
+                    {"text": "IE_기업신용평가 프로젝트", "value": "1000000001"},
+                    {"text": "Project Eye시스템구축", "value": "1000000002"},
+                  ]
             }
           }
         },
@@ -324,12 +318,6 @@ export default {
             options:{
               listItems:
                   [
-                    {"text":" ","value":"NNN"},
-                    {"text":"관리","value":"EEE"},
-                    {"text":"공통","value":"DDD"},
-                    {"text":"신용조사","value":"AAA"},
-                    {"text":"재무제표","value":"BBB"},
-                    {"text":"신용평가","value":"CCC"},
                     {"text": "업무팀", "value": "100"},
                     {"text": "공통팀", "value": "200"},
                     {"text": "PMO", "value": "300"},

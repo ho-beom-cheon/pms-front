@@ -209,20 +209,35 @@
                     >
                   </div>
                 </li>
-                <li class="filter-item-a">
+                <li class="filter-item-a" v-if="detail.mng_id">
                   <div class="item-con">
                     <label>*관리구분</label>
                     <select
-                        id="d_rgs_dis_cd_selected"
-                        name="d_rgs_dis_cd_selected"
-                        v-model="detail.d_rgs_dis_cd_selected"
-                        style="width: 150px"
+                        v-model="detail.rgs_dis_cd_selected"
+                        style="width: 150px; background-color: #f2f2f2;"
+                        :disabled=true
                     >
                       <option
-                          v-for="(d_rgs_dis_cd, idx) in detail.d_rgs_dis_cd"
+                          v-for="(rgs_dis_cd, idx) in detail.rgs_dis_cd"
                           :key="idx"
-                          v-text="d_rgs_dis_cd.text"
-                          :value="d_rgs_dis_cd.value"
+                          v-text="rgs_dis_cd.text"
+                          :value="rgs_dis_cd.value"
+                      ></option>
+                    </select>
+                  </div>
+                </li>
+                <li class="filter-item-a" v-else>
+                  <div class="item-con">
+                    <label>*관리구분</label>
+                    <select
+                        v-model="detail.rgs_dis_cd_selected"
+                        style="width: 150px;"
+                    >
+                      <option
+                          v-for="(rgs_dis_cd, idx) in detail.rgs_dis_cd"
+                          :key="idx"
+                          v-text="rgs_dis_cd.text"
+                          :value="rgs_dis_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -231,14 +246,14 @@
                   <div class="item-con">
                     <label>*처리단계</label>
                     <select
-                        v-model="detail.d_prc_step_cd_selected"
+                        v-model="detail.prc_step_cd_selected"
                         style="width: 150px; margin-right: 150px"
                     >
                       <option
-                          v-for="(d_prc_step_cd, idx) in detail.d_prc_step_cd"
+                          v-for="(prc_step_cd, idx) in detail.prc_step_cd"
                           :key="idx"
-                          v-text="d_prc_step_cd.text"
-                          :value="d_prc_step_cd.value"
+                          v-text="prc_step_cd.text"
+                          :value="prc_step_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -248,14 +263,14 @@
                   <div class="item-con">
                     <label>*요청구분</label>
                     <select
-                        v-model="detail.d_req_dis_cd_selected"
+                        v-model="detail.req_dis_cd_selected"
                         style="width: 150px"
                     >
                       <option
-                          v-for="(d_req_dis_cd, idx) in detail.d_req_dis_cd"
+                          v-for="(req_dis_cd, idx) in detail.req_dis_cd"
                           :key="idx"
-                          v-text="d_req_dis_cd.text"
-                          :value="d_req_dis_cd.value"
+                          v-text="req_dis_cd.text"
+                          :value="req_dis_cd.value"
                       ></option>
                     </select>
                   </div>
@@ -277,10 +292,9 @@
                     <label>*요청자</label>
                     <input type="text"
                            placeholder="입력"
-                           ref="d_achi_nm"
-                           v-model="detail.d_achi_nm"
-                           :disabled=true
-                           style="width: 150px; margin-right: 150px;  background-color: #f2f2f2;"
+                           ref="achi_nm"
+                           v-model="detail.achi_nm"
+                           style="width: 150px; margin-right: 150px;"
                     >
                   </div>
                 </li>
@@ -289,7 +303,7 @@
                     <label>조치담당자</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="detail.d_ttmn_crpe_nm"
+                           v-model="detail.ttmn_crpe_nm"
                            style="width: 150px"
                     >
                   </div>
@@ -299,9 +313,9 @@
                     <label>조치업무명</label>
                     <input type="text"
                            placeholder="입력"
-                           v-model="detail.d_tgt_biz_nm"
-                           id="d_tgt_biz_nm"
-                           name="d_tgt_biz_nm"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
                            style="width: 150px"
                     >
                   </div>
@@ -373,8 +387,8 @@
                     <label>*제목</label>
                     <input type="text"
                            placeholder="입력"
-                           ref="d_titl_nm"
-                           v-model="detail.d_titl_nm"
+                           ref="titl_nm"
+                           v-model="detail.titl_nm"
                            style="width: 885px"
                     >
                   </div>
@@ -388,8 +402,8 @@
                       <textarea cols="140"
                                 rows="5"
                                 placeholder="결함내용을 입력해주세요"
-                                ref="d_req_dis_txt"
-                                v-model="detail.d_req_dis_txt"
+                                ref="req_dis_txt"
+                                v-model="detail.req_dis_txt"
                                 style="width: 885px; line-height: normal;"
                                 @click="enlarged_view(1)"
                       ></textarea>
@@ -405,7 +419,7 @@
                       <textarea cols="140"
                                 rows="5"
                                 placeholder="조치내용을 입력해주세요"
-                                v-model="detail.d_ttmn_txt"
+                                v-model="detail.ttmn_txt"
                                 style="width: 885px; line-height: normal;"
                                 @click="enlarged_view(2)"
                       ></textarea>
@@ -421,7 +435,7 @@
                       <textarea cols="140"
                                 rows="5"
                                 placeholder="해결방안내용을 입력해주세요"
-                                v-model="detail.d_slv_mpln_txt"
+                                v-model="detail.slv_mpln_txt"
                                 style="width: 885px; line-height: normal;"
                                 @click="enlarged_view(3)"
                       ></textarea>
@@ -467,7 +481,7 @@
                               cols="103"
                               rows="33"
                               id="detailTextArea"
-                              v-model="detail.d_req_dis_txt"
+                              v-model="detail.req_dis_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
                     ></textarea>
@@ -475,7 +489,7 @@
                               cols="103"
                               rows="33"
                               id="detailTextArea"
-                              v-model="detail.d_req_dis_txt"
+                              v-model="detail.req_dis_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
                     ></textarea>
@@ -483,7 +497,7 @@
                               cols="103"
                               rows="33"
                               id="detailTextArea"
-                              v-model="detail.d_ttmn_txt"
+                              v-model="detail.ttmn_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
                     ></textarea>
@@ -491,7 +505,7 @@
                               cols="103"
                               rows="33"
                               id="detailTextArea"
-                              v-model="detail.d_slv_mpln_txt"
+                              v-model="detail.slv_mpln_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
                     ></textarea>
@@ -523,25 +537,14 @@ import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
 
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {
-  text: "PMS프로젝트3",
-  value: "1000000003"
-}];
-var bkup_id = [{text: "백업", value: "0000000000"}];
-
-
 // 관리구분
 const rgs_dis_cd = [
-  {text: "전체", value: 'TTT'},
   {text: "ActionItem", value: 'A'},
   {text: "이슈", value: 'I'},
   {text: "위험", value: "R"},
 ];
 // 요청구분
 const req_dis_cd = [
-  {text: "전체", value: 'TTT'},
   {text: "품질", value: "100"},
   {text: "업무처리", value: "200"},
   {text: "협의사항", value: "300"},
@@ -549,28 +552,6 @@ const req_dis_cd = [
 ];
 // 처리단계(이슈처리단계구분코드)
 const prc_step_cd = [
-  {text: "전체", value: 'TTT'},
-  {text: "발생", value: "100"},
-  {text: "요청", value: "200"},
-  {text: "보류", value: "300"},
-  {text: "진행중", value: "400"},
-  {text: "완료", value: "500"}
-];
-// 상세내용 관리구분
-const d_rgs_dis_cd = [
-  {text: "ActionItem", value: 'A'},
-  {text: "이슈", value: 'I'},
-  {text: "위험", value: "R"},
-];
-// 상세내용 요청구분
-const d_req_dis_cd = [
-  {text: "품질", value: "100"},
-  {text: "업무처리", value: "200"},
-  {text: "협의사항", value: "300"},
-  {text: "기타", value: "900"},
-];
-// 상세내용 처리단계(이슈처리단계구분코드)
-const d_prc_step_cd = [
   {text: "발생", value: "100"},
   {text: "요청", value: "200"},
   {text: "보류", value: "300"},
@@ -592,10 +573,6 @@ const urgn_cd = [
   {text: "매우높음", value: "400"},
 ];
 
-const ai = axios.create({
-  baseURL: "http://localhost:8080/PJTE4000/"
-});
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -607,35 +584,35 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
-    console.log("beforeCreate");
+    // console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
-    console.log("created");
+    // console.log("created");
 
   },
   beforeMount() {
-    console.log("beforeMount");
+    // console.log("beforeMount");
   },
   mounted() {
-    console.log("mounted");
+    // console.log("mounted");
     // 초기화
     this.init();
     // 최초조회
     this.fnSearch();
   },
   beforeUpdate() {
-    console.log("beforeUpdate");
+    // console.log("beforeUpdate");
   },
   updated() {
-    console.log("updated");
+    // console.log("updated");
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
+    // console.log("beforeDestroy");
   },
   destroyed() {
-    console.log("destroyed");
+    // console.log("destroyed");
   },
 // 함수를 선언하는 부분
 // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
@@ -664,23 +641,23 @@ export default {
       // 조회 필터 초기화
       this.info.cmpl_yn = false
       // 상세내용 초기화
-      this.detail.d_rgs_dis_cd_selected = d_rgs_dis_cd[0].value       // (상세)관리구분
-      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리단계
+      this.detail.rgs_dis_cd_selected = rgs_dis_cd[0].value       // (상세)관리구분
+      this.detail.prc_step_cd_selected = prc_step_cd[0].value     // (상세)처리단계
       this.detail.mng_id = ''                                         // (상세)관리ID
-      this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
+      this.detail.req_dis_cd_selected = req_dis_cd[0].value       // (상세)요청구분
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
-      this.detail.d_achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
-      this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
-      this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
+      this.detail.achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
+      this.detail.ttmn_crpe_nm = ''                                 // (상세)조치담당자
+      this.detail.tgt_biz_nm = ''                                   // (상세)조치업무명
       this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
       this.detail.ttmn_dt = ''                                        // (상세)조치일자
       this.detail.ifnc_cd_selected = urgn_cd[0].value                 // (상세)영향도
       this.detail.urgn_cd_selected = ifnc_cd[0].value                 // (상세)긴급성
       this.detail.gd_txt = ''                                         // (상세)등급
-      this.detail.d_titl_nm = ''                                      // (상세)제목
-      this.detail.d_req_dis_txt = ''                                  // (상세)요청내용
-      this.detail.d_ttmn_txt = ''                                     // (상세)조치내용
-      this.detail.d_slv_mpln_txt = ''                                 // (상세)해결방안내용
+      this.detail.titl_nm = ''                                      // (상세)제목
+      this.detail.req_dis_txt = ''                                  // (상세)요청내용
+      this.detail.ttmn_txt = ''                                     // (상세)조치내용
+      this.detail.slv_mpln_txt = ''                                 // (상세)해결방안내용
       this.detail.rmrk = ''                                           // (상세)비고
       // 상세내용 확대보기 초기 폰트사이즈 설정
       document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
@@ -692,21 +669,22 @@ export default {
         if (confirm("정말 저장하시겠습니까??") == true) {
           // 관리ID가 없으면 INSERT
           if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
-            ai.post("/insert",
+
+            axiosService.post("/PJTE4000/insert",
                 {
-                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,        // (상세)관리구분
-                  titl_nm: this.detail.d_titl_nm,                       // (상세)제목
-                  req_dis_txt: this.detail.d_req_dis_txt,               // (상세)요청내용
-                  req_dis_cd: this.detail.d_req_dis_cd_selected,        // (상세)요청구분
+                  rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
+                  titl_nm: this.detail.titl_nm,                       // (상세)제목
+                  req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
+                  req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
                   rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                  achi_nm: this.detail.d_achi_nm,                       // (상세)요청자
-                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리단계
-                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                 // (상세)조치업무명
-                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,             // (상세)조치담당자
+                  achi_nm: this.detail.achi_nm,                       // (상세)요청자
+                  prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
+                  tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
+                  ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
                   ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
                   ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                  ttmn_txt: this.detail.d_ttmn_txt,                     // (상세)조치내용
-                  slv_mpln_txt: this.detail.d_slv_mpln_txt,             // (상세)해결방안내용
+                  ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
+                  slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
                   ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
                   gd_txt: this.detail.gd_txt,                           // (상세)등급
                   urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
@@ -719,7 +697,7 @@ export default {
             )
                 .then(res => {
                   if (res.status == 200) {
-                    console.log(res.data);
+                    // console.log(res.data);
                   }
                 }).catch(e => {
               alert("필수값을 입력해주세요.");
@@ -727,21 +705,22 @@ export default {
 
             // 관리ID가 있으면 UPDATE
           } else {
-            ai.put("/update",
+
+            axiosService.put("/PJTE4000/update",
                 {
-                  rgs_dis_cd: this.detail.d_rgs_dis_cd_selected,        // (상세)관리구분
-                  titl_nm: this.detail.d_titl_nm,                       // (상세)제목
-                  req_dis_txt: this.detail.d_req_dis_txt,               // (상세)요청내용
-                  req_dis_cd: this.detail.d_req_dis_cd_selected,        // (상세)요청구분
+                  rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
+                  titl_nm: this.detail.titl_nm,                       // (상세)제목
+                  req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
+                  req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
                   rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                  achi_nm: this.detail.d_achi_nm,                       // (상세)요청자
-                  prc_step_cd: this.detail.d_prc_step_cd_selected,      // (상세)처리단계
-                  tgt_biz_nm: this.detail.d_tgt_biz_nm,                 // (상세)조치업무명
-                  ttmn_crpe_nm: this.detail.d_ttmn_crpe_nm,             // (상세)조치담당자
+                  achi_nm: this.detail.achi_nm,                       // (상세)요청자
+                  prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
+                  tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
+                  ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
                   ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
                   ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                  ttmn_txt: this.detail.d_ttmn_txt,                     // (상세)조치내용
-                  slv_mpln_txt: this.detail.d_slv_mpln_txt,             // (상세)해결방안내용
+                  ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
+                  slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
                   ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
                   gd_txt: this.detail.gd_txt,                           // (상세)등급
                   urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
@@ -754,7 +733,7 @@ export default {
             )
                 .then(res => {
                   if (res.status == 200) {
-                    console.log(res.data);
+                    // console.log(res.data);
                   }
                 }).catch(e => {
               alert("저장 실패.");
@@ -771,23 +750,23 @@ export default {
 
     },
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
-      this.detail.d_rgs_dis_cd_selected = d_rgs_dis_cd[0].value       // (상세)관리구분
-      this.detail.d_prc_step_cd_selected = d_prc_step_cd[0].value     // (상세)처리단계
+      this.detail.rgs_dis_cd_selected = rgs_dis_cd[0].value       // (상세)관리구분
+      this.detail.prc_step_cd_selected = prc_step_cd[0].value     // (상세)처리단계
       this.detail.mng_id = ''                                         // (상세)관리ID
-      this.detail.d_req_dis_cd_selected = d_req_dis_cd[0].value       // (상세)요청구분
+      this.detail.req_dis_cd_selected = req_dis_cd[0].value       // (상세)요청구분
       this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
-      this.detail.d_achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
-      this.detail.d_ttmn_crpe_nm = ''                                 // (상세)조치담당자
-      this.detail.d_tgt_biz_nm = ''                                   // (상세)조치업무명
+      this.detail.achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
+      this.detail.ttmn_crpe_nm = ''                                 // (상세)조치담당자
+      this.detail.tgt_biz_nm = ''                                   // (상세)조치업무명
       this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
       this.detail.ttmn_dt = ''                                        // (상세)조치일자
       this.detail.ifnc_cd_selected = urgn_cd[0].value                 // (상세)영향도
       this.detail.urgn_cd_selected = ifnc_cd[0].value                 // (상세)긴급성
       this.detail.gd_txt = ''                                         // (상세)등급
-      this.detail.d_titl_nm = ''                                      // (상세)제목
-      this.detail.d_req_dis_txt = ''                                  // (상세)요청내용
-      this.detail.d_ttmn_txt = ''                                     // (상세)조치내용
-      this.detail.d_slv_mpln_txt = ''                                 // (상세)해결방안내용
+      this.detail.titl_nm = ''                                      // (상세)제목
+      this.detail.req_dis_txt = ''                                  // (상세)요청내용
+      this.detail.ttmn_txt = ''                                     // (상세)조치내용
+      this.detail.slv_mpln_txt = ''                                 // (상세)해결방안내용
       this.detail.rmrk = ''                                           // (상세)비고
     },
     onClick(ev) {
@@ -799,23 +778,23 @@ export default {
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
-      this.detail.d_rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
-      this.detail.d_prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리단계
+      this.detail.rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
+      this.detail.prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리단계
       this.detail.mng_id = currentRowData.mng_id;                              // (상세)관리ID
-      this.detail.d_req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
+      this.detail.req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
       this.detail.rgs_dt = currentRowData.rgs_dt;                              // (상세)요청일자
-      this.detail.d_achi_nm = currentRowData.achi_nm;                          // (상세)요청자
-      this.detail.d_ttmn_crpe_nm = currentRowData.ttmn_crpe_nm;                // (상세)조치담당자
-      this.detail.d_tgt_biz_nm = currentRowData.tgt_biz_nm;                    // (상세)조치업무명
+      this.detail.achi_nm = currentRowData.achi_nm;                          // (상세)요청자
+      this.detail.ttmn_crpe_nm = currentRowData.ttmn_crpe_nm;                // (상세)조치담당자
+      this.detail.tgt_biz_nm = currentRowData.tgt_biz_nm;                    // (상세)조치업무명
       this.detail.ttmn_scd_dt = currentRowData.ttmn_scd_dt;                    // (상세)조치예정일자
       this.detail.ttmn_dt = currentRowData.ttmn_dt;                            // (상세)조치일자
       this.detail.ifnc_cd_selected = currentRowData.ifnc_cd;                   // (상세)영향도
       this.detail.urgn_cd_selected = currentRowData.urgn_cd;                   // (상세)긴급성
       this.detail.gd_txt = currentRowData.gd_txt;                              // (상세)등급
-      this.detail.d_titl_nm = currentRowData.titl_nm;                          // (상세)제목
-      this.detail.d_req_dis_txt = currentRowData.req_dis_txt;                  // (상세)요청내용
-      this.detail.d_ttmn_txt = currentRowData.ttmn_txt;                        // (상세)조치내용
-      this.detail.d_slv_mpln_txt = currentRowData.slv_mpln_txt;                // (상세)해결방안내용
+      this.detail.titl_nm = currentRowData.titl_nm;                          // (상세)제목
+      this.detail.req_dis_txt = currentRowData.req_dis_txt;                  // (상세)요청내용
+      this.detail.ttmn_txt = currentRowData.ttmn_txt;                        // (상세)조치내용
+      this.detail.slv_mpln_txt = currentRowData.slv_mpln_txt;                // (상세)해결방안내용
       this.detail.rmrk = currentRowData.rmrk;                                  // (상세)비고
 
     },
@@ -861,29 +840,29 @@ export default {
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.d_rgs_dis_cd == "" || this.detail.d_rgs_dis_cd == "null") {            // 관리구분
+      if (this.detail.rgs_dis_cd == "" || this.detail.rgs_dis_cd == "null") {            // 관리구분
         alert('관리구분이 없습니다.');
         return false;
-      } else if (this.detail.d_prc_step_cd == "" || this.detail.d_prc_step_cd == "null") {   // 처리단계
+      } else if (this.detail.prc_step_cd == "" || this.detail.prc_step_cd == "null") {   // 처리단계
         alert('처리단계가 없습니다.');
         return false;
-      } else if (this.detail.d_req_dis_cd == "" || this.detail.d_req_dis_cd == "null") {     // 요청구분
+      } else if (this.detail.req_dis_cd == "" || this.detail.req_dis_cd == "null") {     // 요청구분
         alert('요청구분이 없습니다.');
         return false;
       } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 요청일자
         this.$refs.rgs_dt.focus();
         alert('요청일자를 입력해주세요.');
         return false;
-      } else if (this.detail.d_achi_nm == "" || this.detail.d_achi_nm == "null") {           // 요청자
-        this.$refs.d_achi_nm.focus();
+      } else if (this.detail.achi_nm == "" || this.detail.achi_nm == "null") {           // 요청자
+        this.$refs.achi_nm.focus();
         alert('요청자를 입력해주세요.');
         return false;
-      } else if (this.detail.d_titl_nm == "" || this.detail.d_titl_nm == "null") {           // 제목
-        this.$refs.d_titl_nm.focus();
+      } else if (this.detail.titl_nm == "" || this.detail.titl_nm == "null") {           // 제목
+        this.$refs.titl_nm.focus();
         alert('제목을 입력해주세요.');
         return false;
-      } else if (this.detail.d_req_dis_txt == "" || this.detail.d_req_dis_txt == "null") {   // 요청내용
-        this.$refs.d_req_dis_txt.focus();
+      } else if (this.detail.req_dis_txt == "" || this.detail.req_dis_txt == "null") {   // 요청내용
+        this.$refs.req_dis_txt.focus();
         alert('요청내용을 입력해주세요.');
         return false;
       } else {
@@ -895,9 +874,9 @@ export default {
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
+      // console.log("count의 값이 변경되면 여기도 실행");
+      // console.log("new Value :: " + a);
+      // console.log("old Value :: " + b);
     },
   },
 // 변수 선언부분
@@ -916,8 +895,6 @@ export default {
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
-        bkup_id: bkup_id,                // 백업ID
-        prjt_id: prjt_id,                // 프로젝트ID
         rgs_dis_cd: rgs_dis_cd,          // 관리구분
         req_dis_cd: req_dis_cd,          // 요청구분
         prc_step_cd: prc_step_cd,        // 처리상태
@@ -955,32 +932,30 @@ export default {
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
-        bkup_id: bkup_id,                // 백업ID
-        prjt_id: prjt_id,                // 프로젝트ID
-        d_rgs_dis_cd: d_rgs_dis_cd,             // (상세)관리구분
-        d_prc_step_cd: d_prc_step_cd,           // (상세)처리상태
+        rgs_dis_cd: rgs_dis_cd,             // (상세)관리구분
+        prc_step_cd: prc_step_cd,           // (상세)처리상태
         mng_id: '',                             // (상세)관리ID
-        d_req_dis_cd: d_req_dis_cd,             // (상세)요청구분
+        req_dis_cd: req_dis_cd,             // (상세)요청구분
         rgs_dt: this.getToday(),                // (상세)요청일자
-        d_achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),              // (상세)요청자
-        d_ttmn_crpe_nm: this.d_ttmn_crpe_nm,    // (상세)조치담당자
-        d_tgt_biz_nm: this.d_tgt_biz_nm,        // (상세)조치업무명
+        achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),              // (상세)요청자
+        ttmn_crpe_nm: this.ttmn_crpe_nm,    // (상세)조치담당자
+        tgt_biz_nm: this.tgt_biz_nm,        // (상세)조치업무명
         ttmn_scd_dt: '',                        // (상세)조치예정일자
         ttmn_dt: '',                            // (상세)조치일자
         ifnc_cd: ifnc_cd,                       // (상세)영향도
         urgn_cd: urgn_cd,                       // (상세)긴급성
         gd_txt: this.gd_txt,                    // (상세)등급
-        d_titl_nm: this.d_titl_nm,              // (상세)제목
-        d_req_dis_txt: this.d_req_dis_txt,      // (상세)요청내용
-        d_ttmn_txt: this.d_ttmn_txt,            // (상세)조치내용
-        d_slv_mpln_txt: this.d_slv_mpln_txt,    // (상세)해결방안내용
+        titl_nm: this.titl_nm,              // (상세)제목
+        req_dis_txt: this.req_dis_txt,      // (상세)요청내용
+        ttmn_txt: this.ttmn_txt,            // (상세)조치내용
+        slv_mpln_txt: this.slv_mpln_txt,    // (상세)해결방안내용
         rmrk: this.rmrk,                        // (상세)비고
 
-        bkup_id_selected: bkup_id[0].value,          // 백업ID
-        prjt_id_selected: prjt_id[0].value,          // 프로젝트명
-        d_rgs_dis_cd_selected: d_rgs_dis_cd[0].value,      // (상세)선택 된 관리구분
-        d_req_dis_cd_selected: d_req_dis_cd[0].value,      // (상세)선택 된 요청구분
-        d_prc_step_cd_selected: d_prc_step_cd[0].value,    // (상세)선택 된 처리상태
+        bkup_id_selected: '0000000000',          // 백업ID
+        prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
+        rgs_dis_cd_selected: rgs_dis_cd[0].value,      // (상세)선택 된 관리구분
+        req_dis_cd_selected: req_dis_cd[0].value,      // (상세)선택 된 요청구분
+        prc_step_cd_selected: prc_step_cd[0].value,    // (상세)선택 된 처리상태
         urgn_cd_selected: urgn_cd[0].value,                // (상세)영향도
         ifnc_cd_selected: ifnc_cd[0].value,                // (상세)긴급성
 
@@ -1059,7 +1034,7 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: {url: 'http://localhost:8080/PJTE4000/select', method: 'GET'},
+          readData: { url: process.env.VUE_APP_API + '/PJTE4000/select', method: 'GET' },
         },
         initialRequest: false,
       },

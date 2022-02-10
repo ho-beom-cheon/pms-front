@@ -239,22 +239,14 @@ class SearchBtn {
   }
 }
 
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {text: "PMS프로젝트3",  value: "1000000003"}];
-var bkup_id = [{text: "백업", value: "0000000000"}];
-
-
 // 업무구분
 const bzcd = [
-  {text: "전체", value: 'TTT'},
-  {text: "신용", value: 'AAA'},
-  {text: "재무제표", value: "BBB"},
-  {text: "신용평가", value: "CCC"},
+  {text: "업무팀", value: "100"},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
-//등록단계구분
+// 결함등록단계구분코드
 const rgs_dscd = [
-  {text: "전체", value: 'TTT'},
   {text: "단위테스트단계", value: '1100'},
   {text: "1차통합테스트단계", value: '2100'},
   {text: "2차통합테스트단계", value: '2200'},
@@ -262,19 +254,16 @@ const rgs_dscd = [
   {text: "4차통합테스트단계", value: '2400'},
 ];
 
-//결함유형
+// 결함유형코드
 const err_tycd = [
-  {text: "전체", value: 'TTT'},
   {text: "결함", value: '100'},
   {text: "개선", value: '200'},
   {text: "결함아님", value: '300'},
   {text: "기타결함", value: '900'},
 ];
 
-// 처리단계
+// 결함처리단계구분코드
 const err_prc_step_cd = [
-
-  {text: "전체", value: "TTT"},
   {text: "등록", value: "100"},
   {text: "담당자배정", value: "200"},
   {text: "결함재등록", value: "300"},
@@ -283,7 +272,6 @@ const err_prc_step_cd = [
   {text: "개발자조치완료", value: "600"},
   {text: "PL확인", value: "700"},
   {text: "등록자확인", value: "800"},
-
 ];
 
 export default {
@@ -312,7 +300,6 @@ export default {
   mounted() {
     // 초기화
     this.init();
-    debugger
     // 최초조회
     this.fnSearch();
     window.pms_register = this;
@@ -356,7 +343,7 @@ export default {
     },
     /*그리드 클릭 이벤트*/
     onClick(ev) {
-      console.log("클릭" + ev.rowKey);
+      // console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
     },
     /*그리드 더블클릭 이벤트*/
@@ -402,7 +389,7 @@ export default {
     },
     open_pjte9001(btn_id) {
       let empnm = ''
-      let prjt_id_selected = this.info.prjt_id_selected
+      let prjt_id_selected = this.info.prjt_nm_selected
       if (btn_id == '1') {
         empnm = this.info.rgpe_nm
       } else if (btn_id == '2') {
@@ -419,20 +406,18 @@ export default {
         })
             .then(res => {
               let res_data = res.data.data.contents;
-              console.log('직원조회 값:', res_data)
+              // console.log('직원조회 값:', res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                if(empnm == res_data[0].empnm) {
                   if (btn_id == '1') {
                     this.info.rgpe_no = res.data.data.contents[0].empno
+                    this.info.rgpe_nm = res.data.data.contents[0].empnm
                   } else if (btn_id == '2') {
                     this.info.dvlpe_no = res.data.data.contents[0].empno
+                    this.info.dvlpe_nm = res.data.data.contents[0].empnm
                   } else if (btn_id == '3') {
                     this.info.pl_no = res.data.data.contents[0].empno
+                    this.info.pl_nm = res.data.data.contents[0].empnm
                   }
-                } else {
-                  let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
-                  window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
-                }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
@@ -449,9 +434,9 @@ export default {
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
+      // console.log("count의 값이 변경되면 여기도 실행");
+      // console.log("new Value :: " + a);
+      // console.log("old Value :: " + b);
     },
     /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
        버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
@@ -484,8 +469,6 @@ export default {
 
       info: {
         // 콤보
-        prjt_id: prjt_id,    		            // 프로젝트명
-        bkup_id: bkup_id,                   // 백업ID
         bzcd: bzcd,    			                // 업무구분
         rgs_dscd: rgs_dscd,                 //등록단계구분
         err_tycd: err_tycd,                 //결함유형
@@ -493,7 +476,7 @@ export default {
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected      : '0000000000',
-        bzcd_selected: 'TTT',                       // 업무구분
+        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"), // 업무구분
         err_rgs_dscd_selected: 'TTT',               // 등록단계구분
         err_tycd_selected: 'TTT',                   // 결함유형
         err_prc_step_cd_selected: 'TTT',            // 처리단계
@@ -724,8 +707,8 @@ export default {
         },
         {
           header: '결함내용',
-          width: 110,
-          align: 'center',
+          width: 200,
+          align: 'left',
           name: 'err_txt',
           ellipsis: true,
         },
@@ -781,7 +764,15 @@ export default {
           header: '이관전업무',
           width: 160,
           align: 'center',
-          name: 'bfjr_bzcd'
+          name: 'bfjr_bzcd',
+          type: 'text',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: bzcd
+            }
+          }
         }
       ]
     }
