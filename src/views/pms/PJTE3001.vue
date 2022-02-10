@@ -83,7 +83,7 @@
             결함내용
           </th>
           <td colspan="5">
-            <textarea cols="30" rows="10" v-model="err_txt" placeholder="결함내용을 입력해주세요"></textarea>
+            <textarea cols="30" rows="10" ref="err_txt" v-model="err_txt" placeholder="결함내용을 입력해주세요"></textarea>
           </td>
         </tr>
         <tr v-else-if="mng_id!==undefined && err_prc_step_cd_selected === '300' && rgpe_no === login_emp_no ">
@@ -156,7 +156,7 @@
           <th>　　조치예정일자</th>
           <td>
             <div class="input-dateWrap">
-              <input type="date" v-model="ttmn_scd_dt">
+              <input type="date" ref="ttmn_scd_dt" v-model="ttmn_scd_dt">
             </div>
           </td>
         </tr>
@@ -166,7 +166,7 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
+              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
               <button class="search-btn2" @click="open_pjte9001(1)"></button>
               <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
@@ -176,7 +176,7 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
+              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
               <button class="search-btn2" @click="open_pjte9001(2)"></button>
               <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
@@ -230,7 +230,6 @@ import {axiosService} from "@/api/http";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
-  debugger
   // console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
   window.pms_register.atfl_num = num
@@ -258,6 +257,7 @@ export default {
 // 변수 초기화
   created() {
     // console.log("created");
+    this.getCombo();
     if(this.mng_id){
       this.getRegisterData();  // 팝업 데이터 조회
     }
@@ -288,6 +288,37 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    // 콤보데이터 조회
+    getCombo(){
+      axiosService.get("/PJTE3001/combo", {
+        params: {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID")
+        }
+      }).then(res => {
+        this.setCombo(res.data.data);
+      }).catch(e => {
+
+      });
+    },
+    // 프로젝트명, 업무구분 콤보박스 셋팅
+    setCombo(combodata) {
+      //업무구분 세팅
+      for(let i=0; i<combodata.contents.length; i++) {
+        this.bzcd.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
+      }
+      //처리상태 세팅
+      for(let i=0; i<combodata.contents1.length; i++) {
+        this.err_prc_step_cd.push({"text": combodata.contents1[i].dtls_tynm, "value": combodata.contents1[i].dtls_tycd});
+      }
+      //등록단계 세팅
+      for(let i=0; i<combodata.contents2.length; i++) {
+        this.rgs_dscd.push({"text": combodata.contents2[i].dtls_tynm, "value": combodata.contents2[i].dtls_tycd});
+      }
+      //결함유형 세팅
+      for(let i=0; i<combodata.contents3.length; i++) {
+        this.err_tycd.push({"text": combodata.contents3[i].dtls_tynm, "value": combodata.contents3[i].dtls_tycd});
+      }
+    },
     /* YYYY-MM-DD형태의 오늘 날짜를 구하는 함수*/
     getToday() {
       var date = new Date();
@@ -300,7 +331,7 @@ export default {
 
     // 첨부파일등록 팝업 오픈
     open_file_page(num){
-      console.log(num)
+      // console.log(num)
       let file_rgs_dscd = ''
       let atfl_mng_id = ''
       if(num == 1) {
@@ -329,7 +360,7 @@ export default {
       })
           .then(res => {
             let res_data = res.data.data.contents[0];
-            console.log(res_data)
+            // console.log(res_data)
             this.bzcd_selected = res_data.bzcd                          // 업무구분코드
             this.err_tycd_selected = res_data.err_tycd                  // 결함유형코드
             this.rgs_dscd_selected = res_data.rgs_dscd                  // 결함등록단계구분코드
@@ -375,6 +406,10 @@ export default {
       } else if (this.rgs_dscd_selected === '' || this.rgs_dscd_selected == null || this.rgs_dscd_selected === undefined) {
         alert('선택 된 등록단계가 없습니다.');
         return false;
+      } else if (this.err_txt === '' || this.err_txt == null || this.err_txt === undefined) {
+        alert('결함내용이 없습니다.');
+        this.$refs.err_txt.focus();
+        return false;
       }
 
       axiosService.post('/PJTE3001/insert',{
@@ -403,12 +438,12 @@ export default {
         ttmn_txt : this.ttmn_txt,                                      // 조치내용
 
         bfjr_bzcd : this.bfjr_bzcd,                                    // 이관전업무
-        cctn_bzcd : this.cctn_bzcd,                                    // 연결업무구분코드
+        cctn_bzcd : this.bzcd_selected,                                    // 연결업무구분코드
         cctn_sqn_cd : this.cctn_sqn_cd,                                // 연결차수구분코드
 
       })
           .then(res => {
-            console.log(res);
+            // console.log(res);
             if(res.data){
               alert("저장되었습니다.");
               window.close();
@@ -423,17 +458,43 @@ export default {
       if(this.cctn_id === '' || this.cctn_id == null || this.cctn_id === undefined){
         alert('프로그램/테스트케이스ID이 없습니다.');
         return false;
+      } else if (this.cctn_nm === '' || this.cctn_nm == null || this.cctn_nm === undefined) {
+        alert('프로그램/테스트케이스명이 없습니다.');
+        return false;
       } else if (this.rgpe_no === '' || this.rgpe_no == null || this.rgpe_no === undefined) {
         alert('결함등록자가 없습니다.');
         return false;
       } else if (this.rgs_dt === '' || this.rgs_dt == null || this.rgs_dt === undefined) {
         alert('결함등록일자가 없습니다.');
         return false;
+      } else if (this.mng_id === '' || this.mng_id == null || this.mng_id === undefined) {
+        alert('결함ID가 없습니다.');
+        return false;
       } else if (this.err_tycd_selected === '' || this.err_tycd_selected == null || this.err_tycd_selected === undefined) {
         alert('선택 된 결함유형이 없습니다.');
         return false;
       } else if (this.rgs_dscd_selected === '' || this.rgs_dscd_selected == null || this.rgs_dscd_selected === undefined) {
         alert('선택 된 등록단계가 없습니다.');
+        return false;
+      } else if (this.err_txt === '' || this.err_txt == null || this.err_txt === undefined) {
+        alert('결함내용이 없습니다.');
+        this.$refs.err_txt.focus();
+        return false;
+      } else if (this.dvlpe_no === '' || this.dvlpe_no == null || this.dvlpe_no === undefined) {
+        alert('선택 된 조치자가 없습니다.');
+        this.$refs.dvlpe_nm.focus();
+        return false;
+      } else if (this.pl_no === '' || this.pl_no == null || this.pl_no === undefined) {
+        alert('선택 된 PL이 없습니다.');
+        this.$refs.pl_nm.focus();
+        return false;
+      } else if (this.ttmn_scd_dt === '' || this.ttmn_scd_dt == null || this.ttmn_scd_dt === undefined) {
+        this.$refs.ttmn_scd_dt.focus();
+        alert('조치예정일자가 없습니다.');
+        return false;
+      } else if (this.ttmn_txt === '' || this.ttmn_txt == null || this.ttmn_txt === undefined) {
+        alert('조치내용이 없습니다.');
+        this.$refs.ttmn_txt.focus();
         return false;
       }
 
@@ -503,9 +564,8 @@ export default {
         cctn_sqn_cd : this.cctn_sqn_cd,                                // 연결차수구분코드
       })
           .then(res => {
-            console.log(res);
+            // console.log(res);
             if(res.data){
-              debugger
               alert("저장되었습니다.");
               opener.parent.location.reload();
               window.close();
@@ -514,6 +574,7 @@ export default {
     },
     open_pjte9001(btn_id) {
       let empnm = ''
+      let prjt_id_selected = this.prjt_id
       if (btn_id == '1') {
         empnm = this.dvlpe_nm
       } else if (btn_id == '2') {
@@ -522,17 +583,20 @@ export default {
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
           params: {
-            empnm
+            empnm,
+            prjt_id_selected
           }
         })
             .then(res => {
               let res_data = res.data.data.contents;
-              console.log(res_data)
+              // console.log(res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
                   this.dvlpe_no = res.data.data.contents[0].empno
+                  this.dvlpe_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
                   this.pl_no = res.data.data.contents[0].empno
+                  this.pl_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
@@ -556,9 +620,9 @@ export default {
     // console.log('The list of colours has changed!');
     },
     count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
+      // console.log("count의 값이 변경되면 여기도 실행");
+      // console.log("new Value :: " + a);
+      // console.log("old Value :: " + b);
     },
     /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
        버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
@@ -616,45 +680,27 @@ export default {
       bkup_id : this.$route.query.bkup_id,   // 백업ID
       prjt_id : this.$route.query.prjt_id,   // 프로젝트 ID
       mng_id : this.$route.query.mng_id,     // 결함 ID
-      cctn_id : this.$route.query.cctn_id,      // 프로그램ID/테스트케이스ID
-      cctn_nm : this.$route.query.cctn_nm,      // 프로그램명/테스트케이스명
+      cctn_id : this.$route.query.cctn_id,          // 프로그램ID/테스트케이스ID
+      cctn_nm : this.$route.query.cctn_nm,          // 프로그램명/테스트케이스명
+      cctn_bzcd : this.$route.query.cctn_bzcd,      // 연결업무구분코드
+      cctn_sqn_cd : this.$route.query.cctn_sqn_cd,  // 연결차수구분코드
       atfl_num : '',
 
-      bzcd:[                                 // 업무구분코드
-        {	text:"신용", 	value:'AAA'},
-        {	text:"재무제표", 	value:"BBB"},
-        {	text:"신용평가", 	value:"CCC"},
-      ],
-      bzcd_selected : 'AAA',
+      bzcd:[],                                // 업무구분코드
 
-      err_tycd:[                             // 결함유형코드
-        {	text:"결함", 	value:'100'},
-        {	text:"개선", 	value:"200"},
-        {	text:"결함아님", 	value:"300"},
-        {	text:"기타결함", 	value:"900"},
-      ],
+      bzcd_selected : this.$route.query.cctn_bzcd,
+
+      err_tycd:[],                             // 결함유형코드
+
       err_tycd_selected : '100',
 
-      rgs_dscd:[                             // 결함등록단계구분코드
-        {	text:"단위테스트단계", 	value:'1100'},
-        {	text:"1차통합테스트단계", 	value:"2100"},
-        {	text:"2차통합테스트단계", 	value:"2200"},
-        {	text:"3차통합테스트단계", 	value:"2300"},
-        {	text:"4차통합테스트단계", 	value:"2400"},
-      ],
-      rgs_dscd_selected : '1100',
+      rgs_dscd:[],                             // 결함등록단계구분코드
 
-      err_prc_step_cd:[                      // 결함처리단계구분코드
-        {	text:"등록", 	value:'100'},
-        {	text:"담당자배정", 	value:"200"},
-        {	text:"결함재등록", 	value:"300"},
-        {	text:"이관", 	value:"400"},
-        {	text:"보류", 	value:"500"},
-        {	text:"개발자조치완료", 	value:"600"},
-        {	text:"PL확인", 	value:"700"},
-        {	text:"등록자확인", 	value:"800"},
-      ],
-      err_prc_step_cd_selected : '100',
+      rgs_dscd_selected : this.$route.query.rgs_dscd,
+
+      err_prc_step_cd:[],                      // 결함처리단계구분코드
+
+      err_prc_step_cd_selected :'100' ,
 
       login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),        // 로그인ID
       rgpe_nm : sessionStorage.getItem('LOGIN_EMP_NM'),             // 등록자명
@@ -675,9 +721,6 @@ export default {
       ttmn_atfl_nm : '',        // 조치파일명
       ttmn_atfl_mng_id : '',    // 조치첨부파일관리ID
       bfjr_bzcd : '',           // 이관전업무
-      cctn_bzcd : '',           // 연결업무구분코드
-      // cctn_id : '',          // 연결ID
-      cctn_sqn_cd : '',         // 연결차수구분코드
 
       org_file_nm : '',         // 원파일명
 

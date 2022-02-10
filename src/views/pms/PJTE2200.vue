@@ -665,7 +665,7 @@ export default {
       // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드"}, {useFormattedValue : true} );
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드",useFormattedValue : true} );
     },
     gridExcelImport() {
       // 엑셀파일 업로드 로직 추가
@@ -873,7 +873,7 @@ export default {
         complexColumns: [
           {header: '결함건수',  name: 'mergeColumn1', childNames: ['col19', 'col20', 'col21']},
           {header: '테스트계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
-          {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt']},
+          {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt','err_btn']},
           {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno'], hideChildHeaders : true},
           {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno'], hideChildHeaders : true},
           {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno'], hideChildHeaders : true},
@@ -916,7 +916,6 @@ export default {
           width: 100,
           align: 'center',
           name: 'scnr_id',
-          editor: 'text'
         },
         {
           header: '시나리오명',
@@ -964,6 +963,7 @@ export default {
           align: 'center',
           type: 'date',
           name: 'frcs_end_dt',
+          format: 'yyyy-mm-dd',
           editor: 'datePicker'
         },
         {
@@ -971,14 +971,14 @@ export default {
           width: 110,
           align: 'center',
           name: 'dvlpe_cnf_dt',
-          editor: 'datePicker'
+          format: 'yyyy-mm-dd',
         },
         {
           header: 'PL확인일자',
           width: 110,
           align: 'center',
           name: 'pl_cnf_dt',
-          editor: 'datePicker'
+          format: 'yyyy-mm-dd',
         },
         {
           header: '개발자',
@@ -999,13 +999,13 @@ export default {
           width: 80,
           align: 'center',
           name: 'dvlpe_eno',
-          editor: 'text',
         },
         {
           header: 'PL명',
           width: 80,
           align: 'center',
           name: 'pl_enm',
+          editor: 'text',
         },
         {
           header: 'PL명',
@@ -1042,7 +1042,7 @@ export default {
         },
         {
           header: '증빙첨부',
-          width: 150,
+          width: 120,
           align: 'center',
           name: 'atfl_mng_id_yn',
           // hidden : true,
@@ -1050,7 +1050,7 @@ export default {
         },
         {
           header: '증빙첨부',
-          width: 150,
+          width: 100,
           align: 'center',
           name: 'atfl_mng_id',
           hidden : true
@@ -1074,8 +1074,8 @@ export default {
           name: 'err_ncmpl_cnt',
         },
         {
-          header: '결함등록',
-          width: 120,
+          header: '등록',
+          width: 80,
           name: 'err_btn',
           align: 'center',
           renderer: CustomRenderer,
