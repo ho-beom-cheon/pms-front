@@ -44,13 +44,21 @@
       </section>
       <hr>
       <table v-if="afterSearch">
+        <colgroup>
+          <col width="100px">
+          <col width="100px">
+          <col width="200px">
+          <col width="200px">
+          <col width="180px">
+          <col width="*">
+        </colgroup>
         <thead>
           <tr>
-            <th>no</th>
+            <th>선택</th>
             <th>순번</th>
-            <th>파일경로</th>
+<!--            <th>파일경로</th>-->
             <th>파일명</th>
-            <th>원파일명</th>
+            <th>원본파일명</th>
             <th>비고</th>
             <th>첨부</th>
           </tr>
@@ -61,7 +69,7 @@
               <input type="checkbox" v-model="check_array" :value="fileList.sqno"/>
             </td>
             <td>{{fileList.sqno}}</td>
-            <td>{{fileList.file_path}}</td>
+<!--            <td>{{fileList.file_path}}</td>-->
             <td>{{fileList.file_nm}}</td>
             <td>{{fileList.org_file_nm}}</td>
             <td>
@@ -73,7 +81,7 @@
               </label>
               <input :id="'input-file'+fileList.sqno" type="file" @change="handleFileChange($event, fileList.sqno)"  style="display: none"/>
               &nbsp;
-              <label class="input-down-button" @click="fileDownload(fileList.file_nm)">
+              <label class="input-down-button" @click="fileDownload(fileList.file_nm, fileList.org_file_nm)">
                 다운로드
               </label>
             </td>
@@ -195,7 +203,7 @@ export default {
       for(let i=0; i<this.fileLists.length; i++){
         if(this.fileLists[i].sqno === sqno){
           this.fileLists[i].org_file_nm = e.target.files[0].name;
-          this.fileLists[i].file_nm = this.file_rgs_dscd_selected+'-'+file_nm+'.'+e.target.files[0].name.split('.')[1];
+          this.fileLists[i].file_nm = this.file_rgs_dscd_selected+'-'+file_nm+'.'+e.target.files[0].name.split('.')[e.target.files[0].name.split('.').length-1];
           this.fileLists[i].file = e.target.files[0];
         }
       }
@@ -328,11 +336,12 @@ export default {
 
     },
 
-    fileDownload(fileName) {
+    fileDownload(fileName, orgFileName) {
       axiosService.get("/PJTE9002/fileDownload",
           {
               params: {
-                fileName
+                fileName,
+                orgFileName
               },
             responseType : "blob"
           }
