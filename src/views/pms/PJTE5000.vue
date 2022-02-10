@@ -270,7 +270,7 @@ export default {
     onGridUpdated(grid){
       let gridData = this.$refs.grid.invoke("getData")
       for(let i=0; i<gridData.length; i++) {
-          if(gridData[i].mng_id !== "1000000001" && gridData[i].hgrn_mng_id !== "1000000001" && gridData[i].hgrn_mng_id !== "1000000002") {
+          if(gridData[i].wbs_cnt === "0") {
             this.$refs.grid.invoke("enableCell", i, 'prg_rt');
           }
       }
@@ -759,7 +759,8 @@ export default {
           align: 'center',
           name: 'pln_sta_tim',
           format: 'yyyy-mm-dd',
-          editor: 'text'
+          editor: 'text',
+          disabled: true,
         },
         {
           header: '일자',
@@ -773,7 +774,8 @@ export default {
           width: 80,
           align: 'center',
           name: 'pln_end_tim',
-          editor: 'text'
+          editor: 'text',
+          disabled: true,
         },
         {
           header: '일자',
@@ -820,7 +822,7 @@ export default {
           align: 'center',
           name: 'prg_rt',
           editor: 'text',
-          disabled : true,
+          disabled: true,
         },
         {
           header: '비고',
@@ -835,6 +837,7 @@ export default {
           align: 'center',
           name: 'sort',
           editor: "text",
+          hidden: true,
         },
         {
           header: '프로젝트ID',
