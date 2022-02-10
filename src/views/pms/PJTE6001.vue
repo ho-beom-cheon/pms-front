@@ -16,21 +16,21 @@
         <tr>
           <th>신청자</th>
           <td>
-            <input type="text" :value="reqpe_nm" :disabled="read" style="width: 48.9%">
+            <input type="text" :value="reqpe_nm" :disabled="read" style="width: 48.9%; background-color: #f2f2f2;">
             &nbsp;
-            <input type="text" :value="reqpe_no" :disabled="read" style="width: 48.9%">
+            <input type="text" :value="reqpe_no" :disabled="read" style="width: 48.9%; background-color: #f2f2f2;">
           </td>
           <th>
             신청일자
           </th>
           <td>
-            <input type="text" :value="req_dt" :disabled="read" ref="req_dt">
+            <input type="text" :value="req_dt" :disabled="read" ref="req_dt" style="background-color: #f2f2f2;">
           </td>
         </tr>
         <tr>
           <th>신청ID</th>
           <td>
-            <input type="text" :value="mng_id" :disabled="read">
+            <input type="text" :value="mng_id" :disabled="read" style="background-color: #f2f2f2;">
           </td>
         </tr>
         </tbody>
@@ -38,7 +38,6 @@
       <hr>
       <combo
         :comboArray = "this.comboList"
-        :req_prc_step_cd_selected_pop = "req_prc_step_cd_selected"
         @req_prc_step_cd_change_pop = "req_prc_step_cd_change"
         @req_dscd_change_pop = "req_dscd_change"
         @bzcd_change_pop = "bzcd_change"
@@ -74,6 +73,7 @@
                   <input type="text"
                          placeholder="직원명"
                          v-model="prcpe_nm"
+                         @keypress.enter="open_pjte9001"
                          style="width: 80px"
                   >
                 </td>
@@ -106,7 +106,7 @@
                   처리일자
                 </th>
                 <td>
-                  <input type="text" :value="prc_dt">
+                  <input type="text" :value="prc_dt" :disabled="read" style="background-color: #f2f2f2;">
                 </td>
               </tr>
             </table>
@@ -166,7 +166,7 @@ export default {
     }
 
   },
-  beforeUpdate() {
+  updated() {
     this.$children[0].$data.bzcd_selected_pop = this.bzcd_selected
     this.$children[0].$data.req_prc_step_cd_selected_pop = this.req_prc_step_cd_selected
     this.$children[0].$data.req_dscd_selected_pop = this.req_dscd_selected
@@ -189,9 +189,9 @@ export default {
       reqpe_no : sessionStorage.getItem('LOGIN_EMP_NO'),    // 신청자 직원번호
       req_dt : '',                                               // 신청일자
 
-      bzcd_selected : '',                    // 업무
-      req_dscd_selected : '',                // 신청구분
-      req_prc_step_cd_selected: '',          // 처리구분
+      bzcd_selected : '100',                    // 업무
+      req_dscd_selected : '100',                // 신청구분
+      req_prc_step_cd_selected: '100',          // 처리구분
 
       req_txt : '',               // 신청내용
       prcpe_nm : '',              // 처리자명
@@ -223,7 +223,6 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     req_dscd_change(params) {
-      console.log(this.req_dscd_selected, params)
       this.req_dscd_selected = params
     },
     req_prc_step_cd_change(params) {this.req_prc_step_cd_selected = params},
@@ -231,13 +230,35 @@ export default {
 
     // 직원 조회 팝업
     open_pjte9001(event) {
-      const targetId = event.currentTarget.id;
-      this.pop = window.open("../PJTE9001/", "open_pjte9001", "width=700, height=600");
+      let empnm = this.prcpe_nm, prjt_id_selected = this.prjt_id
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm,
+            prjt_id_selected
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data.contents)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                this.prcpe_no = res.data.data.contents[0].empno
+                this.prcpe_nm = res.data.data.contents[0].empnm
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                window.open(`../PJTE9001/?bkup_id=${this.bkup_id}&prjt_id=${prjt_id_selected}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        window.open(`../PJTE9001/?bkup_id=${this.bkup_id}&prjt_id=${prjt_id_selected}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+      }
+
+
+      // this.pop = window.open("../PJTE9001/", "open_pjte9001", "width=700, height=600");
     },
     // 첨부파일등록 팝업 오픈
     open_file_page(){
       let bkup_id='0000000000', prjt_id=this.prjt_id, atfl_mng_id=this.atfl_mng_id, file_rgs_dscd='500', mng_id = this.mng_id
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=800, height=600");
     },
 
     // mng_id 없이 저장했을 때, mng_ig 파라미터로 하여 새 페이지 오픈(첨부파일등록 보여주기 위함)
@@ -316,6 +337,7 @@ export default {
         console.log(res);
         if(res.data){
           alert("저장되었습니다.");
+          opener.pmsRegisterData("insert");
           window.close();
         }
 
@@ -335,6 +357,7 @@ export default {
         bzcd: this.bzcd_selected,
         req_dscd : this.req_dscd_selected,
         req_dt : this.req_dt.split('-').join(''),
+        reqpe_no : this.reqpe_no,
         req_txt : this.req_txt,
         prcpe_no : this.prcpe_no,
         req_prc_step_cd : this.req_prc_step_cd_selected,
@@ -348,6 +371,7 @@ export default {
         console.log(res);
         if(res.data){
           alert("저장되었습니다.");
+          opener.pmsRegisterData("update");
           window.close();
         }
       })
@@ -358,6 +382,8 @@ export default {
     if(this.mng_id == null || this.mng_id === '' || this.mng_id === undefined){
       this.$children[0].$data.req_dscd_selected_pop = '100'
     }
+    this.$children[0].$data.req_prc_step_cd_selected_pop = this.req_prc_step_cd_selected
+    this.$children[0].$data.bzcd_selected_pop = this.bzcd_selected
     window.pms_register = this;
   },
   beforeDestroy() {
