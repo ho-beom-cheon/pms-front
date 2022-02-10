@@ -1,5 +1,41 @@
 <template>
   <div style="display:inline;">
+    <table v-for="item in this.comboList" :key="item.id" v-if="item === 'C1-2'">
+      <colgroup>
+        <col width="140px">
+        <col width="*">
+        <col width="140px">
+        <col width="*">
+      </colgroup>
+      <tbody>
+      <tr>
+        <th>프로젝트</th>
+        <td>
+          <select v-model="prjt_nm_selected_pop" style="width: 300px; background-color: #f2f2f2" :disabled="read" @change = "prjt_nm_change_pop">
+            <option
+                v-for   = "(pjt_list,idx) in CD0000000000"
+                :key    ="idx"
+                v-text  ="pjt_list.text"
+                :value  ="pjt_list.value"
+            ></option>
+          </select>
+        </td>
+        <th>
+          파일등록구분
+        </th>
+        <td>
+          <select v-model="file_rgs_dscd_selected_pop" style="width: 300px; background-color: #f2f2f2" :disabled="read" @change = "file_rgs_dscd_change_pop">
+            <option
+                v-for   = "(file_rgs_dscd,idx) in CD1000000025"
+                :key    ="idx"
+                v-text  ="file_rgs_dscd.text"
+                :value  ="file_rgs_dscd.value"
+            ></option>
+          </select>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 <!--    pms 신청등록-->
     <table v-for="item in this.comboList" :key="item.id" v-if="item === 'C1-1'">
             <colgroup>
@@ -474,7 +510,7 @@ export default {
       CD1000000022T : [],  CD1000000022N : [],
       CD1000000023T : [],  CD1000000023N : [],
       CD1000000024T : [],  CD1000000024N : [],
-      CD1000000025T : [],  CD1000000025N : [],
+      CD1000000025T : [],  CD1000000025N : [], CD1000000025 : [],
       CD1000000026T : [],  CD1000000026N : [],
       CD1000000027T : [],  CD1000000027N : [],
       CD1000000028T : [],  CD1000000028N : [],
@@ -504,6 +540,7 @@ export default {
       bkup_id_selected : "",
       // 프로젝트명
       prjt_nm_selected : "",
+      prjt_nm_selected_pop : "",
       // 업무구분
       bzcd_selected : "",
       bzcd_selected_pop : "",
@@ -550,6 +587,8 @@ export default {
       search_cd_selected:"",
       //산출물구분
       file_cd_selected:"",
+      // 파일등록구분
+      file_rgs_dscd_selected_pop : "",
     }
   },
   methods: {
@@ -586,8 +625,10 @@ export default {
     search_cd_change()         {  this.$emit('search_cd_change',        this.search_cd_selected)},         // 검색항목코드
     check_cd_change()          {  this.$emit('check_cd_change',         this.check_cd_selected)},          // 검출구분코드
     req_prc_step_cd_change_pop()    {  this.$emit('req_prc_step_cd_change_pop',    this.req_prc_step_cd_selected_pop)},        
-    bzcd_change_pop()               {  this.$emit('bzcd_change_pop',               this.bzcd_selected_pop)},         
-    req_dscd_change_pop()           {  this.$emit('req_dscd_change_pop',            this.req_dscd_selected_pop)},        
+    bzcd_change_pop()               {  this.$emit('bzcd_change_pop',               this.bzcd_selected_pop)},
+    req_dscd_change_pop()           {  this.$emit('req_dscd_change_pop',            this.req_dscd_selected_pop)},
+    file_rgs_dscd_change_pop()      {  this.$emit('file_rgs_dscd_change_pop',            this.file_rgs_dscd_selected_pop)},
+    prjt_nm_change_pop()            {  this.$emit('prjt_nm_change_pop',            this.prjt_nm_selected_pop)},
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -732,6 +773,10 @@ export default {
               this.CD1000000022T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000022N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 25) {
+            this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+            this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+            this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
             else if(i === 26) {
               this.CD1000000026T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
