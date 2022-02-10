@@ -497,10 +497,22 @@ export default {
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
       if(ev.columnName === 'err_btn') {
-        let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_id');
-        let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_nm');
+        let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'tst_case_id');  //연결ID
+        let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'tst_case_nm');  //연결이름
+        let cctn_bzcd= this.$refs.grid.invoke("getValue", this.curRow, 'bzcd');  // 연결업무구분
+        let cctn_sqn_cd= this.$refs.grid.invoke("getValue", this.curRow, 'sqn_cd'); //연결차수구분
+        let rgs_dscd= '' // 등록구분
+        if(cctn_sqn_cd == '100'){
+          rgs_dscd = '2100' //1차통합테스트단계
+        } else if(cctn_sqn_cd == '200') {
+          rgs_dscd = '2200' //2차통합테스트단계
+        } else if(cctn_sqn_cd == '300') {
+          rgs_dscd = '2300' //3차통합테스트단계
+        } else if(cctn_sqn_cd == '400') {
+          rgs_dscd = '2400' //4차통합테스트단계
+        }
         let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&cctn_sqn_cd=${cctn_sqn_cd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=800");
       }
 
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
@@ -685,10 +697,13 @@ export default {
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
                   this.info.dvlpe_eno = res.data.data.contents[0].empno
+                  this.info.dvlpe_enm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
                   this.info.pl_eno = res.data.data.contents[0].empno
+                  this.info.pl_enm = res.data.data.contents[0].empnm
                 } else if (btn_id == '3') {
                   this.info.crpe_eno = res.data.data.contents[0].empno
+                  this.info.crpe_enm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
