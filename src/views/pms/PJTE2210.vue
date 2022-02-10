@@ -117,7 +117,7 @@
             <div class="div-header"><h2>업무별 통합테스트현황</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport1">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -140,7 +140,7 @@
             <div class="div-header"><h2>담당자별 통합테스트현황</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport2">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -163,7 +163,7 @@
             <div class="div-header"><h2>결함현황</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport3">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -186,7 +186,7 @@
             <div class="div-header"><h2>통합테스트 및 결함 미진내역</h2>
               <ul class="filter-btn">
                 <div class="btn btn-filter-e">
-                  <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  <a href="#" @click="gridExcelExport4">엑셀다운로드</a>
                 </div>
               </ul>
             </div>
@@ -231,9 +231,9 @@ var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {tex
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "PMO", value: '100'},
-  {text: "업무팀", value: "200"},
-  {text: "공통팀", value: "300"},
+  {text: "업무팀", value: '100'},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
 
 // 차수구분
@@ -353,12 +353,11 @@ export default {
       this.$refs.grid3.invoke("clear");
       this.$refs.grid4.invoke("clear");
     },
-    gridExcelExport() {
-      this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-      this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-      this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-      this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
-    },
+    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
       this.pop = window.open("../PJTE9001/", targetId, "width=700, height=600");
@@ -446,6 +445,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -459,6 +459,7 @@ export default {
           width: 55,
           align: 'center',
           name: 'sqn_cd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -469,7 +470,7 @@ export default {
         },
         {
           header: '전체',
-          width: 65,
+          width:  55,
           align: 'right',
           name: 'tot_cnt',
           defaultValue:0,
@@ -483,7 +484,7 @@ export default {
         },
         {
           header: '계획완료',
-          width: 60,
+          width:  60,
           align: 'right',
           name: 'cmpl_cnt',
           defaultValue:0,
@@ -518,7 +519,7 @@ export default {
         },
         {
           header: '완료',
-          width: 55,
+          width: 50,
           align: 'right',
           name: 'cmpl_cnt1',
           defaultValue:0,
@@ -539,35 +540,35 @@ export default {
         },
         {
           header: '전체',
-          width: 60,
+          width: 50,
           align: 'right',
           name: 'pl_tot_cnt',
           defaultValue:0,
         },
         {
           header: '완료',
-          width: 60,
+          width: 50,
           align: 'right',
           name: 'pl_cmpl_cnt',
           defaultValue:0,
         },
         {
           header: '미완료',
-          width: 60,
+          width: 55,
           align: 'right',
           name: 'pl_ncmpl_cnt',
           defaultValue:0,
         },
         {
           header: '계획',
-          width: 55,
+          width: 50,
           align: 'right',
           name: 'tot_cnt1',
           defaultValue:0,
         },
         {
           header: '완료',
-          width: 55,
+          width: 50,
           align: 'right',
           name: 'cmpl_cnt2',
           defaultValue:0,
@@ -587,6 +588,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -597,10 +599,11 @@ export default {
         },
         {
           header: '차수',
-          width: 55,
+          width: 60,
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options:{
@@ -706,6 +709,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -716,10 +720,11 @@ export default {
         },
         {
           header: '차수',
-          width: 55,
+          width: 60,
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
+          disabled: true,
           editor: {
             type: 'select',
             options:{
@@ -729,28 +734,28 @@ export default {
         },
         {
           header: '전체',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'tot_err_cnt',
           defaultValue:0,
         },
         {
           header: '결함',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'err_cnt',
           defaultValue:0,
         },
         {
           header: '개선',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'impt_cnt',
           defaultValue:0,
         },
         {
           header: '기타',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'etc_err_cnt',
           defaultValue:0,
@@ -764,21 +769,21 @@ export default {
         },
         {
           header: '완료',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'cmpl_cnt',
           defaultValue:0,
         },
         {
           header: '진행',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'ncmpl_cnt',
           defaultValue:0,
         },
         {
           header: '보류',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'spnd_cnt',
           defaultValue:0,
@@ -797,6 +802,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -807,9 +813,10 @@ export default {
         },
         {
           header: '차수',
-          width: 55,
+          width: 60,
           align: 'center',
           name: 'sqn_cd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',

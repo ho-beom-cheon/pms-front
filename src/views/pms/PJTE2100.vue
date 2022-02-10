@@ -255,9 +255,9 @@ class SearchBtn {
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "PMO", value: '100'},
-  {text: "업무팀", value: "200"},
-  {text: "공통팀", value: "300"},
+  {text: "업무팀", value: '100'},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
 
 const pgm_dis_cd = [
@@ -352,14 +352,13 @@ export default {
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' ||sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        debugger
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'dvlp_dis_cd');
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
       }
-
-      this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
 
       // '100' 권한,개발자명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
@@ -488,13 +487,16 @@ export default {
       if(ev.columnName === 'err_btn') {
         let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_id');
         let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_nm');
+        let cctn_bzcd= this.$refs.grid.invoke("getValue", this.curRow, 'bzcd');
+        let rgs_dscd= '1100'
         let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=800");
       }
 
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
       if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
         let empnm = ''
+        let prjt_id_selected = this.info.prjt_nm_selected
         if(ev.columnName === 'dvlpe_btn'){
           empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_nm')
         } else if(ev.columnName === 'pl_btn') {
@@ -506,25 +508,26 @@ export default {
         if (empnm != null && empnm != '') {
           axiosService.get("/PJTE9001/select", {
             params: {
-              empnm
+              empnm,
+              prjt_id_selected
             }
           })
-          .then(res => {
-            let res_data = res.data.data.contents;
-            // console.log(res_data)
-            if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-              if (ev.columnName == 'dvlpe_btn') {
-                this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', res.data.data.contents[0].empno);
-              } else if (ev.columnName == 'pl_btn') {
-                this.$refs.grid.invoke("setValue", this.curRow, 'pl_no', res.data.data.contents[0].empno);
-              } else if (ev.columnName == 'crpe_btn') {
-                this.$refs.grid.invoke("setValue", this.curRow, 'crpe_no', res.data.data.contents[0].empno);
-              }
-            } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-              let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
-              window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
-            }
-          })
+              .then(res => {
+                let res_data = res.data.data.contents;
+                // console.log(res_data)
+                if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                  if (ev.columnName == 'dvlpe_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', res.data.data.contents[0].empno);
+                  } else if (ev.columnName == 'pl_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'pl_no', res.data.data.contents[0].empno);
+                  } else if (ev.columnName == 'crpe_btn') {
+                    this.$refs.grid.invoke("setValue", this.curRow, 'crpe_no', res.data.data.contents[0].empno);
+                  }
+                } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                  let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+                  window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+                }
+              })
         } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
           let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
           window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
@@ -597,8 +600,10 @@ export default {
     gridExcelImport(){
       this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀업로드"});
     },
+    // 직원조회 팝업 (검색 필터)
     open_pjte9001(btn_id) {
       let empnm = ''
+      let prjt_id_selected = this.info.prjt_nm_selected
       if (btn_id == '1') {
         empnm = this.info.dvlpe_nm
       } else if (btn_id == '2') {
@@ -607,7 +612,8 @@ export default {
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
           params: {
-            empnm
+            empnm,
+            prjt_id_selected
           }
         })
             .then(res => {
@@ -616,8 +622,10 @@ export default {
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
                   this.info.dvlpe_no = res.data.data.contents[0].empno
+                  this.info.dvlpe_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
                   this.info.pl_no = res.data.data.contents[0].empno
+                  this.info.pl_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
