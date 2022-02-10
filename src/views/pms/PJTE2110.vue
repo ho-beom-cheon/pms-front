@@ -232,9 +232,9 @@ var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {tex
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "PMO", value: '100'},
-  {text: "업무팀", value: "200"},
-  {text: "공통팀", value: "300"},
+  {text: "업무팀", value: '100'},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
 
 // 차수구분
@@ -353,10 +353,10 @@ export default {
       this.$refs.grid3.invoke("clear");
       this.$refs.grid4.invoke("clear");
     },
-    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
-    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
-    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
-    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"});},
+    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
 
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
@@ -445,6 +445,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -558,6 +559,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -665,6 +667,7 @@ export default {
           align: 'center',
           name: 'bzcd',
           type:'text',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -739,6 +742,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bzcd',
+          disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',

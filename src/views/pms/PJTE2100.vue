@@ -255,9 +255,9 @@ class SearchBtn {
 // 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
-  {text: "PMO", value: '100'},
-  {text: "업무팀", value: "200"},
-  {text: "공통팀", value: "300"},
+  {text: "업무팀", value: '100'},
+  {text: "공통팀", value: "200"},
+  {text: "PMO", value: "300"},
 ];
 
 const pgm_dis_cd = [
@@ -352,14 +352,13 @@ export default {
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' ||sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        debugger
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'dvlp_dis_cd');
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
       }
-
-      this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
 
       // '100' 권한,개발자명
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
