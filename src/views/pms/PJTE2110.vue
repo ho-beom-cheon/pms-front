@@ -353,10 +353,10 @@ export default {
       this.$refs.grid3.invoke("clear");
       this.$refs.grid4.invoke("clear");
     },
-    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
-    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
-    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
-    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드"}, {useFormattedValue : true} );},
+    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
+    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
+    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
+    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
 
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
@@ -548,8 +548,8 @@ export default {
       header2: {
         height: 45,
         complexColumns: [
-          {header: '전체계획및실적(금주포함)', name: 'mergeColumn1', childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']},
-          {header: '금주계획및실적', name: 'mergeColumn3', childNames: ['pl_tot_cnt', 'pl_cmpl_cnt', 'pl_ncmpl_cnt', 'prnr_rt2']},
+          {header: '전체계획및실적(금주포함)', name: 'mergeColumn1', childNames: ['tot_cnt', 'cmpl_cnt', 'ncmpl_cnt', 'prnr_rt']},
+          {header: '금주계획및실적(담당자기준)', name: 'mergeColumn3', childNames: ['tot_cnt1', 'cmpl_cnt1', 'ncmpl_cnt1', 'prnr_rt1']},
           {header: '차주계획및실적', name: 'mergeColumn4', childNames: ['pl_prnr_rt', 'tot_cnt2']},
         ]
       },
@@ -729,11 +729,8 @@ export default {
       header4: {
         height: 45,
         complexColumns: [
-          {
-            header: '완료여부',
-            name: 'mergeColumn1',
-            childNames: ['pl_yn', 'crpe_yn']
-          },
+          {header: '완료여부', name: 'mergeColumn1', childNames: ['pl_yn', 'crpe_yn']},
+          {header: '개발완료일자', name: 'mergeColumn2', childNames: ['dvlpe_cnf_dt']},
         ]
       },
       columns4: [
@@ -776,7 +773,7 @@ export default {
           name: 'frcs_end_dt',
         },
         {
-          header: '개발완료일자조치일자',
+          header: '조치일자',
           width: 150,
           align: 'center',
           name: 'dvlpe_cnf_dt',
