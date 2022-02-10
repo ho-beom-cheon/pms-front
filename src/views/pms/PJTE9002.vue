@@ -5,6 +5,12 @@
       <h1>첨부파일등록</h1>
     </div>
     <div class="pop-body">
+      <combo
+          :comboArray = "this.comboList"
+          @file_rgs_dscd_change_pop = "file_rgs_dscd_change"
+          @prjt_nm_change_pop = "prjt_nm_change"
+      >
+      </combo>
       <table>
         <colgroup>
           <col width="140px">
@@ -13,32 +19,8 @@
           <col width="*">
         </colgroup>
         <tbody>
-        <tr>
-          <th>프로젝트</th>
-          <td>
-            <select v-model="pjt_selected" style="width: 300px; background-color: #f2f2f2" :disabled="read">
-              <option
-                  v-for   = "(pjt_list,idx) in pjt_list"
-                  :key    ="idx"
-                  v-text  ="pjt_list.text"
-                  :value  ="pjt_list.value"
-              ></option>
-            </select>
-          </td>
-          <th>
-            파일등록구분
-          </th>
-          <td>
-            <select v-model="file_rgs_dscd_selected" style="width: 300px;" :disabled="read">
-              <option
-                  v-for   = "(file_rgs_dscd,idx) in file_rgs_dscds"
-                  :key    ="idx"
-                  v-text  ="file_rgs_dscd.text"
-                  :value  ="file_rgs_dscd.value"
-              ></option>
-            </select>
-          </td>
-        </tr>
+
+
         <tr>
           <th>첨부파일관리ID</th>
           <td>
@@ -112,22 +94,25 @@
 import { Grid } from '@toast-ui/vue-grid';
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {axiosService} from "@/api/http";
+import combo from "@/components/Combo";
 
 export default {
   components : {
     grid: Grid,
+    combo
   },
   created() {
     this.getPjt();
   },
   data() {
     return {
+      comboList : ["C1-2"],
       bkup_id: this.$route.query.bkup_id,
       atfl_mng_id : this.$route.query.atfl_mng_id,
       atfl_num : this.$route.query.num,
       read : true,
       pjt_list: [],
-      pjt_selected:'',
+      pjt_selected:this.$route.query.prjt_id,
       file_rgs_dscd_selected: this.$route.query.file_rgs_dscd,
       file_rgs_dscds : [
         {text: "단위테스트증빙", value:"100"},
@@ -151,6 +136,9 @@ export default {
     };
   },
   methods: {
+    // Combo.vue 에서 받아온 값
+    file_rgs_dscd_change(params) {this.file_rgs_dscd_selected = params},
+    prjt_nm_change(params) {this.pjt_selected = params},
     // 행 추가
     addFile() {
       let sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
@@ -368,7 +356,8 @@ export default {
 
   },
   mounted() {
-
+    this.$children[0].$data.file_rgs_dscd_selected_pop = this.file_rgs_dscd_selected
+    this.$children[0].$data.prjt_nm_selected_pop = this.pjt_selected
     // console.log(sessionStorage.getItem("LOGIN_YN"))
   },
   beforeDestroy() {

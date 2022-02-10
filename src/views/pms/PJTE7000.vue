@@ -565,19 +565,19 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: 'http://localhost:8080/PJTE7000/select_grid1', method: 'GET' },
+          readData: { url: process.env.VUE_APP_API + '/PJTE7000/select_grid1', method: 'GET' },
         },
         initialRequest: false,
       },
       dataSource2: {
         api: {
-          readData: { url: 'http://localhost:8080/PJTE7000/select_grid2', method: 'GET' },
+          readData: { url: process.env.VUE_APP_API + '/PJTE7000/select_grid2', method: 'GET' },
         },
         initialRequest: false,
       },
       dataSource3: {
         api: {
-          readData: { url: 'http://localhost:8080/PJTE7000/select_grid3', method: 'GET' },
+          readData: { url: process.env.VUE_APP_API + '/PJTE7000/select_grid3', method: 'GET' },
         },
         initialRequest: false,
       },

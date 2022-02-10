@@ -174,6 +174,7 @@ import { Grid } from '@toast-ui/vue-grid';
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import combo from '@/components/Combo';
+import {axiosService} from "@/api/http";
 
 window.empData = (empnm, empno, btn_id) => {
   //
@@ -183,6 +184,13 @@ window.empData = (empnm, empno, btn_id) => {
   }else{
     window.pms_manage.info.prcpe_nm = empnm
     window.pms_manage.info.prcpe_no = empno
+  }
+}
+
+window.pmsRegisterData = (res) => {
+  //
+  if(res === 'insert' || res === 'update'){
+    window.pms_manage.checkRegisterData = true;
   }
 }
 
@@ -280,7 +288,32 @@ export default {
         return false;
       }
       let empnm = btn_id === 1 ? this.info.reqpe_nm : this.info.prcpe_nm
-      this.pop = window.open(`../PJTE9001/?bkup_id=${this.info.bkup_id_selected}&prjt_id=${this.info.prjt_nm_selected}&btn_id=${btn_id}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm,
+            prjt_id_selected : this.info.prjt_nm_selected
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.reqpe_no = res.data.data.contents[0].empno
+                  this.info.reqpe_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '2') {
+                  this.info.prcpe_no = res.data.data.contents[0].empno
+                  this.info.prcpe_nm = res.data.data.contents[0].empnm
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                window.open(`../PJTE9001/?bkup_id=${this.info.bkup_id_selected}&prjt_id=${this.info.prjt_nm_selected}&btn_id=${btn_id}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        window.open(`../PJTE9001/?bkup_id=${this.info.bkup_id_selected}&prjt_id=${this.info.prjt_nm_selected}&btn_id=${btn_id}&empnm=${empnm}`,"open_pjte9001", "width=700, height=600");
+      }
+
     },
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
@@ -348,6 +381,13 @@ export default {
 	// 특정 데이터에 실행되는 함수를 선언하는 부분
 	// newValue, oldValue 두개의 매개변수를 사용할 수 있음
 	watch:{
+    checkRegisterData() {
+      if(this.checkRegisterData){
+        this.$refs.grid.invoke("setRequestParams", this.info);
+        this.$refs.grid.invoke("readData");
+        this.checkRegisterData = false;
+      }
+    },
 		count: (a, b) => { 
 			console.log("count의 값이 변경되면 여기도 실행");
 			console.log("new Value :: " + a);
@@ -373,6 +413,7 @@ export default {
 	// 변수 선언부분
 	data() {
 		return {
+      checkRegisterData : false,
       comboList : ["C27","C0","C1","C10","C11"],
 				info : {
 
@@ -481,8 +522,8 @@ export default {
       ],
 			dataSource: {
 				api: {
-					readData: { url: 'http://localhost:8080/PJTE6000/select', method: 'GET' },
-					modifyData : { url: 'http://localhost:8080/PJTE6000/select', method: 'PUT'},
+					readData: { url: process.env.VUE_APP_API + '/PJTE6000/select', method: 'GET' },
+					modifyData : { url: process.env.VUE_APP_API + '/PJTE6000/select', method: 'PUT'},
 				},	
 				initialRequest: false,
 			},
@@ -514,12 +555,9 @@ export default {
             options:{
               listItems:
                   [
-                    {"text":" ","value":"NNN"},
-                    {"text":"관리","value":"EEE"},
-                    {"text":"공통","value":"DDD"},
-                    {"text":"신용조사","value":"AAA"},
-                    {"text":"재무제표","value":"BBB"},
-                    {"text":"신용평가","value":"CCC"}
+                    {"text":"PMO","value":"300"},
+                    {"text":"업무팀","value":"100"},
+                    {"text":"공통팀","value":"200"},
                   ]
             }
           }
