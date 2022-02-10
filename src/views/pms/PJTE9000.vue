@@ -1111,18 +1111,6 @@ export default {
           editor : 'text'
         },
         {
-          header: '이메일주소',
-          width: 120,
-          name: 'email_addr',
-          editor : 'text'
-        },
-        {
-          header: '휴대폰번호',
-          width: 120,
-          name: 'cpno',
-          editor : 'text'
-        },
-        {
           header: '로그인비밀번호',
           width: 120,
           name: 'lgn_pwd',
@@ -1168,7 +1156,7 @@ export default {
         {
           header: '권한구분코드',
           width: 120,
-          name: 'aud_cd',
+          name: 'aut_cd',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -1186,9 +1174,9 @@ export default {
           }
         },
         {
-          header: 'IP주소',
+          header: '투입프로젝트',
           width: 120,
-          name: 'ip_addr',
+          name: 'real_prjt_id',
           editor : 'text'
         },
         {
@@ -1222,6 +1210,24 @@ export default {
           name: 'real_thw_endt',
           format: 'yyyy-mm-dd',
           editor : 'datePicker'
+        },
+        {
+          header: '이메일주소',
+          width: 120,
+          name: 'email_addr',
+          editor : 'text'
+        },
+        {
+          header: '휴대폰번호',
+          width: 120,
+          name: 'cpno',
+          editor : 'text'
+        },
+        {
+          header: 'IP주소',
+          width: 120,
+          name: 'ip_addr',
+          editor : 'text'
         },
       ],
       columns2: [
