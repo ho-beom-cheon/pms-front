@@ -26,8 +26,8 @@
         <tr>
           <th>결함등록자</th>
           <td>
-            <input type="text" v-model="rgpe_nm" :disabled= true style="width: calc(50%); background-color: #f2f2f2;">
-            <input type="text" v-model="rgpe_no" :disabled= true style="width: calc(50%); background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_nm" :disabled= true style="width: 73px; background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_no" :disabled= true style="width: 73px; background-color: #f2f2f2;">
           </td>
           <th>결함등록일자</th>
           <td>
@@ -166,9 +166,9 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(1)" >
+              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
               <button class="search-btn2" @click="open_pjte9001(1)"></button>
-              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>
@@ -176,9 +176,9 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(2)">
+              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
               <button class="search-btn2" @click="open_pjte9001(2)"></button>
-              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>　　조치일자</th>
