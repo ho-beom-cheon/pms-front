@@ -243,27 +243,15 @@ import {axiosService} from "@/api/http";
 import axios from "axios";
 
 window.fileData = (fileLists) => {
-  console.log(fileLists);
+  // console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
 }
-
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-var prjt_id = [{text: "PMS프로젝트", value: "1000000001"}, {text: "PMS프로젝트2", value: "1000000002"}, {
-  text: "PMS프로젝트3",
-  value: "1000000003"
-}];
-var bkup_id = [{text: "백업", value: "0000000000"}];
 
 // 공지구분
 const ntar_bzcd = [
   {text: "프로젝트공지", value: '100'},
   {text: "업무공지", value: "200"},
 ];
-
-const ai = axios.create({
-  baseURL: "http://localhost:8080/PJTE1000/"
-});
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -276,37 +264,37 @@ export default {
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
   beforeCreate() {
-    console.log("beforeCreate");
+    // console.log("beforeCreate");
   },
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
-    console.log("created");
-    this.detail.ntar_bzcd_selected = this.$children[0].$data.ntar_bzcd_selected
+    // console.log("created");
   },
   beforeMount() {
-    console.log("beforeMount");
+    // console.log("beforeMount");
   },
   mounted() {
-    console.log("mounted");
+    // console.log("mounted");
     // 초기 설정
     this.init();
     // 그리드 조회
     this.fnSearch();
 
     window.pms_register = this;
+    this.setColumnHeaders()
   },
   beforeUpdate() {
-    console.log("beforeUpdate");
+    // console.log("beforeUpdate");
   },
   updated() {
-    console.log("updated");
+    // console.log("updated");
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
+    // console.log("beforeDestroy");
   },
   destroyed() {
-    console.log("destroyed");
+    // console.log("destroyed");
   },
 // 함수를 선언하는 부분
 // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
@@ -326,13 +314,6 @@ export default {
     },
     ntar_bzcd_change(params) {
       this.detail.ntar_bzcd_selected = params
-    },
-
-    // 콤보 처음 값 저장
-    comboSetData() {
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.detail.ntar_bzcd_change = this.$children[0].$data.ntar_bzcd_selected;
     },
 
     init() {
@@ -365,7 +346,7 @@ export default {
           if (confirm("정말 저장하시겠습니까??") == true) {
             // 관리ID가 없으면 INSERT
             if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
-              ai.post("/insert",
+              axiosService.post("/PJTE1000/insert",
                   {
                     bkup_id: this.detail.bkup_id_selected,               // (상세)백업ID
                     prjt_id: this.detail.prjt_nm_selected,               // (상세)프로젝트ID
@@ -395,7 +376,7 @@ export default {
               // 관리ID가 있으면 UPDATE
             } else {
               if (this.detail.rgs_no == sessionStorage.getItem("LOGIN_EMP_NO")) { // 공지 등록자가 본인인지 체크
-                ai.put("/update",
+                axiosService.put("/PJTE1000/update",
                     {
                       bkup_id: this.detail.bkup_id_selected,                // (상세)백업ID
                       prjt_id: this.detail.prjt_nm_selected,                // (상세)프로젝트ID
@@ -452,7 +433,24 @@ export default {
       // TO-DO현황 ROW클릭 시 클릭한ROW의 rowNum으로 TO-DO상세내역 재조회
       if (ev.columnName == 'todo_nm' || ev.columnName == 'proc_cnt') {
         this.info.gubun = "2"
-        this.info.rowNum = ev.rowKey;
+
+        // TO-DO상세내역 그리드 타이틀 변경 (todo_cd에 따라)
+        let todo_cd = this.$refs.grid1.invoke("getValue",ev.rowKey,"todo_cd")
+        if(todo_cd == '10' || todo_cd == '11'|| todo_cd == '12'|| todo_cd == '13'){
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '진행내용'})
+        } else if(todo_cd == '20' || todo_cd == '21'|| todo_cd == '22'|| todo_cd == '23') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '미진사유'})
+        } else if(todo_cd == '30' || todo_cd == '31'|| todo_cd == '32'|| todo_cd == '33') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '결함내용'})
+        } else if(todo_cd == '40' || todo_cd == '41') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '신청내용'})
+        } else if(todo_cd == '50') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '요청및조치내용'})
+        } else if(todo_cd == '60' || todo_cd == '61'|| todo_cd == '62') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '비고내용'})
+        } else {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
+        }
         this.$refs.grid2.invoke("setRequestParams", this.info);
         this.$refs.grid2.invoke("readData");
       }
@@ -478,6 +476,7 @@ export default {
       this.detail.org_file_nm = currentRowData.org_file_nm;              // (상세)원파일명
     },
     fnSearch() {
+
       /*조회 시 그리드 구분코드 this.info.gubun를 파라메터로 넘겨서 조회*/
       //그리드 1
       this.info.gubun = "1";
@@ -491,6 +490,27 @@ export default {
       this.info.gubun = "3"
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
+
+    },
+
+    setColumnHeaders() {
+      // TO-DO상세내역 그리드 타이틀 변경 (todo_cd에 따라)
+      let todo_cd = this.$refs.grid1.invoke("getValue",0,"todo_cd")
+      if(todo_cd == '10' || todo_cd == '11'|| todo_cd == '12'|| todo_cd == '13'){
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '진행내용'})
+      } else if(todo_cd == '20' || todo_cd == '21'|| todo_cd == '22'|| todo_cd == '23') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '미진사유'})
+      } else if(todo_cd == '30' || todo_cd == '31'|| todo_cd == '32'|| todo_cd == '33') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '결함내용'})
+      } else if(todo_cd == '40' || todo_cd == '41') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '신청내용'})
+      } else if(todo_cd == '50') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '요청및조치내용'})
+      } else if(todo_cd == '60' || todo_cd == '61'|| todo_cd == '62') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '비고내용'})
+      } else {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
+      }
     },
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
@@ -498,7 +518,7 @@ export default {
     },
     // 첨부파일등록 팝업 오픈
     open_file_page(num) {
-      console.log(num)
+      // console.log(num)
       let file_rgs_dscd = ''
       let atfl_mng_id = ''
       if (num == 1) {  // ProjectEyes가이드 파라미터 file_rgs_dscd = 902
@@ -550,9 +570,9 @@ export default {
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
+      // console.log("count의 값이 변경되면 여기도 실행");
+      // console.log("new Value :: " + a);
+      // console.log("old Value :: " + b);
     },
     file_name_list() {
       // 1. 첨부파일 1개만 보여줄 때
