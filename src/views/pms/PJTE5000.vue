@@ -183,19 +183,9 @@ const bzcd = [
   {text: "공통팀", value: "200"},
   {text: "PMO", value: "300"},
 ];
+
 // 관리구분
 const mng_cd = [
-  {text: " ", value: "NNN"},
-  {text: "테스트전", value: "000"},
-  {text: "테스트시작", value: "100"},
-  {text: "테스트자완료", value: "200"},
-  {text: "PL확인", value: "300"},
-  {text: "담당자확인", value: "400"},
-  {text: "현업확인", value: "500"},
-  {text: "테스트완료", value: "600"},
-];
-// 프로그램 세부 구분 
-const wbs_prc_sts_cd = [
   {text: " ", value: 'NNN'},
   {text: "WBS관리", value: "100"},
   {text: "이행관리", value: "200"},
@@ -263,27 +253,29 @@ export default {
     fnSave() {
       this.rowData = this.$refs.grid.invoke("getData")
 
-      axiosService.delete("/PJTE5000/delete",{
-        data: {
-          bkup_id : this.info.bkup_id_selected,
-          prjt_id : this.info.prjt_nm_selected,
-          bzcd : this.info.bzcd_selected,
-          mng_cd : this.info.wbs_mng_cd_selected,
-          mng_id : this.info.mng_cd_selected,
-          rowData : this.rowData,
-        },
-      }).then(res => {
-        console.log("Delete Success!")
-        axiosService.post("/PJTE5000/insert",{
-          rowData : this.rowData,
-        }).then(res => {
-          console.log("Insert Success!")
-          alert("저장이 완료되었습니다.")
-        }).catch(e => {
-        });
-      }).catch(e => {
-      });
-
+      if(this.rowData.length !== 0) {
+        if (this.vaildation(this.rowData) === true) {
+          axiosService.delete("/PJTE5000/delete", {
+            data: {
+              bkup_id: this.info.bkup_id_selected,
+              prjt_id: this.info.prjt_nm_selected,
+              bzcd: this.info.bzcd_selected,
+              mng_cd: this.info.wbs_prc_sts_cd_selected,
+              rowData: this.rowData,
+            },
+          }).then(res => {
+            console.log("Delete Success!")
+            axiosService.post("/PJTE5000/insert", {
+              rowData: this.rowData,
+            }).then(res => {
+              console.log("Insert Success!")
+              alert("저장이 완료되었습니다.")
+            }).catch(e => {
+            });
+          }).catch(e => {
+          });
+        }
+      }
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
@@ -303,7 +295,7 @@ export default {
       this.$refs.grid.invoke("readData");
       // 버튼 활성화
       if(this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
-          this.info.wbs_mng_cd_selected !== 'TTT' && this.info.wbs_prc_sts_cd_selected === 'TTT' &&
+          this.info.wbs_prc_sts_cd_selected !== 'TTT' && this.info.wbs_mng_cd_selected === 'TTT' &&
           this.info.crpe_nm === undefined && this.info.acl_sta_dt === null && this.info.acl_end_dt === null &&
           this.info.pln_sta_dt=== null && this.info.pln_end_dt === null){
         this.validated = false;
@@ -344,14 +336,14 @@ export default {
       // DB 데이터 삭제로직 추가
     },
     gridUpRow() {
-        this.upCount++;
-        this.upDownCount = (this.curRow + this.downCount) - this.upCount;
-        this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
+      this.upCount++;
+      this.upDownCount = (this.curRow + this.downCount) - this.upCount;
+      this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
     },
     gridDownRow() {
-        this.downCount++;
-        this.upDownCount = (this.curRow - this.upCount) + this.downCount ;
-        this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
+      this.downCount++;
+      this.upDownCount = (this.curRow - this.upCount) + this.downCount ;
+      this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
     },
     gridIns() {
       // DB 데이터 삭제로직 추가
@@ -389,7 +381,7 @@ export default {
                 totWgtRt = totWgtRt + wgtRt * prtRt
               }
             }
-              // 진행율결과값 셋팅
+            // 진행율결과값 셋팅
             this.$refs.grid.invoke("setValue", i, "prg_rt", totWgtRt);
 
           }
@@ -398,7 +390,44 @@ export default {
     },
     open_page() {
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
-    }
+    },
+    // 유효값 검증
+    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
+    vaildation(data) {
+      for(let i=0; i<data.length; i++){
+        /* 출력 영역  */
+        if(data[i].wbs_prc_sts_cd === null) { alert("관리구분코드는 필수 입력 사항입니다");      return false;}
+        if(data[i].bzcd === null)           { alert("업무구분코드는 필수 입력 사항입니다");      return false;}
+        if(data[i].level === null)          { alert("단계구분코드는 필수 입력 사항입니다");    return false;}
+        if(data[i].mng_cd === null)         { alert("관리ID는 필수 입력 사항입니다");   return false;}
+
+        if(data[i].acvt_nm === null)        { alert("ACTIVITY명은 필수 입력 사항입니다");  return false;}
+        if(data[i].task_nm === null)        { alert("테스크명은 필수 입력 사항입니다");   return false;}
+        if(data[i].crpe_nm === null)        { alert("담당자명은 필수 입력 사항입니다");   return false;}
+        if(data[i].mng_id === null)         { alert("처리단계는 필수 입력 사항입니다");      return false;}
+        if(data[i].pln_sta_dt === null)     { alert("계획시작일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].pln_sta_tim === null)    { alert("계획시작시간은 필수 입력 사항입니다");      return false;}
+        if(data[i].pln_end_dt === null)     { alert("계획종료일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].pnl_end_tim === null)    { alert("계획종료시간은 필수 입력 사항입니다");      return false;}
+
+        if(data[i].sort === null)           { alert("정렬은 필수 입력 사항입니다");   return false;}
+        if(data[i].prjt_id === null)        { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
+        if(data[i].wbs_cnt === null)        { alert("하위건수는 필수 입력 사항입니다");   return false;}
+
+        if(data[i].level >= '200') {
+          if (data[i].hgrn_mng_id === null) {alert("상위관리ID는 필수 입력 사항입니다"); return false;}
+        }
+        if(data[i].wbs_prc_sts_cd === '100') {
+          if(data[i].wgt_rt === null)         { alert("가중치는 필수 입력 사항입니다");   return false;}
+          if(data[i].prg_rt === null)         { alert("진행율은 필수 입력 사항입니다");   return false;}
+        }
+
+        // if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+        // if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+
+      }
+      return  true;
+    },
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분 
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음 
@@ -533,14 +562,14 @@ export default {
           width: 100,
           minWidth: 50,
           maxWidth: 250,
-          name: 'wbs_prc_sts_cd',
+          name: 'mng_cd',
           align: 'center',
           disabled: true,
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: wbs_prc_sts_cd
+              listItems: mng_cd
             }
           }
         },
@@ -580,7 +609,7 @@ export default {
           header: '관리 ID',
           width: 130,
           align: 'center',
-          name: 'mng_cd',
+          name: 'mng_id',
         },
         {
           header: '상위관리 ID',
@@ -621,12 +650,12 @@ export default {
           header: '처리단계',
           width: 140,
           align: 'center',
-          name: 'mng_id',
+          name: 'wbs_prc_sts_cd',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: mng_cd
+              listItems: prc_step_cd
             }
           }
         },
