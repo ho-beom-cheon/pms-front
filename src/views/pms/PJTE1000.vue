@@ -153,7 +153,7 @@
                                placeholder="직원명"
                                id="id.rgs_nm"
                                v-model="detail.rgs_nm"
-                               style="width: 80px; background-color: #f2f2f2;"
+                               style="width: 81px; background-color: #f2f2f2;"
                                :disabled=true
                         >
                       </div>
@@ -163,7 +163,7 @@
                              placeholder="직원번호"
                              id="id.rgs_no"
                              v-model="detail.rgs_no"
-                             style="width: 80px; background-color: #f2f2f2;"
+                             style="width: 81px; background-color: #f2f2f2;"
                              :disabled=true
                       >
                     </li>
@@ -172,13 +172,13 @@
                     <li class="filter-item" style="width: 40px">
                       <label>　제목</label>
                     </li>
-                    <li class="filter-item">
-                      <div class="item-con" style="margin-right: 15px">
+                    <li class="filter-item" style=" width:calc(60%)">
+                      <div class="item-con" style="margin-right: 15px;width:calc(100%)">
                           <input type="text"
                                  placeholder="제목을 입력해주세요"
                                  v-model="detail.titl_txt"
                                  ref="titl_txt"
-                                 style   = "width: 578px;"
+                                 style   = " width: calc(100%);"
                           >
                       </div>
                     </li>
@@ -416,7 +416,13 @@ export default {
                     .then(res => {
                       if (res.status == 200) {
                         // console.log(res.data);
-                        alert("공지사항 수정 성공.");
+
+                        if(this.detail.del_yn == true) {
+                          alert("공지사항 삭제 성공.");
+                          this.fnClear()
+                        } else {
+                          alert("공지사항 수정 성공.");
+                        }
                         //update 후 재조회
                         this.$refs.grid3.invoke("reloadData");
                       }
@@ -480,6 +486,7 @@ export default {
         this.curRow = ev.rowKey;
         const currentRowData = (this.$refs.grid3.invoke("getRow", this.curRow));
         if (currentRowData != null) {
+          this.detail.del_yn = false                                    // 공지사항 삭제 체크박스
           this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
         }
       }
