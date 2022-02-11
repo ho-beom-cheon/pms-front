@@ -100,18 +100,6 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <Modal :show.sync="modals.txt_modal1">
-          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
-          <tr>
-            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
-          </tr>
-          <tr>
-            <div style="float: right">
-              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
-              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
-            </div>
-          </tr>
-        </Modal>
         <div class="multiGridWrap">
           <div class="div1">
             <div class="div-header"><h2>업무별 개발현황</h2>
@@ -215,7 +203,6 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
-import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 
@@ -250,7 +237,6 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
-    Modal,
     grid: Grid,
   },
   beforeCreate() {
@@ -317,22 +303,8 @@ export default {
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
-
-      const currentCellData = (this.$refs.grid4.invoke("getFocusedCell"));
-      if(ev.columnName == 'nprrn') {  // 컬럼명이 <비고>일 때만 팝업
-        this.modals.txt_modal1 = true;
-        this.modalTxt = currentCellData.value;
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      }
-    },
-    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-      this.$refs.grid4.invoke("setValue", this.curRow, "nprrn", document.getElementById("modalId").value);
-      this.modals.txt_modal1 = false;
     },
 
-    fnCloseModal(){  // 모달창 닫기
-      this.modals.txt_modal1 = false;
-    },
     fnSearch() {
       this.info.gubun = "1";
       this.$refs.grid1.invoke("setRequestParams", this.info);
@@ -391,12 +363,6 @@ export default {
         proc_days           : '',
         err_proc_days       : '',
       },
-
-      /* 그리드 상세보기 모달 속성 */
-      modals: {
-        txt_modal1: false,
-      },
-      modalTxt:this.modalTxt,
 
       addRow : {
         grid1 : this.grid1,
