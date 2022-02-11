@@ -58,8 +58,12 @@
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
         <ul class="filter-btn">
+          <button class="btn btn-filter-d"
+                  style="margin-left: 10px;"
+                  @click="open_file_page(3)">설계산출물 양식 ⓘ
+          </button>
           <button class="btn btn-filter-p"
-                  style="margin-left: 10px; background-color: #9FC93C"
+                  style=" background-color: #9FC93C"
                   @click="open_file_page(1)">ProjectEyes 가이드 ⓘ
           </button>
         </ul>
@@ -522,6 +526,9 @@ export default {
       } else if (num == 2) {   // 공지사항첨부파일 파라미터 file_rgs_dscd = 600
         file_rgs_dscd = '600'
         atfl_mng_id = this.detail.atfl_mng_id
+      } else if (num == 3) {   // 공지사항첨부파일 파라미터 file_rgs_dscd = 600
+        file_rgs_dscd = '900'
+        atfl_mng_id = '0000000000'
       }
       let bkup_id = '0000000000', prjt_id = this.detail.prjt_nm_selected, mng_id = this.detail.mng_id
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
