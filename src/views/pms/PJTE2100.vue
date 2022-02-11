@@ -141,9 +141,12 @@
           </ul>
           <div class="mt-1">
             <ul class="filter-btn">
-              <button class="btn btn-filter-d" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</button>
+              <button class="btn btn-filter-d" @click="formDownload">TC증빙 일괄다운로드ⓘ</button>
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀업로드</button>
+              <button class="btn btn-filter-e">
+                 <label for="file">엑셀업로드</label>
+                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
+               </button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
               <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
               <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
@@ -185,6 +188,8 @@
               :rowHeaders="rowHeaders"
               @click="onClick"
               @dblclick="dbClick"
+              @onGridUpdated="onGridUpdated"
+              @beforeExport="beforeExport"
           ></grid>
         </div>
       </section>
@@ -196,9 +201,11 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import { Grid } from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
+import XLSX from "xlsx";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+import axios from "axios";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
@@ -275,12 +282,6 @@ const dvlp_dis_cd = [
   {"text":"삭제","value":"900"}
 ]
 
-const dvlp_dis_cd2 = [
-  {"text":" ","value":"NNN"},
-  {"text":"신규","value":"100"},
-  {"text":"변경","value":"200"},
-  {"text":"이행","value":"300"},
-]
 const prc_step_cd = [
   {"text":" ","value":"NNN"},
   {"text":"개발전","value":"000"},
@@ -379,66 +380,98 @@ export default {
     },
     // 저장 버튼
     fnSave(){
-      // 변경 사항 유무 체크
-      if(this.$refs.grid.invoke("isModified") === false){
-        alert("변경된 내용이 없습니다.");
-        return;
-      }
-      // 데이터 로그 확인
-      console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
-      console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
-      console.log("deletedRows ::" ,this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      if(this.excelUplod === 'Y') {
+        this.gridData = this.$refs.grid.invoke("getData");
 
-      // 변경 데이터 저장
-      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-      this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
-      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
-
-      if(this.createdRows.length !== 0){
-        if(this.vaildation(this.createdRows, "1") === true){
-          try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-            // create api 요청
-            this.$refs.grid.invoke("request", "createData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
-          } catch (e){
-            console.log(e);
+        axiosService.post("/PJTE2100/create", {
+          excelUplod : this.excelUplod,
+          gridData: this.gridData,
+          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
+        }).then(res => {
+          console.log(res);
+          if (res.data) {
+            alert("저장이 완료되었습니다.");
           }
-        } else {
-          this.$refs.grid.invoke("reloadData");
+        })
+      } else if(this.excelUplod === 'N') {
+
+        // 변경 사항 유무 체크
+        if (this.$refs.grid.invoke("isModified") === false) {
+          alert("변경된 내용이 없습니다.");
+          return;
         }
-      }
-      if(this.updatedRows.length !== 0){
-        if(this.vaildation(this.updatedRows, "1") === true) {
+        // 데이터 로그 확인
+        console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
+        console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
+        console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+
+        // 변경 데이터 저장
+        this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+        this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
+        this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
+
+        if (this.createdRows.length !== 0) {
+          if (this.vaildation(this.createdRows, "1") === true) {
+            if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+              for(let i=0; i<this.createdRows.length; i++){
+                if(this.createdRows[i].dvlp_dis_cd === "900"){
+                  alert("개발구분 삭제 권한이 없습니다.");
+                  return;
+                }
+              }
+            }
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
+              // create api 요청
+              this.$refs.grid.invoke("request", "createData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            this.$refs.grid.invoke("reloadData");
+          }
+        }
+        if (this.updatedRows.length !== 0) {
+          if (this.vaildation(this.updatedRows, "1") === true) {
+            try {
+              if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+                for(let i=0; i<this.updatedRows.length; i++){
+                  if(this.updatedRows[i].dvlp_dis_cd === "900"){
+                    alert("삭제 권한이 없습니다.");
+                    return;
+                  }
+                }
+              }
+              // 데이터 파라메타 전달
+              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+              this.$refs.grid.invoke("setRequestParams", this.login);
+              // update api 요청
+              this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+            } catch (e) {
+              console.log("업데이트 오류 ::", e);
+            }
+          } else {
+            this.$refs.grid.invoke("reloadData");
+          }
+        }
+        if (this.deletedRows.length !== 0) {
           try {
             // 데이터 파라메타 전달
-
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-            this.$refs.grid.invoke("setRequestParams", this.login);
-            // update api 요청
-            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
+            // delete api 요청
+            this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
             alert("저장이 완료되었습니다.")
           } catch (e) {
-            console.log("업데이트 오류 ::", e);
+            console.log(e);
           }
-        } else {
-          this.$refs.grid.invoke("reloadData");
-        }
-      }
-      if(this.deletedRows.length !== 0){
-        try {
-          // 데이터 파라메타 전달
-          this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
-          // delete api 요청
-          this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-          alert("저장이 완료되었습니다.")
-        } catch (e){
-          console.log(e);
         }
       }
       // 저장 후 변경 데이터 배열 비움
       this.$refs.grid.invoke("clearModifiedData")
+      this.excelUplod = 'N'
     },
     // 기타 항목 저장
     fnEtcSave() {
@@ -468,6 +501,12 @@ export default {
       // 저장 후 변경 데이터 배열 비움
       this.$refs.grid.invoke("clearModifiedData")
     },
+    onGridUpdated(grid){
+
+    },
+    beforeExport(grid){
+        console.log("beforeExport::" , grid)
+    },
     // 클릭 이벤트
     onClick(ev) {
       // 현재 Row 가져오기
@@ -476,19 +515,19 @@ export default {
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
-      if(ev.columnName === 'atfl_mng_id_yn') {
+      if(ev.columnName === 'atfl_mng_id_yn' && this.addCheak === 'N') {
         this.count = 1
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
-      if(ev.columnName === 'pal_atfl_mng_id_yn') {
+      if(ev.columnName === 'pal_atfl_mng_id_yn' && this.addCheak === 'N') {
         this.count = 2
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, pal_atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${pal_atfl_mng_id}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
-      if(ev.columnName === 'err_btn') {
+      if(ev.columnName === 'err_btn' && this.addCheak === 'N') {
         let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_id');
         let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_nm');
         let cctn_bzcd= this.$refs.grid.invoke("getValue", this.curRow, 'bzcd');
@@ -570,6 +609,7 @@ export default {
     },
     // 행추가
     gridAddRow(){
+      this.addCheak = 'Y';
       this.$refs.grid.invoke("appendRow",
           {
             bzcd    : sessionStorage.getItem("LOGIN_BZCD"),
@@ -584,7 +624,12 @@ export default {
     fnEnable() {
       // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
-      this.$refs.grid.invoke("enableRow", this.NewRow-1, {withCheckbox: true});
+      this.$refs.grid.invoke("enableRow", this.NewRow-1);
+      this.$refs.grid.invoke("enableCell", this.NewRow-1, "pgm_id");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "pal_atfl_mng_id_yn");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "atfl_mng_id_yn");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "err_btn");
+
     },
 
     // 행삭제
@@ -593,15 +638,77 @@ export default {
         alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
         return;
       }
+      this.addCheak = 'N'
       this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm:false});
     },
     // 엑셀 다운로드
     gridExcelExport(){
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true, onlySelected:true});
     },
-    // 엑셀파일 업로드(미완성)
-    gridExcelImport(){
-      this.$refs.grid.invoke("import", "xlsx", {fileName:"엑셀업로드"});
+    // 엑셀파일 업로드
+    gridExcelImport(event){
+      // 엑셀파일 업로드 로직 추가
+      console.log(event.target.files[0])
+      this.file = event.target.files ? event.target.files[0] : null;
+      let input = event.target;
+      let reader = new FileReader();
+      reader.onload = () => {
+        let fileData = reader.result;
+        let wb = XLSX.read(fileData, {type: 'binary'});
+        let gridExcelData;
+
+        wb.SheetNames.forEach((sheetName, idx) => {
+            if (sheetName === '개발현황') {
+              console.log(wb.Sheets[sheetName])
+              wb.Sheets[sheetName].A1.w = "NO"
+              wb.Sheets[sheetName].B1.w = "bzcd"
+              wb.Sheets[sheetName].C1.w = "pgm_id"
+              wb.Sheets[sheetName].D1.w = "pgm_nm"
+              wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
+              wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
+              wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
+              wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
+              wb.Sheets[sheetName].I2.w = "frcs_end_dt"
+              wb.Sheets[sheetName].J2.w = "sta_dt"
+              wb.Sheets[sheetName].K2.w = "end_dt"
+              wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
+              wb.Sheets[sheetName].N1.w = "prc_step_cd"
+              wb.Sheets[sheetName].O1.w = "prg_txt"
+              wb.Sheets[sheetName].P2.w = "dvlpe_nm"
+              wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
+              wb.Sheets[sheetName].R2.w = "dvlpe_no"
+              wb.Sheets[sheetName].S2.w = "pl_nm"
+              wb.Sheets[sheetName].T2.w = "pl_btn"
+              wb.Sheets[sheetName].U2.w = "pl_no"
+              wb.Sheets[sheetName].V2.w = "crpe_nm"
+              wb.Sheets[sheetName].W2.w = "crpe_btn"
+              wb.Sheets[sheetName].X2.w = "crpe_no"
+              wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
+              wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
+              wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
+              wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
+              wb.Sheets[sheetName].AC2.w = "err_btn"
+              wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
+              wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
+              wb.Sheets[sheetName].AF1.w = "rmrk"
+
+              let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+              let rowObj_copy = [];
+              for(let n=1; n<rowObj.length; n++){
+                rowObj_copy[n-1] = rowObj[n];
+              }
+              debugger
+              gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+              console.log("gridExcelData ::", gridExcelData)
+          }
+        })
+        this.excelUplod = 'Y'
+        alert('업로드 파일이 적용되었습니다.')
+        this.$refs.grid.invoke('resetData', gridExcelData)
+      };
+      reader.readAsBinaryString(input.files[0]);
+      event.target.value = '';
     },
     // 직원조회 팝업 (검색 필터)
     open_pjte9001(btn_id) {
@@ -658,6 +765,7 @@ export default {
       for(let i=0; i<data.length; i++){
         // 저장과 기타항목수정 분류
         if(division === "1") {
+
           /* 권한 ID에 따른 처리단계 체크 */
           if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
             if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
@@ -681,6 +789,9 @@ export default {
             }
           }
           //권한ID[500:PM,600:PMO] - 모두 가능
+
+          if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+          if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
         }
         /* 출력 영역  */
         if(data[i].bzcd === null)         { alert("업무구분은 필수 입력 사항입니다");      return false;}
@@ -697,8 +808,7 @@ export default {
         if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
         if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
 
-        if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-        if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+
 
       }
       return  true;
@@ -767,6 +877,10 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C2","C3","C4"],
+
+      gridData: [],
+      excelUplod: 'N',
+      addCheak: 'N',
 
       /*직원조회 팝업 변수*/
       emp_btn_id          : '',  // 직원조회팝업 버튼ID
@@ -846,7 +960,7 @@ export default {
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
-      open: true,
+      editingEvent : "click",
       // toast ui grid 데이터
       dataSource: {
         api: {
@@ -869,12 +983,12 @@ export default {
         complexColumns: [
           {header: '계획',             name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '실적',             name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt']},
-          {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_nm', 'dvlpe_btn','dvlpe_no'], hideChildHeaders : true},
-          {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], hideChildHeaders : true},
-          {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], hideChildHeaders : true},
-          {header: '단위테스트케이스',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn']},
-          {header: '설계서',           name: 'mergeColumn8', childNames: ['pal_atfl_mng_id_yn']},
+          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt'], headerAlign:'center'},
+          {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},
+          {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], headerAlign:'center'},
+          {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], headerAlign:'center'},
+          {header: '단위테스트케이스',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn'], headerAlign:'center'},
+          {header: '설계서',           name: 'mergeColumn8', childNames: ['pal_atfl_mng_id_yn'], headerAlign:'center'},
         ]
       },
       columns: [
@@ -900,6 +1014,8 @@ export default {
           align: 'left',
           name: 'pgm_id',
           ellipsis : true,
+          editor: "text",
+          disabled: true,
         },
         {
           header: '프로그램명',
@@ -926,7 +1042,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? dvlp_dis_cd : dvlp_dis_cd2
+              listItems: dvlp_dis_cd
             }
           },
         },
@@ -1004,62 +1120,69 @@ export default {
           }
         },
         {
-          header: '개발자',
+          header: '진행현황',
+          width: 250,
+          align: 'center',
+          name: 'prg_txt',
+          editor: 'text',
+        },
+        {
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
         },
         {
-          header: '개발자',
+          header: ' ',
           width: 50,
           align: 'center',
           name: 'dvlpe_btn',
           renderer: SearchBtn,
         },
         {
-          header: '개발자',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
           editor: 'text',
         },
         {
-          header: 'PL명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'pl_nm',
           editor: 'text',
         },
         {
-          header: 'PL명',
+          header: ' ',
           width: 50,
           align: 'center',
           name: 'pl_btn',
           renderer: SearchBtn,
         },
         {
-          header: 'PL번호',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'pl_no',
         },
         {
-          header: '담당자명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
         },
         {
-          header: '담당자명',
+          header: ' ',
           width: 50,
           align: 'center',
           name: 'crpe_btn',
           renderer: SearchBtn,
         },
         {
-          header: '담당자번호',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'crpe_no',
