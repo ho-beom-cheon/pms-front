@@ -242,6 +242,7 @@
                     </select>
                   </div>
                 </li>
+
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>*처리단계</label>
@@ -663,91 +664,95 @@ export default {
       document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
     },
     fnSave() {
-      //필수항목 확인
-      if (this.checkPrimary() == true) {
-        //확인창
-        if (confirm("정말 저장하시겠습니까??") == true) {
-          // 관리ID가 없으면 INSERT
-          if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
+      //백업ID가 현재 일 때만 저장
+      if (this.detail.bkup_id_selected == '0000000000') {
+        //필수항목 확인
+        if (this.checkPrimary() == true) {
+          //확인창
+          if (confirm("정말 저장하시겠습니까??") == true) {
+            // 관리ID가 없으면 INSERT
+            if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
 
-            axiosService.post("/PJTE4000/insert",
-                {
-                  rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
-                  titl_nm: this.detail.titl_nm,                       // (상세)제목
-                  req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
-                  req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
-                  rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                  achi_nm: this.detail.achi_nm,                       // (상세)요청자
-                  prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
-                  tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
-                  ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
-                  ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
-                  ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                  ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
-                  slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
-                  ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
-                  gd_txt: this.detail.gd_txt,                           // (상세)등급
-                  urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
-                  rmrk: this.detail.rmrk,                               // (상세)비고
-                  login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                  bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
-                  prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
-                  mng_id: this.detail.mng_id,                           // (상세)관리ID
-                }
-            )
-                .then(res => {
-                  if (res.status == 200) {
-                    // console.log(res.data);
+              axiosService.post("/PJTE4000/insert",
+                  {
+                    rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
+                    titl_nm: this.detail.titl_nm,                       // (상세)제목
+                    req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
+                    req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
+                    rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
+                    achi_nm: this.detail.achi_nm,                       // (상세)요청자
+                    prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
+                    tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
+                    ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
+                    ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
+                    ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
+                    ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
+                    slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
+                    ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
+                    gd_txt: this.detail.gd_txt,                           // (상세)등급
+                    urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
+                    rmrk: this.detail.rmrk,                               // (상세)비고
+                    login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
+                    bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
+                    prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
+                    mng_id: this.detail.mng_id,                           // (상세)관리ID
                   }
-                }).catch(e => {
-              alert("필수값을 입력해주세요.");
-            })
+              )
+                  .then(res => {
+                    if (res.status == 200) {
+                      alert("신규 저장이 완료되었습니다.");
+                      //insert 후 재조회
+                      this.$refs.grid.invoke("reloadData");
+                    }
+                  }).catch(e => {
+                alert("신규 저장에 실패하였습니다.");
+              })
 
-            // 관리ID가 있으면 UPDATE
-          } else {
+              // 관리ID가 있으면 UPDATE
+            } else {
 
-            axiosService.put("/PJTE4000/update",
-                {
-                  rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
-                  titl_nm: this.detail.titl_nm,                       // (상세)제목
-                  req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
-                  req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
-                  rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                  achi_nm: this.detail.achi_nm,                       // (상세)요청자
-                  prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
-                  tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
-                  ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
-                  ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
-                  ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                  ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
-                  slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
-                  ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
-                  gd_txt: this.detail.gd_txt,                           // (상세)등급
-                  urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
-                  rmrk: this.detail.rmrk,                               // (상세)비고
-                  login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                  bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
-                  prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
-                  mng_id: this.detail.mng_id,                           // (상세)관리ID
-                }
-            )
-                .then(res => {
-                  if (res.status == 200) {
-                    // console.log(res.data);
+              axiosService.put("/PJTE4000/update",
+                  {
+                    rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
+                    titl_nm: this.detail.titl_nm,                       // (상세)제목
+                    req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
+                    req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
+                    rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
+                    achi_nm: this.detail.achi_nm,                       // (상세)요청자
+                    prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
+                    tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
+                    ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
+                    ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
+                    ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
+                    ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
+                    slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
+                    ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
+                    gd_txt: this.detail.gd_txt,                           // (상세)등급
+                    urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
+                    rmrk: this.detail.rmrk,                               // (상세)비고
+                    login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
+                    bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
+                    prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
+                    mng_id: this.detail.mng_id,                           // (상세)관리ID
                   }
-                }).catch(e => {
-              alert("저장 실패.");
-            })
+              )
+                  .then(res => {
+                    if (res.status == 200) {
+                      alert("저장이 완료되었습니다.");
+                      //update 후 재조회
+                      this.$refs.grid.invoke("reloadData");
+                    }
+                  }).catch(e => {
+                alert("저장에 실패하였습니다.");
+              })
+            }
+          } else {   //취소
+            return;
           }
-          //update / insert 후 재조회
-          this.$refs.grid.invoke("reloadData");
-        } else {   //취소
-          return;
         }
       } else {
-
+        alert('백업정보는 저장할 수 없습니다.');
       }
-
     },
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
       this.detail.rgs_dis_cd_selected = rgs_dis_cd[0].value       // (상세)관리구분
@@ -1043,7 +1048,7 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 40
+        height: 25
       },
       columns: [
         {

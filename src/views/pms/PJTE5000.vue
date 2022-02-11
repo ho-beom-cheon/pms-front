@@ -96,12 +96,12 @@
           </ul>
           <ul class="filter-btn">
             <button class="btn btn-filter-p" @click="prgRtCalc" :disabled="validated">진행률계산</button>
-            <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated" style="margin-left: 20px"> 엑셀업로드</button>
+            <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated_aut" style="margin-left: 20px"> 엑셀업로드</button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" @click="gridUpRow" :disabled="validated" style="margin-left: 20px">+ 행위로</button>
-            <button class="btn btn-filter-b" @click="gridDownRow" :disabled="validated">- 행아래</button>
-            <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="validated">행추가</button>
-            <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
+            <button class="btn btn-filter-b" @click="gridUpRow" :disabled="validated_aut" style="margin-left: 20px">+ 행위로</button>
+            <button class="btn btn-filter-b" @click="gridDownRow" :disabled="validated_aut">- 행아래</button>
+            <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="validated_aut">행추가</button>
+            <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated_aut">행삭제</button>
             <button class="btn btn-filter-p" @click="fnSave" :disabled="validated" style="margin-left: 20px">저장</button>
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
@@ -330,7 +330,7 @@ export default {
       this.downCount = 0;
 
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
-      if(ev.columnName === 'atfl_mng_id_yn') {
+      if(ev.columnName === 'atfl_mng_id_yn' && this.addCheak === 'N') {
         this.count = 1
         debugger
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='700', bzcd = gridData.bzcd, mng_id=gridData.mng_id, mng_cd=gridData.mng_cd
@@ -353,10 +353,15 @@ export default {
           this.info.crpe_nm === undefined && this.info.acl_sta_dt === null && this.info.acl_end_dt === null &&
           this.info.pln_sta_dt=== null && this.info.pln_end_dt === null)
       {
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+          this.validated_aut = false;
+        }
         this.validated = false;
       } else {
         this.validated = true;
+        this.validated_aut = true;
       }
+
     },
     open_pjte9001() {
       this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");
@@ -374,6 +379,7 @@ export default {
 
     },
     gridAddRow() {
+      this.addCheak = 'y';
       this.$refs.grid.invoke("appendRow",
           {
             bzcd    : this.info.bzcd_selected,
@@ -386,6 +392,9 @@ export default {
       let gridData = this.$refs.grid.invoke("getData")
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"step_cd");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"mng_id");
+      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"prg_rt");
+      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_end_tim");
+      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_sta_tim");
     },
     gridDelRow() {
       this.$refs.grid.invoke("removeRow", this.curRow);
@@ -503,10 +512,12 @@ export default {
   data() {
     return {
       validated : true,
+      validated_aut : true,
       comboList : ["C27","C0","C1","C19","C35"],
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       flag                : 'N', //진행율 계산 체크
+      addCheak            : 'N', // 행추가 체크
 
       info: {
         pgm_id: this.pgm_id,    // 프로그램ID
@@ -549,7 +560,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 610,
+      bodyHeight: 700,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
@@ -717,6 +728,7 @@ export default {
           width: 60,
           align: 'center',
           name: 'atfl_mng_id_yn',
+          defaultValue: '미첨부',
         },
         {
           header: '첨부',

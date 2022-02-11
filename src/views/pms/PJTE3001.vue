@@ -26,8 +26,8 @@
         <tr>
           <th>결함등록자</th>
           <td>
-            <input type="text" v-model="rgpe_nm" :disabled= true style="width: 73px; background-color: #f2f2f2;">
-            <input type="text" v-model="rgpe_no" :disabled= true style="width: 73px; background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_nm" :disabled= true style="width: calc(50%); background-color: #f2f2f2;">
+            <input type="text" v-model="rgpe_no" :disabled= true style="width: calc(50%); background-color: #f2f2f2;">
           </td>
           <th>결함등록일자</th>
           <td>
@@ -166,9 +166,9 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(1)" >
+              <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(1)" >
               <button class="search-btn2" @click="open_pjte9001(1)"></button>
-              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>
@@ -176,16 +176,16 @@
           </th>
           <td>
             <div class="input-searchWrap">
-              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: 92px;" @keyup.enter="open_pjte9001(2)">
+              <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(2)">
               <button class="search-btn2" @click="open_pjte9001(2)"></button>
-              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: 64px; background-color: #f2f2f2;" disabled = true >
+              <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
           <th>　　조치일자</th>
           <td>
             <div class="input-dateWrap">
-<!--              <input v-if="mng_id" type="date" v-model="ttmn_dt">-->
-<!--              <input v-else type="date" v-model="ttmn_dt" disabled=true style="background-color: #f2f2f2;">-->
+              <!--              <input v-if="mng_id" type="date" v-model="ttmn_dt">-->
+              <!--              <input v-else type="date" v-model="ttmn_dt" disabled=true style="background-color: #f2f2f2;">-->
               <input type="date" v-model="ttmn_dt" ref="ttmn_dt" disabled=true style="background-color: #f2f2f2;">
             </div>
           </td>
@@ -256,10 +256,14 @@ export default {
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
-    // console.log("created");
+    // 팝업 콤보데이터 별도 조회(공통 컴포넌트 미사용)
     this.getCombo();
+    // mng_id가 있을 때 팝업 데이터 조회
     if(this.mng_id){
-      this.getRegisterData();  // 팝업 데이터 조회
+      this.getRegisterData();
+    // mng_id가 없을 때 신규 등록을 위한팝업 데이터 조회
+    } else {
+      this.getNewRegisterData();
     }
   },
   beforeMount() {
@@ -349,7 +353,7 @@ export default {
       window.close();
     },
 
-    // 데이터 조회
+    // mng_id가 있을 때 팝업 데이터 조회
     getRegisterData() {
       axiosService.get("/PJTE3001/select",{
         params : {
@@ -387,12 +391,38 @@ export default {
             this.cctn_sqn_cd = res_data.cctn_sqn_cd                     // 연결차수구분코드
           })
     },
-
+    //mng_id가 없을 때 신규 등록을 위한팝업 데이터 조회
+    getNewRegisterData() {
+      axiosService.get("/PJTE3001/setdata",{
+        params : {
+          bkup_id : this.bkup_id,
+          prjt_id : this.prjt_id,
+          cctn_bzcd : this.cctn_bzcd,
+          cctn_id : this.cctn_id,
+          cctn_sqn_cd : this.cctn_sqn_cd,
+          rgs_dscd : this.rgs_dscd_selected,
+        }
+      })
+          .then(res => {
+            let res_data = res.data.data.contents[0];
+            // console.log(res_data)
+            this.bzcd_selected = res_data.bzcd                          // 업무구분코드
+            this.cctn_id = res_data.cctn_id                             // 프로그램ID/테스트케이스ID
+            this.cctn_nm = res_data.cctn_nm                             // 프로그램명/테스트케이스명
+            this.dvlpe_nm = res_data.dvlpe_nm                           // 개발자명
+            this.dvlpe_no = res_data.dvlpe_no                           // 개발자번호
+            this.pl_nm = res_data.pl_nm                                 // PL명
+            this.pl_no = res_data.pl_no                                 // PL번호
+          })
+    },
     // 저장(신청 ID 없는 경우, insert 쿼리)
     saveRegisterData() {
       // 필수 항목 체크
       if(this.cctn_id === '' || this.cctn_id == null || this.cctn_id === undefined){
         alert('프로그램/테스트케이스ID이 없습니다.');
+        return false;
+      } else if (this.cctn_nm === '' || this.cctn_nm == null || this.cctn_nm === undefined) {
+        alert('프로그램/테스트케이스명이 없습니다.');
         return false;
       } else if (this.rgpe_no === '' || this.rgpe_no == null || this.rgpe_no === undefined) {
         alert('결함등록자가 없습니다.');
@@ -443,7 +473,7 @@ export default {
 
       })
           .then(res => {
-            // console.log(res);
+
             if(res.data){
               alert("저장되었습니다.");
               window.close();
@@ -513,7 +543,7 @@ export default {
           this.$refs.ttmn_dt.focus();
           return false;
         }
-      // 결함처리단계구분코드가 [500, 600]인 경우 : 조치내용 필수(보류인경우 보류 사유 입력)
+        // 결함처리단계구분코드가 [500, 600]인 경우 : 조치내용 필수(보류인경우 보류 사유 입력)
       } else if(this.err_prc_step_cd_selected == '600') {
         if(this.ttmn_txt === '' || this.ttmn_txt == null || this.ttmn_txt === undefined) {
           alert('조치내용을 입력해주세요.');
@@ -564,7 +594,7 @@ export default {
         cctn_sqn_cd : this.cctn_sqn_cd,                                // 연결차수구분코드
       })
           .then(res => {
-            // console.log(res);
+
             if(res.data){
               alert("저장되었습니다.");
               opener.parent.location.reload();
@@ -572,6 +602,7 @@ export default {
             }
           })
     },
+    //직원조회 팝업
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.prjt_id
@@ -586,8 +617,7 @@ export default {
           params: {
             empnm,
             prjt_id_selected,
-            bkup_id_selected
-          }
+            bkup_id_selected          }
         })
             .then(res => {
               let res_data = res.data.data.contents;
@@ -614,17 +644,12 @@ export default {
 
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
-// newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
     deep: true,
-    // We have to move our method to a handler field
     handler() {
-    // console.log('The list of colours has changed!');
     },
     count: (a, b) => {
-      // console.log("count의 값이 변경되면 여기도 실행");
-      // console.log("new Value :: " + a);
-      // console.log("old Value :: " + b);
+
     },
     /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
        버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
@@ -639,13 +664,7 @@ export default {
     },
 
     file_name_list() {
-      // 1. 첨부파일 1개만 보여줄 때
-      // if(document.getElementById('file-upload-btn')){
-      //   this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
-      // }
-      // if(document.getElementById('file-upload-btn2')){
-      //   this.ttmn_atfl_nm = this.file_name_list[0].org_file_nm
-      // }
+
       if(this.atfl_num == '1'){
         this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
         this.rgs_atfl_mng_id = this.file_name_list[1].atfl_mng_id
@@ -654,15 +673,6 @@ export default {
         this.ttmn_atfl_mng_id = this.file_name_list[1].atfl_mng_id
       }
 
-
-      // 2. 첨부파일 모두 보여줄 때
-      // this.file_name_list.map(e => {
-      //   if(this.rgs_atfl_nm === ''){
-      //     this.rgs_atfl_nm += e.rgs_atfl_nm
-      //   }else{
-      //     this.rgs_atfl_nm += ' / ' + e.rgs_atfl_nm
-      //   }
-      // })
     },
   },
 // 변수 선언부분
@@ -673,12 +683,7 @@ export default {
       emp_btn_id : '',  // 직원조회팝업 버튼ID
       emp_nm : '',      // 직원조회팝업 직원명
       emp_no : '',      // 직원조회팝업 직원번호
-      // emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
-      // emp_colName : '',  // 직원조회팝업 (그리드) colName
 
-      // bkup_id : '0000000000',   // 백업ID
-      // prjt_id : '1000000001',   // 프로젝트 ID
-      // mng_id : 'E100000000',     // 결함 ID
       bkup_id : this.$route.query.bkup_id,   // 백업ID
       prjt_id : this.$route.query.prjt_id,   // 프로젝트 ID
       mng_id : this.$route.query.mng_id,     // 결함 ID

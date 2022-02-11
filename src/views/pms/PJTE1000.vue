@@ -58,8 +58,12 @@
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
         <ul class="filter-btn">
+          <button class="btn btn-filter-d"
+                  style="margin-left: 10px;"
+                  @click="open_file_page(3)">설계산출물 양식 ⓘ
+          </button>
           <button class="btn btn-filter-p"
-                  style="margin-left: 10px; background-color: #9FC93C"
+                  style=" background-color: #9FC93C"
                   @click="open_file_page(1)">ProjectEyes 가이드 ⓘ
           </button>
         </ul>
@@ -174,12 +178,12 @@
                     </li>
                     <li class="filter-item">
                       <div class="item-con" style="margin-right: 15px">
-                          <input type="text"
-                                 placeholder="제목을 입력해주세요"
-                                 v-model="detail.titl_txt"
-                                 ref="titl_txt"
-                                 style   = "width: 578px;"
-                          >
+                        <input type="text"
+                               placeholder="제목을 입력해주세요"
+                               v-model="detail.titl_txt"
+                               ref="titl_txt"
+                               style="width: 578px;"
+                        >
                       </div>
                     </li>
                     <li v-if="this.detail.mng_id" class="filter-item">
@@ -243,12 +247,12 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 import {axiosService} from "@/api/http";
 import axios from "axios";
 
+// 첨부파일 데이터를 받아옴
 window.fileData = (fileLists) => {
-  // console.log(fileLists);
-  window.pms_register.file_name_list = fileLists;
+  window.pms_register.file_name_list = fileLists; // 받아온 데이터를 리스트에 저장
 }
 
-// 공지구분
+// 공지구분 데이터 (그리드)
 const ntar_bzcd = [
   {text: "프로젝트공지", value: '100'},
   {text: "업무공지", value: "200"},
@@ -260,10 +264,7 @@ export default {
     grid: Grid,
     Combo,
   },
-// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
-// "라이프사이클 훅"이라고 함.
-// 자세한 사항은 Vue 라이프 사이클 참조
-// https://kr.vuejs.org/v2/guide/instance.html
+
   beforeCreate() {
     // console.log("beforeCreate");
   },
@@ -276,12 +277,10 @@ export default {
     // console.log("beforeMount");
   },
   mounted() {
-    // console.log("mounted");
     // 초기 설정
     this.init();
     // 그리드 조회
     this.fnSearch();
-
     window.pms_register = this;
   },
   beforeUpdate() {
@@ -315,35 +314,33 @@ export default {
     ntar_bzcd_change(params) {
       this.detail.ntar_bzcd_selected = params
     },
-    // 그리드가 그려지고 바로 실행됨
-    onGridUpdate(grid) {
-      // 그리드 1의 첫번째  todo_cd로 그리드2 상세내용 컬럼명 변경
-      let todo_cd = this.$refs.grid1.invoke("getValue",0,"todo_cd")
-      if(todo_cd == '10' || todo_cd == '11'|| todo_cd == '12'|| todo_cd == '13'){
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '진행내용'})
-      } else if(todo_cd == '20' || todo_cd == '21'|| todo_cd == '22'|| todo_cd == '23') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '미진사유'})
-      } else if(todo_cd == '30' || todo_cd == '31'|| todo_cd == '32'|| todo_cd == '33') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '결함내용'})
-      } else if(todo_cd == '40' || todo_cd == '41') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '신청내용'})
-      } else if(todo_cd == '50') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '요청및조치내용'})
-      } else if(todo_cd == '60' || todo_cd == '61'|| todo_cd == '62') {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '비고내용'})
+
+    /* 그리드 1 의 첫번쩨 Row의 todo_cd에 따라
+       그리드 2의 TO-DO상세내역의 rmrk 컬럼의 헤더를 변경*/
+    onGridUpdate(grid) {  // onGridUpdate는 그리드가 그려지고 바로 실행됨
+      let todo_cd = this.$refs.grid1.invoke("getValue", 0, "todo_cd")
+      if (todo_cd == '10' || todo_cd == '11' || todo_cd == '12' || todo_cd == '13') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '진행내용'})
+      } else if (todo_cd == '20' || todo_cd == '21' || todo_cd == '22' || todo_cd == '23') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '미진사유'})
+      } else if (todo_cd == '30' || todo_cd == '31' || todo_cd == '32' || todo_cd == '33') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '결함내용'})
+      } else if (todo_cd == '40' || todo_cd == '41') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '신청내용'})
+      } else if (todo_cd == '50') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '요청및조치내용'})
+      } else if (todo_cd == '60' || todo_cd == '61' || todo_cd == '62') {
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '비고내용'})
       } else {
-        this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
+        this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '상세내용'})
       }
     },
 
     init() {
       // 특정 열 비활성화
       this.$refs.grid1.invoke("disable");
-      this.$refs.grid1.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       this.$refs.grid2.invoke("disable");
-      this.$refs.grid2.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       this.$refs.grid3.invoke("disable");
-      this.$refs.grid3.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid1.invoke("clear");
       this.$refs.grid2.invoke("clear");
@@ -359,25 +356,26 @@ export default {
       this.detail.del_yn = false                                        // 공지사항 삭제 체크박스
     },
     fnSave() {
+      //백업ID가 현재 일 때만 저장
       if (this.detail.bkup_id_selected == '0000000000') {
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
-          if (confirm("정말 저장하시겠습니까??") == true) {
+          if (confirm("정말 저장하시겠습니까?") == true) {
             // 관리ID가 없으면 INSERT
             if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
               axiosService.post("/PJTE1000/insert",
                   {
-                    bkup_id: this.detail.bkup_id_selected,               // (상세)백업ID
-                    prjt_id: this.detail.prjt_nm_selected,               // (상세)프로젝트ID
-                    ntar_bzcd: this.detail.ntar_bzcd_selected,           // (상세)공지구분
-                    mng_id: this.detail.mng_id,                          // (상세)관리ID
-                    rgs_dt: this.detail.rgs_dt,                          // (상세)공지일자
-                    titl_txt: this.detail.titl_txt,                      // (상세)제목내용
-                    ancpt: this.detail.ancpt,                            // (상세)공지내역
-                    rgs_no: this.detail.rgs_no,                          // (상세)등록자번호
-                    rgs_nm: this.detail.rgs_nm,                          // (상세)등록자명
-                    atfl_mng_id: this.detail.atfl_mng_id,                // (상세)첨부파일관리ID
+                    bkup_id: this.detail.bkup_id_selected,                    // (상세)백업ID
+                    prjt_id: this.detail.prjt_nm_selected,                    // (상세)프로젝트ID
+                    ntar_bzcd: this.detail.ntar_bzcd_selected,                // (상세)공지구분
+                    mng_id: this.detail.mng_id,                               // (상세)관리ID
+                    rgs_dt: this.detail.rgs_dt,                               // (상세)공지일자
+                    titl_txt: this.detail.titl_txt,                           // (상세)제목내용
+                    ancpt: this.detail.ancpt,                                 // (상세)공지내역
+                    rgs_no: this.detail.rgs_no,                               // (상세)등록자번호
+                    rgs_nm: this.detail.rgs_nm,                               // (상세)등록자명
+                    atfl_mng_id: this.detail.atfl_mng_id,                     // (상세)첨부파일관리ID
                     login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), // 직원번호
                     login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                   }
@@ -385,12 +383,12 @@ export default {
                   .then(res => {
                     if (res.status == 200) {
                       // console.log(res.data);
-                      alert("공지사항 추가 성공.");
+                      alert("신규 저장이 완료되었습니다.");
                       //insert 후 재조회
                       this.$refs.grid3.invoke("reloadData");
                     }
                   }).catch(e => {
-                alert("신규 저장 실패.");
+                alert("신규 저장에 실패하였습니다.");
               })
 
               // 관리ID가 있으면 UPDATE
@@ -398,33 +396,32 @@ export default {
               if (this.detail.rgs_no == sessionStorage.getItem("LOGIN_EMP_NO")) { // 공지 등록자가 본인인지 체크
                 axiosService.put("/PJTE1000/update",
                     {
-                      bkup_id: this.detail.bkup_id_selected,                // (상세)백업ID
-                      prjt_id: this.detail.prjt_nm_selected,                // (상세)프로젝트ID
-                      ntar_bzcd: this.detail.ntar_bzcd_selected,            // (상세)공지구분
-                      mng_id: this.detail.mng_id,                           // (상세)관리ID
-                      rgs_dt: this.detail.rgs_dt,                           // (상세)공지일자
-                      titl_txt: this.detail.titl_txt,                       // (상세)제목내용
-                      ancpt: this.detail.ancpt,                             // (상세)공지내역
-                      rgs_no: this.detail.rgs_no,                           // (상세)등록자번호
-                      rgs_nm: this.detail.rgs_nm,                           // (상세)등록자명
-                      atfl_mng_id: this.detail.atfl_mng_id,                 // (상세)첨부파일관리ID
-                      del_yn: this.detail.del_yn,                       // (상세)삭제여부체크박스
+                      bkup_id: this.detail.bkup_id_selected,                     // (상세)백업ID
+                      prjt_id: this.detail.prjt_nm_selected,                     // (상세)프로젝트ID
+                      ntar_bzcd: this.detail.ntar_bzcd_selected,                 // (상세)공지구분
+                      mng_id: this.detail.mng_id,                                // (상세)관리ID
+                      rgs_dt: this.detail.rgs_dt,                                // (상세)공지일자
+                      titl_txt: this.detail.titl_txt,                            // (상세)제목내용
+                      ancpt: this.detail.ancpt,                                  // (상세)공지내역
+                      rgs_no: this.detail.rgs_no,                                // (상세)등록자번호
+                      rgs_nm: this.detail.rgs_nm,                                // (상세)등록자명
+                      atfl_mng_id: this.detail.atfl_mng_id,                      // (상세)첨부파일관리ID
+                      del_yn: this.detail.del_yn,                                // (상세)삭제여부체크박스
                       login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), // 직원번호
                       login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                     }
                 )
                     .then(res => {
                       if (res.status == 200) {
-                        // console.log(res.data);
-                        alert("공지사항 수정 성공.");
+                        alert("저장이 완료되었습니다.");
                         //update 후 재조회
                         this.$refs.grid3.invoke("reloadData");
                       }
                     }).catch(e => {
-                  alert("저장 실패.");
+                  alert("저장에 실패하였습니다.");
                 })
               } else {
-                alert('수정 권한 없음.');
+                alert('해당공지에 대한 수정 권한이 없습니다.');
               }
             }
 
@@ -455,21 +452,21 @@ export default {
         this.info.gubun = "2"
 
         // TO-DO상세내역 그리드 타이틀 변경 (todo_cd에 따라)
-        let todo_cd = this.$refs.grid1.invoke("getValue",ev.rowKey,"todo_cd")
-        if(todo_cd == '10' || todo_cd == '11'|| todo_cd == '12'|| todo_cd == '13'){
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '진행내용'})
-        } else if(todo_cd == '20' || todo_cd == '21'|| todo_cd == '22'|| todo_cd == '23') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '미진사유'})
-        } else if(todo_cd == '30' || todo_cd == '31'|| todo_cd == '32'|| todo_cd == '33') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '결함내용'})
-        } else if(todo_cd == '40' || todo_cd == '41') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '신청내용'})
-        } else if(todo_cd == '50') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '요청및조치내용'})
-        } else if(todo_cd == '60' || todo_cd == '61'|| todo_cd == '62') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '비고내용'})
+        let todo_cd = this.$refs.grid1.invoke("getValue", ev.rowKey, "todo_cd")
+        if (todo_cd == '10' || todo_cd == '11' || todo_cd == '12' || todo_cd == '13') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '진행내용'})
+        } else if (todo_cd == '20' || todo_cd == '21' || todo_cd == '22' || todo_cd == '23') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '미진사유'})
+        } else if (todo_cd == '30' || todo_cd == '31' || todo_cd == '32' || todo_cd == '33') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '결함내용'})
+        } else if (todo_cd == '40' || todo_cd == '41') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '신청내용'})
+        } else if (todo_cd == '50') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '요청및조치내용'})
+        } else if (todo_cd == '60' || todo_cd == '61' || todo_cd == '62') {
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '비고내용'})
         } else {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk : '상세내용'})
+          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '상세내용'})
         }
         this.info.rowNum = ev.rowKey;
         this.$refs.grid2.invoke("setRequestParams", this.info);
@@ -529,6 +526,9 @@ export default {
       } else if (num == 2) {   // 공지사항첨부파일 파라미터 file_rgs_dscd = 600
         file_rgs_dscd = '600'
         atfl_mng_id = this.detail.atfl_mng_id
+      } else if (num == 3) {   // 공지사항첨부파일 파라미터 file_rgs_dscd = 600
+        file_rgs_dscd = '900'
+        atfl_mng_id = '0000000000'
       }
       let bkup_id = '0000000000', prjt_id = this.detail.prjt_nm_selected, mng_id = this.detail.mng_id
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
@@ -572,22 +572,12 @@ export default {
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      // console.log("count의 값이 변경되면 여기도 실행");
-      // console.log("new Value :: " + a);
-      // console.log("old Value :: " + b);
+
     },
     file_name_list() {
       // 1. 첨부파일 1개만 보여줄 때
       this.detail.org_file_nm = this.file_name_list[0].org_file_nm
 
-      // 2. 첨부파일 모두 보여줄 때
-      // this.file_name_list.map(e => {
-      //   if(this.org_file_nm === ''){
-      //     this.org_file_nm += e.org_file_nm
-      //   }else{
-      //     this.org_file_nm += ' / ' + e.org_file_nm
-      //   }
-      // })
     },
   },
 // 변수 선언부분
