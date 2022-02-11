@@ -352,12 +352,12 @@ export default {
         // fileName = decodeURI(fileName) // 파일명 디코딩 (프로젝트에 따라 사용여부 옵션)
 
         if (window.navigator.msSaveOrOpenBlob) { // IE 10+
-          window.navigator.msSaveOrOpenBlob(blob, fileName)
+          window.navigator.msSaveOrOpenBlob(blob, orgFileName)
         } else { // not IE
           let link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
           link.target = '_self'
-          if (fileName) link.download = fileName
+          if (fileName) link.download = orgFileName
           link.click()
         }
       })
