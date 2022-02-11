@@ -153,7 +153,8 @@ export default {
     getCombo(){
       axiosService.get("/PJTE9001/combo", {
         params: {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID")
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          bkup_id: this.bkup_id_selected
         }
       }).then(res => {
         this.setCombo(res.data.data);
@@ -303,6 +304,8 @@ export default {
                   [
                     {"text": "IE_기업신용평가 프로젝트", "value": "1000000001"},
                     {"text": "Project Eye시스템구축", "value": "1000000002"},
+                    {"text": "Project Eye관리", "value": "0000000000"},
+                    {"text": "아이티아이즈주간보고", "value": "0000000001"},
                   ]
             }
           }

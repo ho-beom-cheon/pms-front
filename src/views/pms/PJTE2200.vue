@@ -519,6 +519,7 @@ export default {
       if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
         let empnm = ''
         let prjt_id_selected = this.info.prjt_nm_selected
+        let bkup_id_selected = this.info.bkup_id_selected
         if(ev.columnName === 'dvlpe_btn'){
           empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_enm')
         } else if(ev.columnName === 'pl_btn') {
@@ -531,7 +532,8 @@ export default {
           axiosService.get("/PJTE9001/select", {
             params: {
               empnm,
-              prjt_id_selected
+              prjt_id_selected,
+              bkup_id_selected
             }
           })
               .then(res => {
@@ -540,18 +542,21 @@ export default {
                 if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                   if (ev.columnName == 'dvlpe_btn') {
                     this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_eno', res.data.data.contents[0].empno);
+                    this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_enm', res.data.data.contents[0].empnm);
                   } else if (ev.columnName == 'pl_btn') {
                     this.$refs.grid.invoke("setValue", this.curRow, 'pl_eno', res.data.data.contents[0].empno);
+                    this.$refs.grid.invoke("setValue", this.curRow, 'pl_enm', res.data.data.contents[0].empnm);
                   } else if (ev.columnName == 'crpe_btn') {
                     this.$refs.grid.invoke("setValue", this.curRow, 'crpe_eno', res.data.data.contents[0].empno);
+                    this.$refs.grid.invoke("setValue", this.curRow, 'crpe_enm', res.data.data.contents[0].empnm);
                   }
                 } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                  let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+                  let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
                   window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
                 }
               })
         } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-          let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
+          let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID'), emprow = ev.rowKey, empcol = ev.columnName
           window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
         }
       }
@@ -678,6 +683,7 @@ export default {
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.info.prjt_nm_selected
+      let bkup_id_selected = this.info.bkup_id_selected
       if (btn_id == '1') {
         empnm = this.info.dvlpe_enm
       } else if (btn_id == '2') {
@@ -689,7 +695,8 @@ export default {
         axiosService.get("/PJTE9001/select", {
           params: {
             empnm,
-            prjt_id_selected
+            prjt_id_selected,
+            bkup_id_selected
           }
         })
             .then(res => {
@@ -707,12 +714,12 @@ export default {
                   this.info.crpe_enm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     }

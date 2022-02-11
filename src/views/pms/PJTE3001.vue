@@ -443,7 +443,6 @@ export default {
 
       })
           .then(res => {
-            // console.log(res);
             if(res.data){
               alert("저장되었습니다.");
               window.close();
@@ -564,7 +563,6 @@ export default {
         cctn_sqn_cd : this.cctn_sqn_cd,                                // 연결차수구분코드
       })
           .then(res => {
-            // console.log(res);
             if(res.data){
               alert("저장되었습니다.");
               opener.parent.location.reload();
@@ -572,9 +570,12 @@ export default {
             }
           })
     },
+
+    //직원조회 팝업
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.prjt_id
+      let bkup_id_selected = this.bkup_id
       if (btn_id == '1') {
         empnm = this.dvlpe_nm
       } else if (btn_id == '2') {
@@ -584,7 +585,8 @@ export default {
         axiosService.get("/PJTE9001/select", {
           params: {
             empnm,
-            prjt_id_selected
+            prjt_id_selected,
+            bkup_id_selected
           }
         })
             .then(res => {
@@ -599,12 +601,12 @@ export default {
                   this.pl_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.bkup_id, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = '0000000000', prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.bkup_id, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },
@@ -612,17 +614,13 @@ export default {
 
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
-// newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
     deep: true,
-    // We have to move our method to a handler field
     handler() {
-    // console.log('The list of colours has changed!');
+
     },
     count: (a, b) => {
-      // console.log("count의 값이 변경되면 여기도 실행");
-      // console.log("new Value :: " + a);
-      // console.log("old Value :: " + b);
+
     },
     /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
        버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
@@ -636,14 +634,8 @@ export default {
       }
     },
 
-    file_name_list() {
-      // 1. 첨부파일 1개만 보여줄 때
-      // if(document.getElementById('file-upload-btn')){
-      //   this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
-      // }
-      // if(document.getElementById('file-upload-btn2')){
-      //   this.ttmn_atfl_nm = this.file_name_list[0].org_file_nm
-      // }
+    file_name_list() { //첨부파일 데이터를 바인딩
+
       if(this.atfl_num == '1'){
         this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
         this.rgs_atfl_mng_id = this.file_name_list[1].atfl_mng_id
@@ -651,16 +643,6 @@ export default {
         this.ttmn_atfl_nm = this.file_name_list[0].org_file_nm
         this.ttmn_atfl_mng_id = this.file_name_list[1].atfl_mng_id
       }
-
-
-      // 2. 첨부파일 모두 보여줄 때
-      // this.file_name_list.map(e => {
-      //   if(this.rgs_atfl_nm === ''){
-      //     this.rgs_atfl_nm += e.rgs_atfl_nm
-      //   }else{
-      //     this.rgs_atfl_nm += ' / ' + e.rgs_atfl_nm
-      //   }
-      // })
     },
   },
 // 변수 선언부분
@@ -671,44 +653,39 @@ export default {
       emp_btn_id : '',  // 직원조회팝업 버튼ID
       emp_nm : '',      // 직원조회팝업 직원명
       emp_no : '',      // 직원조회팝업 직원번호
-      // emp_rowKey : '',  // 직원조회팝업 (그리드) rowKey
-      // emp_colName : '',  // 직원조회팝업 (그리드) colName
 
-      // bkup_id : '0000000000',   // 백업ID
-      // prjt_id : '1000000001',   // 프로젝트 ID
-      // mng_id : 'E100000000',     // 결함 ID
-      bkup_id : this.$route.query.bkup_id,   // 백업ID
-      prjt_id : this.$route.query.prjt_id,   // 프로젝트 ID
-      mng_id : this.$route.query.mng_id,     // 결함 ID
+      bkup_id : this.$route.query.bkup_id,          // 백업ID
+      prjt_id : this.$route.query.prjt_id,          // 프로젝트 ID
+      mng_id : this.$route.query.mng_id,            // 결함 ID
       cctn_id : this.$route.query.cctn_id,          // 프로그램ID/테스트케이스ID
       cctn_nm : this.$route.query.cctn_nm,          // 프로그램명/테스트케이스명
       cctn_bzcd : this.$route.query.cctn_bzcd,      // 연결업무구분코드
       cctn_sqn_cd : this.$route.query.cctn_sqn_cd,  // 연결차수구분코드
       atfl_num : '',
 
-      bzcd:[],                                // 업무구분코드
+      bzcd:[],                                     // 업무구분코드
 
       bzcd_selected : this.$route.query.cctn_bzcd,
 
-      err_tycd:[],                             // 결함유형코드
+      err_tycd:[],                                 // 결함유형코드
 
       err_tycd_selected : '100',
 
-      rgs_dscd:[],                             // 결함등록단계구분코드
+      rgs_dscd:[],                                 // 결함등록단계구분코드
 
       rgs_dscd_selected : this.$route.query.rgs_dscd,
 
-      err_prc_step_cd:[],                      // 결함처리단계구분코드
+      err_prc_step_cd:[],                          // 결함처리단계구분코드
 
       err_prc_step_cd_selected :'100' ,
 
-      login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),        // 로그인ID
-      rgpe_nm : sessionStorage.getItem('LOGIN_EMP_NM'),             // 등록자명
-      rgpe_no : sessionStorage.getItem('LOGIN_EMP_NO'),             // 등록자번호
-      rgs_dt : this.getToday(),              // 결함등록일자
-      err_txt : '',             // 결함내용
-      rgs_atfl_nm : '',         // 첨부파일명
-      rgs_atfl_mng_id :'',      // 요청첨부파일관리ID
+      login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'), // 로그인ID
+      rgpe_nm : sessionStorage.getItem('LOGIN_EMP_NM'),      // 등록자명
+      rgpe_no : sessionStorage.getItem('LOGIN_EMP_NO'),      // 등록자번호
+      rgs_dt : this.getToday(),                                  // 결함등록일자
+      err_txt : '',                                              // 결함내용
+      rgs_atfl_nm : '',                                          // 첨부파일명
+      rgs_atfl_mng_id :'',                                       // 요청첨부파일관리ID
       file_name_list : [],
 
       ttmn_scd_dt : '',         // 조치예정일자
@@ -721,7 +698,6 @@ export default {
       ttmn_atfl_nm : '',        // 조치파일명
       ttmn_atfl_mng_id : '',    // 조치첨부파일관리ID
       bfjr_bzcd : '',           // 이관전업무
-
       org_file_nm : '',         // 원파일명
 
     }
