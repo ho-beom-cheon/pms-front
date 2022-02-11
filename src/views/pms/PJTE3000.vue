@@ -390,6 +390,7 @@ export default {
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.info.prjt_nm_selected
+      let bkup_id_selected = this.info.bkup_id_selected
       if (btn_id == '1') {
         empnm = this.info.rgpe_nm
       } else if (btn_id == '2') {
@@ -401,7 +402,8 @@ export default {
         axiosService.get("/PJTE9001/select", {
           params: {
             empnm,
-            prjt_id_selected
+            prjt_id_selected,
+            bkup_id_selected
           }
         })
             .then(res => {
