@@ -391,7 +391,6 @@ export default {
     },
     gridExcelImport(event){
       // 엑셀파일 업로드 로직 추가
-      console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       var input = event.target;
       var reader = new FileReader();
@@ -427,7 +426,9 @@ export default {
             let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let gridExcelData = JSON.parse(JSON.stringify(rowObj));
 
+            gridExcelData = gridExcelData.filter(e => e.sqno && e.file_cd)
             console.log(gridExcelData)
+
             // console.log(this.$refs.grid1.invoke("getData"))
             gridExcelData.map(e => {
               e.file_cd = String(e.file_cd)
@@ -449,6 +450,9 @@ export default {
                   this.$refs.grid1.invoke('resetData',gridExcelData)
 
                 }
+              })
+              .catch(e => {
+                alert("업로드 에러")
               })
             }
           }
