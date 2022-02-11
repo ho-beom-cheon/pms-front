@@ -74,7 +74,7 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box">
+        <div class="grid1-box" style="height: 190px">
           <div class="div-header"><h2>산출물 상세정보</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-e" v-if="info.file_cd_selected != 'TTT'">
@@ -93,7 +93,7 @@
                 :header="header"
                 :columns="columns1"
                 :minBodyHeight="55"
-                :bodyHeight="bodyHeight"
+                :bodyHeight="115"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -111,7 +111,7 @@
                 :data="dataSource2"
                 :header="header2"
                 :columns="columns2"
-                :bodyHeight="290"
+                :bodyHeight="295"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -120,7 +120,7 @@
             ></grid>
           </div>
         </div>
-        <div class="grid1-box">
+        <div class="grid1-box" style="height: 190px">
           <div class="div-header"><h2>미매핑 ID목록</h2>
             <ul class="filter-btn">
               <div class="btn btn-filter-e">
@@ -134,8 +134,8 @@
                 :data="dataSource3"
                 :header="header"
                 :columns="columns3"
-                :minBodyHeight="55"
-                :bodyHeight="bodyHeight"
+                :minBodyHeight="75"
+                :bodyHeight="115"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -586,7 +586,7 @@ export default {
       },
       rowHeaders:['rowNum'],
       header: {
-        height: 45,
+        height: 25,
       },
       header2: {
         height: 45,
@@ -730,11 +730,11 @@ export default {
           width: 100,
           name: 'cate',
           rowSpan : true,
+          align: 'center',
 
         },
         {
           header: '명',
-          width: 190,
           name: 'file_cd',
           formatter: 'listItemText',
           disabled : true,
@@ -823,23 +823,25 @@ export default {
       columns3: [
         {
           header: '항목ID',
-          width: 350,
+          width: 250,
           name: 'item_cd',
         },
         {
           header: '항목명',
-          width: 350,
+          width: 550,
           name: 'item_nm',
+          align: 'left',
         },
         {
           header: '매핑ID',
-          width: 350,
+          width: 250,
           name: 'map_id',
         },
         {
           header: '매핑명',
-          width: 350,
+          width: 550,
           name: 'map_nm',
+          align: 'left',
         },
       ]
     }
