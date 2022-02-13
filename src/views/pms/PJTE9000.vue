@@ -59,10 +59,20 @@
                         @bkup_id_change="bkup_id_change"
                         @prjt_nm_chage="prjt_nm_chage"
                     ></combo>
-                    <button class="btn btn-filter-p" style = "margin-top: 5px" @click="tableBackUp">
+                    <button class="btn btn-filter-p" style = "margin-top: 5px;" @click="fnSearchRe">
+                      <a href="#" >재조회</a>
+                    </button>
+                    <button class="btn btn-filter-p" style = "margin-top: 5px; margin-left: 5px" @click="tableBackUp">
                       <a href="#" >테이블백업</a>
                     </button>
+
+                    &nbsp;
+                    생성프로젝트<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
+                    <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject">
+                      <a href="#" >프로젝트기본정보복사</a>
+                    </button>
                   </ul>
+
                 </section>
                 <div class="div-grid-c">
                 </div>
@@ -305,6 +315,27 @@ export default {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
+    copyProject() {
+      // 신규 프로젝트 추가시 코드정보 신규프로젝트로 데이터 복사
+      try{
+        axiosService.post('/PJTE9000/create_new_project_data', {
+          new_prjt_id : this.info.new_prjt_id,
+          login_emp_no : this.info.login_emp_no,
+          prjt_id : this.info.prjt_nm_selected
+        })
+            .then(res => {
+              console.log(res.data)
+              alert("복사가 완료되었습니다.")
+            })
+      }catch(e) {
+        console.log(e)
+      }
+    },
+    async fnSearchRe() {
+      this.info.grid_num = 1
+      await this.fnSearch();
+      await this.fnSearchCode()
+    },
     tableBackUp() {
       axiosService.get("/PJTE9000/backup_select")
       .then(res => {
@@ -415,7 +446,10 @@ export default {
       this.$refs.grid4.invoke("readData");
     },
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    bkup_id_change(params) {
+      console.log('a')
+      this.info.bkup_id_selected = params
+    },
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
 
     // 콤보 처음 값 저장
@@ -475,18 +509,6 @@ export default {
           // 권한구분코드 체크
           if(grid_arr[i].aut_cd == null || grid_arr[i].aut_cd==='' || grid_arr[i].aut_cd === undefined){
             alert(`${i+1}번째 행 권한구분코드 값이 없습니다.`);
-            check = false;
-            break;
-          }
-          // IP 주소 체크
-          if(grid_arr[i].ip_addr == null || grid_arr[i].ip_addr==='' || grid_arr[i].ip_addr === undefined){
-            alert(`${i+1}번째 행 IP주소 값이 없습니다.`);
-            check = false;
-            break;
-          }
-          //계획투입시작일자 체크
-          if(grid_arr[i].plan_thw_stdt == null || grid_arr[i].plan_thw_stdt==='' || grid_arr[i].plan_thw_stdt === undefined){
-            alert(`${i+1}번째 행 계획투입시작일자 값이 없습니다.`);
             check = false;
             break;
           }
@@ -720,20 +742,7 @@ export default {
           return false;
         }
 
-        // 신규 프로젝트 추가시 코드정보 신규프로젝트로 데이터 복사
-        // try{
-        //   axiosService.post('/PJTE9000/create_new_project_data', {
-        //     // new_prjt_id : this.info.new_prjt_id,
-        //     new_prjt_id : '1000000003',
-        //     login_emp_no : this.info.login_emp_no
-        //   })
-        //   .then(res => {
-        //     console.log(res.data)
-        //     alert("저장이 완료되었습니다.")
-        //   })
-        // }catch(e) {
-        //   console.log(e)
-        // }
+
 
 
       }else if(grid_num === 4){
@@ -929,7 +938,8 @@ export default {
       console.log("count의 값이 변경되면 여기도 실행");
       console.log("new Value :: " + a);
       console.log("old Value :: " + b);
-    }
+    },
+
   },
 // 변수 선언부분
   data() {
@@ -945,6 +955,7 @@ export default {
         grid_num: 1,
         login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
         grp_tycd : '1000000001',
+        new_prjt_ids: '',
         new_prjt_id : '',
         new_bkup_id : '',
         new_bkup_nm : '',
