@@ -273,45 +273,11 @@ export default {
     grid: Grid,
     combo
   },
-// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
-// "라이프사이클 훅"이라고 함.
-// 자세한 사항은 Vue 라이프 사이클 참조
-// https://kr.vuejs.org/v2/guide/instance.html
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-// 화면 동작 시 제일 처음 실행되는 부분
-// 변수 초기화
-  created() {
-    console.log("created");
 
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
+  // 그리드 1,2,3 순서대로 조회 하기 위해 async await 사용
   async mounted() {
     await this.fnSearch();
     await this.fnSearchCode();
-  },
-  beforeUpdate() {
-    console.log("beforeUpdate");
-  },
-  updated(){
-    console.log("updated");
-  },
-  beforeDestroy() {
-    console.log("beforeDestroy");
-  },
-  destroyed() {
-    console.log("destroyed");
-  },
-// 함수를 선언하는 부분
-// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
-  computed: {
-    getCount() {
-      return this.count;
-    }
-
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
@@ -331,11 +297,13 @@ export default {
         console.log(e)
       }
     },
+    // 재조회 async await 사용하여 그리드 1,2,3 순서대로 조회
     async fnSearchRe() {
       this.info.grid_num = 1
       await this.fnSearch();
       await this.fnSearchCode()
     },
+    // 테이블 백업
     tableBackUp() {
       axiosService.get("/PJTE9000/backup_select")
       .then(res => {
@@ -354,6 +322,7 @@ export default {
         console.log(e)
       })
     },
+    // 로그인 변경
     loginChange() {
       if(confirm("로그인변경시 저장하지 않은 수정데이터는 저장되지 않습니다.")){
         this.sessionClear();
@@ -413,6 +382,7 @@ export default {
       storage.setItem("LOGIN_AUT_CD", "");            // 권한ID
       storage.setItem("LOGIN_YN", "");                // 로그인상태
     },
+    // 신규 년도 생성
     createNewYear() {
       if(this.info.new_yyyy == null || this.info.new_yyyy === undefined || this.info.new_yyyy === ''){
         alert("신규생성년도의 값이 없습니다.")
@@ -452,14 +422,6 @@ export default {
     },
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-    },
-    change(){
-      console.log("change");
-    },
     fnSave(grid_num){
       // debugger;
       let grid_arr = [];
@@ -841,10 +803,12 @@ export default {
         this.$refs.grid3.invoke("readData");
       }
     },
+    // 그리드 1 조회
     fnSearch(){
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
     },
+    // 그리드 2,3 조회
     fnSearchCode(){
       this.info.grid_num = 2;
       this.$refs.grid2.invoke("setRequestParams", this.info);
@@ -854,9 +818,7 @@ export default {
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
     },
-    gridInit(){
-      this.$refs.grid1.invoke("clear");
-    },
+    // 행추가
     gridAddRow(grid_num){
       if(grid_num === 1){
         this.$refs.grid1.invoke("appendRow",{ },{focus:true}) ;
@@ -874,6 +836,7 @@ export default {
         this.$refs.grid4.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected },{focus:true}) ;
       }
     },
+    // 행삭제
     gridDelRow(grid_num){
       if(grid_num === 1){
         this.$refs.grid1.invoke("removeRow", this.curRow);
@@ -912,33 +875,16 @@ export default {
       }
 // DB 데이터 삭제로직 추가
     },
-    gridADelRow(){
-// DB 데이터 삭제로직 추가
-    },
-    gridIns(){
-// DB 데이터 삭제로직 추가
-    },
     gridExcelExport(){
       this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
     },
-    gridExcelImport(){
-// 엑셀파일 업로드 로직 추가
-    },
+
+    // 첨부파일 팝업(PJTE9002) 테스트용 method
     open_page(){
       let bkup_id='0000000000', prjt_id='1000000001', atfl_mng_id='1000000011', file_rgs_dscd='700',
       mng_id = '1000000000', bzcd='BBB', sqn_cd='Cust_summary_L9', tst_case_id='200', pgm_id='TS-001-TC-014'
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&bzcd=${bzcd}&sqn_cd=${sqn_cd}&tst_case_id=${tst_case_id}&pgm_id=${pgm_id}&`, "open_page", "width=1000, height=800");
     }
-
-  },
-// 특정 데이터에 실행되는 함수를 선언하는 부분
-// newValue, oldValue 두개의 매개변수를 사용할 수 있음
-  watch:{
-    count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
-    },
 
   },
 // 변수 선언부분

@@ -116,14 +116,14 @@
 import {axiosService} from "@/api/http";
 import Combo from "@/components/Combo";
 
+// PJTE9002(첨부파일팝업) 팝업 종료시 데이터 받아오는 로직
 window.fileData = (fileLists) => {
-  console.log(fileLists);
   window.pms_register.file_name_list = fileLists;
   window.pms_register.atfl_mng_id = fileLists[fileLists.length-1].atfl_mng_id;
 }
 
+// PJTE6001(직원조회팝업) 팝업 종료시 데이터 받아오는 로직
 window.empData = (empnm, empno) => {
-  //
   window.pms_register.prcpe_nm = empnm;
   window.pms_register.prcpe_no = empno;
 
@@ -131,17 +131,14 @@ window.empData = (empnm, empno) => {
 
 export default {
   created() {
+    // 신청일자 데이터 오늘날짜로 세팅
     let today = new Date();
     this.req_dt = today.getFullYear() + '-' + ('0' + (today.getMonth()+1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)
+    // mng_id 가 있으면 기존 데이터 조회
     if(this.mng_id){
       this.getRegisterData();
     }
 
-  },
-  updated() {
-    this.$children[0].$data.bzcd_selected_pop = this.bzcd_selected
-    this.$children[0].$data.req_prc_step_cd_selected_pop = this.req_prc_step_cd_selected
-    this.$children[0].$data.req_dscd_selected_pop = this.req_dscd_selected
   },
   components: {
     Combo,
@@ -259,11 +256,8 @@ export default {
       })
           .then(res => {
             let res_data = res.data.data.contents[0];
-            console.log(res_data)
             this.bzcd_selected = res_data.bzcd
-            // this.req_dscd_selected = '300'  // 테스트용
             this.req_dscd_selected = res_data.req_dscd
-            // this.req_prc_step_cd_selected = '400';    // 테스트용
             this.req_prc_step_cd_selected = res_data.req_prc_step_cd
             this.req_txt = res_data.req_txt
             this.prcpe_nm = res_data.prcpe_nm
@@ -272,6 +266,11 @@ export default {
             this.prc_txt = res_data.prc_txt
             this.org_file_nm = res_data.org_file_nm
             this.atfl_mng_id = res_data.atfl_mng_id
+
+            // 조회 데이터를 콤보 데이터에 적용
+            this.$children[0].$data.bzcd_selected_pop = this.bzcd_selected
+            this.$children[0].$data.req_prc_step_cd_selected_pop = this.req_prc_step_cd_selected
+            this.$children[0].$data.req_dscd_selected_pop = this.req_dscd_selected
           })
     },
 

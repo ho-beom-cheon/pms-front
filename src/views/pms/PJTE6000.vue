@@ -171,118 +171,45 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import { Grid } from '@toast-ui/vue-grid';
-import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import combo from '@/components/Combo';
 import {axiosService} from "@/api/http";
 
+// 신정자, 처리자 직원조회 팝업 종료 시 직원명, 직원번호 받아오는 로직
 window.empData = (empnm, empno, btn_id) => {
-  //
-  if(btn_id === '1'){
+  if(btn_id === '1'){  // 신청자
     window.pms_manage.info.reqpe_nm = empnm
     window.pms_manage.info.reqpe_no = empno
-  }else{
+  }else{  // 처리자
     window.pms_manage.info.prcpe_nm = empnm
     window.pms_manage.info.prcpe_no = empno
   }
 }
 
+// PJTE6001에서 데이터 insert / update 시 그리드 데이터 재조회 하기 위한 로직
 window.pmsRegisterData = (res) => {
-  //
   if(res === 'insert' || res === 'update'){
+    // checkRegisterData 값이 true로 변경되면 watch에서 로직 수행
     window.pms_manage.checkRegisterData = true;
   }
 }
-
-//그리드 아이템 예제
-var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-var prjt_id  = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
-
-
-// // 업무구분
-// const bzcd = [
-// 				{	text:"전체", 	value:'999'},
-// 				{	text:"신용", 	value:'AAA'},
-// 				{	text:"재무제표", 	value:"BBB"},
-// 				{	text:"신용평가", 	value:"CCC"},
-// 			 ];
-// //신청구분
-// const req_dscd = [
-//         {	text:"전체", 	value:'999'},
-//         {	text:"개발현황", 	value:'1'},
-//         {	text:"통합테스트", 	value:"2"},
-//         {	text:"테이블변경", 	value:"3"},
-//         {	text:"SQL튜닝", 	value:'4'},
-//         {	text:"AA관련", 	value:'5'},
-//         {	text:"PMS수정요청", 	value:"6"},
-//         {	text:"기타", 	value:"7"},
-//       ];
-// //처리상태
-// const req_prc_step_cd = [
-//         {	text:"전체", 	value:'999'},
-//         {	text:"변경요청", 	value:'1'},
-//         {	text:"반려", 	value:"2"},
-//         {	text:"재요청", 	value:"3"},
-//         {	text:"처리중", 	value:'4'},
-//         {	text:"처리완료", 	value:'5'}
-//       ];
-// var prjt_id_selected;
-// var bzcd_selected;
-// var req_dscd_selected;
-// var req_prc_step_cd_selected;
 
 
 export default {
 	// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   	components: {
     	grid: Grid,
-    	WindowPopup,
       combo
-	},
-	// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
-	// "라이프사이클 훅"이라고 함.
-	// 자세한 사항은 Vue 라이프 사이클 참조
-	// https://kr.vuejs.org/v2/guide/instance.html
-	beforeCreate() {
-		console.log("beforeCreate");
-	},
-	// 화면 동작 시 제일 처음 실행되는 부분
-	// 변수 초기화
-	created() {
-
-		console.log("created");
-	},
-	beforeMount() {
-		console.log("beforeMount");
 	},
 	mounted() {
     this.fnSearch();
     window.pms_manage = this;
 		console.log("mounted");
 	},
-	beforeUpdate() {
-		console.log("beforeUpdate");
-	},
-	updated(){
-		console.log("updated");
-	},
-	beforeDestroy() {
-		console.log("beforeDestroy");
-	},
-	destroyed() {
-		console.log("destroyed");
-	},
-	// 함수를 선언하는 부분
-	// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
-	computed: {
-		getCount() {
-			return this.count;
-		}
-		
-	},
 	// 일반적인 함수를 선언하는 부분 
 	methods: {
-    open_pjte9001(btn_id) {
+    open_pjte9001(btn_id) {         // PJTE9001(직원조회팝업) 오픈하는 method
+      // 직원조회시 검색된 이름이 단일건이면 팝업 열리지 않고 바로 직원명,직원번호에 데이터 입력되도록
       if(this.info.prjt_nm_selected === '' || this.info.prjt_nm_selected == null && this.info.prjt_nm_selected ===undefined){
         alert("프로젝트가 선택되어 있어야 직원검색이 가능합니다")
         return false;
@@ -303,9 +230,11 @@ export default {
               // console.log(res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
+                  // 신청자 직원명, 직원번호
                   this.info.reqpe_no = res.data.data.contents[0].empno
                   this.info.reqpe_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
+                  // 처리자 직원명, 직원번호
                   this.info.prcpe_no = res.data.data.contents[0].empno
                   this.info.prcpe_nm = res.data.data.contents[0].empnm
                 }
@@ -327,59 +256,27 @@ export default {
     req_dscd_change(params) {this.info.req_dscd_selected = params},
     req_prc_step_cd_change(params) {this.info.req_prc_step_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected = this.$children[0].$data.bzcd_selected;
-      this.info.req_dscd_selected = this.$children[0].$data.req_dscd_selected;
-      this.info.req_prc_step_cd_selected = this.$children[0].$data.req_prc_step_cd_selected;
-    },
-
-		change(){
-			console.log();
-		},
-		fnSave(){
-			this.$refs.grid.invoke("modifyData");
-			console.log("modifyData");
-		},
+    // 그리드 더블클릭 시, PJTE6001 호출
     dbClick(ev) {
-      console.log(this.$refs.grid.invoke("getValue", ev.rowKey, "mng_id"))
       let mng_id = this.$refs.grid.invoke("getValue", ev.rowKey, "mng_id")
       this.open_page(mng_id)
     },
+    // 그리드 데이터 조회
 		fnSearch(){
 			this.$refs.grid.invoke("setRequestParams", this.info);
 			this.$refs.grid.invoke("readData");
 		},
-		gridInit(){
-			this.$refs.grid.invoke("clear");
-		},
-		gridAddRow(){
-			
-			this.$refs.grid.invoke("appendRow",{ col1:"1", col3:"개발", col4:"SWZP0010", col5:"PMS구축"},{focus:true}) ;
-		},
-		gridDelRow(){
-			this.$refs.grid.invoke("removeRow", this.curRow);
-			// DB 데이터 삭제로직 추가
-		},
-		gridADelRow(){
-			// DB 데이터 삭제로직 추가 
-		},
-		gridIns(){
-			// DB 데이터 삭제로직 추가 
-		},
+    // 그리드 엑셀다운로드
 		gridExcelExport(){
+      // useFormattedValue 옵션으로 그리드 데이터 내에 select된 값 value가 아닌 text 값으로 설정되어 다운로드 가능
 			this.$refs.grid.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
 		},
-		gridExcelImport(){
-			// 엑셀파일 업로드 로직 추가
-		},
+    // PJTE6001(PMS신청등록) 팝업 오픈 method
 		open_page(mng_id){
+      // 파라미터 설정
       if(mng_id == null || mng_id==='' || mng_id === undefined) mng_id=''
-      // mng_id='1000000003'
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-			this.pop = window.open(`../PJTE6001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&`, "open_page", "width=1000, height=800");
+			this.pop = window.open(`../PJTE6001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}`, "open_page", "width=1000, height=800");
 		}
 
 	},
@@ -393,14 +290,11 @@ export default {
         this.checkRegisterData = false;
       }
     },
-		count: (a, b) => { 
-			console.log("count의 값이 변경되면 여기도 실행");
-			console.log("new Value :: " + a);
-			console.log("old Value :: " + b);
-		},
+    // check_Yn 값 변하면 info 내의 check_Yn 값 변화
     check_Yn () {
       this.check_Yn ? this.info.check_Yn = 'Y' : this.info.check_Yn = 'N';
     },
+    // 일자들은 데이터 조회시 '-' 이 빠져야 하므로 .split('-').join('')으로 통일
     req_sta_dt (){
       this.info.req_sta_dt = this.req_sta_dt.split('-').join('');
     } ,    // 신청일자STA
@@ -427,23 +321,13 @@ export default {
           prcpe_nm    : this.prcpe_nm,    	// 처리자
           prcpe_no    : this.prcpe_no,    	// 처리자 번호
           req_txt     : this.req_txt,//신청내용
-					// prjt_id     : prjt_id,    		// 프로젝트명
-					// bzcd        : bzcd,    		  	// 업무구분
-          // req_dscd    : req_dscd,    	    // 신청구분
-          // req_prc_step_cd :  req_prc_step_cd,    	// 처리상태
 
-					/* select 박스 */
-					// prjt_id_selected     : prjt_id[0].value,      // 프로젝트명
-					// bzcd_selected        : bzcd[0].value,         // 업무구분
-          // req_dscd_selected    : req_dscd[0].value, //신청구분
-          // req_prc_step_cd_selected    :  req_prc_step_cd[0].value, //처리상태,
-
-          prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-          bkup_id_selected      : '0000000000',
-          bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
-          req_dscd_selected     : 'TTT',
-          req_prc_step_cd_selected : 'TTT',
-          check_Yn : 'N',
+          prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),    // 프로젝트
+          bkup_id_selected      : '0000000000',     // 백업ID
+          bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"), // 업무구분
+          req_dscd_selected     : 'TTT',      // 신청구분
+          req_prc_step_cd_selected : 'TTT',   // 처리구분
+          check_Yn : 'N',     // 완료건포함(데이터 조회용)
           req_sta_dt : '',    // 신청일자STA
           req_end_dt : '',    // 신청일자END
           prc_sta_dt : '',    // 처리일자STA
@@ -457,7 +341,7 @@ export default {
 					prc_sta_dt : '',    // 처리일자STA
 					prc_end_dt : '',    // 처리일자END
 		            
-					check_Yn    : false,  // 완료건 포함
+					check_Yn    : false,  // 완료건 포함(체크박스 값)
 					
 					count:0,
 					curRow:-1,
@@ -660,6 +544,7 @@ export default {
 </script>
 <style>
 /* [체크박스 관련 스타일 지정] */
+/* 완료건 포함 체크박스 커스터마이징 */
 input[type='checkbox'] {
   /* [체크박스 클릭 (전) 이미지 설정] */
   background-image : url(../../assets/img/check_off.png);
