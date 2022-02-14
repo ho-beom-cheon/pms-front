@@ -560,7 +560,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 700,
+      bodyHeight: 640,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
