@@ -120,7 +120,7 @@
                     :data="dataSource"
                     :header="header"
                     :columns="columns3"
-                    :bodyHeight="320"
+                    :bodyHeight="315"
                     :minRowHeight="minRowHeight"
                     :showDummyRows="showDummyRows"
                     :columnOptions="columnOptions"
@@ -633,7 +633,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 325,
+      bodyHeight: 315,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,

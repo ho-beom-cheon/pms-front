@@ -466,7 +466,7 @@
       <div class="item-con">공지업무
         <select
             v-model="ntar_bzcd_selected"
-            style="width: 165px; margin-left: 8px"
+            style="width: 165px;"
             @change = "ntar_bzcd_change"
         >
           <option

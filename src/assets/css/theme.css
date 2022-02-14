@@ -504,7 +504,7 @@ table.form-table select {
 .multiGridWrap-a {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 403px);
+    grid-template-rows: repeat(2, 395px);
     gap: 3px;
     margin: 1px;
 }
@@ -553,7 +553,7 @@ table.form-table select {
     border: 1px solid #d5d5d5;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(1, 390px);
+    grid-template-rows: repeat(1, 384px);
     gap: 3px;
 }
 
