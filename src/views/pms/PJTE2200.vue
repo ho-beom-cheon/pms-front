@@ -842,7 +842,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 630,
+      bodyHeight: 635,
       rowHeight: 25,
       minRowHeight: 10,
       showDummyRows: true,
