@@ -40,6 +40,7 @@ const PJTE7000 = () => import(/* webpackChunkName: "PJTE7000" */ './views/pms/PJ
 const PJTE9000 = () => import(/* webpackChunkName: "PJTE9000" */ './views/pms/PJTE9000.vue'); menuList.push(PJTE9000); menuListStr.push("PJTE9000");
 const PJTE9001 = () => import(/* webpackChunkName: "PJTE9001" */ './views/pms/PJTE9001.vue'); menuList.push(PJTE9001); menuListStr.push("PJTE9001");
 const PJTE9002 = () => import(/* webpackChunkName: "PJTE9002" */ './views/pms/PJTE9002.vue'); menuList.push(PJTE9002); menuListStr.push("PJTE9002");
+const PJTE9003 = () => import(/* webpackChunkName: "PJTE9003" */ './views/pms/PJTE9003.vue'); menuList.push(PJTE9003); menuListStr.push("PJTE9003");
 
 /* BOARD */
 const RefBoard = () => import(/* webpackChunkName: "RefBoardList" */ './views/board/RefBoardList.vue'); menuList.push(RefBoard); menuListStr.push("RefBoard");
@@ -60,7 +61,7 @@ for(var idx=0; idx < menuListStr.length; idx++){
   tmpObj.path = "/" + menuListStr[idx].toLowerCase() ;
   tmpObj.name = menuListStr[idx].toLowerCase() ;
   
-  if( "/login/Tmp/PJTE3001/PJTE6001/PJTE9001/PJTE9002/".indexOf(menuListStr[idx]) > 0) {
+  if( "/login/Tmp/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0) {
     tmpObj.components = { default:menuList[idx] } ;  
   } else {
     tmpObj.components = { header:PmsHeader, footer:PmsFooter, default:menuList[idx] } ;
