@@ -122,20 +122,7 @@ export default {
       pjt_list: [],
       pjt_selected:this.$route.query.prjt_id,
       file_rgs_dscd_selected: this.$route.query.file_rgs_dscd,
-      file_rgs_dscds : [
-        {text: "단위테스트증빙", value:"100"},
-        {text: "설계서파일", value:"101"},
-        {text: "통합테스트증빙", value:"200"},
-        {text: "결함오류파일", value:"300"},
-        {text: "결함조치파일", value:"400"},
-        {text: "신청요청파일", value:"500"},
-        {text: "공지사항파일", value:"600"},
-        {text: "WBS관리파일", value:"700"},
-        {text: "산출물양식", value:"900"},
-        {text: "엑셀업로드양식", value:"901"},
-        {text: "Project Eyes 가이드", value:"902"},
 
-      ],
       fileLists : [],
       afterSearch:false,
       check_array:[],
@@ -308,12 +295,16 @@ export default {
       formData.append("file_rgs_dscd", this.file_rgs_dscd_selected);
       formData.append("atfl_mng_id",  this.atfl_mng_id);
 
-      formData.append("mng_id", this.$route.query.mng_id); // mng_id 넘겨 받은 값으로 대체하기
-      formData.append("bzcd", this.$route.query.bzcd); // bzcd 넘겨 받은 값으로 대체하기
-      formData.append("pgm_id", this.$route.query.pgm_id); //pgm_id 넘겨 받은 값으로 대체하기
-      formData.append("sqn_cd", this.$route.query.sqn_cd); //sqn_cd 넘겨 받은 값으로 대체하기
-      formData.append("tst_case_id", this.$route.query.tst_case_id); //tst_case_id 넘겨 받은 값으로 대체하기
+      formData.append("mng_id", this.$route.query.mng_id); // mng_id 파라미터
+      formData.append("bzcd", this.$route.query.bzcd);
+      formData.append("pgm_id", this.$route.query.pgm_id);
+      formData.append("sqn_cd", this.$route.query.sqn_cd);
+      formData.append("tst_case_id", this.$route.query.tst_case_id);
       formData.append("jsonList", JSON.stringify(this.fileLists));
+
+      formData.append("week_sqn_cd", this.$route.query.week_sqn_cd);
+      formData.append("week_yymm", this.$route.query.week_yymm);
+      formData.append("real_prjt_id", this.$route.query.real_prjt_id);
 
       await axiosService.post("/PJTE9002/insert", formData, {
         headers: {
@@ -336,6 +327,7 @@ export default {
 
     },
 
+    // 파일 다운로드
     fileDownload(fileName, orgFileName) {
       axiosService.get("/PJTE9002/fileDownload",
           {
@@ -365,12 +357,9 @@ export default {
 
   },
   mounted() {
+    // 콤보 데이터에 적용
     this.$children[0].$data.file_rgs_dscd_selected_pop = this.file_rgs_dscd_selected
     this.$children[0].$data.prjt_nm_selected_pop = this.pjt_selected
-    // console.log(sessionStorage.getItem("LOGIN_YN"))
-  },
-  beforeDestroy() {
-    // opener.fileData(this.fileLists)
   },
 };
 </script>
