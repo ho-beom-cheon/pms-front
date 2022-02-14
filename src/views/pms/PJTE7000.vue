@@ -197,42 +197,10 @@ export default {
     grid: Grid,
     combo,
   },
-  // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
-  // "라이프사이클 훅"이라고 함.
-  // 자세한 사항은 Vue 라이프 사이클 참조
-  // https://kr.vuejs.org/v2/guide/instance.html
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-  created() {
-    console.log("created");
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
   mounted() {
     console.log("mounted");
     this.fnSearch()
 
-  },
-  beforeUpdate() {
-    console.log("beforeUpdate");
-  },
-  updated(){
-    console.log("updated");
-  },
-  beforeDestroy() {
-    console.log("beforeDestroy");
-  },
-  destroyed() {
-    console.log("destroyed");
-  },
-  // 함수를 선언하는 부분
-  // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
-  computed: {
-    getCount() {
-      return this.count;
-    }
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
@@ -241,6 +209,7 @@ export default {
     prjt_nm_chage(params)          {this.info.prjt_nm_selected = params},
     bzcd_change(params)            {this.info.bzcd_selected = params},
     check_cd_change(params)        {
+      // 검증구분 변경시 그리드2 헤더 변경 및 데이터 조회
       this.info.chk_cd_selected = params
       if(params === '100'){
         this.$refs.grid2.invoke("setHeader", {
@@ -291,21 +260,13 @@ export default {
     search_cd_change(params)       {this.info.srh_cd_selected = params},
     file_cd_change(params)         {this.info.file_cd_selected = params},
 
-    // 콤보 처음 값 저장
-    comboSetData(){
-      this.info.bkup_id_selected         = this.$children[0].$data.bkup_id_selected;
-      this.info.prjt_nm_selected         = this.$children[0].$data.prjt_nm_selected;
-      this.info.bzcd_selected            = this.$children[0].$data.bzcd_selected;
-      this.info.chk_cd_selected          = this.$children[0].$data.check_cd_selected;
-      this.info.srh_cd_selected          = this.$children[0].$data.search_cd_selected;
-      this.info.file_cd_selected         = this.$children[0].$data.file_cd_selected;
-    },
     change(){
       console.log();
     },
     fnSave(){
       console.log();
     },
+    // 컬럼 네임을 코드로 변경
     convert_file_cd2 (nm) {
       if(nm === 'colm_yn01'){
         return '050';
@@ -331,6 +292,7 @@ export default {
         return '910';
       }
     },
+    // 그리드2 중에 비정상 누르면 그리드3 데이터 조회, 정상일 때는 그리드3 데이터 클리어
     onClick(ev, grid_num) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
@@ -350,6 +312,7 @@ export default {
 
       }
     },
+    // 조회
     fnSearch(){
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
@@ -358,11 +321,7 @@ export default {
 
       this.$refs.grid3.invoke("resetData", []);
     },
-    gridInit(){
-      this.$refs.grid1.invoke("clear");
-      this.$refs.grid2.invoke("clear");
-      this.$refs.grid3.invoke("clear");
-    },
+    // 엑셀 다운로드
     gridExcelExport(grid_num){
       if(grid_num === 1){
         this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
@@ -375,6 +334,7 @@ export default {
 
       }
     },
+    // 엑셀 업로드 전 체크 로직
     checkBzcd() {
       if(this.info.file_cd_selected === 'TTT'){
         alert("산출물구분이 전체일 때는 업로드할 수 없습니다.");
@@ -389,6 +349,7 @@ export default {
 
 
     },
+    // 엑셀 업로드
     gridExcelImport(event){
       // 엑셀파일 업로드 로직 추가
       this.file = event.target.files ? event.target.files[0] : null;
@@ -398,6 +359,7 @@ export default {
         var fileData = reader.result;
         var wb = XLSX.read(fileData, {type : 'binary'});
 
+        // 시트명이 엑셀업로드작성 일때만 업로드
         wb.SheetNames.forEach((sheetName, idx) => {
           if(sheetName === '엑셀업로드작성'){
             console.log(wb.Sheets[sheetName])
@@ -427,7 +389,6 @@ export default {
             let gridExcelData = JSON.parse(JSON.stringify(rowObj));
 
             gridExcelData = gridExcelData.filter(e => e.sqno && e.file_cd)
-            console.log(gridExcelData)
 
             // console.log(this.$refs.grid1.invoke("getData"))
             gridExcelData.map(e => {
@@ -466,19 +427,8 @@ export default {
       event.target.value = '';
 
     },
-    open_page(){
-      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-    },
   },
-  // 특정 데이터에 실행되는 함수를 선언하는 부분
-  // newValue, oldValue 두개의 매개변수를 사용할 수 있음
-  watch:{
-    count: (a, b) => {
-      console.log("count의 값이 변경되면 여기도 실행");
-      console.log("new Value :: " + a);
-      console.log("old Value :: " + b);
-    }
-  },
+
   // 변수 선언부분
   data() {
     return {
