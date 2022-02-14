@@ -263,6 +263,7 @@ export default {
     //닫기
     close() {
       console.log(this.atfl_num)
+      sessionStorage.clear();
       opener.fileData(this.fileLists);
       window.close();
 
