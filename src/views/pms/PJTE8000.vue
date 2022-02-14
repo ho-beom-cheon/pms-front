@@ -51,18 +51,13 @@
             </combo>
             <li class="filter-item">
               <div class="item-con">주간년월
-                <div class="input-dateWrap">
-                  <input type="date"
-                         :max="info.rgs_end_dt"
-                         v-model="info.rgs_sta_dt"
-                         style="width: 125px"
-                  ></div>
+                  <input type="month" style="width: 125px"  v-model="info.inq_date">
               </div>
             </li>
             <li class="filter-item-n">
-              <div class="input-searchWrap">개발자명
+              <div class="input-searchWrap">PM명
                 <input type="text"
-                       placeholder="직원명"
+                       placeholder="PM명"
                        v-model="info.dvlpe_nm"
                        style   = "width: 90px"
                        @keyup.enter="open_pjte9001(1)"
@@ -374,6 +369,13 @@ import axios from "axios";
 import Combo from "@/components/Combo"
 import {axiosService} from "@/api/http";
 
+// 현재 날짜
+let today = new Date();
+let year = today.getFullYear();
+let month = ('0' + (today.getMonth() + 1)).slice(-2);
+let day = ('0' + today.getDate()).slice(-2);
+let dateString = year + '-' + month;
+
 const storage = window.sessionStorage;
 
 // 관리구분
@@ -466,17 +468,15 @@ export default {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params)             {this.info.bkup_id_selected = params},
     prjt_nm_chage(params)              {this.info.prjt_nm_selected = params},
-    rgs_dis_cd_change(params)          {this.info.rgs_dis_cd_selected = params},
-    req_dis_cd_change(params)          {this.info.req_dis_cd_selected = params},
-    iss_prc_step_cd_change(params)     {this.info.prc_step_cd_selected = params},
+    week_sqn_cd_change(params)         {this.info.week_sqn_cd_selected = params},
+    real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
 
     rgs_dis_cd_change_iss(params)     {this.detail.rgs_dis_cd_selected = params},
     iss_prc_step_cd_change_iss(params)     {this.detail.prc_step_cd_selected = params},
     req_dis_cd_change_iss(params)     {this.detail.req_dis_cd_selected = params},
     urgn_cd_change_iss(params)     {this.detail.urgn_cd_selected = params},
     ifnc_cd_change_iss(params)     {this.detail.ifnc_cd_selected = params},
-    week_sqn_cd_change(params)     {this.detail.week_sqn_cd_selected = params},
-    real_prjt_id_change(params)     {this.detail.real_prjt_id_selected = params},
+
 
 
     init() {
@@ -595,6 +595,46 @@ export default {
       }
     },
 
+// 직원조회 팝업 (검색 필터)
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      let prjt_id_selected = this.info.prjt_nm_selected
+      let bkup_id_selected = this.info.bkup_id_selected
+      if (btn_id == '1') {
+        empnm = this.info.dvlpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.info.pl_nm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm,
+            prjt_id_selected,
+            bkup_id_selected
+
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.dvlpe_no = res.data.data.contents[0].empno
+                  this.info.dvlpe_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '2') {
+                  this.info.pl_no = res.data.data.contents[0].empno
+                  this.info.pl_nm = res.data.data.contents[0].empnm
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
       this.detail.rgs_dis_cd_selected = this.$refs.combo2.$data.CD1000000012[0].value                     // (상세)관리구분
       this.$refs.combo2.$data.rgs_dis_cd_selected_iss = this.$refs.combo2.$data.CD1000000012[0].value
@@ -773,6 +813,8 @@ export default {
 
         bkup_id_selected      : '0000000000',              // 백업ID
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
+        real_prjt_id_selected : '',
+        week_sqn_cd_selected : '',
         rgs_dis_cd_selected: 'TTT',    // 선택 된 관리구분
         req_dis_cd_selected: 'TTT',    // 선택 된 요청구분
         prc_step_cd_selected: 'TTT',  // 선택 된 처리상태
@@ -794,6 +836,10 @@ export default {
         ttmn_crpe_no: this.ttmn_crpe_nm,           // 조치담당자
 
         cmpl_yn: this.cmpl_yn,       // 완료/제외/해결/미발생해소 포함 여부
+        //신규
+        inq_date : dateString,                        // 주간년월
+        dvlpe_no              : this.dvlpe_no,        // 개발자번호
+        dvlpe_nm              : this.dvlpe_nm,        // 개발자명
       },
 
       detail: {
@@ -825,9 +871,6 @@ export default {
         prc_step_cd_selected: '',    // (상세)선택 된 처리상태
         urgn_cd_selected: '',                // (상세)영향도
         ifnc_cd_selected: '',                // (상세)긴급성
-
-        real_prjt_id_selected : '',
-        week_sqn_cd_selected : '',
 
       },
 
