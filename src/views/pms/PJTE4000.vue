@@ -58,7 +58,6 @@
                 @rgs_dis_cd_change="rgs_dis_cd_change"
                 @req_dis_cd_change="req_dis_cd_change"
                 @iss_prc_step_cd_change="iss_prc_step_cd_change"
-                @onGridUpdated="onGridUpdated"
             >
             </combo>
             <li class="filter-item">
@@ -565,7 +564,7 @@ export default {
       // 조회 필터 초기화
       this.info.cmpl_yn = false
       // 상세내용 확대보기 초기 폰트사이즈 설정
-      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+
       if(this.large_num == '1'){
         document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       } else if(this.large_num == '2') {
@@ -574,6 +573,8 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      } else {
+        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       }
     },
     fnSave() {
@@ -775,6 +776,8 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
+      } else {
+        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
       }
     },
     textSizeDown() {  //상세내용 확대보기  (-축소버튼)
@@ -787,6 +790,8 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
+      } else {
+        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
       }
     },
     /* 저장을 하기위한 필수 항목 체크 */
@@ -914,7 +919,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 210,
+      bodyHeight: 190,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,

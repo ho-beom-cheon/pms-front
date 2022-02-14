@@ -964,7 +964,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 610,
+      bodyHeight: 630,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
