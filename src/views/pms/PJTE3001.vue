@@ -418,25 +418,25 @@ export default {
     // 저장(신청 ID 없는 경우, insert 쿼리)
     saveRegisterData() {
       // 필수 항목 체크
-      if(this.cctn_id === '' || this.cctn_id == null || this.cctn_id === undefined){
+      if(this.cctn_id === '' || this.cctn_id === "null" || this.cctn_id === undefined){
         alert('프로그램/테스트케이스ID이 없습니다.');
         return false;
-      } else if (this.cctn_nm === '' || this.cctn_nm == null || this.cctn_nm === undefined) {
+      } else if (this.cctn_nm === '' || this.cctn_nm == "null" || this.cctn_nm === undefined) {
         alert('프로그램/테스트케이스명이 없습니다.');
         return false;
-      } else if (this.rgpe_no === '' || this.rgpe_no == null || this.rgpe_no === undefined) {
+      } else if (this.rgpe_no === '' || this.rgpe_no == "null" || this.rgpe_no === undefined) {
         alert('결함등록자가 없습니다.');
         return false;
-      } else if (this.rgs_dt === '' || this.rgs_dt == null || this.rgs_dt === undefined) {
+      } else if (this.rgs_dt === '' || this.rgs_dt == "null" || this.rgs_dt === undefined) {
         alert('결함등록일자가 없습니다.');
         return false;
-      } else if (this.err_tycd_selected === '' || this.err_tycd_selected == null || this.err_tycd_selected === undefined) {
+      } else if (this.err_tycd_selected === '' || this.err_tycd_selected == "null" || this.err_tycd_selected === undefined) {
         alert('선택 된 결함유형이 없습니다.');
         return false;
-      } else if (this.rgs_dscd_selected === '' || this.rgs_dscd_selected == null || this.rgs_dscd_selected === undefined) {
+      } else if (this.rgs_dscd_selected === '' || this.rgs_dscd_selected == "null" || this.rgs_dscd_selected === undefined) {
         alert('선택 된 등록단계가 없습니다.');
         return false;
-      } else if (this.err_txt === '' || this.err_txt == null || this.err_txt === undefined) {
+      } else if (this.err_txt === '' || this.err_txt == "null" || this.err_txt === undefined) {
         alert('결함내용이 없습니다.');
         this.$refs.err_txt.focus();
         return false;

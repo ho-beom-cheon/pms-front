@@ -1,5 +1,102 @@
 <template>
   <div style="display:inline;">
+    <!--  ActionItem및이슈관리현황 시작  -->
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-41'">
+      <div class="item-con">
+        <label>*관리구분</label>
+        <select
+            v-model="rgs_dis_cd_selected_iss"
+            style="width: 150px;"
+            @change = "rgs_dis_cd_change_iss"
+        >
+          <option
+              v-for="(item, idx) in CD1000000012"
+              :key="idx"
+              v-text="item.text"
+              :value="item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-42'">
+      <div class="item-con">
+        <label>*처리단계</label>
+        <select
+            v-model="iss_prc_step_cd_selected_iss"
+            style="width: 150px; margin-right: 150px"
+            @change = "iss_prc_step_cd_change_iss"
+        >
+          <option
+              v-for="(item, idx) in CD1000000014"
+              :key="idx"
+              v-text="item.text"
+              :value="item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a">
+      <div class="item-con" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-43'">
+        <label>*요청구분</label>
+        <select
+            v-model="req_dis_cd_selected_iss"
+            style="width: 150px"
+            @change = "req_dis_cd_change_iss"
+        >
+          <option
+              v-for="(item, idx) in CD1000000013"
+              :key="idx"
+              v-text="item.text"
+              :value="item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-44'">
+      <div class="item-con">
+        <label>긴급성</label>
+        <select
+            v-model="urgn_cd_selected_iss"
+            style="width: 150px"
+            @change = "urgn_cd_change_iss"
+        >
+          <option
+              v-for="(item, idx) in CD1000000015"
+              :key="idx"
+              v-text="item.text"
+              :value="item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-45'">
+      <div class="item-con">
+        <label>영향도</label>
+        <select
+            v-model="ifnc_cd_selected_iss"
+            style="width: 150px"
+            @change = "ifnc_cd_change_iss"
+        >
+          <option
+              v-for="(item, idx) in CD1000000016"
+              :key="idx"
+              v-text="item.text"
+              :value="item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+
+
+    <!--  ActionItem및이슈관리현황 끝  -->
+
+    <!--  산출물 팝업 시작 -->
     <table v-for="item in this.comboList" :key="item.id" v-if="item === 'C1-2'">
       <colgroup>
         <col width="140px">
@@ -36,67 +133,69 @@
       </tr>
       </tbody>
     </table>
-<!--    pms 신청등록-->
+    <!--  산출물 팝업 끝 -->
+
+    <!--    pms 신청등록-->
     <table v-for="item in this.comboList" :key="item.id" v-if="item === 'C1-1'">
-            <colgroup>
-              <col width="140px">
-              <col width="*">
-              <col width="140px">
-              <col width="*">
-            </colgroup>
-            <tbody>
-            <tr>
-              <th>업무</th>
-              <td>
-                  <select
-                    v-model = "bzcd_selected_pop"
-                    @change = "bzcd_change_pop"
-                >
-                  <option
-                      v-for  = "(item, idx) in CD1000000001"
-                      :key   = "idx"
-                      v-text = "item.text"
-                      :value = "item.value"
-                  ></option>
-                </select>
-              </td>
-              <th></th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>신청구분</th>
-              <td>
-                <select
-                      v-model = "req_dscd_selected_pop"
-                      @change = "req_dscd_change_pop"
-                  >
-                    <option
-                        v-for  = "(item, idx) in CD1000000010"
-                        :key   = "idx"
-                        v-text = "item.text"
-                        :value = "item.value"
-                    ></option>
-                </select>
-              </td>
-              <th>
-                처리구분
-              </th>
-              <td>
-                <select
-                    v-model = "req_prc_step_cd_selected_pop"
-                    @change = "req_prc_step_cd_change_pop"
-                >
-                  <option
-                      v-for  = "(item, idx) in CD1000000011"
-                      :key   = "idx"
-                      v-text = "item.text"
-                      :value = "item.value"
-                  ></option>
-                </select>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+      <colgroup>
+        <col width="140px">
+        <col width="*">
+        <col width="140px">
+        <col width="*">
+      </colgroup>
+      <tbody>
+      <tr>
+        <th>업무</th>
+        <td>
+          <select
+              v-model = "bzcd_selected_pop"
+              @change = "bzcd_change_pop"
+          >
+            <option
+                v-for  = "(item, idx) in CD1000000001"
+                :key   = "idx"
+                v-text = "item.text"
+                :value = "item.value"
+            ></option>
+          </select>
+        </td>
+        <th></th>
+        <td></td>
+      </tr>
+      <tr>
+        <th>신청구분</th>
+        <td>
+          <select
+              v-model = "req_dscd_selected_pop"
+              @change = "req_dscd_change_pop"
+          >
+            <option
+                v-for  = "(item, idx) in CD1000000010"
+                :key   = "idx"
+                v-text = "item.text"
+                :value = "item.value"
+            ></option>
+          </select>
+        </td>
+        <th>
+          처리구분
+        </th>
+        <td>
+          <select
+              v-model = "req_prc_step_cd_selected_pop"
+              @change = "req_prc_step_cd_change_pop"
+          >
+            <option
+                v-for  = "(item, idx) in CD1000000011"
+                :key   = "idx"
+                v-text = "item.text"
+                :value = "item.value"
+            ></option>
+          </select>
+        </td>
+      </tr>
+      </tbody>
+    </table>
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트
         <select
@@ -362,12 +461,29 @@
         </select>
       </div>
     </li>
+    <!--   검출구분코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C25'">
+      <div class="item-con">파일구분코드
+        <select
+            v-model = "file_rgs_dscd_selected"
+            style   = "width: 200px"
+            @change = "file_rgs_dscd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000025T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <!--    공지업무코드-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C18'">
       <div class="item-con">공지업무
         <select
             v-model="ntar_bzcd_selected"
-            style="width: 165px; margin-left: 8px"
+            style="width: 165px;"
             @change = "ntar_bzcd_change"
         >
           <option
@@ -380,22 +496,22 @@
       </div>
     </li>
     <!--   WBS관리구분코드 -->
-     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C35'">
-       <div class="item-con">관리구분
-         <select
-             v-model="wbs_prc_sts_cd_selected"
-             style="width: 120px"
-             @change = "wbs_prc_sts_cd_change"
-         >
-           <option
-               v-for="(wbs_prc_sts_cd, idx) in CD1000000035T"
-               :key="idx"
-               v-text="wbs_prc_sts_cd.text"
-               :value="wbs_prc_sts_cd.value"
-           ></option>
-         </select>
-       </div>
-     </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C35'">
+      <div class="item-con">관리구분
+        <select
+            v-model="wbs_prc_sts_cd_selected"
+            style="width: 120px"
+            @change = "wbs_prc_sts_cd_change"
+        >
+          <option
+              v-for="(wbs_prc_sts_cd, idx) in CD1000000035T"
+              :key="idx"
+              v-text="wbs_prc_sts_cd.text"
+              :value="wbs_prc_sts_cd.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <!--   신청 처리 단계 구분코드-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C19'">
       <div class="item-con">진행상태
@@ -465,6 +581,57 @@
         </select>
       </div>
     </li>
+    <!--   검색항목코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C36'">
+      <div class="item-con">검색항목
+        <select
+            v-model = "search_cd_selected"
+            style   = "width: 100px"
+            @change = "search_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000036T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!--   투입프로젝트 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C38'">
+      <div class="item-con">투입프로젝트
+        <select
+            v-model = "real_prjt_id_selected"
+            style   = "width: 100px"
+            @change = "real_prjt_id_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000038T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!--   회차 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C39'">
+      <div class="item-con">차수
+        <select
+            v-model = "week_sqn_cd_selected"
+            style   = "width: 100px"
+            @change = "week_sqn_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000039T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
   </div>
 
 
@@ -498,11 +665,11 @@ export default {
       CD1000000009T : [],  CD1000000009N : [],
       CD1000000010T : [],  CD1000000010N : [], CD1000000010 : [],
       CD1000000011T : [],  CD1000000011N : [], CD1000000011 : [],
-      CD1000000012T : [],  CD1000000012N : [],
-      CD1000000013T : [],  CD1000000013N : [],
-      CD1000000014T : [],  CD1000000014N : [],
-      CD1000000015T : [],  CD1000000015N : [],
-      CD1000000016T : [],  CD1000000016N : [],
+      CD1000000012T : [],  CD1000000012N : [], CD1000000012 : [],
+      CD1000000013T : [],  CD1000000013N : [], CD1000000013 : [],
+      CD1000000014T : [],  CD1000000014N : [], CD1000000014 : [],
+      CD1000000015T : [],  CD1000000015N : [], CD1000000015 : [],
+      CD1000000016T : [],  CD1000000016N : [], CD1000000016 : [],
       CD1000000017T : [],  CD1000000017N : [],
       CD1000000018T : [],  CD1000000018N : [],
       CD1000000019T : [],  CD1000000019N : [],
@@ -523,6 +690,8 @@ export default {
       CD1000000034T : [],  CD1000000034N : [],
       CD1000000035T : [],  CD1000000035N : [],
       CD1000000036T : [],  CD1000000036N : [],
+      CD1000000038T : [],  CD1000000038N : [],
+      CD1000000039T : [],  CD1000000039N : [],
 
       comboList: this.comboArray,
       code_it : [],
@@ -566,8 +735,10 @@ export default {
       err_rgs_dscd_selected : "",
       // 관리구분
       rgs_dis_cd_selected : "",
+      rgs_dis_cd_selected_iss : "",
       // 요청구분
       req_dis_cd_selected : "",
+      req_dis_cd_selected_iss : "",
       //신청구분
       req_dscd_selected:"",
       req_dscd_selected_pop:"",
@@ -576,6 +747,12 @@ export default {
       req_prc_step_cd_selected_pop:"",
       //관리구분
       mng_cd_selected:"",
+      //이슈처리단계
+      iss_prc_step_cd_selected_iss:"",
+      //긴급성
+      urgn_cd_selected_iss:"",
+      //영향도
+      ifnc_cd_selected_iss:"",
       //WBS_진행상태
       wbs_prc_sts_cd_selected:"",
       //WBS_관리구분
@@ -588,8 +765,14 @@ export default {
       search_cd_selected:"",
       //산출물구분
       file_cd_selected:"",
-      // 파일등록구분
+      // 파일등록구분(팝업)
       file_rgs_dscd_selected_pop : "",
+      // 파일등록구분
+      file_rgs_dscd_selected : "",
+      // 투입프로젝트
+      real_prjt_id_selected : "",
+      // 회차
+      week_sqn_cd_selected : "",
     }
   },
   methods: {
@@ -603,33 +786,39 @@ export default {
         // 개발용
       }
     },
-    bzcd_change()              {  this.$emit('bzcd_change',             this.bzcd_selected)},              // 업무구분코드
-    dvlp_dis_cd_change()       {  this.$emit('dvlp_dis_cd_change',      this.dvlp_dis_cd_selected)},       // 개발구분코드
-    pgm_dis_cd_change()        {  this.$emit('pgm_dis_cd_change',       this.pgm_dis_cd_selected)},        // 프로그램구분코드
-    prc_step_cd_change()       {  this.$emit('prc_step_cd_change',      this.prc_step_cd_selected)},       // 처리단계코드
-    iss_prc_step_cd_change()   {  this.$emit('iss_prc_step_cd_change',  this.iss_prc_step_cd_selected)},   // 이슈관리처리단계코드
-    bkup_id_change()           {  this.$emit('bkup_id_change',          this.bkup_id_selected)},           // 백업 ID
-    prjt_nm_chage()            {  this.$emit('prjt_nm_chage',           this.prjt_nm_selected)},           // 프로젝트명
-    sqn_cd_change()            {  this.$emit('sqn_cd_change',           this.sqn_cd_selected)},            // 차수구분코드
-    itg_tst_prc_cd_change()    {  this.$emit('itg_tst_prc_cd_change',   this.itg_tst_prc_cd_selected)},    // 통합테스트 처리구분코드
-    req_dis_cd_change()        {  this.$emit('req_dis_cd_change',       this.req_dis_cd_selected)},        // 요청구분코드
-    rgs_dis_cd_change()        {  this.$emit('rgs_dis_cd_change',       this.rgs_dis_cd_selected)},        // 관리구분코드
-    req_dscd_change()          {  this.$emit('req_dscd_change',         this.req_dscd_selected)},          // 신청구분코드
-    req_prc_step_cd_change()   {  this.$emit('req_prc_step_cd_change',  this.req_prc_step_cd_selected)},   // 신청처리단계구분코드
-    wbs_prc_sts_cd_change()    {  this.$emit('wbs_prc_sts_cd_change',   this.wbs_prc_sts_cd_selected)},    // WBS 진행상태코드
-    wbs_mng_cd_change()        {  this.$emit('wbs_mng_cd_change',       this.wbs_mng_cd_selected)},        // WBS 관리구분코드
-    ntar_bzcd_change()         {  this.$emit('ntar_bzcd_change',        this.ntar_bzcd_selected)},         // 공지업무코드
-    err_tycd_change()          {  this.$emit('err_tycd_change',         this.err_tycd_selected)},          // 결함유형구분코드
-    err_rgs_dscd_change()      {  this.$emit('err_rgs_dscd_change',     this.err_rgs_dscd_selected)},      // 결함등록단계구분코드
-    err_prc_step_cd_change()   {  this.$emit('err_prc_step_cd_change',  this.err_prc_step_cd_selected)},   // 결함처리단계구분코드
-    file_cd_change()           {  this.$emit('file_cd_change',          this.file_cd_selected)},           // 산출물구분코드
-    search_cd_change()         {  this.$emit('search_cd_change',        this.search_cd_selected)},         // 검색항목코드
-    check_cd_change()          {  this.$emit('check_cd_change',         this.check_cd_selected)},          // 검출구분코드
-    req_prc_step_cd_change_pop()    {  this.$emit('req_prc_step_cd_change_pop',    this.req_prc_step_cd_selected_pop)},        
+    bzcd_change()                   {  this.$emit('bzcd_change',                   this.bzcd_selected)},                 // 업무구분코드
+    dvlp_dis_cd_change()            {  this.$emit('dvlp_dis_cd_change',            this.dvlp_dis_cd_selected)},          // 개발구분코드
+    pgm_dis_cd_change()             {  this.$emit('pgm_dis_cd_change',             this.pgm_dis_cd_selected)},           // 프로그램구분코드
+    prc_step_cd_change()            {  this.$emit('prc_step_cd_change',            this.prc_step_cd_selected)},          // 처리단계코드
+    iss_prc_step_cd_change()        {  this.$emit('iss_prc_step_cd_change',        this.iss_prc_step_cd_selected)},      // 이슈관리처리단계코드
+    bkup_id_change()                {  this.$emit('bkup_id_change',                this.bkup_id_selected)},              // 백업 ID
+    prjt_nm_chage()                 {  this.$emit('prjt_nm_chage',                 this.prjt_nm_selected)},              // 프로젝트명
+    sqn_cd_change()                 {  this.$emit('sqn_cd_change',                 this.sqn_cd_selected)},               // 차수구분코드
+    itg_tst_prc_cd_change()         {  this.$emit('itg_tst_prc_cd_change',         this.itg_tst_prc_cd_selected)},       // 통합테스트 처리구분코드
+    req_dis_cd_change()             {  this.$emit('req_dis_cd_change',             this.req_dis_cd_selected)},           // 요청구분코드
+    rgs_dis_cd_change()             {  this.$emit('rgs_dis_cd_change',             this.rgs_dis_cd_selected)},           // 관리구분코드
+    req_dscd_change()               {  this.$emit('req_dscd_change',               this.req_dscd_selected)},             // 신청구분코드
+    req_prc_step_cd_change()        {  this.$emit('req_prc_step_cd_change',        this.req_prc_step_cd_selected)},      // 신청처리단계구분코드
+    wbs_prc_sts_cd_change()         {  this.$emit('wbs_prc_sts_cd_change',         this.wbs_prc_sts_cd_selected)},       // WBS 진행상태코드
+    wbs_mng_cd_change()             {  this.$emit('wbs_mng_cd_change',             this.wbs_mng_cd_selected)},           // WBS 관리구분코드
+    ntar_bzcd_change()              {  this.$emit('ntar_bzcd_change',              this.ntar_bzcd_selected)},            // 공지업무코드
+    err_tycd_change()               {  this.$emit('err_tycd_change',               this.err_tycd_selected)},             // 결함유형구분코드
+    err_rgs_dscd_change()           {  this.$emit('err_rgs_dscd_change',           this.err_rgs_dscd_selected)},         // 결함등록단계구분코드
+    err_prc_step_cd_change()        {  this.$emit('err_prc_step_cd_change',        this.err_prc_step_cd_selected)},      // 결함처리단계구분코드
+    file_cd_change()                {  this.$emit('file_cd_change',                this.file_cd_selected)},              // 산출물구분코드
+    search_cd_change()              {  this.$emit('search_cd_change',              this.search_cd_selected)},            // 검색항목코드
+    check_cd_change()               {  this.$emit('check_cd_change',               this.check_cd_selected)},             // 검출구분코드
+    req_prc_step_cd_change_pop()    {  this.$emit('req_prc_step_cd_change_pop',    this.req_prc_step_cd_selected_pop)},
     bzcd_change_pop()               {  this.$emit('bzcd_change_pop',               this.bzcd_selected_pop)},
-    req_dscd_change_pop()           {  this.$emit('req_dscd_change_pop',            this.req_dscd_selected_pop)},
-    file_rgs_dscd_change_pop()      {  this.$emit('file_rgs_dscd_change_pop',            this.file_rgs_dscd_selected_pop)},
-    prjt_nm_change_pop()            {  this.$emit('prjt_nm_change_pop',            this.prjt_nm_selected_pop)},
+    req_dscd_change_pop()           {  this.$emit('req_dscd_change_pop',           this.req_dscd_selected_pop)},
+    file_rgs_dscd_change_pop()      {  this.$emit('file_rgs_dscd_change_pop',      this.file_rgs_dscd_selected_pop)},
+    file_rgs_dscd_change()          {  this.$emit('file_rgs_dscd_change',          this.file_rgs_dscd_selected)},
+    rgs_dis_cd_change_iss()         {  this.$emit('rgs_dis_cd_change_iss',         this.rgs_dis_cd_selected_iss)},       // 관리구분(이슈)
+    iss_prc_step_cd_change_iss()    {  this.$emit('iss_prc_step_cd_change_iss',    this.iss_prc_step_cd_selected_iss)},  // 이슈처리단계구분코드
+    req_dis_cd_change_iss()         {  this.$emit('req_dis_cd_change_iss',         this.req_dis_cd_selected_iss)},       // 요청구분(이슈)
+    urgn_cd_change_iss()            {  this.$emit('urgn_cd_change_iss',            this.urgn_cd_selected_iss)},          // 긴급성(이슈)
+    real_prjt_id_change()            {  this.$emit('real_prjt_id_change',          this.real_prjt_id_selected)},         // 투입프로젝트
+    week_sqn_cd_change()            {  this.$emit('week_sqn_cd_change',            this.week_sqn_cd_selected)},          // 회차
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -696,6 +885,9 @@ export default {
               } else if (i === 36) {
                 this.CD1000000036T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000036N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 39) {
+                this.CD1000000039T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000039N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -749,15 +941,23 @@ export default {
             } else if(i === 12) {
               this.CD1000000012T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000012N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000012.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 13) {
               this.CD1000000013T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000013N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000013.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 14) {
               this.CD1000000014T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000014N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000014.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 15) {
+              this.CD1000000015T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000015N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000015.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 16) {
+              this.CD1000000016T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000016N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000016.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 18) {
               this.CD1000000018T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000018N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -775,9 +975,9 @@ export default {
               this.CD1000000022N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 25) {
-            this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
-            this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-            this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
             else if(i === 26) {
               this.CD1000000026T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
@@ -795,13 +995,20 @@ export default {
               this.CD1000000036T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000036N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 38) {
+              this.CD1000000038T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000038N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 39) {
+              this.CD1000000039T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000039N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
 
             this.set_yn = "Y";
             this.row++;
           }
           if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected          = sessionStorage.getItem("LOGIN_PROJ_ID")
-          // if(this.CD1000000001.length !== 0)  this.bzcd_selected_pop = this.CD1000000001[0].value
           if(this.CD1000000001T.length !== 0)  this.bzcd_selected = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
           if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected         = this.CD1000000002T[0].value
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected         = this.CD1000000003T[0].value
@@ -810,9 +1017,12 @@ export default {
           if(this.CD1000000007T.length !== 0)  this.err_tycd_selected            = this.CD1000000007T[0].value
           if(this.CD1000000008T.length !== 0)  this.err_rgs_dscd_selected        = this.CD1000000008T[0].value
           if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected     = this.CD1000000009T[0].value
-          // if(this.CD1000000010.length !== 0)  this.req_dscd_selected_pop         = '400'
           if(this.CD1000000010T.length !== 0)  this.req_dscd_selected            = this.CD1000000010T[0].value
-          // if(this.CD1000000011.length !== 0)  this.req_prc_step_cd_selected_pop  = this.CD1000000011[0].value
+          if(this.CD1000000012.length !== 0)  this.rgs_dis_cd_selected_iss       = this.CD1000000012[0].value
+          if(this.CD1000000013.length !== 0)  this.req_dis_cd_selected_iss       = this.CD1000000013[0].value
+          if(this.CD1000000014.length !== 0)  this.iss_prc_step_cd_selected_iss  = this.CD1000000014[0].value
+          if(this.CD1000000015.length !== 0)  this.urgn_cd_selected_iss          = this.CD1000000015[0].value
+          if(this.CD1000000016.length !== 0)  this.ifnc_cd_selected_iss          = this.CD1000000016[0].value
           if(this.CD1000000011T.length !== 0)  this.req_prc_step_cd_selected     = this.CD1000000011T[0].value
           if(this.CD1000000012T.length !== 0)  this.rgs_dis_cd_selected          = this.CD1000000012T[0].value
           if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected          = this.CD1000000013T[0].value
@@ -821,10 +1031,13 @@ export default {
           if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected          = this.CD1000000019T[0].value
           if(this.CD1000000021T.length !== 0)  this.check_cd_selected            = this.CD1000000021T[0].value
           if(this.CD1000000022T.length !== 0)  this.file_cd_selected             = this.CD1000000022T[0].value
+          if(this.CD1000000025T.length !== 0)  this.file_rgs_dscd_selected       = this.CD1000000025T[0].value
           if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected      = this.CD1000000026T[0].value
           if(this.CD1000000027T.length !== 0)  this.bkup_id_selected             = this.CD1000000027T[0].value
           if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035T[0].value
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
+          if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
+          if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
         }
         this.setCdAll()
       }
@@ -868,6 +1081,8 @@ export default {
       this.cd_all.push(this.CD1000000034N)
       this.cd_all.push(this.CD1000000035N)
       this.cd_all.push(this.CD1000000036N)
+      this.cd_all.push(this.CD1000000038N)
+      this.cd_all.push(this.CD1000000039N)
     },
     init()  {
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -915,6 +1130,9 @@ export default {
             "1000000034",
             "1000000035",
             "1000000036",
+            "1000000037",
+            "1000000038",
+            "1000000039",
           ];
 
       // 조회영역 권한 체크

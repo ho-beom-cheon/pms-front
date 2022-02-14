@@ -348,7 +348,7 @@ export default {
 					title:"",
 					scrollX:false,
 					scrollY:false,
-					bodyHeight: 610,
+					bodyHeight: 640,
 					rowHeight: 25,
 					showDummyRows: true,
 					open: false,

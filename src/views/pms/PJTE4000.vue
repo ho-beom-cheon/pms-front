@@ -52,7 +52,7 @@
         <div class="col">
           <ul class="filter-con clear-fix">
             <combo
-                :comboArray = "this.comboList"
+                :comboArray="this.comboList"
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @rgs_dis_cd_change="rgs_dis_cd_change"
@@ -209,73 +209,14 @@
                     >
                   </div>
                 </li>
-                <li class="filter-item-a" v-if="detail.mng_id">
-                  <div class="item-con">
-                    <label>*관리구분</label>
-                    <select
-                        v-model="detail.rgs_dis_cd_selected"
-                        style="width: 150px; background-color: #f2f2f2;"
-                        :disabled=true
-                    >
-                      <option
-                          v-for="(rgs_dis_cd, idx) in detail.rgs_dis_cd"
-                          :key="idx"
-                          v-text="rgs_dis_cd.text"
-                          :value="rgs_dis_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-                <li class="filter-item-a" v-else>
-                  <div class="item-con">
-                    <label>*관리구분</label>
-                    <select
-                        v-model="detail.rgs_dis_cd_selected"
-                        style="width: 150px;"
-                    >
-                      <option
-                          v-for="(rgs_dis_cd, idx) in detail.rgs_dis_cd"
-                          :key="idx"
-                          v-text="rgs_dis_cd.text"
-                          :value="rgs_dis_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*처리단계</label>
-                    <select
-                        v-model="detail.prc_step_cd_selected"
-                        style="width: 150px; margin-right: 150px"
-                    >
-                      <option
-                          v-for="(prc_step_cd, idx) in detail.prc_step_cd"
-                          :key="idx"
-                          v-text="prc_step_cd.text"
-                          :value="prc_step_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청구분</label>
-                    <select
-                        v-model="detail.req_dis_cd_selected"
-                        style="width: 150px"
-                    >
-                      <option
-                          v-for="(req_dis_cd, idx) in detail.req_dis_cd"
-                          :key="idx"
-                          v-text="req_dis_cd.text"
-                          :value="req_dis_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
+                <combo
+                    :comboArray="this.comboList2"
+                    @rgs_dis_cd_change_iss="rgs_dis_cd_change_iss"
+                    @iss_prc_step_cd_change_iss="iss_prc_step_cd_change_iss"
+                    @req_dis_cd_change_iss="req_dis_cd_change_iss"
+                    ref="combo2"
+                >
+                </combo>
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>*요청일자</label>
@@ -341,38 +282,13 @@
                       ></div>
                   </div>
                 </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>긴급성</label>
-                    <select
-                        v-model="detail.urgn_cd_selected"
-                        style="width: 150px"
-                    >
-                      <option
-                          v-for="(urgn_cd, idx) in detail.urgn_cd"
-                          :key="idx"
-                          v-text="urgn_cd.text"
-                          :value="urgn_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>영향도</label>
-                    <select
-                        v-model="detail.ifnc_cd_selected"
-                        style="width: 150px"
-                    >
-                      <option
-                          v-for="(ifnc_cd, idx) in detail.ifnc_cd"
-                          :key="idx"
-                          v-text="ifnc_cd.text"
-                          :value="ifnc_cd.value"
-                      ></option>
-                    </select>
-                  </div>
-                </li>
+                <combo
+                    :comboArray="this.comboList3"
+                    @urgn_cd_change_iss="urgn_cd_change_iss"
+                    @ifnc_cd_change_iss="ifnc_cd_change_iss"
+                    ref="combo3"
+                >
+                </combo>
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>등급</label>
@@ -489,7 +405,7 @@
                     <textarea v-else-if="this.large_num == '1'"
                               cols="103"
                               rows="33"
-                              id="detailTextArea"
+                              id="detailTextArea1"
                               v-model="detail.req_dis_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
@@ -497,7 +413,7 @@
                     <textarea v-else-if="this.large_num == '2'"
                               cols="103"
                               rows="33"
-                              id="detailTextArea"
+                              id="detailTextArea2"
                               v-model="detail.ttmn_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
@@ -505,7 +421,7 @@
                     <textarea v-else-if="this.large_num == '3'"
                               cols="103"
                               rows="33"
-                              id="detailTextArea"
+                              id="detailTextArea3"
                               v-model="detail.slv_mpln_txt"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
@@ -513,7 +429,7 @@
                     <textarea v-else-if="this.large_num == '4'"
                               cols="103"
                               rows="33"
-                              id="detailTextArea"
+                              id="detailTextArea4"
                               v-model="detail.rmrk"
                               :disabled=true
                               style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
@@ -626,42 +542,61 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params)             {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)              {this.info.prjt_nm_selected = params},
-    rgs_dis_cd_change(params)          {this.info.rgs_dis_cd_selected = params},
-    req_dis_cd_change(params)          {this.info.req_dis_cd_selected = params},
-    iss_prc_step_cd_change(params)     {this.info.prc_step_cd_selected = params},
+    bkup_id_change(params) {
+      this.info.bkup_id_selected = params
+    },
+    prjt_nm_chage(params) {
+      this.info.prjt_nm_selected = params
+    },
+    rgs_dis_cd_change(params) {
+      this.info.rgs_dis_cd_selected = params
+    },
+    req_dis_cd_change(params) {
+      this.info.req_dis_cd_selected = params
+    },
+    iss_prc_step_cd_change(params) {
+      this.info.prc_step_cd_selected = params
+    },
+
+    rgs_dis_cd_change_iss(params) {
+      this.detail.rgs_dis_cd_selected = params
+    },
+    iss_prc_step_cd_change_iss(params) {
+      this.detail.prc_step_cd_selected = params
+    },
+    req_dis_cd_change_iss(params) {
+      this.detail.req_dis_cd_selected = params
+    },
+    urgn_cd_change_iss(params) {
+      this.detail.urgn_cd_selected = params
+    },
+    ifnc_cd_change_iss(params) {
+      this.detail.ifnc_cd_selected = params
+    },
 
 
     init() {
       // 특정 열 비활성화
       this.$refs.grid.invoke("disable");
-      this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
+      this.$refs.grid.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
       // 조회 필터 초기화
       this.info.cmpl_yn = false
       // 상세내용 초기화
-      this.detail.rgs_dis_cd_selected = rgs_dis_cd[0].value       // (상세)관리구분
-      this.detail.prc_step_cd_selected = prc_step_cd[0].value     // (상세)처리단계
-      this.detail.mng_id = ''                                         // (상세)관리ID
-      this.detail.req_dis_cd_selected = req_dis_cd[0].value       // (상세)요청구분
-      this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
-      this.detail.achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
-      this.detail.ttmn_crpe_nm = ''                                 // (상세)조치담당자
-      this.detail.tgt_biz_nm = ''                                   // (상세)조치업무명
-      this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
-      this.detail.ttmn_dt = ''                                        // (상세)조치일자
-      this.detail.ifnc_cd_selected = urgn_cd[0].value                 // (상세)영향도
-      this.detail.urgn_cd_selected = ifnc_cd[0].value                 // (상세)긴급성
-      this.detail.gd_txt = ''                                         // (상세)등급
-      this.detail.titl_nm = ''                                      // (상세)제목
-      this.detail.req_dis_txt = ''                                  // (상세)요청내용
-      this.detail.ttmn_txt = ''                                     // (상세)조치내용
-      this.detail.slv_mpln_txt = ''                                 // (상세)해결방안내용
-      this.detail.rmrk = ''                                           // (상세)비고
+      this.detail.mng_id = ''
       // 상세내용 확대보기 초기 폰트사이즈 설정
-      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      if (this.large_num == '1') {
+        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      } else if (this.large_num == '2') {
+        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      } else if (this.large_num == '3') {
+        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      } else if (this.large_num == '4') {
+        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      } else {
+        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      }
     },
     fnSave() {
       //백업ID가 현재 일 때만 저장
@@ -741,6 +676,10 @@ export default {
                       alert("저장이 완료되었습니다.");
                       //update 후 재조회
                       this.$refs.grid.invoke("reloadData");
+                      // 이슈처리단계 구분코드가 500 (완료) 일 때, 상세내용 초기화
+                      if (this.detail.prc_step_cd_selected == '500') {
+                        this.fnClear();
+                      }
                     }
                   }).catch(e => {
                 alert("저장에 실패하였습니다.");
@@ -754,53 +693,78 @@ export default {
         alert('백업정보는 저장할 수 없습니다.');
       }
     },
+
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
-      this.detail.rgs_dis_cd_selected = rgs_dis_cd[0].value       // (상세)관리구분
-      this.detail.prc_step_cd_selected = prc_step_cd[0].value     // (상세)처리단계
-      this.detail.mng_id = ''                                         // (상세)관리ID
-      this.detail.req_dis_cd_selected = req_dis_cd[0].value       // (상세)요청구분
-      this.detail.rgs_dt = this.getToday()                            // (상세)요청일자
-      this.detail.achi_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)요청자
-      this.detail.ttmn_crpe_nm = ''                                 // (상세)조치담당자
-      this.detail.tgt_biz_nm = ''                                   // (상세)조치업무명
-      this.detail.ttmn_scd_dt = ''                                    // (상세)조치예정일자
-      this.detail.ttmn_dt = ''                                        // (상세)조치일자
-      this.detail.ifnc_cd_selected = urgn_cd[0].value                 // (상세)영향도
-      this.detail.urgn_cd_selected = ifnc_cd[0].value                 // (상세)긴급성
-      this.detail.gd_txt = ''                                         // (상세)등급
-      this.detail.titl_nm = ''                                      // (상세)제목
-      this.detail.req_dis_txt = ''                                  // (상세)요청내용
-      this.detail.ttmn_txt = ''                                     // (상세)조치내용
-      this.detail.slv_mpln_txt = ''                                 // (상세)해결방안내용
-      this.detail.rmrk = ''                                           // (상세)비고
+      this.detail.rgs_dis_cd_selected = this.$refs.combo2.$data.CD1000000012[0].value                     // (상세)관리구분
+      this.$refs.combo2.$data.rgs_dis_cd_selected_iss = this.$refs.combo2.$data.CD1000000012[0].value
+      this.detail.prc_step_cd_selected = this.$refs.combo2.$data.CD1000000014[0].value                    // (상세)처리단계
+      this.$refs.combo2.$data.iss_prc_step_cd_selected_iss = this.$refs.combo2.$data.CD1000000014[0].value
+      this.detail.mng_id = ''                                                                             // (상세)관리ID
+      this.detail.req_dis_cd_selected = this.$refs.combo2.$data.CD1000000013[0].value                     // (상세)요청구분
+      this.$refs.combo2.$data.req_dis_cd_selected_iss = this.$refs.combo2.$data.CD1000000013[0].value
+      this.detail.rgs_dt = this.getToday()                                                                // (상세)요청일자
+      this.detail.achi_nm = sessionStorage.getItem("LOGIN_EMP_NM")                                   // (상세)요청자
+      this.detail.ttmn_crpe_nm = ''                                                                      // (상세)조치담당자
+      this.detail.tgt_biz_nm = ''                                                                        // (상세)조치업무명
+      this.detail.ttmn_scd_dt = ''                                                                       // (상세)조치예정일자
+      this.detail.ttmn_dt = ''                                                                           // (상세)조치일자
+      this.detail.ifnc_cd_selected = this.$refs.combo3.$data.CD1000000016[0].value                       // (상세)영향도
+      this.$refs.combo3.$data.ifnc_cd_selected_iss = this.$refs.combo3.$data.CD1000000016[0].value
+      this.detail.urgn_cd_selected = this.$refs.combo3.$data.CD1000000015[0].value                       // (상세)긴급성
+      this.$refs.combo3.$data.urgn_cd_selected_iss = this.$refs.combo3.$data.CD1000000015[0].value
+      this.detail.gd_txt = ''                                                                            // (상세)등급
+      this.detail.titl_nm = ''                                                                           // (상세)제목
+      this.detail.req_dis_txt = ''                                                                       // (상세)요청내용
+      this.detail.ttmn_txt = ''                                                                          // (상세)조치내용
+      this.detail.slv_mpln_txt = ''                                                                      // (상세)해결방안내용
+      this.detail.rmrk = ''                                                                              // (상세)비고
+
+      //관리구분 콤보박스 활성화
+      document.getElementById('rgs_dis_cd_iss').disabled = false
+      document.getElementById('rgs_dis_cd_iss').style.backgroundColor = '#ffffff'
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
+
+      // 그리드 row 클릭 시 상세내용에 Bind
       if (currentRowData != null) {
+        // console.log(currentRowData)
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+        // 관리구분 콤보박스 비활성화 (mng_id가 있을 시)
+        if (this.detail.mng_id != '' || this.detail.mng_id != 'null' || this.detail.mng_id !== undefined) {
+          document.getElementById('rgs_dis_cd_iss').disabled = true
+          document.getElementById('rgs_dis_cd_iss').style.backgroundColor = '#f2f2f2'
+        }
       }
+
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
       this.detail.rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
+      this.$refs.combo2.$data.rgs_dis_cd_selected_iss = currentRowData.rgs_dis_cd;
       this.detail.prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리단계
-      this.detail.mng_id = currentRowData.mng_id;                              // (상세)관리ID
+      this.$refs.combo2.$data.iss_prc_step_cd_selected_iss = currentRowData.prc_step_cd;
+      this.detail.mng_id = currentRowData.mng_id;                            // (상세)관리ID
       this.detail.req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
-      this.detail.rgs_dt = currentRowData.rgs_dt;                              // (상세)요청일자
+      this.$refs.combo2.$data.req_dis_cd_selected_iss = currentRowData.req_dis_cd;
+      this.detail.rgs_dt = currentRowData.rgs_dt;                            // (상세)요청일자
       this.detail.achi_nm = currentRowData.achi_nm;                          // (상세)요청자
       this.detail.ttmn_crpe_nm = currentRowData.ttmn_crpe_nm;                // (상세)조치담당자
       this.detail.tgt_biz_nm = currentRowData.tgt_biz_nm;                    // (상세)조치업무명
-      this.detail.ttmn_scd_dt = currentRowData.ttmn_scd_dt;                    // (상세)조치예정일자
-      this.detail.ttmn_dt = currentRowData.ttmn_dt;                            // (상세)조치일자
-      this.detail.ifnc_cd_selected = currentRowData.ifnc_cd;                   // (상세)영향도
-      this.detail.urgn_cd_selected = currentRowData.urgn_cd;                   // (상세)긴급성
-      this.detail.gd_txt = currentRowData.gd_txt;                              // (상세)등급
+      this.detail.ttmn_scd_dt = currentRowData.ttmn_scd_dt;                  // (상세)조치예정일자
+      this.detail.ttmn_dt = currentRowData.ttmn_dt;                          // (상세)조치일자
+      this.detail.ifnc_cd_selected = currentRowData.ifnc_cd;                 // (상세)영향도
+      this.$refs.combo3.$data.ifnc_cd_selected_iss = currentRowData.ifnc_cd;
+      this.detail.urgn_cd_selected = currentRowData.urgn_cd;                 // (상세)긴급성
+      this.$refs.combo3.$data.urgn_cd_selected_iss = currentRowData.urgn_cd;
+      this.detail.gd_txt = currentRowData.gd_txt;                            // (상세)등급
       this.detail.titl_nm = currentRowData.titl_nm;                          // (상세)제목
       this.detail.req_dis_txt = currentRowData.req_dis_txt;                  // (상세)요청내용
       this.detail.ttmn_txt = currentRowData.ttmn_txt;                        // (상세)조치내용
       this.detail.slv_mpln_txt = currentRowData.slv_mpln_txt;                // (상세)해결방안내용
-      this.detail.rmrk = currentRowData.rmrk;                                  // (상세)비고
+      this.detail.rmrk = currentRowData.rmrk;                                // (상세)비고
+      this.detail.bkup_id_selected = currentRowData.bkup_id;                 // (상세)백업ID
 
     },
     /* 저장 */
@@ -824,7 +788,7 @@ export default {
 
       return year + '-' + month + '-' + day;
     },
-    enlarged_view(num){
+    enlarged_view(num) {
       if (num == 1) {
         this.large_num = '1'
       } else if (num == 2) {
@@ -837,11 +801,31 @@ export default {
     },
     textSizeUP() {  //상세내용 확대보기  (+확대버튼)
       this.defaultFontSize++;
-      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
+      if (this.large_num == '1') {
+        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
+      } else if (this.large_num == '2') {
+        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';
+      } else if (this.large_num == '3') {
+        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
+      } else if (this.large_num == '4') {
+        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
+      } else {
+        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
+      }
     },
     textSizeDown() {  //상세내용 확대보기  (-축소버튼)
       this.defaultFontSize--;
-      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
+      if (this.large_num == '1') {
+        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
+      } else if (this.large_num == '2') {
+        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';
+      } else if (this.large_num == '3') {
+        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
+      } else if (this.large_num == '4') {
+        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
+      } else {
+        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
+      }
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
@@ -879,90 +863,83 @@ export default {
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     count: (a, b) => {
-      // console.log("count의 값이 변경되면 여기도 실행");
-      // console.log("new Value :: " + a);
-      // console.log("old Value :: " + b);
+
     },
   },
 // 변수 선언부분
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C12","C13","C14"],
+      comboList: ["C27", "C0", "C12", "C13", "C14"],
+      comboList2: ["C-41", "C-42", "C-43"],
+      comboList3: ["C-44", "C-45"],
+      // comboList2 : ["C4000_1","C4000_2","C4000_3"],
+      // comboList3 : ["C4000_4","C4000_5"],
 
-      large_num : '',
+      large_num: '',
 
       info: {
         /* 필터 변수 */
         // 공통 sessionStorage 데이터
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),       // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
 
-        rgs_dis_cd: rgs_dis_cd,          // 관리구분
-        req_dis_cd: req_dis_cd,          // 요청구분
-        prc_step_cd: prc_step_cd,        // 처리상태
+        bkup_id_selected: '0000000000',                                 // 백업ID
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
+        rgs_dis_cd_selected: 'TTT',                                     // 선택 된 관리구분
+        req_dis_cd_selected: 'TTT',                                     // 선택 된 요청구분
+        prc_step_cd_selected: 'TTT',                                    // 선택 된 처리상태
 
-        bkup_id_selected      : '0000000000',              // 백업ID
-        prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
-        rgs_dis_cd_selected: 'TTT',    // 선택 된 관리구분
-        req_dis_cd_selected: 'TTT',    // 선택 된 요청구분
-        prc_step_cd_selected: 'TTT',  // 선택 된 처리상태
-
-        rgs_sta_dt: this.rgs_sta_dt,         // 요청시작일자
-        rgs_end_dt: this.rgs_end_dt,         // 요청종료일자
+        rgs_sta_dt: this.rgs_sta_dt,          // 요청시작일자
+        rgs_end_dt: this.rgs_end_dt,          // 요청종료일자
         ttmn_sta_dt: this.ttmn_sta_dt,        // 조치시작일자
         ttmn_end_dt: this.ttmn_end_dt,        // 조치종료일자
 
-        tgt_biz_nm: this.tgt_biz_nm,               // 조치업무명
-        achi_nm: this.achi_nm,                     // 요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,           // 조치담당자
-        titl_nm: this.titl_nm,                     // 제목
-        req_dis_txt: this.req_dis_txt,             // 요청내용
-        ttmn_txt: this.ttmn_txt,                   // 조치내용
-        slv_mpln_txt: this.slv_mpln_txt,           // 해결방안내용
+        tgt_biz_nm: this.tgt_biz_nm,          // 조치업무명
+        achi_nm: this.achi_nm,                // 요청자
+        ttmn_crpe_nm: this.ttmn_crpe_nm,      // 조치담당자
+        titl_nm: this.titl_nm,                // 제목
+        req_dis_txt: this.req_dis_txt,        // 요청내용
+        ttmn_txt: this.ttmn_txt,              // 조치내용
+        slv_mpln_txt: this.slv_mpln_txt,      // 해결방안내용
 
-        achi_no: this.achi_nm,                     // 요청자
-        ttmn_crpe_no: this.ttmn_crpe_nm,           // 조치담당자
+        achi_no: this.achi_nm,                // 요청자
+        ttmn_crpe_no: this.ttmn_crpe_nm,      // 조치담당자
 
-        cmpl_yn: this.cmpl_yn,       // 완료/제외/해결/미발생해소 포함 여부
+        cmpl_yn: this.cmpl_yn,                // 완료/제외/해결/미발생해소 포함 여부
       },
 
       detail: {
         /* 상세내용 변수 */
         // 공통 sessionStorage 데이터
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),       // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
 
-        rgs_dis_cd: rgs_dis_cd,             // (상세)관리구분
-        prc_step_cd: prc_step_cd,           // (상세)처리상태
-        mng_id: '',                             // (상세)관리ID
-        req_dis_cd: req_dis_cd,             // (상세)요청구분
-        rgs_dt: this.getToday(),                // (상세)요청일자
-        achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),              // (상세)요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,    // (상세)조치담당자
-        tgt_biz_nm: this.tgt_biz_nm,        // (상세)조치업무명
-        ttmn_scd_dt: '',                        // (상세)조치예정일자
-        ttmn_dt: '',                            // (상세)조치일자
-        ifnc_cd: ifnc_cd,                       // (상세)영향도
-        urgn_cd: urgn_cd,                       // (상세)긴급성
-        gd_txt: this.gd_txt,                    // (상세)등급
-        titl_nm: this.titl_nm,              // (상세)제목
-        req_dis_txt: this.req_dis_txt,      // (상세)요청내용
-        ttmn_txt: this.ttmn_txt,            // (상세)조치내용
-        slv_mpln_txt: this.slv_mpln_txt,    // (상세)해결방안내용
-        rmrk: this.rmrk,                        // (상세)비고
+        mng_id: '',                                                  // (상세)관리ID
+        rgs_dt: this.getToday(),                                     // (상세)요청일자
+        achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),        // (상세)요청자
+        ttmn_crpe_nm: this.ttmn_crpe_nm,                             // (상세)조치담당자
+        tgt_biz_nm: this.tgt_biz_nm,                                 // (상세)조치업무명
+        ttmn_scd_dt: '',                                             // (상세)조치예정일자
+        ttmn_dt: '',                                                 // (상세)조치일자
+        gd_txt: this.gd_txt,                                         // (상세)등급
+        titl_nm: this.titl_nm,                                       // (상세)제목
+        req_dis_txt: this.req_dis_txt,                               // (상세)요청내용
+        ttmn_txt: this.ttmn_txt,                                     // (상세)조치내용
+        slv_mpln_txt: this.slv_mpln_txt,                             // (상세)해결방안내용
+        rmrk: this.rmrk,                                             // (상세)비고
 
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
-        rgs_dis_cd_selected: rgs_dis_cd[0].value,      // (상세)선택 된 관리구분
-        req_dis_cd_selected: req_dis_cd[0].value,      // (상세)선택 된 요청구분
-        prc_step_cd_selected: prc_step_cd[0].value,    // (상세)선택 된 처리상태
-        urgn_cd_selected: urgn_cd[0].value,                // (상세)영향도
-        ifnc_cd_selected: ifnc_cd[0].value,                // (상세)긴급성
+        rgs_dis_cd_selected: 'A',      // (상세)선택 된 관리구분
+        req_dis_cd_selected: '100',      // (상세)선택 된 요청구분
+        prc_step_cd_selected: '100',    // (상세)선택 된 처리상태
+        urgn_cd_selected: '100',                // (상세)영향도
+        ifnc_cd_selected: '100',                // (상세)긴급성
 
       },
 
@@ -975,7 +952,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 210,
+      bodyHeight: 190,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
@@ -1039,7 +1016,7 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: process.env.VUE_APP_API + '/PJTE4000/select', method: 'GET' },
+          readData: {url: process.env.VUE_APP_API + '/PJTE4000/select', method: 'GET'},
         },
         initialRequest: false,
       },

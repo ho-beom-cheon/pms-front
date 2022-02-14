@@ -141,7 +141,7 @@
           </ul>
           <div class="mt-1">
             <ul class="filter-btn">
-              <button class="btn btn-filter-d" @click="formDownload">TC증빙 일괄다운로드ⓘ</button>
+              <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
               <button class="btn btn-filter-e">
                  <label for="file">엑셀업로드</label>
@@ -205,7 +205,6 @@ import XLSX from "xlsx";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
-import axios from "axios";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
@@ -593,15 +592,23 @@ export default {
     dbClick(ev) {
       this.curRow = ev.rowKey;
     },
+    // 양식다운로드
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
       this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
     },
-    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+    // TC증빙 일괄다운로드
+    batchDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+    },
+    // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+    fnEdit(){
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
       this.modals.txt_modal1 = false;
     },
-    fnCloseModal(){  // 모달창 닫기
+    // 모달창 닫기
+    fnCloseModal(){
       this.modals.txt_modal1 = false;
     },
     //조회
@@ -634,9 +641,7 @@ export default {
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "pal_atfl_mng_id_yn");
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "atfl_mng_id_yn");
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "err_btn");
-
     },
-
     // 행삭제
     gridDelRow(){
       if(this.$refs.grid.invoke('getRow',this.curRow).save_yn === "Y"){
@@ -964,7 +969,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 610,
+      bodyHeight: 630,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
