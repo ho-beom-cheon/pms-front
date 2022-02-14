@@ -87,6 +87,7 @@
                   :rowHeight="rowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
+                  @onGridUpdated="onGridUpdated"
               ></grid>
             </div>
           </div>
@@ -106,7 +107,6 @@
                   :rowHeight="rowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
-                  @onGridUpdate="onGridUpdate"
               ></grid>
             </div>
           </div>
@@ -137,6 +137,7 @@
                     <combo
                         :comboArray="this.comboList2"
                         @ntar_bzcd_change="ntar_bzcd_change"
+                        ref="combo2"
                     >
                     </combo>
                     <li class="filter-item">
@@ -317,7 +318,7 @@ export default {
 
     /* 그리드 1 의 첫번쩨 Row의 todo_cd에 따라
        그리드 2의 TO-DO상세내역의 rmrk 컬럼의 헤더를 변경*/
-    onGridUpdate(grid) {  // onGridUpdate는 그리드가 그려지고 바로 실행됨
+    onGridUpdated(grid) {  // onGridUpdate는 그리드가 그려지고 바로 실행됨
       let todo_cd = this.$refs.grid1.invoke("getValue", 0, "todo_cd")
       if (todo_cd == '10' || todo_cd == '11' || todo_cd == '12' || todo_cd == '13') {
         this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '진행내용'})
@@ -416,6 +417,10 @@ export default {
                         alert("저장이 완료되었습니다.");
                         //update 후 재조회
                         this.$refs.grid3.invoke("reloadData");
+                        // 공지사항 삭제가 true 일 때, 상세내용 초기화
+                        if(this.detail.del_yn == true){
+                          this.fnClear();
+                        }
                       }
                     }).catch(e => {
                   alert("저장에 실패하였습니다.");
@@ -445,6 +450,8 @@ export default {
       this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM") // (상세)등록자번호
       this.detail.atfl_mng_id = ''                                    // (상세)첨부파일관리ID
       this.detail.del_yn = false                                    // 공지사항 삭제 체크박스
+      this.detail.ntar_bzcd_selected = this.$refs.combo2.$data.CD1000000018T[0].value     //(상세)공지업무
+      this.$refs.combo2.$data.ntar_bzcd_selected = this.$refs.combo2.$data.CD1000000018T[0].value
     },
     onClick(ev) {
       // TO-DO현황 ROW클릭 시 클릭한ROW의 rowNum으로 TO-DO상세내역 재조회
@@ -596,7 +603,7 @@ export default {
 
         // 공통 sessionStorage 데이터
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
+        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),       // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
       },
 
@@ -609,18 +616,18 @@ export default {
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),    // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
-        bkup_id_selected: '0000000000',                 // 백업ID
-        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트명
-        ntar_bzcd_selected: '100',                         // 공지구분
-        mng_id: this.mng_id,                            // 관리ID
-        rgs_dt: this.rgs_dt,                            // 요청일자
-        titl_txt: this.titl_txt,                        // 제목내용
-        ancpt: this.ancpt,                              // 공지내역
-        rgs_no: this.rgs_no,                            // 등록자번호
-        rgs_nm: this.rgs_nm,                            // 등록자번호
-        atfl_mng_id: this.atfl_mng_id,                  // 첨부파일관리ID
-        org_file_nm: this.org_file_nm,                  // 원파일명
-        del_yn: false,                                  // 공지사항 삭제 체크박스
+        bkup_id_selected: '0000000000',                                 // 백업ID
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
+        ntar_bzcd_selected: '100',        // 공지구분
+        mng_id: this.mng_id,              // 관리ID
+        rgs_dt: this.rgs_dt,              // 요청일자
+        titl_txt: this.titl_txt,          // 제목내용
+        ancpt: this.ancpt,                // 공지내역
+        rgs_no: this.rgs_no,              // 등록자번호
+        rgs_nm: this.rgs_nm,              // 등록자번호
+        atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
+        org_file_nm: this.org_file_nm,    // 원파일명
+        del_yn: false,                    // 공지사항 삭제 체크박스
       },
       file_name_list: [],
 
