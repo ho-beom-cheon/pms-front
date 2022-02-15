@@ -614,6 +614,19 @@ table.form-table select {
     gap: 3px;
 }
 
+/*PJTE8000*/
+.div1-d{
+    grid-column: 4/7;
+}
+.div0-d{
+    grid-column: 1/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(1, 490px);
+    gap: 3px;
+}
 /*SWZP0110 적용 CSS*/
 .multiGridWrap-c {
     display: grid;

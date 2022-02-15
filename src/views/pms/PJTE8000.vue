@@ -27,8 +27,8 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <ul class="card-body">
-                <li class="active"><a href="/PJTE8000">{{ menu_list[11].name }}</a></li>
-                <li><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
+                <li class="active"><a href="/PJTE8000">{{ menu_list[1].name }}</a></li>
+                <li><a href="/PJTE9000">{{ menu_list[0].name }}</a></li>
               </ul>
             </div>
           </div>
@@ -105,7 +105,7 @@
             ></grid>
           </div>
         </div>
-        <div class="div0-b">
+        <div class="div0-d">
           <div class="div3-b">
             <div class="div-header-b"><h2>상세내용</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
@@ -295,7 +295,7 @@
               </ul>
             </div>
           </div>
-          <div class="div4-b">
+          <div class="div1-d">
             <div class="div-header-b">
               <h2 v-if="this.large_num == ''">상세내용 확대보기</h2>
               <h2 v-if="this.large_num == '1'">요청내용 확대보기</h2>
@@ -368,13 +368,6 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 import axios from "axios";
 import Combo from "@/components/Combo"
 import {axiosService} from "@/api/http";
-
-// 현재 날짜
-let today = new Date();
-let year = today.getFullYear();
-let month = ('0' + (today.getMonth() + 1)).slice(-2);
-let day = ('0' + today.getDate()).slice(-2);
-let dateString = year + '-' + month;
 
 const storage = window.sessionStorage;
 
@@ -715,7 +708,7 @@ export default {
       var month = ("0" + (1 + date.getMonth())).slice(-2);
       var day = ("0" + date.getDate()).slice(-2);
 
-      return year + '-' + month + '-' + day;
+      return year + '-' + month;
     },
     enlarged_view(num){
       if (num == 1) {
@@ -837,7 +830,7 @@ export default {
 
         cmpl_yn: this.cmpl_yn,       // 완료/제외/해결/미발생해소 포함 여부
         //신규
-        inq_date : dateString,                        // 주간년월
+        inq_date : this.getToday(),                        // 주간년월
         dvlpe_no              : this.dvlpe_no,        // 개발자번호
         dvlpe_nm              : this.dvlpe_nm,        // 개발자명
       },
@@ -890,56 +883,6 @@ export default {
       open: false,
       menu_list: [
         {
-          id: 'PJTE1000',
-          path: '/PJTE1000',
-          name: 'ProjectEyes현황'
-        },
-        {
-          id: 'PJTE2100',
-          path: '/PJTE2100',
-          name: '개발현황'
-        },
-        {
-          id: 'PJTE2110',
-          path: '/PJTE2110',
-          name: '개발진척현황'
-        },
-        {
-          id: 'PJTE2200',
-          path: '/PJTE2200',
-          name: '통합테스트'
-        },
-        {
-          id: 'PJTE2210',
-          path: '/PJTE2210',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'PJTE3000',
-          path: '/PJTE3000',
-          name: '결함관리'
-        },
-        {
-          id: 'PJTE4000',
-          path: '/PJTE4000',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'PJTE5000',
-          path: '/PJTE5000',
-          name: 'WBS관리'
-        },
-        {
-          id: 'PJTE6000',
-          path: '/PJTE6000',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'PJTE7000',
-          path: '/PJTE7000',
-          name: '산출물정합성체크'
-        },
-        {
           id: 'PJTE9000',
           path: '/PJTE9000',
           name: '시스템관리'
@@ -961,159 +904,118 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 25
+        height: 70,
+        complexColumns: [
+          {header: 'PM',               name: 'mergeColumn1', childNames: ['pm_nm', 'pm_no']},
+          {header: '전체',              name: 'mergeColumn2', childNames: ['all_pred_prg', 'all_real_prg']},
+          {header: '단계',              name: 'mergeColumn3', childNames: ['step_nm', 'step_pred_prg', 'step_real_prg'], headerAlign:'center'},
+          {header: 'WBS',               name:'mergeColumn4', childNames: ['mergeColumn2', 'mergeColumn3']},
+      //    {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},*/
+        ]
       },
       columns: [
         {
-          header: '관리구분',
-          width: 150,
-          align: 'left',
-          name: 'rgs_dis_cd',
-          formatter: 'listItemText',
+          header  : '프로젝트 ID',
+          width   : 150,
+          align   : 'left',
+          name    : 'real_prjt_id',
+          hidden  : true,
+    /*      formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: rgs_dis_cd
+              listItems: real_prjt_id
             }
-          }
+          }*/
         },
         {
-          header: '관리ID',
+          header: '프로젝트',
+          width: 200,
+          align: 'left',
+          name: 'real_prjt_nm',
+        },
+        {
+          header: '이름',
           width: 100,
-          align: 'center',
-          name: 'mng_id',
+          align: 'left',
+          name: 'pm_nm',
         },
         {
-          header: '제목',
+          header: '사원번호',
+          width: 120,
+          align: 'center',
+          name: 'pm_no',
+          ellipsis: true,
+        },
+        {
+          header: '주간년월',
+          width: 120,
+          align: 'center',
+          name: 'week_yymm',
+          format: 'yyyy-mm',
+        },
+        {
+          header: '차수 CD',
+          width: 110,
+          align: 'left',
+          name: 'week_sqn_cd',
+          hidden : true,
+        },
+        {
+          header: '차수',
+          width: 40,
+          align: 'left',
+          name: 'week_sqn_nm',
+        },
+        {
+          header: '예정',
+          width: 60,
+          align: 'center',
+          name: 'all_pred_prg',
+        },
+        {
+          header: '실제',
+          width: 60,
+          align: 'center',
+          name: 'all_real_prg',
+        },
+        {
+          header: '단계',
+          width: 60,
+          align: 'center',
+          name: 'step_nm',
+        },
+        {
+          header: '예정',
+          width: 60,
+          align: 'center',
+          name: 'step_pred_prg',
+        },
+        {
+          header: '실제',
+          width: 60,
+          align: 'center',
+          name: 'step_real_prg',
+        },
+        {
+          header: '프로젝트진행현황',
           width: 230,
           align: 'left',
-          name: 'titl_nm',
+          name: 'prg_txt',
+          ellipsis: true,
+        },
+        {
+          header: '이슈내용',
+          width: 230,
+          align: 'left',
+          name: 'iss_txt',
           ellipsis: true,
         },
         {
           header: '요청내용',
-          width: 280,
-          align: 'left',
-          name: 'req_dis_txt',
-          ellipsis: true,
-        },
-        {
-          header: '요청구분',
-          width: 110,
-          align: 'left',
-          name: 'req_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: req_dis_cd
-            }
-          }
-        },
-        {
-          header: '요청일자',
-          width: 110,
-          align: 'center',
-          name: 'rgs_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '요청자',
-          width: 110,
-          align: 'center',
-          name: 'achi_nm',
-        },
-        {
-          header: '처리단계',
-          width: 110,
-          align: 'left',
-          name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: prc_step_cd
-            }
-          }
-        },
-        {
-          header: '조치업무명',
-          width: 140,
-          align: 'left',
-          name: 'tgt_biz_nm',
-        },
-        {
-          header: '조치담당자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_crpe_nm',
-        },
-        {
-          header: '조치예정일자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_scd_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '조치일자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '조치내용',
           width: 230,
           align: 'left',
-          name: 'ttmn_txt',
-          ellipsis: true,
-        },
-        {
-          header: '비고',
-          width: 230,
-          align: 'left',
-          name: 'rmrk',
-          ellipsis: true,
-        },
-        {
-          header: '긴급성',
-          width: 110,
-          align: 'left',
-          name: 'urgn_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: urgn_cd
-            }
-          }
-        },
-        {
-          header: '영향도',
-          width: 110,
-          align: 'left',
-          name: 'ifnc_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: ifnc_cd
-            }
-          }
-        },
-
-        {
-          header: '등급',
-          width: 110,
-          align: 'left',
-          name: 'gd_txt',
-        },
-        {
-          header: '해결방안내용',
-          width: 230,
-          align: 'left',
-          name: 'slv_mpln_txt',
+          name: 'req_txt',
           ellipsis: true,
         },
       ]
