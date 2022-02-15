@@ -996,7 +996,7 @@ export default {
         complexColumns: [
           {header: '계획',             name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '실적',             name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt'], headerAlign:'center'},
+          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt', 'err_btn'], headerAlign:'center'},
           {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},
           {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], headerAlign:'center'},
           {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], headerAlign:'center'},
@@ -1147,7 +1147,7 @@ export default {
           editor: 'text',
         },
         {
-          header: ' ',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'dvlpe_btn',
@@ -1168,7 +1168,7 @@ export default {
           editor: 'text',
         },
         {
-          header: ' ',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'pl_btn',
@@ -1271,25 +1271,6 @@ export default {
           name: 'rmrk',
           editor: 'text',
           ellipsis : true,
-        },
-        {
-          header: '개발자사번',
-          width: 400,
-          hidden : true,
-          name: 'dvlpe_no',
-        },
-        {
-          header: 'PL사번',
-          width: 200,
-          hidden : true,
-          name: 'pl_no',
-        },
-        {
-          header: '담당자사번',
-          width: 140,
-          hidden : true,
-          name: 'crpe_no',
-
         },
         {
           header: '등록여부',

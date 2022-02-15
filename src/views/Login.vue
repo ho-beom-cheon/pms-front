@@ -292,15 +292,7 @@ export default {
     },
     /* 세션 초기화 */
     sessionClear() {
-      storage.setItem("jwt-auth-token", "");          // 인증토큰
-      storage.setItem("LOGIN_EMP_NO", "");            // 직원번호
-      storage.setItem("LOGIN_EMP_NM", "");            // 직원명
-      storage.setItem("LOGIN_PROJ_ID", "");           // 프로젝트ID
-      storage.setItem("LOGIN_BZCD", "");              // 업무구분
-      storage.setItem("LOGIN_CATN_DCD", "");          // 구성원 구분코드
-      storage.setItem("LOGIN_AUT_CD", "");            // 권한ID
-      storage.setItem("LOGIN_YN", "");                // 로그인상태
-      storage.setItem("LOGIN_REAL_PRJT_ID", "");      // 투입프로젝트ID
+      sessionStorage.clear();
     },
     valClear() {
           this.userId = "";
