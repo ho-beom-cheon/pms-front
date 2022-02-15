@@ -107,44 +107,42 @@
         </div>
         <div class="div0-d">
           <div class="div3-b">
-            <div class="div-header-b"><h2>상세내용</h2>
+            <div class="div-header-b"><h2>금주 주간보고 등록</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
-                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">등록</button>
               </ul>
             </div>
             <div class="div2-body-c">
-              <ul class="filter-con clear-fix-a">
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>관리ID</label>
-                    <input type="text"
-                           placeholder="입력 불가"
-                           v-model="detail.mng_id"
-                           :disabled=true
-                           style="background-color: #f2f2f2 ; width: 150px"
-                    >
-                  </div>
-                </li>
+              <ul class="filter-con clear-fix-a" >
                 <combo
                     :comboArray="this.comboList2"
-                    @rgs_dis_cd_change_iss="rgs_dis_cd_change_iss"
-                    @iss_prc_step_cd_change_iss="iss_prc_step_cd_change_iss"
-                    @req_dis_cd_change_iss="req_dis_cd_change_iss"
+                    @real_prjt_id_change="real_prjt_id_change"
                     ref="combo2"
                 >
                 </combo>
+              </ul>
+              <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             ref="rgs_dt"
-                             v-model="detail.rgs_dt"
-                             :disabled=true
-                             style="width: 150px; background-color: #f2f2f2;"
-                      ></div>
+                  <div class="input-searchWrap"  style="margin-left: 15px">PM명
+                    <input type="text"
+                           placeholder="PM명"
+                           v-model="info.dvlpe_nm"
+                           style   = "width: 90px"
+                           @keyup.enter="open_pjte9001(1)"
+                    >
+                    <button class="search-btn"
+                            @click="open_pjte9001(1)"
+                    ></button>
                   </div>
+                </li>
+                <li style="float:left">
+                  <input type="text"
+                         placeholder="직원번호"
+                         v-model="info.dvlpe_no"
+                         style="width: 70px; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
@@ -153,10 +151,19 @@
                            placeholder="입력"
                            ref="achi_nm"
                            v-model="detail.achi_nm"
-                           style="width: 150px; margin-right: 150px;"
+                           style="width: 150px;"
                     >
                   </div>
                 </li>
+                <combo
+                    :comboArray="this.comboList3"
+                    @urgn_cd_change_iss="urgn_cd_change_iss"
+                    @ifnc_cd_change_iss="ifnc_cd_change_iss"
+                    ref="combo3"
+                >
+                </combo>
+                </ul>
+              <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>조치담당자</label>
@@ -199,13 +206,7 @@
                       ></div>
                   </div>
                 </li>
-                <combo
-                    :comboArray="this.comboList3"
-                    @urgn_cd_change_iss="urgn_cd_change_iss"
-                    @ifnc_cd_change_iss="ifnc_cd_change_iss"
-                    ref="combo3"
-                >
-                </combo>
+
                 <li class="filter-item-a">
                   <div class="item-con">
                     <label>등급</label>
@@ -791,8 +792,8 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C38","C39"],
-      comboList2 : ["C-41","C-42","C-43"],
-      comboList3 : ["C-44","C-45"],
+      comboList2 : ["C38"],
+      comboList3 : ["C39"],
 
       large_num : '',
 
