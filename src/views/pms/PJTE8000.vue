@@ -44,7 +44,6 @@
           <ul class="filter-con clear-fix">
             <combo
                 :comboArray = "this.comboList"
-                @prjt_nm_chage="prjt_nm_chage"
                 @real_prjt_id_change="real_prjt_id_change"
                 @week_sqn_cd_change="week_sqn_cd_change"
             >
@@ -114,17 +113,17 @@
               </ul>
             </div>
             <div class="div2-body-c">
-              <ul class="filter-con clear-fix-a" >
+              <ul class="filter-con clear-fix-a">
                 <combo
                     :comboArray="this.comboList2"
-                    @real_prjt_id_change="real_prjt_id_change"
+                    @rgs_dis_cd_change_iss="rgs_dis_cd_change_iss"
+                    @iss_prc_step_cd_change_iss="iss_prc_step_cd_change_iss"
+                    @req_dis_cd_change_iss="req_dis_cd_change_iss"
                     ref="combo2"
                 >
                 </combo>
-              </ul>
-              <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
-                  <div class="input-searchWrap"  style="margin-left: 15px">PM명
+                  <div class="input-searchWrap"  style="margin-left: 45px">PM명
                     <input type="text"
                            placeholder="PM명"
                            v-model="info.dvlpe_nm"
@@ -144,41 +143,41 @@
                          :disabled = true
                   >
                 </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청자</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="achi_nm"
-                           v-model="detail.achi_nm"
-                           style="width: 150px;"
-                    >
+                <li class="filter-item-a" >
+                  <div class="item-con"style="margin-left: 22px">
+                    <label>*주간년월</label>
+                    <input type="month" style="width: 150px"  v-model="info.inq_date">
                   </div>
                 </li>
                 <combo
                     :comboArray="this.comboList3"
-                    @urgn_cd_change_iss="urgn_cd_change_iss"
-                    @ifnc_cd_change_iss="ifnc_cd_change_iss"
+                    @week_sqn_cd_change_iss="week_sqn_cd_change_iss"
                     ref="combo3"
                 >
                 </combo>
-                </ul>
-              <ul class="filter-con clear-fix-a">
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>조치담당자</label>
+                    <label>전</label>
+                    <label>체</label>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con"style="margin-left: 94px">
+                    <label>예정(진척율%)</label>
                     <input type="text"
-                           placeholder="입력"
-                           v-model="detail.ttmn_crpe_nm"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
                            style="width: 150px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치업무명</label>
+                  <div class="item-con"style="margin-left: 30px">
+                    <label>전체(진척율%)</label>
                     <input type="text"
-                           placeholder="입력"
+                           placeholder="숫자만 입력 하세요"
                            v-model="detail.tgt_biz_nm"
                            id="tgt_biz_nm"
                            name="tgt_biz_nm"
@@ -188,58 +187,52 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>조치예정일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.ttmn_scd_dt"
-                             style="width: 150px"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.ttmn_dt"
-                             style="width: 150px"
-                      ></div>
-                  </div>
-                </li>
-
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>등급</label>
+                    <label>단계</label>
                     <input type="text"
-                           placeholder="입력"
-                           v-model="detail.gd_txt"
+                           placeholder="단계를 입력 하세요"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 150px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style="margin-left: 30px">
+                    <label>예정진척율(%)</label>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 150px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style="margin-left: 30px">
+                    <label>전체진척율(%)</label>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요""
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
                            style="width: 150px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>*제목</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="titl_nm"
-                           v-model="detail.titl_nm"
-                           style="width: 885px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
                     <th style="vertical-align: middle">
-                      <label>*요청내용</label>
+                      <label>*프로젝트 <div></div> 진행현황</label>
                     </th>
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="결함내용을 입력해주세요"
+                                placeholder="진행현황을 입력해주세요"
                                 ref="req_dis_txt"
                                 v-model="detail.req_dis_txt"
-                                style="width: 885px; line-height: normal;"
+                                style="width: 700px; line-height: normal;"
                                 @click="enlarged_view(1)"
                       ></textarea>
                     </td>
@@ -248,14 +241,14 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <th style="vertical-align: middle">
-                      <label>조치내용</label>
+                      <label>이슈내용</label>
                     </th>
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="조치내용을 입력해주세요"
+                                placeholder="이슈내용을 입력해주세요"
                                 v-model="detail.ttmn_txt"
-                                style="width: 885px; line-height: normal;"
+                                style="width: 700px; line-height: normal;"
                                 @click="enlarged_view(2)"
                       ></textarea>
                     </td>
@@ -264,14 +257,14 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <th style="vertical-align: middle">
-                      <label>해결방안내용</label>
+                      <label>요청내용</label>
                     </th>
                     <td>
                       <textarea cols="140"
                                 rows="5"
                                 placeholder="해결방안내용을 입력해주세요"
                                 v-model="detail.slv_mpln_txt"
-                                style="width: 885px; line-height: normal;"
+                                style="width: 700px; line-height: normal;"
                                 @click="enlarged_view(3)"
                       ></textarea>
                     </td>
@@ -280,14 +273,14 @@
                 <li class="filter-item-a">
                   <div class="item-con">
                     <th style="vertical-align: middle">
-                      <label>비고</label>
+                      <label>첨부파일</label>
                     </th>
                     <td>
                       <textarea cols="140"
                                 rows="2"
                                 placeholder="비고를 입력해주세요"
                                 v-model="detail.rmrk"
-                                style="width: 885px; line-height: normal;"
+                                style="width: 700px; line-height: normal;"
                                 @click="enlarged_view(4)"
                       ></textarea>
                     </td>
@@ -371,42 +364,14 @@ import Combo from "@/components/Combo"
 import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
-
-// 관리구분
-const rgs_dis_cd = [
-  {text: "ActionItem", value: 'A'},
-  {text: "이슈", value: 'I'},
-  {text: "위험", value: "R"},
-];
-// 요청구분
-const req_dis_cd = [
-  {text: "품질", value: "100"},
-  {text: "업무처리", value: "200"},
-  {text: "협의사항", value: "300"},
-  {text: "기타", value: "900"},
-];
-// 처리단계(이슈처리단계구분코드)
-const prc_step_cd = [
-  {text: "발생", value: "100"},
-  {text: "요청", value: "200"},
-  {text: "보류", value: "300"},
-  {text: "진행중", value: "400"},
-  {text: "완료", value: "500"}
-];
-// 상세내용 영향도
-const ifnc_cd = [
-  {text: "매우낮음", value: "100"},
-  {text: "낮음", value: "200"},
-  {text: "높음", value: "300"},
-  {text: "매우높음", value: "400"},
-];
+/*
 // 상세내용 긴급성
 const urgn_cd = [
   {text: "매우낮음", value: "100"},
   {text: "낮음", value: "200"},
   {text: "높음", value: "300"},
   {text: "매우높음", value: "400"},
-];
+];*/
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -433,9 +398,9 @@ export default {
   mounted() {
     // console.log("mounted");
     // 초기화
-    //this.init();
+    this.init();
     // 최초조회
-    //this.fnSearch();
+    this.fnSearch();
   },
   beforeUpdate() {
     // console.log("beforeUpdate");
@@ -460,17 +425,14 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params)             {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)              {this.info.prjt_nm_selected = params},
+
     week_sqn_cd_change(params)         {this.info.week_sqn_cd_selected = params},
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
 
-    rgs_dis_cd_change_iss(params)     {this.detail.rgs_dis_cd_selected = params},
-    iss_prc_step_cd_change_iss(params)     {this.detail.prc_step_cd_selected = params},
-    req_dis_cd_change_iss(params)     {this.detail.req_dis_cd_selected = params},
-    urgn_cd_change_iss(params)     {this.detail.urgn_cd_selected = params},
-    ifnc_cd_change_iss(params)     {this.detail.ifnc_cd_selected = params},
+    real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params},
+    week_sqn_cd_change_iss(params)    {this.detail.week_sqn_cd_selected = params},
 
+    //rgs_dis_cd_change_iss(params)     {this.detail.rgs_dis_cd_selected = params},
 
 
     init() {
@@ -792,8 +754,8 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C38","C39"],
-      comboList2 : ["C38"],
-      comboList3 : ["C39"],
+      comboList2 : ["C-38"],
+      comboList3: ["C-39"],
 
       large_num : '',
 
@@ -844,20 +806,10 @@ export default {
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
-        mng_id: '',                             // (상세)관리ID
-        rgs_dt: this.getToday(),                // (상세)요청일자
-        achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),              // (상세)요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,    // (상세)조치담당자
-        tgt_biz_nm: this.tgt_biz_nm,        // (상세)조치업무명
-        ttmn_scd_dt: '',                        // (상세)조치예정일자
-        ttmn_dt: '',                            // (상세)조치일자
-        gd_txt: this.gd_txt,                    // (상세)등급
-        titl_nm: this.titl_nm,              // (상세)제목
-        req_dis_txt: this.req_dis_txt,      // (상세)요청내용
-        ttmn_txt: this.ttmn_txt,            // (상세)조치내용
-        slv_mpln_txt: this.slv_mpln_txt,    // (상세)해결방안내용
-        rmrk: this.rmrk,                        // (상세)비고
-
+        /*주간보고*/
+        real_prjt_id_selected : '',
+        week_sqn_cd_selected : '',
+        /**/
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         rgs_dis_cd_selected: '',      // (상세)선택 된 관리구분

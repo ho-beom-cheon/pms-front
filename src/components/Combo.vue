@@ -1,5 +1,40 @@
 <template>
   <div style="display:inline;">
+    <!-- 주간보고 시작 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
+      <div class="item-con" style = "margin-left : 45px">프로젝트
+        <select
+            v-model = "real_prjt_id_selected_iss"
+            style   = "width: 430px"
+            @change = "real_prjt_id_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000038"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-39'">
+      <div class="item-con" style = "margin-left : 93px">차수
+        <select
+            v-model = "week_sqn_cd_selected_iss"
+            style   = "width: 100px"
+            @change = "week_sqn_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000039"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!-- 주간보고 시작-->
     <!--  ActionItem및이슈관리현황 시작  -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-41'">
       <div class="item-con">
@@ -686,8 +721,8 @@ export default {
       CD1000000034T : [],  CD1000000034N : [],
       CD1000000035T : [],  CD1000000035N : [],
       CD1000000036T : [],  CD1000000036N : [],
-      CD1000000038T : [],  CD1000000038N : [],
-      CD1000000039T : [],  CD1000000039N : [],
+      CD1000000038T : [],  CD1000000038N : [], CD1000000038 : [],
+      CD1000000039T : [],  CD1000000039N : [], CD1000000039 : [],
 
       comboList: this.comboArray,
       code_it : [],
@@ -767,8 +802,10 @@ export default {
       file_rgs_dscd_selected : "",
       // 투입프로젝트
       real_prjt_id_selected : "",
+      real_prjt_id_selected_iss : "",
       // 회차
       week_sqn_cd_selected : "",
+      week_sqn_cd_selected_iss : "",
     }
   },
   methods: {
@@ -816,6 +853,8 @@ export default {
     urgn_cd_change_iss()            {  this.$emit('urgn_cd_change_iss',            this.urgn_cd_selected_iss)},          // 긴급성(이슈)
     real_prjt_id_change()            {  this.$emit('real_prjt_id_change',          this.real_prjt_id_selected)},         // 투입프로젝트
     week_sqn_cd_change()            {  this.$emit('week_sqn_cd_change',            this.week_sqn_cd_selected)},          // 회차
+    real_prjt_id_change_iss()       {  this.$emit('real_prjt_id_change_iss',       this.real_prjt_id_selected_iss)},     // 상세보기]투입프로젝트
+    week_sqn_cd_change_iss()        {  this.$emit('week_sqn_cd_change_iss',        this.week_sqn_cd_selected_iss)},      // 상세보기]회차
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -997,11 +1036,11 @@ export default {
             } else if(i === 38) {
               this.CD1000000038T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000038N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000038.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 39) {
               this.CD1000000039T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000039N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+               this.CD1000000039.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
 
             this.set_yn = "Y";
@@ -1037,6 +1076,8 @@ export default {
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
+          if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038[0].value
+          if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039[0].value
         }
         this.setCdAll()
       }
