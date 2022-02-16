@@ -95,8 +95,11 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <button class="btn btn-filter-p" @click="prgRtCalc" :disabled="validated">진행률계산</button>
-            <button class="btn btn-filter-e" @click="gridExcelExport" :disabled="validated_aut" style="margin-left: 20px"> 엑셀업로드</button>
+            <button class="btn btn-filter-p" @click="prgRtCalc" :disabled="validated" style="margin-right: 20px">진행률계산</button>
+            <button class="btn btn-filter-e">
+              <label for="file">엑셀업로드</label>
+              <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
+            </button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             <button class="btn btn-filter-b" @click="gridUpRow" :disabled="validated_aut" style="margin-left: 20px">+ 행위로</button>
             <button class="btn btn-filter-b" @click="gridDownRow" :disabled="validated_aut">- 행아래</button>
@@ -151,6 +154,7 @@ import Combo from "@/components/Combo"
 import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
+import XLSX from "xlsx";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
@@ -283,43 +287,58 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSave() {
-      if(this.flag === "N"){
-        alert("진행율계산을 수행하세요")
-        return;
-      }
+      if(this.excelUplod === 'Y') {
+        this.gridData = this.$refs.grid.invoke("getData");
 
-      let getData = this.$refs.grid.invoke("getData")
+        axiosService.post("/PJTE5000/insert", {
+          excelUplod : this.excelUplod,
+          gridData: this.gridData,
+          prjt_id  : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
+        }).then(res => {
+          console.log(res);
+          if (res.data) {
+            alert("저장이 완료되었습니다.");
+          }
+        })
+      } else if(this.excelUplod === 'N') {
+        if (this.flag === "N") {
+          alert("진행율계산을 수행하세요")
+          return;
+        }
 
-      debugger
-      for(let i=0; i<getData.length; i++){
-        this.$refs.grid.invoke("setValue",i, "sort", i+1)
-      }
+        let getData = this.$refs.grid.invoke("getData")
 
-      this.rowData = this.$refs.grid.invoke("getData")
-      debugger
-      if(this.rowData.length !== 0) {
-        if (this.vaildation(this.rowData) === true) {
-          axiosService.delete("/PJTE5000/delete", {
-            data: {
-              bkup_id: this.info.bkup_id_selected,
-              prjt_id: this.info.prjt_nm_selected,
-              bzcd: this.info.bzcd_selected,
-              mng_cd: this.info.wbs_prc_sts_cd_selected,
-              rowData: this.rowData,
-            },
-          }).then(res => {
-            console.log("Delete Success!")
-            axiosService.post("/PJTE5000/insert", {
-              rowData: this.rowData,
+        for (let i = 0; i < getData.length; i++) {
+          this.$refs.grid.invoke("setValue", i, "sort", i + 1)
+        }
+
+        this.rowData = this.$refs.grid.invoke("getData")
+        if (this.rowData.length !== 0) {
+          if (this.vaildation(this.rowData) === true) {
+            axiosService.delete("/PJTE5000/delete", {
+              data: {
+                bkup_id: this.info.bkup_id_selected,
+                prjt_id: this.info.prjt_nm_selected,
+                bzcd: this.info.bzcd_selected,
+                mng_cd: this.info.wbs_prc_sts_cd_selected,
+                rowData: this.rowData,
+              },
             }).then(res => {
-              console.log("Insert Success!")
-              alert("저장이 완료되었습니다.")
+              console.log("Delete Success!")
+              axiosService.post("/PJTE5000/insert", {
+                rowData: this.rowData,
+              }).then(res => {
+                console.log("Insert Success!")
+                alert("저장이 완료되었습니다.")
+              }).catch(e => {
+              });
             }).catch(e => {
             });
-          }).catch(e => {
-          });
+          }
         }
       }
+      this.excelUplod = 'N'
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
@@ -332,7 +351,6 @@ export default {
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn' && this.addCheak === 'N') {
         this.count = 1
-        debugger
         let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='700', bzcd = gridData.bzcd, mng_id=gridData.mng_id, mng_cd=gridData.mng_cd
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&mng_cd=${mng_cd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
@@ -422,8 +440,58 @@ export default {
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
-    gridExcelImport() {
-// 엑셀파일 업로드 로직 추가 
+    gridExcelImport(event) {
+      // 엑셀파일 업로드 로직 추가
+      console.log(event.target.files[0])
+      this.file = event.target.files ? event.target.files[0] : null;
+      let input = event.target;
+      let reader = new FileReader();
+      reader.onload = () => {
+        let fileData = reader.result;
+        let wb = XLSX.read(fileData, {type: 'binary'});
+        let gridExcelData;
+
+        wb.SheetNames.forEach((sheetName, idx) => {
+          if (sheetName === 'WBS관리') {
+            console.log(wb.Sheets[sheetName])
+            wb.Sheets[sheetName].A1.w = "NO"
+            wb.Sheets[sheetName].B1.w = "mng_cd"
+            wb.Sheets[sheetName].C1.w = "bzcd"
+            wb.Sheets[sheetName].D1.w = "step_cd"
+            wb.Sheets[sheetName].E1.w = "mng_id"
+            wb.Sheets[sheetName].F1.w = "hgrn_mng_id"
+            wb.Sheets[sheetName].G1.w = "acvt_nm"
+            wb.Sheets[sheetName].H1.w = "task_nm"
+            wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName].J1.w = "crpe_nm"
+            wb.Sheets[sheetName].K1.w = "wbs_prc_sts_cd"
+            wb.Sheets[sheetName].L2.w = "pln_sta_dt"
+            wb.Sheets[sheetName].M2.w = "pln_sta_tim"
+            wb.Sheets[sheetName].N2.w = "pln_end_dt"
+            wb.Sheets[sheetName].O2.w = "pln_end_tim"
+            wb.Sheets[sheetName].P2.w = "acl_sta_dt"
+            wb.Sheets[sheetName].Q2.w = "acl_sta_tim"
+            wb.Sheets[sheetName].R2.w = "acl_end_dt"
+            wb.Sheets[sheetName].S2.w = "acl_end_tim"
+            wb.Sheets[sheetName].T1.w = "wgt_rt"
+            wb.Sheets[sheetName].U1.w = "prg_rt"
+            wb.Sheets[sheetName].V1.w = "rmrk"
+
+            let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let rowObj_copy = [];
+            for(let n=1; n<rowObj.length; n++){
+              rowObj_copy[n-1] = rowObj[n];
+            }
+            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+            console.log("gridExcelData ::", gridExcelData)
+          }
+        })
+        this.excelUplod = 'Y'
+        alert('업로드 파일이 적용되었습니다.')
+        this.$refs.grid.invoke('resetData', gridExcelData)
+      };
+      reader.readAsBinaryString(input.files[0]);
+      event.target.value = '';
     },
     // 진행률 계산 함수
     prgRtCalc() {
@@ -521,6 +589,9 @@ export default {
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       flag                : 'N', //진행율 계산 체크
       addCheak            : 'N', // 행추가 체크
+
+      excelUplod: 'N',           // 엑셀 업로드
+
 
       info: {
         pgm_id: this.pgm_id,    // 프로그램ID
