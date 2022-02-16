@@ -174,28 +174,16 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <div class="btn btn-filter-d">
-              <a href="#" @click="gridExcelExport">TC증빙 일괄다운로드ⓘ</a>
-            </div>
-            <div class="btn btn-filter-d">
-              <a href="#" @click="formDownload">양식다운로드ⓘ</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀업로드</a>
-            </div>
-            <div class="btn btn-filter-e">
-              <a href="#" @click="gridExcelExport">엑셀다운로드</a>
-            </div>
-            <div class="btn btn-filter-b">
-              <a href="#" @click="fnEtcSave">기타항목수정</a>
-            </div>
-            <div class="btn btn-filter-p" style="margin-left: 20px">
-              <a href="#" @click="fnSave">저장</a>
-            </div>
-            <div class="btn btn-filter-p">
-              <a href="#" @click="fnSearch">조회</a>
-            </div>
-
+            <button class="btn btn-filter-d" @click="gridExcelImport">TC증빙 일괄다운로드ⓘ</button>
+            <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
+            <button class="btn btn-filter-e">
+              <label for="file">엑셀업로드</label>
+              <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
+            </button>
+            <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+            <button class="btn btn-filter-b" @click="fnEtcSave">기타항목수정</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+            <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
@@ -243,6 +231,7 @@ import Modal from "@/components/Modal";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
+import XLSX from "xlsx";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
@@ -405,56 +394,73 @@ export default {
     },
     // 저장 버튼
     fnSave(){
-      // 변경 사항 유무 체크
-      if(this.$refs.grid.invoke("isModified") === false){
-        alert("변경된 내용이 없습니다.");
-        return;
-      }
-      // 데이터 로그 확인
-      console.log("updatedRows ::" ,this.$refs.grid.invoke("getModifiedRows").updatedRows);
-      console.log("createdRows ::" ,this.$refs.grid.invoke("getModifiedRows").createdRows);
-      console.log("deletedRows ::" ,this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      if(this.excelUplod === 'Y') {
+        this.gridData = this.$refs.grid.invoke("getData");
 
-      // 변경 데이터 저장
-      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-      this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
-      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
-
-      if(this.createdRows.length !== 0){
-        if(this.vaildation(this.createdRows, "1") === true){
-          try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-            // create api 요청
-            this.$refs.grid.invoke("request", "createData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
-            this.$refs.grid.invoke("reloadData");
-          } catch (e){
-            console.log(e);
+        axiosService.post("/PJTE2200/create", {
+          excelUplod : this.excelUplod,
+          gridData: this.gridData,
+          prjt_id  : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
+        }).then(res => {
+          console.log(res);
+          if (res.data) {
+            alert("저장이 완료되었습니다.");
           }
+        })
+      } else if(this.excelUplod === 'N') {
+        // 변경 사항 유무 체크
+        if (this.$refs.grid.invoke("isModified") === false) {
+          alert("변경된 내용이 없습니다.");
+          return;
         }
-        // 저장 후 변경 데이터 배열 비움
-        this.$refs.grid.invoke("clearModifiedData")
-        this.$refs.grid.invoke("reloadData");
-      }
-      if(this.updatedRows.length !== 0){
-        if(this.vaildation(this.updatedRows, "1") === true) {
-          try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-            this.$refs.grid.invoke("setRequestParams", this.login);
-            // update api 요청
-            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
-            this.$refs.grid.invoke("reloadData");
-          } catch (e) {
-            console.log("업데이트 오류 ::", e);
+        // 데이터 로그 확인
+        console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
+        console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
+        console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+
+        // 변경 데이터 저장
+        this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+        this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
+        this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
+
+        if (this.createdRows.length !== 0) {
+          if (this.vaildation(this.createdRows, "1") === true) {
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
+              // create api 요청
+              this.$refs.grid.invoke("request", "createData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+              this.$refs.grid.invoke("reloadData");
+            } catch (e) {
+              console.log(e);
+            }
+          }
+          // 저장 후 변경 데이터 배열 비움
+          this.$refs.grid.invoke("clearModifiedData")
+          this.$refs.grid.invoke("reloadData");
+        }
+        if (this.updatedRows.length !== 0) {
+          if (this.vaildation(this.updatedRows, "1") === true) {
+            try {
+              // 데이터 파라메타 전달
+              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+              this.$refs.grid.invoke("setRequestParams", this.login);
+              // update api 요청
+              this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+              alert("저장이 완료되었습니다.")
+              this.$refs.grid.invoke("reloadData");
+            } catch (e) {
+              console.log("업데이트 오류 ::", e);
+            }
           }
         }
       }
       // 저장 후 변경 데이터 배열 비움
       this.$refs.grid.invoke("clearModifiedData")
       this.$refs.grid.invoke("reloadData");
+      this.excelUplod = 'N'
     },
 
     // 기타 항목 저장
@@ -570,9 +576,6 @@ export default {
     },
     dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
       this.curRow = ev.rowKey;
-      if(ev.columnName === 'tst_case_nm') {
-        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-      }
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -673,13 +676,77 @@ export default {
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드",useFormattedValue : true} );
     },
-    gridExcelImport() {
+    gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
-      this.$refs.grid.invoke("import", "xlsx", {fileName: "엑셀업로드"});
+      console.log(event.target.files[0])
+      this.file = event.target.files ? event.target.files[0] : null;
+      let input = event.target;
+      let reader = new FileReader();
+      reader.onload = () => {
+        let fileData = reader.result;
+        let wb = XLSX.read(fileData, {type: 'binary'});
+        let gridExcelData;
+
+        wb.SheetNames.forEach((sheetName, idx) => {
+          if (sheetName === '통합테스트') {
+            console.log(wb.Sheets[sheetName])
+            wb.Sheets[sheetName].A1.w = "NO"
+            wb.Sheets[sheetName].B1.w = "bzcd"
+            wb.Sheets[sheetName].C1.w = "sqn_cd"
+            wb.Sheets[sheetName].D1.w = "scnr_id"
+            wb.Sheets[sheetName].E1.w = "scnr_nm"
+            wb.Sheets[sheetName].F1.w = "tst_case_id"
+            wb.Sheets[sheetName].G1.w = "tst_case_nm"
+            wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
+            wb.Sheets[sheetName].I2.w = "frcs_sta_dt"
+            wb.Sheets[sheetName].J2.w = "frcs_end_dt"
+            wb.Sheets[sheetName].K1.w = "dvlpe_cnf_dt"
+            wb.Sheets[sheetName].L1.w = "pl_cnf_dt"
+            wb.Sheets[sheetName].M2.w = "dvlpe_enm"
+            wb.Sheets[sheetName].N2.w = "dvlpe_btn"
+            wb.Sheets[sheetName].O2.w = "dvlpe_eno"
+            wb.Sheets[sheetName].P2.w = "pl_enm"
+            wb.Sheets[sheetName].Q2.w = "pl_btn"
+            wb.Sheets[sheetName].R2.w = "pl_eno"
+            wb.Sheets[sheetName].S2.w = "crpe_enm"
+            wb.Sheets[sheetName].T2.w = "crpe_btn"
+            wb.Sheets[sheetName].U2.w = "crpe_eno"
+            wb.Sheets[sheetName].V1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName].W2.w = "err_tot_cnt"
+            wb.Sheets[sheetName].X2.w = "err_cmpl_cnt"
+            wb.Sheets[sheetName].Y2.w = "err_ncmpl_cnt"
+            wb.Sheets[sheetName].Z2.w = "err_btn"
+            wb.Sheets[sheetName].AA1.w = "rmrk"
+            wb.Sheets[sheetName].AB1.w = "pgm_id"
+            wb.Sheets[sheetName].AC1.w = "scrn_id"
+            wb.Sheets[sheetName].AD1.w = "trn_cd"
+            wb.Sheets[sheetName].AE1.w = "rqu_sbh_id"
+            wb.Sheets[sheetName].AF1.w = "prr_cnd"
+            wb.Sheets[sheetName].AG1.w = "inp_val"
+            wb.Sheets[sheetName].AH1.w = "tst_des"
+            wb.Sheets[sheetName].AI1.w = "oup_val"
+            wb.Sheets[sheetName].AJ1.w = "tp"
+            wb.Sheets[sheetName].AK1.w = "oup_mens"
+            wb.Sheets[sheetName].AL1.w = "tst_achi_rst"
+
+            let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let rowObj_copy = [];
+            for(let n=1; n<rowObj.length; n++){
+              rowObj_copy[n-1] = rowObj[n];
+            }
+            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+            console.log("gridExcelData ::", gridExcelData)
+          }
+        })
+        this.excelUplod = 'Y'
+        alert('업로드 파일이 적용되었습니다.')
+        this.$refs.grid.invoke('resetData', gridExcelData)
+      };
+      reader.readAsBinaryString(input.files[0]);
+      event.target.value = '';
     },
-    open_page() {
-      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-    },
+
+    // 직원조회 팝업
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.info.prjt_nm_selected
@@ -791,6 +858,8 @@ export default {
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
       pal_atfl_mng_id_yn  : '',  // 설계서 첨부파일관리
+
+      excelUplod: 'N',           // 엑셀 업로드
 
       info: {
         scnr_id      : this.scnr_id,         // 시나리오 ID

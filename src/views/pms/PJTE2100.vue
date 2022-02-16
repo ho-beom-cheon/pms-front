@@ -144,9 +144,9 @@
               <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
               <button class="btn btn-filter-e">
-                 <label for="file">엑셀업로드</label>
-                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
-               </button>
+                <label for="file">엑셀업로드</label>
+                <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
+              </button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
               <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
               <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
@@ -381,10 +381,10 @@ export default {
     fnSave(){
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
-
         axiosService.post("/PJTE2100/create", {
           excelUplod : this.excelUplod,
           gridData: this.gridData,
+          prjt_id  : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
           console.log(res);
@@ -504,7 +504,7 @@ export default {
 
     },
     beforeExport(grid){
-        console.log("beforeExport::" , grid)
+      console.log("beforeExport::" , grid)
     },
     // 클릭 이벤트
     onClick(ev) {
@@ -668,49 +668,48 @@ export default {
         let gridExcelData;
 
         wb.SheetNames.forEach((sheetName, idx) => {
-            if (sheetName === '개발현황') {
-              console.log(wb.Sheets[sheetName])
-              wb.Sheets[sheetName].A1.w = "NO"
-              wb.Sheets[sheetName].B1.w = "bzcd"
-              wb.Sheets[sheetName].C1.w = "pgm_id"
-              wb.Sheets[sheetName].D1.w = "pgm_nm"
-              wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
-              wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
-              wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
-              wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
-              wb.Sheets[sheetName].I2.w = "frcs_end_dt"
-              wb.Sheets[sheetName].J2.w = "sta_dt"
-              wb.Sheets[sheetName].K2.w = "end_dt"
-              wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
-              wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
-              wb.Sheets[sheetName].N1.w = "prc_step_cd"
-              wb.Sheets[sheetName].O1.w = "prg_txt"
-              wb.Sheets[sheetName].P2.w = "dvlpe_nm"
-              wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
-              wb.Sheets[sheetName].R2.w = "dvlpe_no"
-              wb.Sheets[sheetName].S2.w = "pl_nm"
-              wb.Sheets[sheetName].T2.w = "pl_btn"
-              wb.Sheets[sheetName].U2.w = "pl_no"
-              wb.Sheets[sheetName].V2.w = "crpe_nm"
-              wb.Sheets[sheetName].W2.w = "crpe_btn"
-              wb.Sheets[sheetName].X2.w = "crpe_no"
-              wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
-              wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
-              wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
-              wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
-              wb.Sheets[sheetName].AC2.w = "err_btn"
-              wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
-              wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
-              wb.Sheets[sheetName].AF1.w = "rmrk"
+          if (sheetName === '개발현황') {
+            console.log(wb.Sheets[sheetName])
+            wb.Sheets[sheetName].A1.w = "NO"
+            wb.Sheets[sheetName].B1.w = "bzcd"
+            wb.Sheets[sheetName].C1.w = "pgm_id"
+            wb.Sheets[sheetName].D1.w = "pgm_nm"
+            wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
+            wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
+            wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
+            wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
+            wb.Sheets[sheetName].I2.w = "frcs_end_dt"
+            wb.Sheets[sheetName].J2.w = "sta_dt"
+            wb.Sheets[sheetName].K2.w = "end_dt"
+            wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
+            wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
+            wb.Sheets[sheetName].N1.w = "prc_step_cd"
+            wb.Sheets[sheetName].O1.w = "prg_txt"
+            wb.Sheets[sheetName].P2.w = "dvlpe_nm"
+            wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
+            wb.Sheets[sheetName].R2.w = "dvlpe_no"
+            wb.Sheets[sheetName].S2.w = "pl_nm"
+            wb.Sheets[sheetName].T2.w = "pl_btn"
+            wb.Sheets[sheetName].U2.w = "pl_no"
+            wb.Sheets[sheetName].V2.w = "crpe_nm"
+            wb.Sheets[sheetName].W2.w = "crpe_btn"
+            wb.Sheets[sheetName].X2.w = "crpe_no"
+            wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
+            wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
+            wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
+            wb.Sheets[sheetName].AC2.w = "err_btn"
+            wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
+            wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
+            wb.Sheets[sheetName].AF1.w = "rmrk"
 
-              let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-              let rowObj_copy = [];
-              for(let n=1; n<rowObj.length; n++){
-                rowObj_copy[n-1] = rowObj[n];
-              }
-              debugger
-              gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
-              console.log("gridExcelData ::", gridExcelData)
+            let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let rowObj_copy = [];
+            for(let n=1; n<rowObj.length; n++){
+              rowObj_copy[n-1] = rowObj[n];
+            }
+            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+            console.log("gridExcelData ::", gridExcelData)
           }
         })
         this.excelUplod = 'Y'
@@ -996,7 +995,7 @@ export default {
         complexColumns: [
           {header: '계획',             name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '실적',             name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt'], headerAlign:'center'},
+          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt', 'err_btn'], headerAlign:'center'},
           {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},
           {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], headerAlign:'center'},
           {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], headerAlign:'center'},
@@ -1147,7 +1146,7 @@ export default {
           editor: 'text',
         },
         {
-          header: ' ',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'dvlpe_btn',
@@ -1168,7 +1167,7 @@ export default {
           editor: 'text',
         },
         {
-          header: ' ',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'pl_btn',
@@ -1273,25 +1272,6 @@ export default {
           ellipsis : true,
         },
         {
-          header: '개발자사번',
-          width: 400,
-          hidden : true,
-          name: 'dvlpe_no',
-        },
-        {
-          header: 'PL사번',
-          width: 200,
-          hidden : true,
-          name: 'pl_no',
-        },
-        {
-          header: '담당자사번',
-          width: 140,
-          hidden : true,
-          name: 'crpe_no',
-
-        },
-        {
           header: '등록여부',
           width: 90,
           hidden : true,
@@ -1302,13 +1282,15 @@ export default {
           width: 90,
           name: 'bkup_id',
           hidden : true,
+          defaultValue: '0000000000'
         },
         {
           header: '프로젝트 ID',
           width: 90,
           name: 'prjt_id',
           align: 'center',
-          hidden : true,
+          hidden : false,
+          defaultValue: sessionStorage.getItem("LOGIN_PROJ_ID")
         },
       ]
     }

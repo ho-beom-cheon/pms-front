@@ -102,7 +102,7 @@
             <button class="btn btn-filter-b" @click="gridDownRow" :disabled="validated_aut">- 행아래</button>
             <button class="btn btn-filter-b" href="#" @click="gridAddRow" :disabled="validated_aut">행추가</button>
             <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated_aut">행삭제</button>
-            <button class="btn btn-filter-p" @click="fnSave" :disabled="validated" style="margin-left: 20px">저장</button>
+            <button class="btn btn-filter-p" @click="fnSave" :disabled="validated_aut" style="margin-left: 20px">저장</button>
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
@@ -347,6 +347,12 @@ export default {
     fnSearch() {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
+
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+        this.validated_aut = false;
+        this.validated = false;
+      }
+
       // 버튼 활성화
       if(this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
           this.info.wbs_prc_sts_cd_selected !== 'TTT' && this.info.wbs_mng_cd_selected === 'TTT' &&
@@ -355,13 +361,10 @@ export default {
       {
         if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
           this.validated_aut = false;
+        } else {
+          this.validated = false;
         }
-        this.validated = false;
-      } else {
-        this.validated = true;
-        this.validated_aut = true;
       }
-
     },
     open_pjte9001() {
       this.pop = window.open("../PJTE9001/", "open_page", "width=700, height=600");

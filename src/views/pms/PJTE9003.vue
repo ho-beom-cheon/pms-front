@@ -10,6 +10,10 @@
           <ul class="filter-con clear-fix">
             <combo
                 :comboArray = "this.comboList"
+                @bkup_id_change="bkup_id_change"
+                @prjt_nm_chage="prjt_nm_chage"
+                @bzcd_change="bzcd_change"
+                @file_rgs_dscd_change="file_rgs_dscd_change"
             >
             </combo>
           </ul>
@@ -36,8 +40,7 @@
       </section>
     </div>
     <div class="pop-footer">
-      <button class="btn btn-filter-b" @click="close">닫기</button>
-      <button class="btn btn-filter-p" @click="fileSave" v-if="bkup_id==='0000000000'">저장</button>
+
     </div>
   </section>
 </template>
@@ -54,12 +57,23 @@ export default {
     grid: Grid,
     combo
   },
-  created() {
-    this.getPjt();
+  methods: {
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    bzcd_change(params) {this.info.bzcd_selected = params},
+    file_rgs_dscd_change(params) {this.info.file_rgs_dscd_selected = params},
   },
+
   data() {
     return {
       comboList : ["C27","C0","C1","C25"],
+
+      info : {
+        bzcd_selected : '',
+        prjt_nm_selected : '',
+        bkup_id_selected : '',
+        file_rgs_dscd_selected : '',
+      },
 
       /* grid 속성 */
       count:0,
@@ -86,26 +100,17 @@ export default {
         withCredentials: false,
       },
       columnOptions: {
-        resizable: true
+
       },
-      rowHeaders:['rowNum'],
+      rowHeaders:['checkbox','rowNum'],
       header:{
         height: 45,
         complexColumns: [
-          {header: '계획',             name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
-          {header: '실적',             name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt'], headerAlign:'center'},
-          {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},
-          {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], headerAlign:'center'},
-          {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], headerAlign:'center'},
-          {header: '단위테스트케이스',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn'], headerAlign:'center'},
-          {header: '설계서',           name: 'mergeColumn8', childNames: ['pal_atfl_mng_id_yn'], headerAlign:'center'},
         ]
       },
       columns: [
         {
-          header: '프로그램ID',
-          width: 150,
+          header: '업무',
           align: 'left',
           name: 'pgm_id',
           ellipsis : true,
@@ -113,34 +118,37 @@ export default {
           disabled: true,
         },
         {
-          header: '프로그램명',
-          width: 200,
+          header: '파일등록구분',
           align: 'left',
           name: 'pgm_nm',
           ellipsis : true,
           editor: 'text',
         },
         {
-          header: '업무세부',
-          width: 180,
+          header: '산출물구분',
           align: 'left',
           name: 'bz_dtls_txt',
           editor: 'text',
         },
         {
-          header: '예상시작일자',
-          width: 110,
+          header: '서버파일명',
           align: 'center',
           name: 'frcs_sta_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker'
         },
-        ]
+        {
+          header: '원본파일명',
+          align: 'center',
+          name: 'frcs_sta_dt',
+        },
+        {
+          header: '산출물양식명',
+          align: 'center',
+          name: 'frcs_sta_dt',
+        },
+      ]
     };
   },
-  methods: {
 
-  },
   mounted() {
 
   },

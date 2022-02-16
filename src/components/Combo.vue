@@ -1,7 +1,6 @@
 <template>
   <div style="display:inline;">
     <!--  ActionItem및이슈관리현황 시작  -->
-
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-41'">
       <div class="item-con">
         <label>*관리구분</label>
@@ -91,9 +90,6 @@
         </select>
       </div>
     </li>
-
-
-
     <!--  ActionItem및이슈관리현황 끝  -->
 
     <!--  산출물 팝업 시작 -->
@@ -600,10 +596,10 @@
     </li>
     <!--   투입프로젝트 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C38'">
-      <div class="item-con">투입프로젝트
+      <div class="item-con">프로젝트
         <select
             v-model = "real_prjt_id_selected"
-            style   = "width: 100px"
+            style   = "width: 200px"
             @change = "real_prjt_id_change"
         >
           <option
@@ -793,6 +789,7 @@ export default {
     iss_prc_step_cd_change()        {  this.$emit('iss_prc_step_cd_change',        this.iss_prc_step_cd_selected)},      // 이슈관리처리단계코드
     bkup_id_change()                {  this.$emit('bkup_id_change',                this.bkup_id_selected)},              // 백업 ID
     prjt_nm_chage()                 {  this.$emit('prjt_nm_chage',                 this.prjt_nm_selected)},              // 프로젝트명
+    prjt_nm_change_pop()            {  this.$emit('prjt_nm_change_pop',            this.prjt_nm_selected_pop)},          // 프로젝트명(팝업)
     sqn_cd_change()                 {  this.$emit('sqn_cd_change',                 this.sqn_cd_selected)},               // 차수구분코드
     itg_tst_prc_cd_change()         {  this.$emit('itg_tst_prc_cd_change',         this.itg_tst_prc_cd_selected)},       // 통합테스트 처리구분코드
     req_dis_cd_change()             {  this.$emit('req_dis_cd_change',             this.req_dis_cd_selected)},           // 요청구분코드
@@ -885,6 +882,9 @@ export default {
               } else if (i === 36) {
                 this.CD1000000036T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000036N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 38) {
+                this.CD1000000038T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000038N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 39) {
                 this.CD1000000039T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000039N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -975,14 +975,13 @@ export default {
               this.CD1000000022N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 25) {
-              this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
-              this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000025T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000025N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000025.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
-            }
-            else if(i === 26) {
+            }  else if(i === 26) {
               this.CD1000000026T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000026N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              // this.CD0000000000.push({"text":     data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 27) {
               this.CD1000000027T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000027N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -1008,8 +1007,8 @@ export default {
             this.set_yn = "Y";
             this.row++;
           }
-          if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected          = sessionStorage.getItem("LOGIN_PROJ_ID")
-          if(this.CD1000000001T.length !== 0)  this.bzcd_selected = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
+          if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected             = sessionStorage.getItem("LOGIN_PROJ_ID")
+          if(this.CD1000000001T.length !== 0)  this.bzcd_selected                = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
           if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected         = this.CD1000000002T[0].value
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected         = this.CD1000000003T[0].value
           if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected          = this.CD1000000004T[0].value
