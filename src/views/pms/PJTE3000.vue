@@ -379,7 +379,7 @@ export default {
       // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
     gridExcelImport() {
       // 엑셀파일 업로드 로직 추가
@@ -602,19 +602,16 @@ export default {
             header: '결함등록자',
             name: 'mergeColumn3',
             childNames: ['rgpe_nm', 'rgpe_no'],
-            hideChildHeaders : true,
           },
           {
             header: '조치자명',
             name: 'mergeColumn4',
             childNames: ['dvlpe_nm', 'dvlpe_no'],
-            hideChildHeaders : true,
           },
           {
             header: 'PL명',
             name: 'mergeColumn5',
             childNames: ['pl_nm', 'pl_no'],
-            hideChildHeaders : true,
           },
         ]
       },
@@ -695,21 +692,21 @@ export default {
           editor: 'datePicker',
         },
         {
-          header: '결함등록자',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'rgpe_nm',
           editor: 'text',
         },
         {
-          header: '결함등록자',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'rgpe_no',
         },
         {
           header: '결함내용',
-          width: 200,
+          width: 300,
           align: 'left',
           name: 'err_txt',
           ellipsis: true,
@@ -737,27 +734,27 @@ export default {
           editor: 'datePicker'
         },
         {
-          header: '조치자명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
         },
         {
-          header: '조치자명',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
         },
         {
-          header: 'PL명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'pl_nm',
           editor: 'text',
         },
         {
-          header: 'PL명',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'pl_no',

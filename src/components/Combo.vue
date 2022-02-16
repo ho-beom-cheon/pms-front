@@ -37,8 +37,8 @@
       </div>
     </li>
 
-    <li class="filter-item-a">
-      <div class="item-con" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-43'">
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-43'">
+      <div class="item-con" >
         <label>*요청구분</label>
         <select
             v-model="req_dis_cd_selected_iss"
