@@ -576,9 +576,6 @@ export default {
     },
     dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
       this.curRow = ev.rowKey;
-      if(ev.columnName === 'tst_case_nm') {
-        this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-      }
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
