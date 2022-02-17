@@ -602,7 +602,7 @@ export default {
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=700");
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
@@ -939,10 +939,6 @@ export default {
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
       createdRows : this.createdRows,
-      rowData : this.$store.state["pms"].CD0000000000N,
-      addRow : {
-        grid : this.grid,
-      },
 
       // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [
@@ -1309,7 +1305,7 @@ export default {
           width: 90,
           name: 'prjt_id',
           align: 'center',
-          hidden : false,
+          hidden : true,
           defaultValue: sessionStorage.getItem("LOGIN_PROJ_ID")
         },
       ]
