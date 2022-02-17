@@ -1273,6 +1273,25 @@ export default {
           ellipsis : true,
         },
         {
+          header: '개발자사번',
+          width: 400,
+          hidden : true,
+          name: 'dvlpe_no',
+        },
+        {
+          header: 'PL사번',
+          width: 200,
+          hidden : true,
+          name: 'pl_no',
+        },
+        {
+          header: '담당자사번',
+          width: 140,
+          hidden : true,
+          name: 'crpe_no',
+
+        },
+        {
           header: '등록여부',
           width: 90,
           hidden : true,
