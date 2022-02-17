@@ -13,30 +13,15 @@
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
-            >
-            </combo>
-          </ul>
-          <ul style="list-style: none; margin-top: 5px">
-            <combo
-                :comboArray2 = "this.comboList2"
                 @file_rgs_dscd_change="file_rgs_dscd_change"
-                style="float: left; margin-right: 15px"
             >
             </combo>
-            <li style="float: left;">
-              <label for="name" style="margin-right: 3px">산출물구분 </label>
-              <input type="text" v-model="info.sah_file_nm" id="name" style="width: 180px" placeholder="입력하세요">
-            </li>
-            <li class="filter-btn">
-              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
-            </li>
           </ul>
         </div>
       </section>
-      <hr>
+
       <!-- page contents -->
       <section class="page-contents">
-        <div class="div-header"><h2>다운로드 리스트</h2></div>
         <!-- grid contents -->
         <div class="gridWrap" style="min-width: 750px;">
           <grid
@@ -50,58 +35,8 @@
               :rowHeight="rowHeight"
               :minRowHeight="minRowHeight"
               :rowHeaders="rowHeaders"
-              @onGridUpdated="onGridUpdated"
           ></grid>
         </div>
-        <hr>
-        <!--        <table>-->
-        <!--          <colgroup>-->
-        <!--            <col width="23px">-->
-        <!--            <col width="90px">-->
-        <!--            <col width="150px">-->
-        <!--          </colgroup>-->
-        <!--          <tr>-->
-        <!--            <th style="font-weight: bold">로컬저장위치</th>-->
-        <!--            <td>-->
-        <!--              <div style="float: left;">-->
-        <!--                <input type="ㅅ" style="width:200px; margin-left: 15px; float:left;" onchange="alert(this.value)">-->
-        <!--              </div>-->
-        <!--              <div style="float: left; margin-top: -2px">-->
-        <!--                <button class="btn btn-filter-d">...</button>-->
-        <!--              </div>-->
-        <!--            </td>-->
-        <!--          </tr>-->
-        <!--        </table>-->
-        <table>
-          <colgroup>
-            <col width="80px">
-            <col width="250px">
-            <col width="400px">
-            <col width="300px">
-          </colgroup>
-          <tr>
-            <th style="font-weight: bold">다운로드파일명</th>
-            <td>
-              <div class="item-con">
-                <div class="radio">
-                  <input type="radio" id="option01" v-model="radioValues" value="option01" name="radio-set" checked>
-                  <label for="option01">서버파일명</label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="option02" v-model="radioValues" value="option02" name="radio-set">
-                  <label for="option02">원본파일명</label>
-                </div>
-                <div class="radio">
-                  <input type="radio" id="option03" v-model="radioValues" value="option03" name="radio-set">
-                  <label for="option03">산출물양식명</label>
-                </div>
-              </div>
-            </td>
-            <td>
-              <button class="btn btn-filter-b" @click="fileDownload()">다운로드</button>
-            </td>
-          </tr>
-        </table>
       </section>
     </div>
     <div class="pop-footer">
@@ -116,82 +51,28 @@ import { Grid } from '@toast-ui/vue-grid';
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {axiosService} from "@/api/http";
 import combo from "@/components/Combo";
-import Inputs from "@/views/components/Inputs";
 
 export default {
   components : {
-    Inputs,
     grid: Grid,
     combo
-  },
-  mounted() {
-    this.fnSearch()
-  },
-
-  watch: {
   },
   methods: {
     bkup_id_change(params) {this.info.bkup_id_selected = params},
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     bzcd_change(params) {this.info.bzcd_selected = params},
     file_rgs_dscd_change(params) {this.info.file_rgs_dscd_selected = params},
-
-    // 조회
-    fnSearch() {
-      this.$refs.grid.invoke("setRequestParams", this.info);
-      this.$refs.grid.invoke("readData");
-    },
-    // 수정 후 실행
-    onGridUpdated() {
-    },
-    // 파일 다운로드
-    fileDownload() {
-      this.gridData = this.$refs.grid.invoke("getData");
-      // for (let i = 0; i < this.gridData.length; i++) {
-      //   this.fileName = this.gridData[i].file_nm;
-      //   this.orgFileName = this.gridData[i].org_file_nm
-      this.gridData.reduce((previousValue, currentValue) => {
-        return previousValue.then(async() => {
-          const res = await axiosService.get("/PJTE9003/fileDownload", {
-                params: {
-                  fileName: currentValue.file_nm,
-                },
-                responseType: "blob"
-              }
-          )
-          console.log("response :: "+res.data)
-          console.log(currentValue.org_file_nm)
-          let blob = new Blob([res.data], {type: res.headers['content-type']})
-          // let fileName = getFileName(res.headers['content-disposition'])
-          // fileName = decodeURI(fileName) // 파일명 디코딩 (프로젝트에 따라 사용여부 옵션)
-
-          if (window.navigator.msSaveOrOpenBlob) { // IE 10+
-            window.navigator.msSaveOrOpenBlob(blob, currentValue.file_nm)
-          } else { // not IE
-            let link = document.createElement('a')
-            link.href = window.URL.createObjectURL(blob)
-            link.target = '_self'
-            if (currentValue.org_file_nm) link.download = currentValue.org_file_nm
-            link.click()
-          }
-        })
-      }, Promise.resolve())
-    }
   },
 
   data() {
     return {
       comboList : ["C27","C0","C1","C25"],
-      comboList2 : ["C25"],
-
-      radioValues: '',
 
       info : {
-        bzcd_selected : this.$route.query.bzcd,
-        bkup_id_selected:this.$route.query.bkup_id,
-        prjt_nm_selected:this.$route.query.prjt_id,
-        file_rgs_dscd_selected:this.$route.query.file_rgs_dscd,
-        sah_file_nm : '',
+        bzcd_selected : '',
+        prjt_nm_selected : '',
+        bkup_id_selected : '',
+        file_rgs_dscd_selected : '',
       },
 
       /* grid 속성 */
@@ -200,19 +81,18 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 350,
+      bodyHeight: 300,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
       editingEvent : "click",
-      fileName : '',
-      orgFileName: '',
-      gridData : [],
-
       // toast ui grid 데이터
       dataSource: {
         api: {
-          readData   : { url: process.env.VUE_APP_API + '/PJTE9003/select', method: 'GET' },
+          readData   : { url: process.env.VUE_APP_API + '/PJTE2100/select', method: 'GET' },
+          createData : { url: process.env.VUE_APP_API + '/PJTE2100/create', method: 'POST'},
+          updateData : { url: process.env.VUE_APP_API + '/PJTE2100/update', method: 'PUT'},
+          deleteData : { url: process.env.VUE_APP_API + '/PJTE2100/delete', method: 'PUT'},
         },
         initialRequest: false,
         contentType : 'application/json;',
@@ -222,7 +102,7 @@ export default {
       columnOptions: {
 
       },
-      rowHeaders:['checkbox', 'rowNum'],
+      rowHeaders:['checkbox','rowNum'],
       header:{
         height: 45,
         complexColumns: [
@@ -231,57 +111,46 @@ export default {
       columns: [
         {
           header: '업무',
-          width : 70,
-          align: 'center',
-          name: 'bznm',
+          align: 'left',
+          name: 'pgm_id',
           ellipsis : true,
+          editor: "text",
           disabled: true,
         },
         {
           header: '파일등록구분',
-          width : 90,
-          align: 'center',
-          name: 'file_rgs_dscd',
+          align: 'left',
+          name: 'pgm_nm',
           ellipsis : true,
           editor: 'text',
         },
         {
           header: '산출물구분',
-          width : 160,
           align: 'left',
-          name: 'sah_file_nm',
+          name: 'bz_dtls_txt',
           editor: 'text',
-          ellipsis : true,
         },
         {
           header: '서버파일명',
-          width : 190,
-          align: 'left',
-          name: 'file_nm',
-          ellipsis : true,
+          align: 'center',
+          name: 'frcs_sta_dt',
         },
         {
           header: '원본파일명',
-          width : 190,
-          align: 'left',
-          name: 'org_file_nm',
-          ellipsis : true,
+          align: 'center',
+          name: 'frcs_sta_dt',
         },
         {
           header: '산출물양식명',
-          width : 190,
-          align: 'left',
-          name: 'sam_file_nm',
-          ellipsis : true,
-        },
-        {
-          header: '파일경로',
-          align: 'left',
-          name: 'file_path',
-          ellipsis : true,
+          align: 'center',
+          name: 'frcs_sta_dt',
         },
       ]
     };
+  },
+
+  mounted() {
+
   },
 };
 </script>

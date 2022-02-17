@@ -8,7 +8,6 @@
             v-model="rgs_dis_cd_selected_iss"
             style="width: 150px;"
             @change = "rgs_dis_cd_change_iss"
-            id="rgs_dis_cd_iss"
         >
           <option
               v-for="(item, idx) in CD1000000012"
@@ -38,8 +37,8 @@
       </div>
     </li>
 
-    <li class="filter-item-a">
-      <div class="item-con" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-43'">
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-43'">
+      <div class="item-con">
         <label>*요청구분</label>
         <select
             v-model="req_dis_cd_selected_iss"

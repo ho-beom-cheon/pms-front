@@ -501,7 +501,7 @@ export default {
       this.$refs.grid.invoke("clearModifiedData")
     },
     onGridUpdated(grid){
-      this.$refs.grid.invoke("getData")
+
     },
     beforeExport(grid){
       console.log("beforeExport::" , grid)
@@ -595,12 +595,12 @@ export default {
     // 양식다운로드
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
     },
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=600");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
@@ -1157,6 +1157,7 @@ export default {
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
+          editor: 'text',
         },
         {
           header: '이름',
@@ -1269,6 +1270,25 @@ export default {
           name: 'rmrk',
           editor: 'text',
           ellipsis : true,
+        },
+        {
+          header: '개발자사번',
+          width: 400,
+          hidden : true,
+          name: 'dvlpe_no',
+        },
+        {
+          header: 'PL사번',
+          width: 200,
+          hidden : true,
+          name: 'pl_no',
+        },
+        {
+          header: '담당자사번',
+          width: 140,
+          hidden : true,
+          name: 'crpe_no',
+
         },
         {
           header: '등록여부',
