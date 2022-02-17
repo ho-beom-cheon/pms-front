@@ -116,14 +116,13 @@
               <ul class="filter-con clear-fix-a">
                 <combo
                     :comboArray="this.comboList2"
-                    @rgs_dis_cd_change_iss="rgs_dis_cd_change_iss"
-                    @iss_prc_step_cd_change_iss="iss_prc_step_cd_change_iss"
-                    @req_dis_cd_change_iss="req_dis_cd_change_iss"
+                    @real_prjt_id_change="real_prjt_id_change"
                     ref="combo2"
                 >
                 </combo>
                 <li class="filter-item-a">
-                  <div class="input-searchWrap"  style="margin-left: 45px">PM명
+                  <div class="input-searchWrap" style = "margin-left : -16px">
+                    <td class="td-box"> PM명 </td>
                     <input type="text"
                            placeholder="PM명"
                            v-model="info.dvlpe_nm"
@@ -144,9 +143,9 @@
                   >
                 </li>
                 <li class="filter-item-a" >
-                  <div class="item-con"style="margin-left: 22px">
-                    <label>*주간년월</label>
-                    <input type="month" style="width: 150px"  v-model="info.inq_date">
+                  <div class="item-con">
+                    <td class="td-box"> *주간년월 </td>
+                    <input type="month" style="width: 125px;text-align: center"  v-model="info.inq_date">
                   </div>
                 </li>
                 <combo
@@ -156,75 +155,74 @@
                 >
                 </combo>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>전</label>
-                    <label>체</label>
+                  <div class="item-con" style = "margin-left : -30px">
+                    <td class="td-box" style="margin-left : 30px;width :280px"> &emsp;&emsp;전&emsp;&emsp;&emsp;체&emsp;&emsp;</td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con"style="margin-left: 94px">
-                    <label>예정(진척율%)</label>
+                  <div class="item-con">
+                    <td class="td-box"> 예정(진척율%) </td>
                     <input type="text"
                            placeholder="숫자만 입력 하세요"
                            v-model="detail.tgt_biz_nm"
                            id="tgt_biz_nm"
                            name="tgt_biz_nm"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con"style="margin-left: 30px">
-                    <label>전체(진척율%)</label>
-                    <input type="text"
-                           placeholder="숫자만 입력 하세요"
-                           v-model="detail.tgt_biz_nm"
-                           id="tgt_biz_nm"
-                           name="tgt_biz_nm"
-                           style="width: 150px"
+                           style="width: 125px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>단계</label>
+                    <td class="td-box"> 전체(진척율%) </td>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -8px">
+                    <td class="td-box"> 단계 </td>
                     <input type="text"
                            placeholder="단계를 입력 하세요"
                            v-model="detail.tgt_biz_nm"
                            id="tgt_biz_nm"
                            name="tgt_biz_nm"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con" style="margin-left: 30px">
-                    <label>예정진척율(%)</label>
-                    <input type="text"
-                           placeholder="숫자만 입력 하세요"
-                           v-model="detail.tgt_biz_nm"
-                           id="tgt_biz_nm"
-                           name="tgt_biz_nm"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con" style="margin-left: 30px">
-                    <label>전체진척율(%)</label>
-                    <input type="text"
-                           placeholder="숫자만 입력 하세요""
-                           v-model="detail.tgt_biz_nm"
-                           id="tgt_biz_nm"
-                           name="tgt_biz_nm"
-                           style="width: 150px"
+                           style="width: 160px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>*프로젝트 <div></div> 진행현황</label>
+                    <td class="td-box"> 예정진척율(%)</td>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 전체진척율(%)</td>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <th>
+                      <td class="td-box2">*프로젝트<br> 진행현황</td>
                     </th>
                     <td>
                       <textarea cols="140"
@@ -232,123 +230,227 @@
                                 placeholder="진행현황을 입력해주세요"
                                 ref="req_dis_txt"
                                 v-model="detail.req_dis_txt"
-                                style="width: 700px; line-height: normal;"
+                                style="width: 685px; height:80px;"
                                 @click="enlarged_view(1)"
                       ></textarea>
                     </td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
+                  <div class="item-con" style = "margin-left : -9px">
                     <th style="vertical-align: middle">
-                      <label>이슈내용</label>
+                     <td class="td-box2">이슈내용</td>
                     </th>
                     <td>
                       <textarea cols="140"
                                 rows="5"
                                 placeholder="이슈내용을 입력해주세요"
                                 v-model="detail.ttmn_txt"
-                                style="width: 700px; line-height: normal;"
+                                style="width: 685px;height:80px;"
                                 @click="enlarged_view(2)"
                       ></textarea>
                     </td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
+                  <div class="item-con" style = "margin-left : -9px">
                     <th style="vertical-align: middle">
-                      <label>요청내용</label>
+                      <td class="td-box2">요청내용</td>
                     </th>
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="해결방안내용을 입력해주세요"
+                                placeholder="요청내용을 입력해주세요"
                                 v-model="detail.slv_mpln_txt"
-                                style="width: 700px; line-height: normal;"
+                                style="width: 685px; height:80px;"
                                 @click="enlarged_view(3)"
                       ></textarea>
                     </td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>첨부파일</label>
-                    </th>
-                    <td>
-                      <textarea cols="140"
-                                rows="2"
-                                placeholder="비고를 입력해주세요"
-                                v-model="detail.rmrk"
-                                style="width: 700px; line-height: normal;"
-                                @click="enlarged_view(4)"
-                      ></textarea>
-                    </td>
+                  <div class="item-con" style = "margin-left : -9px">
+                      <th class="td-box">첨부파일</th>
+                      <td colspan="4">
+                        <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
+                      </td>
+                      <th>
+                        <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
+                      </th>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
           <div class="div1-d">
-            <div class="div-header-b">
-              <h2 v-if="this.large_num == ''">상세내용 확대보기</h2>
-              <h2 v-if="this.large_num == '1'">요청내용 확대보기</h2>
-              <h2 v-if="this.large_num == '2'">조치내용 확대보기</h2>
-              <h2 v-if="this.large_num == '3'">해결방안내용 확대보기</h2>
-              <h2 v-if="this.large_num == '4'">비고 확대보기</h2>
+            <div class="div-header-b"><h2>지난주 주간보고</h2>
               <ul class="filter-btn">
-                <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
-                <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
+                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">지난주 주간보고 조회</button>
               </ul>
             </div>
             <div class="div2-body-c">
-              <ul class="filter-con clear-fix-a">
+              <ul class="filter-con clear-fix-a" style = "margin-top : 30px">
                 <li class="filter-item-a">
-                  <td>
-                    <textarea v-if="this.large_num == ''"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea"
-                              v-model="detail.req_dis_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '1'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea1"
-                              v-model="detail.req_dis_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '2'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea2"
-                              v-model="detail.ttmn_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '3'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea3"
-                              v-model="detail.slv_mpln_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '4'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea4"
-                              v-model="detail.rmrk"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                  </td>
+                  <div class="input-searchWrap" style = "margin-left : -8px">
+                    <td class="td-box"> PM명 </td>
+                    <input type="text"
+                           placeholder="PM명"
+                           v-model="info.dvlpe_nm"
+                           style   = "width: 90px"
+                           @keyup.enter="open_pjte9001(1)"
+                    >
+                  </div>
+                </li>
+                <li style="float:left">
+                  <input type="text"
+                         placeholder="직원번호"
+                         v-model="info.dvlpe_no"
+                         style="width: 70px; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
+                </li>
+                <li class="filter-item-a" >
+                  <div class="item-con">
+                    <td class="td-box"> *주간년월 </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box">차수</td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -30px">
+                    <td class="td-box" style="margin-left : 30px;width :280px"> &emsp;&emsp;전&emsp;&emsp;&emsp;체&emsp;&emsp;</td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 예정(진척율%) </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 전체(진척율%) </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -8px">
+                    <td class="td-box"> 단계 </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 160px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 예정진척율(%)</td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 전체진척율(%)</td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           id="tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <th>
+                    <td class="td-box2">*프로젝트<br> 진행현황</td>
+                    </th>
+                    <td>
+                      <textarea cols="140"
+                                rows="5"
+                                ref="req_dis_txt"
+                                v-model="detail.req_dis_txt"
+                                style="width: 685px; height:80px;"
+                                @click="enlarged_view(1)"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <th style="vertical-align: middle">
+                    <td class="td-box2">이슈내용</td>
+                    </th>
+                    <td>
+                      <textarea cols="140"
+                                rows="5"
+                                v-model="detail.ttmn_txt"
+                                style="width: 685px;height:80px;"
+                                @click="enlarged_view(2)"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <th style="vertical-align: middle">
+                    <td class="td-box2">요청내용</td>
+                    </th>
+                    <td>
+                      <textarea cols="140"
+                                rows="5"
+                                v-model="detail.slv_mpln_txt"
+                                style="width: 685px; height:80px;"
+                                @click="enlarged_view(3)"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <th class="td-box">첨부파일</th>
+                    <td colspan="4">
+                      <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
+                    </td>
+                    <th>
+                      <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
+                    </th>
+                  </div>
                 </li>
               </ul>
             </div>
+
           </div>
         </div>
       </section>

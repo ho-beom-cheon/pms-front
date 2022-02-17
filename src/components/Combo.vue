@@ -2,14 +2,15 @@
   <div style="display:inline;">
     <!-- 주간보고 시작 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
-      <div class="item-con" style = "margin-left : 45px">프로젝트
+      <div class="item-con">
+        <td class="td-box"> 프로젝트 </td>
         <select
             v-model = "real_prjt_id_selected_iss"
-            style   = "width: 430px"
+            style   = "width: 422px"
             @change = "real_prjt_id_change_iss"
         >
           <option
-              v-for  = "(item, idx) in CD1000000038"
+              v-for  = "(item, idx) in CD1000000038N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -19,14 +20,15 @@
     </li>
 
     <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-39'">
-      <div class="item-con" style = "margin-left : 93px">차수
+      <div class="item-con" >
+        <td class="td-box"> 차수 </td>
         <select
             v-model = "week_sqn_cd_selected_iss"
-            style   = "width: 100px"
+            style   = "width: 125px"
             @change = "week_sqn_cd_change_iss"
         >
           <option
-              v-for  = "(item, idx) in CD1000000039"
+              v-for  = "(item, idx) in CD1000000039N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -1076,8 +1078,8 @@ export default {
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
-          if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038[0].value
-          if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039[0].value
+          if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038N[0].value
+          if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039N[0].value
         }
         this.setCdAll()
       }

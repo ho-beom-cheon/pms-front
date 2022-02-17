@@ -627,6 +627,33 @@ table.form-table select {
     grid-template-rows: repeat(1, 490px);
     gap: 3px;
 }
+.td-box{
+    float: left;
+    margin-left: 8px;
+
+    padding: 3.3px 18px 3.3px 18px;
+    text-align: center;
+    border: 2px solid #B8B8B8;
+    color: rgb(232, 232, 232);
+    background: #B8B8B8;
+    font-size : 12px;
+    font-weight: bold;
+    width: 120px;
+}
+.td-box2{
+    float: left;
+    margin-left: 8px;
+    background: #B8B8B8;
+    padding: 25px 18px 0px 18px;
+    text-align: center;
+    vertical-align: middle;
+    border: 2px solid#B8B8B8;
+    color: rgb(232, 232, 232);
+    font-size : 12px;
+    font-weight: bold;
+    width: 120px;
+    height: 80px;
+}
 /*SWZP0110 적용 CSS*/
 .multiGridWrap-c {
     display: grid;
