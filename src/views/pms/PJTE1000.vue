@@ -253,12 +253,6 @@ window.fileData = (fileLists) => {
   window.pms_register.file_name_list = fileLists; // 받아온 데이터를 리스트에 저장
 }
 
-// 공지구분 데이터 (그리드)
-const ntar_bzcd = [
-  {text: "프로젝트공지", value: '100'},
-  {text: "업무공지", value: "200"},
-];
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -773,7 +767,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: ntar_bzcd
+              listItems: this.$store.state.pms.CD1000000018N
             }
           }
         },

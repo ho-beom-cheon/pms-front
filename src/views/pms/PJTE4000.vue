@@ -454,42 +454,6 @@ import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
 
-// 관리구분
-const rgs_dis_cd = [
-  {text: "ActionItem", value: 'A'},
-  {text: "이슈", value: 'I'},
-  {text: "위험", value: "R"},
-];
-// 요청구분
-const req_dis_cd = [
-  {text: "품질", value: "100"},
-  {text: "업무처리", value: "200"},
-  {text: "협의사항", value: "300"},
-  {text: "기타", value: "900"},
-];
-// 처리단계(이슈처리단계구분코드)
-const prc_step_cd = [
-  {text: "발생", value: "100"},
-  {text: "요청", value: "200"},
-  {text: "보류", value: "300"},
-  {text: "진행중", value: "400"},
-  {text: "완료", value: "500"}
-];
-// 상세내용 영향도
-const ifnc_cd = [
-  {text: "매우낮음", value: "100"},
-  {text: "낮음", value: "200"},
-  {text: "높음", value: "300"},
-  {text: "매우높음", value: "400"},
-];
-// 상세내용 긴급성
-const urgn_cd = [
-  {text: "매우낮음", value: "100"},
-  {text: "낮음", value: "200"},
-  {text: "높음", value: "300"},
-  {text: "매우높음", value: "400"},
-];
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -1037,7 +1001,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: rgs_dis_cd
+              listItems: this.$store.state.pms.CD1000000012N
             }
           }
         },
@@ -1071,7 +1035,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: req_dis_cd
+              listItems: this.$store.state.pms.CD1000000013N
             }
           }
         },
@@ -1097,7 +1061,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: prc_step_cd
+              listItems: this.$store.state.pms.CD1000000014N
             }
           }
         },
@@ -1150,7 +1114,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: urgn_cd
+              listItems: this.$store.state.pms.CD1000000015N
             }
           }
         },
@@ -1163,7 +1127,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: ifnc_cd
+              listItems: this.$store.state.pms.CD1000000016N
             }
           }
         },
