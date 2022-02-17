@@ -629,6 +629,23 @@
         </select>
       </div>
     </li>
+    <!--   부문코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
+      <div class="item-con">차수
+        <select
+            v-model = "dept_cd_selected"
+            style   = "width: 100px"
+            @change = "dept_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000040T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
   </div>
 
 
@@ -682,6 +699,7 @@ export default {
     this.urgn_cd_change_iss()
     this.real_prjt_id_change()
     this.week_sqn_cd_change()
+    this.dept_cd_selected()
   },
   data() {
     return {
@@ -726,6 +744,7 @@ export default {
       CD1000000036T : [],  CD1000000036N : [],
       CD1000000038T : [],  CD1000000038N : [],
       CD1000000039T : [],  CD1000000039N : [],
+      CD1000000040T : [],  CD1000000040N : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -808,6 +827,8 @@ export default {
       real_prjt_id_selected : "",
       // 회차
       week_sqn_cd_selected : "",
+      // 부문코드
+      dept_cd_selected : "",
     }
   },
   methods: {
@@ -854,8 +875,9 @@ export default {
     req_dis_cd_change_iss()         {  this.$emit('req_dis_cd_change_iss',         this.req_dis_cd_selected_iss)},       // 요청구분(이슈)
     urgn_cd_change_iss()            {  this.$emit('urgn_cd_change_iss',            this.urgn_cd_selected_iss)},          // 긴급성(이슈)
     ifnc_cd_change_iss()            {  this.$emit('ifnc_cd_change_iss',            this.ifnc_cd_selected_iss)},          // 영향도(이슈)
-    real_prjt_id_change()            {  this.$emit('real_prjt_id_change',          this.real_prjt_id_selected)},         // 투입프로젝트
+    real_prjt_id_change()           {  this.$emit('real_prjt_id_change',           this.real_prjt_id_selected)},         // 투입프로젝트
     week_sqn_cd_change()            {  this.$emit('week_sqn_cd_change',            this.week_sqn_cd_selected)},          // 회차
+    dept_cd_change()                {  this.$emit('dept_cd_change',                this.dept_cd_selected)},              // 부문코드
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -928,6 +950,9 @@ export default {
               } else if (i === 39) {
                 this.CD1000000039T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000039N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 40) {
+                this.CD1000000040T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000040N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1042,6 +1067,10 @@ export default {
               this.CD1000000039T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000039N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 40) {
+              this.CD1000000040T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000040N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
 
             this.set_yn = "Y";
@@ -1077,6 +1106,7 @@ export default {
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
+          if(this.CD1000000040T.length !== 0)  this.dept_cd_selected             = this.CD1000000040T[0].value
         }
         this.setCdAll()
       }
@@ -1122,6 +1152,7 @@ export default {
       this.cd_all.push(this.CD1000000036N)
       this.cd_all.push(this.CD1000000038N)
       this.cd_all.push(this.CD1000000039N)
+      this.cd_all.push(this.CD1000000040N)
     },
     init()  {
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -1172,6 +1203,7 @@ export default {
             "1000000037",
             "1000000038",
             "1000000039",
+            "1000000040",
           ];
 
       // 조회영역 권한 체크
