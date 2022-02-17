@@ -458,11 +458,11 @@
       </div>
     </li>
     <!--   검출구분코드 -->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C25'">
+    <li class="filter-item" v-for="item in this.comboList2" :key="item.id" v-if="item === 'C25'">
       <div class="item-con">파일구분코드
         <select
             v-model = "file_rgs_dscd_selected"
-            style   = "width: 200px"
+            style   = "width: 160px"
             @change = "file_rgs_dscd_change"
         >
           <option
@@ -641,9 +641,46 @@ export default {
   name: "combo",
   props: {
     comboArray: Array,
+    comboArray2: Array,
   },
   mounted () {
     this.init()
+  },
+  updated() {
+   this.bzcd_change()
+   this.dvlp_dis_cd_change()
+   this.pgm_dis_cd_change()
+   this.prc_step_cd_change()
+   this.iss_prc_step_cd_change()
+   this.bkup_id_change()
+   this.prjt_nm_chage()
+   this.prjt_nm_change_pop()
+   this.sqn_cd_change()
+   this.itg_tst_prc_cd_change()
+   this.req_dis_cd_change()
+   this.rgs_dis_cd_change()
+   this.req_dscd_change()
+   this.req_prc_step_cd_change()
+   this.wbs_prc_sts_cd_change()
+   this.wbs_mng_cd_change()
+   this.ntar_bzcd_change()
+   this.err_tycd_change()
+   this.err_rgs_dscd_change()
+   this.err_prc_step_cd_change()
+   this.file_cd_change()
+   this.search_cd_change()
+   this.check_cd_change()
+   this.req_prc_step_cd_change_pop()
+   this.bzcd_change_pop()
+   this.req_dscd_change_pop()
+   this.file_rgs_dscd_change_pop()
+   this.file_rgs_dscd_change()
+   this.rgs_dis_cd_change_iss()
+   this.iss_prc_step_cd_change_iss()
+   this.req_dis_cd_change_iss()
+   this.urgn_cd_change_iss()
+   this.real_prjt_id_change()
+   this.week_sqn_cd_change()
   },
   data() {
     return {
@@ -690,6 +727,7 @@ export default {
       CD1000000039T : [],  CD1000000039N : [],
 
       comboList: this.comboArray,
+      comboList2: this.comboArray2,
       code_it : [],
       cd_all : [],
       row : 0,

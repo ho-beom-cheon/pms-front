@@ -486,6 +486,9 @@ export default {
     },
 
     onClick(ev) {
+      if(this.$refs.grid.invoke("getData").length <= ev.rowkey){
+        return
+      }
       this.curRow = ev.rowKey;
       let gridData = this.$refs.grid.invoke("getRow",this.curRow);
       this.$refs.grid.invoke("getRow", this.curRow);
@@ -846,7 +849,7 @@ export default {
       rowHeight: 25,
       minRowHeight: 10,
       showDummyRows: true,
-      open: false,
+      open: true,
       // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [
         { id: 'PJTE1000', path: '/PJTE1000', name: 'ProjectEyes현황' },
@@ -882,9 +885,9 @@ export default {
           {header: '결함건수',  name: 'mergeColumn1', childNames: ['col19', 'col20', 'col21']},
           {header: '테스트계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt','err_btn']},
-          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno'], hideChildHeaders : true},
-          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno'], hideChildHeaders : true},
-          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno'], hideChildHeaders : true},
+          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno']},
+          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno']},
+          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno']},
           {header: '통합테스트',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn']},
         ]
       },
@@ -946,7 +949,7 @@ export default {
         },
         {
           header: '처리단계',
-          width: 130,
+          width: 100,
           align: 'center',
           name: 'itg_tst_prc_cd',
           formatter: 'listItemText',
@@ -989,61 +992,61 @@ export default {
           format: 'yyyy-mm-dd',
         },
         {
-          header: '개발자',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'dvlpe_enm',
           editor: 'text',
         },
         {
-          header: '개발자',
+          header: '검색',
           width: 60,
           align: 'center',
           name: 'dvlpe_btn',
           renderer: SearchBtn,
         },
         {
-          header: '개발자',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'dvlpe_eno',
         },
         {
-          header: 'PL명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'pl_enm',
           editor: 'text',
         },
         {
-          header: 'PL명',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'pl_btn',
           renderer: SearchBtn,
         },
         {
-          header: 'PL번호',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'pl_eno',
         },
         {
-          header: '담당자명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'crpe_enm',
           editor: 'text',
         },
         {
-          header: '담당자명',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'crpe_btn',
           renderer: SearchBtn,
         },
         {
-          header: '담당자번호',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'crpe_eno',

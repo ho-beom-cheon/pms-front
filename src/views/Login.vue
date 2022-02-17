@@ -271,7 +271,6 @@ export default {
                   storage.setItem("LOGIN_AUT_CD", res.data.data[0].aut_cd);              // 권한ID
                   storage.setItem("LOGIN_YN", res.data.data[0].login_yn);                // 로그인상태
                   storage.setItem("LOGIN_REAL_PRJT_ID", res.data.data[0].real_prjt_id);  // 투입프로젝트ID
-
                 } else if (res.data.data[0].login_yn === 'C') {
                   alert("비밀번호를 변경하세요.");
                   this.modals.modal1 = true
