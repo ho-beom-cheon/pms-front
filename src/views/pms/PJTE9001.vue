@@ -300,13 +300,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text": "IE_기업신용평가 프로젝트", "value": "1000000001"},
-                    {"text": "Project Eye시스템구축", "value": "1000000002"},
-                    {"text": "Project Eye관리", "value": "0000000000"},
-                    {"text": "아이티아이즈주간보고", "value": "0000000001"},
-                  ]
+              listItems:this.$store.state.pms.CD0000000000N
             }
           }
         },
@@ -319,12 +313,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text": "업무팀", "value": "100"},
-                    {"text": "공통팀", "value": "200"},
-                    {"text": "PMO", "value": "300"},
-                  ]
+              listItems:this.$store.state.pms.CD1000000001N
             }
           }
         },

@@ -447,7 +447,7 @@ table.form-table select {
     height: 50px;
     border-bottom: 1px solid #C4C4C4;
 }
-/*SWZP0070, SWZP0080 적용 CSS*/
+/*PJTE2110, PJTE2210 적용 CSS*/
 .multiGridWrap {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -500,7 +500,7 @@ table.form-table select {
     margin-right: 5px;
     border: 1px solid #d5d5d5;
 }
-/*SWZP0014 적용 CSS*/
+/*PJTE1000 적용 CSS*/
 .multiGridWrap-a {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -557,7 +557,7 @@ table.form-table select {
     gap: 3px;
 }
 
-/*SWZP0060 적용 CSS*/
+/*PJTE4000 적용 CSS*/
 .multiGridWrap-b {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -614,6 +614,7 @@ table.form-table select {
     gap: 3px;
 }
 
+
 /*PJTE8000*/
 .div1-d{
     grid-column: 4/7;
@@ -654,7 +655,7 @@ table.form-table select {
     width: 120px;
     height: 80px;
 }
-/*SWZP0110 적용 CSS*/
+/*PJTE9000 적용 CSS*/
 .multiGridWrap-c {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -744,6 +745,10 @@ table.form-table select {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(1, 315px);
     gap: 3px;
+}
+/*PJTE2100, PJTE2200그리드 내 결함등록 버튼 이미지*/
+.div-img{
+    background-image: url(../../assets/img/PE-icon/ic_new.svg);
 }
 .grid1-box{
     border: 1px solid #d5d5d5;
@@ -1017,7 +1022,7 @@ aside dl dd + dd a {
     justify-content: space-between;
     align-items: flex-end;
 }
-/*SWZP0014 필터*/
+/*PJTE1000 필터*/
 .filter-a {
     padding-top: 10px;
     display: flex;
@@ -1025,7 +1030,7 @@ aside dl dd + dd a {
     justify-content: space-between;
     align-items: flex-end;
 }
-/*SWZP0060 필터*/
+/*PJTE1000 필터*/
 .filter-b {
     display: flex;
     flex-wrap: wrap;
@@ -1083,7 +1088,7 @@ aside dl dd + dd a {
     gap: 4px;
 }
 
-/*SWZP0110 적용 CSS*/
+/*PJTE9000 적용 CSS*/
 .filter-con .filter-item-a {
     float: left;
     margin-left: 8px;

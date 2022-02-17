@@ -491,6 +491,7 @@ export default {
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
       this.detail.ntar_bzcd_selected = currentRowData.ntar_bzcd;         // (상세)공지구분
+      this.detail.bkup_id_selected = currentRowData.bkup_id;             // (상세)백업ID
       this.detail.mng_id = currentRowData.mng_id;                        // (상세)관리ID
       this.detail.rgs_dt = currentRowData.rgs_dt;                        // (상세)공지일자
       this.detail.titl_txt = currentRowData.titl_txt;                    // (상세)제목내용
