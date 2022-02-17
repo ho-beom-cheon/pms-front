@@ -1046,6 +1046,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'mng_id',
+          sortable: true
         },
         {
           header: '제목',
