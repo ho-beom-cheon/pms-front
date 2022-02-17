@@ -50,14 +50,14 @@
             </combo>
             <li class="filter-item">
               <div class="item-con">주간년월
-                  <input type="month" style="width: 125px"  v-model="info.inq_date">
+                  <input type="month" style="width: 125px"  v-model="info.week_yymm">
               </div>
             </li>
             <li class="filter-item-n">
               <div class="input-searchWrap">PM명
                 <input type="text"
                        placeholder="PM명"
-                       v-model="info.dvlpe_nm"
+                       v-model="info.pm_nm"
                        style   = "width: 90px"
                        @keyup.enter="open_pjte9001(1)"
                 >
@@ -69,11 +69,14 @@
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.dvlpe_no"
-                     v-model="info.dvlpe_no"
+                     v-model="info.pm_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
               >
+            </li>
+            <li class="filter-btn">
+              <button class="btn btn-filter-e" @click="gridExcelExport"  style="margin-top: 5px">엑셀다운로드</button>
+              <button class="btn btn-filter-p" style="margin-left: 20px;margin-top: 5px" @click="fnSearch" >조회</button>
             </li>
           </ul>
         </div>
@@ -83,10 +86,6 @@
       <section class="page-contents">
         <div class="grid1-box">
           <div class="div-header-b"><h2>주간보고 내역</h2>
-            <ul class="filter-btn">
-              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSearch">조회</button>
-            </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
             <grid
@@ -127,10 +126,10 @@
                            placeholder="PM명"
                            v-model="info.dvlpe_nm"
                            style   = "width: 90px"
-                           @keyup.enter="open_pjte9001(1)"
+                           @keyup.enter="open_pjte9001(2)"
                     >
                     <button class="search-btn"
-                            @click="open_pjte9001(1)"
+                            @click="open_pjte9001(2)"
                     ></button>
                   </div>
                 </li>
@@ -145,7 +144,7 @@
                 <li class="filter-item-a" >
                   <div class="item-con">
                     <td class="td-box"> *주간년월 </td>
-                    <input type="month" style="width: 125px;text-align: center"  v-model="info.inq_date">
+                    <input type="month" style="width: 125px;text-align: center"  v-model="info.week_yymm">
                   </div>
                 </li>
                 <combo
@@ -272,7 +271,7 @@
                   <div class="item-con" style = "margin-left : -9px">
                       <th class="td-box">첨부파일</th>
                       <td colspan="4">
-                        <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
+                        <input type="text" :disabled=true v-model="detail.ttmn_atfl_nm" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
                       </td>
                       <th>
                         <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
@@ -297,7 +296,6 @@
                            placeholder="PM명"
                            v-model="info.dvlpe_nm"
                            style   = "width: 90px"
-                           @keyup.enter="open_pjte9001(1)"
                     >
                   </div>
                 </li>
@@ -441,7 +439,7 @@
                   <div class="item-con" style = "margin-left : -9px">
                     <th class="td-box">첨부파일</th>
                     <td colspan="4">
-                      <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
+                      <input type="text" :disabled=true v-model="detail.ttmn_atf" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
                     </td>
                     <th>
                       <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
@@ -466,14 +464,13 @@ import Combo from "@/components/Combo"
 import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
-/*
-// 상세내용 긴급성
-const urgn_cd = [
-  {text: "매우낮음", value: "100"},
-  {text: "낮음", value: "200"},
-  {text: "높음", value: "300"},
-  {text: "매우높음", value: "400"},
-];*/
+
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id) => {
+  window.pms_register.emp_nm = empnm;
+  window.pms_register.emp_no = empno;
+  window.pms_register.emp_btn_id = btn_id;
+}
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -503,6 +500,7 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
+    window.pms_register = this;
   },
   beforeUpdate() {
     // console.log("beforeUpdate");
@@ -527,25 +525,21 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-
+    //조회조건 차수, 프로젝트명
     week_sqn_cd_change(params)         {this.info.week_sqn_cd_selected = params},
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
-
+    // 금주주간보고 등록 차수,프로젝트명
     real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params},
     week_sqn_cd_change_iss(params)    {this.detail.week_sqn_cd_selected = params},
 
-    //rgs_dis_cd_change_iss(params)     {this.detail.rgs_dis_cd_selected = params},
-
-
     init() {
-      // 특정 열 비활성화
+      // 특정 열 비활성화 , applyTheme메서드를 이용하여 쉽게 Grid의 전체 스타일을 바꿈
       this.$refs.grid.invoke("disable");
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-      // 조회 필터 초기화
-      this.info.cmpl_yn = false
-      // 상세내용 확대보기 초기 폰트사이즈 설정
+
+      /*// 상세내용 확대보기 초기 폰트사이즈 설정
       document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       if(this.large_num == '1'){
         document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
@@ -555,7 +549,8 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      }
+      }*/
+
     },
     fnSave() {
       //백업ID가 현재 일 때만 저장
@@ -659,7 +654,7 @@ export default {
       let prjt_id_selected = this.info.prjt_nm_selected
       let bkup_id_selected = this.info.bkup_id_selected
       if (btn_id == '1') {
-        empnm = this.info.dvlpe_nm
+        empnm = this.info.pm_nm
       } else if (btn_id == '2') {
         empnm = this.info.pl_nm
       }
@@ -677,8 +672,8 @@ export default {
               // console.log(res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
-                  this.info.dvlpe_no = res.data.data.contents[0].empno
-                  this.info.dvlpe_nm = res.data.data.contents[0].empnm
+                  this.info.pm_no = res.data.data.contents[0].empno
+                  this.info.pm_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
                   this.info.pl_no = res.data.data.contents[0].empno
                   this.info.pl_nm = res.data.data.contents[0].empnm
@@ -850,6 +845,15 @@ export default {
       // console.log("new Value :: " + a);
       // console.log("old Value :: " + b);
     },
+    emp_btn_id() {
+      if(this.emp_btn_id == '1'){       // 결함등록자
+        this.info.pm_no = this.emp_no
+        this.info.pm_nm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 조치자
+        this.info.dvlpe_no = this.emp_no
+        this.info.dvlpe_nm = this.emp_nm
+      }
+    }
   },
 // 변수 선언부분
   data() {
@@ -860,6 +864,10 @@ export default {
       comboList3: ["C-39"],
 
       large_num : '',
+      /*직원조회 팝업 변수*/
+      emp_btn_id : '',  // 직원조회팝업 버튼ID
+      emp_nm : '',      // 직원조회팝업 직원명
+      emp_no : '',      // 직원조회팝업 직원번호
 
       info: {
         /* 필터 변수 */
@@ -871,33 +879,15 @@ export default {
 
         bkup_id_selected      : '0000000000',              // 백업ID
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
-        real_prjt_id_selected : '',
-        week_sqn_cd_selected : '',
-        rgs_dis_cd_selected: 'TTT',    // 선택 된 관리구분
-        req_dis_cd_selected: 'TTT',    // 선택 된 요청구분
-        prc_step_cd_selected: 'TTT',  // 선택 된 처리상태
 
-        rgs_sta_dt: this.rgs_sta_dt,         // 요청시작일자
-        rgs_end_dt: this.rgs_end_dt,         // 요청종료일자
-        ttmn_sta_dt: this.ttmn_sta_dt,        // 조치시작일자
-        ttmn_end_dt: this.ttmn_end_dt,        // 조치종료일자
-
-        tgt_biz_nm: this.tgt_biz_nm,               // 조치업무명
-        achi_nm: this.achi_nm,                     // 요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,           // 조치담당자
-        titl_nm: this.titl_nm,                     // 제목
-        req_dis_txt: this.req_dis_txt,             // 요청내용
-        ttmn_txt: this.ttmn_txt,                   // 조치내용
-        slv_mpln_txt: this.slv_mpln_txt,           // 해결방안내용
-
-        achi_no: this.achi_nm,                     // 요청자
-        ttmn_crpe_no: this.ttmn_crpe_nm,           // 조치담당자
-
-        cmpl_yn: this.cmpl_yn,       // 완료/제외/해결/미발생해소 포함 여부
         //신규
-        inq_date : this.getToday(),                        // 주간년월
-        dvlpe_no              : this.dvlpe_no,        // 개발자번호
-        dvlpe_nm              : this.dvlpe_nm,        // 개발자명
+        week_yymm : this.getToday(),                       // 주간년월
+        pm_no              : this.pm_no,                  // 개발자번호
+        pm_nm              : this.pm_nm,                  // 개발자명
+        real_prjt_id_selected : 'TTT',                    // 프로젝트콤보
+        week_sqn_cd_selected  : 'TTT',                    // 차수콤보
+
+
       },
 
       detail: {
@@ -920,6 +910,9 @@ export default {
         urgn_cd_selected: '',                // (상세)영향도
         ifnc_cd_selected: '',                // (상세)긴급성
 
+
+        ttmn_atfl_nm : '',        // 조치파일명
+        ttmn_atfl_mng_id : '',    // 조치첨부파일관리ID
       },
 
       addRow: {
@@ -950,7 +943,7 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: process.env.VUE_APP_API + '/PJTE8000/select', method: 'GET' },
+          readData: { url: process.env.VUE_APP_API + '/PJTE8000/select01', method: 'GET' },
         },
         initialRequest: false,
       },
@@ -965,7 +958,6 @@ export default {
           {header: '전체',              name: 'mergeColumn2', childNames: ['all_pred_prg', 'all_real_prg']},
           {header: '단계',              name: 'mergeColumn3', childNames: ['step_nm', 'step_pred_prg', 'step_real_prg'], headerAlign:'center'},
           {header: 'WBS',               name:'mergeColumn4', childNames: ['mergeColumn2', 'mergeColumn3']},
-      //    {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},*/
         ]
       },
       columns: [
@@ -1072,6 +1064,101 @@ export default {
           align: 'left',
           name: 'req_txt',
           ellipsis: true,
+        },
+        {
+          header: '지난주pm명',
+          width: 100,
+          align: 'left',
+          name: 'bef_pm_nm',
+          hidden : true,
+        },
+        {
+          header: '지난주사원번호',
+          width: 120,
+          align: 'center',
+          name: 'bef_pm_no',
+          hidden : true,
+        },
+        {
+          header: '지난주간년월',
+          width: 120,
+          align: 'center',
+          name: 'bef_week_yymm',
+          format: 'yyyy-mm',
+          hidden : true,
+        },
+        {
+          header: '지난차수 CD',
+          width: 110,
+          align: 'left',
+          name: 'bef_week_sqn_cd',
+          hidden : true,
+        },
+        {
+          header: '지난차수',
+          width: 40,
+          align: 'left',
+          name: 'bef_week_sqn_nm',
+          hidden : true,
+        },
+        {
+          header: '지난예정',
+          width: 60,
+          align: 'center',
+          name: 'bef_all_pred_prg',
+          hidden : true,
+        },
+        {
+          header: '지난실제',
+          width: 60,
+          align: 'center',
+          name: 'bef_all_real_prg',
+          hidden : true,
+        },
+        {
+          header: '지난단계',
+          width: 60,
+          align: 'center',
+          name: 'bef_step_nm',
+          hidden : true,
+        },
+        {
+          header: '지난예정',
+          width: 60,
+          align: 'center',
+          name: 'bef_step_pred_prg',
+          hidden : true,
+        },
+        {
+          header: '지난실제',
+          width: 60,
+          align: 'center',
+          name: 'bef_step_real_prg',
+          hidden : true,
+        },
+        {
+          header: '지난프로젝트진행현황',
+          width: 230,
+          align: 'left',
+          name: 'bef_prg_txt',
+          ellipsis: true,
+          hidden : true,
+        },
+        {
+          header: '지난이슈내용',
+          width: 230,
+          align: 'left',
+          name: 'bef_iss_txt',
+          ellipsis: true,
+          hidden : true,
+        },
+        {
+          header: '지난요청내용',
+          width: 230,
+          align: 'left',
+          name: 'bef_req_txt',
+          ellipsis: true,
+          hidden : true,
         },
       ]
     }
