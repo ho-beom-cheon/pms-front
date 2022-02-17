@@ -45,10 +45,10 @@
       <hr>
       <table v-if="afterSearch">
         <colgroup>
-          <col width="100px">
+          <col width="30px">
           <col width="100px">
           <col width="200px">
-          <col width="200px">
+          <col width="300px">
           <col width="180px">
           <col width="*">
         </colgroup>
