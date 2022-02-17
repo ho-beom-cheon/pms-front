@@ -239,12 +239,6 @@ class SearchBtn {
   }
 }
 
-// 업무구분
-const bzcd = [
-  {text: "업무팀", value: "100"},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
 // 결함등록단계구분코드
 const rgs_dscd = [
   {text: "단위테스트단계", value: '1100'},
@@ -471,7 +465,6 @@ export default {
 
       info: {
         // 콤보
-        bzcd: bzcd,    			                // 업무구분
         rgs_dscd: rgs_dscd,                 //등록단계구분
         err_tycd: err_tycd,                 //결함유형
         err_prc_step_cd: err_prc_step_cd,   //처리단계
@@ -627,7 +620,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -769,7 +762,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         }
