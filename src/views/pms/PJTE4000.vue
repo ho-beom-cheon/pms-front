@@ -774,7 +774,7 @@ export default {
       this.$refs.grid.invoke("readData");
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
     gridExcelImport() {
 
