@@ -479,7 +479,7 @@
       <div class="item-con">공지업무
         <select
             v-model="ntar_bzcd_selected"
-            style="width: 165px;"
+            style="width: 165px; margin-left: 8px"
             @change = "ntar_bzcd_change"
         >
           <option
@@ -1109,7 +1109,8 @@ export default {
       }
     },
     setCdAll() {
-      this.cd_all.push(this.CD1000000001N)
+      this.bzcd_n.push(this.CD1000000001N)
+
       this.cd_all.push(this.CD0000000000N)
       this.cd_all.push(this.CD1000000001N)
       this.cd_all.push(this.CD1000000002N)
