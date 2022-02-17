@@ -646,8 +646,6 @@
       </div>
     </li>
   </div>
-
-
 </template>
 
 <script>
@@ -698,7 +696,7 @@ export default {
     this.urgn_cd_change_iss()
     this.real_prjt_id_change()
     this.week_sqn_cd_change()
-    this.dept_cd_selected()
+    this.dept_cd_change()
   },
   data() {
     return {
@@ -1111,7 +1109,7 @@ export default {
       }
     },
     setCdAll() {
-      this.bzcd_n.push(this.CD1000000001N)
+      this.cd_all.push(this.CD1000000001N)
       this.cd_all.push(this.CD0000000000N)
       this.cd_all.push(this.CD1000000001N)
       this.cd_all.push(this.CD1000000002N)
