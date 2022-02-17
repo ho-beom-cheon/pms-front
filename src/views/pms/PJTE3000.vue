@@ -239,12 +239,6 @@ class SearchBtn {
   }
 }
 
-// 업무구분
-const bzcd = [
-  {text: "업무팀", value: "100"},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
 // 결함등록단계구분코드
 const rgs_dscd = [
   {text: "단위테스트단계", value: '1100'},
@@ -379,7 +373,7 @@ export default {
       // DB 데이터 삭제로직 추가
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
     gridExcelImport() {
       // 엑셀파일 업로드 로직 추가
@@ -471,7 +465,6 @@ export default {
 
       info: {
         // 콤보
-        bzcd: bzcd,    			                // 업무구분
         rgs_dscd: rgs_dscd,                 //등록단계구분
         err_tycd: err_tycd,                 //결함유형
         err_prc_step_cd: err_prc_step_cd,   //처리단계
@@ -602,19 +595,16 @@ export default {
             header: '결함등록자',
             name: 'mergeColumn3',
             childNames: ['rgpe_nm', 'rgpe_no'],
-            hideChildHeaders : true,
           },
           {
             header: '조치자명',
             name: 'mergeColumn4',
             childNames: ['dvlpe_nm', 'dvlpe_no'],
-            hideChildHeaders : true,
           },
           {
             header: 'PL명',
             name: 'mergeColumn5',
             childNames: ['pl_nm', 'pl_no'],
-            hideChildHeaders : true,
           },
         ]
       },
@@ -630,7 +620,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -695,21 +685,21 @@ export default {
           editor: 'datePicker',
         },
         {
-          header: '결함등록자',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'rgpe_nm',
           editor: 'text',
         },
         {
-          header: '결함등록자',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'rgpe_no',
         },
         {
           header: '결함내용',
-          width: 200,
+          width: 300,
           align: 'left',
           name: 'err_txt',
           ellipsis: true,
@@ -737,27 +727,27 @@ export default {
           editor: 'datePicker'
         },
         {
-          header: '조치자명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
         },
         {
-          header: '조치자명',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
         },
         {
-          header: 'PL명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'pl_nm',
           editor: 'text',
         },
         {
-          header: 'PL명',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'pl_no',
@@ -772,7 +762,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         }
