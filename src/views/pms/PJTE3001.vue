@@ -468,7 +468,7 @@ export default {
         ttmn_txt : this.ttmn_txt,                                      // 조치내용
 
         bfjr_bzcd : this.bfjr_bzcd,                                    // 이관전업무
-        cctn_bzcd : this.bzcd_selected,                                    // 연결업무구분코드
+        cctn_bzcd : this.cctn_bzcd,                                    // 연결업무구분코드
         cctn_sqn_cd : this.cctn_sqn_cd,                                // 연결차수구분코드
 
       })

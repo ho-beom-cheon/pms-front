@@ -994,7 +994,7 @@ export default {
       columns: [
         {
           header: '관리구분',
-          width: 150,
+          width: 100,
           align: 'left',
           name: 'rgs_dis_cd',
           formatter: 'listItemText',
@@ -1014,7 +1014,7 @@ export default {
         },
         {
           header: '제목',
-          width: 230,
+          width: 250,
           align: 'left',
           name: 'titl_nm',
           ellipsis: true,
@@ -1029,7 +1029,7 @@ export default {
         {
           header: '요청구분',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'req_dis_cd',
           formatter: 'listItemText',
           editor: {
@@ -1055,7 +1055,7 @@ export default {
         {
           header: '처리단계',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'prc_step_cd',
           formatter: 'listItemText',
           editor: {
@@ -1067,7 +1067,7 @@ export default {
         },
         {
           header: '조치업무명',
-          width: 140,
+          width: 120,
           align: 'left',
           name: 'tgt_biz_nm',
         },
@@ -1108,7 +1108,7 @@ export default {
         {
           header: '긴급성',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'urgn_cd',
           formatter: 'listItemText',
           editor: {
@@ -1121,7 +1121,7 @@ export default {
         {
           header: '영향도',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'ifnc_cd',
           formatter: 'listItemText',
           editor: {
