@@ -63,6 +63,7 @@
             v-model="rgs_dis_cd_selected_iss"
             style="width: 150px;"
             @change = "rgs_dis_cd_change_iss"
+            id="rgs_dis_cd_iss"
         >
           <option
               v-for="(item, idx) in CD1000000012"
@@ -993,6 +994,12 @@ export default {
               } else if (i === 22) {
                 this.CD1000000022T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000022N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 23) {
+                this.CD1000000023T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000023N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 24) {
+                this.CD1000000024T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000024N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 26) {
                 this.CD1000000026T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000026N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -1096,6 +1103,14 @@ export default {
             } else if(i === 22) {
               this.CD1000000022T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000022N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 23) {
+              this.CD1000000023T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000023N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 24) {
+              this.CD1000000024T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000024N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 25) {
               this.CD1000000025T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
