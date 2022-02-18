@@ -5,7 +5,6 @@
     <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
     <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
     <div class="div-img"></div>
-    <
     <!-- ASIDE -- LNB -->
     <aside>
       <div class="page-tit">
