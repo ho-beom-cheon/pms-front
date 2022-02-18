@@ -569,20 +569,7 @@ export default {
           editor: {
             type : "text",
             options:{
-              listItems:
-                  [
-                    {"text":"업무기능분할도","value": '050'},
-                    {"text":"요구사항정의서","value":"100"},
-                    {"text":"화면설계서","value":"200"},
-                    {"text":"프로그램설계서","value":"300"},
-                    {"text":"보고서설계서","value":"400"},
-                    {"text":"인터페이스설계서","value":"500"},
-                    {"text":"테이블목록","value":"600"},
-                    {"text":"단위테스트결과서","value":"700"},
-                    {"text":"통합테스트결과서","value":"800"},
-                    {"text":"요구사항추적표","value":"900"},
-                    {"text":"메뉴구조도","value":"910"},
-                  ]
+              listItems: this.$store.state.pms.CD1000000022N
             }
           }
         },
@@ -695,20 +682,7 @@ export default {
           editor: {
             type : "text",
             options:{
-              listItems:
-                  [
-                    {"text":"업무기능분할도","value":"050"},
-                    {"text":"요구사항정의서","value":"100"},
-                    {"text":"화면설계서","value":"200"},
-                    {"text":"프로그램설계서","value":"300"},
-                    {"text":"보고서설계서","value":"400"},
-                    {"text":"인터페이스설계서","value":"500"},
-                    {"text":"테이블목록","value":"600"},
-                    {"text":"단위테스트결과서","value":"700"},
-                    {"text":"통합테스트결과서","value":"800"},
-                    {"text":"요구사항추적표","value":"900"},
-                    {"text":"메뉴구조도","value":"910"},
-                  ]
+              listItems: this.$store.state.pms.CD1000000022N
             }
           }
         },
