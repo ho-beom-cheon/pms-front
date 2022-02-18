@@ -314,13 +314,16 @@ export default {
     /*그리드 더블클릭 이벤트*/
     dblonClick(ev) {
       this.curRow = ev.rowKey;
-      // 그리드 ROW 더블클릭 시 결함팝업 호출
-      let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id'); // 결함ID
-      let bkup_id='0000000000';                                                     //백업ID
-      let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
-      let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
-      this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+      const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
 
+      if (currentRowData != null) {
+        // 그리드 ROW 더블클릭 시 결함팝업 호출
+        let mng_id = this.$refs.grid.invoke("getValue", this.curRow, 'mng_id'); // 결함ID
+        let bkup_id = '0000000000';                                                     //백업ID
+        let prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
+        let rgpe_nm = this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+      }
     },
 
     fnSearch() {
