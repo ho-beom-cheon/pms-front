@@ -25,7 +25,7 @@
             </div>
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-              <ul class="card-body">
+              <ul class="card-body" v-if="info.prjt_nm_selected != '0000000001'">
                 <li><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
                 <li><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
                 <li><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
@@ -36,6 +36,10 @@
                 <li><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
                 <li><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
                 <li><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
+                <li class="active"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
+              </ul>
+              <ul class="card-body" v-else-if="info.prjt_nm_selected === '0000000001'">
+                <li><a href="/PJTE8000">{{ menu_list[11].name }}</a></li>
                 <li class="active"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
               </ul>
             </div>
@@ -299,6 +303,7 @@ export default {
       this.info.grid_num = 1
       await this.fnSearch();
       await this.fnSearchCode()
+      console.log(this.$store.state.pms.CD1000000001N)
     },
     // 테이블 백업
     tableBackUp() {
@@ -1077,6 +1082,11 @@ export default {
           path: '/PJTE9000',
           name: '시스템관리'
         },
+        {
+          id: 'PJTE8000',
+          path: '/PJTE8000',
+          name: '주간보고'
+        },
       ],
       dataSource: {
         api: {
@@ -1138,7 +1148,13 @@ export default {
           header: '프로젝트',
           width: 150,
           name: 'prjt_id',
-          editor : 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD0000000000N
+            }
+          }
         },
         {
           header: '직원번호',
@@ -1172,12 +1188,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text":"PMO","value":"300"},
-                    {"text": "업무팀", "value": '100'},
-                    {"text": "공통팀", "value": "200"},
-                  ]
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -1189,15 +1200,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text": "고객", "value": '100'},
-                    {"text": "정직원", "value": "200"},
-                    {"text": "계약직", "value": "300"},
-                    {"text":"프리랜서","value":"400"},
-                    {"text":"업체직원","value":"500"},
-                    {"text":"기타","value":"900"},
-                  ]
+              listItems: this.$store.state.pms.CD1000000023N
             }
           }
         },
@@ -1209,15 +1212,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text": "개발자", "value": '100'},
-                    {"text": "PL", "value": "200"},
-                    {"text": "IT", "value": "300"},
-                    {"text":"현업","value":"400"},
-                    {"text":"PM","value":"500"},
-                    {"text":"PMO","value":"600"},
-                  ]
+              listItems: this.$store.state.pms.CD1000000024N
             }
           }
         },
