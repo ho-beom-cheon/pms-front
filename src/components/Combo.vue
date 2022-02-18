@@ -8,6 +8,7 @@
             v-model="rgs_dis_cd_selected_iss"
             style="width: 150px;"
             @change = "rgs_dis_cd_change_iss"
+            id="rgs_dis_cd_iss"
         >
           <option
               v-for="(item, idx) in CD1000000012"
