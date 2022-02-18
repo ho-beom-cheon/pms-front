@@ -1,9 +1,9 @@
 <template>
   <div style="display:inline;">
     <!-- 주간보고 시작 -->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
-      <div class="item-con">
-        <td class="td-box"> 프로젝트 </td>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
+      <div class="item-con" style="margin-left : -8px">
+        <td class="td-box"> *프로젝트 </td>
         <select
             v-model = "real_prjt_id_selected_iss"
             style   = "width: 422px"
@@ -21,7 +21,7 @@
 
     <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-39'">
       <div class="item-con" >
-        <td class="td-box"> 차수 </td>
+        <td class="td-box"> *차수 </td>
         <select
             v-model = "week_sqn_cd_selected_iss"
             style   = "width: 125px"
@@ -29,6 +29,24 @@
         >
           <option
               v-for  = "(item, idx) in CD1000000039N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-40'">
+      <div class="item-con" >
+        <td class="td-box"> *부문명 </td>
+        <select
+            v-model = "dept_cd_selected_iss"
+            style   = "width: 125px"
+            @change = "dept_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000040N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -667,7 +685,7 @@
     </li>
     <!--   부문코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
-      <div class="item-con">차수
+      <div class="item-con">부문명
         <select
             v-model = "dept_cd_selected"
             style   = "width: 100px"
@@ -865,6 +883,7 @@ export default {
       week_sqn_cd_selected_iss : "",
       // 부문코드
       dept_cd_selected : "",
+      dept_cd_selected_iss : "",
     }
   },
   methods: {
@@ -916,6 +935,7 @@ export default {
     real_prjt_id_change_iss()       {  this.$emit('real_prjt_id_change_iss',       this.real_prjt_id_selected_iss)},     // 상세보기]투입프로젝트
     week_sqn_cd_change_iss()        {  this.$emit('week_sqn_cd_change_iss',        this.week_sqn_cd_selected_iss)},      // 상세보기]회차
     dept_cd_change()                {  this.$emit('dept_cd_change',                this.dept_cd_selected)},              // 부문코드
+    dept_cd_change_iss()            {  this.$emit('dept_cd_change_iss',                this.dept_cd_selected_iss)},              // 상세보기]부문코드
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {

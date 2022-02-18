@@ -21,7 +21,7 @@ const GridSample = () => import(/* webpackChunkName: "grid-sample" */ './views/e
 const ExGridAndExcel = () => import(/* webpackChunkName: "grid-excel" */ './views/example/ExGridAndExcel.vue'); menuList.push(ExGridAndExcel); menuListStr.push("ExGridAndExcel");
 const ExTran = () => import(/* webpackChunkName: "exTran" */ './views/example/ExTran.vue'); menuList.push(ExTran); menuListStr.push("ExTran");
 const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetMain.vue'); menuList.push(NetMain); menuListStr.push("NetMain");
-const Tmp = () => import(/* webpackChunkName: "Tmp" */ './views/example/Tmp.vue'); menuList.push(Tmp); menuListStr.push("Tmp");
+
 
 
 /* PMS */
@@ -43,10 +43,6 @@ const PJTE9001 = () => import(/* webpackChunkName: "PJTE9001" */ './views/pms/PJ
 const PJTE9002 = () => import(/* webpackChunkName: "PJTE9002" */ './views/pms/PJTE9002.vue'); menuList.push(PJTE9002); menuListStr.push("PJTE9002");
 const PJTE9003 = () => import(/* webpackChunkName: "PJTE9003" */ './views/pms/PJTE9003.vue'); menuList.push(PJTE9003); menuListStr.push("PJTE9003");
 
-/* BOARD */
-const RefBoard = () => import(/* webpackChunkName: "RefBoardList" */ './views/board/RefBoardList.vue'); menuList.push(RefBoard); menuListStr.push("RefBoard");
-const RefBoardReg = () => import(/* webpackChunkName: "RefBoardReg" */ './views/board/RefBoardReg.vue'); menuList.push(RefBoardReg); menuListStr.push("RefBoardReg");
-
 Vue.use(Router);
 
 let aRootPath = new Object();
@@ -62,7 +58,7 @@ for(var idx=0; idx < menuListStr.length; idx++){
   tmpObj.path = "/" + menuListStr[idx].toLowerCase() ;
   tmpObj.name = menuListStr[idx].toLowerCase() ;
   
-  if( "/login/Tmp/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0) {
+  if( "/login/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0) {
     tmpObj.components = { default:menuList[idx] } ;  
   } else {
     tmpObj.components = { header:PmsHeader, footer:PmsFooter, default:menuList[idx] } ;
@@ -72,6 +68,7 @@ for(var idx=0; idx < menuListStr.length; idx++){
 
 let aOtherPath = new Object();
 
+aOtherPath.path = "/*";
 aOtherPath.path = "/*";
 aOtherPath.name = "/other";
 aOtherPath.components = { default:Login } ;
