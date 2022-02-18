@@ -84,15 +84,15 @@
             <td>
               <div class="item-con">
                 <div class="radio">
-                  <input type="radio" id="option01" v-model="radioValues" value="option01" name="radio-set" checked>
+                  <input type="radio" id="option01" v-model="radioValues" value="radio01" name="radio-set" checked>
                   <label for="option01">서버파일명</label>
                 </div>
                 <div class="radio">
-                  <input type="radio" id="option02" v-model="radioValues" value="option02" name="radio-set">
+                  <input type="radio" id="option02" v-model="radioValues" value="radio02" name="radio-set">
                   <label for="option02">원본파일명</label>
                 </div>
                 <div class="radio">
-                  <input type="radio" id="option03" v-model="radioValues" value="option03" name="radio-set">
+                  <input type="radio" id="option03" v-model="radioValues" value="radio03" name="radio-set">
                   <label for="option03">산출물양식명</label>
                 </div>
               </div>
@@ -105,7 +105,7 @@
       </section>
     </div>
     <div class="pop-footer">
-
+      <button class="btn btn-filter-b" @click="closePopup">닫기</button>
     </div>
   </section>
 </template>
@@ -127,6 +127,9 @@ export default {
   mounted() {
     this.fnSearch()
   },
+  updated() {
+    console.log("this.radioValues ::" ,this.radioValues);
+  },
 
   watch: {
   },
@@ -144,6 +147,10 @@ export default {
     // 수정 후 실행
     onGridUpdated() {
     },
+    // 화면 종료
+    closePopup() {
+      window.close();
+    },
     // 파일 다운로드
     fileDownload() {
       this.gridData = this.$refs.grid.invoke("getData");
@@ -154,13 +161,12 @@ export default {
         return previousValue.then(async() => {
           const res = await axiosService.get("/PJTE9003/fileDownload", {
                 params: {
-                  fileName: currentValue.file_nm,
+                  fileName:currentValue.file_nm
                 },
                 responseType: "blob"
               }
           )
           console.log("response :: "+res.data)
-          console.log(currentValue.org_file_nm)
           let blob = new Blob([res.data], {type: res.headers['content-type']})
           // let fileName = getFileName(res.headers['content-disposition'])
           // fileName = decodeURI(fileName) // 파일명 디코딩 (프로젝트에 따라 사용여부 옵션)
@@ -168,11 +174,14 @@ export default {
           if (window.navigator.msSaveOrOpenBlob) { // IE 10+
             window.navigator.msSaveOrOpenBlob(blob, currentValue.file_nm)
           } else { // not IE
+            let current = this.radioValues==="radio01"?currentValue.file_nm : (this.radioValues==="radio02"?currentValue.org_file_nm : (this.radioValues==="radio03"?currentValue.sam_file_nm:""))
             let link = document.createElement('a')
             link.href = window.URL.createObjectURL(blob)
             link.target = '_self'
-            if (currentValue.org_file_nm) link.download = currentValue.org_file_nm
-            link.click()
+            if (current != null && current !== ""){
+              link.download = current;
+              link.click();
+            }
           }
         })
       }, Promise.resolve())
@@ -200,7 +209,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 350,
+      bodyHeight: 300,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: true,
@@ -239,7 +248,7 @@ export default {
         },
         {
           header: '파일등록구분',
-          width : 90,
+          width : 110,
           align: 'center',
           name: 'file_rgs_dscd',
           ellipsis : true,
