@@ -4,6 +4,7 @@
     <input type="hidden" name="updatedRows" v-model="updatedRows" id="updatedRows">
     <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
     <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
+    <div class="div-img"></div>
     <!-- ASIDE -- LNB -->
     <aside>
       <div class="page-tit">
@@ -263,7 +264,7 @@ class CustomRenderer {
   getElement() {return this.el;}
   render(props) {
     // 결함등록 버튼 img
-    this.el.src = '/img/ic_new.bfdece7b.svg';
+    this.el.src = '/img/ic_new.e2fc07f4.svg';
   }
 }
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성

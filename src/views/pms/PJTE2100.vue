@@ -4,6 +4,7 @@
     <input type="hidden" name="updatedRows" v-model="updatedRows" id="updatedRows">
     <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
     <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
+    <div class="div-img"></div>
     <!-- ASIDE -- LNB -->
     <aside>
       <div class="page-tit">
@@ -239,7 +240,7 @@ class CustomRenderer {
   }
   render(props) {
     // 결함등록 버튼 img
-    this.el.src = '/img/ic_new.bfdece7b.svg';
+    this.el.src = '/img/ic_new.e2fc07f4.svg';
   }
 }
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -600,7 +601,7 @@ export default {
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=700");
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
@@ -937,10 +938,6 @@ export default {
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
       createdRows : this.createdRows,
-      rowData : this.$store.state["pms"].CD0000000000N,
-      addRow : {
-        grid : this.grid,
-      },
 
       // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [
@@ -1157,7 +1154,6 @@ export default {
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
-          editor: 'text',
         },
         {
           header: '이름',
@@ -1187,7 +1183,7 @@ export default {
           editor: 'text',
         },
         {
-          header: ' ',
+          header: '검색',
           width: 50,
           align: 'center',
           name: 'crpe_btn',
@@ -1272,6 +1268,25 @@ export default {
           ellipsis : true,
         },
         {
+          header: '개발자사번',
+          width: 400,
+          hidden : true,
+          name: 'dvlpe_no',
+        },
+        {
+          header: 'PL사번',
+          width: 200,
+          hidden : true,
+          name: 'pl_no',
+        },
+        {
+          header: '담당자사번',
+          width: 140,
+          hidden : true,
+          name: 'crpe_no',
+
+        },
+        {
           header: '등록여부',
           width: 90,
           hidden : true,
@@ -1289,7 +1304,7 @@ export default {
           width: 90,
           name: 'prjt_id',
           align: 'center',
-          hidden : false,
+          hidden : true,
           defaultValue: sessionStorage.getItem("LOGIN_PROJ_ID")
         },
       ]

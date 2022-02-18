@@ -253,12 +253,6 @@ window.fileData = (fileLists) => {
   window.pms_register.file_name_list = fileLists; // 받아온 데이터를 리스트에 저장
 }
 
-// 공지구분 데이터 (그리드)
-const ntar_bzcd = [
-  {text: "프로젝트공지", value: '100'},
-  {text: "업무공지", value: "200"},
-];
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -491,6 +485,7 @@ export default {
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
       this.detail.ntar_bzcd_selected = currentRowData.ntar_bzcd;         // (상세)공지구분
+      this.detail.bkup_id_selected = currentRowData.bkup_id;             // (상세)백업ID
       this.detail.mng_id = currentRowData.mng_id;                        // (상세)관리ID
       this.detail.rgs_dt = currentRowData.rgs_dt;                        // (상세)공지일자
       this.detail.titl_txt = currentRowData.titl_txt;                    // (상세)제목내용
@@ -772,7 +767,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: ntar_bzcd
+              listItems: this.$store.state.pms.CD1000000018N
             }
           }
         },
