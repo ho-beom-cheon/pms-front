@@ -27,8 +27,8 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
               <ul class="card-body">
-                <li class="active"><a href="/PJTE8000">{{ menu_list[11].name }}</a></li>
-                <li><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
+                <li class="active"><a href="/PJTE8000">{{ menu_list[1].name }}</a></li>
+                <li><a href="/PJTE9000">{{ menu_list[0].name }}</a></li>
               </ul>
             </div>
           </div>
@@ -44,26 +44,20 @@
           <ul class="filter-con clear-fix">
             <combo
                 :comboArray = "this.comboList"
-                @prjt_nm_chage="prjt_nm_chage"
                 @real_prjt_id_change="real_prjt_id_change"
                 @week_sqn_cd_change="week_sqn_cd_change"
             >
             </combo>
             <li class="filter-item">
               <div class="item-con">주간년월
-                <div class="input-dateWrap">
-                  <input type="date"
-                         :max="info.rgs_end_dt"
-                         v-model="info.rgs_sta_dt"
-                         style="width: 125px"
-                  ></div>
+                  <input  type="month" style="width: 125px"  v-model="info.week_yymm">
               </div>
             </li>
             <li class="filter-item-n">
-              <div class="input-searchWrap">개발자명
+              <div class="input-searchWrap">PM명
                 <input type="text"
-                       placeholder="직원명"
-                       v-model="info.dvlpe_nm"
+                       placeholder="PM명"
+                       v-model="info.pm_nm"
                        style   = "width: 90px"
                        @keyup.enter="open_pjte9001(1)"
                 >
@@ -75,11 +69,19 @@
             <li class="filter-item">
               <input type="text"
                      placeholder="직원번호"
-                     id="id.dvlpe_no"
-                     v-model="info.dvlpe_no"
+                     v-model="info.pm_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled = true
               >
+            </li>
+            <combo
+                :comboArray = "this.comboList1"
+                @dept_cd_change="dept_cd_change"
+            >
+            </combo>
+            <li class="filter-btn">
+              <button class="btn btn-filter-e" @click="gridExcelExport"  style="margin-top: 5px">엑셀다운로드</button>
+              <button class="btn btn-filter-p" style="margin-left: 20px;margin-top: 5px" @click="fnSearch" >조회</button>
             </li>
           </ul>
         </div>
@@ -89,10 +91,6 @@
       <section class="page-contents">
         <div class="grid1-box">
           <div class="div-header-b"><h2>주간보고 내역</h2>
-            <ul class="filter-btn">
-              <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSearch">조회</button>
-            </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
             <grid
@@ -110,256 +108,325 @@
             ></grid>
           </div>
         </div>
-        <div class="div0-b">
+        <div class="div0-d">
           <div class="div3-b">
-            <div class="div-header-b"><h2>상세내용</h2>
+            <div class="div-header-b"><h2>금주 주간보고 등록</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
-                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">등록</button>
               </ul>
             </div>
             <div class="div2-body-c">
               <ul class="filter-con clear-fix-a">
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>관리ID</label>
-                    <input type="text"
-                           placeholder="입력 불가"
-                           v-model="detail.mng_id"
-                           :disabled=true
-                           style="background-color: #f2f2f2 ; width: 150px"
-                    >
-                  </div>
-                </li>
                 <combo
                     :comboArray="this.comboList2"
-                    @rgs_dis_cd_change_iss="rgs_dis_cd_change_iss"
-                    @iss_prc_step_cd_change_iss="iss_prc_step_cd_change_iss"
-                    @req_dis_cd_change_iss="req_dis_cd_change_iss"
+                    @real_prjt_id_change_iss="real_prjt_id_change_iss"
+                    @dept_cd_change_iss="dept_cd_change_iss"
                     ref="combo2"
                 >
                 </combo>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             ref="rgs_dt"
-                             v-model="detail.rgs_dt"
-                             :disabled=true
-                             style="width: 150px; background-color: #f2f2f2;"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청자</label>
+                  <div class="input-searchWrap" style = "margin-left : -8px">
+                    <td class="td-box"> *PM명 </td>
                     <input type="text"
-                           placeholder="입력"
-                           ref="achi_nm"
-                           v-model="detail.achi_nm"
-                           style="width: 150px; margin-right: 150px;"
+                           placeholder="PM명"
+                           v-model="detail.pm_nm"
+                           style   = "width: 90px"
+                           @keyup.enter="open_pjte9001(2)"
                     >
+                    <button class="search-btn"
+                            @click="open_pjte9001(2)"
+                    ></button>
                   </div>
                 </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치담당자</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="detail.ttmn_crpe_nm"
-                           style="width: 150px"
-                    >
-                  </div>
+                <li style="float:left">
+                  <input type="text"
+                         placeholder="직원번호"
+                         v-model="detail.pm_no"
+                         style="width: 70px; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
                 </li>
-                <li class="filter-item-a">
+                <li class="filter-item-a" >
                   <div class="item-con">
-                    <label>조치업무명</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="detail.tgt_biz_nm"
-                           id="tgt_biz_nm"
-                           name="tgt_biz_nm"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치예정일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.ttmn_scd_dt"
-                             style="width: 150px"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.ttmn_dt"
-                             style="width: 150px"
-                      ></div>
+                    <td class="td-box"> *주간년월 </td>
+                    <input type="month" style="width: 125px;text-align: center"  v-model="detail.week_yymm">
                   </div>
                 </li>
                 <combo
                     :comboArray="this.comboList3"
-                    @urgn_cd_change_iss="urgn_cd_change_iss"
-                    @ifnc_cd_change_iss="ifnc_cd_change_iss"
+                    @week_sqn_cd_change_iss="week_sqn_cd_change_iss"
                     ref="combo3"
                 >
                 </combo>
                 <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -30px">
+                    <td class="td-box" style="margin-left : 30px;width :280px"> &emsp;&emsp;전&emsp;&emsp;&emsp;체&emsp;&emsp;</td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
                   <div class="item-con">
-                    <label>등급</label>
+                    <td class="td-box"> *예정(진척율%) </td>
                     <input type="text"
-                           placeholder="입력"
-                           v-model="detail.gd_txt"
-                           style="width: 150px"
+                           placeholder="숫자만 입력 하세요"
+                           ref="all_pred_prg"
+                           v-model="detail.all_pred_prg"
+                           style="width: 125px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <label>*제목</label>
+                    <td class="td-box"> *전체(진척율%) </td>
                     <input type="text"
-                           placeholder="입력"
-                           ref="titl_nm"
-                           v-model="detail.titl_nm"
-                           style="width: 885px"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.all_real_prg"
+                           ref="all_real_prg"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -8px">
+                    <td class="td-box"> 단계 </td>
+                    <input type="text"
+                           placeholder="단계를 입력 하세요"
+                           v-model="detail.step_nm"
+                           style="width: 160px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>*요청내용</label>
-                    </th>
+                    <td class="td-box"> 예정진척율(%)</td>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.step_pred_prg"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 전체진척율(%)</td>
+                    <input type="text"
+                           placeholder="숫자만 입력 하세요"
+                           v-model="detail.step_real_prg"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <td class="td-box2">*프로젝트<br> 진행현황</td>
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="결함내용을 입력해주세요"
-                                ref="req_dis_txt"
-                                v-model="detail.req_dis_txt"
-                                style="width: 885px; line-height: normal;"
+                                placeholder="진행현황을 입력해주세요"
+                                ref="prg_txt"
+                                v-model="detail.prg_txt"
+                                style="width: 685px; height:80px;"
                                 @click="enlarged_view(1)"
                       ></textarea>
                     </td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>조치내용</label>
-                    </th>
+                  <div class="item-con" style = "margin-left : -9px">
+                     <td class="td-box2">이슈내용</td>
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="조치내용을 입력해주세요"
-                                v-model="detail.ttmn_txt"
-                                style="width: 885px; line-height: normal;"
+                                placeholder="이슈내용을 입력해주세요"
+                                v-model="detail.iss_txt"
+                                style="width: 685px;height:80px;"
                                 @click="enlarged_view(2)"
                       ></textarea>
                     </td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>해결방안내용</label>
-                    </th>
+                  <div class="item-con" style = "margin-left : -9px">
+                      <td class="td-box2">요청내용</td>
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="해결방안내용을 입력해주세요"
-                                v-model="detail.slv_mpln_txt"
-                                style="width: 885px; line-height: normal;"
+                                placeholder="요청내용을 입력해주세요"
+                                v-model="detail.req_txt"
+                                style="width: 685px; height:80px;"
                                 @click="enlarged_view(3)"
                       ></textarea>
                     </td>
                   </div>
                 </li>
                 <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>비고</label>
-                    </th>
-                    <td>
-                      <textarea cols="140"
-                                rows="2"
-                                placeholder="비고를 입력해주세요"
-                                v-model="detail.rmrk"
-                                style="width: 885px; line-height: normal;"
-                                @click="enlarged_view(4)"
-                      ></textarea>
-                    </td>
+                  <div class="item-con" style = "margin-left : -9px">
+                      <th class="td-box">첨부파일</th>
+                      <td colspan="4">
+                        <input type="text" :disabled=true v-model="detail.ttmn_atfl_nm" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
+                      </td>
+                      <th>
+                        <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
+                      </th>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
-          <div class="div4-b">
-            <div class="div-header-b">
-              <h2 v-if="this.large_num == ''">상세내용 확대보기</h2>
-              <h2 v-if="this.large_num == '1'">요청내용 확대보기</h2>
-              <h2 v-if="this.large_num == '2'">조치내용 확대보기</h2>
-              <h2 v-if="this.large_num == '3'">해결방안내용 확대보기</h2>
-              <h2 v-if="this.large_num == '4'">비고 확대보기</h2>
+          <div class="div1-d">
+            <div class="div-header-b"><h2>지난주 주간보고</h2>
               <ul class="filter-btn">
-                <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
-                <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
+                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">지난주 주간보고 조회</button>
               </ul>
             </div>
             <div class="div2-body-c">
-              <ul class="filter-con clear-fix-a">
+              <ul class="filter-con clear-fix-a" style = "margin-top : 30px">
                 <li class="filter-item-a">
-                  <td>
-                    <textarea v-if="this.large_num == ''"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea"
-                              v-model="detail.req_dis_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '1'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea1"
-                              v-model="detail.req_dis_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '2'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea2"
-                              v-model="detail.ttmn_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '3'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea3"
-                              v-model="detail.slv_mpln_txt"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                    <textarea v-else-if="this.large_num == '4'"
-                              cols="103"
-                              rows="33"
-                              id="detailTextArea4"
-                              v-model="detail.rmrk"
-                              :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
-                    ></textarea>
-                  </td>
+                  <div class="input-searchWrap" style = "margin-left : -8px">
+                    <td class="td-box"> PM명 </td>
+                    <input type="text"
+                           placeholder="PM명"
+                           v-model="info.dvlpe_nm"
+                           style   = "width: 90px"
+                    >
+                  </div>
+                </li>
+                <li style="float:left">
+                  <input type="text"
+                         placeholder="직원번호"
+                         v-model="info.dvlpe_no"
+                         style="width: 70px; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
+                </li>
+                <li class="filter-item-a" >
+                  <div class="item-con">
+                    <td class="td-box"> *주간년월 </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box">차수</td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -30px">
+                    <td class="td-box" style="margin-left : 30px;width :280px"> &emsp;&emsp;전&emsp;&emsp;&emsp;체&emsp;&emsp;</td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 예정(진척율%) </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 전체(진척율%) </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -8px">
+                    <td class="td-box"> 단계 </td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 160px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 예정진척율(%)</td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con">
+                    <td class="td-box"> 전체진척율(%)</td>
+                    <input type="text"
+                           v-model="detail.tgt_biz_nm"
+                           name="tgt_biz_nm"
+                           style="width: 125px"
+                    >
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <td class="td-box2">*프로젝트<br> 진행현황</td>
+                    <td>
+                      <textarea cols="140"
+                                rows="5"
+                                ref="req_dis_txt"
+                                v-model="detail.req_dis_txt"
+                                style="width: 685px; height:80px;"
+                                @click="enlarged_view(1)"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <td class="td-box2">이슈내용</td>
+                    <td>
+                      <textarea cols="140"
+                                rows="5"
+                                v-model="detail.ttmn_txt"
+                                style="width: 685px;height:80px;"
+                                @click="enlarged_view(2)"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <td class="td-box2">요청내용</td>
+                    <td>
+                      <textarea cols="140"
+                                rows="5"
+                                v-model="detail.slv_mpln_txt"
+                                style="width: 685px; height:80px;"
+                                @click="enlarged_view(3)"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+                <li class="filter-item-a">
+                  <div class="item-con" style = "margin-left : -9px">
+                    <th class="td-box">첨부파일</th>
+                    <td colspan="4">
+                      <input type="text" :disabled=true v-model="detail.ttmn_atf" style="margin-bottom:10px;background-color: #f2f2f2;width: 590px;">
+                    </td>
+                    <th>
+                      <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
+                    </th>
+                  </div>
                 </li>
               </ul>
             </div>
+
           </div>
         </div>
       </section>
@@ -376,41 +443,12 @@ import {axiosService} from "@/api/http";
 
 const storage = window.sessionStorage;
 
-// 관리구분
-const rgs_dis_cd = [
-  {text: "ActionItem", value: 'A'},
-  {text: "이슈", value: 'I'},
-  {text: "위험", value: "R"},
-];
-// 요청구분
-const req_dis_cd = [
-  {text: "품질", value: "100"},
-  {text: "업무처리", value: "200"},
-  {text: "협의사항", value: "300"},
-  {text: "기타", value: "900"},
-];
-// 처리단계(이슈처리단계구분코드)
-const prc_step_cd = [
-  {text: "발생", value: "100"},
-  {text: "요청", value: "200"},
-  {text: "보류", value: "300"},
-  {text: "진행중", value: "400"},
-  {text: "완료", value: "500"}
-];
-// 상세내용 영향도
-const ifnc_cd = [
-  {text: "매우낮음", value: "100"},
-  {text: "낮음", value: "200"},
-  {text: "높음", value: "300"},
-  {text: "매우높음", value: "400"},
-];
-// 상세내용 긴급성
-const urgn_cd = [
-  {text: "매우낮음", value: "100"},
-  {text: "낮음", value: "200"},
-  {text: "높음", value: "300"},
-  {text: "매우높음", value: "400"},
-];
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id) => {
+  window.pms_register.emp_nm = empnm;
+  window.pms_register.emp_no = empno;
+  window.pms_register.emp_btn_id = btn_id;
+}
 
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -436,10 +474,12 @@ export default {
   },
   mounted() {
     // console.log("mounted");
+    console.log(this.info.week_yymm);
     // 초기화
-    //this.init();
+    this.init();
     // 최초조회
-    //this.fnSearch();
+    this.fnSearch();
+    window.pms_register = this;
   },
   beforeUpdate() {
     // console.log("beforeUpdate");
@@ -464,30 +504,23 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params)             {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)              {this.info.prjt_nm_selected = params},
-    rgs_dis_cd_change(params)          {this.info.rgs_dis_cd_selected = params},
-    req_dis_cd_change(params)          {this.info.req_dis_cd_selected = params},
-    iss_prc_step_cd_change(params)     {this.info.prc_step_cd_selected = params},
-
-    rgs_dis_cd_change_iss(params)     {this.detail.rgs_dis_cd_selected = params},
-    iss_prc_step_cd_change_iss(params)     {this.detail.prc_step_cd_selected = params},
-    req_dis_cd_change_iss(params)     {this.detail.req_dis_cd_selected = params},
-    urgn_cd_change_iss(params)     {this.detail.urgn_cd_selected = params},
-    ifnc_cd_change_iss(params)     {this.detail.ifnc_cd_selected = params},
-    week_sqn_cd_change(params)     {this.detail.week_sqn_cd_selected = params},
-    real_prjt_id_change(params)     {this.detail.real_prjt_id_selected = params},
-
+    //조회조건 차수, 프로젝트명
+    week_sqn_cd_change(params)         {this.info.week_sqn_cd_selected = params},
+    real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
+    dept_cd_change(params)             {this.info.dept_cd_selected = params},
+    // 금주주간보고 등록 차수,프로젝트명
+    real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params},
+    week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params},
+    dept_cd_change_iss(params)         {this.detail.dept_cd_selected = params},
 
     init() {
-      // 특정 열 비활성화
+      // 특정 열 비활성화 , applyTheme메서드를 이용하여 쉽게 Grid의 전체 스타일을 바꿈
       this.$refs.grid.invoke("disable");
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-      // 조회 필터 초기화
-      this.info.cmpl_yn = false
-      // 상세내용 확대보기 초기 폰트사이즈 설정
+
+      /*// 상세내용 확대보기 초기 폰트사이즈 설정
       document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       if(this.large_num == '1'){
         document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
@@ -497,7 +530,8 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      }
+      }*/
+
     },
     fnSave() {
       //백업ID가 현재 일 때만 저장
@@ -595,6 +629,47 @@ export default {
       }
     },
 
+// 직원조회 팝업 (검색 필터)
+    open_pjte9001(btn_id) {
+      let empnm = ''
+      let prjt_id_selected = this.info.prjt_nm_selected
+      let bkup_id_selected = this.info.bkup_id_selected
+      if (btn_id == '1') {
+        empnm = this.info.pm_nm
+      } else if (btn_id == '2') {
+        empnm = this.detail.pl_nm
+      }
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm,
+            prjt_id_selected,
+            bkup_id_selected
+
+          }
+        })
+            .then(res => {
+              let res_data = res.data.data.contents;
+              // console.log(res_data)
+              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+                if (btn_id == '1') {
+                  this.info.pm_no = res.data.data.contents[0].empno
+                  this.info.pm_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '2') {
+                  this.detail.pl_no = res.data.data.contents[0].empno
+                  this.detail.pl_nm = res.data.data.contents[0].empnm
+                }
+              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+                let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+              }
+            })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
+
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
       this.detail.rgs_dis_cd_selected = this.$refs.combo2.$data.CD1000000012[0].value                     // (상세)관리구분
       this.$refs.combo2.$data.rgs_dis_cd_selected_iss = this.$refs.combo2.$data.CD1000000012[0].value
@@ -620,6 +695,7 @@ export default {
       this.detail.slv_mpln_txt = ''                                                                      // (상세)해결방안내용
       this.detail.rmrk = ''                                                                              // (상세)비고
     },
+
     onClick(ev) {
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
@@ -630,33 +706,30 @@ export default {
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
-      this.detail.rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
-      this.$refs.combo2.$data.rgs_dis_cd_selected_iss = currentRowData.rgs_dis_cd;
-      this.detail.prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리단계
-      this.$refs.combo2.$data.iss_prc_step_cd_selected_iss = currentRowData.prc_step_cd;
-      this.detail.mng_id = currentRowData.mng_id;                            // (상세)관리ID
-      this.detail.req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
-      this.$refs.combo2.$data.req_dis_cd_selected_iss = currentRowData.req_dis_cd;
-      this.detail.rgs_dt = currentRowData.rgs_dt;                            // (상세)요청일자
-      this.detail.achi_nm = currentRowData.achi_nm;                          // (상세)요청자
-      this.detail.ttmn_crpe_nm = currentRowData.ttmn_crpe_nm;                // (상세)조치담당자
-      this.detail.tgt_biz_nm = currentRowData.tgt_biz_nm;                    // (상세)조치업무명
-      this.detail.ttmn_scd_dt = currentRowData.ttmn_scd_dt;                  // (상세)조치예정일자
-      this.detail.ttmn_dt = currentRowData.ttmn_dt;                          // (상세)조치일자
-      this.detail.ifnc_cd_selected = currentRowData.ifnc_cd;                 // (상세)영향도
-      this.$refs.combo3.$data.ifnc_cd_selected_iss = currentRowData.ifnc_cd;
-      this.detail.urgn_cd_selected = currentRowData.urgn_cd;                 // (상세)긴급성
-      this.$refs.combo3.$data.urgn_cd_selected_iss = currentRowData.urgn_cd;
-      this.detail.gd_txt = currentRowData.gd_txt;                            // (상세)등급
-      this.detail.titl_nm = currentRowData.titl_nm;                          // (상세)제목
-      this.detail.req_dis_txt = currentRowData.req_dis_txt;                  // (상세)요청내용
-      this.detail.ttmn_txt = currentRowData.ttmn_txt;                        // (상세)조치내용
-      this.detail.slv_mpln_txt = currentRowData.slv_mpln_txt;                // (상세)해결방안내용
-      this.detail.rmrk = currentRowData.rmrk;                                // (상세)비고
+      this.detail.real_prjt_id_selected = currentRowData.real_prjt_id;                  // (상세)프로젝트
+      this.$refs.combo2.$data.real_prjt_id_selected_iss = currentRowData.real_prjt_id;  //(상세)프로젝트
+      this.detail.dept_cd_selected = currentRowData.dept_cd;                            // (상세)부문명
+      this.$refs.combo2.$data.dept_cd_selected_iss = currentRowData.dept_cd;            // 부문명
+      this.detail.pm_nm = currentRowData.pm_nm;                                         // (상세)pm명
+      this.detail.pm_no = currentRowData.pm_no;                                         // (상세)pm번호
+      this.detail.week_yymm = this.getYyyymm(currentRowData.week_yymm);                                 // (상세)주간년월
+      this.detail.week_sqn_cd_selected = currentRowData.week_sqn_cd;                    // (상세)차수
+      this.$refs.combo3.$data.week_sqn_cd_selected_iss = currentRowData.week_sqn_cd;    // 차수
+      this.detail.all_pred_prg = currentRowData.all_pred_prg;                           // (상세)전체 예정진척율
+      this.detail.all_real_prg = currentRowData.all_real_prg;                           // (상세)전체 실제진척율
+      this.detail.step_nm = currentRowData.step_nm;                                     // (상세)단계명
+      this.detail.step_pred_prg = currentRowData.step_pred_prg;                         // (상세)단계 예정진척율
+      this.detail.step_real_prg = currentRowData.step_real_prg;                         // (상세)단계 전체진척율
+      this.detail.prg_txt = currentRowData.prg_txt;                 // (상세)영향도
+      this.detail.iss_txt = currentRowData.iss_txt;                 // (상세)긴급성
+      this.detail.req_txt = currentRowData.req_txt;                            // (상세)등급
       this.detail.bkup_id_selected = currentRowData.bkup_id;                 // (상세)백업ID
+      this.detail.rmrk = currentRowData.rmrk;                                // (상세)비고
+
 
     },
-    /* 저장 */
+
+    /* 조회 */
     fnSearch() {
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -675,7 +748,13 @@ export default {
       var month = ("0" + (1 + date.getMonth())).slice(-2);
       var day = ("0" + date.getDate()).slice(-2);
 
-      return year + '-' + month + '-' + day;
+      return year + '-' + month;
+    },
+    getYyyymm(data) {
+      let yyyymm;
+      yyyymm=   data.substring(0,4).concat('-',data.substring(4,6));
+
+      return yyyymm;
     },
     enlarged_view(num){
       if (num == 1) {
@@ -714,32 +793,31 @@ export default {
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.rgs_dis_cd == "" || this.detail.rgs_dis_cd == "null") {            // 관리구분
-        alert('관리구분이 없습니다.');
+      if (this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == "null") {
+        alert('프로젝트가 없습니다.');
         return false;
-      } else if (this.detail.prc_step_cd == "" || this.detail.prc_step_cd == "null") {   // 처리단계
-        alert('처리단계가 없습니다.');
+      } else if (this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == "null") {
+        alert('부문명이 없습니다.');
         return false;
-      } else if (this.detail.req_dis_cd == "" || this.detail.req_dis_cd == "null") {     // 요청구분
-        alert('요청구분이 없습니다.');
+      } else if (this.detail.pm_nm == "" || this.detail.pm_nm == "null") {
+        alert('PM명이 없습니다.');
         return false;
-      } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 요청일자
-        this.$refs.rgs_dt.focus();
-        alert('요청일자를 입력해주세요.');
+      } else if (this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == "null") {
+        alert('PM명이 없습니다.');
         return false;
-      } else if (this.detail.achi_nm == "" || this.detail.achi_nm == "null") {           // 요청자
-        this.$refs.achi_nm.focus();
-        alert('요청자를 입력해주세요.');
+      }  else if (this.detail.all_real_prg == "" || this.detail.all_real_prg == "null") {
+        this.$refs.all_real_prg.focus();
+        alert('[전체] 실제진척율을 입력해주세요.');
         return false;
-      } else if (this.detail.titl_nm == "" || this.detail.titl_nm == "null") {           // 제목
-        this.$refs.titl_nm.focus();
-        alert('제목을 입력해주세요.');
+      }  else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg == "null") {
+        this.$refs.all_pred_prg.focus();
+        alert('[전체] 예정진척율을 입력해주세요.');
         return false;
-      } else if (this.detail.req_dis_txt == "" || this.detail.req_dis_txt == "null") {   // 요청내용
-        this.$refs.req_dis_txt.focus();
-        alert('요청내용을 입력해주세요.');
+      }else if (this.detail.prg_txt == "" || this.detail.prg_txt == "null") {
+        this.$refs.prg_txt.focus();
+        alert('프로젝트 진행현황을 입력해주세요.');
         return false;
-      } else {
+      }else {
         return true;  // 필수 값 모두 입력 시 true
       }
     },
@@ -752,16 +830,30 @@ export default {
       // console.log("new Value :: " + a);
       // console.log("old Value :: " + b);
     },
+    emp_btn_id() {
+      if(this.emp_btn_id == '1'){       // 결함등록자
+        this.info.pm_no = this.emp_no
+        this.info.pm_nm = this.emp_nm
+      }else if(this.emp_btn_id == '2'){ // 조치자
+        this.detail.pm_no = this.emp_no
+        this.detail.pm_nm = this.emp_nm
+      }
+    }
   },
 // 변수 선언부분
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C38","C39"],
-      comboList2 : ["C-41","C-42","C-43"],
-      comboList3 : ["C-44","C-45"],
+      comboList1 : ["C40"],
+      comboList2 : ["C-38","C-40"],
+      comboList3: ["C-39"],
 
       large_num : '',
+      /*직원조회 팝업 변수*/
+      emp_btn_id : '',  // 직원조회팝업 버튼ID
+      emp_nm : '',      // 직원조회팝업 직원명
+      emp_no : '',      // 직원조회팝업 직원번호
 
       info: {
         /* 필터 변수 */
@@ -773,27 +865,15 @@ export default {
 
         bkup_id_selected      : '0000000000',              // 백업ID
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
-        rgs_dis_cd_selected: 'TTT',    // 선택 된 관리구분
-        req_dis_cd_selected: 'TTT',    // 선택 된 요청구분
-        prc_step_cd_selected: 'TTT',  // 선택 된 처리상태
 
-        rgs_sta_dt: this.rgs_sta_dt,         // 요청시작일자
-        rgs_end_dt: this.rgs_end_dt,         // 요청종료일자
-        ttmn_sta_dt: this.ttmn_sta_dt,        // 조치시작일자
-        ttmn_end_dt: this.ttmn_end_dt,        // 조치종료일자
+        //신규
+        week_yymm : this.getToday(),                       // 주간년월
+        pm_no              : this.pm_no,                  // 개발자번호
+        pm_nm              : this.pm_nm,                  // 개발자명
+        real_prjt_id_selected : 'TTT',                    // 프로젝트콤보
+        week_sqn_cd_selected  : 'TTT',                    // 차수콤보
+        dept_cd_selected      : 'TTT',                    // 부문명
 
-        tgt_biz_nm: this.tgt_biz_nm,               // 조치업무명
-        achi_nm: this.achi_nm,                     // 요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,           // 조치담당자
-        titl_nm: this.titl_nm,                     // 제목
-        req_dis_txt: this.req_dis_txt,             // 요청내용
-        ttmn_txt: this.ttmn_txt,                   // 조치내용
-        slv_mpln_txt: this.slv_mpln_txt,           // 해결방안내용
-
-        achi_no: this.achi_nm,                     // 요청자
-        ttmn_crpe_no: this.ttmn_crpe_nm,           // 조치담당자
-
-        cmpl_yn: this.cmpl_yn,       // 완료/제외/해결/미발생해소 포함 여부
       },
 
       detail: {
@@ -804,31 +884,28 @@ export default {
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
-        mng_id: '',                             // (상세)관리ID
-        rgs_dt: this.getToday(),                // (상세)요청일자
-        achi_nm: sessionStorage.getItem("LOGIN_EMP_NM"),              // (상세)요청자
-        ttmn_crpe_nm: this.ttmn_crpe_nm,    // (상세)조치담당자
-        tgt_biz_nm: this.tgt_biz_nm,        // (상세)조치업무명
-        ttmn_scd_dt: '',                        // (상세)조치예정일자
-        ttmn_dt: '',                            // (상세)조치일자
-        gd_txt: this.gd_txt,                    // (상세)등급
-        titl_nm: this.titl_nm,              // (상세)제목
-        req_dis_txt: this.req_dis_txt,      // (상세)요청내용
-        ttmn_txt: this.ttmn_txt,            // (상세)조치내용
-        slv_mpln_txt: this.slv_mpln_txt,    // (상세)해결방안내용
-        rmrk: this.rmrk,                        // (상세)비고
+        /*주간보고*/
+        real_prjt_id_selected : '',     // 프로젝트
+        week_sqn_cd_selected  : '',     // 주간년월 차수
+        dept_cd_selected      : '',     // 부문명
+        week_yymm             :  this.getToday(),     // 주간년월
+        pm_no                 : '',     // pm번호
+        pm_nm                 : '',     // pm명
+        all_pred_prg          : '',     // 전체예상진척율
+        all_real_prg          : '',     // 전체실제진척율
+        step_nm               : '',     // 단계명
+        step_pred_prg         : '',     // 단계예상진척율
+        step_real_prg         : '',     // 단계실제진척율
+        prg_txt               : '',     // 프로젝트진행현황
+        iss_txt               : '',     // 이슈내용
+        req_txt               : '',     // 요청내용
 
+        /**/
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
-        rgs_dis_cd_selected: '',      // (상세)선택 된 관리구분
-        req_dis_cd_selected: '',      // (상세)선택 된 요청구분
-        prc_step_cd_selected: '',    // (상세)선택 된 처리상태
-        urgn_cd_selected: '',                // (상세)영향도
-        ifnc_cd_selected: '',                // (상세)긴급성
 
-        real_prjt_id_selected : '',
-        week_sqn_cd_selected : '',
-
+        ttmn_atfl_nm : '',        // 조치파일명
+        ttmn_atfl_mng_id : '',    // 조치첨부파일관리ID
       },
 
       addRow: {
@@ -847,56 +924,6 @@ export default {
       open: false,
       menu_list: [
         {
-          id: 'PJTE1000',
-          path: '/PJTE1000',
-          name: 'ProjectEyes현황'
-        },
-        {
-          id: 'PJTE2100',
-          path: '/PJTE2100',
-          name: '개발현황'
-        },
-        {
-          id: 'PJTE2110',
-          path: '/PJTE2110',
-          name: '개발진척현황'
-        },
-        {
-          id: 'PJTE2200',
-          path: '/PJTE2200',
-          name: '통합테스트'
-        },
-        {
-          id: 'PJTE2210',
-          path: '/PJTE2210',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'PJTE3000',
-          path: '/PJTE3000',
-          name: '결함관리'
-        },
-        {
-          id: 'PJTE4000',
-          path: '/PJTE4000',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'PJTE5000',
-          path: '/PJTE5000',
-          name: 'WBS관리'
-        },
-        {
-          id: 'PJTE6000',
-          path: '/PJTE6000',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'PJTE7000',
-          path: '/PJTE7000',
-          name: '산출물정합성체크'
-        },
-        {
           id: 'PJTE9000',
           path: '/PJTE9000',
           name: '시스템관리'
@@ -909,7 +936,7 @@ export default {
       ],
       dataSource: {
         api: {
-          readData: { url: process.env.VUE_APP_API + '/PJTE8000/select', method: 'GET' },
+          readData: { url: process.env.VUE_APP_API + '/PJTE8000/select01', method: 'GET' },
         },
         initialRequest: false,
       },
@@ -918,160 +945,219 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 25
+        height: 70,
+        complexColumns: [
+          {header: 'PM',               name: 'mergeColumn1', childNames: ['pm_nm', 'pm_no']},
+          {header: '전체',              name: 'mergeColumn2', childNames: ['all_pred_prg', 'all_real_prg']},
+          {header: '단계',              name: 'mergeColumn3', childNames: ['step_nm', 'step_pred_prg', 'step_real_prg'], headerAlign:'center'},
+          {header: 'WBS',               name:'mergeColumn4', childNames: ['mergeColumn2', 'mergeColumn3']},
+        ]
       },
       columns: [
         {
-          header: '관리구분',
-          width: 150,
-          align: 'left',
-          name: 'rgs_dis_cd',
-          formatter: 'listItemText',
+          header  : '프로젝트 ID',
+          width   : 150,
+          align   : 'left',
+          name    : 'real_prjt_id',
+          hidden  : true,
+    /*      formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: rgs_dis_cd
+              listItems: real_prjt_id
             }
-          }
+          }*/
         },
         {
-          header: '관리ID',
+          header: '백업id',
+          width: 200,
+          align: 'left',
+          name: 'bkup_id',
+          hidden : true,
+        },
+        {
+          header: '프로젝트',
+          width: 200,
+          align: 'left',
+          name: 'real_prjt_nm',
+        },
+        {
+          header: '이름',
           width: 100,
-          align: 'center',
-          name: 'mng_id',
+          align: 'left',
+          name: 'pm_nm',
         },
         {
-          header: '제목',
+          header: '사원번호',
+          width: 120,
+          align: 'center',
+          name: 'pm_no',
+          ellipsis: true,
+        },
+        {
+          header: '주간년월',
+          width: 120,
+          align: 'center',
+          name: 'week_yymm',
+        },
+        {
+          header: '차수 CD',
+          width: 110,
+          align: 'left',
+          name: 'week_sqn_cd',
+          hidden : true,
+        },
+        {
+          header: '차수',
+          width: 40,
+          align: 'left',
+          name: 'week_sqn_nm',
+        },
+        {
+          header: '예정',
+          width: 60,
+          align: 'center',
+          name: 'all_pred_prg',
+        },
+        {
+          header: '실제',
+          width: 60,
+          align: 'center',
+          name: 'all_real_prg',
+        },
+        {
+          header: '단계',
+          width: 60,
+          align: 'center',
+          name: 'step_nm',
+        },
+        {
+          header: '예정',
+          width: 60,
+          align: 'center',
+          name: 'step_pred_prg',
+        },
+        {
+          header: '실제',
+          width: 60,
+          align: 'center',
+          name: 'step_real_prg',
+        },
+        {
+          header: '프로젝트진행현황',
           width: 230,
           align: 'left',
-          name: 'titl_nm',
+          name: 'prg_txt',
+          ellipsis: true,
+        },
+        {
+          header: '이슈내용',
+          width: 230,
+          align: 'left',
+          name: 'iss_txt',
           ellipsis: true,
         },
         {
           header: '요청내용',
-          width: 280,
-          align: 'left',
-          name: 'req_dis_txt',
-          ellipsis: true,
-        },
-        {
-          header: '요청구분',
-          width: 110,
-          align: 'left',
-          name: 'req_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: req_dis_cd
-            }
-          }
-        },
-        {
-          header: '요청일자',
-          width: 110,
-          align: 'center',
-          name: 'rgs_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '요청자',
-          width: 110,
-          align: 'center',
-          name: 'achi_nm',
-        },
-        {
-          header: '처리단계',
-          width: 110,
-          align: 'left',
-          name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: prc_step_cd
-            }
-          }
-        },
-        {
-          header: '조치업무명',
-          width: 140,
-          align: 'left',
-          name: 'tgt_biz_nm',
-        },
-        {
-          header: '조치담당자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_crpe_nm',
-        },
-        {
-          header: '조치예정일자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_scd_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '조치일자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '조치내용',
           width: 230,
           align: 'left',
-          name: 'ttmn_txt',
+          name: 'req_txt',
           ellipsis: true,
         },
         {
-          header: '비고',
+          header: '지난주pm명',
+          width: 100,
+          align: 'left',
+          name: 'bef_pm_nm',
+          hidden : true,
+        },
+        {
+          header: '지난주사원번호',
+          width: 120,
+          align: 'center',
+          name: 'bef_pm_no',
+          hidden : true,
+        },
+        {
+          header: '지난주간년월',
+          width: 120,
+          align: 'center',
+          name: 'bef_week_yymm',
+          format: 'yyyy-mm',
+          hidden : true,
+        },
+        {
+          header: '지난차수 CD',
+          width: 110,
+          align: 'left',
+          name: 'bef_week_sqn_cd',
+          hidden : true,
+        },
+        {
+          header: '지난차수',
+          width: 40,
+          align: 'left',
+          name: 'bef_week_sqn_nm',
+          hidden : true,
+        },
+        {
+          header: '지난예정',
+          width: 60,
+          align: 'center',
+          name: 'bef_all_pred_prg',
+          hidden : true,
+        },
+        {
+          header: '지난실제',
+          width: 60,
+          align: 'center',
+          name: 'bef_all_real_prg',
+          hidden : true,
+        },
+        {
+          header: '지난단계',
+          width: 60,
+          align: 'center',
+          name: 'bef_step_nm',
+          hidden : true,
+        },
+        {
+          header: '지난예정',
+          width: 60,
+          align: 'center',
+          name: 'bef_step_pred_prg',
+          hidden : true,
+        },
+        {
+          header: '지난실제',
+          width: 60,
+          align: 'center',
+          name: 'bef_step_real_prg',
+          hidden : true,
+        },
+        {
+          header: '지난프로젝트진행현황',
           width: 230,
           align: 'left',
-          name: 'rmrk',
+          name: 'bef_prg_txt',
           ellipsis: true,
+          hidden : true,
         },
         {
-          header: '긴급성',
-          width: 110,
-          align: 'left',
-          name: 'urgn_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: urgn_cd
-            }
-          }
-        },
-        {
-          header: '영향도',
-          width: 110,
-          align: 'left',
-          name: 'ifnc_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: ifnc_cd
-            }
-          }
-        },
-
-        {
-          header: '등급',
-          width: 110,
-          align: 'left',
-          name: 'gd_txt',
-        },
-        {
-          header: '해결방안내용',
+          header: '지난이슈내용',
           width: 230,
           align: 'left',
-          name: 'slv_mpln_txt',
+          name: 'bef_iss_txt',
           ellipsis: true,
+          hidden : true,
+        },
+        {
+          header: '지난요청내용',
+          width: 230,
+          align: 'left',
+          name: 'bef_req_txt',
+          ellipsis: true,
+          hidden : true,
         },
       ]
     }
