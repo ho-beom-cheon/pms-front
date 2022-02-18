@@ -229,7 +229,7 @@ export default {
         withCredentials: false,
       },
       columnOptions: {
-
+        resizable: true,
       },
       rowHeaders:['checkbox', 'rowNum'],
       header:{
@@ -285,9 +285,11 @@ export default {
         },
         {
           header: '파일경로',
+          width : 190,
           align: 'left',
           name: 'file_path',
           ellipsis : true,
+          hidden : true,
         },
       ]
     };
