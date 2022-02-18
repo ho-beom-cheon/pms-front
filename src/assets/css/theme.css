@@ -1162,7 +1162,7 @@ aside dl dd + dd a {
     padding-left: 10px;
 }
 .pop-body table th:nth-of-type(2) {
-    /*padding-left: 30px;*/
+    padding-left: 30px;
 }
 .pop-body table select {
     border-radius: 0;
@@ -1171,7 +1171,7 @@ aside dl dd + dd a {
 .pop-body table select:only-child,
 .pop-body table textarea:only-child,
 .pop-body table .input-dateWrap:only-child {
-    /*width: 100%;*/
+    width: 100%;
 }
 .pop-body table .file-Attach label {
     display: block;
