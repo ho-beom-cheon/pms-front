@@ -175,7 +175,7 @@
             </li>
           </ul>
           <ul class="filter-btn">
-            <button class="btn btn-filter-d" @click="gridExcelImport">TC증빙 일괄다운로드ⓘ</button>
+            <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
             <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
             <button class="btn btn-filter-e">
               <label for="file">엑셀업로드</label>
@@ -377,15 +377,6 @@ export default {
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     itg_tst_prc_cd_change(params) {this.info.itg_tst_prc_cd_selected = params},
 
-    // setColumns() {    // 권한에 따른 컬럼 세팅
-    //   if (sessionStorage.getItem("aut_cd") === '100') {
-    //     this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
-    //   } else if (sessionStorage.getItem("aut_cd") === '500') {
-    //     this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
-    //   } else {
-    //     this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
-    //   }
-    // },
     init() {
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
         // 특정 열 비활성화
@@ -585,6 +576,11 @@ export default {
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
       this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+    },
+    // TC증빙 일괄다운로드
+    batchDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=700");
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;

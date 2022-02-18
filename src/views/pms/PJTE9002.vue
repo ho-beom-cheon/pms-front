@@ -266,7 +266,6 @@ export default {
       sessionStorage.clear();
       opener.fileData(this.fileLists);
       window.close();
-
     },
 
     //저장
