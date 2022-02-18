@@ -258,40 +258,6 @@ class SearchBtn {
   }
 }
 
-// 업무구분
-const bzcd = [
-  {"text":" ","value":"NNN"},
-  {text: "업무팀", value: '100'},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
-
-const pgm_dis_cd = [
-  {"text":" ","value":"NNN"},
-  {"text":"화면","value":"100"},
-  {"text":"프로그램","value":"200"},
-  {"text":"보고서","value":"300"},
-  {"text":"배치","value":"400"}
-]
-
-const dvlp_dis_cd = [
-  {"text":" ","value":"NNN"},
-  {"text":"신규","value":"100"},
-  {"text":"변경","value":"200"},
-  {"text":"이행","value":"300"},
-  {"text":"삭제","value":"900"}
-]
-
-const prc_step_cd = [
-  {"text":" ","value":"NNN"},
-  {"text":"개발전","value":"000"},
-  {"text":"개발시작","value":"100"},
-  {"text":"개발자완료","value":"200"},
-  {"text":"PL확인","value":"300"},
-  {"text":"담당자확인","value":"400"},
-  {"text":"현업확인","value":"500"},
-  {"text":"개발종료","value":"600"}
-]
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -1013,7 +979,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000002N
             }
           }
         },
@@ -1051,7 +1017,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: dvlp_dis_cd
+              listItems: this.$store.state.pms.CD1000000003N
             }
           },
         },
@@ -1064,7 +1030,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: pgm_dis_cd
+              listItems: this.$store.state.pms.CD1000000004N
 
             }
           }
@@ -1091,7 +1057,8 @@ export default {
           align: 'center',
           name: 'sta_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
+          editor: 'datePicker',
+          disabled: true,
         },
         {
           header: '실제종료일자',
@@ -1099,7 +1066,8 @@ export default {
           align: 'center',
           type: 'date',
           name: 'end_dt',
-          editor: 'datePicker'
+          editor: 'datePicker',
+          disabled: true,
         },
         {
           header: '개발자확인일자',
@@ -1107,13 +1075,15 @@ export default {
           align: 'center',
           name: 'dvlpe_cnf_dt',
           editor: 'datePicker',
+          disabled: true,
         },
         {
           header: 'PL확인일자',
           width: 110,
           align: 'center',
           name: 'pl_cnf_dt',
-          editor: 'datePicker'
+          editor: 'datePicker',
+          disabled: true,
         },
         {
           header: '처리단계',
@@ -1124,7 +1094,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: prc_step_cd
+              listItems: this.$store.state.pms.CD1000000002N
             }
           }
         },
