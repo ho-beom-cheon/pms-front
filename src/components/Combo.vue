@@ -1,5 +1,60 @@
 <template>
   <div style="display:inline;">
+    <!-- 주간보고 시작 -->
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
+      <div class="item-con" style="margin-left : -8px">
+        <td class="td-box"> *프로젝트 </td>
+        <select
+            v-model = "real_prjt_id_selected_iss"
+            style   = "width: 422px"
+            @change = "real_prjt_id_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000038N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-39'">
+      <div class="item-con" >
+        <td class="td-box"> *차수 </td>
+        <select
+            v-model = "week_sqn_cd_selected_iss"
+            style   = "width: 125px"
+            @change = "week_sqn_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000039N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-40'">
+      <div class="item-con" >
+        <td class="td-box"> *부문명 </td>
+        <select
+            v-model = "dept_cd_selected_iss"
+            style   = "width: 125px"
+            @change = "dept_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000040N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!-- 주간보고 시작-->
     <!--  ActionItem및이슈관리현황 시작  -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-41'">
       <div class="item-con">
@@ -8,6 +63,7 @@
             v-model="rgs_dis_cd_selected_iss"
             style="width: 150px;"
             @change = "rgs_dis_cd_change_iss"
+            id="rgs_dis_cd_iss"
         >
           <option
               v-for="(item, idx) in CD1000000012"
@@ -630,7 +686,7 @@
     </li>
     <!--   부문코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
-      <div class="item-con">차수
+      <div class="item-con">부문명
         <select
             v-model = "dept_cd_selected"
             style   = "width: 100px"
@@ -739,8 +795,8 @@ export default {
       CD1000000034T : [],  CD1000000034N : [],
       CD1000000035T : [],  CD1000000035N : [],
       CD1000000036T : [],  CD1000000036N : [],
-      CD1000000038T : [],  CD1000000038N : [],
-      CD1000000039T : [],  CD1000000039N : [],
+      CD1000000038T : [],  CD1000000038N : [], CD1000000038 : [],
+      CD1000000039T : [],  CD1000000039N : [], CD1000000039 : [],
       CD1000000040T : [],  CD1000000040N : [],
 
       comboList: this.comboArray,
@@ -822,10 +878,13 @@ export default {
       file_rgs_dscd_selected : "",
       // 투입프로젝트
       real_prjt_id_selected : "",
+      real_prjt_id_selected_iss : "",
       // 회차
       week_sqn_cd_selected : "",
+      week_sqn_cd_selected_iss : "",
       // 부문코드
       dept_cd_selected : "",
+      dept_cd_selected_iss : "",
     }
   },
   methods: {
@@ -874,7 +933,10 @@ export default {
     ifnc_cd_change_iss()            {  this.$emit('ifnc_cd_change_iss',            this.ifnc_cd_selected_iss)},          // 영향도(이슈)
     real_prjt_id_change()           {  this.$emit('real_prjt_id_change',           this.real_prjt_id_selected)},         // 투입프로젝트
     week_sqn_cd_change()            {  this.$emit('week_sqn_cd_change',            this.week_sqn_cd_selected)},          // 회차
+    real_prjt_id_change_iss()       {  this.$emit('real_prjt_id_change_iss',       this.real_prjt_id_selected_iss)},     // 상세보기]투입프로젝트
+    week_sqn_cd_change_iss()        {  this.$emit('week_sqn_cd_change_iss',        this.week_sqn_cd_selected_iss)},      // 상세보기]회차
     dept_cd_change()                {  this.$emit('dept_cd_change',                this.dept_cd_selected)},              // 부문코드
+    dept_cd_change_iss()            {  this.$emit('dept_cd_change_iss',                this.dept_cd_selected_iss)},              // 상세보기]부문코드
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -932,6 +994,12 @@ export default {
               } else if (i === 22) {
                 this.CD1000000022T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000022N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 23) {
+                this.CD1000000023T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000023N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 24) {
+                this.CD1000000024T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000024N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 26) {
                 this.CD1000000026T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000026N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -1036,6 +1104,14 @@ export default {
               this.CD1000000022T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000022N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 23) {
+              this.CD1000000023T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000023N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 24) {
+              this.CD1000000024T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000024N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 25) {
               this.CD1000000025T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000025N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -1059,10 +1135,11 @@ export default {
             } else if(i === 38) {
               this.CD1000000038T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000038N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000038.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 39) {
               this.CD1000000039T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000039N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+               this.CD1000000039.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 40) {
               this.CD1000000040T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
@@ -1103,6 +1180,8 @@ export default {
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
+          if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038N[0].value
+          if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039N[0].value
           if(this.CD1000000040T.length !== 0)  this.dept_cd_selected             = this.CD1000000040T[0].value
         }
         this.setCdAll()

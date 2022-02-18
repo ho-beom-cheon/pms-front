@@ -442,12 +442,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {"text":"PMO","value":"300"},
-                    {"text":"업무팀","value":"100"},
-                    {"text":"공통팀","value":"200"},
-                  ]
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -461,15 +456,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {	text:"전체", 	value:'TTT'},
-                    {	text:"개발현황관련", 	value:'100'},
-                    {	text:"통합테스트관련", 	value:"200"},
-                    {	text:"PMS오류관련", 	value:'400'},
-                    {	text:"DB관련", 	value:'500'},
-                    {	text:"기타", 	value:"600"},
-                  ]
+              listItems: this.$store.state.pms.CD0000000010N
             }
           }
 				},
@@ -525,14 +512,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems:
-                  [
-                    {	text:"전체", 	value:'TTT'},
-                    {	text:"요청", 	value:'100'},
-                    {	text:"담당자배정", 	value:"200"},
-                    {	text:"보류", 	value:"300"},
-                    {	text:"처리완료", 	value:'400'},
-                  ]
+              listItems: this.$store.state.pms.CD1000000011N
             }
           }
 				}
