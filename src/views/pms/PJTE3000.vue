@@ -593,7 +593,7 @@ export default {
         },
         {
           header: '등록단계',
-          width: 180,
+          width: 140,
           align: 'left',
           name: 'rgs_dscd',
           formatter: 'listItemText',
@@ -632,7 +632,7 @@ export default {
         },
         {
           header: '처리상태',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'err_prc_step_cd',
           formatter: 'listItemText',
@@ -721,7 +721,7 @@ export default {
         },
         {
           header: '이관전업무',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'bfjr_bzcd',
           type: 'text',
