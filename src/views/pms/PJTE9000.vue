@@ -62,13 +62,13 @@
                     <button class="btn btn-filter-p" style = "margin-top: 5px;" @click="fnSearchRe">
                       <a href="#" >재조회</a>
                     </button>
-                    <button class="btn btn-filter-p" style = "margin-top: 5px; margin-left: 5px" @click="tableBackUp">
+                    <button class="btn btn-filter-p" style = "margin-top: 5px; margin-left: 5px" @click="tableBackUp" v-if="aut_cd_check">
                       <a href="#" >테이블백업</a>
                     </button>
 
                     &nbsp;
                     생성프로젝트<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
-                    <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject">
+                    <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject" v-if="aut_cd_check">
                       <a href="#" >프로젝트기본정보복사</a>
                     </button>
                   </ul>
@@ -77,22 +77,23 @@
                 <div class="div-grid-c">
                 </div>
                 <ul class="filter-btn" style="margin-top: 25px">
-<!--                  <button class="btn btn-filter-e"  @click="gridExcelImport">-->
-<!--                    <a href="#">엑셀업로드</a>-->
-<!--                  </button>-->
+                  <button class="btn btn-filter-e" v-if="aut_cd_check">
+                    <label for="file">엑셀업로드</label>
+                    <input type="file" id="file"  @change="gridExcelImport" accept=".xlsx, .xls" style="display: none;"/>
+                  </button>
                   <button class="btn btn-filter-e" @click="gridExcelExport">
                     <a href="#" >엑셀다운로드</a>
                   </button>
-                  <button class="btn btn-filter-b" style = "margin-left: 20px;" @click="gridAddRow(1)">
+                  <button class="btn btn-filter-b" style = "margin-left: 20px;" @click="gridAddRow(1)" v-if="aut_cd_check">
                     <a href="#"  >행추가</a>
                   </button>
-                  <button class="btn btn-filter-b" @click="gridDelRow(1)">
+                  <button class="btn btn-filter-b" @click="gridDelRow(1)" v-if="aut_cd_check">
                     <a href="#" >행삭제</a>
                   </button>
-                  <button class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C" @click="loginChange">
+                  <button class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C" @click="loginChange" v-if="aut_cd_check">
                     <a href="#" >로그인변경</a>
                   </button>
-                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(1)">
+                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(1)" v-if="aut_cd_check">
                     <a href="#" >저장</a>
                   </button>
                 </ul>
@@ -129,7 +130,7 @@
                     </li>
                   </ul>
                   <ul class="filter-btn">
-                    <button class="btn btn-filter-p" style = "margin-bottom: 5px" @click="createNewYear">
+                    <button class="btn btn-filter-p" style = "margin-bottom: 5px" @click="createNewYear" v-if="aut_cd_check">
                       <a href="#" >생성</a>
                     </button>
                   </ul>
@@ -151,15 +152,9 @@
                   </ul>
                 </section>
               <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
-                <button class="btn btn-filter-b" @click="gridAddRow(4)">
-                  <a href="#" >행추가</a>
-                </button>
-                <button class="btn btn-filter-b" @click="gridDelRow(4)">
-                  <a href="#" >행삭제</a>
-                </button>
-<!--                <div class="btn btn-filter-p" style = "margin-left: 20px">-->
-<!--                  <a href="#" @click="fnSave(4)">저장</a>-->
-<!--                </div>-->
+                <div class="btn btn-filter-p" style = "margin-left: 20px" v-if="aut_cd_check">
+                  <a href="#" @click="fnSave(4)">저장</a>
+                </div>
               </ul>
               </div>
               <div class="div2-2-c">
@@ -182,7 +177,7 @@
           </div>
           <div class="div3-c">
             <div class="div-header-c"><h2>코드유형</h2>
-                <ul class="filter-btn">
+                <ul class="filter-btn" v-if="aut_cd_check">
                   <button class="btn btn-filter-b" @click="gridAddRow(2)">
                     <a href="#" >행추가</a>
                   </button>
@@ -214,7 +209,7 @@
             <div class="div-header-c">
               <h2 v-if="grp_tymm">{{ grp_tymm }}</h2>
               <h2 v-else>코드상세</h2>
-              <ul class="filter-btn">
+              <ul class="filter-btn" v-if="aut_cd_check">
                 <button class="btn btn-filter-b" @click="gridAddRow(3)">
                   <a href="#" >행추가</a>
                 </button>
@@ -257,6 +252,8 @@ import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import {axiosService} from "@/api/http";
 import combo from '@/components/Combo';
+import XLSX from "xlsx";
+
 const storage = window.sessionStorage;
 
 //그리드 아이템 예제
@@ -393,17 +390,61 @@ export default {
         alert(`신규생성년도는 현재 해(${currentYear.getFullYear()}년) 보다 작거나 같을 수 없습니다.`)
       }else{
         try {
+
+          function checkValidDate(value) {
+            var result = true;
+            try {
+              var date = value.split("-");
+              var y = parseInt(date[0], 10),
+                  m = parseInt(date[1], 10),
+                  d = parseInt(date[2], 10);
+
+              var dateRegex = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-.\/])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
+              result = dateRegex.test(d+'-'+m+'-'+y);
+            } catch (err) {
+              result = false;
+            }
+            return result;
+          }
+
+          let month = [1,2,3,4,5,6,7,8,9,10,11,12]
+          let date = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+          let createYear = []
+          for(let i=0; i<month.length; i++){
+            for(let j=0; j<date.length; j++){
+              if(checkValidDate(this.info.new_yyyy+"-"+month[i]+"-"+date[j])){
+                let day = new Date(this.info.new_yyyy+"-"+month[i]+"-"+date[j])
+                let convertDay = day.getDay() == 0 ? 7 : day.getDay()
+                let convertMonth = String(month[i]).length == 1 ? '0'+month[i] : month[i]
+                let convertDate = String(date[j]).length == 1 ? '0'+date[j] : date[j]
+                let holiday = 1
+                if(convertDay > 5 || (month[i]==1 && date[j]==1) || (month[i]==12 && date[j]==25)) holiday = 2
+                if((month[i]==3 && date[j]==1) || (month[i]==5 && date[j]==5) || (month[i]==6 && date[j]==6) || (month[i]==8 && date[j]==15) || (month[i]==10 && date[j]==3) || (month[i]==10 && date[j]==9)) holiday = 4
+
+                createYear.push({
+                  prjt_id : this.info.prjt_nm_selected,
+                  date : this.info.new_yyyy+"-"+convertMonth+"-"+convertDate,
+                  date_cd : String(convertDay),
+                  holiday_cd : String(holiday)
+                })
+              }
+            }
+          }
           axiosService.post('/PJTE9000/create4', {
             prjt_id : this.info.prjt_nm_selected,
-            new_yyyy : this.info.new_yyyy
+            new_yyyy : this.info.new_yyyy,
+            rowDatas : createYear
           })
-              .then(res => {
-                console.log(res.data)
-                alert("생성이 완료되었습니다.")
-              })
-          this.info.sel_yyyymmdd = this.info.new_yyyy;
-          this.$refs.grid4.invoke("setRequestParams", this.info);
-          this.$refs.grid4.invoke("reloadData");
+          .then(res => {
+            console.log(res.data)
+            alert("생성이 완료되었습니다.")
+
+            this.info.sel_yyyymmdd = this.info.new_yyyy;
+            this.$refs.grid4.invoke("setRequestParams", this.info);
+            this.$refs.grid4.invoke("reloadData")
+          })
+          // this.$refs.grid4.invoke('resetData', thisYear)
+
 
         }catch (e){
           console.log(e)
@@ -417,7 +458,6 @@ export default {
     },
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {
-      console.log('a')
       this.info.bkup_id_selected = params
     },
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
@@ -483,7 +523,6 @@ export default {
               // 데이터 파라메타 전달
               this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.createdRows));
               // create api 요청
-              this.createDataUrl = process.env.VUE_APP_API + '/PJTE9000/create'
                   this.$refs.grid1.invoke("request", "createData", {showConfirm: false});
               alert("저장이 완료되었습니다.")
               this.info.grid_num = 1;
@@ -499,7 +538,6 @@ export default {
               // 데이터 파라메타 전달
               this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.updatedRows));
               // create api 요청
-              this.updateDataUrl = process.env.VUE_APP_API + '/PJTE9000/update'
               this.$refs.grid1.invoke("request", "updateData", {showConfirm: false});
               alert("저장이 완료되었습니다.")
               this.info.grid_num = 1;
@@ -733,16 +771,15 @@ export default {
           }else{
             try {
               axiosService.post('/PJTE9000/update4', {
-                rowDatas : grid_arr,
-                sel_yyyymmdd : this.info.sel_yyyymmdd
+                updatedRows : this.updatedRows4,
               })
               .then(res => {
-                console.log(res.data)
                 alert("저장이 완료되었습니다.")
+                this.$refs.grid4.invoke("setRequestParams", this.info);
+                this.$refs.grid4.invoke("reloadData");
               })
 
-              this.$refs.grid4.invoke("setRequestParams", this.info);
-              this.$refs.grid4.invoke("reloadData");
+
 
             }catch (e){
               console.log(e)
@@ -873,7 +910,60 @@ export default {
       }else if(grid_num === 4){
         this.$refs.grid4.invoke("removeRow", this.curRow);
       }
-// DB 데이터 삭제로직 추가
+    },
+    gridExcelImport(event){
+      // 엑셀파일 업로드 로직 추가
+      this.file = event.target.files ? event.target.files[0] : null;
+      var input = event.target;
+      var reader = new FileReader();
+      reader.onload = () => {
+        var fileData = reader.result;
+        var wb = XLSX.read(fileData, {type : 'binary'});
+
+        wb.SheetNames.forEach((sheetName, idx) => {
+          wb.Sheets[sheetName].A1.w = "prjt_id"
+          wb.Sheets[sheetName].B1.w = "empno"
+          wb.Sheets[sheetName].C1.w = "empnm"
+          wb.Sheets[sheetName].D1.w = "rank_nm"
+          wb.Sheets[sheetName].E1.w = "lgn_pwd"
+          wb.Sheets[sheetName].F1.w = "bzcd"
+          wb.Sheets[sheetName].G1.w = "catn_dcd"
+          wb.Sheets[sheetName].H1.w = "aut_cd"
+          wb.Sheets[sheetName].I1.w = "real_prjt_id"
+          wb.Sheets[sheetName].J1.w = "plan_thw_stdt"
+          wb.Sheets[sheetName].K1.w = "plan_thw_endt"
+          wb.Sheets[sheetName].L1.w = "real_thw_stdt"
+          wb.Sheets[sheetName].M1.w = "real_thw_endt"
+          wb.Sheets[sheetName].N1.w = "email_addr"
+          wb.Sheets[sheetName].O1.w = "cpno"
+          wb.Sheets[sheetName].P1.w = "ip_addr"
+
+          let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+          let gridExcelData = JSON.parse(JSON.stringify(rowObj));
+
+
+          gridExcelData = gridExcelData.filter(e => e.prjt_id && e.empno)
+
+          axiosService.post("/PJTE9000/excel_upload",{
+            prjt_id : this.info.prjt_nm_selected,
+            rowDatas : gridExcelData
+          }).then(res => {
+            console.log(res);
+            if(res.data){
+              alert('업로드 파일이 적용되었습니다.')
+              this.$refs.grid1.invoke('resetData',gridExcelData)
+
+            }
+          })
+          .catch(e => {
+            alert("업로드 에러")
+          })
+
+        })
+      };
+      reader.readAsBinaryString(input.files[0]);
+      event.target.value = '';
+
     },
     gridExcelExport(){
       this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
@@ -890,6 +980,7 @@ export default {
 // 변수 선언부분
   data() {
     return {
+      aut_cd_check : (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') ? true : false,
       comboList : ["C27","C0"],
       grp_tymm : '',
       changeUserId : '',

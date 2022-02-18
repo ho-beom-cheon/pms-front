@@ -239,35 +239,6 @@ class SearchBtn {
   }
 }
 
-// 결함등록단계구분코드
-const rgs_dscd = [
-  {text: "단위테스트단계", value: '1100'},
-  {text: "1차통합테스트단계", value: '2100'},
-  {text: "2차통합테스트단계", value: '2200'},
-  {text: "3차통합테스트단계", value: '2300'},
-  {text: "4차통합테스트단계", value: '2400'},
-];
-
-// 결함유형코드
-const err_tycd = [
-  {text: "결함", value: '100'},
-  {text: "개선", value: '200'},
-  {text: "결함아님", value: '300'},
-  {text: "기타결함", value: '900'},
-];
-
-// 결함처리단계구분코드
-const err_prc_step_cd = [
-  {text: "등록", value: "100"},
-  {text: "담당자배정", value: "200"},
-  {text: "결함재등록", value: "300"},
-  {text: "이관", value: "400"},
-  {text: "보류", value: "500"},
-  {text: "개발자조치완료", value: "600"},
-  {text: "PL확인", value: "700"},
-  {text: "등록자확인", value: "800"},
-];
-
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -464,10 +435,6 @@ export default {
       // emp_colName : '',  // 직원조회팝업 (그리드) colName
 
       info: {
-        // 콤보
-        rgs_dscd: rgs_dscd,                 //등록단계구분
-        err_tycd: err_tycd,                 //결함유형
-        err_prc_step_cd: err_prc_step_cd,   //처리단계
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected      : '0000000000',
@@ -633,7 +600,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: rgs_dscd
+              listItems: this.$store.state.pms.CD1000000007N
             }
           }
         },
@@ -659,7 +626,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: err_tycd
+              listItems: this.$store.state.pms.CD1000000008N
             }
           }
         },
@@ -672,7 +639,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: err_prc_step_cd
+              listItems: this.$store.state.pms.CD1000000009N
             }
           }
         },
