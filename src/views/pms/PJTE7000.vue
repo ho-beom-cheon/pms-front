@@ -3,47 +3,7 @@
   <div class="contents">
 
     <!-- ASIDE -- LNB -->
-    <aside>
-      <div class="page-tit">
-        ITeyes PMS
-      </div>
-      <dl>
-        <dd>
-          <a href="#">기본메뉴</a>
-        </dd>
-        <dd>
-          <a href="#">즐겨찾기메뉴</a>
-        </dd>
-      </dl>
-      <div class="aside-con">
-        <div class="accordion" id="accordionExample">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                PMS
-              </button>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-              <ul class="card-body">
-                <li><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
-                <li><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
-                <li><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
-                <li><a href="/PJTE2200">{{ menu_list[3].name }}</a></li>
-                <li><a href="/PJTE2210">{{ menu_list[4].name }}</a></li>
-                <li><a href="/PJTE3000">{{ menu_list[5].name }}</a></li>
-                <li><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
-                <li><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
-                <li><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
-                <li class="active"><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-                <li><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- 필터영역 -->
@@ -156,6 +116,7 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 import combo from '@/components/Combo';
 import XLSX from "xlsx";
 import {axiosService} from "@/api/http";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 //그리드 아이템 예제
 var listItem = [{text:"개발", value:"1"},{text:"운영", value:"2"},{text:"이관", value:"3"}];
@@ -196,6 +157,7 @@ export default {
   components: {
     grid: Grid,
     combo,
+    PmsSideBar,
   },
   mounted() {
     console.log("mounted");
@@ -412,9 +374,9 @@ export default {
 
                 }
               })
-              .catch(e => {
-                alert("업로드 에러")
-              })
+                  .catch(e => {
+                    alert("업로드 에러")
+                  })
             }
           }
 
