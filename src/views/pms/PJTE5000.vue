@@ -3,48 +3,7 @@
   <div class="contents">
 
     <!-- ASIDE -- LNB -->
-    <aside>
-      <div class="page-tit">
-        ITeyes PMS
-      </div>
-      <dl>
-        <dd>
-          <a href="#">기본메뉴</a>
-        </dd>
-        <dd>
-          <a href="#">즐겨찾기메뉴</a>
-        </dd>
-      </dl>
-      <div class="aside-con">
-        <div class="accordion" id="accordionExample">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
-                      aria-expanded="true" aria-controls="collapseOne">
-                PMS
-              </button>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-              <ul class="card-body">
-                <li><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
-                <li><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
-                <li><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
-                <li><a href="/PJTE2200">{{ menu_list[3].name }}</a></li>
-                <li><a href="/PJTE2210">{{ menu_list[4].name }}</a></li>
-                <li><a href="/PJTE3000">{{ menu_list[5].name }}</a></li>
-                <li><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
-                <li class="active"><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
-                <li><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
-                <li><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-                <li><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- 필터영역 -->
@@ -155,6 +114,7 @@ import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import XLSX from "xlsx";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
@@ -191,7 +151,7 @@ const level = [
   {text: "4레벨", value: "400"},
   {text: "5레벨", value: "500"},
 ];
-// 업무구분 
+// 업무구분
 const bzcd = [
   {"text":" ","value":"NNN"},
   {text: "업무팀", value: '100'},
@@ -205,7 +165,7 @@ const mng_cd = [
   {text: "WBS관리", value: "100"},
   {text: "이행관리", value: "200"},
 ];
-// 처리단계 
+// 처리단계
 const prc_step_cd = [
   {text: " ", value: "NNN"},
   {text: "대기", value: "100"},
@@ -214,12 +174,13 @@ const prc_step_cd = [
 ];
 
 export default {
-// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언) 
+// 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
     Combo,
     WindowPopup,
     Modal,
+    PmsSideBar,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수 
 // "라이프사이클 훅"이라고 함. 
@@ -274,9 +235,9 @@ export default {
     onGridUpdated(grid){
       let gridData = this.$refs.grid.invoke("getData")
       for(let i=0; i<gridData.length; i++) {
-          if(gridData[i].wbs_cnt === "0") {
-            this.$refs.grid.invoke("enableCell", i, 'prg_rt');
-          }
+        if(gridData[i].wbs_cnt === "0") {
+          this.$refs.grid.invoke("enableCell", i, 'prg_rt');
+        }
       }
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
@@ -573,10 +534,10 @@ export default {
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음 
   watch: {
     atfl_mng_id() {    // 단위테스트 케이스 변경 시 작동
-        if (this.atfl_mng_id_yn !== '') {
-          this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
-          this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
-        }
+      if (this.atfl_mng_id_yn !== '') {
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+      }
     }
   },
 // 변수 선언부분 

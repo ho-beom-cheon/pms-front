@@ -3,51 +3,7 @@
   <div class="contents">
 
     <!-- ASIDE -- LNB -->
-    <aside>
-      <div class="page-tit">
-        ITeyes PMS
-      </div>
-      <dl>
-        <dd>
-          <a href="#">기본메뉴</a>
-        </dd>
-        <dd>
-          <a href="#">즐겨찾기메뉴</a>
-        </dd>
-      </dl>
-      <div class="aside-con">
-        <div class="accordion" id="accordionExample">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                PMS
-              </button>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-              <ul class="card-body" v-if="info.prjt_nm_selected != '0000000001'">
-                <li><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
-                <li><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
-                <li><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
-                <li><a href="/PJTE2200">{{ menu_list[3].name }}</a></li>
-                <li><a href="/PJTE2210">{{ menu_list[4].name }}</a></li>
-                <li><a href="/PJTE3000">{{ menu_list[5].name }}</a></li>
-                <li><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
-                <li><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
-                <li><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
-                <li><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-                <li class="active"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
-              </ul>
-              <ul class="card-body" v-else-if="info.prjt_nm_selected === '0000000001'">
-                <li><a href="/PJTE8000">{{ menu_list[11].name }}</a></li>
-                <li class="active"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- page contents -->
@@ -155,43 +111,43 @@
                     </button>
                   </ul>
                 </section>
-              <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
-                <div class="btn btn-filter-p" style = "margin-left: 20px" v-if="aut_cd_check">
-                  <a href="#" @click="fnSave(4)">저장</a>
-                </div>
-              </ul>
+                <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
+                  <div class="btn btn-filter-p" style = "margin-left: 20px" v-if="aut_cd_check">
+                    <a href="#" @click="fnSave(4)">저장</a>
+                  </div>
+                </ul>
               </div>
               <div class="div2-2-c">
-              <div class="div-grid-c">
-                <grid
-                    ref="grid4"
-                    :data="dataSource4"
-                    :header="header"
-                    :columns="columns4"
-                    :bodyHeight="150"
-                    :showDummyRows="showDummyRows"
-                    :columnOptions="columnOptions"
-                    :rowHeight="rowHeight"
-                    :minRowHeight="minRowHeight"
-                    @click="onClick"
-                ></grid>
-              </div>
+                <div class="div-grid-c">
+                  <grid
+                      ref="grid4"
+                      :data="dataSource4"
+                      :header="header"
+                      :columns="columns4"
+                      :bodyHeight="150"
+                      :showDummyRows="showDummyRows"
+                      :columnOptions="columnOptions"
+                      :rowHeight="rowHeight"
+                      :minRowHeight="minRowHeight"
+                      @click="onClick"
+                  ></grid>
+                </div>
               </div>
             </div>
           </div>
           <div class="div3-c">
             <div class="div-header-c"><h2>코드유형</h2>
-                <ul class="filter-btn" v-if="aut_cd_check">
-                  <button class="btn btn-filter-b" @click="gridAddRow(2)">
-                    <a href="#" >행추가</a>
-                  </button>
-                  <button class="btn btn-filter-b" @click="gridDelRow(2)">
-                    <a href="#" >행삭제</a>
-                  </button>
-                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(2)">
-                    <a href="#" >저장</a>
-                  </button>
-                </ul>
+              <ul class="filter-btn" v-if="aut_cd_check">
+                <button class="btn btn-filter-b" @click="gridAddRow(2)">
+                  <a href="#" >행추가</a>
+                </button>
+                <button class="btn btn-filter-b" @click="gridDelRow(2)">
+                  <a href="#" >행삭제</a>
+                </button>
+                <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(2)">
+                  <a href="#" >저장</a>
+                </button>
+              </ul>
             </div>
             <div class="div-grid-c">
               <grid
@@ -257,14 +213,15 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 import {axiosService} from "@/api/http";
 import combo from '@/components/Combo';
 import XLSX from "xlsx";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 const storage = window.sessionStorage;
 
 //그리드 아이템 예제
 const listItem = [
-    {text:"개발", value:"1"},
-    {text:"운영", value:"2"},
-    {text:"이관", value:"3"}
+  {text:"개발", value:"1"},
+  {text:"운영", value:"2"},
+  {text:"이관", value:"3"}
 ];
 
 
@@ -272,7 +229,8 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     grid: Grid,
-    combo
+    combo,
+    PmsSideBar,
   },
 
   // 그리드 1,2,3 순서대로 조회 하기 위해 async await 사용
@@ -308,21 +266,21 @@ export default {
     // 테이블 백업
     tableBackUp() {
       axiosService.get("/PJTE9000/backup_select")
-      .then(res => {
-        this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
-        this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
-        if(res.data.data.contents.length){
-          axiosService.post("/PJTE9000/backup_update", {
-              new_bkup_id : this.info.new_bkup_id,
-              new_bkup_nm : this.info.new_bkup_nm,
-              prjt_id : this.info.prjt_nm_selected,
-              login_emp_no : this.info.login_emp_no
+          .then(res => {
+            this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
+            this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
+            if(res.data.data.contents.length){
+              axiosService.post("/PJTE9000/backup_update", {
+                new_bkup_id : this.info.new_bkup_id,
+                new_bkup_nm : this.info.new_bkup_nm,
+                prjt_id : this.info.prjt_nm_selected,
+                login_emp_no : this.info.login_emp_no
+              })
+            }
           })
-        }
-      })
-      .catch(e => {
-        console.log(e)
-      })
+          .catch(e => {
+            console.log(e)
+          })
     },
     // 로그인 변경
     loginChange() {
@@ -440,14 +398,14 @@ export default {
             new_yyyy : this.info.new_yyyy,
             rowDatas : createYear
           })
-          .then(res => {
-            console.log(res.data)
-            alert("생성이 완료되었습니다.")
+              .then(res => {
+                console.log(res.data)
+                alert("생성이 완료되었습니다.")
 
-            this.info.sel_yyyymmdd = this.info.new_yyyy;
-            this.$refs.grid4.invoke("setRequestParams", this.info);
-            this.$refs.grid4.invoke("reloadData")
-          })
+                this.info.sel_yyyymmdd = this.info.new_yyyy;
+                this.$refs.grid4.invoke("setRequestParams", this.info);
+                this.$refs.grid4.invoke("reloadData")
+              })
           // this.$refs.grid4.invoke('resetData', thisYear)
 
 
@@ -528,7 +486,7 @@ export default {
               // 데이터 파라메타 전달
               this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.createdRows));
               // create api 요청
-                  this.$refs.grid1.invoke("request", "createData", {showConfirm: false});
+              this.$refs.grid1.invoke("request", "createData", {showConfirm: false});
               alert("저장이 완료되었습니다.")
               this.info.grid_num = 1;
               this.$refs.grid1.invoke("setRequestParams", this.info);
@@ -729,9 +687,9 @@ export default {
               axiosService.post('/PJTE9000/create3', {
                 rowDatas : grid_arr
               })
-              .then(res => {
-                console.log(res)
-              })
+                  .then(res => {
+                    console.log(res)
+                  })
               alert("저장이 완료되었습니다.")
               this.info.grid_num = 3;
               this.$refs.grid3.invoke("setRequestParams", this.info);
@@ -778,11 +736,11 @@ export default {
               axiosService.post('/PJTE9000/update4', {
                 updatedRows : this.updatedRows4,
               })
-              .then(res => {
-                alert("저장이 완료되었습니다.")
-                this.$refs.grid4.invoke("setRequestParams", this.info);
-                this.$refs.grid4.invoke("reloadData");
-              })
+                  .then(res => {
+                    alert("저장이 완료되었습니다.")
+                    this.$refs.grid4.invoke("setRequestParams", this.info);
+                    this.$refs.grid4.invoke("reloadData");
+                  })
 
 
 
@@ -960,9 +918,9 @@ export default {
 
             }
           })
-          .catch(e => {
-            alert("업로드 에러")
-          })
+              .catch(e => {
+                alert("업로드 에러")
+              })
 
         })
       };
@@ -977,7 +935,7 @@ export default {
     // 첨부파일 팝업(PJTE9002) 테스트용 method
     open_page(){
       let bkup_id='0000000000', prjt_id='1000000001', atfl_mng_id='1000000011', file_rgs_dscd='700',
-      mng_id = '1000000000', bzcd='BBB', sqn_cd='Cust_summary_L9', tst_case_id='200', pgm_id='TS-001-TC-014'
+          mng_id = '1000000000', bzcd='BBB', sqn_cd='Cust_summary_L9', tst_case_id='200', pgm_id='TS-001-TC-014'
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&bzcd=${bzcd}&sqn_cd=${sqn_cd}&tst_case_id=${tst_case_id}&pgm_id=${pgm_id}&`, "open_page", "width=1000, height=800");
     }
 
