@@ -2,9 +2,10 @@
   "name": "iteyespms",
   "version": "0.1.0",
   "scripts": {
+    "local": "vue-cli-service serve --mode local",
     "dev": "vue-cli-service serve --mode dev",
     "prod": "vue-cli-service serve --mode prod",
-    "build": "vue-cli-service serve --mode dev",
+    "build": "vue-cli-service build --mode build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
