@@ -3,39 +3,7 @@
   <div class="contents">
 
     <!-- ASIDE -- LNB -->
-    <aside>
-      <div class="page-tit">
-        ITeyes PMS
-      </div>
-      <dl>
-        <dd>
-          <a href="#">기본메뉴</a>
-        </dd>
-        <dd>
-          <a href="#">즐겨찾기메뉴</a>
-        </dd>
-      </dl>
-      <div class="aside-con">
-        <div class="accordion" id="accordionExample">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
-                      aria-expanded="true" aria-controls="collapseOne">
-                PMS
-              </button>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-              <ul class="card-body">
-                <li class="active"><a href="/PJTE8000">{{ menu_list[1].name }}</a></li>
-                <li><a href="/PJTE9000">{{ menu_list[0].name }}</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- 필터영역 -->
@@ -443,6 +411,7 @@ import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적�
 import axios from "axios";
 import Combo from "@/components/Combo"
 import {axiosService} from "@/api/http";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 const storage = window.sessionStorage;
 
@@ -462,6 +431,7 @@ export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    PmsSideBar,
     grid: Grid,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수

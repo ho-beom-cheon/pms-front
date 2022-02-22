@@ -3,48 +3,7 @@
   <div class="contents">
 
     <!-- ASIDE -- LNB -->
-    <aside>
-      <div class="page-tit">
-        ITeyes PMS
-      </div>
-      <dl>
-        <dd>
-          <a href="#">기본메뉴</a>
-        </dd>
-        <dd>
-          <a href="#">즐겨찾기메뉴</a>
-        </dd>
-      </dl>
-      <div class="aside-con">
-        <div class="accordion" id="accordionExample">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
-                      aria-expanded="true" aria-controls="collapseOne">
-                PMS
-              </button>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-              <ul class="card-body">
-                <li><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
-                <li><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
-                <li><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
-                <li><a href="/PJTE2200">{{ menu_list[3].name }}</a></li>
-                <li><a href="/PJTE2210">{{ menu_list[4].name }}</a></li>
-                <li class="active"><a href="/PJTE3000">{{ menu_list[5].name }}</a></li>
-                <li><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
-                <li><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
-                <li><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
-                <li><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-                <li><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- 필터영역 -->
@@ -212,6 +171,7 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import Combo from "@/components/Combo"
 import 'tui-date-picker/dist/tui-date-picker.css';
+import PmsSideBar from  "@/components/PmsSideBar";
 import axios from "axios";
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import Modal from "@/components/Modal";
@@ -243,6 +203,7 @@ export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    PmsSideBar,
     grid: Grid,
   },
   // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
@@ -314,13 +275,16 @@ export default {
     /*그리드 더블클릭 이벤트*/
     dblonClick(ev) {
       this.curRow = ev.rowKey;
-      // 그리드 ROW 더블클릭 시 결함팝업 호출
-      let mng_id= this.$refs.grid.invoke("getValue", this.curRow, 'mng_id'); // 결함ID
-      let bkup_id='0000000000';                                                     //백업ID
-      let prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
-      let rgpe_nm=this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
-      this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+      const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
 
+      if (currentRowData != null) {
+        // 그리드 ROW 더블클릭 시 결함팝업 호출
+        let mng_id = this.$refs.grid.invoke("getValue", this.curRow, 'mng_id'); // 결함ID
+        let bkup_id = '0000000000';                                                     //백업ID
+        let prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
+        let rgpe_nm = this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+      }
     },
 
     fnSearch() {
@@ -375,16 +339,16 @@ export default {
               let res_data = res.data.data.contents;
               // console.log('직원조회 값:', res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                  if (btn_id == '1') {
-                    this.info.rgpe_no = res.data.data.contents[0].empno
-                    this.info.rgpe_nm = res.data.data.contents[0].empnm
-                  } else if (btn_id == '2') {
-                    this.info.dvlpe_no = res.data.data.contents[0].empno
-                    this.info.dvlpe_nm = res.data.data.contents[0].empnm
-                  } else if (btn_id == '3') {
-                    this.info.pl_no = res.data.data.contents[0].empno
-                    this.info.pl_nm = res.data.data.contents[0].empnm
-                  }
+                if (btn_id == '1') {
+                  this.info.rgpe_no = res.data.data.contents[0].empno
+                  this.info.rgpe_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '2') {
+                  this.info.dvlpe_no = res.data.data.contents[0].empno
+                  this.info.dvlpe_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '3') {
+                  this.info.pl_no = res.data.data.contents[0].empno
+                  this.info.pl_nm = res.data.data.contents[0].empnm
+                }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
@@ -593,7 +557,7 @@ export default {
         },
         {
           header: '등록단계',
-          width: 180,
+          width: 140,
           align: 'left',
           name: 'rgs_dscd',
           formatter: 'listItemText',
@@ -632,7 +596,7 @@ export default {
         },
         {
           header: '처리상태',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'err_prc_step_cd',
           formatter: 'listItemText',
@@ -721,7 +685,7 @@ export default {
         },
         {
           header: '이관전업무',
-          width: 160,
+          width: 100,
           align: 'center',
           name: 'bfjr_bzcd',
           type: 'text',

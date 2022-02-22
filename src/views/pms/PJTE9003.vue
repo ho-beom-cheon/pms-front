@@ -38,7 +38,7 @@
       <section class="page-contents">
         <div class="div-header"><h2>다운로드 리스트</h2></div>
         <!-- grid contents -->
-        <div class="gridWrap" style="min-width: 750px;">
+        <div class="gridWrap">
           <grid
               ref="grid"
               :data="dataSource"
@@ -84,7 +84,7 @@
             <td>
               <div class="item-con">
                 <div class="radio">
-                  <input type="radio" id="option01" v-model="radioValues" value="radio01" name="radio-set" checked>
+                  <input type="radio" id="option01" v-model="radioValues" value="radio01" name="radio-set">
                   <label for="option01">서버파일명</label>
                 </div>
                 <div class="radio">
@@ -126,6 +126,7 @@ export default {
   },
   mounted() {
     this.fnSearch()
+    this.radioValues = "radio01"
   },
   updated() {
     console.log("this.radioValues ::" ,this.radioValues);
@@ -153,10 +154,11 @@ export default {
     },
     // 파일 다운로드
     fileDownload() {
-      this.gridData = this.$refs.grid.invoke("getData");
-      // for (let i = 0; i < this.gridData.length; i++) {
-      //   this.fileName = this.gridData[i].file_nm;
-      //   this.orgFileName = this.gridData[i].org_file_nm
+      this.gridData = this.$refs.grid.invoke("getCheckedRows");
+      if(this.gridData.length === 0){
+        alert("다운로드 받을 데이터를 선택하세요");
+        return;
+      }
       this.gridData.reduce((previousValue, currentValue) => {
         return previousValue.then(async() => {
           const res = await axiosService.get("/PJTE9003/fileDownload", {
@@ -178,7 +180,7 @@ export default {
             let link = document.createElement('a')
             link.href = window.URL.createObjectURL(blob)
             link.target = '_self'
-            if (current != null && current !== ""){
+            if (current != null && current !== "") {
               link.download = current;
               link.click();
             }
@@ -229,7 +231,7 @@ export default {
         withCredentials: false,
       },
       columnOptions: {
-
+        resizable: true,
       },
       rowHeaders:['checkbox', 'rowNum'],
       header:{
@@ -240,7 +242,7 @@ export default {
       columns: [
         {
           header: '업무',
-          width : 70,
+          width : 80,
           align: 'center',
           name: 'bznm',
           ellipsis : true,
@@ -248,15 +250,21 @@ export default {
         },
         {
           header: '파일등록구분',
-          width : 110,
+          width : 140,
           align: 'center',
           name: 'file_rgs_dscd',
           ellipsis : true,
-          editor: 'text',
+          formatter: 'listItemText',
+          disabled: true,
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000025N
+            }
+          }
         },
         {
           header: '산출물구분',
-          width : 160,
           align: 'left',
           name: 'sah_file_nm',
           editor: 'text',
@@ -264,21 +272,18 @@ export default {
         },
         {
           header: '서버파일명',
-          width : 190,
           align: 'left',
           name: 'file_nm',
           ellipsis : true,
         },
         {
           header: '원본파일명',
-          width : 190,
           align: 'left',
           name: 'org_file_nm',
           ellipsis : true,
         },
         {
           header: '산출물양식명',
-          width : 190,
           align: 'left',
           name: 'sam_file_nm',
           ellipsis : true,
@@ -287,7 +292,7 @@ export default {
           header: '파일경로',
           align: 'left',
           name: 'file_path',
-          ellipsis : true,
+          hidden : true,
         },
       ]
     };
@@ -296,4 +301,8 @@ export default {
 </script>
 
 <style>
+.pop-body table th:nth-of-type(2) {
+    padding-left: 0!important;
+}
+
 </style>

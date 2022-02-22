@@ -9,8 +9,6 @@ module.exports = {
     // proxy: {
     //     '^/': {
     //       target:  'http://localhost:8080',
-    //       changeOrigin: true,
-    //       logLevel: 'debug',
     //     }
     // }
   },
