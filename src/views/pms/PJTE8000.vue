@@ -194,8 +194,9 @@
                                 placeholder="진행현황을 입력해주세요"
                                 ref="prg_txt"
                                 v-model="detail.prg_txt"
+                                id="modalTextArea0"
                                 style="width: 685px; height:80px;"
-                                @click="enlarged_view(1)"
+                                @dblclick="modalView(1)"
                       ></textarea>
                     </td>
                   </div>
@@ -209,7 +210,7 @@
                                 placeholder="이슈내용을 입력해주세요"
                                 v-model="detail.iss_txt"
                                 style="width: 685px;height:80px;"
-                                @click="enlarged_view(2)"
+                                @dblclick="modalView(2)"
                       ></textarea>
                     </td>
                   </div>
@@ -223,7 +224,7 @@
                                 placeholder="요청내용을 입력해주세요"
                                 v-model="detail.req_txt"
                                 style="width: 685px; height:80px;"
-                                @click="enlarged_view(3)"
+                                @dblclick="modalView(3)"
                       ></textarea>
                     </td>
                   </div>
@@ -259,6 +260,7 @@
                            placeholder="PM명"
                            v-model="detail.bef_pm_nm"
                            style   = "width: 70px"
+                           :disabled=true
                     >
                   </div>
                 </li>
@@ -276,6 +278,7 @@
                     <input type="text"
                            v-model="detail.bef_week_yymm"
                            name="tgt_biz_nm"
+                           :disabled=true
                            style="width: 125px"
                     >
                   </div>
@@ -286,6 +289,7 @@
                     <input type="text"
                            v-model="detail.bef_week_sqn_nm"
                            name="tgt_biz_nm"
+                           :disabled=true
                            style="width: 125px"
                     >
                   </div>
@@ -301,6 +305,7 @@
                     <input type="text"
                            v-model="detail.bef_all_pred_prg"
                            name="tgt_biz_nm"
+                           :disabled=true
                            style="width: 125px;text-align :right "
                     >
                   </div>
@@ -310,6 +315,7 @@
                     <td class="td-box"> 전체(진척율%) </td>
                     <input type="text"
                            v-model="detail.bef_all_real_prg"
+                           :disabled=true
                            style="width: 125px;text-align :right "
                     >
                   </div>
@@ -320,6 +326,7 @@
                     <input type="text"
                            v-model="detail.bef_step_nm"
                            name="tgt_biz_nm"
+                           :disabled=true
                            style="width: 160px"
                     >
                   </div>
@@ -330,6 +337,7 @@
                     <input type="text"
                            v-model="detail.bef_step_pred_prg"
                            name="tgt_biz_nm"
+                           :disabled=true
                            style="width: 125px;text-align :right "
                     >
                   </div>
@@ -340,6 +348,7 @@
                     <input type="text"
                            v-model="detail.bef_step_real_prg"
                            name="tgt_biz_nm"
+                           :disabled=true
                            style="width: 125px;text-align :right "
                     >
                   </div>
@@ -350,10 +359,10 @@
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                ref="req_dis_txt"
                                 v-model="detail.bef_prg_txt"
+                                readonly="readonly"
                                 style="width: 685px; height:80px;"
-                                @click="enlarged_view(1)"
+                                @dblclick="modalView(4)"
                       ></textarea>
                     </td>
                   </div>
@@ -365,8 +374,9 @@
                       <textarea cols="140"
                                 rows="5"
                                 v-model="detail.bef_iss_txt"
+                                readonly="readonly"
                                 style="width: 685px;height:80px;"
-                                @click="enlarged_view(2)"
+                                @dblclick="modalView(5)"
                       ></textarea>
                     </td>
                   </div>
@@ -375,11 +385,10 @@
                   <div class="item-con" style = "margin-left : -9px">
                     <td class="td-box2">요청내용</td>
                     <td>
-                      <textarea cols="140"
-                                rows="5"
-                                v-model="detail.bef_req_txt"
+                      <textarea v-model="detail.bef_req_txt"
+                                readonly="readonly"
                                 style="width: 685px; height:80px;"
-                                @click="enlarged_view(3)"
+                                @dblclick="modalView(6)"
                       ></textarea>
                     </td>
                   </div>
@@ -400,6 +409,79 @@
 
           </div>
         </div>
+        <Modal :show.sync="detail.modals.txt_modal1">
+          <div class="div-header-b">
+            <h2 v-if="this.large_num == '1'">금주 프로젝트 진행현황 확대보기</h2>
+            <h2 v-if="this.large_num == '2'">금주 이슈내용 확대보기</h2>
+            <h2 v-if="this.large_num == '3'">금주 요청내용 확대보기</h2>
+            <h2 v-if="this.large_num == '4'">지난주 프로젝트 진행현황 확대보기</h2>
+            <h2 v-if="this.large_num == '5'">지난주 이슈내용 확대보기</h2>
+            <h2 v-if="this.large_num == '6'">지난주 요청내용 확대보기</h2>
+            <ul class="filter-btn">
+              <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
+              <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
+            </ul>
+          </div>
+          <tr>
+            <textarea v-if="this.large_num == '1'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea1"
+                      v-model="detail.prg_txt"
+                      :disabled=true
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+            ></textarea>
+            <textarea v-if="this.large_num == '2'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea2"
+                      v-model="detail.iss_txt"
+                      :disabled=true
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+            ></textarea>
+            <textarea v-if="this.large_num == '3'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea3"
+                      v-model="detail.req_txt"
+                      :disabled=true
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+            ></textarea>
+            <textarea v-if="this.large_num == '4'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea4"
+                      v-model="detail.bef_prg_txt"
+                      :disabled=true
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+            ></textarea>
+            <textarea v-if="this.large_num == '5'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea5"
+                      v-model="detail.bef_iss_txt"
+                      :disabled=true
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+            ></textarea>
+            <textarea v-if="this.large_num == '6'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea6"
+                      v-model="detail.bef_req_txt"
+                      :disabled=true
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+            ></textarea>
+            <div style="float: right;margin-top: 5px">
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+<!--          <tr>
+            <div style="float: right">
+              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>-->
+        </Modal>
       </section>
     </div>
   </div>
@@ -409,9 +491,11 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
 import axios from "axios";
-import Combo from "@/components/Combo"
+import Combo from "@/components/Combo";
+import Modal from "@/components/Modal";
 import {axiosService} from "@/api/http";
 import PmsSideBar from  "@/components/PmsSideBar";
+import WindowPopup from "@/views/pms/PJTE3001";
 
 const storage = window.sessionStorage;
 
@@ -432,6 +516,8 @@ export default {
   components: {
     Combo,
     PmsSideBar,
+    WindowPopup,
+    Modal,
     grid: Grid,
   },
 // beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수
@@ -496,107 +582,47 @@ export default {
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-
-      /*// 상세내용 확대보기 초기 폰트사이즈 설정
-      document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      if(this.large_num == '1'){
-        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else if(this.large_num == '2') {
-        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else if(this.large_num == '3') {
-        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else if(this.large_num == '4') {
-        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      }*/
-
     },
+
+    //등록,업데이트
     fnSave() {
       //백업ID가 현재 일 때만 저장
       if (this.detail.bkup_id_selected == '0000000000') {
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
-          if (confirm("정말 저장하시겠습니까??") == true) {
-            // 관리ID가 없으면 INSERT
-            if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
-
-              axiosService.post("/PJTE4000/insert",
+          if (confirm("정말 등록하시겠습니까??") == true) {
+              debugger
+              axiosService.post("/PJTE8000/insert",
                   {
-                    rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
-                    titl_nm: this.detail.titl_nm,                       // (상세)제목
-                    req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
-                    req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
-                    rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                    achi_nm: this.detail.achi_nm,                       // (상세)요청자
-                    prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
-                    tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
-                    ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
-                    ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
-                    ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                    ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
-                    slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
-                    ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
-                    gd_txt: this.detail.gd_txt,                           // (상세)등급
-                    urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
-                    rmrk: this.detail.rmrk,                               // (상세)비고
-                    login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                    bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
-                    prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
-                    mng_id: this.detail.mng_id,                           // (상세)관리ID
+                    prjt_id: sessionStorage.getItem('LOGIN_PROJ_ID'),        // (상세)프로젝트아이디
+                    real_prjt_id: this.detail.real_prjt_id_selected,                       // (상세)제목
+                    week_yymm: this.detail.week_yymm,               // (상세)요청내용
+                    week_sqn_cd: this.detail.week_sqn_cd_selected,        // (상세)요청구분
+                    dept_cd: this.detail.dept_cd_selected,
+                    pm_no: this.detail.pm_no,                           // (상세)요청일자
+                    all_real_prg: this.detail.all_real_prg,                       // (상세)요청자
+                    all_pred_prg: this.detail.all_pred_prg,      // (상세)처리단계
+                    step_nm: this.detail.step_nm,                 // (상세)조치업무명
+                    step_real_prg: this.detail.step_real_prg,             // (상세)조치담당자
+                    step_pred_prg: this.detail.step_pred_prg,                 // (상세)조치예정일자
+                    prg_txt: this.detail.prg_txt,                         // (상세)조치일자
+                    iss_txt: this.detail.iss_txt,                     // (상세)조치내용
+                    req_txt: this.detail.req_txt,             // (상세)해결방안내용
+                    atfl_mng_id: this.detail.atfl_mng_id,                // (상세)영향도
+                    opr_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
                   }
               )
                   .then(res => {
                     if (res.status == 200) {
-                      alert("신규 저장이 완료되었습니다.");
+                      alert("등록 완료되었습니다.");
                       //insert 후 재조회
                       this.$refs.grid.invoke("reloadData");
                     }
                   }).catch(e => {
-                alert("신규 저장에 실패하였습니다.");
+                alert("등록 실패하였습니다.");
               })
 
-              // 관리ID가 있으면 UPDATE
-            } else {
-
-              axiosService.put("/PJTE4000/update",
-                  {
-                    rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
-                    titl_nm: this.detail.titl_nm,                       // (상세)제목
-                    req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
-                    req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
-                    rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                    achi_nm: this.detail.achi_nm,                       // (상세)요청자
-                    prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
-                    tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
-                    ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
-                    ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
-                    ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                    ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
-                    slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
-                    ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
-                    gd_txt: this.detail.gd_txt,                           // (상세)등급
-                    urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
-                    rmrk: this.detail.rmrk,                               // (상세)비고
-                    login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                    bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
-                    prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
-                    mng_id: this.detail.mng_id,                           // (상세)관리ID
-                  }
-              )
-                  .then(res => {
-                    if (res.status == 200) {
-                      alert("저장이 완료되었습니다.");
-                      //update 후 재조회
-                      this.$refs.grid.invoke("reloadData");
-                      // 이슈처리단계 구분코드가 500 (완료) 일 때, 상세내용 초기화
-                      if(this.detail.prc_step_cd_selected == '500'){
-                        this.fnClear();
-                      }
-                    }
-                  }).catch(e => {
-                alert("저장에 실패하였습니다.");
-              })
-            }
           } else {   //취소
             return;
           }
@@ -682,7 +708,7 @@ export default {
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
 
-// 직원조회 팝업 (검색 필터)
+    // 직원조회 팝업 (검색 필터)
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.info.prjt_nm_selected
@@ -690,7 +716,7 @@ export default {
       if (btn_id == '1') {
         empnm = this.info.pm_nm
       } else if (btn_id == '2') {
-        empnm = this.detail.pl_nm
+        empnm = this.detail.pm_nm
       }
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
@@ -698,7 +724,6 @@ export default {
             empnm,
             prjt_id_selected,
             bkup_id_selected
-
           }
         })
             .then(res => {
@@ -709,8 +734,8 @@ export default {
                   this.info.pm_no = res.data.data.contents[0].empno
                   this.info.pm_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
-                  this.detail.pl_no = res.data.data.contents[0].empno
-                  this.detail.pl_nm = res.data.data.contents[0].empnm
+                  this.detail.pm_no = res.data.data.contents[0].empno
+                  this.detail.pm_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
@@ -722,8 +747,8 @@ export default {
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },
-
-    fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
+    //초기화 클릭했을때
+    fnClear() {
       this.detail.real_prjt_id_selected = this.$refs.combo2.$data.CD1000000038N[0].value                    // (상세)프로젝트
       this.$refs.combo2.$data.real_prjt_id_selected_iss = this.$refs.combo2.$data.CD1000000038N[0].value
       this.detail.dept_cd_selected = this.$refs.combo2.$data.CD1000000040N[0].value                         // (상세) 부문명
@@ -733,11 +758,11 @@ export default {
       this.detail.week_yymm = this.getToday()                                                               // (상세)주간년월
       this.detail.week_sqn_cd_selected = this.$refs.combo3.$data.CD1000000039N[0].value                     // (상세)차수
       this.$refs.combo3.$data.week_sqn_cd_selected_iss = this.$refs.combo3.$data.CD1000000039N[0].value
-      this.detail.all_pred_prg = ''                                                                         // (상세)예상진척율
-      this.detail.all_real_prg = ''                                                                         // (상세)실제진척율
+      this.detail.all_pred_prg = '0'                                                                         // (상세)예상진척율
+      this.detail.all_real_prg = '0'                                                                         // (상세)실제진척율
       this.detail.step_nm = ''                                                                              // (상세)단계 명
-      this.detail.step_pred_prg = ''                                                                        // (상세)단계 예정 진척율
-      this.detail.step_real_prg = ''                                                                        // (상세)단계 전체 진척율
+      this.detail.step_pred_prg = '0'                                                                        // (상세)단계 예정 진척율
+      this.detail.step_real_prg = '0'                                                                        // (상세)단계 전체 진척율
       this.detail.prg_txt = ''                                                                              // (상세)프로젝트내용
       this.detail.iss_txt = ''                                                                              // (상세)이슈내용
       this.detail.req_txt = ''                                                                              // (상세)요청내용
@@ -759,12 +784,11 @@ export default {
       this.detail.bef_org_file_nm = ''                                                                      // (상세)첨부파일
       this.detail.bef_atfl_mng_id = ''                                                                      // (상세)첨부파일
     },
-
+    //셀 row 클릭시 주간보고,지난주 주간보고에 바인딩
     onClick(ev) {
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
       if (currentRowData != null) {
-
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
       }
     },
@@ -839,8 +863,15 @@ export default {
       return yyyymm;
     },
 
+    fnCloseModal(){  // 모달창 닫기
+      this.detail.modals.txt_modal1 = false;
+    },
+
     //더블클릭시 레이어 띄우기위해
-    enlarged_view(num){
+    modalView(num){
+      //true일때 레이어 오픈
+      this.detail.modals.txt_modal1 = true;
+
       if (num == 1) {
         this.large_num = '1'
       } else if (num == 2) {
@@ -849,9 +880,14 @@ export default {
         this.large_num = '3'
       } else if (num == 4) {
         this.large_num = '4'
+      }else if (num == 5) {
+        this.large_num = '5'
+      }else if (num == 6) {
+        this.large_num = '6'
       }
     },
-    textSizeUP() {  //상세내용 확대보기  (+확대버튼)
+    //상세내용 확대보기  (+확대버튼)
+    textSizeUP() {
       this.defaultFontSize++;
       if(this.large_num == '1'){
         document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
@@ -861,9 +897,15 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '5') {
+        document.getElementById("detailTextArea5").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '6') {
+        document.getElementById("detailTextArea6").style.fontSize = this.defaultFontSize + 'px';
       }
     },
-    textSizeDown() {  //상세내용 확대보기  (-축소버튼)
+
+    //상세내용 확대보기  (-축소버튼)
+    textSizeDown() {
       this.defaultFontSize--;
       if(this.large_num == '1'){
         document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
@@ -873,6 +915,10 @@ export default {
         document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
       } else if(this.large_num == '4') {
         document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '5') {
+        document.getElementById("detailTextArea5").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '6') {
+        document.getElementById("detailTextArea6").style.fontSize = this.defaultFontSize + 'px';
       }
     },
 
@@ -988,11 +1034,11 @@ export default {
         week_yymm             :  this.getToday(),     // 주간년월
         pm_no                 : '',     // pm번호
         pm_nm                 : '',     // pm명
-        all_pred_prg          : '',     // 전체예상진척율
-        all_real_prg          : '',     // 전체실제진척율
+        all_pred_prg          : '0',     // 전체예상진척율
+        all_real_prg          : '0',     // 전체실제진척율
         step_nm               : '',     // 단계명
-        step_pred_prg         : '',     // 단계예상진척율
-        step_real_prg         : '',     // 단계실제진척율
+        step_pred_prg         : '0',     // 단계예상진척율
+        step_real_prg         : '0',     // 단계실제진척율
         prg_txt               : '',     // 프로젝트진행현황
         iss_txt               : '',     // 이슈내용
         req_txt               : '',     // 요청내용
@@ -1016,6 +1062,13 @@ export default {
         /**/
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
+
+        /* 그리드 상세보기 모달 속성 */
+        modals: {
+          txt_modal1: false,
+        },
+        modalTxt1:this.modalTxt,//금주주간보고
+        modalTxt2:this.modalTxt2,//지난주주간보고
 
       },
 
@@ -1067,47 +1120,40 @@ export default {
       columns: [
         {
           header  : '프로젝트 ID',
-          width   : 150,
+          width   : 0,
           align   : 'left',
           name    : 'real_prjt_id',
           hidden  : true,
-    /*      formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: real_prjt_id
-            }
-          }*/
         },
         {
           header: '백업id',
-          width: 200,
+          width: 0,
           align: 'left',
           name: 'bkup_id',
           hidden : true,
         },
         {
           header: '프로젝트',
-          width: 200,
+          width: 400,
           align: 'left',
           name: 'real_prjt_nm',
         },
         {
           header: '이름',
-          width: 100,
+          width: 60,
           align: 'center',
           name: 'pm_nm',
         },
         {
           header: '사원번호',
-          width: 120,
+          width: 90,
           align: 'center',
           name: 'pm_no',
           ellipsis: true,
         },
         {
           header: '주간년월',
-          width: 120,
+          width: 80,
           align: 'center',
           name: 'week_yymm',
           formatter({value}){
@@ -1129,44 +1175,44 @@ export default {
         },
         {
           header: '예정',
-          width: 60,
-          align: 'center',
+          width: 40,
+          align: 'right',
           name: 'all_pred_prg',
         },
         {
           header: '실제',
-          width: 60,
-          align: 'center',
+          width: 40,
+          align: 'right',
           name: 'all_real_prg',
         },
         {
           header: '단계',
-          width: 60,
-          align: 'center',
+          width: 80,
+          align: 'left',
           name: 'step_nm',
         },
         {
           header: '예정',
-          width: 60,
-          align: 'center',
+          width: 40,
+          align: 'right',
           name: 'step_pred_prg',
         },
         {
           header: '실제',
-          width: 60,
-          align: 'center',
+          width: 40,
+          align: 'right',
           name: 'step_real_prg',
         },
         {
           header: '프로젝트진행현황',
-          width: 230,
+          width: 300,
           align: 'left',
           name: 'prg_txt',
           ellipsis: true,
         },
         {
           header: '이슈내용',
-          width: 230,
+          width: 240,
           align: 'left',
           name: 'iss_txt',
           ellipsis: true,
