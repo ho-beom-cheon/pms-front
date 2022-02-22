@@ -127,6 +127,11 @@ export default {
           path: '/PJTE9000',
           name: '시스템관리'
         },
+        {
+          id: 'PJTE8000',
+          path: '/PJTE8000',
+          name: '주간보고'
+        },
       ],
     }
   },
