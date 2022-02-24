@@ -237,6 +237,11 @@
                                v-model="detail.org_file_nm"
                                style="height: 22px;background-color: #f2f2f2;width: 590px;">
                       </td>
+                    <td>
+                      <input type="text" :hidden="true"
+                             v-model="detail.atfl_mng_id"
+                             style="height: 22px;background-color: #f2f2f2;width: 590px;">
+                    </td>
                       <td>
                         <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(1)">첨부</button>
                       </td>
@@ -248,7 +253,7 @@
           <div class="div1-d">
             <div class="div-header-b"><h2>지난주 주간보고</h2>
               <ul class="filter-btn">
-                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnLastSerch">지난주 주간보고 조회</button>
+                <button  id ="lastWeekreport" class="btn btn-filter-p" style="margin-left: 20px" @click="fnLastSerch">지난주 주간보고 조회</button>
               </ul>
             </div>
             <div class="div2-body-c">
@@ -542,6 +547,7 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
+    //지난주 주간보고 조회 버튼 비활성화
     window.pms_register = this;
   },
   beforeUpdate() {
@@ -572,9 +578,9 @@ export default {
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
     dept_cd_change(params)             {this.info.dept_cd_selected = params},
     // 금주주간보고 등록 차수,프로젝트명
-    real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params},
-    week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params},
-    dept_cd_change_iss(params)         {this.detail.dept_cd_selected = params},
+    real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params; this.fnWeekClear(); this.fnWekVail()},
+    week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params; this.fnWeekClear(); this.fnWekVail()},
+    dept_cd_change_iss(params)         {this.detail.dept_cd_selected = params; this.fnWeekClear(); this.fnWekVail()},
 
     init() {
       // 특정 열 비활성화 , applyTheme메서드를 이용하여 쉽게 Grid의 전체 스타일을 바꿈
@@ -592,7 +598,6 @@ export default {
         if (this.checkPrimary() == true) {
           //확인창
           if (confirm("정말 등록하시겠습니까??") == true) {
-              debugger
               axiosService.post("/PJTE8000/insert",
                   {
                     prjt_id: sessionStorage.getItem('LOGIN_PROJ_ID'),        // (상세)프로젝트아이디
@@ -649,7 +654,6 @@ export default {
         })
             .then(res => {
               let res_data = res.data.data.contents;
-              console.log(res_data);
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
 
                 this.detail.bef_pm_nm = res.data.data.contents[0].bef_pm_nm
@@ -698,10 +702,10 @@ export default {
       let file_rgs_dscd = ''
       let atfl_mng_id = ''
       if(num == 1) {
-        file_rgs_dscd='900'
+        file_rgs_dscd='800'
         atfl_mng_id = this.detail.atfl_mng_id
       } else if(num = 2){
-        file_rgs_dscd='900'
+        file_rgs_dscd='800'
         atfl_mng_id = this.detail.bef_atfl_mng_id
       }
       let bkup_id='0000000000', prjt_id= sessionStorage.getItem("LOGIN_PROJ_ID")
@@ -768,6 +772,10 @@ export default {
       this.detail.req_txt = ''                                                                              // (상세)요청내용
       this.detail.org_file_nm = ''                                                                      // (상세)첨부파일
       this.detail.atfl_mng_id = ''                                                                      // (상세)첨부파일
+      //지난주 초기화
+      this.fnWeekClear();
+    },
+    fnWeekClear(){
       //지난주 주간보고 초기화
       this.detail.bef_pm_nm = ''                                                                            // (상세)pm명
       this.detail.bef_pm_no = ''                                                                            // (상세)pmno
@@ -829,6 +837,8 @@ export default {
       this.detail.bef_req_txt = currentRowData.bef_req_txt;                              // (지난주 상세)요청내용
       this.detail.bef_org_file_nm = currentRowData.bef_org_file_nm;                             // (상세)첨부파일명
       this.detail.bef_atfl_mng_id = currentRowData.bef_atfl_mng_id;                             // (상세)첨부파일id
+
+      this.fnWekVail();
     },
 
     /* 조회 */
@@ -836,6 +846,7 @@ export default {
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
+      this.fnWekVail();
     },
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
@@ -950,6 +961,15 @@ export default {
         return false;
       }else {
         return true;  // 필수 값 모두 입력 시 true
+      }
+    },
+    fnWekVail(){
+      if((this.detail.real_prjt_id_selected != '' && this.detail.real_prjt_id_selected != 'NNN')
+          && (this.detail.week_sqn_cd_selected != '' && this.detail.week_sqn_cd_selected != 'NNN')
+          && (this.detail.dept_cd_selected != '' && this.detail.dept_cd_selected != 'NNN')){
+        document.getElementById("lastWeekreport").hidden =false;
+      }else{
+        document.getElementById("lastWeekreport").hidden =true;
       }
     },
   },
