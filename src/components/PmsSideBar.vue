@@ -22,7 +22,7 @@
           </div>
 
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-            <ul class="card-body">
+            <ul class="card-body" v-if="this.LoginId !=='0000000001'" >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
               <li id="PJTE2100"><a href="/PJTE2100">{{ menu_list[1].name }}</a></li>
               <li id="PJTE2110"><a href="/PJTE2110">{{ menu_list[2].name }}</a></li>
@@ -35,6 +35,10 @@
               <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
               <li id="PJTE9000"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
             </ul>
+            <ul class="card-body" v-else >
+              <li id="WeekPjte8000"><a href="/PJTE8000">{{ week_menu_list[0].name }}</a></li>
+              <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[1].name }}</a></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -42,6 +46,7 @@
   </aside>
 </template>
 <script>
+const storage = window.sessionStorage;
 
 export default {
   components: {
@@ -49,6 +54,7 @@ export default {
   beforeCreate() {
   },
   created() {
+
     this.fn_current_menu() // 현재 메뉴명
   },
   beforeMount() {
@@ -65,8 +71,9 @@ export default {
   destroyed() {
   },
   data() {
-    return {
 
+    return {
+      LoginId : storage.getItem('LOGIN_PROJ_ID'),
       current_menu: '',
       menu_list: [
         {
@@ -124,22 +131,51 @@ export default {
           path: '/PJTE9000',
           name: '시스템관리'
         },
+
       ],
+      week_menu_list: [
+        {
+          id: 'WeekPjte8000',
+          path: '/PJTE8000',
+          name: '주간보고'
+        },
+        {
+          id: 'WeekPjte9000',
+          path: '/PJTE9000',
+          name: '시스템관리'
+        },
+      ]
     }
   },
   methods: {
     fn_current_menu() {
-      for (let i = 0; i < this.menu_list.length; i++) {
-        if (this.$route.path == this.menu_list[i].path) {
-          this.current_menu = this.menu_list[i].name
+      if(this.LoginId !='0000000001'){
+        for (let i = 0; i < this.menu_list.length; i++) {
+          if (this.$route.path == this.menu_list[i].path) {
+            this.current_menu = this.menu_list[i].name
+          }
+        }
+      }else{
+        for (let i = 0; i < this.week_menu_list.length; i++) {
+          if (this.$route.path == this.week_menu_list[i].path) {
+            this.current_menu = this.week_menu_list[i].name
+          }
         }
       }
 
     },
     fn_highlight_meun() {
-      for (let i = 0; i < this.menu_list.length; i++) {
-        if (this.$route.path == this.menu_list[i].path) {
-          document.getElementById(this.menu_list[i].id).className = 'active'
+      if(this.LoginId !='0000000001'){
+        for (let i = 0; i < this.menu_list.length; i++) {
+          if (this.$route.path == this.menu_list[i].path) {
+            document.getElementById(this.menu_list[i].id).className = 'active'
+          }
+        }
+      }else{
+        for (let i = 0; i < this.week_menu_list.length; i++) {
+          if (this.$route.path == this.week_menu_list[i].path) {
+            document.getElementById(this.week_menu_list[i].id).className = 'active'
+          }
         }
       }
     }
