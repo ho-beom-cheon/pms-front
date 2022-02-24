@@ -547,14 +547,13 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
-    //지난주 주간보고 조회 버튼 비활성화
+
     window.pms_register = this;
   },
   beforeUpdate() {
     // console.log("beforeUpdate");
   },
   updated() {
-    // console.log("updated");
   },
   beforeDestroy() {
     // console.log("beforeDestroy");
@@ -578,9 +577,9 @@ export default {
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
     dept_cd_change(params)             {this.info.dept_cd_selected = params},
     // 금주주간보고 등록 차수,프로젝트명
-    real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params; this.fnWeekClear(); this.fnWekVail()},
-    week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params; this.fnWeekClear(); this.fnWekVail()},
-    dept_cd_change_iss(params)         {this.detail.dept_cd_selected = params; this.fnWeekClear(); this.fnWekVail()},
+    real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
+    week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
+    dept_cd_change_iss(params)         {this.detail.dept_cd_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
 
     init() {
       // 특정 열 비활성화 , applyTheme메서드를 이용하여 쉽게 Grid의 전체 스타일을 바꿈
@@ -589,7 +588,14 @@ export default {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
     },
+    /* 조회 */
+    fnSearch() {
+      // 조회 서비스
+      this.$refs.grid.invoke("setRequestParams", this.info);
+      this.$refs.grid.invoke("readData");
 
+      this.fnWekVail();
+      },
     //등록,업데이트
     fnSave() {
       //백업ID가 현재 일 때만 저장
@@ -773,9 +779,11 @@ export default {
       this.detail.org_file_nm = ''                                                                      // (상세)첨부파일
       this.detail.atfl_mng_id = ''                                                                      // (상세)첨부파일
       //지난주 초기화
-      this.fnWeekClear();
+      this.fnLastWeekClear();
+      //지난주 주간보고 조회버튼 히든
+      this.fnWekVail();
     },
-    fnWeekClear(){
+    fnLastWeekClear(){
       //지난주 주간보고 초기화
       this.detail.bef_pm_nm = ''                                                                            // (상세)pm명
       this.detail.bef_pm_no = ''                                                                            // (상세)pmno
@@ -841,13 +849,7 @@ export default {
       this.fnWekVail();
     },
 
-    /* 조회 */
-    fnSearch() {
-      // 조회 서비스
-      this.$refs.grid.invoke("setRequestParams", this.info);
-      this.$refs.grid.invoke("readData");
-      this.fnWekVail();
-    },
+
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
