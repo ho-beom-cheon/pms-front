@@ -235,7 +235,7 @@
                       <td>
                         <input type="text" :disabled=true
                                v-model="detail.org_file_nm"
-                               style="height: 22px;background-color: #f2f2f2;width: 590px;">
+                               style="margin-top:3px; height: 22px;background-color: #f2f2f2;width: 590px;">
                       </td>
                     <td>
                       <input type="text" :hidden="true"
@@ -243,7 +243,7 @@
                              style="height: 22px;background-color: #f2f2f2;width: 590px;">
                     </td>
                       <td>
-                        <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(1)">첨부</button>
+                        <button id="openFile" class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(1)">첨부</button>
                       </td>
                   </div>
                 </li>
@@ -402,10 +402,10 @@
                   <div class="item-con" style = "margin-left : -9px">
                     <td class="td-box" style ="margin-top: 1px;">첨부파일</td>
                     <td>
-                      <input type="text" :disabled=true v-model="detail.bef_org_file_nm" style="height: 22px;background-color: #f2f2f2;width: 590px;">
+                      <input type="text" :disabled=true v-model="detail.bef_org_file_nm" style="margin-top:3px;height: 22px;background-color: #f2f2f2;width: 590px;">
                     </td>
                     <td>
-                      <button class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
+                      <button  id="openFile1" class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
                     </td>
                   </div>
                 </li>
@@ -434,7 +434,7 @@
                       id="detailTextArea1"
                       v-model="detail.prg_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '2'"
                       cols="200"
@@ -442,7 +442,7 @@
                       id="detailTextArea2"
                       v-model="detail.iss_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '3'"
                       cols="200"
@@ -450,7 +450,7 @@
                       id="detailTextArea3"
                       v-model="detail.req_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '4'"
                       cols="200"
@@ -458,7 +458,7 @@
                       id="detailTextArea4"
                       v-model="detail.bef_prg_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '5'"
                       cols="200"
@@ -466,7 +466,7 @@
                       id="detailTextArea5"
                       v-model="detail.bef_iss_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '6'"
                       cols="200"
@@ -474,7 +474,7 @@
                       id="detailTextArea6"
                       v-model="detail.bef_req_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal"
+                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <div style="float: right;margin-top: 5px">
               <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
@@ -577,7 +577,9 @@ export default {
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
     dept_cd_change(params)             {this.info.dept_cd_selected = params},
     // 금주주간보고 등록 차수,프로젝트명
+
     real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
+
     week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
     dept_cd_change_iss(params)         {this.detail.dept_cd_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
 
@@ -593,7 +595,8 @@ export default {
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-
+      document.getElementById("openFile").hidden =true;
+      document.getElementById("openFile1").hidden =true;
       this.fnWekVail();
       },
     //등록,업데이트
@@ -629,6 +632,7 @@ export default {
                       alert("등록 완료되었습니다.");
                       //insert 후 재조회
                       this.$refs.grid.invoke("reloadData");
+                      document.getElementById("openFile").hidden =false;
                     }
                   }).catch(e => {
                 alert("등록 실패하였습니다.");
@@ -676,7 +680,12 @@ export default {
                 this.detail.bef_iss_txt = res.data.data.contents[0].bef_iss_txt
                 this.detail.bef_req_txt = res.data.data.contents[0].bef_req_txt
                 this.detail.bef_atfl_mng_id = res.data.data.contents[0].bef_atfl_mng_id
-
+                this.detail.bef_org_file_nm =  res.data.data.contents[0].bef_org_file_nm
+                if( this.detail.bef_atfl_mng_id != null &&  this.detail.bef_atfl_mng_id != '' ){
+                  document.getElementById("openFile1").hidden =false;
+                }else{
+                  document.getElementById("openFile1").hidden =true;
+                }
 
               }else if(res_data.length == 0){ //다건이 조회되었을대 경고알림.
                 alert("지난주 주간보고가 없습니다.");
@@ -759,12 +768,17 @@ export default {
     },
     //초기화 클릭했을때
     fnClear() {
-      this.detail.real_prjt_id_selected = this.$refs.combo2.$data.CD1000000038N[0].value                    // (상세)프로젝트
-      this.$refs.combo2.$data.real_prjt_id_selected_iss = this.$refs.combo2.$data.CD1000000038N[0].value
+      if(sessionStorage.getItem('LOGIN_REAL_PRJT_ID') == null && sessionStorage.getItem('LOGIN_REAL_PRJT_ID') == ''){
+        this.detail.real_prjt_id_selected = this.$refs.combo2.$data.CD1000000038N[0].value                    // (상세)프로젝트
+      }else{
+        this.detail.real_prjt_id_selected = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')                    // (상세)프로젝트
+        this.$refs.combo2.$data.real_prjt_id_selected_iss = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')
+      }
+
       this.detail.dept_cd_selected = this.$refs.combo2.$data.CD1000000040N[0].value                         // (상세) 부문명
       this.$refs.combo2.$data.dept_cd_selected_iss = this.$refs.combo2.$data.CD1000000040N[0].value
-      this.detail.pm_nm = ''                                                                                // (상세)pm명
-      this.detail.pm_no = ''                                                                                // (상세)pmno
+      this.detail.pm_nm = sessionStorage.getItem('LOGIN_EMP_NM')                                                                             // (상세)pm명
+      this.detail.pm_no = sessionStorage.getItem('LOGIN_EMP_NO')                                                                            // (상세)pmno
       this.detail.week_yymm = this.getToday()                                                               // (상세)주간년월
       this.detail.week_sqn_cd_selected = this.$refs.combo3.$data.CD1000000039N[0].value                     // (상세)차수
       this.$refs.combo3.$data.week_sqn_cd_selected_iss = this.$refs.combo3.$data.CD1000000039N[0].value
@@ -784,6 +798,9 @@ export default {
       this.fnWekVail();
     },
     fnLastWeekClear(){
+      //첨부파일 버튼 히든
+      document.getElementById("openFile").hidden =true;
+      document.getElementById("openFile1").hidden =true;
       //지난주 주간보고 초기화
       this.detail.bef_pm_nm = ''                                                                            // (상세)pm명
       this.detail.bef_pm_no = ''                                                                            // (상세)pmno
@@ -847,6 +864,15 @@ export default {
       this.detail.bef_atfl_mng_id = currentRowData.bef_atfl_mng_id;                             // (상세)첨부파일id
 
       this.fnWekVail();
+      //클릭했을때 첨부파일버튼 활성화
+      document.getElementById("openFile").hidden =false;
+
+      //지난주간보고 첨부파일 아이디가 있으면 첨부파일 활성화
+      if( this.detail.bef_atfl_mng_id != null &&  this.detail.bef_atfl_mng_id != '' ){
+        document.getElementById("openFile1").hidden =false;
+      }else{
+        document.getElementById("openFile1").hidden =true;
+      }
     },
 
 
@@ -949,13 +975,13 @@ export default {
       } else if (this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == "null") {
         alert('PM명이 없습니다.');
         return false;
-      }  else if (this.detail.all_real_prg == "" || this.detail.all_real_prg == "null") {
+      }  else if (this.detail.all_real_prg < 1 || this.detail.all_real_prg == "") {
         this.$refs.all_real_prg.focus();
-        alert('[전체] 실제진척율을 입력해주세요.');
+        alert('[전체] 0보다 큰 실제진척율을 입력해주세요.');
         return false;
-      }  else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg == "null") {
+      }  else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg < 1) {
         this.$refs.all_pred_prg.focus();
-        alert('[전체] 예정진척율을 입력해주세요.');
+        alert('[전체] 0보다 큰  예정진척율을 입력해주세요.');
         return false;
       }else if (this.detail.prg_txt == "" || this.detail.prg_txt == "null") {
         this.$refs.prg_txt.focus();
@@ -967,8 +993,7 @@ export default {
     },
     fnWekVail(){
       if((this.detail.real_prjt_id_selected != '' && this.detail.real_prjt_id_selected != 'NNN')
-          && (this.detail.week_sqn_cd_selected != '' && this.detail.week_sqn_cd_selected != 'NNN')
-          && (this.detail.dept_cd_selected != '' && this.detail.dept_cd_selected != 'NNN')){
+          && (this.detail.week_sqn_cd_selected != '' && this.detail.week_sqn_cd_selected != 'NNN')){
         document.getElementById("lastWeekreport").hidden =false;
       }else{
         document.getElementById("lastWeekreport").hidden =true;
@@ -1097,7 +1122,7 @@ export default {
       addRow: {
         grid: this.grid,
       },
-      defaultFontSize: 20,
+      defaultFontSize: 40,
       count: 0,
       curRow: -1,
       title: "",
@@ -1159,6 +1184,12 @@ export default {
           width: 400,
           align: 'left',
           name: 'real_prjt_nm',
+        },
+        {
+          header: '부문명',
+          width: 100,
+          align: 'left',
+          name: 'dept_nm',
         },
         {
           header: '이름',

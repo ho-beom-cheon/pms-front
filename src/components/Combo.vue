@@ -655,7 +655,7 @@
       <div class="item-con">프로젝트
         <select
             v-model = "real_prjt_id_selected"
-            style   = "width: 200px"
+            style   = "width: 422px"
             @change = "real_prjt_id_change"
         >
           <option
