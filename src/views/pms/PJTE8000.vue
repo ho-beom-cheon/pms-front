@@ -653,7 +653,7 @@ export default {
       let real_prjt_id_selected = this.detail.real_prjt_id_selected
       let dept_cd_selected = this.detail.dept_cd_selected
 
-      if ((week_sqn_cd_selected != null && week_sqn_cd_selected != '') && (real_prjt_id_selected != null && real_prjt_id_selected != '') && (dept_cd_selected != null && dept_cd_selected != '')) {
+      if ((week_sqn_cd_selected != null && week_sqn_cd_selected != '') && (real_prjt_id_selected != null && real_prjt_id_selected != '')) {
         axiosService.get("/PJTE8000/select02", {
           params: {
             week_yymm,
@@ -1184,6 +1184,18 @@ export default {
           width: 400,
           align: 'left',
           name: 'real_prjt_nm',
+        },
+        {
+          header: '시작일자',
+          width: 80,
+          align: 'center',
+          name: 'start_prjt_date',
+        },
+        {
+          header: '종료일자',
+          width: 80,
+          align: 'center',
+          name: 'end_prjt_date',
         },
         {
           header: '부문명',
