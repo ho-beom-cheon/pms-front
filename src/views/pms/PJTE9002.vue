@@ -242,16 +242,31 @@ export default {
               }
             },
         ).then(res => {
-          res.data.data.fileList.map(e => {
-            this.fileLists.push({
-              sqno: e.sqno,
-              file_path: e.file_path,
-              file_nm: e.file_nm,
-              org_file_nm : e.org_file_nm,
-              rmrmk : e.rmrmk,
-              file: null,
-            },)
-          })
+          if(res.data.data.fileList.length == 0){
+            this.fileLists = [
+              {
+                sqno: 1,
+                file_path: '',
+                file_nm: '',
+                org_file_nm : '',
+                rmrmk : '',
+                file: null,
+              },
+            ];
+          }else{
+            res.data.data.fileList.map(e => {
+              this.fileLists.push({
+                sqno: e.sqno,
+                file_path: e.file_path,
+                file_nm: e.file_nm,
+                org_file_nm : e.org_file_nm,
+                rmrmk : e.rmrmk,
+                file: null,
+              },)
+            })
+
+          }
+
         }).catch(e => {
 
         });
@@ -264,7 +279,7 @@ export default {
     close() {
       console.log(this.atfl_num)
       sessionStorage.clear();
-      opener.fileData(this.fileLists);
+      opener.fileData(this.fileLists, this.atfl_num);
       window.close();
     },
 
@@ -318,7 +333,7 @@ export default {
             atfl_mng_id: res.data.split('/')[1]
           })
           opener.fileData(this.fileLists, this.atfl_num );
-          window.close();
+          // window.close();
         }
       })
       .catch(e => {
