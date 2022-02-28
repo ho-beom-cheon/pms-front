@@ -308,11 +308,12 @@ export default {
 
       })
           .then(res => {
-            console.log(res);
-            if(res.data){
+            console.log(res.data)
+            if(res.data.result){
               alert("저장되었습니다.");
               opener.pmsRegisterData("insert");
-              window.close();
+              this.open_page(res.data.mng_id)
+              // window.close();
             }
 
           })
@@ -346,7 +347,7 @@ export default {
             if(res.data){
               alert("저장되었습니다.");
               opener.pmsRegisterData("update");
-              window.close();
+              // window.close();
             }
           })
     }
