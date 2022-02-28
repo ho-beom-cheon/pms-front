@@ -22,13 +22,13 @@
                     <button class="btn btn-filter-p" style = "margin-top: 5px;" @click="fnSearchRe">
                       <a href="#" >재조회</a>
                     </button>
-                    <button class="btn btn-filter-p" style = "margin-top: 5px; margin-left: 5px" @click="tableBackUp" v-if="aut_cd_check">
+                    <button class="btn btn-filter-p" style = "margin-top: 5px; margin-left: 5px" @click="tableBackUp" :disabled="aut_cd_check2">
                       <a href="#" >테이블백업</a>
                     </button>
 
                     &nbsp;
                     생성프로젝트<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
-                    <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject" v-if="aut_cd_check">
+                    <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject" :disabled="aut_cd_check">
                       <a href="#" >프로젝트기본정보복사</a>
                     </button>
                   </ul>
@@ -37,23 +37,23 @@
                 <div class="div-grid-c">
                 </div>
                 <ul class="filter-btn" style="margin-top: 25px">
-                  <button class="btn btn-filter-e" v-if="aut_cd_check">
+                  <button class="btn btn-filter-e" :disabled="aut_cd_check2">
                     <label for="file">엑셀업로드</label>
                     <input type="file" id="file"  @change="gridExcelImport" accept=".xlsx, .xls" style="display: none;"/>
                   </button>
                   <button class="btn btn-filter-e" @click="gridExcelExport">
                     <a href="#" >엑셀다운로드</a>
                   </button>
-                  <button class="btn btn-filter-b" style = "margin-left: 20px;" @click="gridAddRow(1)" v-if="aut_cd_check">
+                  <button class="btn btn-filter-b" style = "margin-left: 20px;" @click="gridAddRow(1)" :disabled="aut_cd_check2">
                     <a href="#"  >행추가</a>
                   </button>
-                  <button class="btn btn-filter-b" @click="gridDelRow(1)" v-if="aut_cd_check">
+                  <button class="btn btn-filter-b" @click="gridDelRow(1)" :disabled="aut_cd_check2">
                     <a href="#" >행삭제</a>
                   </button>
-                  <button class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C" @click="loginChange" v-if="aut_cd_check">
+                  <button class="btn btn-filter-p" style = "margin-left: 20px; background-color: #9FC93C" @click="loginChange" v-if="!aut_cd_check">
                     <a href="#" >로그인변경</a>
                   </button>
-                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(1)" v-if="aut_cd_check">
+                  <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(1)" :disabled="aut_cd_check2">
                     <a href="#" >저장</a>
                   </button>
                 </ul>
@@ -90,7 +90,7 @@
                     </li>
                   </ul>
                   <ul class="filter-btn">
-                    <button class="btn btn-filter-p" style = "margin-bottom: 5px" @click="createNewYear" v-if="aut_cd_check">
+                    <button class="btn btn-filter-p" style = "margin-bottom: 5px" @click="createNewYear" :disabled="aut_cd_check">
                       <a href="#" >생성</a>
                     </button>
                   </ul>
@@ -112,9 +112,9 @@
                   </ul>
                 </section>
                 <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
-                  <div class="btn btn-filter-p" style = "margin-left: 20px" v-if="aut_cd_check">
+                  <button class="btn btn-filter-p" style = "margin-left: 20px" :disabled="aut_cd_check2">
                     <a href="#" @click="fnSave(4)">저장</a>
-                  </div>
+                  </button>
                 </ul>
               </div>
               <div class="div2-2-c">
@@ -137,14 +137,14 @@
           </div>
           <div class="div3-c">
             <div class="div-header-c"><h2>코드유형</h2>
-              <ul class="filter-btn" v-if="aut_cd_check">
-                <button class="btn btn-filter-b" @click="gridAddRow(2)">
+              <ul class="filter-btn">
+                <button class="btn btn-filter-b" @click="gridAddRow(2)" :disabled="aut_cd_check">
                   <a href="#" >행추가</a>
                 </button>
-                <button class="btn btn-filter-b" @click="gridDelRow(2)">
+                <button class="btn btn-filter-b" @click="gridDelRow(2)" :disabled="aut_cd_check">
                   <a href="#" >행삭제</a>
                 </button>
-                <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(2)">
+                <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(2)" :disabled="aut_cd_check">
                   <a href="#" >저장</a>
                 </button>
               </ul>
@@ -169,14 +169,14 @@
             <div class="div-header-c">
               <h2 v-if="grp_tymm">{{ grp_tymm }}</h2>
               <h2 v-else>코드상세</h2>
-              <ul class="filter-btn" v-if="aut_cd_check">
-                <button class="btn btn-filter-b" @click="gridAddRow(3)">
+              <ul class="filter-btn">
+                <button class="btn btn-filter-b" @click="gridAddRow(3)" :disabled="aut_cd_check">
                   <a href="#" >행추가</a>
                 </button>
-                <button class="btn btn-filter-b" @click="gridDelRow(3)">
+                <button class="btn btn-filter-b" @click="gridDelRow(3)" :disabled="aut_cd_check">
                   <a href="#" >행삭제</a>
                 </button>
-                <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(3)">
+                <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSave(3)" :disabled="aut_cd_check">
                   <a href="#" >저장</a>
                 </button>
               </ul>
@@ -235,6 +235,11 @@ export default {
 
   // 그리드 1,2,3 순서대로 조회 하기 위해 async await 사용
   async mounted() {
+    if(sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
+      this.aut_cd_check = false
+    }else if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+      this.aut_cd_check2 = false
+    }
     await this.fnSearch();
     await this.fnSearchCode();
   },
@@ -261,7 +266,6 @@ export default {
       this.info.grid_num = 1
       await this.fnSearch();
       await this.fnSearchCode()
-      console.log(this.$store.state.pms.CD1000000001N)
     },
     // 테이블 백업
     tableBackUp() {
@@ -481,27 +485,32 @@ export default {
         }
 
         if(check){
-          if(this.createdRows.length != 0){
+          if(this.createdRows.length != 0 || this.updatedRows.length != 0 || this.deletedRows.length != 0){
             try {
-              // 데이터 파라메타 전달
-              this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.createdRows));
-              // create api 요청
-              this.$refs.grid1.invoke("request", "createData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-              this.info.grid_num = 1;
-              this.$refs.grid1.invoke("setRequestParams", this.info);
-              this.$refs.grid1.invoke("reloadData");
-            } catch (e){
-              console.log(e);
-            }
-          }
+              // createdRows
+              if(this.createdRows.length != 0){
+                // 데이터 파라메타 전달
+                this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.createdRows));
+                // create api 요청
+                this.$refs.grid1.invoke("request", "createData", {showConfirm: false});
+              }
 
-          if(this.updatedRows.length != 0){
-            try {
-              // 데이터 파라메타 전달
-              this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-              // create api 요청
-              this.$refs.grid1.invoke("request", "updateData", {showConfirm: false});
+              // updatedRows
+              if(this.updatedRows.length != 0){
+                // 데이터 파라메타 전달
+                this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+                // create api 요청
+                this.$refs.grid1.invoke("request", "updateData", {showConfirm: false});
+              }
+
+              //deletedRows
+              if(this.deletedRows.length != 0){
+                // 데이터 파라메타 전달
+                this.$refs.grid1.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+                // create api 요청
+                this.$refs.grid1.invoke("request", "deleteData", {showConfirm: false});
+              }
+
               alert("저장이 완료되었습니다.")
               this.info.grid_num = 1;
               this.$refs.grid1.invoke("setRequestParams", this.info);
@@ -509,6 +518,8 @@ export default {
             } catch (e){
               console.log(e);
             }
+          }else{
+            alert("변경된 데이터가 없습니다.")
           }
 
         }else{
@@ -575,12 +586,30 @@ export default {
 
         // 필수값 체크 이상 없을 때 저장장
         if(check){
-          if(this.createdRows2.length != 0){
+          if(this.createdRows2.length != 0 || this.updatedRows2.length != 0 || this.deletedRows2.length != 0){
             try {
-              // 데이터 파라메타 전달
-              this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.createdRows));
-              // create api 요청
-              this.$refs.grid2.invoke("request", "createData", {showConfirm: false});
+              if(this.createdRows2.length != 0){
+                // 데이터 파라메타 전달
+                this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.createdRows));
+                // create api 요청
+                this.$refs.grid2.invoke("request", "createData", {showConfirm: false});
+              }
+
+              if(this.updatedRows2.length != 0){
+                // 데이터 파라메타 전달
+                this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+                // update api 요청
+                this.$refs.grid2.invoke("request", "updateData", {showConfirm: false});
+              }
+
+              if(this.deletedRows2.length != 0){
+                // 데이터 파라메타 전달
+                this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+                // update api 요청
+                this.$refs.grid2.invoke("request", "deleteData", {showConfirm: false});
+              }
+
+
               alert("저장이 완료되었습니다.")
               this.info.grid_num = 2;
               this.$refs.grid2.invoke("setRequestParams", this.info);
@@ -588,22 +617,10 @@ export default {
             } catch (e){
               console.log(e);
             }
+          }else{
+            alert("변경된 데이터가 없습니다.");
           }
 
-          if(this.updatedRows2.length != 0){
-            try {
-              // 데이터 파라메타 전달
-              this.$refs.grid2.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-              // update api 요청
-              this.$refs.grid2.invoke("request", "updateData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-              this.info.grid_num = 2;
-              this.$refs.grid2.invoke("setRequestParams", this.info);
-              this.$refs.grid2.invoke("reloadData");
-            } catch (e){
-              console.log(e);
-            }
-          }
 
         }else{
           return false;
@@ -943,7 +960,8 @@ export default {
 // 변수 선언부분
   data() {
     return {
-      aut_cd_check : (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') ? true : false,
+      aut_cd_check : true,
+      aut_cd_check2 : true,
       comboList : ["C27","C0"],
       grp_tymm : '',
       changeUserId : '',
@@ -1051,6 +1069,7 @@ export default {
           readData: { url: process.env.VUE_APP_API + '/PJTE9000/select', method: 'GET' },
           createData : { url: process.env.VUE_APP_API + '/PJTE9000/create1', method: 'POST'},
           updateData : { url: process.env.VUE_APP_API + '/PJTE9000/update1' , method: 'PUT'},
+          deleteData : { url: process.env.VUE_APP_API + '/PJTE9000/delete1' , method: 'PUT'},
         },
         initialRequest: false,
         contentType: 'application/json;',
@@ -1062,6 +1081,7 @@ export default {
           readData: { url: process.env.VUE_APP_API + '/PJTE9000/select', method: 'GET' },
           createData : { url: process.env.VUE_APP_API + '/PJTE9000/create2', method: 'POST'},
           updateData : { url: process.env.VUE_APP_API + '/PJTE9000/update2' , method: 'PUT'},
+          deleteData : { url: process.env.VUE_APP_API + '/PJTE9000/delete2' , method: 'PUT'},
         },
         initialRequest: false,
         contentType: 'application/json;',
