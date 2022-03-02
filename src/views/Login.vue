@@ -36,10 +36,17 @@
           <tr>
             <th>로그인 사번</th>
             <td>
-              <input type="text" placeholder="로그인 사번" name="userId"
-                     id="userId" v-model="userId" style="width: 300px;"
-                     @keyup.enter="login"
-              >
+              <div class="input-searchWrap">
+                <input type="text"
+                       placeholder="로그인 사번"
+                       v-model="userId"
+                       style="width: 300px;"
+                       @keyup.enter="open_pjte9001(1)"
+                >
+                <button class="search-btn3"
+                        @click="open_pjte9001(1)"
+                ></button>
+              </div>
               <h6 class="mt-1" style="color:red; font-size: small" v-if="idCheak">로그인 사번은 필수 입력 사항입니다.</h6>
             </td>
           </tr>
@@ -99,6 +106,16 @@
 <script>
 import {axiosService} from "@/api/http";
 import Modal from "@/components/Modal.vue";
+
+// 직원조회 팝업에서 받은 값
+window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
+  window.pms_login.emp_nm = empnm;
+  window.pms_login.userId = empno;
+  window.pms_login.emp_btn_id = btn_id;
+  window.pms_login.emp_rowKey = emprow;
+  window.pms_login.emp_colName = empcol;
+}
+
 // 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다. 
 const storage = window.sessionStorage;
 
@@ -110,6 +127,7 @@ export default {
     this.sessionClear();
     this.getPjt();
   },
+
   updated() {
     // 로그인 정보 필수 입력 문구 초기화
     if(this.userId !== "")
@@ -290,15 +308,40 @@ export default {
             });
       }
     },
+
+    // 직원조회 팝업 (검색 필터)
+    open_pjte9001(btn_id) {
+      let empno = ''
+      let prjt_id_selected = this.pjt_selected
+      let bkup_id_selected = '0000000000'
+
+      if (this.userId != null && this.userId !== '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empno,
+            prjt_id_selected,
+            bkup_id_selected
+          }
+        }).then(res => {
+          let res_data = res.data.data.contents;
+          let bkup_id = bkup_id_selected, prjt_id = prjt_id_selected, empno = this.userId
+          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empno=${empno}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+        })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = bkup_id_selected, prjt_id = prjt_id_selected, empno = this.userId
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empno=${empno}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
+
     /* 세션 초기화 */
     sessionClear() {
       sessionStorage.clear();
     },
     valClear() {
-          this.userId = "";
-          this.password = "";
-          this.passwordConfirm = "";
-          this.newPassword = "";
+      this.userId = "";
+      this.password = "";
+      this.passwordConfirm = "";
+      this.newPassword = "";
     },
     /* 값 유효성 체크 */
     vaildation() {
@@ -318,10 +361,11 @@ export default {
       } else {
         storage.setItem("jwt-auth-token", "");
       }
-    } // init 
+    } // init
   },
   mounted() {
     this.init();
+    window.pms_login = this;
   }
 };
 </script>
