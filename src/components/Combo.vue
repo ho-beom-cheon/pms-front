@@ -633,23 +633,6 @@
         </select>
       </div>
     </li>
-    <!--   검색항목코드 -->
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C36'">
-      <div class="item-con">검색항목
-        <select
-            v-model = "search_cd_selected"
-            style   = "width: 100px"
-            @change = "search_cd_change"
-        >
-          <option
-              v-for  = "(item, idx) in CD1000000036T"
-              :key   = "idx"
-              v-text = "item.text"
-              :value = "item.value"
-          ></option>
-        </select>
-      </div>
-    </li>
     <!--   투입프로젝트 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C38'">
       <div class="item-con">프로젝트
