@@ -166,7 +166,7 @@ export default {
     setCombo(combodata) {
       //프로젝트명 세팅
       for(let i=0; i<combodata.contents.length; i++) {
-          this.prjt_id.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
+        this.prjt_id.push({"text": combodata.contents[i].dtls_tynm, "value": combodata.contents[i].dtls_tycd});
       }
       //업무구분 세팅
       this.bzcd.push({"text": "전체", "value": "TTT"});
@@ -253,7 +253,7 @@ export default {
 
       info: {
         /* 필터 변수 */
-        empno  : this.empno,                         // 직원번호
+        empno  : this.$route.query.empno,                         // 직원번호
         empnm  : this.$route.query.empnm,            // 직원명
         prjt_id_selected: this.$route.query.prjt_id, // 선택 된 프로젝트명
         // prjt_id_selected: "", // 선택 된 프로젝트명

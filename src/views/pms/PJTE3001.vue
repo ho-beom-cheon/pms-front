@@ -261,7 +261,7 @@ export default {
     // mng_id가 있을 때 팝업 데이터 조회
     if(this.mng_id){
       this.getRegisterData();
-    // mng_id가 없을 때 신규 등록을 위한팝업 데이터 조회
+      // mng_id가 없을 때 신규 등록을 위한팝업 데이터 조회
     } else {
       this.getNewRegisterData();
     }
@@ -443,8 +443,8 @@ export default {
       }
 
       axiosService.post('/PJTE3001/insert',{
-        bkup_id : this.bkup_id,                                        // 백업ID
-        prjt_id : this.prjt_id,                                        // 프로젝트ID
+        bkup_id : this.bkup_id,                                         // 백업ID
+        prjt_id : this.prjt_id,                                         // 프로젝트ID
         login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),     // 직원번호
         login_aut_cd : sessionStorage.getItem('LOGIN_AUT_CD'),     // 권한ID
 
@@ -476,7 +476,7 @@ export default {
 
             if(res.data){
               alert("저장되었습니다.");
-              window.close();
+
             }
 
           })
@@ -598,7 +598,6 @@ export default {
             if(res.data){
               alert("저장되었습니다.");
               opener.parent.location.reload();
-              window.close();
             }
           })
     },
