@@ -450,8 +450,8 @@ export default {
       this.$refs.grid.invoke("getRow", this.curRow);
 // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn') {
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&pgm_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='200', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&bzcd=${bzcd}&pgm_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -535,8 +535,8 @@ export default {
       this.modals.txt_modal1 = false;
     },
     formDownload(){
-      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
     },
     // TC증빙 일괄다운로드
     batchDownload(){
