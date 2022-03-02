@@ -293,29 +293,11 @@ export default {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
-    gridAddRow() {
 
-      this.$refs.grid.invoke("appendRow", {col1: "1", col3: "개발", col4: "SWZP0010", col5: "PMS구축"}, {focus: true});
-    },
-    gridDelRow() {
-      this.$refs.grid.invoke("removeRow", this.curRow);
-      // DB 데이터 삭제로직 추가
-    },
-    gridADelRow() {
-      // DB 데이터 삭제로직 추가
-    },
-    gridIns() {
-      // DB 데이터 삭제로직 추가
-    },
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
-    gridExcelImport() {
-      // 엑셀파일 업로드 로직 추가
-    },
-    open_page() {
-      this.pop = window.open("../PJTE3001/", "open_page", "width=1000, height=800");
-    },
+
     //엔터키를 눌러 직원 조회
     open_pjte9001(btn_id) {
       let empnm = ''
@@ -351,12 +333,12 @@ export default {
                   this.info.pl_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },
@@ -371,10 +353,10 @@ export default {
         empnm = this.info.pl_nm
       }
       if((empnm === '' || empnm == "null" || empnm === undefined)) {
-        let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       } else {
-        let bkup_id = this.info.bkup_id_selected, prjt_id =  sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     }
