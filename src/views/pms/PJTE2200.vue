@@ -536,7 +536,7 @@ export default {
           empnm = this.$refs.grid.invoke("getValue", this.curRow, 'crpe_enm')
         }
 
-        if((empnm === '' || empnm == "null" || empnm === undefined)) {
+        if((empnm === '' || empnm == null || empnm === undefined)) {
           let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected, emprow = ev.rowKey, empcol = ev.columnName
           window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
         } else {
@@ -783,7 +783,7 @@ export default {
       } else if (btn_id == '3') {
         empnm = this.info.crpe_enm
       }
-      if((empnm === '' || empnm == "null" || empnm === undefined)) {
+      if((empnm === '' || empnm == null || empnm === undefined)) {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       } else {
