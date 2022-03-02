@@ -167,7 +167,7 @@
           <td>
             <div class="input-searchWrap">
               <input type="text" ref="dvlpe_nm" v-model="dvlpe_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(1)" >
-              <button class="search-btn2" @click="open_pjte9001(1)"></button>
+              <button class="search-btn2" @click="open_pjte9001_btn(1)"></button>
               <input type="text" v-model="dvlpe_no" ref="dvlpe_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
@@ -177,7 +177,7 @@
           <td>
             <div class="input-searchWrap">
               <input type="text" ref="pl_nm" v-model="pl_nm" placeholder="직원명" style="width: calc(58%);" @keyup.enter="open_pjte9001(2)">
-              <button class="search-btn2" @click="open_pjte9001(2)"></button>
+              <button class="search-btn2" @click="open_pjte9001_btn(2)"></button>
               <input type="text" v-model="pl_no" ref="pl_no" placeholder="직원번호" style="width: calc(42%); background-color: #f2f2f2;" disabled = true >
             </div>
           </td>
@@ -601,7 +601,23 @@ export default {
             }
           })
     },
-    //직원조회 팝업
+    //직원조회 버튼 클릭 시
+    open_pjte9001_btn(btn_id) {
+      let empnm = ''
+      if (btn_id == '1') {
+        empnm = this.dvlpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.pl_nm
+      }
+      if((empnm === '' || empnm == "null" || empnm === undefined)) {
+        let bkup_id = this.bkup_id, prjt_id =  this.prjt_id
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      } else {
+        let bkup_id = this.bkup_id, prjt_id =  this.prjt_id
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
+    //엔터키를 눌러 직원 조회
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.prjt_id
@@ -630,12 +646,12 @@ export default {
                   this.pl_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = this.bkup_id, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.bkup_id, prjt_id = this.prjt_id
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = this.bkup_id, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.bkup_id, prjt_id = this.prjt_id
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },
@@ -652,7 +668,7 @@ export default {
     },
     /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
        버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
-    emp_btn_id() {
+    emp_no() {
       if(this.emp_btn_id == '1'){       // 요청자
         this.dvlpe_no = this.emp_no
         this.dvlpe_nm = this.emp_nm

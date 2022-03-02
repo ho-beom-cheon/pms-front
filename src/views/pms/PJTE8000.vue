@@ -30,7 +30,7 @@
                        @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn"
-                        @click="open_pjte9001(1)"
+                        @click="open_pjte9001_btn(1)"
                 ></button>
               </div>
             </li>
@@ -103,7 +103,7 @@
                            @keyup.enter="open_pjte9001(2)"
                     >
                     <button class="search-btn"
-                            @click="open_pjte9001(2)"
+                            @click="open_pjte9001_btn(2)"
                     ></button>
                   </div>
                 </li>
@@ -135,7 +135,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> *예정(진척율%) </td>
+                    <td class="td-box"> *예정진척율(%) </td>
                     <input type="text"
                            placeholder="숫자만 입력 하세요"
                            ref="all_pred_prg"
@@ -146,7 +146,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> *전체(진척율%) </td>
+                    <td class="td-box"> *실제진척율(%) </td>
                     <input type="text"
                            placeholder="숫자만 입력 하세요"
                            v-model="detail.all_real_prg"
@@ -177,7 +177,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> 전체진척율(%)</td>
+                    <td class="td-box"> 실제진척율(%)</td>
                     <input type="text"
                            placeholder="숫자만 입력 하세요"
                            v-model="detail.step_real_prg"
@@ -306,7 +306,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> 예정(진척율%) </td>
+                    <td class="td-box"> 예정진척율(%) </td>
                     <input type="text"
                            v-model="detail.bef_all_pred_prg"
                            name="tgt_biz_nm"
@@ -317,7 +317,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> 전체(진척율%) </td>
+                    <td class="td-box"> 실제진척율(%) </td>
                     <input type="text"
                            v-model="detail.bef_all_real_prg"
                            :disabled=true
@@ -349,7 +349,7 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> 전체진척율(%)</td>
+                    <td class="td-box"> 실제진척율(%)</td>
                     <input type="text"
                            v-model="detail.bef_step_real_prg"
                            name="tgt_biz_nm"
@@ -726,8 +726,23 @@ export default {
       let bkup_id='0000000000', prjt_id= sessionStorage.getItem("LOGIN_PROJ_ID")
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
-
-    // 직원조회 팝업 (검색 필터)
+    //직원조회 버튼 클릭 시
+    open_pjte9001_btn(btn_id) {
+      let empnm = ''
+      if (btn_id == '1') {
+        empnm = this.info.pm_nm
+      } else if (btn_id == '2') {
+        empnm = this.detail.pm_nm
+      }
+      if((empnm === '' || empnm == "null" || empnm === undefined)) {
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      } else {
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
+    //엔터키를 눌러 직원 조회
     open_pjte9001(btn_id) {
       let empnm = ''
       let prjt_id_selected = this.info.prjt_nm_selected
@@ -757,12 +772,12 @@ export default {
                   this.detail.pm_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+                let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
                 window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
-        let bkup_id = this.info.bkup_id_selected, prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID')
+        let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },
@@ -1008,7 +1023,9 @@ export default {
       // console.log("new Value :: " + a);
       // console.log("old Value :: " + b);
     },
-    emp_btn_id() {
+    /* 직원조회 팝업에서 받아온 값으로 emp_no이 바뀔 때
+   버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
+    emp_no() {
       if(this.emp_btn_id == '1'){       // info
         this.info.pm_no = this.emp_no
         this.info.pm_nm = this.emp_nm
