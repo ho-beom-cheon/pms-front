@@ -333,6 +333,7 @@ export default {
             atfl_mng_id: res.data.split('/')[1]
           })
           opener.fileData(this.fileLists, this.atfl_num );
+          this.fileLists.pop();
           // window.close();
         }
       })

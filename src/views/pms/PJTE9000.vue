@@ -70,6 +70,7 @@
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
                       :minRowHeight="minRowHeight"
+                      :editingEvent="editingEvent"
                       @click="onClick($event, 1)"
                   ></grid>
                 </div>
@@ -129,6 +130,7 @@
                       :columnOptions="columnOptions"
                       :rowHeight="rowHeight"
                       :minRowHeight="minRowHeight"
+                      :editingEvent="editingEvent"
                       @click="onClick"
                   ></grid>
                 </div>
@@ -161,6 +163,7 @@
                   :rowHeight="rowHeight"
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
+                  :editingEvent="editingEvent"
                   @click="onClick($event, 2)"
               ></grid>
             </div>
@@ -193,6 +196,7 @@
                   :rowHeight="rowHeight"
                   :minRowHeight="25"
                   :rowHeaders="rowHeaders"
+                  :editingEvent="editingEvent"
                   @click="onClick"
               ></grid>
             </div>
@@ -1000,6 +1004,7 @@ export default {
       bodyHeight: 345,
       rowHeight: 25,
       minRowHeight : 25,
+      editingEvent : 'click',
       showDummyRows: true,
       open: false,
       menu_list: [
