@@ -68,29 +68,31 @@
         <base-button class="btn btn-primary" @click="passwordChg">비밀번호변경</base-button>
         <modal :show.sync="modals.modal1">
           <h3 slot="header" class="modal-title" id="modal-title-default">비밀번호 변경</h3>
-          <tr>
-            <th>신규 비밀번호</th>
-            <td>
-              <input type="text" placeholder="비밀번호"
-                     name="newPassword"
-                     v-model="newPassword"
-                     id="newPassword"
-                     style="width: 350px;"
-              >
-            </td>
-          </tr>
-          <tr>
-            <th>비밀번호 확인</th>
-            <td>
-              <input type="password" placeholder="비밀번호 확인"
-                     name="passwordConfirm"
-                     v-model="passwordConfirm"
-                     id="passwordConfirm"
-                     style="width: 350px;"
-              >
-            </td>
-          </tr>
-
+          <div class="modal-mid">
+            <tr>
+              <th>신규 비밀번호&nbsp;</th>
+              <td>
+                <input type="password" placeholder="비밀번호"
+                       name="newPassword"
+                       v-model="newPassword"
+                       id="newPassword"
+                       style="width: 300px; margin-left: 3px"
+                >
+              </td>
+            </tr>
+            <br>
+            <tr>
+              <th>비밀번호 확인&nbsp;</th>
+              <td>
+                <input type="password" placeholder="비밀번호 확인"
+                       name="passwordConfirm"
+                       v-model="passwordConfirm"
+                       id="passwordConfirm"
+                       style="width: 300px; margin-left: 3px"
+                >
+              </td>
+            </tr>
+          </div>
           <template slot="footer">
             <button class="btn btn-primary" type="primary" @click="pwChange">변경</button>
             <button type="primary" class="ml-auto btn btn-primary" @click="closeModal"> 취소</button>
@@ -116,7 +118,7 @@ window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
   window.pms_login.emp_colName = empcol;
 }
 
-// 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다. 
+// 토큰 및 사용자 정보를 저장하기 위해서 세션 스토리지를 사용한다.
 const storage = window.sessionStorage;
 
 export default {
@@ -136,6 +138,12 @@ export default {
       this.pwCheak = false
   },
 
+  watch: {
+    pjt_selected() {
+      this.userId = ""
+      this.password = ""
+    }
+  },
   data() {
     return {
       userId: "",
