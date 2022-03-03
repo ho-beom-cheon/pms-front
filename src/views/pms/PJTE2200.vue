@@ -560,8 +560,8 @@ export default {
       this.modals.txt_modal1 = false;
     },
     formDownload(){
-      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
     },
     // TC증빙 일괄다운로드
     batchDownload(){
@@ -671,7 +671,7 @@ export default {
         let gridExcelData;
 
         wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === '통합테스트') {
+          if (sheetName === '통합테스트' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "NO"
             wb.Sheets[sheetName].B1.w = "bzcd"
@@ -681,18 +681,34 @@ export default {
             wb.Sheets[sheetName].F1.w = "tst_case_id"
             wb.Sheets[sheetName].G1.w = "tst_case_nm"
             wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
+            let I1 = {I1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_no'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
             wb.Sheets[sheetName].I2.w = "frcs_sta_dt"
+            let J1 = {J1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_no'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
             wb.Sheets[sheetName].J2.w = "frcs_end_dt"
             wb.Sheets[sheetName].K1.w = "dvlpe_cnf_dt"
             wb.Sheets[sheetName].L1.w = "pl_cnf_dt"
+            let M1 = {M1 : {t: 's', v: '명', r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>', h: '명', w: 'dvlpe_enm'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
             wb.Sheets[sheetName].M2.w = "dvlpe_enm"
             wb.Sheets[sheetName].N2.w = "dvlpe_btn"
+            let O1 = {O1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'dvlpe_eno'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
             wb.Sheets[sheetName].O2.w = "dvlpe_eno"
+            let P1 = {P1 : {t: 's', v: 'PL', r: '<t>PL</t><phoneticPr fontId="1" type="noConversion"/>', h: 'PL', w: 'PL'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
             wb.Sheets[sheetName].P2.w = "pl_enm"
             wb.Sheets[sheetName].Q2.w = "pl_btn"
+            let R1 = {R1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'pl_eno'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
             wb.Sheets[sheetName].R2.w = "pl_eno"
+            let S1 = {S1 : {t: 's', v: '명', r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>', h: '명', w: 'crpe_enm'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
             wb.Sheets[sheetName].S2.w = "crpe_enm"
             wb.Sheets[sheetName].T2.w = "crpe_btn"
+            let U1 = {U1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_eno'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
             wb.Sheets[sheetName].U2.w = "crpe_eno"
             wb.Sheets[sheetName].V1.w = "atfl_mng_id_yn"
             wb.Sheets[sheetName].W2.w = "err_tot_cnt"
@@ -711,6 +727,7 @@ export default {
             wb.Sheets[sheetName].AJ1.w = "tp"
             wb.Sheets[sheetName].AK1.w = "oup_mens"
             wb.Sheets[sheetName].AL1.w = "tst_achi_rst"
+
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
