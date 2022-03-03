@@ -27,7 +27,7 @@
                     </button>
 
                     &nbsp;
-                    생성프로젝트<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
+                    생성프로젝트코드<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
                     <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject" :disabled="aut_cd_check">
                       <a href="#" >프로젝트기본정보복사</a>
                     </button>
@@ -241,7 +241,9 @@ export default {
   async mounted() {
     if(sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
       this.aut_cd_check = false
-    }else if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+      this.aut_cd_check2 = false
+    }
+    if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
       this.aut_cd_check2 = false
     }
     await this.fnSearch();
@@ -250,6 +252,10 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     copyProject() {
+      if(this.info.new_prjt_id ==='' || this.info.new_prjt_id===undefined || this.info.new_prjt_id==null){
+        alert('신규프로젝트번호를 입력해야 합니다.');
+        return false
+      }
       // 신규 프로젝트 추가시 코드정보 신규프로젝트로 데이터 복사
       try{
         axiosService.post('/PJTE9000/create_new_project_data', {

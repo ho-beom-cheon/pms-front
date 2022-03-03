@@ -92,7 +92,12 @@
     </div>
     <div class="pop-footer">
       <button class="btn btn-filter-b" @click="close">닫기</button>
-      <button class="btn btn-filter-p" @click="fileSave" v-if="bkup_id==='0000000000'">저장</button>
+<!--   파일등록구분코드 900,901 외    -->
+      <button class="btn btn-filter-p" @click="fileSave" v-if="bkup_id==='0000000000' && !check_file_rgs_dscd()">저장</button>
+<!--   파일등록구분코드 900,901이면서 권한구분코드가 500,600,900이 아닌경우   -->
+      <button class="btn btn-filter-p" @click="fileSave" v-else-if="bkup_id === '0000000000' && check_file_rgs_dscd() && !check_aut_cd()" :disabled=true>저장</button>
+<!--   파일등록구분코드 900,901이면서 권한구분코드가 500,600,900인 경우   -->
+      <button class="btn btn-filter-p" @click="fileSave" v-else-if="bkup_id === '0000000000' && check_file_rgs_dscd() && check_aut_cd()">저장</button>
     </div>
   </section>
 </template>
@@ -131,6 +136,18 @@ export default {
     };
   },
   methods: {
+    // 권한구분코드에 따른 버튼 활성화 조건
+    check_aut_cd() {
+      if(sessionStorage.getItem("LOGIN_AUT_CD")==='500' || sessionStorage.getItem("LOGIN_AUT_CD")==='600' || sessionStorage.getItem("LOGIN_AUT_CD")==='900'){
+        return true
+      }
+    },
+    // 파일등록구분코드에 따른 버튼 활성화 조건
+    check_file_rgs_dscd() {
+      if( (this.file_rgs_dscd_selected === '900' || this.file_rgs_dscd_selected ==='901')){
+        return true
+      }
+    },
     // Combo.vue 에서 받아온 값
     file_rgs_dscd_change(params) {this.file_rgs_dscd_selected = params},
     prjt_nm_change(params) {this.pjt_selected = params},
