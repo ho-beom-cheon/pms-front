@@ -845,10 +845,18 @@ export default {
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
     },
+    // 추가한 행 편집 활성화
+    fnEnable() {
+      // 새로 ADD한 Row를 enable시킴
+      this.NewRow = this.$refs.grid1.invoke("getRowCount");
+      this.$refs.grid1.invoke("enableCell", this.NewRow-1, 'empno');
+      this.$refs.grid1.invoke("focus", this.NewRow-1, 'empno');
+    },
     // 행추가
     gridAddRow(grid_num){
       if(grid_num === 1){
-        this.$refs.grid1.invoke("appendRow",{ },{focus:true}) ;
+        this.$refs.grid1.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected },{focus:true});
+        this.fnEnable()
       }else if(grid_num === 2){
         let grid_arr = this.$refs.grid2.invoke("getData")
         this.$refs.grid2.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected, grp_tycd : grid_arr[grid_arr.length-1].grp_tycd*1+1 },{focus:true}) ;
@@ -1138,6 +1146,7 @@ export default {
           width: 150,
           name: 'prjt_id',
           formatter: 'listItemText',
+          disabled : true,
           editor: {
             type: 'select',
             options:{
@@ -1149,7 +1158,8 @@ export default {
           header: '직원번호',
           width: 120,
           name: 'empno',
-          editor : 'text'
+          editor : 'text',
+          disabled : true,
         },
         {
           header: '직원명',
