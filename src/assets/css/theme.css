@@ -643,14 +643,12 @@ table.form-table select {
 .td-box{
     float: left;
     margin-left: 8px;
-
     padding: 3.3px 18px 3.3px 18px;
     text-align: center;
     border: 2px solid #B8B8B8;
-    color: rgb(232, 232, 232);
+    color: #ffffff;
     background: #B8B8B8;
     font-size : 12px;
-    font-weight: bold;
     width: 120px;
 }
 .td-box2{
@@ -661,9 +659,8 @@ table.form-table select {
     text-align: center;
     vertical-align: middle;
     border: 2px solid#B8B8B8;
-    color: rgb(232, 232, 232);
+    color: #ffffff;
     font-size : 12px;
-    font-weight: bold;
     width: 120px;
     height: 80px;
 }
