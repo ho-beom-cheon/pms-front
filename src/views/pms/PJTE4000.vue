@@ -880,7 +880,7 @@ export default {
       bodyHeight: 190,
       minRowHeight: 10,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       menu_list: [
         {

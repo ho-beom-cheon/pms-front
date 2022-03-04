@@ -27,7 +27,7 @@
                     </button>
 
                     &nbsp;
-                    생성프로젝트<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
+                    생성프로젝트코드<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
                     <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject" :disabled="aut_cd_check">
                       <a href="#" >프로젝트기본정보복사</a>
                     </button>
@@ -241,7 +241,9 @@ export default {
   async mounted() {
     if(sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
       this.aut_cd_check = false
-    }else if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+      this.aut_cd_check2 = false
+    }
+    if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
       this.aut_cd_check2 = false
     }
     await this.fnSearch();
@@ -250,6 +252,10 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     copyProject() {
+      if(this.info.new_prjt_id ==='' || this.info.new_prjt_id===undefined || this.info.new_prjt_id==null){
+        alert('신규프로젝트번호를 입력해야 합니다.');
+        return false
+      }
       // 신규 프로젝트 추가시 코드정보 신규프로젝트로 데이터 복사
       try{
         axiosService.post('/PJTE9000/create_new_project_data', {
@@ -839,10 +845,18 @@ export default {
       this.$refs.grid3.invoke("setRequestParams", this.info);
       this.$refs.grid3.invoke("readData");
     },
+    // 추가한 행 편집 활성화
+    fnEnable() {
+      // 새로 ADD한 Row를 enable시킴
+      this.NewRow = this.$refs.grid1.invoke("getRowCount");
+      this.$refs.grid1.invoke("enableCell", this.NewRow-1, 'empno');
+      this.$refs.grid1.invoke("focus", this.NewRow-1, 'empno');
+    },
     // 행추가
     gridAddRow(grid_num){
       if(grid_num === 1){
-        this.$refs.grid1.invoke("appendRow",{ },{focus:true}) ;
+        this.$refs.grid1.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected },{focus:true});
+        this.fnEnable()
       }else if(grid_num === 2){
         let grid_arr = this.$refs.grid2.invoke("getData")
         this.$refs.grid2.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected, grp_tycd : grid_arr[grid_arr.length-1].grp_tycd*1+1 },{focus:true}) ;
@@ -1005,7 +1019,7 @@ export default {
       rowHeight: 25,
       minRowHeight : 25,
       editingEvent : 'click',
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       menu_list: [
         {
@@ -1132,6 +1146,7 @@ export default {
           width: 150,
           name: 'prjt_id',
           formatter: 'listItemText',
+          disabled : true,
           editor: {
             type: 'select',
             options:{
@@ -1143,7 +1158,8 @@ export default {
           header: '직원번호',
           width: 120,
           name: 'empno',
-          editor : 'text'
+          editor : 'text',
+          disabled : true,
         },
         {
           header: '직원명',

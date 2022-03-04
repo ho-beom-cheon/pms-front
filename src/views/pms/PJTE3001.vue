@@ -475,11 +475,18 @@ export default {
           .then(res => {
 
             if(res.data){
+              this.open_page(res.data.mng_id)
               alert("저장되었습니다.");
-
             }
 
           })
+    },
+
+    // mng_id 없이 저장했을 때, mng_ig 파라미터로 하여 새 페이지 오픈(첨부파일등록 보여주기 위함)
+    open_page(mng_id){
+      if(mng_id == null || mng_id==='' || mng_id === undefined) mng_id=''
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
+      this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&`, "open_page", "width=1000, height=800");
     },
 
     // 저장(mng_id 있는 경우, update 쿼리)

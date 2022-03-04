@@ -413,7 +413,7 @@ export default {
         let gridExcelData;
 
         wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === 'WBS관리') {
+          if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "NO"
             wb.Sheets[sheetName].B1.w = "mng_cd"
@@ -426,13 +426,29 @@ export default {
             wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
             wb.Sheets[sheetName].J1.w = "crpe_nm"
             wb.Sheets[sheetName].K1.w = "wbs_prc_sts_cd"
+            let L1 = {L1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_sta_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], L1)
             wb.Sheets[sheetName].L2.w = "pln_sta_dt"
+            let M1 = {M1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_sta_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
             wb.Sheets[sheetName].M2.w = "pln_sta_tim"
+            let N1 = {N1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], N1)
             wb.Sheets[sheetName].N2.w = "pln_end_dt"
+            let O1 = {O1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_end_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
             wb.Sheets[sheetName].O2.w = "pln_end_tim"
+            let P1 = {P1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_sta_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
             wb.Sheets[sheetName].P2.w = "acl_sta_dt"
+            let Q1 = {Q1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_sta_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
             wb.Sheets[sheetName].Q2.w = "acl_sta_tim"
+            let R1 = {R1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
             wb.Sheets[sheetName].R2.w = "acl_end_dt"
+            let S1 = {S1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_end_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
             wb.Sheets[sheetName].S2.w = "acl_end_tim"
             wb.Sheets[sheetName].T1.w = "wgt_rt"
             wb.Sheets[sheetName].U1.w = "prg_rt"
@@ -598,7 +614,7 @@ export default {
       bodyHeight: 640,
       minRowHeight: 10,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       //draggable: true,
       menu_list: [
