@@ -329,7 +329,7 @@ export default {
       scrollY:false,
       bodyHeight: 640,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       menu_list: [
         {

@@ -1011,7 +1011,7 @@ export default {
       rowHeight: 25,
       minRowHeight : 25,
       editingEvent : 'click',
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       menu_list: [
         {

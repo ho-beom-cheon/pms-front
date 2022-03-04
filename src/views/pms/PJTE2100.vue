@@ -951,7 +951,7 @@ export default {
       bodyHeight: 630,
       minRowHeight: 10,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       editingEvent : "click",
       // toast ui grid 데이터
       dataSource: {

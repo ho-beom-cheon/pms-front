@@ -614,7 +614,7 @@ export default {
       bodyHeight: 640,
       minRowHeight: 10,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       //draggable: true,
       menu_list: [

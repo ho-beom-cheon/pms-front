@@ -272,7 +272,7 @@ export default {
       bodyHeight: 300,
       rowHeight: 40,
       minRowHeight: 10,
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       dataSource: {
         api: {
