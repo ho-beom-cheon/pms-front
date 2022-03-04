@@ -336,7 +336,7 @@ export default {
       bodyHeight: 270,
       rowHeight: 25,
       minRowHeight: 10,
-      showDummyRows: true,
+      showDummyRows: false,
       open: false,
       // 메뉴 리스트 (추후 공통 작업 필요)
       menu_list: [

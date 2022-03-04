@@ -407,6 +407,7 @@ export default {
     },
     // 기타 항목 저장
     fnEtcSave() {
+
       // 변경 사항 유무 체크
       if(this.$refs.grid.invoke("isModified") === false){
         alert("변경된 내용이 없습니다.");
@@ -434,7 +435,7 @@ export default {
       this.$refs.grid.invoke("clearModifiedData")
     },
     onGridUpdated(grid){
-
+      this.addCheak = 'N';
     },
     beforeExport(grid){
       console.log("beforeExport::" , grid)
@@ -491,23 +492,29 @@ export default {
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
-      let gridData = this.$refs.grid.invoke("getRow",this.curRow);
+      let gridRow = this.$refs.grid.invoke("getRow",this.curRow);
+      let gridData = this.$refs.grid.invoke("getData");
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
+      if(this.addCheak === 'Y'){
+        if(this.curRow === gridData.length-1){
+          return;
+        }
+      }
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
-      if(ev.columnName === 'atfl_mng_id_yn' && this.addCheak === 'N') {
+      if(ev.columnName === 'atfl_mng_id_yn') {
         this.count = 1
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
+        let bkup_id='0000000000', prjt_id=gridRow.prjt_id, atfl_mng_id=gridRow.atfl_mng_id != null?gridRow.atfl_mng_id:'', file_rgs_dscd='100', bzcd = gridRow.bzcd, pgm_id=gridRow.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&bzcd=${bzcd}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
-      if(ev.columnName === 'pal_atfl_mng_id_yn' && this.addCheak === 'N') {
+      if(ev.columnName === 'pal_atfl_mng_id_yn') {
         this.count = 2
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, pal_atfl_mng_id=gridData.pal_atfl_mng_id != null?gridData.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridData.pgm_id
+        let bkup_id='0000000000', prjt_id=gridRow.prjt_id, pal_atfl_mng_id=gridRow.pal_atfl_mng_id != null?gridRow.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridRow.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${pal_atfl_mng_id}&bzcd=${bzcd}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
-      if(ev.columnName === 'err_btn' && this.addCheak === 'N') {
+      if(ev.columnName === 'err_btn') {
         let cctn_id= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_id');
         let cctn_nm= this.$refs.grid.invoke("getValue", this.curRow, 'pgm_nm');
         let cctn_bzcd= this.$refs.grid.invoke("getValue", this.curRow, 'bzcd');
@@ -548,8 +555,8 @@ export default {
     },
     // 양식다운로드
     formDownload(){
-      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '902' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}}`, "open_file_page", "width=1000, height=500");
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
     },
     // TC증빙 일괄다운로드
     batchDownload(){
@@ -622,7 +629,7 @@ export default {
         let gridExcelData;
 
         wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === '개발현황') {
+          if (sheetName === '개발현황' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "NO"
             wb.Sheets[sheetName].B1.w = "bzcd"
@@ -631,9 +638,16 @@ export default {
             wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
             wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
             wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
+            wb.Sheets[sheetName].H1.w = "frcs_sta_dt"
             wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
+            let I1 = {I1 : {t: 's', v: '예상종료일자', r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>', h: '예상종료일자', w: 'frcs_end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
             wb.Sheets[sheetName].I2.w = "frcs_end_dt"
+            let J1 = {J1 : {t: 's', v: '실제시작일자', r: '<t>실제시작일자</t><phoneticPr fontId="1" type="noConversion"/>', h: '실제시작일자', w: 'sta_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
             wb.Sheets[sheetName].J2.w = "sta_dt"
+            let K1 = {K1 : {t: 's', v: '실제종료일자', r: '<t>실제종료일자</t><phoneticPr fontId="1" type="noConversion"/>', h: '실제종료일자', w: 'end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
             wb.Sheets[sheetName].K2.w = "end_dt"
             wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
             wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
@@ -641,18 +655,25 @@ export default {
             wb.Sheets[sheetName].O1.w = "prg_txt"
             wb.Sheets[sheetName].P2.w = "dvlpe_nm"
             wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
+            let R1 = {R1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'dvlpe_no'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
             wb.Sheets[sheetName].R2.w = "dvlpe_no"
             wb.Sheets[sheetName].S2.w = "pl_nm"
             wb.Sheets[sheetName].T2.w = "pl_btn"
+            let U1 = {U1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'pl_no'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
             wb.Sheets[sheetName].U2.w = "pl_no"
             wb.Sheets[sheetName].V2.w = "crpe_nm"
             wb.Sheets[sheetName].W2.w = "crpe_btn"
+            let X1 = {X1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_no'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
             wb.Sheets[sheetName].X2.w = "crpe_no"
             wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
             wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
             wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
             wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
             wb.Sheets[sheetName].AC2.w = "err_btn"
+            wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
             wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
             wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
             wb.Sheets[sheetName].AF1.w = "rmrk"
@@ -705,7 +726,6 @@ export default {
             empnm,
             prjt_id_selected,
             bkup_id_selected
-
           }
         })
             .then(res => {
@@ -931,7 +951,7 @@ export default {
       bodyHeight: 630,
       minRowHeight: 10,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       editingEvent : "click",
       // toast ui grid 데이터
       dataSource: {
@@ -1233,25 +1253,6 @@ export default {
           name: 'rmrk',
           editor: 'text',
           ellipsis : true,
-        },
-        {
-          header: '개발자사번',
-          width: 400,
-          hidden : true,
-          name: 'dvlpe_no',
-        },
-        {
-          header: 'PL사번',
-          width: 200,
-          hidden : true,
-          name: 'pl_no',
-        },
-        {
-          header: '담당자사번',
-          width: 140,
-          hidden : true,
-          name: 'crpe_no',
-
         },
         {
           header: '등록여부',

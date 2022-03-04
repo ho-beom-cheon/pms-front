@@ -214,7 +214,7 @@ export default {
       bodyHeight: 300,
       minRowHeight: 10,
       rowHeight: 25,
-      showDummyRows: true,
+      showDummyRows: false,
       editingEvent : "click",
       fileName : '',
       orgFileName: '',
