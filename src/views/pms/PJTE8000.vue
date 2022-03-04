@@ -157,30 +157,33 @@
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con" style = "margin-left : -8px">
-                    <td class="td-box"> 단계 </td>
+                    <td class="td-box"> *단계 </td>
                     <input type="text"
                            placeholder="단계를 입력 하세요"
                            v-model="detail.step_nm"
+                           ref="step_nm"
                            style="width: 160px"
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> 예정진척율(%)</td>
+                    <td class="td-box"> *예정진척율(%)</td>
                     <input type="text"
                            placeholder="숫자만 입력 하세요"
                            v-model="detail.step_pred_prg"
+                           ref="step_pred_prg"
                            style="width: 125px;text-align :right "
                     >
                   </div>
                 </li>
                 <li class="filter-item-a">
                   <div class="item-con">
-                    <td class="td-box"> 실제진척율(%)</td>
+                    <td class="td-box"> *실제진척율(%)</td>
                     <input type="text"
                            placeholder="숫자만 입력 하세요"
                            v-model="detail.step_real_prg"
+                           ref="step_real_prg"
                            style="width: 125px;text-align :right "
                     >
                   </div>
@@ -606,7 +609,7 @@ export default {
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
-          if (confirm("정말 등록하시겠습니까??") == true) {
+          if (confirm("정말 등록/변경 하시겠습니까??") == true) {
               axiosService.post("/PJTE8000/insert",
                   {
                     prjt_id: sessionStorage.getItem('LOGIN_PROJ_ID'),        // (상세)프로젝트아이디
@@ -643,7 +646,7 @@ export default {
           }
         }
       } else {
-        alert('백업정보는 저장할 수 없습니다.');
+        alert('필수입력 항목을 입력해주세요.');
       }
     },
 // 지난 주간보고조회
@@ -978,27 +981,41 @@ export default {
 
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == "null") {
+      debugger
+
+      if (this.detail.real_prjt_id_selected == "NNN" ||this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == "null") {
         alert('프로젝트가 없습니다.');
         return false;
-      } else if (this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == "null") {
+      } else if (this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == "null") {
         alert('부문명이 없습니다.');
+        return false;
+      }  else if (this.detail.week_sqn_cd_selected == "NNN" |this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == "null") {
+        alert('차수가 없습니다.');
         return false;
       } else if (this.detail.pm_nm == "" || this.detail.pm_nm == "null") {
         alert('PM명이 없습니다.');
         return false;
-      } else if (this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == "null") {
-        alert('PM명이 없습니다.');
-        return false;
-      }  else if (this.detail.all_real_prg < 1 || this.detail.all_real_prg == "") {
+      } else if (this.detail.all_real_prg < 1 || this.detail.all_real_prg == "") {
         this.$refs.all_real_prg.focus();
         alert('[전체] 0보다 큰 실제진척율을 입력해주세요.');
         return false;
-      }  else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg < 1) {
+      } else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg < 1) {
         this.$refs.all_pred_prg.focus();
         alert('[전체] 0보다 큰  예정진척율을 입력해주세요.');
         return false;
-      }else if (this.detail.prg_txt == "" || this.detail.prg_txt == "null") {
+      } else if (this.detail.step_nm == "null" || this.detail.step_nm == "") {
+        this.$refs.step_nm.focus();
+        alert('단계명을 입력해주세요.');
+        return false;
+      } else if (this.detail.step_real_prg < 1 || this.detail.step_real_prg == "") {
+        this.$refs.step_real_prg.focus();
+        alert('[단계] 0보다 큰 실제진척율을 입력해주세요.');
+        return false;
+      } else if (this.detail.step_pred_prg == "" || this.detail.step_pred_prg < 1) {
+        this.$refs.step_pred_prg.focus();
+        alert('[단계] 0보다 큰  예정진척율을 입력해주세요.');
+        return false;
+      } else if (this.detail.prg_txt == "" || this.detail.prg_txt == "null") {
         this.$refs.prg_txt.focus();
         alert('프로젝트 진행현황을 입력해주세요.');
         return false;
@@ -1218,6 +1235,7 @@ export default {
           header: '부문명',
           width: 100,
           align: 'left',
+          filter: 'select',
           name: 'dept_nm',
         },
         {
@@ -1239,7 +1257,12 @@ export default {
           align: 'center',
           name: 'week_yymm',
           formatter({value}){
-            return `${value}`.substring(0,4).concat('-',`${value}`.substring(4,6));
+            if(value == null){
+              return '';
+            }else{
+              return `${value}`.substring(0,4).concat('-',`${value}`.substring(4,6));
+            }
+
           }
         },
         {
