@@ -288,8 +288,6 @@ export default {
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-      // 열고정
-      this.$refs.grid.invoke("setFrozenColumnCount", 4);
 
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
         // 특정 열 비활성화
@@ -322,7 +320,7 @@ export default {
         }).then(res => {
           console.log(res);
           if (res.data) {
-            alert("저장이 완료되었습니다.");
+
           }
         })
       } else if(this.excelUplod === 'N') {
@@ -436,6 +434,8 @@ export default {
     },
     onGridUpdated(grid){
       this.addCheak = 'N';
+      // 열고정
+      this.$refs.grid.invoke("setFrozenColumnCount", 4);
     },
     beforeExport(grid){
       console.log("beforeExport::" , grid)
@@ -496,6 +496,32 @@ export default {
       let gridData = this.$refs.grid.invoke("getData");
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
+      // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
+      if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
+        let empnm = ''
+        if(ev.columnName === 'dvlpe_btn'){
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_nm')
+        } else if(ev.columnName === 'pl_btn') {
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'pl_nm')
+        } else if(ev.columnName === 'crpe_btn') {
+          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'crpe_nm')
+        }
+        if((empnm === '' || empnm == null || empnm === undefined)) {
+          let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected, emprow = ev.rowKey, empcol = ev.columnName
+          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+        } else {
+          let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected, emprow = ev.rowKey, empcol = ev.columnName
+          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
+        }
+      }
+
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+
       if(this.addCheak === 'Y'){
         if(this.curRow === gridData.length-1){
           return;
@@ -523,31 +549,7 @@ export default {
         this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=800");
       }
 
-      // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
-      if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
-        let empnm = ''
-        if(ev.columnName === 'dvlpe_btn'){
-          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'dvlpe_nm')
-        } else if(ev.columnName === 'pl_btn') {
-          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'pl_nm')
-        } else if(ev.columnName === 'crpe_btn') {
-          empnm = this.$refs.grid.invoke("getValue", this.curRow, 'crpe_nm')
-        }
-        if((empnm === '' || empnm == null || empnm === undefined)) {
-          let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected, emprow = ev.rowKey, empcol = ev.columnName
-          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
-        } else {
-          let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected, emprow = ev.rowKey, empcol = ev.columnName
-          window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
-        }
-      }
 
-      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
-        this.modals.txt_modal1 = true;
-        this.modalTxt = currentCellData.value;
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      }
     },
     // 그리드 내용 더블클릭 시 상세보기 모달팝업
     dbClick(ev) {
@@ -582,6 +584,7 @@ export default {
     },
     // 행추가
     gridAddRow(){
+      this.$refs.grid.invoke("setFrozenColumnCount", 0);
       this.addCheak = 'Y';
       this.$refs.grid.invoke("appendRow",
           {
@@ -602,6 +605,10 @@ export default {
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "pal_atfl_mng_id_yn");
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "atfl_mng_id_yn");
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "err_btn");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "sta_dt");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "end_dt");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "dvlpe_cnf_dt");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "pl_cnf_dt");
     },
     // 행삭제
     gridDelRow(){
@@ -791,9 +798,10 @@ export default {
             }
           }
           //권한ID[500:PM,600:PMO] - 모두 가능
-
-          if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-          if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+          if(this.addCheak === 'N') {
+            if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+            if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+          }
         }
         /* 출력 영역  */
         if(data[i].bzcd === null)         { alert("업무구분은 필수 입력 사항입니다");      return false;}
@@ -996,7 +1004,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000002N
+              listItems: this.$store.state.pms.CD1000000003N
             }
           }
         },
@@ -1034,7 +1042,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000003N
+              listItems: this.$store.state.pms.CD1000000002N
             }
           },
         },
