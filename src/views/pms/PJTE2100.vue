@@ -320,11 +320,11 @@ export default {
         }).then(res => {
           console.log(res);
           if (res.data) {
-
           }
+        }).catch(e => {
+          alert("이미 등록된 프로그램입니다.")
         })
       } else if(this.excelUplod === 'N') {
-
         // 변경 사항 유무 체크
         if (this.$refs.grid.invoke("isModified") === false) {
           alert("변경된 내용이 없습니다.");
@@ -342,66 +342,69 @@ export default {
 
         if (this.createdRows.length !== 0) {
           if (this.vaildation(this.createdRows, "1") === true) {
-            if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-              for(let i=0; i<this.createdRows.length; i++){
-                if(this.createdRows[i].dvlp_dis_cd === "900"){
+            if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+              for (let i = 0; i < this.createdRows.length; i++) {
+                if (this.createdRows[i].dvlp_dis_cd === "900") {
                   alert("개발구분 삭제 권한이 없습니다.");
                   return;
                 }
               }
             }
+            axiosService.post("/PJTE2100/create", {
+              excelUplod: this.excelUplod,
+              gridData: this.createdRows,
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+            }).then(res => {
+              console.log(res)
+              if(res.data === true){
+                alert("저장이 완료되었습니다.")
+              }else{
+                alert("이미 등록된 프로그램입니다.")
+              }
+              this.fnSearch()
+            })
+          }
+          if (this.updatedRows.length !== 0) {
+            if (this.vaildation(this.updatedRows, "1") === true) {
+              try {
+                if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+                  for (let i = 0; i < this.updatedRows.length; i++) {
+                    if (this.updatedRows[i].dvlp_dis_cd === "900") {
+                      alert("삭제 권한이 없습니다.");
+                      return;
+                    }
+                  }
+                }
+                // 데이터 파라메타 전달
+                this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+                this.$refs.grid.invoke("setRequestParams", this.login);
+                // update api 요청
+                this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+                alert("저장이 완료되었습니다1111.")
+              } catch (e) {
+                console.log("업데이트 오류 ::", e);
+              }
+            } else {
+              this.$refs.grid.invoke("reloadData");
+            }
+          }
+          if (this.deletedRows.length !== 0) {
             try {
               // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-              // create api 요청
-              this.$refs.grid.invoke("request", "createData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
+              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
+              // delete api 요청
+              this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
+              // alert("저장이 완료되었습니다.")
             } catch (e) {
               console.log(e);
             }
-          } else {
-            this.$refs.grid.invoke("reloadData");
           }
         }
-        if (this.updatedRows.length !== 0) {
-          if (this.vaildation(this.updatedRows, "1") === true) {
-            try {
-              if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-                for(let i=0; i<this.updatedRows.length; i++){
-                  if(this.updatedRows[i].dvlp_dis_cd === "900"){
-                    alert("삭제 권한이 없습니다.");
-                    return;
-                  }
-                }
-              }
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-              this.$refs.grid.invoke("setRequestParams", this.login);
-              // update api 요청
-              this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-            } catch (e) {
-              console.log("업데이트 오류 ::", e);
-            }
-          } else {
-            this.$refs.grid.invoke("reloadData");
-          }
-        }
-        if (this.deletedRows.length !== 0) {
-          try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
-            // delete api 요청
-            this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
-          } catch (e) {
-            console.log(e);
-          }
-        }
+        // 저장 후 변경 데이터 배열 비움
+        this.$refs.grid.invoke("clearModifiedData")
+        this.excelUplod = 'N'
       }
-      // 저장 후 변경 데이터 배열 비움
-      this.$refs.grid.invoke("clearModifiedData")
-      this.excelUplod = 'N'
     },
     // 기타 항목 저장
     fnEtcSave() {
