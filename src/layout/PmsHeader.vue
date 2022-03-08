@@ -1,7 +1,10 @@
 <template>
   <header class="GNB">
     <div class="gnb-logo">
-      <a href="./PJTE1000">
+      <a href="./PJTE8000" v-if="this.projId =='0000000001'">
+        <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
+      </a>
+      <a href="./PJTE1000" v-else>
         <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
       </a>
     </div>
@@ -68,6 +71,7 @@ export default {
   data() {
     return {
       empnm: sessionStorage.getItem('LOGIN_EMP_NM'),
+      projId : sessionStorage.getItem('LOGIN_PROJ_ID'),
       list: this.$router.options.routes,
 
       current_menu: '',
@@ -151,6 +155,8 @@ export default {
         sessionStorage.setItem("LOGIN_CATN_DCD", "");          // 구성원 구분코드
         sessionStorage.setItem("LOGIN_AUT_CD", "");            // 권한ID
         sessionStorage.setItem("LOGIN_YN", "");                // 로그인상태
+        sessionStorage.setItem("LOGIN_REAL_PRJT_ID", "");      // 투입프로젝트아이디
+        sessionStorage.setItem("LOGIN_DEPT_CD", "");           // 부문코드
         this.$router.push('/login')
       } else {   //취소
         return;
