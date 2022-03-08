@@ -296,7 +296,7 @@ export default {
     close() {
       console.log(this.atfl_num)
       sessionStorage.clear();
-      opener.fileData(this.fileLists, this.atfl_num);
+      // opener.fileData(this.fileLists, this.atfl_num);
       window.close();
     },
 

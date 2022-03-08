@@ -27,7 +27,7 @@
                     </button>
 
                     &nbsp;
-                    생성프로젝트코드<input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
+                    <a style="margin-left: 20px; margin-right: 5px">생성프로젝트코드</a><input v-model="info.new_prjt_id" placeholder="신규프로젝트번호" type="text"/>
                     <button class="btn btn-filter-p" style = " margin-left: 5px" @click="copyProject" :disabled="aut_cd_check">
                       <a href="#" >프로젝트기본정보복사</a>
                     </button>

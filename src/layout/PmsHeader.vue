@@ -11,7 +11,7 @@
         <li><a href="#"></a></li>
       </ul>
       <div class="gnb-etc">
-        <a href="#">
+        <a href="./PJTE9000">
           <div class="imgWrap">
             <img src="../assets/img/PE-icon/ic_profile.svg" alt="profile">
           </div>
@@ -131,6 +131,11 @@ export default {
           id: 'PJTE8000',
           path: '/PJTE8000',
           name: '주간보고'
+        },
+        {
+          id: 'PJTE9900',
+          path: '/PJTE9900',
+          name: 'KanbanBoard'
         },
       ],
     }
