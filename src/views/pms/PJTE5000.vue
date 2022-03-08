@@ -193,7 +193,22 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
+    prjt_nm_chage(params)         {
+      this.info.prjt_nm_selected = params
+
+      if(params !== sessionStorage.getItem("LOGIN_PROJ_ID")){
+        this.validated_aut = true;
+        this.validated = true;
+      } else {
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+          this.validated_aut = false;
+          this.validated = false;
+        } else {
+          this.validated_aut = true;
+          this.validated = true;
+        }
+      }
+    },
     bzcd_change(params)           {this.info.bzcd_selected = params},
     wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
@@ -300,22 +315,13 @@ export default {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
 
-      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
-        this.validated_aut = false;
-        this.validated = false;
-      }
-
       // 버튼 활성화
       if(this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
           this.info.wbs_prc_sts_cd_selected !== 'TTT' && this.info.wbs_mng_cd_selected === 'TTT' &&
           this.info.crpe_nm === undefined && this.info.acl_sta_dt === null && this.info.acl_end_dt === null &&
           this.info.pln_sta_dt=== null && this.info.pln_end_dt === null)
       {
-        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
-          this.validated_aut = false;
-        } else {
-          this.validated = false;
-        }
+          this.validated_aut = false
       }
     },
     open_pjte9001() {

@@ -868,6 +868,7 @@ export default {
       gridData: [],
       excelUplod: 'N',
       addCheak: 'N',
+      validated: false,
       
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
