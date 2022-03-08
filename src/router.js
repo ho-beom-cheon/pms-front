@@ -6,12 +6,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import PmsHeader from "./layout/PmsHeader";
 import PmsFooter from "./layout/PmsFooter";
-import Components from "./views/Components.vue";; menuList.push(Components); menuListStr.push("Components");
-import Landing from "./views/Landing.vue";; menuList.push(Landing); menuListStr.push("Landing");
-
-import Register from "./views/Register.vue";; menuList.push(Register); menuListStr.push("Register");
-import Profile from "./views/Profile.vue";; menuList.push(Profile); menuListStr.push("Profile");
-import Starter from "./views/Starter.vue";; menuList.push(Starter); menuListStr.push("Starter");
 
 const Login = () => import(/* webpackChunkName: "login" */ './views/Login.vue'); menuList.push(Login); menuListStr.push("login");
 const FileUpload = () => import(/* webpackChunkName: "file-upload" */ './views/example/FileUpload.vue'); menuList.push(FileUpload); menuListStr.push("FileUpload");
@@ -21,8 +15,6 @@ const GridSample = () => import(/* webpackChunkName: "grid-sample" */ './views/e
 const ExGridAndExcel = () => import(/* webpackChunkName: "grid-excel" */ './views/example/ExGridAndExcel.vue'); menuList.push(ExGridAndExcel); menuListStr.push("ExGridAndExcel");
 const ExTran = () => import(/* webpackChunkName: "exTran" */ './views/example/ExTran.vue'); menuList.push(ExTran); menuListStr.push("ExTran");
 const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetMain.vue'); menuList.push(NetMain); menuListStr.push("NetMain");
-
-
 
 /* PMS */
 const PJTE2100 = () => import(/* webpackChunkName: "PJTE2100" */ './views/pms/PJTE2100.vue'); menuList.push(PJTE2100); menuListStr.push("PJTE2100");
