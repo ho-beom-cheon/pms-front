@@ -184,11 +184,35 @@ window.fileData = (fileLists, num) => {
 }
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
-  window.pms_register.emp_nm = empnm;
-  window.pms_register.emp_no = empno;
-  window.pms_register.emp_btn_id = btn_id;
-  window.pms_register.emp_rowKey = emprow;
-  window.pms_register.emp_colName = empcol;
+  if(btn_id === undefined) {  // 그리드 내 직원조회
+    if(empcol == 'dvlpe_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_nm', empnm);
+    } else if(empcol == 'pl_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_nm', empnm);
+    } else if(empcol == 'crpe_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_nm', empnm);
+    } else if(empcol == 'dvlpe_nm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_nm', empnm);
+    } else if(empcol == 'pl_nm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_nm', empnm);
+    } else if(empcol == 'crpe_nm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_nm', empnm);
+    }
+  } else {  // 상단 필터 직원조회
+    if(btn_id === '1') {
+      window.pms_register.info.dvlpe_no = empno  // 개발자번호
+      window.pms_register.info.dvlpe_nm = empnm  // 개발자명
+    } else {
+      window.pms_register.info.pl_no = empno  // PL번호
+      window.pms_register.info.pl_nm = empnm  // PL명
+    }
+  }
 }
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -827,38 +851,7 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
-    deep : true,
-    /*watch에서 emp_nm의 값이 변경되었을 때
-      버튼에 따라 직원명과 직원번호를 입력한다.*/
-    emp_nm() {  // 그리드에 있는 직원조회 팝업 (emp_nm 으로 구분)
-      if(this.emp_colName == 'dvlpe_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
-      } else if(this.emp_colName == 'pl_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_nm', this.emp_nm);
-      } else if(this.emp_colName == 'crpe_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
-      } else if(this.emp_colName == 'dvlpe_nm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
-      } else if(this.emp_colName == 'pl_nm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_nm', this.emp_nm);
-      } else if(this.emp_colName == 'crpe_nm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
-      }
-      // emp_btn_id 변경 시 발생
-      if(this.emp_btn_id == '1'){       // 개발자명
-        this.info.dvlpe_no = this.emp_no
-        this.info.dvlpe_nm = this.emp_nm
-      }else if(this.emp_btn_id == '2'){ // 담당PL
-        this.info.pl_no = this.emp_no
-        this.info.pl_nm = this.emp_nm
-      }
-    },
+
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
       if(this.count == 1) {
         if (this.atfl_mng_id_yn !== '') {
@@ -885,14 +878,7 @@ export default {
       gridData: [],
       excelUplod: 'N',
       addCheak: 'N',
-
-      /*직원조회 팝업 변수*/
-      emp_btn_id          : '',  // 직원조회팝업 버튼ID
-      emp_nm              : '',  // 직원조회팝업 직원명
-      emp_no              : '',  // 직원조회팝업 직원번호
-
-      emp_rowKey          : '',  // 직원조회팝업 (그리드) rowKey
-      emp_colName         : '',  // 직원조회팝업 (그리드) colName
+      
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
