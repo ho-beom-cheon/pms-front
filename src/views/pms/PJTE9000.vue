@@ -915,10 +915,12 @@ export default {
       var input = event.target;
       var reader = new FileReader();
       reader.onload = () => {
+
         var fileData = reader.result;
         var wb = XLSX.read(fileData, {type : 'binary'});
 
         wb.SheetNames.forEach((sheetName, idx) => {
+
           wb.Sheets[sheetName].A1.w = "prjt_id"
           wb.Sheets[sheetName].B1.w = "empno"
           wb.Sheets[sheetName].C1.w = "empnm"
@@ -928,13 +930,14 @@ export default {
           wb.Sheets[sheetName].G1.w = "catn_dcd"
           wb.Sheets[sheetName].H1.w = "aut_cd"
           wb.Sheets[sheetName].I1.w = "real_prjt_id"
-          wb.Sheets[sheetName].J1.w = "plan_thw_stdt"
-          wb.Sheets[sheetName].K1.w = "plan_thw_endt"
-          wb.Sheets[sheetName].L1.w = "real_thw_stdt"
-          wb.Sheets[sheetName].M1.w = "real_thw_endt"
-          wb.Sheets[sheetName].N1.w = "email_addr"
-          wb.Sheets[sheetName].O1.w = "cpno"
-          wb.Sheets[sheetName].P1.w = "ip_addr"
+          wb.Sheets[sheetName].J1.w = "dept_cd"
+          wb.Sheets[sheetName].K1.w = "plan_thw_stdt"
+          wb.Sheets[sheetName].L1.w = "plan_thw_endt"
+          wb.Sheets[sheetName].M1.w = "real_thw_stdt"
+          wb.Sheets[sheetName].N1.w = "real_thw_endt"
+          wb.Sheets[sheetName].O1.w = "email_addr"
+          wb.Sheets[sheetName].P1.w = "cpno"
+          wb.Sheets[sheetName].Q1.w = "ip_addr"
 
           let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
           let gridExcelData = JSON.parse(JSON.stringify(rowObj));
@@ -1219,6 +1222,12 @@ export default {
           header: '투입프로젝트',
           width: 120,
           name: 'real_prjt_id',
+          editor : 'text'
+        },
+        {
+          header: '부문코드',
+          width: 80,
+          name: 'dept_cd',
           editor : 'text'
         },
         {
