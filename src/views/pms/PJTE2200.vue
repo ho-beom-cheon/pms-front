@@ -319,17 +319,6 @@ export default {
     PmsSideBar,
     grid: Grid,
   },
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-  // 화면 동작 시 제일 처음 실행되는 부분
-  // 변수 초기화
-  created() {
-    console.log("created");
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
   mounted() {
     console.log("mounted");
     this.init();
@@ -337,25 +326,9 @@ export default {
     // this.setColumns();  // 권한에 따른 컬럼 세팅
     window.pms_register = this;
   },
-  beforeUpdate() {
-    console.log("beforeUpdate");
-  },
-  updated() {
-    console.log("updated");
-  },
-  beforeDestroy() {
-    console.log("beforeDestroy");
-  },
-  destroyed() {
-    console.log("destroyed");
-  },
   // 함수를 선언하는 부분
   // "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
   computed: {
-    getCount() {
-      return this.count;
-    }
-
   },
   // 일반적인 함수를 선언하는 부분
   methods: {
@@ -377,17 +350,16 @@ export default {
     // 저장 버튼
     fnSave(){
       if(this.excelUplod === 'Y') {
-        this.gridData = this.$refs.grid.invoke("getData");
 
         axiosService.post("/PJTE2200/create", {
-          excelUplod : this.excelUplod,
-          gridData: this.gridData,
-          prjt_id  : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          excelUplod            : this.excelUplod,
+          gridData              : this.gridData,
+          prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
-          console.log(res);
           if (res.data) {
             alert("저장이 완료되었습니다.");
+            this.fnSearch();
           }
         })
       } else if(this.excelUplod === 'N') {
@@ -768,6 +740,7 @@ export default {
         this.excelUplod = 'Y'
         alert('업로드 파일이 적용되었습니다.')
         this.$refs.grid.invoke('resetData', gridExcelData)
+        this.gridData = this.$refs.grid.invoke("getData");
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';

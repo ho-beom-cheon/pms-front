@@ -81,7 +81,7 @@
               </label>
               <input :id="'input-file'+fileList.sqno" type="file" @change="handleFileChange($event, fileList.sqno)"  style="display: none"/>
               &nbsp;
-              <label class="input-down-button" @click="fileDownload(fileList.file_nm, fileList.org_file_nm)">
+              <label class="input-down-button" @click="fileDownload(fileList.file_nm, fileList.org_file_nm, fileList.file_path)">
                 다운로드
               </label>
             </td>
@@ -361,12 +361,12 @@ export default {
     },
 
     // 파일 다운로드
-    fileDownload(fileName, orgFileName) {
+    fileDownload(fileName, orgFileName, filePath) {
       axiosService.get("/PJTE9002/fileDownload",
           {
               params: {
                 fileName,
-                orgFileName
+                filePath,
               },
             responseType : "blob"
           }
@@ -385,6 +385,9 @@ export default {
           if (fileName) link.download = orgFileName
           link.click()
         }
+      })
+      .catch(e => {
+        alert("다운로드 실패")
       })
     }
 
