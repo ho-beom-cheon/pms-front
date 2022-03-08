@@ -172,26 +172,6 @@ let month = ('0' + (today.getMonth() + 1)).slice(-2);
 let day = ('0' + today.getDate()).slice(-2);
 let dateString = year + '-' + month  + '-' + day;
 
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-
-// 업무구분
-const bzcd = [
-  {"text":" ","value":"NNN"},
-  {text: "업무팀", value: '100'},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
-
-// 차수구분
-const sqn_cd = [
-  {text: " ", value: "NNN"},
-  {text: "1차수", value: "100"},
-  {text: "2차수", value: "200"},
-  {text: "3차수", value: "300"},
-  {text: "4차수", value: "400"},
-];
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -377,7 +357,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -391,7 +371,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: sqn_cd
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
@@ -520,7 +500,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -534,7 +514,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: sqn_cd
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
@@ -641,7 +621,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -655,7 +635,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: sqn_cd
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
@@ -734,7 +714,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -748,7 +728,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: sqn_cd
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },

@@ -141,8 +141,8 @@
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
             </button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" @click="fnEtcSave">기타항목수정</button>
-            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+            <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
@@ -177,6 +177,7 @@
               :rowHeaders="rowHeaders"
               @click="onClick"
               @dblclick="dblonClick"
+              @onGridUpdated="onGridUpdated"
               @editingFinish="editingFinish"
               id = "grid"
           ></grid>
@@ -270,46 +271,6 @@ class SearchBtn {
     this.el.src = '/img/ic_search.21e28c8b.svg';
   }
 }
-
-
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-
-// 업무구분
-const bzcd = [
-  {"text":" ","value":"NNN"},
-  {text: "업무팀", value: '100'},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
-
-// 통합테스트처리코드 (처리단계)
-const itg_tst_prc_cd = [
-  {"text":" ","value":"NNN"},
-  {text: "테스트전", value: "000"},
-  {text: "테스트시작", value: "100"},
-  {text: "테스트자완료", value: "200"},
-  {text: "PL확인", value: "300"},
-  {text: "담당자확인", value: "400"},
-  {text: "현업확인", value: "500"},
-  {text: "테스트완료", value: "600"}
-];
-// 유형
-const tp = [
-  {"text":" ","value":"NNN"},
-  {text: "화면", value: "100"},
-  {text: "프로그램", value: "200"},
-  {text: "보고서", value: "300"},
-  {text: "배치", value: "400"}
-];
-// 차수구분
-const sqn_cd = [
-  {text: " ", value: "NNN"},
-  {text: "1차수", value: "100"},
-  {text: "2차수", value: "200"},
-  {text: "3차수", value: "300"},
-  {text: "4차수", value: "400"},
-];
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -334,7 +295,14 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    prjt_nm_chage(params) {
+      this.info.prjt_nm_selected = params
+      if(params !== sessionStorage.getItem("LOGIN_PROJ_ID")){
+        this.validated = true;
+      } else {
+        this.validated = false;
+      }
+    },
     bzcd_change(params) {this.info.bzcd_selected = params},
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
@@ -645,7 +613,9 @@ export default {
 
       return  true;
     },
-
+    onGridUpdated(grid){
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+    },
     fnEnable() {
       // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
@@ -832,6 +802,7 @@ export default {
       pal_atfl_mng_id_yn  : '',  // 설계서 첨부파일관리
 
       excelUplod: 'N',           // 엑셀 업로드
+      validated: false,
 
       info: {
         scnr_id      : this.scnr_id,         // 시나리오 ID
@@ -943,7 +914,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: bzcd,
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -957,7 +928,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: sqn_cd
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
@@ -995,7 +966,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: itg_tst_prc_cd
+              listItems: this.$store.state.pms.CD1000000026N
             }
           }
         },
@@ -1134,7 +1105,6 @@ export default {
           header: '미진사유',
           width: 400,
           name: 'rmrk',
-          editor: "text",
         },
         {
           header: '프로그램ID',
@@ -1227,4 +1197,7 @@ export default {
 
 </script>
 <style>
+.disableColor {
+  background: #FFFFFF!important;
+}
 </style>
