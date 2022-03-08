@@ -509,8 +509,8 @@ const storage = window.sessionStorage;
 
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
-  window.pms_register.file_name_list = fileLists;
-  window.pms_register.atfl_num = num
+  window.pms_register.file_name_list = [...fileLists];
+  window.pms_register.atfl_num = num;
 }
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
@@ -981,18 +981,21 @@ export default {
 
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      debugger
 
-      if (this.detail.real_prjt_id_selected == "NNN" ||this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == "null") {
+      if (this.detail.real_prjt_id_selected == "NNN" ||this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == null) {
         alert('프로젝트가 없습니다.');
         return false;
-      } else if (this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == "null") {
+      } else if (this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == null) {
         alert('부문명이 없습니다.');
         return false;
-      }  else if (this.detail.week_sqn_cd_selected == "NNN" |this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == "null") {
+      }  else if (this.detail.week_sqn_cd_selected == "NNN" ||this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == null) {
         alert('차수가 없습니다.');
         return false;
-      } else if (this.detail.pm_nm == "" || this.detail.pm_nm == "null") {
+      } else if (this.detail.week_yymm == "" || this.detail.week_yymm == null) {
+        alert('주간년월이 없습니다.');
+        this.detail.week_yymm = this.getToday();
+        return false;
+      } else if (this.detail.pm_nm == "" || this.detail.pm_nm == null) {
         alert('PM명이 없습니다.');
         return false;
       } else if (this.detail.all_real_prg < 1 || this.detail.all_real_prg == "") {
@@ -1015,7 +1018,7 @@ export default {
         this.$refs.step_pred_prg.focus();
         alert('[단계] 0보다 큰  예정진척율을 입력해주세요.');
         return false;
-      } else if (this.detail.prg_txt == "" || this.detail.prg_txt == "null") {
+      } else if (this.detail.prg_txt == "" || this.detail.prg_txt == null) {
         this.$refs.prg_txt.focus();
         alert('프로젝트 진행현황을 입력해주세요.');
         return false;
@@ -1052,12 +1055,13 @@ export default {
       }
     },
     file_name_list() {
+
       if(this.atfl_num == '1'){
         this.detail.org_file_nm = this.file_name_list[0].org_file_nm
-        this.detail.atfl_mng_id = this.file_name_list[1].atfl_mng_id
+        this.detail.atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
       }else if(this.atfl_num == '2'){
         this.detail.bef_org_file_nm = this.file_name_list[0].org_file_nm
-        this.detail.bef_atfl_mng_id = this.file_name_list[1].atfl_mng_id
+        this.detail.bef_atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
       }
 
     },
