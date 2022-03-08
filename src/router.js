@@ -42,6 +42,7 @@ const PJTE9000 = () => import(/* webpackChunkName: "PJTE9000" */ './views/pms/PJ
 const PJTE9001 = () => import(/* webpackChunkName: "PJTE9001" */ './views/pms/PJTE9001.vue'); menuList.push(PJTE9001); menuListStr.push("PJTE9001");
 const PJTE9002 = () => import(/* webpackChunkName: "PJTE9002" */ './views/pms/PJTE9002.vue'); menuList.push(PJTE9002); menuListStr.push("PJTE9002");
 const PJTE9003 = () => import(/* webpackChunkName: "PJTE9003" */ './views/pms/PJTE9003.vue'); menuList.push(PJTE9003); menuListStr.push("PJTE9003");
+const PJTE9900 = () => import(/* webpackChunkName: "PJTE9900" */ './views/pms/PJTE9900.vue'); menuList.push(PJTE9900); menuListStr.push("PJTE9900");
 
 Vue.use(Router);
 
