@@ -231,7 +231,7 @@ import {axiosService} from "@/api/http";
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
   // console.log(fileLists);
-  window.pms_register.file_name_list = fileLists;
+  window.pms_register.file_name_list = [...fileLists];
   window.pms_register.atfl_num = num
 }
 // 직원조회 팝업에서 받은 값
@@ -686,13 +686,12 @@ export default {
     },
 
     file_name_list() {
-
       if(this.atfl_num == '1'){
         this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
-        this.rgs_atfl_mng_id = this.file_name_list[1].atfl_mng_id
+        this.rgs_atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
       }else if(this.atfl_num == '2'){
         this.ttmn_atfl_nm = this.file_name_list[0].org_file_nm
-        this.ttmn_atfl_mng_id = this.file_name_list[1].atfl_mng_id
+        this.ttmn_atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
       }
 
     },
