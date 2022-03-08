@@ -424,6 +424,10 @@ table.form-table select {
     padding-top: var(--gnb-h);
     padding-left: var(--aside-w);
 }
+.kanban-contents-body {
+    width: 100%;
+    padding-top: var(--gnb-h);
+}
 
 .page-contents {
     width: 100%;

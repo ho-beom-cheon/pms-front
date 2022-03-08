@@ -179,9 +179,16 @@ import PJTE9001 from "@/views/pms/PJTE9001";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
-  window.pms_register.emp_nm = empnm;
-  window.pms_register.emp_no = empno;
-  window.pms_register.emp_btn_id = btn_id;
+  if(btn_id === '1'){
+    window.pms_register.info.rgpe_nm = empnm
+    window.pms_register.info.rgpe_no = empno
+  } else if(btn_id === '2'){
+    window.pms_register.info.dvlpe_nm = empnm
+    window.pms_register.info.dvlpe_no = empno
+  } else if(btn_id === '3'){
+    window.pms_register.info.pl_nm = empnm
+    window.pms_register.info.pl_no = empno
+  }
 }
 
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -368,20 +375,6 @@ export default {
       // console.log("count의 값이 변경되면 여기도 실행");
       // console.log("new Value :: " + a);
       // console.log("old Value :: " + b);
-    },
-    /* 직원조회 팝업에서 받아온 값으로 emp_no이 바뀔 때
-       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
-    emp_no() {
-      if(this.emp_btn_id == '1'){       // 결함등록자
-        this.info.rgpe_no = this.emp_no
-        this.info.rgpe_nm = this.emp_nm
-      }else if(this.emp_btn_id == '2'){ // 조치자
-        this.info.dvlpe_no = this.emp_no
-        this.info.dvlpe_nm = this.emp_nm
-      }else if(this.emp_btn_id == '3'){ // 담당PL
-        this.info.pl_no = this.emp_no
-        this.info.pl_nm = this.emp_nm
-      }
     },
   },
   // 변수 선언부분

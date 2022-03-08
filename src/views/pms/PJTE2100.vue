@@ -110,10 +110,10 @@
                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
               </button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
-              <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
-              <button class="btn btn-filter-b" @click="fnEtcSave">기타항목수정</button>
-              <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+              <button class="btn btn-filter-b" @click="gridAddRow" :disabled="validated">행추가</button>
+              <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
+              <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
+              <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
               <button class="btn btn-filter-p" @click="fnSearch">조회</button>
             </ul>
           </div>
@@ -150,7 +150,6 @@
               :minRowHeight="minRowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
-              @dblclick="dbClick"
               @onGridUpdated="onGridUpdated"
               @beforeExport="beforeExport"
               @editingFinish="editingFinish"
@@ -184,11 +183,35 @@ window.fileData = (fileLists, num) => {
 }
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
-  window.pms_register.emp_nm = empnm;
-  window.pms_register.emp_no = empno;
-  window.pms_register.emp_btn_id = btn_id;
-  window.pms_register.emp_rowKey = emprow;
-  window.pms_register.emp_colName = empcol;
+  if(btn_id === undefined) {  // 그리드 내 직원조회
+    if(empcol == 'dvlpe_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_nm', empnm);
+    } else if(empcol == 'pl_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_nm', empnm);
+    } else if(empcol == 'crpe_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_nm', empnm);
+    } else if(empcol == 'dvlpe_nm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_nm', empnm);
+    } else if(empcol == 'pl_nm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_nm', empnm);
+    } else if(empcol == 'crpe_nm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_no', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_nm', empnm);
+    }
+  } else {  // 상단 필터 직원조회
+    if(btn_id === '1') {
+      window.pms_register.info.dvlpe_no = empno  // 개발자번호
+      window.pms_register.info.dvlpe_nm = empnm  // 개발자명
+    } else {
+      window.pms_register.info.pl_no = empno  // PL번호
+      window.pms_register.info.pl_nm = empnm  // PL명
+    }
+  }
 }
 
 // 커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -236,17 +259,8 @@ export default {
 // "라이프사이클 훅"이라고 함.
 // 자세한 사항은 Vue 라이프 사이클 참조
 // https://kr.vuejs.org/v2/guide/instance.html
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-// 화면 동작 시 제일 처음 실행되는 부분
+
 // 변수 초기화
-  created() {
-    console.log("created")
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
   mounted() {
     // 화면 초기화
     this.init();
@@ -279,7 +293,14 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    prjt_nm_chage(params) {
+      this.info.prjt_nm_selected = params
+      if(params !== sessionStorage.getItem("LOGIN_PROJ_ID")){
+        this.validated = true;
+      } else {
+        this.validated = false;
+      }
+    },
     bzcd_change(params) {this.info.bzcd_selected = params},
     dvlp_dis_cd_change(params) {this.info.dvlp_dis_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
@@ -320,11 +341,11 @@ export default {
         }).then(res => {
           console.log(res);
           if (res.data) {
-
           }
+        }).catch(e => {
+          alert("이미 등록된 프로그램입니다.")
         })
       } else if(this.excelUplod === 'N') {
-
         // 변경 사항 유무 체크
         if (this.$refs.grid.invoke("isModified") === false) {
           alert("변경된 내용이 없습니다.");
@@ -342,66 +363,61 @@ export default {
 
         if (this.createdRows.length !== 0) {
           if (this.vaildation(this.createdRows, "1") === true) {
-            if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-              for(let i=0; i<this.createdRows.length; i++){
-                if(this.createdRows[i].dvlp_dis_cd === "900"){
+            if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+              for (let i = 0; i < this.createdRows.length; i++) {
+                if (this.createdRows[i].dvlp_dis_cd === "900") {
                   alert("개발구분 삭제 권한이 없습니다.");
                   return;
                 }
               }
             }
-            try {
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-              // create api 요청
-              this.$refs.grid.invoke("request", "createData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            this.$refs.grid.invoke("reloadData");
+            axiosService.post("/PJTE2100/create", {
+              excelUplod: this.excelUplod,
+              gridData: this.createdRows,
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+            }).then(res => {
+              console.log(res)
+              if(res.data === true){
+                alert("저장이 완료되었습니다.")
+                // 저장 후 변경 데이터 배열 비움
+                this.$refs.grid.invoke("clearModifiedData")
+                this.excelUplod = 'N'
+              }else{
+                alert("이미 등록된 프로그램입니다.")
+              }
+              this.fnSearch()
+            })
           }
-        }
-        if (this.updatedRows.length !== 0) {
-          if (this.vaildation(this.updatedRows, "1") === true) {
-            try {
-              if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-                for(let i=0; i<this.updatedRows.length; i++){
-                  if(this.updatedRows[i].dvlp_dis_cd === "900"){
-                    alert("삭제 권한이 없습니다.");
-                    return;
+          if (this.updatedRows.length !== 0) {
+            if (this.vaildation(this.updatedRows, "1") === true) {
+              try {
+                if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+                  for (let i = 0; i < this.updatedRows.length; i++) {
+                    if (this.updatedRows[i].dvlp_dis_cd === "900") {
+                      alert("삭제 권한이 없습니다.");
+                      return;
+                    }
                   }
                 }
+                // 데이터 파라메타 전달
+                this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+                this.$refs.grid.invoke("setRequestParams", this.login);
+                // update api 요청
+                this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+                alert("저장이 완료되었습니다.")
+                // 저장 후 변경 데이터 배열 비움
+                this.$refs.grid.invoke("clearModifiedData")
+                this.excelUplod = 'N'
+              } catch (e) {
+                console.log("업데이트 오류 ::", e);
               }
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-              this.$refs.grid.invoke("setRequestParams", this.login);
-              // update api 요청
-              this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-            } catch (e) {
-              console.log("업데이트 오류 ::", e);
+            } else {
+              this.$refs.grid.invoke("reloadData");
             }
-          } else {
-            this.$refs.grid.invoke("reloadData");
-          }
-        }
-        if (this.deletedRows.length !== 0) {
-          try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
-            // delete api 요청
-            this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
-          } catch (e) {
-            console.log(e);
           }
         }
       }
-      // 저장 후 변경 데이터 배열 비움
-      this.$refs.grid.invoke("clearModifiedData")
-      this.excelUplod = 'N'
     },
     // 기타 항목 저장
     fnEtcSave() {
@@ -433,6 +449,7 @@ export default {
       this.$refs.grid.invoke("clearModifiedData")
     },
     onGridUpdated(grid){
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.addCheak = 'N';
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
@@ -494,7 +511,13 @@ export default {
       this.curRow = ev.rowKey;
       let gridRow = this.$refs.grid.invoke("getRow",this.curRow);
       let gridData = this.$refs.grid.invoke("getData");
-      console.log(this.$refs.grid.invoke("getRow", this.curRow));
+
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
 
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
       if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
@@ -513,13 +536,6 @@ export default {
           let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected, emprow = ev.rowKey, empcol = ev.columnName
           window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
         }
-      }
-
-      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
-        this.modals.txt_modal1 = true;
-        this.modalTxt = currentCellData.value;
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
 
       if(this.addCheak === 'Y'){
@@ -551,10 +567,6 @@ export default {
 
 
     },
-    // 그리드 내용 더블클릭 시 상세보기 모달팝업
-    dbClick(ev) {
-      this.curRow = ev.rowKey;
-    },
     // 양식다운로드
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
@@ -568,6 +580,9 @@ export default {
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+
+      console.log("확인::", document.getElementById("modalId").value);
+      console.log("this.curRow::", this.curRow);
       this.modals.txt_modal1 = false;
     },
     // 모달창 닫기
@@ -827,38 +842,7 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
-    deep : true,
-    /*watch에서 emp_nm의 값이 변경되었을 때
-      버튼에 따라 직원명과 직원번호를 입력한다.*/
-    emp_nm() {  // 그리드에 있는 직원조회 팝업 (emp_nm 으로 구분)
-      if(this.emp_colName == 'dvlpe_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
-      } else if(this.emp_colName == 'pl_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_nm', this.emp_nm);
-      } else if(this.emp_colName == 'crpe_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
-      } else if(this.emp_colName == 'dvlpe_nm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_nm', this.emp_nm);
-      } else if(this.emp_colName == 'pl_nm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_nm', this.emp_nm);
-      } else if(this.emp_colName == 'crpe_nm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_no', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_nm', this.emp_nm);
-      }
-      // emp_btn_id 변경 시 발생
-      if(this.emp_btn_id == '1'){       // 개발자명
-        this.info.dvlpe_no = this.emp_no
-        this.info.dvlpe_nm = this.emp_nm
-      }else if(this.emp_btn_id == '2'){ // 담당PL
-        this.info.pl_no = this.emp_no
-        this.info.pl_nm = this.emp_nm
-      }
-    },
+
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
       if(this.count == 1) {
         if (this.atfl_mng_id_yn !== '') {
@@ -873,7 +857,6 @@ export default {
         }
       }
     },
-
   },
 
 // 변수 선언부분
@@ -885,14 +868,8 @@ export default {
       gridData: [],
       excelUplod: 'N',
       addCheak: 'N',
-
-      /*직원조회 팝업 변수*/
-      emp_btn_id          : '',  // 직원조회팝업 버튼ID
-      emp_nm              : '',  // 직원조회팝업 직원명
-      emp_no              : '',  // 직원조회팝업 직원번호
-
-      emp_rowKey          : '',  // 직원조회팝업 (그리드) rowKey
-      emp_colName         : '',  // 직원조회팝업 (그리드) colName
+      validated: false,
+      
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
@@ -944,11 +921,7 @@ export default {
         { id: 'PJTE7000', path: '/PJTE7000', name: '산출물정합성체크' },
         { id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리' },
       ],
-      /* 그리드 상세보기 모달 속성 */
-      modals: {
-        txt_modal1: false,
-      },
-      modalTxt:this.modalTxt,
+
 
       /* grid 속성 */
       count:0,
@@ -961,6 +934,14 @@ export default {
       rowHeight: 25,
       showDummyRows: false,
       editingEvent : "click",
+
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
+
       // toast ui grid 데이터
       dataSource: {
         api: {
@@ -1256,11 +1237,9 @@ export default {
         },
         {
           header: '비고',
-          width: 220,
+          width: 200,
           align: 'left',
           name: 'rmrk',
-          editor: 'text',
-          ellipsis : true,
         },
         {
           header: '등록여부',
@@ -1290,4 +1269,7 @@ export default {
 
 </script>
 <style>
+.disableColor {
+  background: #FFFFFF!important;
+}
 </style>

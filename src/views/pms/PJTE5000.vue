@@ -93,6 +93,7 @@
               :bodyHeight="bodyHeight"
               :minRowHeight="minRowHeight"
               :showDummyRows="showDummyRows"
+              :editingEvent="editingEvent"
               :columnOptions="columnOptions"
               :rowHeight="rowHeight"
               :rowHeaders="rowHeaders"
@@ -142,37 +143,6 @@ class CustomRenderer {
     this.el.src = '/img/ic_logOut.8c60a751.svg';
   }
 }
-
-// 레벨구분
-const level = [
-  {text: "1레벨", value: '100'},
-  {text: "2레벨", value: '200'},
-  {text: "3레벨", value: "300"},
-  {text: "4레벨", value: "400"},
-  {text: "5레벨", value: "500"},
-];
-// 업무구분
-const bzcd = [
-  {"text":" ","value":"NNN"},
-  {text: "업무팀", value: '100'},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
-
-// 관리구분
-const mng_cd = [
-  {text: " ", value: 'NNN'},
-  {text: "WBS관리", value: "100"},
-  {text: "이행관리", value: "200"},
-];
-// 처리단계
-const prc_step_cd = [
-  {text: " ", value: "NNN"},
-  {text: "대기", value: "100"},
-  {text: "진행중", value: "200"},
-  {text: "완료", value: "300"},
-];
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -223,7 +193,22 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
+    prjt_nm_chage(params)         {
+      this.info.prjt_nm_selected = params
+
+      if(params !== sessionStorage.getItem("LOGIN_PROJ_ID")){
+        this.validated_aut = true;
+        this.validated = true;
+      } else {
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+          this.validated_aut = false;
+          this.validated = false;
+        } else {
+          this.validated_aut = true;
+          this.validated = true;
+        }
+      }
+    },
     bzcd_change(params)           {this.info.bzcd_selected = params},
     wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
@@ -239,9 +224,12 @@ export default {
           this.$refs.grid.invoke("enableCell", i, 'prg_rt');
         }
       }
+
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modalTxt = document.getElementById("modalId").value;
       this.modals.txt_modal1 = false;
     },
     fnCloseModal(){  // 모달창 닫기
@@ -327,22 +315,13 @@ export default {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
 
-      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
-        this.validated_aut = false;
-        this.validated = false;
-      }
-
       // 버튼 활성화
       if(this.info.bkup_id_selected === '0000000000' && this.info.bzcd_selected !== 'TTT' &&
           this.info.wbs_prc_sts_cd_selected !== 'TTT' && this.info.wbs_mng_cd_selected === 'TTT' &&
           this.info.crpe_nm === undefined && this.info.acl_sta_dt === null && this.info.acl_end_dt === null &&
           this.info.pln_sta_dt=== null && this.info.pln_end_dt === null)
       {
-        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
-          this.validated_aut = false;
-        } else {
-          this.validated = false;
-        }
+          this.validated_aut = false
       }
     },
     open_pjte9001() {
@@ -554,7 +533,7 @@ export default {
         this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
         this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
       }
-    }
+    },
   },
 // 변수 선언부분 
   data() {
@@ -566,7 +545,7 @@ export default {
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       flag                : 'N', //진행율 계산 체크
       addCheak            : 'N', // 행추가 체크
-
+      editingEvent : "click",
       excelUplod: 'N',           // 엑셀 업로드
 
 
@@ -709,7 +688,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: mng_cd
+              listItems: this.$store.state.pms.CD1000000035N
             }
           }
         },
@@ -725,7 +704,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: bzcd
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -741,7 +720,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: level
+              listItems: this.$store.state.pms.CD1000000009N
             }
           }
         },
@@ -804,7 +783,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: prc_step_cd
+              listItems: this.$store.state.pms.CD1000000035N
             }
           }
         },
@@ -890,9 +869,9 @@ export default {
         {
           header: '비고',
           width: 200,
-          align: 'center',
+          align: 'left',
           name: 'rmrk',
-          editor: 'text',
+          disabled: false
         },
         {
           header: '정렬',
@@ -923,4 +902,7 @@ export default {
 
 </script>
 <style>
+.disableColor {
+  background: #FFFFFF!important;
+}
 </style>

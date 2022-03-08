@@ -231,14 +231,19 @@ import {axiosService} from "@/api/http";
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists, num) => {
   // console.log(fileLists);
-  window.pms_register.file_name_list = fileLists;
+  window.pms_register.file_name_list = [...fileLists];
   window.pms_register.atfl_num = num
 }
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
-  window.pms_register.emp_nm = empnm;
-  window.pms_register.emp_no = empno;
-  window.pms_register.emp_btn_id = btn_id;
+  if(btn_id === '1'){           // 요청자
+    window.pms_register.dvlpe_nm = empnm
+    window.pms_register.dvlpe_no = empno
+  } else if(btn_id === '2'){   // 조치담당자
+    window.pms_register.pl_nm = empnm
+    window.pms_register.pl_no = empno
+  }
+
 }
 
 export default {
@@ -673,26 +678,14 @@ export default {
     count: (a, b) => {
 
     },
-    /* 직원조회 팝업에서 받아온 값으로 emp_btn_id값이 바뀔 때
-       버튼 id에 따라 직원명, 직원번호 값을 넣는다*/
-    emp_no() {
-      if(this.emp_btn_id == '1'){       // 요청자
-        this.dvlpe_no = this.emp_no
-        this.dvlpe_nm = this.emp_nm
-      }else if(this.emp_btn_id == '2'){ // 조치담당자
-        this.pl_no = this.emp_no
-        this.pl_nm = this.emp_nm
-      }
-    },
 
     file_name_list() {
-
       if(this.atfl_num == '1'){
         this.rgs_atfl_nm = this.file_name_list[0].org_file_nm
-        this.rgs_atfl_mng_id = this.file_name_list[1].atfl_mng_id
+        this.rgs_atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
       }else if(this.atfl_num == '2'){
         this.ttmn_atfl_nm = this.file_name_list[0].org_file_nm
-        this.ttmn_atfl_mng_id = this.file_name_list[1].atfl_mng_id
+        this.ttmn_atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
       }
 
     },

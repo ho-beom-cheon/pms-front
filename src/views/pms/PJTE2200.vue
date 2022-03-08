@@ -141,8 +141,8 @@
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
             </button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" @click="fnEtcSave">기타항목수정</button>
-            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+            <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
@@ -177,6 +177,7 @@
               :rowHeaders="rowHeaders"
               @click="onClick"
               @dblclick="dblonClick"
+              @onGridUpdated="onGridUpdated"
               @editingFinish="editingFinish"
               id = "grid"
           ></grid>
@@ -208,11 +209,38 @@ window.fileData = (fileLists, num) => {
 }
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
-  window.pms_register.emp_nm = empnm;
-  window.pms_register.emp_no = empno;
-  window.pms_register.emp_btn_id = btn_id;
-  window.pms_register.emp_rowKey = emprow;
-  window.pms_register.emp_colName = empcol;
+  if(btn_id === undefined) {  // 그리드 내 직원조회
+    if(empcol == 'dvlpe_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_eno', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_enm', empnm);
+    } else if(empcol == 'pl_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_eno', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_enm', empnm);
+    } else if(empcol == 'crpe_btn') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_eno', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_enm', empnm);
+    } else if(empcol == 'dvlpe_enm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_eno', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'dvlpe_enm', empnm);
+    } else if(empcol == 'pl_enm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_eno', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'pl_enm', empnm);
+    } else if(empcol == 'crpe_enm') {
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_eno', empno);
+      window.pms_register.$refs.grid.invoke("setValue", emprow, 'crpe_enm', empnm);
+    }
+  } else {  // 상단 필터 직원조회
+    if(btn_id === '1') {
+      window.pms_register.info.dvlpe_eno = empno  // 개발자번호
+      window.pms_register.info.dvlpe_enm = empnm  // 개발자명
+    } else if(btn_id === '2') {
+      window.pms_register.info.pl_eno = empno  // PL번호
+      window.pms_register.info.pl_enm = empnm  // PL명
+    } else if(btn_id === '3') {
+      window.pms_register.info.crpe_eno = empno  // 담당현업번호
+      window.pms_register.info.crpe_enm = empnm  // 담당현업명
+    }
+  }
 }
 
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -243,46 +271,6 @@ class SearchBtn {
     this.el.src = '/img/ic_search.21e28c8b.svg';
   }
 }
-
-
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-
-// 업무구분
-const bzcd = [
-  {"text":" ","value":"NNN"},
-  {text: "업무팀", value: '100'},
-  {text: "공통팀", value: "200"},
-  {text: "PMO", value: "300"},
-];
-
-// 통합테스트처리코드 (처리단계)
-const itg_tst_prc_cd = [
-  {"text":" ","value":"NNN"},
-  {text: "테스트전", value: "000"},
-  {text: "테스트시작", value: "100"},
-  {text: "테스트자완료", value: "200"},
-  {text: "PL확인", value: "300"},
-  {text: "담당자확인", value: "400"},
-  {text: "현업확인", value: "500"},
-  {text: "테스트완료", value: "600"}
-];
-// 유형
-const tp = [
-  {"text":" ","value":"NNN"},
-  {text: "화면", value: "100"},
-  {text: "프로그램", value: "200"},
-  {text: "보고서", value: "300"},
-  {text: "배치", value: "400"}
-];
-// 차수구분
-const sqn_cd = [
-  {text: " ", value: "NNN"},
-  {text: "1차수", value: "100"},
-  {text: "2차수", value: "200"},
-  {text: "3차수", value: "300"},
-  {text: "4차수", value: "400"},
-];
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -307,7 +295,14 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    prjt_nm_chage(params) {
+      this.info.prjt_nm_selected = params
+      if(params !== sessionStorage.getItem("LOGIN_PROJ_ID")){
+        this.validated = true;
+      } else {
+        this.validated = false;
+      }
+    },
     bzcd_change(params) {this.info.bzcd_selected = params},
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
@@ -618,7 +613,9 @@ export default {
 
       return  true;
     },
-
+    onGridUpdated(grid){
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+    },
     fnEnable() {
       // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
@@ -786,41 +783,6 @@ export default {
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
 
-    /*watch에서 emp_nm의 값이 변경되었을 때
-     버튼에 따라 직원명과 직원번호를 입력한다.*/
-    emp_nm() {  // 그리드에 있는 직원조회 팝업 (emp_nm 으로 구분)
-      if(this.emp_colName == 'dvlpe_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_eno', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_enm', this.emp_nm);
-      } else if(this.emp_colName == 'pl_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_eno', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_enm', this.emp_nm);
-      } else if(this.emp_colName == 'crpe_btn') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_eno', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_enm', this.emp_nm);
-      } else if(this.emp_colName == 'dvlpe_enm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_eno', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'dvlpe_enm', this.emp_nm);
-      } else if(this.emp_colName == 'pl_enm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_eno', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'pl_enm', this.emp_nm);
-      } else if(this.emp_colName == 'crpe_enm') {
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_eno', this.emp_no);
-        this.$refs.grid.invoke("setValue", this.emp_rowKey, 'crpe_enm', this.emp_nm);
-      }
-      // emp_btn_id 변경 시 발생
-      if(this.emp_btn_id == '1'){       // 개발자명
-        this.info.dvlpe_eno = this.emp_no
-        this.info.dvlpe_enm = this.emp_nm
-      }else if(this.emp_btn_id == '2'){ // 담당PL
-        this.info.pl_eno = this.emp_no
-        this.info.pl_enm = this.emp_nm
-      } else if(this.emp_btn_id == '3'){ // 담당현업
-        this.info.crpe_eno = this.emp_no
-        this.info.crpe_enm = this.emp_nm
-      }
-    },
-
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
       if(this.atfl_mng_id_yn !== '') {
         this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
@@ -834,19 +796,13 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0","C1","C4","C6","C26"],
 
-      /*직원조회 팝업 변수*/
-      emp_btn_id          : '',  // 직원조회팝업 버튼ID
-      emp_nm              : '',  // 직원조회팝업 직원명
-      emp_no              : '',  // 직원조회팝업 직원번호
-
-      emp_rowKey          : '',  // 직원조회팝업 (그리드) rowKey
-      emp_colName         : '',  // 직원조회팝업 (그리드) colName
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
       pal_atfl_mng_id_yn  : '',  // 설계서 첨부파일관리
 
       excelUplod: 'N',           // 엑셀 업로드
+      validated: false,
 
       info: {
         scnr_id      : this.scnr_id,         // 시나리오 ID
@@ -958,7 +914,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: bzcd,
+              listItems: this.$store.state.pms.CD1000000001N
             }
           }
         },
@@ -972,7 +928,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: sqn_cd
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
@@ -1010,7 +966,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: itg_tst_prc_cd
+              listItems: this.$store.state.pms.CD1000000026N
             }
           }
         },
@@ -1149,7 +1105,6 @@ export default {
           header: '미진사유',
           width: 400,
           name: 'rmrk',
-          editor: "text",
         },
         {
           header: '프로그램ID',
@@ -1242,4 +1197,7 @@ export default {
 
 </script>
 <style>
+.disableColor {
+  background: #FFFFFF!important;
+}
 </style>

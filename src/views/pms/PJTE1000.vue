@@ -210,7 +210,7 @@ import PmsSideBar from '@/components/PmsSideBar';
 
 // 첨부파일 데이터를 받아옴
 window.fileData = (fileLists) => {
-  window.pms_register.file_name_list = fileLists; // 받아온 데이터를 리스트에 저장
+  window.pms_register.file_name_list = [...fileLists]; // 받아온 데이터를 리스트에 저장
 }
 
 export default {
@@ -540,6 +540,7 @@ export default {
     file_name_list() {
       // 1. 첨부파일 1개만 보여줄 때
       this.detail.org_file_nm = this.file_name_list[0].org_file_nm
+      this.detail.atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
 
     },
   },
