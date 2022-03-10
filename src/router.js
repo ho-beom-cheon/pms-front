@@ -42,32 +42,49 @@ let aRootPath = new Object();
 
 aRootPath.path = "/";
 aRootPath.redirect = "/login";
-arrRoutes.push(aRootPath) ; 
+aRootPath.meta = {authRequired : false}
+arrRoutes.push(aRootPath) ;
 
-for(var idx=0; idx < menuListStr.length; idx++){
+
+for (var idx = 0; idx < menuListStr.length; idx++) {
 
   let tmpObj = new Object();
 
-  tmpObj.path = "/" + menuListStr[idx].toLowerCase() ;
-  tmpObj.name = menuListStr[idx].toLowerCase() ;
-  
-  if( "/login/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0) {
-    tmpObj.components = { default:menuList[idx] } ;  
-  } else {
-    tmpObj.components = { header:PmsHeader, footer:PmsFooter, default:menuList[idx] } ;
+  tmpObj.path = "/" + menuListStr[idx].toLowerCase();
+  tmpObj.name = menuListStr[idx].toLowerCase();
+
+  if("/login".indexOf(menuListStr[idx]) > 0){
+    tmpObj.components = {default: menuList[idx]};
+    tmpObj.meta = {authRequired : false}
   }
+  else if ("/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0){
+    tmpObj.components = {default: menuList[idx]};
+    if(sessionStorage.getItem("jwt-auth-token")){
+      tmpObj.meta = {authRequired : false}
+    } else {
+      tmpObj.meta = {authRequired : true}
+    }
+  } else {
+    tmpObj.components = {header: PmsHeader, footer: PmsFooter, default: menuList[idx]};
+    if(sessionStorage.getItem("jwt-auth-token")){
+      tmpObj.meta = {authRequired : false}
+    } else {
+      tmpObj.meta = {authRequired : true}
+    }
+  }
+
+
   arrRoutes.push(tmpObj);
 }
 
 let aOtherPath = new Object();
 
 aOtherPath.path = "/*";
-aOtherPath.path = "/*";
 aOtherPath.name = "/other";
-aOtherPath.components = { default:Login } ;
-arrRoutes.push(aOtherPath) ; 
+aOtherPath.components = {default: Login};
+arrRoutes.push(aOtherPath);
 
-export default new Router({
+export const router = new Router({
   mode:'history',
   linkExactActiveClass: "active",
   routes : arrRoutes,
@@ -79,6 +96,31 @@ export default new Router({
     }
   }
 });
+// 네비게이션 가드
+router.beforeEach(function (to,from,next){
+  // console.log("to::",to);
+  // console.log("from::",from);
+  // console.log("next::",next);
+  if(to.fullPath === '/login'){
+    sessionStorage.setItem("jwt-auth-token", "")
+  }
+  if(to.matched.some(function (routeInfo){
+    if(from.fullPath === "/login"){
+      next()
+    } else {
+      return routeInfo.meta.authRequired;
+    }
+  })){
+    next({path:'/login'})
+    window.alert("잘못된 경로로 접근하였습니다.");
+  } else
+  {
+    next()
+  }
+})
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-/*!
+                                       /*!
 
 =========================================================
 * Vue Argon Design System - v1.1.0
@@ -19,7 +19,7 @@ import Vue from "vue";
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import App from "./App.vue";
-import router from "./router";
+import { router } from "./router";
 import store from "./store/index";
 import Argon from "./plugins/argon-kit";
 import './registerServiceWorker'
