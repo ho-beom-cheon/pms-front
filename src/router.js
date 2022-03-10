@@ -6,12 +6,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import PmsHeader from "./layout/PmsHeader";
 import PmsFooter from "./layout/PmsFooter";
-import Components from "./views/Components.vue";; menuList.push(Components); menuListStr.push("Components");
-import Landing from "./views/Landing.vue";; menuList.push(Landing); menuListStr.push("Landing");
-
-import Register from "./views/Register.vue";; menuList.push(Register); menuListStr.push("Register");
-import Profile from "./views/Profile.vue";; menuList.push(Profile); menuListStr.push("Profile");
-import Starter from "./views/Starter.vue";; menuList.push(Starter); menuListStr.push("Starter");
 
 const Login = () => import(/* webpackChunkName: "login" */ './views/Login.vue'); menuList.push(Login); menuListStr.push("login");
 const FileUpload = () => import(/* webpackChunkName: "file-upload" */ './views/example/FileUpload.vue'); menuList.push(FileUpload); menuListStr.push("FileUpload");
@@ -21,8 +15,6 @@ const GridSample = () => import(/* webpackChunkName: "grid-sample" */ './views/e
 const ExGridAndExcel = () => import(/* webpackChunkName: "grid-excel" */ './views/example/ExGridAndExcel.vue'); menuList.push(ExGridAndExcel); menuListStr.push("ExGridAndExcel");
 const ExTran = () => import(/* webpackChunkName: "exTran" */ './views/example/ExTran.vue'); menuList.push(ExTran); menuListStr.push("ExTran");
 const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetMain.vue'); menuList.push(NetMain); menuListStr.push("NetMain");
-
-
 
 /* PMS */
 const PJTE2100 = () => import(/* webpackChunkName: "PJTE2100" */ './views/pms/PJTE2100.vue'); menuList.push(PJTE2100); menuListStr.push("PJTE2100");
@@ -50,32 +42,49 @@ let aRootPath = new Object();
 
 aRootPath.path = "/";
 aRootPath.redirect = "/login";
-arrRoutes.push(aRootPath) ; 
+aRootPath.meta = {authRequired : false}
+arrRoutes.push(aRootPath) ;
 
-for(var idx=0; idx < menuListStr.length; idx++){
+
+for (var idx = 0; idx < menuListStr.length; idx++) {
 
   let tmpObj = new Object();
 
-  tmpObj.path = "/" + menuListStr[idx].toLowerCase() ;
-  tmpObj.name = menuListStr[idx].toLowerCase() ;
-  
-  if( "/login/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0) {
-    tmpObj.components = { default:menuList[idx] } ;  
-  } else {
-    tmpObj.components = { header:PmsHeader, footer:PmsFooter, default:menuList[idx] } ;
+  tmpObj.path = "/" + menuListStr[idx].toLowerCase();
+  tmpObj.name = menuListStr[idx].toLowerCase();
+
+  if("/login".indexOf(menuListStr[idx]) > 0){
+    tmpObj.components = {default: menuList[idx]};
+    tmpObj.meta = {authRequired : false}
   }
+  else if ("/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0){
+    tmpObj.components = {default: menuList[idx]};
+    if(sessionStorage.getItem("jwt-auth-token")){
+      tmpObj.meta = {authRequired : false}
+    } else {
+      tmpObj.meta = {authRequired : true}
+    }
+  } else {
+    tmpObj.components = {header: PmsHeader, footer: PmsFooter, default: menuList[idx]};
+    if(sessionStorage.getItem("jwt-auth-token")){
+      tmpObj.meta = {authRequired : false}
+    } else {
+      tmpObj.meta = {authRequired : true}
+    }
+  }
+
+
   arrRoutes.push(tmpObj);
 }
 
 let aOtherPath = new Object();
 
 aOtherPath.path = "/*";
-aOtherPath.path = "/*";
 aOtherPath.name = "/other";
-aOtherPath.components = { default:Login } ;
-arrRoutes.push(aOtherPath) ; 
+aOtherPath.components = {default: Login};
+arrRoutes.push(aOtherPath);
 
-export default new Router({
+export const router = new Router({
   mode:'history',
   linkExactActiveClass: "active",
   routes : arrRoutes,
@@ -87,6 +96,31 @@ export default new Router({
     }
   }
 });
+// 네비게이션 가드
+router.beforeEach(function (to,from,next){
+  // console.log("to::",to);
+  // console.log("from::",from);
+  // console.log("next::",next);
+  if(to.fullPath === '/login'){
+    sessionStorage.setItem("jwt-auth-token", "")
+  }
+  if(to.matched.some(function (routeInfo){
+    if(from.fullPath === "/login"){
+      next()
+    } else {
+      return routeInfo.meta.authRequired;
+    }
+  })){
+    next({path:'/login'})
+    window.alert("잘못된 경로로 접근하였습니다.");
+  } else
+  {
+    next()
+  }
+})
+
+
+
 
 
 

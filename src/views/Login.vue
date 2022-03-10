@@ -323,7 +323,7 @@ export default {
       let empno = ''
       let prjt_id_selected = this.pjt_selected
       let bkup_id_selected = '0000000000'
-
+      storage.setItem("jwt-auth-token", "login")
       if (this.userId != null && this.userId !== '') {
         axiosService.get("/PJTE9001/select", {
           params: {

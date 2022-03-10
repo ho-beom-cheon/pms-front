@@ -388,6 +388,8 @@ export default {
               }
               this.fnSearch()
             })
+          } else {
+            return;
           }
           if (this.updatedRows.length !== 0) {
             if (this.vaildation(this.updatedRows, "1") === true) {
@@ -413,7 +415,7 @@ export default {
                 console.log("업데이트 오류 ::", e);
               }
             } else {
-              this.$refs.grid.invoke("reloadData");
+              return;
             }
           }
         }
@@ -842,7 +844,6 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
-
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
       if(this.count == 1) {
         if (this.atfl_mng_id_yn !== '') {
@@ -857,6 +858,11 @@ export default {
         }
       }
     },
+    txt_modal1() {
+      if(this.modals.txt_modal1 === true) {
+        document.getElementById("modalId").focus()
+      }
+    }
   },
 
 // 변수 선언부분
@@ -869,7 +875,7 @@ export default {
       excelUplod: 'N',
       addCheak: 'N',
       validated: false,
-      
+
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
