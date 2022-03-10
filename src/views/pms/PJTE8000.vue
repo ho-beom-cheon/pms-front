@@ -11,16 +11,24 @@
         <div class="col">
           <ul class="filter-con clear-fix">
             <combo
-                :comboArray = "this.comboList"
+                :comboArray = "this.infocomboList1"
                 @real_prjt_id_change="real_prjt_id_change"
-                @week_sqn_cd_change="week_sqn_cd_change"
             >
             </combo>
             <li class="filter-item">
               <div class="item-con">주간년월
-                  <input  type="month" style="width: 125px"  v-model="info.week_yymm">
+                <input  type="month"
+                        style="width: 125px"
+                        v-model="info.week_yymm"
+                        @change="getWeekVal(info.week_yymm)"
+                >
               </div>
             </li>
+            <combo
+                :comboArray = "this.infocomboList2"
+                @week_sqn_cd_change="week_sqn_cd_change"
+            >
+            </combo>
             <li class="filter-item-n">
               <div class="input-searchWrap">PM명
                 <input type="text"
@@ -913,6 +921,22 @@ export default {
 
       return year + '-' + month;
     },
+    //오늘날인지 아닌지 확인
+    getWeekVal(data){
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = ("0" + (1 + date.getMonth())).slice(-2);
+      var curDate = year + '-' + month;
+
+      if(curDate == data){
+        this.info.week_seq_val ='Y';
+      }else{
+        this.info.week_seq_val ='N';
+      }
+
+      console.log(this.info.week_seq_val);
+    },
+
     // YYYY-MM 으로 형식 변환
     getYyyymm(data) {
       let yyyymm;
@@ -1063,7 +1087,8 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C38","C39"],
+      infocomboList1 : ["C38"],
+      infocomboList2 : ["C39"],
       comboList1 : ["C40"],
       comboList2 : ["C-38","C-40"],
       comboList3: ["C-39"],
@@ -1095,6 +1120,7 @@ export default {
         week_sqn_cd_selected  : 'TTT',                    // 차수콤보
         dept_cd_selected      : 'TTT',                    // 부문명
 
+        week_seq_val : 'Y',
       },
 
       detail: {
