@@ -982,7 +982,7 @@ aside dl dd + dd a {
     padding: 5px 0;
 }
 .aside-con .card-body li.active,
-.aside-con .card-body li:hover {
+.aside-con .card-body li a:hover {
     color: var(--primary);
 }
 .aside-con .card-body li a {
