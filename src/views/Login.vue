@@ -284,6 +284,8 @@ export default {
                 if (res.data.data[0].login_yn === "Y") {
                   if(res.data.data[0].prjt_id === "0000000001") {
                     this.$router.push('/PJTE8000');
+                  } else if (res.data.data[0].prjt_id === "0000000003"){
+                    this.$router.push('/PJTE9900');
                   } else {
                     this.$router.push('/PJTE1000');
                   }

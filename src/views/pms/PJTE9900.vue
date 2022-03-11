@@ -13,8 +13,8 @@
         <ul class="filter-con clear-fix">
           <combo
               :comboArray="this.comboList"
+              @dept_cd_change="dept_cd_change"
               @bkup_id_change="bkup_id_change"
-              @prjt_nm_chage="prjt_nm_chage"
           ></combo>
           <li class="filter-item">
             <div class="item-con">기준년월
@@ -25,7 +25,7 @@
             <div class="item-con">연관작업
               <input type="text"
                      placeholder="입력불가"
-                     v-model="info.pgm_id"
+                     v-model="info.mng_id"
                      style   = "width: 100px; background-color: #f2f2f2"
                      :disabled = true
               >
@@ -86,11 +86,22 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import {Grid} from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
-import XLSX from "xlsx";
-import PmsSideBar from "@/components/PmsSideBar";
-import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+
+// 부문 코드 (수정필요)
+const work_step_cd = [
+  { text: '오픈', value: '100' },
+  { text: '진행중', value: '200' },
+  { text: '중단', value: '300' },
+  { text: '완료', value: '400' },
+];
+// 부문 코드 (수정필요)
+const mark = [
+  { text: ' ', value: 'NNN' },
+  { text: '이슈', value: 'I' },
+  { text: '위험', value: 'R' },
+];
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -134,29 +145,72 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
+    dept_cd_change(params) {
+      this.info.dept_cd_selected = params
+    },
     bkup_id_change(params) {
       this.info.bkup_id_selected = params
     },
-    prjt_nm_chage(params) {
-      this.info.prjt_nm_selected = params
-    },
+
 
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-
-      if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
-        // 특정 열 비활성화
-        this.$refs.grid.invoke("disableColumn", 'pgm_nm');
-        this.$refs.grid.invoke("disableColumn", 'pgm_id');
+      // 그리드 전체 비활성화
+      this.$refs.grid.invoke("disable");
+      // 최초 조회 시 현재 년월 기준 조회 값 세팅
+      this.info.week_yymm = this.getCurrentYyyymm()
+      // 권한에 따른 컬럼 활성화
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
+      if (aut_cd === '500' || aut_cd === '600') {
+        this.$refs.grid.invoke("enableColumn", 'work_task');
+        this.$refs.grid.invoke("enableColumn", 'reg_dt');
+        this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
+        this.$refs.grid.invoke("enableColumn", 'com_due_dt');
+        this.$refs.grid.invoke("enableColumn", 'stop_dt');
+        this.$refs.grid.invoke("enableColumn", 're_sta_dt');
+        this.$refs.grid.invoke("enableColumn", 'com_dt');
+        this.$refs.grid.invoke("enableColumn", 'bak_work_id');
+        this.$refs.grid.invoke("enableColumn", 'mark');
+      } else {
+        this.$refs.grid.invoke("enableColumn", 'com_due_dt');
+        this.$refs.grid.invoke("enableColumn", 'stop_dt');
+        this.$refs.grid.invoke("enableColumn", 're_sta_dt');
+        this.$refs.grid.invoke("enableColumn", 'com_dt');
+        this.$refs.grid.invoke("enableColumn", 'bak_work_id');
       }
 
+    },
+
+    // YYYY-MM 형태의 현재 년월을 구하는 함수
+    getCurrentYyyymm() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' + month;
+    },
+    // YYYYMMDD 형태의 현재 년월일을 구하는 함수
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      debugger
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
     },
     // 저장 버튼
     fnSave() {
       if (this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
-        axiosService.post("/PJTE2100/create", {
+        axiosService.post("/PJTE9900/create", {
           excelUplod: this.excelUplod,
           gridData: this.gridData,
           prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -194,7 +248,7 @@ export default {
                 }
               }
             }
-            axiosService.post("/PJTE2100/create", {
+            axiosService.post("/PJTE9900/create", {
               excelUplod: this.excelUplod,
               gridData: this.createdRows,
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -252,8 +306,10 @@ export default {
     },
 
     onGridUpdated(grid) {
+      this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.addCheak = 'N';
-
+      this.fnStepCheck();
     },
     beforeExport(grid) {
       console.log("beforeExport::", grid)
@@ -263,11 +319,17 @@ export default {
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
-      let gridRow = this.$refs.grid.invoke("getRow", this.curRow);
+      const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
+      // 그리드 row 클릭 시 연관작업에 바인딩
+      if (currentRowData != null) {
+        this.info.mng_id = currentRowData.mng_id;
+      }
+
       let gridData = this.$refs.grid.invoke("getData");
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+
       if (ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
@@ -284,7 +346,6 @@ export default {
     dbClick(ev) {
       this.curRow = ev.rowKey;
     },
-
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit() {
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -318,17 +379,15 @@ export default {
     },
     // 추가한 행 편집 활성화
     fnEnable() {
-      // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
-      this.$refs.grid.invoke("enableRow", this.NewRow - 1);
-      this.$refs.grid.invoke("enableCell", this.NewRow - 1, "pgm_id");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "pal_atfl_mng_id_yn");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "atfl_mng_id_yn");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "err_btn");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "sta_dt");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "end_dt");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "dvlpe_cnf_dt");
-      this.$refs.grid.invoke("disableCell", this.NewRow - 1, "pl_cnf_dt");
+      // 새로 ADD한 Row의 등록일을 현재 날짜로 세팅
+      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_dt", this.getCurrentYyyymmdd());
+      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
+      this.$refs.grid.invoke("setValue", this.NewRow - 1, "work_step_cd", '100');
+      // // 새로 ADD한 Row의 담당자와 비고 내용 셀 색 변경
+      this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      // this.$refs.grid.invoke("enableCell", this.NewRow - 1, "mark");
     },
     // 행삭제
     gridDelRow() {
@@ -461,7 +520,7 @@ export default {
     return {
 
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C27", "C0"],
+      comboList: ["C40", "C27"],
 
       gridData: [],
       excelUplod: 'N',
@@ -492,32 +551,26 @@ export default {
         dvlp_dis_cd_selected: 'TTT',
         pgm_dis_cd_selected: 'TTT',
         prc_step_cd_selected: 'TTT',
+
+        reg_dt : '',
+        mng_id : this.mng_id,  // 연관작업 ID
+        week_yymm : this.week_yymm,  // 기준년월
+        work_step_cd : work_step_cd,
+        dept_cd_selected : sessionStorage.getItem("LOGIN_DEPT_CD"),
       },
       login: {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
         login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+        login_dept_cd: sessionStorage.getItem("LOGIN_DEPT_CD"),
       },
+
 
       updatedRows: this.updatedRows,
       deletedRows: this.deletedRows,
       createdRows: this.createdRows,
 
-      // 메뉴 리스트 (추후 공통 작업 필요)
-      menu_list: [
-        {id: 'PJTE1000', path: '/PJTE1000', name: 'ProjectEyes현황'},
-        {id: 'PJTE2100', path: '/PJTE2100', name: '개발현황'},
-        {id: 'PJTE2110', path: '/PJTE2110', name: '개발진척현황'},
-        {id: 'PJTE2200', path: '/PJTE2200', name: '통합테스트'},
-        {id: 'PJTE2210', path: '/PJTE2210', name: '통합테스트진척현황'},
-        {id: 'PJTE3000', path: '/PJTE3000', name: '결함관리'},
-        {id: 'PJTE4000', path: '/PJTE4000', name: 'ActionItem및이슈관리현황'},
-        {id: 'PJTE5000', path: '/PJTE5000', name: 'WBS관리'},
-        {id: 'PJTE6000', path: '/PJTE6000', name: 'PMS신청관리'},
-        {id: 'PJTE7000', path: '/PJTE7000', name: '산출물정합성체크'},
-        {id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리'},
-      ],
       /* 그리드 상세보기 모달 속성 */
       modals: {
         txt_modal1: false,
@@ -538,10 +591,10 @@ export default {
       // toast ui grid 데이터
       dataSource: {
         api: {
-          readData: {url: process.env.VUE_APP_API + '/PJTE2100/select', method: 'GET'},
-          createData: {url: process.env.VUE_APP_API + '/PJTE2100/create', method: 'POST'},
-          updateData: {url: process.env.VUE_APP_API + '/PJTE2100/update', method: 'PUT'},
-          deleteData: {url: process.env.VUE_APP_API + '/PJTE2100/delete', method: 'PUT'},
+          readData: {url: process.env.VUE_APP_API + '/PJTE9900/select', method: 'GET'},
+          createData: {url: process.env.VUE_APP_API + '/PJTE9900/create', method: 'POST'},
+          updateData: {url: process.env.VUE_APP_API + '/PJTE9900/update', method: 'PUT'},
+          deleteData: {url: process.env.VUE_APP_API + '/PJTE9900/delete', method: 'PUT'},
         },
         initialRequest: false,
         contentType: 'application/json;',
@@ -555,10 +608,10 @@ export default {
       header: {
         height: 55,
         complexColumns: [
-          {header: '작업목록(TO-DO)', name: 'mergeColumn1', childNames: ['pgm_nm', 'pgm_id', 'pl_nm', 'frcs_sta_dt', 'frcs_end_dt']},
-          {header: '진행중(In-Progress)', name: 'mergeColumn2', childNames: ['dvlpe_enm', 'if_end_dt']},
-          {header: '중단(Hold)', name: 'mergeColumn3', childNames: ['stop_sta_dt', 'stop_end_dt'], headerAlign: 'center'},
-          {header: '완료(Done)', name: 'mergeColumn4', childNames: ['end_dt', 'next_no']},
+          {header: '작업목록(TO-DO)', name: 'mergeColumn1', childNames: ['work_task', 'mng_id', 'reg_nm', 'reg_dt', 'com_rgs_dt', 'work_step_cd']},
+          {header: '진행중(In-Progress)', name: 'mergeColumn2', childNames: ['crpe_nm', 'com_due_dt']},
+          {header: '중단(Hold)', name: 'mergeColumn3', childNames: ['stop_dt', 're_sta_dt'], headerAlign: 'center'},
+          {header: '완료(Done)', name: 'mergeColumn4', childNames: ['com_dt', 'bak_work_id']},
           {header: '비고(Back-Log)', name: 'mergeColumn5', childNames: ['mark', 'rmrk'], headerAlign: 'center'},
         ]
       },
@@ -567,7 +620,7 @@ export default {
           header: '작업명',
           width: 350,
           align: 'left',
-          name: 'pgm_nm',
+          name: 'work_task',
           whiteSpace: 'normal',
           editor: 'text',
           filter: 'select',
@@ -576,55 +629,81 @@ export default {
           header: '작업ID',
           width: 95,
           align: 'center',
-          name: 'pgm_id',
-          editor: 'text',
+          name: 'mng_id',
           sortable: true
         },
         {
           header: '등록자',
           width: 95,
           align: 'center',
-          name: 'pl_nm',
-          editor: 'text',
-          filter: 'select'
+          name: 'reg_nm',
+          filter: 'select',
+          defaultValue: sessionStorage.getItem("LOGIN_EMP_NM"),
         },
         {
           header: '등록일',
           width: 95,
           align: 'center',
-          name: 'frcs_sta_dt',
+          type: 'date',
+          name: 'reg_dt',
           format: 'yyyy-mm-dd',
-          sortable: true
+          sortable: true,
         },
         {
           header: '완료요청일',
           width: 95,
           align: 'center',
-          name: 'frcs_end_dt',
+          type: 'date',
+          name: 'com_rgs_dt',
           format: 'yyyy-mm-dd',
+          editor: 'datePicker',
           sortable: true
+        },
+        {
+          header: '작업상태',
+          width: 95,
+          align: 'center',
+          name: 'work_step_cd',
+          formatter: 'listItemText',
+          type:'text',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: work_step_cd
+            }
+          },
         },
         {
           header: '담당자',
           width: 95,
           align: 'center',
-          name: 'dvlpe_enm',
+          name: 'crpe_nm',
           editor: 'text',
           filter: 'select'
+        },
+        {
+          header: '참여자',
+          width: 95,
+          align: 'center',
+          name: 'ptcp_nm',
+          editor: 'text',
+          filter: 'select',
+          hidden: true
         },
         {
           header: '완료예정일',
           width: 95,
           align: 'center',
-          name: 'if_end_dt',
+          name: 'com_due_dt',
           format: 'yyyy-mm-dd',
+          editor: 'datePicker',
           sortable: true
         },
         {
           header: '중단일',
           width: 95,
           align: 'center',
-          name: 'stop_sta_dt',
+          name: 'stop_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true
@@ -634,7 +713,7 @@ export default {
           width: 95,
           align: 'center',
           type: 'date',
-          name: 'stop_end_dt',
+          name: 're_sta_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true
@@ -643,14 +722,15 @@ export default {
           header: '완료일',
           width: 95,
           align: 'center',
-          name: 'end_dt',
+          name: 'com_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true
         },
         {
           header: '후속작업',
-          name: 'next_no',
+          name: 'bak_work_id',
+          align: 'center',
           width: 95,
           editor: "text",
           sortable: true
@@ -660,7 +740,14 @@ export default {
           width: 70,
           align: 'center',
           name: 'mark',
-          filter: 'select'
+          formatter: 'listItemText',
+          type:'text',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: mark
+            }
+          },
         },
         {
           header: '비고내용',
@@ -674,4 +761,7 @@ export default {
 
 </script>
 <style>
+.disableColor {
+  background: #FFFFFF!important;
+}
 </style>

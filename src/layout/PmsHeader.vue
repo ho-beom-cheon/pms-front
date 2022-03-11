@@ -163,13 +163,11 @@ export default {
       }
     },
     fn_current_menu() {
-      if(sessionStorage.getItem(""))
       for (let i = 0; i < this.menu_list.length; i++) {
         if (this.$route.path == this.menu_list[i].path) {
           this.current_menu = this.menu_list[i].name
         }
       }
-
     }
   }
 };
