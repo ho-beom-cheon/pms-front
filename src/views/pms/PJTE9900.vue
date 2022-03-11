@@ -21,16 +21,6 @@
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
-          <li class="filter-item">
-            <div class="item-con">연관작업
-              <input type="text"
-                     placeholder="입력불가"
-                     v-model="info.mng_id"
-                     style   = "width: 100px; background-color: #f2f2f2"
-                     :disabled = true
-              >
-            </div>
-          </li>
         </ul>
 
         <ul class="filter-btn">
@@ -45,15 +35,72 @@
       <!-- page contents -->
       <section class="page-contents">
         <!-- Modal popup contents -->
-        <Modal :show.sync="modals.txt_modal1">
-          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
+        <Modal :show.sync="modals.crpe_nm_modal">
+          <div class="modal-pop-body">
+            <h2>
+              담당자 및 참여자
+            </h2>
+          </div>
+          <hr>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>담당자명</th>
+              <td colspan="2">
+                <input type="text"
+                       placeholder="담당자를 입력하세요."
+                       v-model="crpenmTxt"
+                       style="width: 403px"
+                >
+              </td>
+            </tr>
+            <br>
+            <tr>
+              <th style="vertical-align: middle">
+                참여자명
+              </th>
+              <td colspan="5">
+                <textarea
+                    cols="62"
+                    rows="20"
+                    v-model="ptcpnmTxt"
+                    style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
+                ></textarea>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+            <div style="float: right">
+              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+        </Modal>
+        <Modal :show.sync="modals.backlog_modal">
+          <div class="modal-pop-body">
+            <h2>
+              비고(Back-Log)
+            </h2>
+          </div>
+          <hr>
           <tr>
-            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
+            <textarea
+                id="BacklogModal"
+                cols="73"
+                rows="30"
+                style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
+                v-model="modalTxt"
+            ></textarea>
           </tr>
           <tr>
             <div style="float: right">
-              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
-              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+              <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button id="backlog-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
             </div>
           </tr>
         </Modal>
@@ -200,7 +247,6 @@ export default {
       let month = date.getMonth()+1;
       let day = ("0" + date.getDate()).slice(-2);
 
-      debugger
       if(month < 10){
         month = "0"+month;
       }
@@ -309,7 +355,6 @@ export default {
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.addCheak = 'N';
-      this.fnStepCheck();
     },
     beforeExport(grid) {
       console.log("beforeExport::", grid)
@@ -320,18 +365,22 @@ export default {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
-      // 그리드 row 클릭 시 연관작업에 바인딩
-      if (currentRowData != null) {
-        this.info.mng_id = currentRowData.mng_id;
-      }
 
       let gridData = this.$refs.grid.invoke("getData");
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
 
-      if (ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
-        this.modals.txt_modal1 = true;
+      // 컬럼명이 <담당자>일 때만 모달 팝업
+      if (ev.columnName == 'crpe_nm') {
+        this.modals.crpe_nm_modal = true;
+        this.crpenmTxt = currentCellData.value;
+        this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm")
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+      // 컬럼명이 <비고>일 때만 모달 팝업
+      if (ev.columnName == 'rmrk') {
+        this.modals.backlog_modal = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
@@ -348,12 +397,22 @@ export default {
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit() {
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
-      this.modals.txt_modal1 = false;
+      if (this.modals.backlog_modal == true) {
+        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("BacklogModal").value);
+        this.modals.backlog_modal = false;
+      } else if (this.modals.crpe_nm_modal == true) {
+        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("BacklogModal").value);
+        this.modals.backlog_modal = false;
+      }
+
     },
-    // 모달창 닫기
+    // backlog 모달창 닫기
     fnCloseModal() {
-      this.modals.txt_modal1 = false;
+      if(this.modals.backlog_modal == true) {
+        this.modals.backlog_modal = false;
+      } else if (this.modals.crpe_nm_modal == true) {
+        this.modals.crpe_nm_modal = false;
+      }
     },
     //조회
     fnSearch() {
@@ -573,9 +632,12 @@ export default {
 
       /* 그리드 상세보기 모달 속성 */
       modals: {
-        txt_modal1: false,
+        crpe_nm_modal: false,
+        backlog_modal: false,
       },
-      modalTxt: this.modalTxt,
+      modalTxt: this.modalTxt,   // 비고
+      crpenmTxt: this.crpenmTxt, // 담당자
+      ptcpnmTxt: this.ptcpnmTxt, // 참여자
 
       /* grid 속성 */
       count: 0,
