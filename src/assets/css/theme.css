@@ -1143,6 +1143,23 @@ aside dl dd + dd a {
     height: 16px;
     background: url(../../assets/img/PE-icon/ic_popup_close.svg) center/cover no-repeat;
 }
+.modal-pop-body {
+
+}
+.modal-pop-body h2 {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 5px;
+}
+.modal-pop-body h2::before {
+    display: block;
+    content: '';
+    width: 14px;
+    height: 2px;
+    background: var(--primary);
+    margin-bottom: 3px;
+}
 .pop-body {
     padding: 25px 20px 70px;
 }
