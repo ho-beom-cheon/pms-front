@@ -54,6 +54,7 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
   tmpObj.name = menuListStr[idx].toLowerCase();
 
   if("/login".indexOf(menuListStr[idx]) > 0){
+    console.log("tmpObj ::",tmpObj);
     tmpObj.components = {default: menuList[idx]};
     tmpObj.meta = {authRequired : false}
   }
@@ -72,8 +73,6 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
       tmpObj.meta = {authRequired : true}
     }
   }
-
-
   arrRoutes.push(tmpObj);
 }
 
@@ -96,16 +95,19 @@ export const router = new Router({
     }
   }
 });
-// 네비게이션 가드
+
 router.beforeEach(function (to,from,next){
-  // console.log("to::",to);
-  // console.log("from::",from);
-  // console.log("next::",next);
+  console.log("to::",to);
+  console.log("from::",from);
+  console.log("next::",next);
   if(to.fullPath === '/login'){
     sessionStorage.setItem("jwt-auth-token", "")
   }
+  if(to.name === '/other'){
+    next({path:'/login'})
+  }
   if(to.matched.some(function (routeInfo){
-    if(from.fullPath === "/login"){
+    if(from.fullPath === '/login'){
       next()
     } else {
       return routeInfo.meta.authRequired;

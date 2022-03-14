@@ -82,48 +82,77 @@
               <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
             </div>
         </Modal>
-        <Modal :show.sync="modals.backlog_modal">
-          <div class="modal-pop-body">
-            <h2>
-              비고(Back-Log)
-            </h2>
-          </div>
-          <hr>
-          <tr>
-            <textarea
-                id="BacklogModal"
-                cols="73"
-                rows="30"
-                style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
-                v-model="modalTxt"
-            ></textarea>
-          </tr>
-          <tr>
-            <div style="float: right">
-              <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
-              <button id="backlog-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+      </section>
+      <!-- page contents -->
+      <section class="page-contents">
+        <div class="multiGridWrap-Kanban">
+          <div class="div1-Kanban">
+            <div>
+              <grid
+                  ref="grid"
+                  :data="dataSource"
+                  :header="header"
+                  :columns="columns"
+                  :bodyHeight="455"
+                  :showDummyRows="showDummyRows"
+                  :columnOptions="columnOptions"
+                  :editingEvent="editingEvent"
+                  :rowHeight="rowHeight"
+                  :minRowHeight="minRowHeight"
+                  :rowHeaders="rowHeaders"
+                  @click="onClick"
+                  @dblclick="dbClick"
+                  @onGridUpdated="onGridUpdated"
+                  @beforeExport="beforeExport"
+              ></grid>
             </div>
-          </tr>
-        </Modal>
-        <!-- grid contents -->
-        <div class="gridWrap" style="min-width: 750px;">
-          <grid
-              ref="grid"
-              :data="dataSource"
-              :header="header"
-              :columns="columns"
-              :bodyHeight="bodyHeight"
-              :showDummyRows="showDummyRows"
-              :columnOptions="columnOptions"
-              :editingEvent="editingEvent"
-              :rowHeight="rowHeight"
-              :minRowHeight="minRowHeight"
-              :rowHeaders="rowHeaders"
-              @click="onClick"
-              @dblclick="dbClick"
-              @onGridUpdated="onGridUpdated"
-              @beforeExport="beforeExport"
-          ></grid>
+          </div>
+          <div class="div2-Kanban">
+            <div class="div-header"><h2>비고(Back-Log)</h2>
+              <ul class="filter-btn">
+                <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+              </ul>
+            </div>
+              <div class="col">
+                <ul class="filter-con clear-fix">
+                  <li class="filter-item">
+                    <div class="item-con">
+                    <textarea
+                              cols="103"
+                              rows="33"
+                              id="rmrk"
+                              placeholder="비고를 확인 할 작업항목을 선택하세요."
+                              v-model="rmrk"
+                              style=" margin-left: 10px; height: 206px; width: 732px; border: 1px solid #bdbdbd; line-height: normal"
+                    ></textarea>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+          </div>
+          <div class="div3-Kanban">
+            <div class="div-header"><h2>연관작업 목록</h2>
+              <ul class="filter-btn">
+                <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">연관작업 조회</button>
+              </ul>
+            </div>
+            <div class="div-grid">
+              <grid
+                  ref="grid2"
+                  :data="dataSource"
+                  :header="header2"
+                  :columns="columns2"
+                  :bodyHeight="175"
+                  :showDummyRows="showDummyRows"
+                  :columnOptions="columnOptions"
+                  :editingEvent="editingEvent"
+                  :rowHeight="rowHeight"
+                  :minRowHeight="minRowHeight"
+                  :rowHeaders="rowHeaders"
+                  @click="onClick"
+              ></grid>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -359,9 +388,22 @@ export default {
     },
 
     onGridUpdated(grid) {
+      console.log("grid :: ", grid);
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.addCheak = 'N';
+
+      // 작업 상태에 따라 셀 색상 변경
+      let gridRow = this.$refs.grid.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+          }
+      }
     },
     beforeExport(grid) {
       console.log("beforeExport::", grid)
@@ -376,6 +418,8 @@ export default {
       let gridData = this.$refs.grid.invoke("getData");
       console.log(this.$refs.grid.invoke("getRow", this.curRow));
 
+      this.rmrk = this.$refs.grid.invoke("getValue", this.curRow, "rmrk")
+
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
 
       // 컬럼명이 <담당자>일 때만 모달 팝업
@@ -383,12 +427,6 @@ export default {
         this.modals.crpe_nm_modal = true;
         this.crpenmTxt = currentCellData.value;
         this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm")
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      }
-      // 컬럼명이 <비고>일 때만 모달 팝업
-      if (ev.columnName == 'rmrk') {
-        this.modals.backlog_modal = true;
-        this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
 
@@ -404,22 +442,12 @@ export default {
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit() {
-      if (this.modals.backlog_modal == true) {
-        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("BacklogModal").value);
-        this.modals.backlog_modal = false;
-      } else if (this.modals.crpe_nm_modal == true) {
-        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("BacklogModal").value);
-        this.modals.backlog_modal = false;
-      }
-
-    },
-    // backlog 모달창 닫기
-    fnCloseModal() {
-      if(this.modals.backlog_modal == true) {
-        this.modals.backlog_modal = false;
-      } else if (this.modals.crpe_nm_modal == true) {
+        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("CrpeNmModal").value);
         this.modals.crpe_nm_modal = false;
-      }
+    },
+
+    fnCloseModal() {
+        this.modals.crpe_nm_modal = false;
     },
     //조회
     fnSearch() {
@@ -628,6 +656,8 @@ export default {
         prjt_id           : sessionStorage.getItem("LOGIN_PROJ_ID"),     //프로젝트아이디
         week_yymm         : this.week_yymm,                                   //기준년월
       },
+      rmrk : '', // 비고
+
       login: {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
         login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),
@@ -656,7 +686,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 740,
+      bodyHeight: 300,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: false,
@@ -685,129 +715,12 @@ export default {
           {header: '진행중(In-Progress)', name: 'mergeColumn2', childNames: ['crpe_nm', 'com_due_dt']},
           {header: '중단(Hold)', name: 'mergeColumn3', childNames: ['stop_dt', 're_sta_dt'], headerAlign: 'center'},
           {header: '완료(Done)', name: 'mergeColumn4', childNames: ['com_dt', 'bak_work_id']},
-          {header: '비고(Back-Log)', name: 'mergeColumn5', childNames: ['mark', 'rmrk'], headerAlign: 'center'},
         ]
       },
+      header2: {
+        height: 30,
+      },
       columns: [
-        {
-          header: '작업명',
-          width: 350,
-          align: 'left',
-          name: 'work_task',
-          whiteSpace: 'normal',
-          editor: 'text',
-          filter: 'select',
-        },
-        {
-          header: '작업ID',
-          width: 95,
-          align: 'center',
-          name: 'mng_id',
-          sortable: true
-        },
-        {
-          header: '등록자',
-          width: 95,
-          align: 'center',
-          name: 'reg_nm',
-          filter: 'select',
-          defaultValue: sessionStorage.getItem("LOGIN_EMP_NM"),
-        },
-        {
-          header: '등록일',
-          width: 95,
-          align: 'center',
-          type: 'date',
-          name: 'reg_dt',
-          format: 'yyyy-mm-dd',
-          sortable: true,
-        },
-        {
-          header: '완료요청일',
-          width: 95,
-          align: 'center',
-          type: 'date',
-          name: 'com_rgs_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '작업상태',
-          width: 95,
-          align: 'center',
-          name: 'work_step_cd',
-          formatter: 'listItemText',
-          type:'text',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: work_step_cd
-            }
-          },
-        },
-        {
-          header: '담당자',
-          width: 95,
-          align: 'center',
-          name: 'crpe_nm',
-          editor: 'text',
-          filter: 'select'
-        },
-        {
-          header: '참여자',
-          width: 95,
-          align: 'center',
-          name: 'ptcp_nm',
-          editor: 'text',
-          filter: 'select',
-          hidden: true
-        },
-        {
-          header: '완료예정일',
-          width: 95,
-          align: 'center',
-          name: 'com_due_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '중단일',
-          width: 95,
-          align: 'center',
-          name: 'stop_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '재시작일',
-          width: 95,
-          align: 'center',
-          type: 'date',
-          name: 're_sta_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '완료일',
-          width: 95,
-          align: 'center',
-          name: 'com_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '후속작업',
-          name: 'bak_work_id',
-          align: 'center',
-          width: 95,
-          editor: "text",
-          sortable: true
-        },
         {
           header: 'Mark',
           width: 70,
@@ -823,9 +736,268 @@ export default {
           },
         },
         {
+          header: '작업ID',
+          width: 95,
+          align: 'center',
+          name: 'mng_id',
+          sortable: true
+        },
+        {
+          header: '작업명',
+          width: 650,
+          align: 'left',
+          name: 'work_task',
+          whiteSpace: 'normal',
+          editor: 'text',
+          filter: 'select',
+        },
+        {
+          header: '등록자',
+          width: 105,
+          align: 'center',
+          name: 'reg_nm',
+          filter: 'select',
+          defaultValue: sessionStorage.getItem("LOGIN_EMP_NM"),
+        },
+        {
+          header: '등록일',
+          width: 105,
+          align: 'center',
+          type: 'date',
+          name: 'reg_dt',
+          format: 'yyyy-mm-dd',
+          sortable: true,
+        },
+        {
+          header: '완료요청일',
+          width: 105,
+          align: 'center',
+          type: 'date',
+          name: 'com_rgs_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '작업상태',
+          width: 105,
+          align: 'center',
+          name: 'work_step_cd',
+          formatter: 'listItemText',
+          type:'text',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: work_step_cd
+            }
+          },
+        },
+        {
+          header: '담당자',
+          width: 105,
+          align: 'center',
+          name: 'crpe_nm',
+          editor: 'text',
+          filter: 'select'
+        },
+        {
+          header: '참여자',
+          width: 105,
+          align: 'center',
+          name: 'ptcp_nm',
+          editor: 'text',
+          filter: 'select',
+          hidden: true
+        },
+        {
+          header: '완료예정일',
+          width: 105,
+          align: 'center',
+          name: 'com_due_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '중단일',
+          width: 105,
+          align: 'center',
+          name: 'stop_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '재시작일',
+          width: 105,
+          align: 'center',
+          type: 'date',
+          name: 're_sta_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '완료일',
+          width: 105,
+          align: 'center',
+          name: 'com_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '후속작업',
+          name: 'bak_work_id',
+          align: 'center',
+          editor: "text",
+          sortable: true
+        },
+        {
           header: '비고내용',
           name: 'rmrk',
           whiteSpace: 'normal',
+          hidden: true
+        },
+      ],
+      columns2: [
+        {
+          header: 'Mark',
+          width: 70,
+          align: 'center',
+          name: 'mark',
+          formatter: 'listItemText',
+          type:'text',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: mark
+            }
+          },
+        },
+        {
+          header: '작업ID',
+          width: 95,
+          align: 'center',
+          name: 'mng_id',
+          sortable: true
+        },
+        {
+          header: '작업명',
+          width: 650,
+          align: 'left',
+          name: 'work_task',
+          whiteSpace: 'normal',
+          editor: 'text',
+          filter: 'select',
+        },
+        {
+          header: '등록자',
+          width: 105,
+          align: 'center',
+          name: 'reg_nm',
+          filter: 'select',
+          defaultValue: sessionStorage.getItem("LOGIN_EMP_NM"),
+        },
+        {
+          header: '등록일',
+          width: 105,
+          align: 'center',
+          type: 'date',
+          name: 'reg_dt',
+          format: 'yyyy-mm-dd',
+          sortable: true,
+        },
+        {
+          header: '완료요청일',
+          width: 105,
+          align: 'center',
+          type: 'date',
+          name: 'com_rgs_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '작업상태',
+          width: 105,
+          align: 'center',
+          name: 'work_step_cd',
+          formatter: 'listItemText',
+          type:'text',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: work_step_cd
+            }
+          },
+        },
+        {
+          header: '담당자',
+          width: 105,
+          align: 'center',
+          name: 'crpe_nm',
+          editor: 'text',
+          filter: 'select'
+        },
+        {
+          header: '참여자',
+          width: 105,
+          align: 'center',
+          name: 'ptcp_nm',
+          editor: 'text',
+          filter: 'select',
+          hidden: true
+        },
+        {
+          header: '완료예정일',
+          width: 105,
+          align: 'center',
+          name: 'com_due_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '중단일',
+          width: 105,
+          align: 'center',
+          name: 'stop_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '재시작일',
+          width: 105,
+          align: 'center',
+          type: 'date',
+          name: 're_sta_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '완료일',
+          width: 105,
+          align: 'center',
+          name: 'com_dt',
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          sortable: true
+        },
+        {
+          header: '후속작업',
+          name: 'bak_work_id',
+          align: 'center',
+          editor: "text",
+          sortable: true
+        },
+        {
+          header: '비고내용',
+          name: 'rmrk',
+          whiteSpace: 'normal',
+          hidden: true
         },
       ],
     }
@@ -836,5 +1008,14 @@ export default {
 <style>
 .disableColor {
   background: #FFFFFF!important;
+}
+.comColor {
+  background: #B7F0B1!important;
+}
+.stopColor {
+  background: #FFC19E!important;
+}
+.inProgressColor {
+  background: #B2EBF4!important;
 }
 </style>

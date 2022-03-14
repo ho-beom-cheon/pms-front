@@ -124,16 +124,38 @@
       <section class="page-contents">
         <!-- Modal popup contents -->
         <Modal :show.sync="modals.txt_modal1">
-          <h3 slot="header" class="modal-title" id="modal-title-default">내용상세보기</h3>
-          <tr>
-            <textarea id="modalId" cols="73" rows="15" style="margin-bottom: 10px" v-model="modalTxt"></textarea>
-          </tr>
-          <tr>
-            <div style="float: right">
-              <button class="btn btn-filter-p" id="fnEdit" style="margin-right: 5px" @click="fnEdit">수정</button>
-              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
-            </div>
-          </tr>
+          <div class="modal-pop-body">
+            <h2>
+              비고상세보기
+            </h2>
+          </div>
+          <hr>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <br>
+            <tr>
+              <td colspan="5">
+                <textarea
+                    id="modalId"
+                    cols="72"
+                    rows="20"
+                    v-model="modalTxt"
+                    style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
+                ></textarea>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div style="float: right">
+            <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+            <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+          </div>
         </Modal>
         <!-- grid contents -->
         <div class="gridWrap" style="min-width: 750px;">
@@ -452,6 +474,9 @@ export default {
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
       this.addCheak = 'N';
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
@@ -1126,7 +1151,8 @@ export default {
         },
         {
           header: '검색',
-          width: 50,
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'dvlpe_btn',
           renderer: SearchBtn,
@@ -1146,7 +1172,8 @@ export default {
         },
         {
           header: '검색',
-          width: 50,
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'pl_btn',
           renderer: SearchBtn,
@@ -1166,7 +1193,8 @@ export default {
         },
         {
           header: '검색',
-          width: 50,
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'crpe_btn',
           renderer: SearchBtn,
@@ -1277,5 +1305,8 @@ export default {
 <style>
 .disableColor {
   background: #FFFFFF!important;
+}
+.empBtnColor {
+  background: #BEBEBE!important;
 }
 </style>
