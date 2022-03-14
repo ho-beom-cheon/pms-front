@@ -133,7 +133,7 @@
           <div class="div3-Kanban">
             <div class="div-header"><h2>연관작업 목록</h2>
               <ul class="filter-btn">
-                <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">연관작업 조회</button>
+                <button class="btn btn-filter-p" style="margin-right: 5px" @click="fnReSearch">연관작업 상세조회</button>
               </ul>
             </div>
             <div class="div-grid">
@@ -149,7 +149,7 @@
                   :rowHeight="rowHeight"
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
-                  @click="onClick"
+                  @onGridUpdated="onGridUpdated2"
               ></grid>
             </div>
           </div>
@@ -241,6 +241,7 @@ export default {
       this.$refs.grid.invoke("clear");
       // 그리드 전체 비활성화
       this.$refs.grid.invoke("disable");
+      this.$refs.grid2.invoke("disable");
       // 최초 조회 시 현재 년월 기준 조회 값 세팅
       this.info.week_yymm = this.getCurrentYyyymm();
       // 권한에 따른 컬럼 활성화
@@ -249,10 +250,6 @@ export default {
         this.$refs.grid.invoke("enableColumn", 'work_task');
         this.$refs.grid.invoke("enableColumn", 'reg_dt');
         this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
-        this.$refs.grid.invoke("enableColumn", 'com_due_dt');
-        this.$refs.grid.invoke("enableColumn", 'stop_dt');
-        this.$refs.grid.invoke("enableColumn", 're_sta_dt');
-        this.$refs.grid.invoke("enableColumn", 'com_dt');
         this.$refs.grid.invoke("enableColumn", 'bak_work_id');
         this.$refs.grid.invoke("enableColumn", 'mark');
       } else {
@@ -391,6 +388,9 @@ export default {
       console.log("grid :: ", grid);
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "work_step_cd", "lineBorder");
+      this.$refs.grid.invoke("addColumnClassName", "com_due_dt", "lineBorder");
+      this.$refs.grid.invoke("addColumnClassName", "re_sta_dt", "lineBorder");
       this.addCheak = 'N';
 
       // 작업 상태에 따라 셀 색상 변경
@@ -404,6 +404,20 @@ export default {
             this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
           }
       }
+
+    },
+    onGridUpdated2(grid2) {
+      // 연관작업 목록 작업 상태에 따라 셀 색상 변경
+      let gridRow2 = this.$refs.grid.invoke("getRowCount");
+      for(let i=0; i<gridRow2; i++) {
+        if(grid2.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+          this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid2.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid2.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+        }
+      }
     },
     beforeExport(grid) {
       console.log("beforeExport::", grid)
@@ -413,20 +427,16 @@ export default {
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
-      const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
-
       let gridData = this.$refs.grid.invoke("getData");
-      console.log(this.$refs.grid.invoke("getRow", this.curRow));
-
-      this.rmrk = this.$refs.grid.invoke("getValue", this.curRow, "rmrk")
-
+      // 그리드 Row 클릭 시 비고(Back-Log) 바인딩
+      this.rmrk = this.$refs.grid.invoke("getValue", this.curRow, "rmrk");
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
 
       // 컬럼명이 <담당자>일 때만 모달 팝업
       if (ev.columnName == 'crpe_nm') {
         this.modals.crpe_nm_modal = true;
         this.crpenmTxt = currentCellData.value;
-        this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm")
+        this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm");
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
 
@@ -435,6 +445,10 @@ export default {
           return;
         }
       }
+      this.info.gubun = "2";
+      this.info.con_work_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id");
+      this.$refs.grid2.invoke("setRequestParams", this.info);
+      this.$refs.grid2.invoke("readData");
     },
 
     dbClick(ev) {
@@ -454,8 +468,16 @@ export default {
       if (this.searchVaildation() === false) {
         return;
       }
+      this.info.gubun = "1";
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
+    },
+    //연관작업 상세조회
+    fnReSearch() {
+      this.info.gubun = "2";
+      this.$refs.grid.invoke("setRequestParams", this.info);
+      this.$refs.grid.invoke("readData");
+      this.info.week_yymm = '';
     },
     // 행추가
     gridAddRow() {
@@ -627,35 +649,19 @@ export default {
 
 
       info: {
-        pgm_id: this.pgm_id,          // 프로그램ID
-        pgm_nm: this.pgm_nm,          // 프로그램명
-        dvlpe_no: this.dvlpe_no,        // 개발자번호
-        dvlpe_nm: this.dvlpe_nm,        // 개발자명
-        pl_nm: this.pl_nm,           // 담당PL명
-        pl_no: this.pl_no,           // 담당PL번호
-        frcs_sta_dt: this.frcs_sta_dt,     // 계획일자STA
-        frcs_end_dt: this.frcs_end_dt,     // 계획일자END
-        dvlpe_sta_dt: this.dvlpe_sta_dt,    // 실제일자STA
-        dvlpe_end_dt: this.dvlpe_end_dt,    // 실제일자END
-        atfl_mng_id: this.atfl_mng_id,
-        pal_atfl_mng_id: this.pal_atfl_mng_id,
+        // 조회 변수
+        bkup_id_selected  : '0000000000',                                 //백업ID
+        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트ID
+        dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"), //부문코드
+        week_yymm         : this.week_yymm,                               //기준년월
 
-        prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
-
-        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT' : sessionStorage.getItem("LOGIN_BZCD"),
-        dvlp_dis_cd_selected: 'TTT',
-        pgm_dis_cd_selected: 'TTT',
-        prc_step_cd_selected: 'TTT',
-
-        reg_dt : '',
-        mng_id : this.mng_id,  // 연관작업 ID
-        work_step_cd : work_step_cd,
-        //20220311
-        dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"),     //부문코드
-        bkup_id_selected  : '0000000000',                                     //백업아이디
-        prjt_id           : sessionStorage.getItem("LOGIN_PROJ_ID"),     //프로젝트아이디
-        week_yymm         : this.week_yymm,                                   //기준년월
+        reg_dt : '',                                                      // 등록일
+        mng_id : this.mng_id,                                             // 작업ID
+        work_step_cd : work_step_cd,                                      // 작업상태
+        con_work_id : '',                                                 // 연관작업
+        gubun : '', // 그리드 구분자
       },
+
       rmrk : '', // 비고
 
       login: {
@@ -743,6 +749,14 @@ export default {
           sortable: true
         },
         {
+          header: '연관작업ID',
+          width: 95,
+          align: 'center',
+          name: 'con_work_id',
+          sortable: true,
+          hidden: true
+        },
+        {
           header: '작업명',
           width: 650,
           align: 'left',
@@ -785,6 +799,7 @@ export default {
           name: 'work_step_cd',
           formatter: 'listItemText',
           type:'text',
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -850,6 +865,7 @@ export default {
           header: '후속작업',
           name: 'bak_work_id',
           align: 'center',
+          width: 95,
           editor: "text",
           sortable: true
         },
@@ -863,7 +879,7 @@ export default {
       columns2: [
         {
           header: 'Mark',
-          width: 70,
+          width: 50,
           align: 'center',
           name: 'mark',
           formatter: 'listItemText',
@@ -877,14 +893,14 @@ export default {
         },
         {
           header: '작업ID',
-          width: 95,
+          width: 80,
           align: 'center',
           name: 'mng_id',
           sortable: true
         },
         {
           header: '작업명',
-          width: 650,
+          width: 555,
           align: 'left',
           name: 'work_task',
           whiteSpace: 'normal',
@@ -892,35 +908,8 @@ export default {
           filter: 'select',
         },
         {
-          header: '등록자',
-          width: 105,
-          align: 'center',
-          name: 'reg_nm',
-          filter: 'select',
-          defaultValue: sessionStorage.getItem("LOGIN_EMP_NM"),
-        },
-        {
-          header: '등록일',
-          width: 105,
-          align: 'center',
-          type: 'date',
-          name: 'reg_dt',
-          format: 'yyyy-mm-dd',
-          sortable: true,
-        },
-        {
-          header: '완료요청일',
-          width: 105,
-          align: 'center',
-          type: 'date',
-          name: 'com_rgs_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
           header: '작업상태',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'work_step_cd',
           formatter: 'listItemText',
@@ -933,6 +922,14 @@ export default {
           },
         },
         {
+          header: '등록자',
+          width: 105,
+          align: 'center',
+          name: 'reg_nm',
+          filter: 'select',
+          defaultValue: sessionStorage.getItem("LOGIN_EMP_NM"),
+        },
+        {
           header: '담당자',
           width: 105,
           align: 'center',
@@ -941,63 +938,11 @@ export default {
           filter: 'select'
         },
         {
-          header: '참여자',
-          width: 105,
-          align: 'center',
-          name: 'ptcp_nm',
-          editor: 'text',
-          filter: 'select',
-          hidden: true
-        },
-        {
-          header: '완료예정일',
-          width: 105,
-          align: 'center',
-          name: 'com_due_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '중단일',
-          width: 105,
-          align: 'center',
-          name: 'stop_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '재시작일',
-          width: 105,
-          align: 'center',
-          type: 'date',
-          name: 're_sta_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
-          header: '완료일',
-          width: 105,
-          align: 'center',
-          name: 'com_dt',
-          format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true
-        },
-        {
           header: '후속작업',
           name: 'bak_work_id',
           align: 'center',
           editor: "text",
           sortable: true
-        },
-        {
-          header: '비고내용',
-          name: 'rmrk',
-          whiteSpace: 'normal',
-          hidden: true
         },
       ],
     }
@@ -1018,4 +963,8 @@ export default {
 .inProgressColor {
   background: #B2EBF4!important;
 }
+.lineBorder {
+  border-right: #aaa solid 1px!important;
+}
+
 </style>
