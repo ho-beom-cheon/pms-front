@@ -637,6 +637,9 @@ export default {
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
     },
     fnEnable() {
       // 새로 ADD한 Row를 enable시킴
@@ -917,9 +920,9 @@ export default {
           {header: '결함건수',  name: 'mergeColumn1', childNames: ['col19', 'col20', 'col21']},
           {header: '테스트계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt','err_btn']},
-          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno'], hideChildHeaders : true},
-          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno'], hideChildHeaders : true},
-          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno'], hideChildHeaders : true},
+          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno']},
+          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno']},
+          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno']},
           {header: '통합테스트',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn']},
         ]
       },
@@ -1024,61 +1027,64 @@ export default {
           format: 'yyyy-mm-dd',
         },
         {
-          header: '개발자',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'dvlpe_enm',
           editor: 'text',
         },
         {
-          header: '개발자',
-          width: 60,
+          header: '검색',
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'dvlpe_btn',
           renderer: SearchBtn,
         },
         {
-          header: '개발자',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'dvlpe_eno',
         },
         {
-          header: 'PL명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'pl_enm',
           editor: 'text',
         },
         {
-          header: 'PL명',
-          width: 50,
+          header: '검색',
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'pl_btn',
           renderer: SearchBtn,
         },
         {
-          header: 'PL번호',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'pl_eno',
         },
         {
-          header: '담당자명',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'crpe_enm',
           editor: 'text',
         },
         {
-          header: '담당자명',
-          width: 50,
+          header: '검색',
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'crpe_btn',
           renderer: SearchBtn,
         },
         {
-          header: '담당자번호',
+          header: '번호',
           width: 80,
           align: 'center',
           name: 'crpe_eno',
@@ -1221,5 +1227,8 @@ export default {
 <style>
 .disableColor {
   background: #FFFFFF!important;
+}
+.empBtnColor {
+  background: #BEBEBE!important;
 }
 </style>

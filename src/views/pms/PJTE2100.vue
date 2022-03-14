@@ -474,6 +474,9 @@ export default {
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
       this.addCheak = 'N';
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 4);
@@ -1148,7 +1151,8 @@ export default {
         },
         {
           header: '검색',
-          width: 50,
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'dvlpe_btn',
           renderer: SearchBtn,
@@ -1168,7 +1172,8 @@ export default {
         },
         {
           header: '검색',
-          width: 50,
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'pl_btn',
           renderer: SearchBtn,
@@ -1188,7 +1193,8 @@ export default {
         },
         {
           header: '검색',
-          width: 50,
+          width: 35,
+          minWidth: 10,
           align: 'center',
           name: 'crpe_btn',
           renderer: SearchBtn,
@@ -1299,5 +1305,8 @@ export default {
 <style>
 .disableColor {
   background: #FFFFFF!important;
+}
+.empBtnColor {
+  background: #BEBEBE!important;
 }
 </style>
