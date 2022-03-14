@@ -78,7 +78,7 @@
             </tbody>
           </table>
             <div style="float: right">
-              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(1)">수정</button>
               <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
             </div>
         </Modal>
@@ -110,7 +110,7 @@
           <div class="div2-Kanban">
             <div class="div-header"><h2>비고(Back-Log)</h2>
               <ul class="filter-btn">
-                <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+                <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">수정</button>
               </ul>
             </div>
               <div class="col">
@@ -290,21 +290,6 @@ export default {
     },
     // 저장 버튼
     fnSave() {
-      if (this.excelUplod === 'Y') {
-        this.gridData = this.$refs.grid.invoke("getData");
-        axiosService.post("/PJTE9900/create", {
-          excelUplod: this.excelUplod,
-          gridData: this.gridData,
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-          login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
-        }).then(res => {
-          console.log(res);
-          if (res.data) {
-          }
-        }).catch(e => {
-          alert("이미 등록된 프로그램입니다.")
-        })
-      } else if (this.excelUplod === 'N') {
         // 변경 사항 유무 체크
         if (this.$refs.grid.invoke("isModified") === false) {
           alert("변경된 내용이 없습니다.");
@@ -330,11 +315,14 @@ export default {
                 }
               }
             }
+            debugger
             axiosService.post("/PJTE9900/create", {
               excelUplod: this.excelUplod,
               gridData: this.createdRows,
+              dept_cd: this.info.dept_cd_selected,
+              bkup_id: this.info.bkup_id_selected,
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
             }).then(res => {
               console.log(res)
               if (res.data === true) {
@@ -384,7 +372,7 @@ export default {
         // 저장 후 변경 데이터 배열 비움
         this.$refs.grid.invoke("clearModifiedData")
         this.excelUplod = 'N'
-      }
+
     },
 
     onGridUpdated(grid) {
@@ -441,9 +429,14 @@ export default {
       this.curRow = ev.rowKey;
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-    fnEdit() {
-        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("CrpeNmModal").value);
+    fnEdit(num) {
+      if(num ==1){
+        this.$refs.grid.invoke("setValue", this.curRow, "crpe_nm", this.crpenmTxt);
+        this.$refs.grid.invoke("setValue", this.curRow, "ptcp_nm", this.ptcpnmTxt);
         this.modals.crpe_nm_modal = false;
+      }else if(num ==2){
+        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk);
+      }
     },
 
     fnCloseModal() {
