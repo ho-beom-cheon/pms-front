@@ -15,6 +15,7 @@
               :comboArray="this.comboList"
               @dept_cd_change="dept_cd_change"
               @bkup_id_change="bkup_id_change"
+              ref="combo1"
           ></combo>
           <li class="filter-item">
             <div class="item-con">기준년월
@@ -193,7 +194,13 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     dept_cd_change(params) {
-      this.info.dept_cd_selected = params
+        if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+          this.info.dept_cd_selected  = sessionStorage.getItem("LOGIN_DEPT_CD");
+          this.$refs.combo1.$data.dept_cd_selected = sessionStorage.getItem('LOGIN_DEPT_CD');
+        }else{
+          this.info.dept_cd_selected  = params;
+        }
+
     },
     bkup_id_change(params) {
       this.info.bkup_id_selected = params
@@ -206,7 +213,7 @@ export default {
       // 그리드 전체 비활성화
       this.$refs.grid.invoke("disable");
       // 최초 조회 시 현재 년월 기준 조회 값 세팅
-      this.info.week_yymm = this.getCurrentYyyymm()
+      this.info.week_yymm = this.getCurrentYyyymm();
       // 권한에 따른 컬럼 활성화
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
       if (aut_cd === '500' || aut_cd === '600') {
@@ -590,6 +597,7 @@ export default {
       pal_atfl_mng_id: '',  // 설계서 첨부파일관리
       pal_atfl_mng_id_yn: '',  // 설계서 첨부파일관리
 
+
       info: {
         pgm_id: this.pgm_id,          // 프로그램ID
         pgm_nm: this.pgm_nm,          // 프로그램명
@@ -605,7 +613,7 @@ export default {
         pal_atfl_mng_id: this.pal_atfl_mng_id,
 
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
-        bkup_id_selected: '0000000000',
+
         bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT' : sessionStorage.getItem("LOGIN_BZCD"),
         dvlp_dis_cd_selected: 'TTT',
         pgm_dis_cd_selected: 'TTT',
@@ -613,9 +621,12 @@ export default {
 
         reg_dt : '',
         mng_id : this.mng_id,  // 연관작업 ID
-        week_yymm : this.week_yymm,  // 기준년월
         work_step_cd : work_step_cd,
-        dept_cd_selected : sessionStorage.getItem("LOGIN_DEPT_CD"),
+        //20220311
+        dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"),     //부문코드
+        bkup_id_selected  : '0000000000',                                     //백업아이디
+        prjt_id           : sessionStorage.getItem("LOGIN_PROJ_ID"),     //프로젝트아이디
+        week_yymm         : this.week_yymm,                                   //기준년월
       },
       login: {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
