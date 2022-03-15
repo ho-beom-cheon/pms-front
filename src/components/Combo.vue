@@ -672,7 +672,8 @@
       <div class="item-con">부문명
         <select
             v-model = "dept_cd_selected"
-            style   = "width: 100px"
+            style   = "width: 110px"
+            :disabled="read"
             @change = "dept_cd_change"
         >
           <option
