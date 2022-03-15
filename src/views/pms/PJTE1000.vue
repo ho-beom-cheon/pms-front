@@ -1,7 +1,6 @@
 <template>
   <!-- CONTENTS -->
   <div class="contents">
-
     <!-- ASIDE -- LNB -->
     <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->

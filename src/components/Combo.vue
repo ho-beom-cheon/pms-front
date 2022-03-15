@@ -672,8 +672,8 @@
       <div class="item-con">부문명
         <select
             v-model = "dept_cd_selected"
-            style   = "width: 100px"
-            :disabled ="read"
+            style   = "width: 110px"
+            :disabled="read"
             @change = "dept_cd_change"
         >
           <option
@@ -1216,7 +1216,6 @@ export default {
       this.cd_all.push(this.CD1000000040N)
     },
     init()  {
-      debugger
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
           sessionStorage.getItem("LOGIN_AUT_CD") === '600'){

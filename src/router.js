@@ -7,7 +7,7 @@ import Router from "vue-router";
 import PmsHeader from "./layout/PmsHeader";
 import PmsFooter from "./layout/PmsFooter";
 
-const Login = () => import(/* webpackChunkName: "login" */ './views/Login.vue'); menuList.push(Login); menuListStr.push("login");
+/*참고 컴포넌트*/
 const FileUpload = () => import(/* webpackChunkName: "file-upload" */ './views/example/FileUpload.vue'); menuList.push(FileUpload); menuListStr.push("FileUpload");
 const ExcelExport = () => import(/* webpackChunkName: "excel-export" */ './views/example/ExcelExport.vue'); menuList.push(ExcelExport); menuListStr.push("ExcelExport");
 const EditSample = () => import(/* webpackChunkName: "edit-sample" */ './views/example/EditSample.vue'); menuList.push(EditSample); menuListStr.push("EditSample");
@@ -17,6 +17,7 @@ const ExTran = () => import(/* webpackChunkName: "exTran" */ './views/example/Ex
 const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetMain.vue'); menuList.push(NetMain); menuListStr.push("NetMain");
 
 /* PMS */
+const PJTE0000 = () => import(/* webpackChunkName: "PJTE0000" */ './views/pms/PJTE0000.vue'); menuList.push(PJTE0000); menuListStr.push("login");
 const PJTE2100 = () => import(/* webpackChunkName: "PJTE2100" */ './views/pms/PJTE2100.vue'); menuList.push(PJTE2100); menuListStr.push("PJTE2100");
 const PJTE1000 = () => import(/* webpackChunkName: "PJTE1000" */ './views/pms/PJTE1000.vue'); menuList.push(PJTE1000); menuListStr.push("PJTE1000");
 const PJTE2200 = () => import(/* webpackChunkName: "PJTE2200" */ './views/pms/PJTE2200.vue'); menuList.push(PJTE2200); menuListStr.push("PJTE2200");
@@ -36,6 +37,7 @@ const PJTE9002 = () => import(/* webpackChunkName: "PJTE9002" */ './views/pms/PJ
 const PJTE9003 = () => import(/* webpackChunkName: "PJTE9003" */ './views/pms/PJTE9003.vue'); menuList.push(PJTE9003); menuListStr.push("PJTE9003");
 const PJTE9900 = () => import(/* webpackChunkName: "PJTE9900" */ './views/pms/PJTE9900.vue'); menuList.push(PJTE9900); menuListStr.push("PJTE9900");
 
+// Vue 와 Router 연결
 Vue.use(Router);
 
 let aRootPath = new Object();
@@ -53,11 +55,13 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
   tmpObj.path = "/" + menuListStr[idx].toLowerCase();
   tmpObj.name = menuListStr[idx].toLowerCase();
 
+  // 첫 로그인 화면
   if("/login".indexOf(menuListStr[idx]) > 0){
     console.log("tmpObj ::",tmpObj);
     tmpObj.components = {default: menuList[idx]};
     tmpObj.meta = {authRequired : false}
   }
+  // 팝업 components에 header, footer 가 없기 때문에 따로 분기
   else if ("/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0){
     tmpObj.components = {default: menuList[idx]};
     if(sessionStorage.getItem("jwt-auth-token")){
@@ -80,13 +84,17 @@ let aOtherPath = new Object();
 
 aOtherPath.path = "/*";
 aOtherPath.name = "/other";
-aOtherPath.components = {default: Login};
+aOtherPath.components = {default: PJTE0000};
 arrRoutes.push(aOtherPath);
 
 export const router = new Router({
+  // history 모드롤 선언시 브라우저가 history.pushState 를 제공한다.
   mode:'history',
+  // 전역적으로 linkExactActiveClass 를 통해 css를 적용할 수 있다.
   linkExactActiveClass: "active",
+  // route 될 객체 목록
   routes : arrRoutes,
+
   scrollBehavior: to => {
     if (to.hash) {
       return { selector: to.hash };
@@ -96,10 +104,14 @@ export const router = new Router({
   }
 });
 
+/* Navigation guard
+* 뷰 라우터로 특정 URL을 접근 시 해당 URL의 접근을 막아주는 역할
+* - to : 이동할 url 정보가 담긴 라우터 객체
+* - from : 현재 url 정보가 담긴 라우터 객체
+* - next : to에 지정한 url로 이동하기 위해 꼭 호출해야 하는 함수
+*  */
 router.beforeEach(function (to,from,next){
-  console.log("to::",to);
-  console.log("from::",from);
-  console.log("next::",next);
+  debugger
   if(to.fullPath === '/login'){
     sessionStorage.setItem("jwt-auth-token", "")
   }

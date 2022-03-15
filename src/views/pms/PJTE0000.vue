@@ -3,7 +3,7 @@
   <section class="login">
     <div class="loginBx">
       <div class="top">
-        <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
+        <img src="src/assets/img/PE-icon/logo_Eyes.svg" alt="logo">
         <!--<button class="btn logOut">로그아웃</button>-->
       </div>
       <div class="body">
@@ -382,7 +382,4 @@ export default {
 </script>
 
 <style>
-@import "../assets/css/reset.css";
-@import "../assets/css/theme.css";
-
 </style>
