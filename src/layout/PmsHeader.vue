@@ -46,27 +46,7 @@ export default {
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
-    // console.log("created");
     this.fn_current_menu() // 현재 메뉴명
-  },
-  beforeMount() {
-    // console.log("beforeMount");
-  },
-  mounted() {
-    // console.log("mounted");
-
-  },
-  beforeUpdate() {
-    // console.log("beforeUpdate");
-  },
-  updated() {
-    // console.log("updated");
-  },
-  beforeDestroy() {
-    // console.log("beforeDestroy");
-  },
-  destroyed() {
-    // console.log("destroyed");
   },
   data() {
     return {

@@ -179,39 +179,12 @@ export default {
     PmsSideBar,
     grid: Grid,
   },
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-// 화면 동작 시 제일 처음 실행되는 부분
-// 변수 초기화
-  created() {
-    console.log("created");
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
   mounted() {
     this.init();
-    console.log("mounted");
     // 최초조회
     this.fnSearch();
   },
-  beforeUpdate() {
-    console.log("beforeUpdate");
-  },
-  updated() {
-    console.log("updated");
-  },
-  beforeDestroy() {
-    console.log("beforeDestroy");
-  },
-  destroyed() {
-    console.log("destroyed");
-  },
 // 함수를 선언하는 부분
-// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
-  computed: {
-  },
 // 일반적인 함수를 선언하는 부분
   methods: {
     bkup_id_change(params) {this.info.bkup_id_selected = params},

@@ -54,24 +54,6 @@
           ></grid>
         </div>
         <hr>
-        <!--        <table>-->
-        <!--          <colgroup>-->
-        <!--            <col width="23px">-->
-        <!--            <col width="90px">-->
-        <!--            <col width="150px">-->
-        <!--          </colgroup>-->
-        <!--          <tr>-->
-        <!--            <th style="font-weight: bold">로컬저장위치</th>-->
-        <!--            <td>-->
-        <!--              <div style="float: left;">-->
-        <!--                <input type="ㅅ" style="width:200px; margin-left: 15px; float:left;" onchange="alert(this.value)">-->
-        <!--              </div>-->
-        <!--              <div style="float: left; margin-top: -2px">-->
-        <!--                <button class="btn btn-filter-d">...</button>-->
-        <!--              </div>-->
-        <!--            </td>-->
-        <!--          </tr>-->
-        <!--        </table>-->
         <table>
           <colgroup>
             <col width="80px">
@@ -127,9 +109,6 @@ export default {
   mounted() {
     this.fnSearch()
     this.radioValues = "radio01"
-  },
-  updated() {
-    console.log("this.radioValues ::" ,this.radioValues);
   },
 
   watch: {

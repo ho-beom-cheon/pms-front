@@ -173,11 +173,6 @@ let month = ('0' + (today.getMonth() + 1)).slice(-2);
 let day = ('0' + today.getDate()).slice(-2);
 let dateString = year + '-' + month  + '-' + day;
 
-
-//그리드 아이템 예제
-var listItem = [{text: "개발", value: "1"}, {text: "운영", value: "2"}, {text: "이관", value: "3"}];
-// 업무구분
-
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -185,38 +180,10 @@ export default {
     PmsSideBar,
     grid: Grid,
   },
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-// 화면 동작 시 제일 처음 실행되는 부분
-// 변수 초기화
-  created() {
-    console.log("created");
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
   mounted() {
     this.init();
-    console.log("mounted");
     // 최초조회
     this.fnSearch();
-  },
-  beforeUpdate() {
-    console.log("beforeUpdate");
-  },
-  updated() {
-    console.log("updated");
-  },
-  beforeDestroy() {
-    console.log("beforeDestroy");
-  },
-  destroyed() {
-    console.log("destroyed");
-  },
-// 함수를 선언하는 부분
-// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
-  computed: {
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
@@ -243,8 +210,6 @@ export default {
       }).catch(e => {
 
       });
-      // 정렬
-      //this.$refs.grid.invoke("sort",);
     },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
