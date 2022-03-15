@@ -174,43 +174,12 @@ export default {
     Modal,
     PmsSideBar,
   },
-// beforeCreate ~ destroyed 까지는 Vue 인스턴스 생성에 따라 자동으로 호출되는 함수 
-// "라이프사이클 훅"이라고 함. 
-// 자세한 사항은 Vue 라이프 사이클 참조 
-// https://kr.vuejs.org/v2/guide/instance.html 
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
-// 화면 동작 시 제일 처음 실행되는 부분 
-// 변수 초기화 
-  created() {
-    console.log("created");
-  },
-  beforeMount() {
-    console.log("beforeMount");
-  },
   mounted() {
-    console.log("mounted");
     this.init()
     this.fnSearch()
     window.pms_register = this;
   },
-  beforeUpdate() {
-    console.log("beforeUpdate");
-  },
-  updated() {
-    console.log("updated");
-  },
-  beforeDestroy() {
-    console.log("beforeDestroy");
-  },
-  destroyed() {
-    console.log("destroyed");
-  },
-// 함수를 선언하는 부분 
-// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점. 
-  computed: {
-  },
+// 함수를 선언하는 부분
 // 일반적인 함수를 선언하는 부분  
   methods: {
     // Combo.vue 에서 받아온 값
