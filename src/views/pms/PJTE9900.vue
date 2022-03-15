@@ -312,9 +312,8 @@ export default {
                 }
               }
             }
-            debugger
+
             axiosService.post("/PJTE9900/create", {
-              excelUplod: this.excelUplod,
               gridData: this.createdRows,
               dept_cd: this.info.dept_cd_selected,
               bkup_id: this.info.bkup_id_selected,
@@ -396,14 +395,16 @@ export default {
     },
     onGridUpdated2(grid2) {
       // 연관작업 목록 작업 상태에 따라 셀 색상 변경
-      let gridRow2 = this.$refs.grid.invoke("getRowCount");
-      for(let i=0; i<gridRow2; i++) {
-        if(grid2.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-          this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-        } else if(grid2.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-          this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-        } else if(grid2.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-          this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+      let gridRow2 = this.$refs.grid2.invoke("getRowCount");
+      if (gridRow2 !== '' && gridRow2!== undefined) {
+        for(let i=0; i<gridRow2; i++) {
+          if(grid2.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+            this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+          } else if(grid2.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+            this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+          } else if(grid2.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+            this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+          }
         }
       }
     },
@@ -464,6 +465,7 @@ export default {
       this.info.gubun = "1";
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
+      this.info.week_yymm = this.getCurrentYyyymm();
     },
     //연관작업 상세조회
     fnReSearch() {
