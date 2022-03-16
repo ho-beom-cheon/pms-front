@@ -384,12 +384,8 @@ export default {
         if (this.createdRows.length !== 0) {
           if (this.vaildation(this.createdRows, "1") === true) {
             if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
-              for (let i = 0; i < this.createdRows.length; i++) {
-                if (this.createdRows[i].dvlp_dis_cd === "900") {
                   alert("개발구분 삭제 권한이 없습니다.");
                   return;
-                }
-              }
             }
 
             axiosService.post("/PJTE9900/create", {
@@ -411,48 +407,37 @@ export default {
               this.fnSearch()
             })
           }
-          if (this.updatedRows.length !== 0) {
-            if (this.vaildation(this.updatedRows, "1") === true) {
+        }
+        if (this.updatedRows.length !== 0) {
               try {
-                if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
-                  for (let i = 0; i < this.updatedRows.length; i++) {
-                    if (this.updatedRows[i].dvlp_dis_cd === "900") {
-                      alert("삭제 권한이 없습니다.");
-                      return;
-                    }
-                  }
-                }
                 // 데이터 파라메타 전달
                 this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
                 this.$refs.grid.invoke("setRequestParams", this.login);
                 // update api 요청
                 this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-                alert("저장이 완료되었습니다1111.")
+                alert("저장이 완료되었습니다.")
+                this.fnSearch()
               } catch (e) {
                 console.log("업데이트 오류 ::", e);
               }
-            } else {
-              this.$refs.grid.invoke("reloadData");
-            }
-          }
-          if (this.deletedRows.length !== 0) {
+        }
+        if (this.deletedRows.length !== 0) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
               // delete api 요청
               this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-              // alert("저장이 완료되었습니다.")
+              alert("저장이 완료되었습니다.")
             } catch (e) {
               console.log(e);
             }
-          }
         }
+
         // 저장 후 변경 데이터 배열 비움
         this.$refs.grid.invoke("clearModifiedData")
     },
 
     onGridUpdated(grid) {
-      // console.log("grid :: ", grid);
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
       if (aut_cd === '500' || aut_cd === '600') {
         this.$refs.grid.invoke("addColumnClassName", "bak_work_id", "disableColor");
