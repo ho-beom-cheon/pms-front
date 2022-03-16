@@ -326,33 +326,30 @@ export default {
             })
           }
         }
-          if (this.updatedRows.length !== 0) {
+        if (this.updatedRows.length !== 0) {
               try {
                 // 데이터 파라메타 전달
                 this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-                console.log("파라메타확인"+this.updatedRows);
                 this.$refs.grid.invoke("setRequestParams", this.login);
                 // update api 요청
                 this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-                alert("저장이 완료되었습니다1111.")
+                alert("저장이 완료되었습니다.")
                 this.fnSearch()
               } catch (e) {
                 console.log("업데이트 오류 ::", e);
               }
-            } else {
-              this.$refs.grid.invoke("reloadData");
-            }
-          if (this.deletedRows.length !== 0) {
+        }
+        if (this.deletedRows.length !== 0) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
               // delete api 요청
               this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-              // alert("저장이 완료되었습니다.")
+              alert("저장이 완료되었습니다.")
             } catch (e) {
               console.log(e);
             }
-          }
+        }
 
         // 저장 후 변경 데이터 배열 비움
         this.$refs.grid.invoke("clearModifiedData")
