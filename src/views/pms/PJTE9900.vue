@@ -26,8 +26,8 @@
 
         <ul class="filter-btn">
           <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-          <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
-          <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
+          <button class="btn btn-filter-b" @click="gridAddRow" :disabled="check_aut_cd">행추가</button>
+          <button class="btn btn-filter-b" @click="gridDelRow" :disabled="check_aut_cd">행삭제</button>
           <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
           <button class="btn btn-filter-p" @click="fnSearch">조회</button>
         </ul>
@@ -57,7 +57,7 @@
                 <input type="text"
                        placeholder="담당자를 입력하세요."
                        v-model="crpenmTxt"
-                       style="width: 403px"
+                       style="width: 200px"
                 >
               </td>
             </tr>
@@ -68,7 +68,7 @@
               </th>
               <td colspan="5">
                 <textarea
-                    cols="62"
+                    cols="95"
                     rows="20"
                     v-model="ptcpnmTxt"
                     style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
@@ -79,8 +79,105 @@
           </table>
             <div style="float: right">
               <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(1)">수정</button>
-              <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+              <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
             </div>
+        </Modal>
+        <Modal :show.sync="modals.bak_work_modal">
+          <div class="modal-pop-body">
+            <h2>
+              후속작업
+            </h2>
+          </div>
+          <hr>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>작업명</th>
+              <td colspan="4">
+                <input type="text"
+                       placeholder="작업명"
+                       v-model="info.work_task"
+                       style="width: 260px; margin-right: 40px"
+                >
+              </td>
+              <th>작업ID</th>
+              <td colspan="4">
+                <input type="text"
+                       placeholder="작업ID"
+                       v-model="info.mng_id"
+                       style="width: calc(100% - 120px); margin-left: 10px"
+                >
+                <button class="btn btn-filter-p"
+                        style="min-width: 80px; margin-left: 20px; float:right"
+                        @click="fnBakSearch"
+                >조회</button>
+              </td>
+            </tr>
+            <br>
+            </tbody>
+          </table>
+          <div>
+            <grid
+                ref="grid3"
+                :data="dataSource"
+                :header="header3"
+                :columns="columns3"
+                :bodyHeight="300"
+                :width="665"
+                :showDummyRows="showDummyRows"
+                :columnOptions="columnOptions"
+                :editingEvent="editingEvent"
+                :rowHeight="rowHeight"
+                :minRowHeight="minRowHeight"
+                :rowHeaders="rowHeaders"
+                @onGridUpdated="onGridUpdated"
+                @click="onClick3"
+                @dblclick="dblClick3"
+            ></grid>
+          </div>
+          <br>
+          <br>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>현재작업ID</th>
+              <td colspan="4">
+                <input type="text"
+                       v-model="info.current_mng_id"
+                       :disabled=true
+                       style="width: 260px; margin-right: 25px; background-color: #f2f2f2"
+                >
+              </td>
+              <th>후속작업ID</th>
+              <td colspan="4">
+                <input type="text"
+                       placeholder="현재작업의 후속작업을 선택해주세요."
+                       :disabled=true
+                       v-model="info.back_work_id"
+                       style="width: 260px; margin-left: 5px;"
+                >
+              </td>
+            </tr>
+            <br>
+            <br>
+            </tbody>
+          </table>
+          <div style="float: right">
+            <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">후속작업등록</button>
+            <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
+          </div>
         </Modal>
       </section>
       <!-- page contents -->
@@ -101,7 +198,6 @@
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
-                  @dblclick="dbClick"
                   @onGridUpdated="onGridUpdated"
                   @beforeExport="beforeExport"
               ></grid>
@@ -110,7 +206,7 @@
           <div class="div2-Kanban">
             <div class="div-header"><h2>비고(Back-Log)</h2>
               <ul class="filter-btn">
-                <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">수정</button>
+                <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(3)"  :disabled="btn_yn">수정</button>
               </ul>
             </div>
               <div class="col">
@@ -133,7 +229,7 @@
           <div class="div3-Kanban">
             <div class="div-header"><h2>연관작업 목록</h2>
               <ul class="filter-btn">
-                <button class="btn btn-filter-p" style="margin-right: 5px" @click="fnReSearch">연관작업 상세조회</button>
+                <button id="con_work_search" class="btn btn-filter-p" style="margin-right: 5px" @click="fnReSearch" :disabled="btn_yn">연관작업 상세조회</button>
               </ul>
             </div>
             <div class="div-grid">
@@ -149,7 +245,7 @@
                   :rowHeight="rowHeight"
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
-                  @onGridUpdated="onGridUpdated2"
+                  @onGridUpdated="onGridUpdated"
               ></grid>
             </div>
           </div>
@@ -188,35 +284,13 @@ export default {
     Modal,
   },
 
-  beforeCreate() {
-
-  },
-  created() {
-
-  },
-  beforeMount() {
-
-  },
   mounted() {
     // 화면 초기화
     this.init();
     // 화면 접속 시 데이터 조회
     this.fnSearch();
   },
-  beforeUpdate() {
 
-  },
-  updated() {
-
-  },
-  beforeDestroy() {
-
-  },
-  destroyed() {
-
-  },
-// 함수를 선언하는 부분
-// "종속대상에 따라 캐싱"된다는 점이 method와는 다른점.
   computed: {},
 
 // 일반적인 함수를 선언하는 부분
@@ -239,9 +313,12 @@ export default {
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
+      this.$refs.grid2.invoke("clear");
+      this.$refs.grid3.invoke("clear");
       // 그리드 전체 비활성화
       this.$refs.grid.invoke("disable");
       this.$refs.grid2.invoke("disable");
+      this.$refs.grid3.invoke("disable");
       // 최초 조회 시 현재 년월 기준 조회 값 세팅
       this.info.week_yymm = this.getCurrentYyyymm();
       // 권한에 따른 컬럼 활성화
@@ -250,15 +327,17 @@ export default {
         this.$refs.grid.invoke("enableColumn", 'work_task');
         this.$refs.grid.invoke("enableColumn", 'reg_dt');
         this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
-        this.$refs.grid.invoke("enableColumn", 'bak_work_id');
         this.$refs.grid.invoke("enableColumn", 'mark');
+        this.check_aut_cd = false // 행추가,행삭제 활성화
       } else {
         this.$refs.grid.invoke("enableColumn", 'com_due_dt');
         this.$refs.grid.invoke("enableColumn", 'stop_dt');
         this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'com_dt');
-        this.$refs.grid.invoke("enableColumn", 'bak_work_id');
+        this.check_aut_cd = true // 행추가,행삭제 비활성화
       }
+      // 비고 폰트사이즈
+      document.getElementById("rmrk").style.fontSize = '13px';  // 상세내용 확대보기 폰트 사이즈 최초값
 
     },
 
@@ -322,55 +401,69 @@ export default {
               } else {
                 alert("이미 등록된 프로그램입니다.")
               }
+              // 조회 시 현재 년월 기준 조회 값 세팅
+              this.info.week_yymm = this.getCurrentYyyymm();
+              this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
               this.fnSearch()
             })
           }
         }
-          if (this.updatedRows.length !== 0) {
+        if (this.updatedRows.length !== 0) {
               try {
                 // 데이터 파라메타 전달
                 this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-                console.log("파라메타확인"+this.updatedRows);
                 this.$refs.grid.invoke("setRequestParams", this.login);
                 // update api 요청
                 this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-                alert("저장이 완료되었습니다1111.")
+                alert("저장이 완료되었습니다.")
                 this.fnSearch()
               } catch (e) {
                 console.log("업데이트 오류 ::", e);
               }
-            } else {
-              this.$refs.grid.invoke("reloadData");
-            }
-          if (this.deletedRows.length !== 0) {
+        }
+        if (this.deletedRows.length !== 0) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
               // delete api 요청
               this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-              // alert("저장이 완료되었습니다.")
+              alert("저장이 완료되었습니다.")
             } catch (e) {
               console.log(e);
             }
-          }
+        }
 
         // 저장 후 변경 데이터 배열 비움
         this.$refs.grid.invoke("clearModifiedData")
-        this.excelUplod = 'N'
     },
 
     onGridUpdated(grid) {
-      console.log("grid :: ", grid);
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
+      if (aut_cd === '500' || aut_cd === '600') {
+        this.$refs.grid.invoke("addColumnClassName", "bak_work_id", "disableColor");
+      }
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "work_step_cd", "lineBorder");
       this.$refs.grid.invoke("addColumnClassName", "com_due_dt", "lineBorder");
       this.$refs.grid.invoke("addColumnClassName", "re_sta_dt", "lineBorder");
       this.addCheak = 'N';
 
       // 작업 상태에 따라 셀 색상 변경
-      let gridRow = this.$refs.grid.invoke("getRowCount");
-      for(let i=0; i<gridRow; i++) {
+      let gridRow = '';
+      if(grid.instance.store.id == 1) {
+        gridRow = this.$refs.grid3.invoke("getRowCount");
+        for(let i=0; i<gridRow; i++) {
+          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+          }
+        }
+      } else if(grid.instance.store.id == 2) {
+        gridRow = this.$refs.grid.invoke("getRowCount");
+        for(let i=0; i<gridRow; i++) {
           if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
             this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
           } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
@@ -378,20 +471,16 @@ export default {
           } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
             this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
           }
-      }
-
-    },
-    onGridUpdated2(grid2) {
-      // 연관작업 목록 작업 상태에 따라 셀 색상 변경
-      let gridRow2 = this.$refs.grid2.invoke("getRowCount");
-      if (gridRow2 !== '' && gridRow2!== undefined) {
-        for(let i=0; i<gridRow2; i++) {
-          if(grid2.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid2.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid2.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid2.invoke("addCellClassName", grid2.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+        }
+      } else if(grid.instance.store.id == 3) {
+        gridRow = this.$refs.grid2.invoke("getRowCount");
+        for(let i=0; i<gridRow; i++) {
+          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
           }
         }
       }
@@ -400,10 +489,16 @@ export default {
       console.log("beforeExport::", grid)
     },
 
-    // 클릭 이벤트
+    // 그리드 1 클릭 이벤트
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
+      if(this.$refs.grid.invoke("getValue", this.curRow, "mng_id")){
+        // 수정, 연관작업 상세조회 버튼 활성화
+        this.btn_yn = false;
+      } else {
+        this.btn_yn = true;
+      }
       let gridData = this.$refs.grid.invoke("getData");
       // 그리드 Row 클릭 시 비고(Back-Log) 바인딩
       this.rmrk = this.$refs.grid.invoke("getValue", this.curRow, "rmrk");
@@ -414,7 +509,18 @@ export default {
         this.modals.crpe_nm_modal = true;
         this.crpenmTxt = currentCellData.value;
         this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm");
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+      // 컬럼명이 <후속작업>일 때만 모달 팝업
+      if (ev.columnName == 'bak_work_id') {
+        this.info.work_task = '';  // 작업명 초기화
+        this.info.mng_id = ''      // 작업ID 초기화
+        this.info.current_mng_id = this.$refs.grid.invoke("getValue", this.curRow, "mng_id"); // 현재작업ID 설정
+        this.info.back_work_id = ''; // 후속작업ID 초기화
+        this.fnBakSearch()
+        let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
+        if (aut_cd === '500' || aut_cd === '600') {  // 권한이 500, 600일 때만 팝업
+          this.modals.bak_work_modal = true;
+        }
       }
 
       if (this.addCheak === 'Y') {
@@ -427,29 +533,42 @@ export default {
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
     },
-
-    dbClick(ev) {
-      this.curRow = ev.rowKey;
+    // 그리드3(후속작업 모달) 클릭 이벤트
+    onClick3(ev) {
+      this.curRow3 = ev.rowKey;
+      this.info.back_work_id = this.$refs.grid3.invoke("getValue", this.curRow3, "mng_id");
     },
+    // 그리드3(후속작업 모달) 더블 클릭 이벤트
+    dblClick3(ev) {
+      this.fnEdit(2);
+    },
+
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(num) {
-      if(num ==1){
-        this.$refs.grid.invoke("setValue", this.curRow, "crpe_nm", this.crpenmTxt);
-        this.$refs.grid.invoke("setValue", this.curRow, "ptcp_nm", this.ptcpnmTxt);
-        this.modals.crpe_nm_modal = false;
-      }else if(num ==2){
-        this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk);
+      if(num == 1){ //담당자모달팝업 수정버튼
+        this.$refs.grid.invoke("setValue", this.curRow, "crpe_nm", this.crpenmTxt); //담당자설정
+        this.$refs.grid.invoke("setValue", this.curRow, "ptcp_nm", this.ptcpnmTxt); //참여자설정
+        this.modals.crpe_nm_modal = false; //담당자모달닫기
+      }else if(num == 2) { //후소작업모달팝업 수정버튼
+        this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id", this.info.back_work_id); // 후속작업설정
+        for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+          if(this.$refs.grid.invoke("getValue", i, "mng_id") == this.$refs.grid3.invoke("getValue", this.curRow3, "mng_id")) {
+            this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"))
+          }
+        }
+        this.modals.bak_work_modal = false; //후속작업모달닫기
       }
     },
-
-    fnCloseModal() {
+    // 모달팝업 닫기
+    fnCloseModal(num) {
+      if(num == 1){
         this.modals.crpe_nm_modal = false;
+      }else if(num == 2) {
+        this.modals.bak_work_modal = false;
+      }
     },
     //조회
     fnSearch() {
-      if (this.searchVaildation() === false) {
-        return;
-      }
       this.info.gubun = "1";
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -462,6 +581,14 @@ export default {
       this.$refs.grid.invoke("readData");
       this.info.week_yymm = '';
     },
+    //후속작업 조회
+    fnBakSearch() {
+      this.info.gubun = "3";
+      this.info.dept_cd_selected = this.$refs.grid.invoke("getValue", this.curRow, "dept_cd");
+      this.$refs.grid3.invoke("setRequestParams", this.info);
+      this.$refs.grid3.invoke("readData");
+    },
+
     // 행추가
     gridAddRow() {
       this.$refs.grid.invoke("setFrozenColumnCount", 0);
@@ -501,42 +628,12 @@ export default {
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue: true, onlySelected: true});
     },
-
-    // 조회 유효값 검사
-    searchVaildation() {
-      //if(this.bkup_id_selected === null) { alert("백업 ID는 필수 입력 사항입니다"); return false;}
-      //if(this.prjt_nm_selected === null) { alert("프로그램 ID는 필수 입력 사항입니다"); return false;}
-      return true;
-    },
     // 유효값 검증
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
     vaildation(data, division) {
       for (let i = 0; i < data.length; i++) {
         // 저장과 기타항목수정 분류
         if (division === "1") {
-
-          /* 권한 ID에 따른 처리단계 체크 */
-          if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
-            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
-              alert("권한이 부족합니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].prc_step_cd !== "300") {
-              alert("권한이 부족합니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300") { //권한 ID[300:IT]
-            if (data[i].prc_step_cd !== "400" && data[i].prc_step_cd !== "600") {
-              alert("권한이 부족합니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[400:현업]
-            if (data[i].prc_step_cd !== "500" && data[i].prc_step_cd !== "600") {
-              alert("권한이 부족합니다.")
-              return false;
-            }
-          }
           //권한ID[500:PM,600:PMO] - 모두 가능
           if (this.addCheak === 'N') {
             if (data[i].atfl_mng_id === null) {
@@ -620,16 +717,8 @@ export default {
 
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList: ["C40", "C27"],
-
       gridData: [],
-      excelUplod: 'N',
       addCheak: 'N',
-
-      atfl_mng_id: '',  // 단위테스트 케이스 첨부파일관리
-      atfl_mng_id_yn: '',  // 단위테스트 케이스 첨부파일관리
-      pal_atfl_mng_id: '',  // 설계서 첨부파일관리
-      pal_atfl_mng_id_yn: '',  // 설계서 첨부파일관리
-
 
       info: {
         // 조회 변수
@@ -639,35 +728,31 @@ export default {
         week_yymm         : this.week_yymm,                               //기준년월
 
         reg_dt : '',                                                      // 등록일
-        mng_id : this.mng_id,                                             // 작업ID
         work_step_cd : work_step_cd,                                      // 작업상태
         con_work_id : '',                                                 // 연관작업
         gubun : '', // 그리드 구분자
+        // 후속작업 팝업
+        work_task : this.work_task,       // 작업명
+        mng_id : this.mng_id,             // 작업ID
+        current_mng_id : this.current_mng_id, // 현재작업ID
+        back_work_id : this.back_work_id,     // 후속작업ID
       },
 
       rmrk : '', // 비고
-
-      login: {
-        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
-        login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),
-        login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
-        login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-        login_dept_cd: sessionStorage.getItem("LOGIN_DEPT_CD"),
-      },
-
 
       updatedRows: this.updatedRows,
       deletedRows: this.deletedRows,
       createdRows: this.createdRows,
 
-      /* 그리드 상세보기 모달 속성 */
       modals: {
-        crpe_nm_modal: false,
-        backlog_modal: false,
+        crpe_nm_modal: false,   // 담당자, 참여자 모달팝업
+        bak_work_modal: false,   // 후속작업 모달팝업
       },
       modalTxt: this.modalTxt,   // 비고
       crpenmTxt: this.crpenmTxt, // 담당자
       ptcpnmTxt: this.ptcpnmTxt, // 참여자
+      btn_yn: true,              // 비고, 연관작업 목록 버튼 비활성화/활성화
+      check_aut_cd: true,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
 
       /* grid 속성 */
       count: 0,
@@ -709,6 +794,9 @@ export default {
       header2: {
         height: 30,
       },
+      header3: {
+        height: 30,
+      },
       columns: [
         {
           header: 'Mark',
@@ -741,7 +829,6 @@ export default {
         },
         {
           header: '작업명',
-          width: 650,
           align: 'left',
           name: 'work_task',
           whiteSpace: 'normal',
@@ -928,6 +1015,52 @@ export default {
           sortable: true
         },
       ],
+      columns3: [
+        {
+          header: '작업ID',
+          width: 80,
+          align: 'center',
+          name: 'mng_id',
+          sortable: true
+        },
+        {
+          header: '작업명',
+          width: 285,
+          align: 'left',
+          name: 'work_task',
+          whiteSpace: 'normal',
+          editor: 'text',
+        },
+        {
+          header: '작업상태',
+          width: 80,
+          align: 'center',
+          name: 'work_step_cd',
+          formatter: 'listItemText',
+          filter: 'select',
+          type:'text',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: work_step_cd
+            }
+          },
+        },
+        {
+          header: '등록자',
+          align: 'center',
+          width: 80,
+          name: 'reg_nm',
+          filter: 'select',
+        },
+        {
+          header: '담당자',
+          align: 'center',
+          name: 'crpe_nm',
+          editor: 'text',
+          filter: 'select'
+        },
+      ],
     }
   },
 };
@@ -948,6 +1081,10 @@ export default {
 }
 .lineBorder {
   border-right: #aaa solid 1px!important;
+}
+.modal-dialog {
+  max-width: 700px;
+  margin: 1.75rem auto !important;
 }
 
 </style>
