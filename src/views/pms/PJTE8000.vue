@@ -907,8 +907,13 @@ export default {
 
       this.fnWekVail();
       //클릭했을때 첨부파일버튼 활성화
-      document.getElementById("openFile").hidden =false;
 
+      // 첨부파일 아이디가 있으면 첨부파일 활성화
+      if( this.detail.atfl_mng_id != null &&  this.detail.atfl_mng_id != '' ){
+        document.getElementById("openFile").hidden =false;
+      }else{
+        document.getElementById("openFile").hidden =true;
+      }
       //지난주간보고 첨부파일 아이디가 있으면 첨부파일 활성화
       if( this.detail.bef_atfl_mng_id != null &&  this.detail.bef_atfl_mng_id != '' ){
         document.getElementById("openFile1").hidden =false;
