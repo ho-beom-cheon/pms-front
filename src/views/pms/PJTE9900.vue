@@ -18,7 +18,7 @@
               ref="combo1"
           ></combo>
           <li class="filter-item">
-            <div class="item-con">기준년월
+            <div class="item-con">등록기준년월
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
@@ -324,7 +324,7 @@ export default {
       this.$refs.grid2.invoke("disable");
       this.$refs.grid3.invoke("disable");
       // 최초 조회 시 현재 년월 기준 조회 값 세팅
-      this.info.week_yymm = this.getCurrentYyyymm();
+      // this.info.week_yymm = this.getCurrentYyyymm();
       //미진항목 조회 체크박스 초기값
       this.info.over_due_dt_yn = false;
       // 권한에 따른 컬럼 활성화
@@ -630,6 +630,11 @@ export default {
         this.check_bkup = true // 테이블백업  비활성화
         this.check_aut_cd = true // 행추가, 행삭제  비활성화
       }
+      if(this.info.over_due_dt_yn == true) {
+        this.info.week_yymm = ''
+      } else if (this.info.over_due_dt_yn == false && this.info.week_yymm == this.getCurrentYyyymm()) {
+        this.info.week_yymm = this.getCurrentYyyymm();
+      }
     },
     //연관작업 상세조회
     fnReSearch() {
@@ -648,16 +653,14 @@ export default {
 
     // 행추가
     gridAddRow() {
-      this.$refs.grid.invoke("setFrozenColumnCount", 0);
       this.addCheak = 'Y';
       this.$refs.grid.invoke("appendRow",
           {
-            bzcd: sessionStorage.getItem("LOGIN_BZCD"),
             save_yn: "N", //행르 추가하면 등록여부 'N'
             prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
             bkup_id: "0000000000",
           },
-          {focus: true});
+          {focus: true, at: 0});
       this.fnEnable();
     },
     // 추가한 행 편집 활성화
@@ -700,6 +703,7 @@ export default {
               }).then(res => {
                 if (res.status == 200) {
                   alert("테이블백업이 완료되었습니다.");
+                  location.reload();
                 }
               })
             }
@@ -744,7 +748,7 @@ export default {
   watch: {
     rmrk() {
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk); // 비고설정
-    }
+    },
   },
 
 // 변수 선언부분
@@ -762,7 +766,7 @@ export default {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트ID
         dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"), //부문코드
         week_yymm         : this.week_yymm,                               //기준년월
-        over_due_dt_yn       : this.over_due_dt_yn,                             // 미진항목(완료요청일을 넘김) 조회 체크박스
+        over_due_dt_yn    : this.over_due_dt_yn,                          // 미진항목(완료요청일을 넘김) 조회 체크박스
         reg_dt : '',                                                      // 등록일
         work_step_cd : work_step_cd,                                      // 작업상태
         con_work_id : '',                                                 // 연관작업
