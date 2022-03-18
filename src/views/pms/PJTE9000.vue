@@ -289,6 +289,10 @@ export default {
                 new_bkup_nm : this.info.new_bkup_nm,
                 prjt_id : this.info.prjt_nm_selected,
                 login_emp_no : this.info.login_emp_no
+              }).then(res => {
+                if (res.status == 200) {
+                  alert("테이블백업이 완료되었습니다.");
+                }
               })
             }
           })
