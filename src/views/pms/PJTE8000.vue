@@ -857,13 +857,25 @@ export default {
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
+
+      if(currentRowData.dept_cd != null && currentRowData.dept_cd != ''){
+        this.detail.dept_cd_selected = currentRowData.dept_cd;                            // (상세)부문명
+        this.$refs.combo2.$data.dept_cd_selected_iss = currentRowData.dept_cd;            // 부문명
+      }else{
+        this.detail.dept_cd_selected = this.info.login_dept_cd;                            // (상세)부문명
+        this.$refs.combo2.$data.dept_cd_selected_iss =this.info.login_dept_cd;            // 부문명
+      }
+      if(currentRowData.week_yymm != null && currentRowData.week_yymm != ''){
+        this.detail.week_yymm = this.getYyyymm(currentRowData.week_yymm);                 // (상세)주간년월
+      }else{
+        this.detail.week_yymm =  this.info.week_yymm;                 // (상세)주간년월
+      }
       this.detail.real_prjt_id_selected = currentRowData.real_prjt_id;                  // (상세)프로젝트
       this.$refs.combo2.$data.real_prjt_id_selected_iss = currentRowData.real_prjt_id;  //(상세)프로젝트
-      this.detail.dept_cd_selected = currentRowData.dept_cd;                            // (상세)부문명
-      this.$refs.combo2.$data.dept_cd_selected_iss = currentRowData.dept_cd;            // 부문명
+
       this.detail.pm_nm = currentRowData.pm_nm;                                         // (상세)pm명
       this.detail.pm_no = currentRowData.pm_no;                                         // (상세)pm번호
-      this.detail.week_yymm = this.getYyyymm(currentRowData.week_yymm);                 // (상세)주간년월
+
       this.detail.week_sqn_cd_selected = currentRowData.week_sqn_cd;                    // (상세)차수
       this.$refs.combo3.$data.week_sqn_cd_selected_iss = currentRowData.week_sqn_cd;    // 차수
       this.detail.all_pred_prg = currentRowData.all_pred_prg;                           // (상세)전체 예정진척율
@@ -1108,6 +1120,7 @@ export default {
         login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_dept_cd: sessionStorage.getItem("LOGIN_DEPT_CD"),  // 부서코드
 
         bkup_id_selected      : '0000000000',              // 백업ID
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
