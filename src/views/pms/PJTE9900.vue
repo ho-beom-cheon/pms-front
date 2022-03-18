@@ -22,13 +22,20 @@
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
+          <li class="filter-item">
+            <div class="item-con">
+              <input type="checkbox" id="over_due_dt_yn" v-model="info.over_due_dt_yn">
+              <label>　미진항목</label>
+            </div>
+          </li>
         </ul>
 
         <ul class="filter-btn">
-          <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+          <button class="btn btn-filter-p" @click="tableBackUp" :disabled="check_bkup">테이블백업</button>
+          <button class="btn btn-filter-e" style="margin-right: 20px" @click="gridExcelExport">엑셀다운로드</button>
           <button class="btn btn-filter-b" @click="gridAddRow" :disabled="check_aut_cd">행추가</button>
           <button class="btn btn-filter-b" @click="gridDelRow" :disabled="check_aut_cd">행삭제</button>
-          <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+          <button class="btn btn-filter-p" style="margin-left: 20px" :disabled="check_save" @click="fnSave">저장</button>
           <button class="btn btn-filter-p" @click="fnSearch">조회</button>
         </ul>
       </section>
@@ -217,7 +224,7 @@
                         id="rmrk"
                         placeholder="비고를 확인 할 작업항목을 선택하세요."
                         v-model="rmrk"
-                        style=" margin-left: 10px; height: 206px; width: 732px; border: 1px solid #bdbdbd; line-height: normal"
+                        style=" margin-left: 10px; height: 206px; width: 100%; border: 1px solid #bdbdbd; line-height: normal"
                     ></textarea>
                   </div>
                 </li>
@@ -236,7 +243,7 @@
                   :data="dataSource"
                   :header="header2"
                   :columns="columns2"
-                  :bodyHeight="175"
+                  :bodyHeight="168"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions"
                   :editingEvent="editingEvent"
@@ -307,7 +314,6 @@ export default {
       this.info.bkup_id_selected = params
     },
 
-
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
@@ -319,6 +325,8 @@ export default {
       this.$refs.grid3.invoke("disable");
       // 최초 조회 시 현재 년월 기준 조회 값 세팅
       this.info.week_yymm = this.getCurrentYyyymm();
+      //미진항목 조회 체크박스 초기값
+      this.info.over_due_dt_yn = false;
       // 권한에 따른 컬럼 활성화
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
       if (aut_cd === '500' || aut_cd === '600') {
@@ -327,16 +335,17 @@ export default {
         this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
         this.$refs.grid.invoke("enableColumn", 'mark');
         this.check_aut_cd = false // 행추가,행삭제 활성화
+        this.check_bkup = false // 테이블 백업 버튼 활성화
       } else {
         this.$refs.grid.invoke("enableColumn", 'com_due_dt');
         this.$refs.grid.invoke("enableColumn", 'stop_dt');
         this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'com_dt');
         this.check_aut_cd = true // 행추가,행삭제 비활성화
+        this.check_bkup = true // 테이블 백업 버튼 비활성화
       }
       // 비고 폰트사이즈
       document.getElementById("rmrk").style.fontSize = '13px';  // 상세내용 확대보기 폰트 사이즈 최초값
-
     },
 
     // YYYY-MM 형태의 현재 년월을 구하는 함수
@@ -370,9 +379,9 @@ export default {
         return;
       }
       // 데이터 로그 확인
-      console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
-      console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
-      console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      // console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
+      // console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
+      // console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
 
       // 변경 데이터 저장
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
@@ -393,7 +402,7 @@ export default {
             prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
             login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
           }).then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.data === true) {
               alert("저장이 완료되었습니다.")
               // 저장 후 변경 데이터 배열 비움
@@ -493,7 +502,7 @@ export default {
         }
     },
     beforeExport(grid) {
-      console.log("beforeExport::", grid)
+      // console.log("beforeExport::", grid)
     },
 
     // 그리드 1 클릭 이벤트
@@ -517,7 +526,7 @@ export default {
         this.crpenmTxt = currentCellData.value;
         this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm");
       }
-// 컬럼명이 <후속작업>일 때만 모달 팝업
+      // 컬럼명이 <후속작업>일 때만 모달 팝업
       if (ev.columnName == 'bak_work_id') {
         this.info.work_task = '';  // 작업명 초기화
         this.info.mng_id = ''      // 작업ID 초기화
@@ -569,7 +578,7 @@ export default {
           }
           for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
             if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.kbak_id){
-              console.log("후속"+ this.$refs.grid.invoke("getValue",this.curRow, "bak_work_id"));
+              // console.log("후속"+ this.$refs.grid.invoke("getValue",this.curRow, "bak_work_id"));
               this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "con_work_id"))
             }
           }
@@ -587,7 +596,7 @@ export default {
           }
           for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
             if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.kbak_id){
-              console.log("후속"+ this.$refs.grid.invoke("getValue",this.curRow, "bak_work_id"));
+              // console.log("후속"+ this.$refs.grid.invoke("getValue",this.curRow, "bak_work_id"));
               this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "con_work_id"))
             }
           }
@@ -609,7 +618,18 @@ export default {
       this.info.gubun = "1";
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-      this.info.week_yymm = this.getCurrentYyyymm();
+      // 버튼 비활성화/활성화 - 권한, 백업ID에 따라
+      if(this.info.bkup_id_selected == '0000000000') {
+        this.check_save = false // 테이블백업, 저장 활성화
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
+          this.check_bkup = false // 테이블백업  활성화
+          this.check_aut_cd = false // 행추가, 행삭제  활성화
+        }
+      } else {
+        this.check_save = true // 저장  비활성화
+        this.check_bkup = true // 테이블백업  비활성화
+        this.check_aut_cd = true // 행추가, 행삭제  비활성화
+      }
     },
     //연관작업 상세조회
     fnReSearch() {
@@ -665,6 +685,29 @@ export default {
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue: true, onlySelected: true});
     },
+    // 테이블백업
+    tableBackUp() {
+      axiosService.get("/PJTE9900/backup_select")
+          .then(res => {
+            this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
+            this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
+            if(res.data.data.contents.length){
+              axiosService.post("/PJTE9900/backup_update", {
+                new_bkup_id : this.info.new_bkup_id,
+                new_bkup_nm : this.info.new_bkup_nm,
+                prjt_id : this.info.prjt_nm_selected,
+                login_emp_no : this.info.login_emp_no
+              }).then(res => {
+                if (res.status == 200) {
+                  alert("테이블백업이 완료되었습니다.");
+                }
+              })
+            }
+          })
+          .catch(e => {
+            console.log(e)
+          })
+    },
     // 유효값 검증
     vaildation(data, division) {
       for (let i = 0; i < data.length; i++) {
@@ -719,7 +762,7 @@ export default {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트ID
         dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"), //부문코드
         week_yymm         : this.week_yymm,                               //기준년월
-
+        over_due_dt_yn       : this.over_due_dt_yn,                             // 미진항목(완료요청일을 넘김) 조회 체크박스
         reg_dt : '',                                                      // 등록일
         work_step_cd : work_step_cd,                                      // 작업상태
         con_work_id : '',                                                 // 연관작업
@@ -729,6 +772,10 @@ export default {
         mng_id : this.mng_id,             // 작업ID
         current_mng_id : this.current_mng_id, // 현재작업ID
         back_work_id : this.back_work_id,     // 후속작업ID
+        //테이블백업
+        login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+        new_bkup_id : '',
+        new_bkup_nm : '',
       },
 
       rmrk : '', // 비고
@@ -746,6 +793,8 @@ export default {
       ptcpnmTxt: this.ptcpnmTxt, // 참여자
       btn_yn: true,              // 비고, 연관작업 목록 버튼 비활성화/활성화
       check_aut_cd: true,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
+      check_save: false,          // 저장 버튼 비활성화/활성화
+      check_bkup: true,          // 테이블백업 버튼 비활성화/활성화
 
       /* grid 속성 */
       count: 0,
@@ -798,6 +847,7 @@ export default {
           name: 'mark',
           formatter: 'listItemText',
           type:'text',
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -824,9 +874,8 @@ export default {
           header: '작업명',
           align: 'left',
           name: 'work_task',
-          whiteSpace: 'normal',
           editor: 'text',
-          filter: 'select',
+          filter: { type: 'text'}
         },
         {
           header: '등록자',
@@ -935,7 +984,6 @@ export default {
         {
           header: '비고내용',
           name: 'rmrk',
-          whiteSpace: 'normal',
           hidden: true
         },
       ],
@@ -966,7 +1014,6 @@ export default {
           width: 555,
           align: 'left',
           name: 'work_task',
-          whiteSpace: 'normal',
           editor: 'text',
           filter: 'select',
         },
@@ -1021,7 +1068,6 @@ export default {
           width: 285,
           align: 'left',
           name: 'work_task',
-          whiteSpace: 'normal',
           editor: 'text',
         },
         {

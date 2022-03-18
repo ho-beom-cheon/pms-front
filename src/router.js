@@ -111,7 +111,6 @@ export const router = new Router({
 * - next : to에 지정한 url로 이동하기 위해 꼭 호출해야 하는 함수
 *  */
 router.beforeEach(function (to,from,next){
-  debugger
   if(to.fullPath === '/login'){
     sessionStorage.setItem("jwt-auth-token", "")
   }
