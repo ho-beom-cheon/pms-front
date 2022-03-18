@@ -77,10 +77,10 @@
             </tr>
             </tbody>
           </table>
-            <div style="float: right">
-              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(1)">수정</button>
-              <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
-            </div>
+          <div style="float: right">
+            <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(1)">수정</button>
+            <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
+          </div>
         </Modal>
         <Modal :show.sync="modals.bak_work_modal">
           <div class="modal-pop-body">
@@ -136,7 +136,7 @@
                 :rowHeight="rowHeight"
                 :minRowHeight="minRowHeight"
                 :rowHeaders="rowHeaders"
-                @onGridUpdated="onGridUpdated"
+                @onGridUpdated="onGridUpdated3"
                 @click="onClick3"
                 @dblclick="dblClick3"
             ></grid>
@@ -198,33 +198,31 @@
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
-                  @onGridUpdated="onGridUpdated"
+                  @onGridUpdated="onGridUpdated1"
                   @beforeExport="beforeExport"
               ></grid>
             </div>
           </div>
           <div class="div2-Kanban">
-            <div class="div-header"><h2>비고(Back-Log)</h2>
-              <ul class="filter-btn">
-                <button id="backlog-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(3)"  :disabled="btn_yn">수정</button>
+            <div class="div-header">
+              <h2>비고(Back-Log)</h2>
+            </div>
+            <div class="col">
+              <ul class="filter-con clear-fix">
+                <li class="filter-item">
+                  <div class="item-con">
+                    <textarea
+                        cols="103"
+                        rows="33"
+                        id="rmrk"
+                        placeholder="비고를 확인 할 작업항목을 선택하세요."
+                        v-model="rmrk"
+                        style=" margin-left: 10px; height: 206px; width: 732px; border: 1px solid #bdbdbd; line-height: normal"
+                    ></textarea>
+                  </div>
+                </li>
               </ul>
             </div>
-              <div class="col">
-                <ul class="filter-con clear-fix">
-                  <li class="filter-item">
-                    <div class="item-con">
-                    <textarea
-                              cols="103"
-                              rows="33"
-                              id="rmrk"
-                              placeholder="비고를 확인 할 작업항목을 선택하세요."
-                              v-model="rmrk"
-                              style=" margin-left: 10px; height: 206px; width: 732px; border: 1px solid #bdbdbd; line-height: normal"
-                    ></textarea>
-                    </div>
-                  </li>
-                </ul>
-              </div>
           </div>
           <div class="div3-Kanban">
             <div class="div-header"><h2>연관작업 목록</h2>
@@ -245,7 +243,7 @@
                   :rowHeight="rowHeight"
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
-                  @onGridUpdated="onGridUpdated"
+                  @onGridUpdated="onGridUpdated2"
               ></grid>
             </div>
           </div>
@@ -297,12 +295,12 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     dept_cd_change(params) {
-        if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-          this.info.dept_cd_selected  = sessionStorage.getItem("LOGIN_DEPT_CD");
-          this.$refs.combo1.$data.dept_cd_selected = sessionStorage.getItem('LOGIN_DEPT_CD');
-        }else{
-          this.info.dept_cd_selected  = params;
-        }
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        this.info.dept_cd_selected  = sessionStorage.getItem("LOGIN_DEPT_CD");
+        this.$refs.combo1.$data.dept_cd_selected = sessionStorage.getItem('LOGIN_DEPT_CD');
+      }else{
+        this.info.dept_cd_selected  = params;
+      }
 
     },
     bkup_id_change(params) {
@@ -366,78 +364,85 @@ export default {
     },
     // 저장 버튼
     fnSave() {
-        // 변경 사항 유무 체크
-        if (this.$refs.grid.invoke("isModified") === false) {
-          alert("변경된 내용이 없습니다.");
-          return;
-        }
-        // 데이터 로그 확인
-        console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
-        console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
-        console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      // 변경 사항 유무 체크
+      if (this.$refs.grid.invoke("isModified") === false) {
+        alert("변경된 내용이 없습니다.");
+        return;
+      }
+      // 데이터 로그 확인
+      console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
+      console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
+      console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
 
-        // 변경 데이터 저장
-        this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-        this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
-        this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
+      // 변경 데이터 저장
+      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+      this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
+      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
-        if (this.createdRows.length !== 0) {
-          if (this.vaildation(this.createdRows, "1") === true) {
-            if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
-                  alert("개발구분 삭제 권한이 없습니다.");
-                  return;
+      if (this.createdRows.length !== 0) {
+        if (this.vaildation(this.createdRows, "1") === true) {
+          if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+            alert("개발구분 삭제 권한이 없습니다.");
+            return;
+          }
+
+          axiosService.post("/PJTE9900/create", {
+            gridData: this.createdRows,
+            dept_cd: this.info.dept_cd_selected,
+            bkup_id: this.info.bkup_id_selected,
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+          }).then(res => {
+            console.log(res)
+            if (res.data === true) {
+              alert("저장이 완료되었습니다.")
+              // 저장 후 변경 데이터 배열 비움
+              this.$refs.grid.invoke("clearModifiedData")
+            } else {
+              alert("이미 등록된 프로그램입니다.")
             }
-
-            axiosService.post("/PJTE9900/create", {
-              gridData: this.createdRows,
-              dept_cd: this.info.dept_cd_selected,
-              bkup_id: this.info.bkup_id_selected,
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
-            }).then(res => {
-              console.log(res)
-              if (res.data === true) {
-                alert("저장이 완료되었습니다.")
-              } else {
-                alert("이미 등록된 프로그램입니다.")
-              }
-              // 조회 시 현재 년월 기준 조회 값 세팅
-              this.info.week_yymm = this.getCurrentYyyymm();
-              this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
-              this.fnSearch()
-            })
+            // 조회 시 현재 년월 기준 조회 값 세팅
+            this.info.week_yymm = this.getCurrentYyyymm();
+            this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
+            this.fnSearch()
+          })
+        }
+      }
+      if (this.updatedRows.length !== 0) {
+        if (this.vaildation(this.updatedRows, "2") === true) {
+          try {
+            // 데이터 파라메타 전달
+            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
+            this.$refs.grid.invoke("setRequestParams", this.login);
+            // update api 요청
+            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
+            alert("저장이 완료되었습니다.")
+            // 저장 후 변경 데이터 배열 비움
+            this.$refs.grid.invoke("clearModifiedData")
+            this.fnSearch()
+          } catch (e) {
+            console.log("업데이트 오류 ::", e);
           }
         }
-        if (this.updatedRows.length !== 0) {
-              try {
-                // 데이터 파라메타 전달
-                this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-                this.$refs.grid.invoke("setRequestParams", this.login);
-                // update api 요청
-                this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-                alert("저장이 완료되었습니다.")
-                this.fnSearch()
-              } catch (e) {
-                console.log("업데이트 오류 ::", e);
-              }
+      }
+      if (this.deletedRows.length !== 0) {
+        try {
+          // 데이터 파라메타 전달
+          this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
+          // delete api 요청
+          this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
+          alert("저장이 완료되었습니다.")
+          // 저장 후 변경 데이터 배열 비움
+          this.$refs.grid.invoke("clearModifiedData")
+        } catch (e) {
+          console.log(e);
         }
-        if (this.deletedRows.length !== 0) {
-            try {
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.deletedRows));
-              // delete api 요청
-              this.$refs.grid.invoke("request", "deleteData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-            } catch (e) {
-              console.log(e);
-            }
-        }
+      }
 
-        // 저장 후 변경 데이터 배열 비움
-        this.$refs.grid.invoke("clearModifiedData")
+
     },
 
-    onGridUpdated(grid) {
+    onGridUpdated1(grid) {
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
       if (aut_cd === '500' || aut_cd === '600') {
         this.$refs.grid.invoke("addColumnClassName", "bak_work_id", "disableColor");
@@ -450,18 +455,6 @@ export default {
 
       // 작업 상태에 따라 셀 색상 변경
       let gridRow = '';
-      if(grid.instance.store.id == 1) {
-        gridRow = this.$refs.grid3.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
-        }
-      } else if(grid.instance.store.id == 2) {
         gridRow = this.$refs.grid.invoke("getRowCount");
         for(let i=0; i<gridRow; i++) {
           if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
@@ -472,7 +465,9 @@ export default {
             this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
           }
         }
-      } else if(grid.instance.store.id == 3) {
+    },
+    onGridUpdated2(grid) {
+      let gridRow = '';
         gridRow = this.$refs.grid2.invoke("getRowCount");
         for(let i=0; i<gridRow; i++) {
           if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
@@ -483,7 +478,19 @@ export default {
             this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
           }
         }
-      }
+    },
+    onGridUpdated3(grid) {
+      let gridRow = '';
+        gridRow = this.$refs.grid3.invoke("getRowCount");
+        for(let i=0; i<gridRow; i++) {
+          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
+          }
+        }
     },
     beforeExport(grid) {
       console.log("beforeExport::", grid)
@@ -510,12 +517,13 @@ export default {
         this.crpenmTxt = currentCellData.value;
         this.ptcpnmTxt = this.$refs.grid.invoke("getValue", this.curRow, "ptcp_nm");
       }
-      // 컬럼명이 <후속작업>일 때만 모달 팝업
+// 컬럼명이 <후속작업>일 때만 모달 팝업
       if (ev.columnName == 'bak_work_id') {
         this.info.work_task = '';  // 작업명 초기화
         this.info.mng_id = ''      // 작업ID 초기화
         this.info.current_mng_id = this.$refs.grid.invoke("getValue", this.curRow, "mng_id"); // 현재작업ID 설정
         this.info.back_work_id = ''; // 후속작업ID 초기화
+        this.kbak_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"); // 현재후속ID 설정
         this.fnBakSearch()
         let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
         if (aut_cd === '500' || aut_cd === '600') {  // 권한이 500, 600일 때만 팝업
@@ -550,12 +558,41 @@ export default {
         this.$refs.grid.invoke("setValue", this.curRow, "ptcp_nm", this.ptcpnmTxt); //참여자설정
         this.modals.crpe_nm_modal = false; //담당자모달닫기
       }else if(num == 2) { //후소작업모달팝업 수정버튼
-        this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id", this.info.back_work_id); // 후속작업설정
-        for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
-          if(this.$refs.grid.invoke("getValue", i, "mng_id") == this.$refs.grid3.invoke("getValue", this.curRow3, "mng_id")) {
-            this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"))
+        let main_bak_work_id = this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")
+
+        if(main_bak_work_id != null && main_bak_work_id != '') {
+          this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id", this.info.back_work_id); // 후속작업설정
+          for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+            if(this.$refs.grid.invoke("getValue", i, "mng_id") == this.$refs.grid3.invoke("getValue", this.curRow3, "mng_id")) {
+              this.$refs.grid.invoke("setValue", this.curRow, "con_work_id", this.$refs.grid.invoke("getValue", i, "con_work_id"))
+            }
+          }
+          for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+            if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.kbak_id){
+              console.log("후속"+ this.$refs.grid.invoke("getValue",this.curRow, "bak_work_id"));
+              this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "con_work_id"))
+            }
+          }
+          for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+            if(main_bak_work_id == this.$refs.grid.invoke("getValue", i, "mng_id")){
+              this.$refs.grid.invoke("setValue", i, "con_work_id", main_bak_work_id)
+            }
+          }
+        } else {
+          this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id", this.info.back_work_id); // 후속작업설정
+          for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+            if(this.$refs.grid.invoke("getValue", i, "mng_id") == this.$refs.grid3.invoke("getValue", this.curRow3, "mng_id")) {
+              this.$refs.grid.invoke("setValue", this.curRow, "con_work_id", this.$refs.grid.invoke("getValue", i, "con_work_id"))
+            }
+          }
+          for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+            if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.kbak_id){
+              console.log("후속"+ this.$refs.grid.invoke("getValue",this.curRow, "bak_work_id"));
+              this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "con_work_id"))
+            }
           }
         }
+
         this.modals.bak_work_modal = false; //후속작업모달닫기
       }
     },
@@ -629,77 +666,31 @@ export default {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue: true, onlySelected: true});
     },
     // 유효값 검증
-    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
     vaildation(data, division) {
       for (let i = 0; i < data.length; i++) {
         // 저장과 기타항목수정 분류
         if (division === "1") {
           //권한ID[500:PM,600:PMO] - 모두 가능
-          if (this.addCheak === 'N') {
-            if (data[i].atfl_mng_id === null) {
-              alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");
-              return false;
-            }
-            if (data[i].pal_atfl_mng_id === null) {
-              alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");
-              return false;
-            }
+          if (data[i].work_task === null || data[i].work_task === "") {
+            alert("작업명은 필수 입력 사항입니다");
+            return false;
+          }
+          if (data[i].com_rgs_dt === null || data[i].com_rgs_dt === "") {
+            alert("완료요청일은 필수 입력 사항입니다");
+            return false;
+          }
+
+        }
+        if (division === "2") {
+          if(data[i].com_due_dt == null || data[i].com_due_dt == "" || data[i].crpe_nm == null || data[i].crpe_nm == ""){
+            alert("담당자와 완료예정일은 필수 입력 사항입니다.");
+            return false;
+          }
+          if ((data[i].stop_dt == null || data[i].stop_dt == '') && (data[i].re_sta_dt != null && data[i].re_sta_dt != '')) {
+            alert("중단일이 없어 재시작을 할 수 없습니다.");
+            return false;
           }
         }
-        /* 출력 영역  */
-        if (data[i].bzcd === null) {
-          alert("업무구분은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].pgm_id === null) {
-          alert("프로그램ID는 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].pgm_nm === null) {
-          alert("프로그램명은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].dvlp_dis_cd === null) {
-          alert("개발구분은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].pgm_dis_cd === null) {
-          alert("프로그램 구분은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].frcs_sta_dt === null) {
-          alert("예상시작일자는 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].frcs_end_dt === null) {
-          alert("예상종료일자는 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].prc_step_cd === null) {
-          alert("처리단계는 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].dvlpe_no === null) {
-          alert("개발자 사번은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].pl_no === null) {
-          alert("PL 사번은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].crpe_no === null) {
-          alert("담당자 사번은 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].bkup_id === null) {
-          alert("백업 ID는 필수 입력 사항입니다");
-          return false;
-        }
-        if (data[i].prjt_id === null) {
-          alert("프로젝트 ID는 필수 입력 사항입니다");
-          return false;
-        }
-
 
       }
       return true;
@@ -708,7 +699,9 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
-
+    rmrk() {
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk); // 비고설정
+    }
   },
 
 // 변수 선언부분
@@ -739,7 +732,7 @@ export default {
       },
 
       rmrk : '', // 비고
-
+      kbak_id : '', // 그리드 1 후속 ID
       updatedRows: this.updatedRows,
       deletedRows: this.deletedRows,
       createdRows: this.createdRows,
