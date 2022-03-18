@@ -289,6 +289,10 @@ export default {
                 new_bkup_nm : this.info.new_bkup_nm,
                 prjt_id : this.info.prjt_nm_selected,
                 login_emp_no : this.info.login_emp_no
+              }).then(res => {
+                if (res.status == 200) {
+                  alert("테이블백업이 완료되었습니다.");
+                }
               })
             }
           })
@@ -1024,68 +1028,6 @@ export default {
       editingEvent : 'click',
       showDummyRows: false,
       open: false,
-      menu_list: [
-        {
-          id: 'PJTE1000',
-          path: '/PJTE1000',
-          name: 'ProjectEyes현황'
-        },
-        {
-          id: 'PJTE2100',
-          path: '/PJTE2100',
-          name: '개발현황'
-        },
-        {
-          id: 'PJTE2110',
-          path: '/PJTE2110',
-          name: '개발진척현황'
-        },
-        {
-          id: 'PJTE2200',
-          path: '/PJTE2200',
-          name: '통합테스트'
-        },
-        {
-          id: 'PJTE2210',
-          path: '/PJTE2210',
-          name: '통합테스트진척현황'
-        },
-        {
-          id: 'PJTE3000',
-          path: '/PJTE3000',
-          name: '결함관리'
-        },
-        {
-          id: 'PJTE4000',
-          path: '/PJTE4000',
-          name: 'ActionItem및이슈관리현황'
-        },
-        {
-          id: 'PJTE5000',
-          path: '/PJTE5000',
-          name: 'WBS관리'
-        },
-        {
-          id: 'PJTE6000',
-          path: '/PJTE6000',
-          name: 'PMS신청관리'
-        },
-        {
-          id: 'PJTE7000',
-          path: '/PJTE7000',
-          name: '산출물정합성체크'
-        },
-        {
-          id: 'PJTE9000',
-          path: '/PJTE9000',
-          name: '시스템관리'
-        },
-        {
-          id: 'PJTE8000',
-          path: '/PJTE8000',
-          name: '주간보고'
-        },
-      ],
       dataSource: {
         api: {
           readData: { url: process.env.VUE_APP_API + '/PJTE9000/select', method: 'GET' },
