@@ -1166,7 +1166,14 @@ export default {
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
           if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038N[0].value
           if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039N[0].value
-          if(this.CD1000000040T.length !== 0)  this.dept_cd_selected             =  (sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null ? sessionStorage.getItem("LOGIN_DEPT_CD"): this.CD1000000040T[0].value)
+          if(this.CD1000000040T.length !== 0) {
+            if(sessionStorage.getItem("LOGIN_PROJ_ID")== '0000000001'){
+              this.dept_cd_selected =this.CD1000000040T[0].value;
+            }else{
+              this.dept_cd_selected             = (sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null ? sessionStorage.getItem("LOGIN_DEPT_CD"): this.CD1000000040T[0].value)
+            }
+
+          }
         }
         this.setCdAll()
       }
