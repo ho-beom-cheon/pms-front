@@ -497,6 +497,7 @@ table.form-table select {
     grid-row: 3/4;
     margin-right: 5px;
     margin-left: 5px;
+    padding-right: 20px;
     margin-bottom: 5px;
     border: 1px solid #d5d5d5;
 }
