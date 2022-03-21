@@ -18,7 +18,7 @@
               ref="combo1"
           ></combo>
           <li class="filter-item">
-            <div class="item-con">기준년월
+            <div class="item-con">등록기준년월
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
@@ -324,7 +324,7 @@ export default {
       this.$refs.grid2.invoke("disable");
       this.$refs.grid3.invoke("disable");
       // 최초 조회 시 현재 년월 기준 조회 값 세팅
-      this.info.week_yymm = this.getCurrentYyyymm();
+      // this.info.week_yymm = this.getCurrentYyyymm();
       //미진항목 조회 체크박스 초기값
       this.info.over_due_dt_yn = false;
       // 권한에 따른 컬럼 활성화
@@ -333,6 +333,8 @@ export default {
         this.$refs.grid.invoke("enableColumn", 'work_task');
         this.$refs.grid.invoke("enableColumn", 'reg_dt');
         this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
+        this.$refs.grid.invoke("enableColumn", 'stop_dt');
+        this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'mark');
         this.check_aut_cd = false // 행추가,행삭제 활성화
         this.check_bkup = false // 테이블 백업 버튼 활성화
@@ -411,7 +413,7 @@ export default {
               alert("이미 등록된 프로그램입니다.")
             }
             // 조회 시 현재 년월 기준 조회 값 세팅
-            this.info.week_yymm = this.getCurrentYyyymm();
+            // this.info.week_yymm = this.getCurrentYyyymm();
             this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
             this.fnSearch()
           })
@@ -464,42 +466,42 @@ export default {
 
       // 작업 상태에 따라 셀 색상 변경
       let gridRow = '';
-        gridRow = this.$refs.grid.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
+      gridRow = this.$refs.grid.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+          this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
         }
+      }
     },
     onGridUpdated2(grid) {
       let gridRow = '';
-        gridRow = this.$refs.grid2.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
+      gridRow = this.$refs.grid2.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+          this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
         }
+      }
     },
     onGridUpdated3(grid) {
       let gridRow = '';
-        gridRow = this.$refs.grid3.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
+      gridRow = this.$refs.grid3.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+          this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
         }
+      }
     },
     beforeExport(grid) {
       // console.log("beforeExport::", grid)
@@ -509,6 +511,9 @@ export default {
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
+      if(this.curRow === undefined){
+        return;
+      }
       if(this.$refs.grid.invoke("getValue", this.curRow, "mng_id")){
         // 수정, 연관작업 상세조회 버튼 활성화
         this.btn_yn = false;
@@ -528,15 +533,17 @@ export default {
       }
       // 컬럼명이 <후속작업>일 때만 모달 팝업
       if (ev.columnName == 'bak_work_id') {
-        this.info.work_task = '';  // 작업명 초기화
-        this.info.mng_id = ''      // 작업ID 초기화
-        this.info.current_mng_id = this.$refs.grid.invoke("getValue", this.curRow, "mng_id"); // 현재작업ID 설정
-        this.info.back_work_id = ''; // 후속작업ID 초기화
-        this.kbak_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"); // 현재후속ID 설정
-        this.fnBakSearch()
-        let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-        if (aut_cd === '500' || aut_cd === '600') {  // 권한이 500, 600일 때만 팝업
-          this.modals.bak_work_modal = true;
+        if(this.$refs.grid.invoke("getValue", this.curRow, "mng_id") != null) {
+          this.info.work_task = '';  // 작업명 초기화
+          this.info.mng_id = ''      // 작업ID 초기화
+          this.info.current_mng_id = this.$refs.grid.invoke("getValue", this.curRow, "mng_id"); // 현재작업ID 설정
+          this.info.back_work_id = this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id"); // 후속작업ID 초기화
+          this.kbak_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"); // 현재후속ID 설정
+          this.fnBakSearch()
+          let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
+          if (aut_cd === '500' || aut_cd === '600') {  // 권한이 500, 600일 때만 팝업
+            this.modals.bak_work_modal = true;
+          }
         }
       }
 
@@ -630,6 +637,11 @@ export default {
         this.check_bkup = true // 테이블백업  비활성화
         this.check_aut_cd = true // 행추가, 행삭제  비활성화
       }
+      if(this.info.over_due_dt_yn == true) {
+        this.info.week_yymm = ''
+      } else if (this.info.over_due_dt_yn == false && this.info.week_yymm == this.getCurrentYyyymm()) {
+        this.info.week_yymm = this.getCurrentYyyymm();
+      }
     },
     //연관작업 상세조회
     fnReSearch() {
@@ -648,16 +660,14 @@ export default {
 
     // 행추가
     gridAddRow() {
-      this.$refs.grid.invoke("setFrozenColumnCount", 0);
       this.addCheak = 'Y';
       this.$refs.grid.invoke("appendRow",
           {
-            bzcd: sessionStorage.getItem("LOGIN_BZCD"),
             save_yn: "N", //행르 추가하면 등록여부 'N'
             prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
             bkup_id: "0000000000",
           },
-          {focus: true});
+          {focus: true, at: 0});
       this.fnEnable();
     },
     // 추가한 행 편집 활성화
@@ -700,6 +710,7 @@ export default {
               }).then(res => {
                 if (res.status == 200) {
                   alert("테이블백업이 완료되었습니다.");
+                  location.reload();
                 }
               })
             }
@@ -725,10 +736,6 @@ export default {
 
         }
         if (division === "2") {
-          if(data[i].com_due_dt == null || data[i].com_due_dt == "" || data[i].crpe_nm == null || data[i].crpe_nm == ""){
-            alert("담당자와 완료예정일은 필수 입력 사항입니다.");
-            return false;
-          }
           if ((data[i].stop_dt == null || data[i].stop_dt == '') && (data[i].re_sta_dt != null && data[i].re_sta_dt != '')) {
             alert("중단일이 없어 재시작을 할 수 없습니다.");
             return false;
@@ -744,7 +751,7 @@ export default {
   watch: {
     rmrk() {
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk); // 비고설정
-    }
+    },
   },
 
 // 변수 선언부분
@@ -762,7 +769,7 @@ export default {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트ID
         dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"), //부문코드
         week_yymm         : this.week_yymm,                               //기준년월
-        over_due_dt_yn       : this.over_due_dt_yn,                             // 미진항목(완료요청일을 넘김) 조회 체크박스
+        over_due_dt_yn    : this.over_due_dt_yn,                          // 미진항목(완료요청일을 넘김) 조회 체크박스
         reg_dt : '',                                                      // 등록일
         work_step_cd : work_step_cd,                                      // 작업상태
         con_work_id : '',                                                 // 연관작업
