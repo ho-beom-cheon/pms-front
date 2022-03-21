@@ -685,6 +685,24 @@
         </select>
       </div>
     </li>
+    <!--  KanbanBoard 부문코드 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40-1'">
+      <div class="item-con">부문명
+        <select
+            v-model = "dept_cd_selected"
+            style   = "width: 110px"
+            :disabled="read"
+            @change = "dept_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000040"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
   </div>
 </template>
 
@@ -781,7 +799,7 @@ export default {
       CD1000000036T : [],  CD1000000036N : [],
       CD1000000038T : [],  CD1000000038N : [], CD1000000038 : [],
       CD1000000039T : [],  CD1000000039N : [], CD1000000039 : [],
-      CD1000000040T : [],  CD1000000040N : [],
+      CD1000000040T : [],  CD1000000040N : [], CD1000000040 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -1128,6 +1146,7 @@ export default {
             } else if(i === 40) {
               this.CD1000000040T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000040N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000040.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
 
@@ -1168,9 +1187,13 @@ export default {
           if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039N[0].value
           if(this.CD1000000040T.length !== 0) {
             if(sessionStorage.getItem("LOGIN_PROJ_ID")== '0000000001'){
-              this.dept_cd_selected =this.CD1000000040T[0].value;
+              this.dept_cd_selected = this.CD1000000040T[0].value;
             }else{
-              this.dept_cd_selected             = (sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null ? sessionStorage.getItem("LOGIN_DEPT_CD"): this.CD1000000040T[0].value)
+              if(sessionStorage.getItem("LOGIN_PROJ_ID")== '0000000003') {
+                this.dept_cd_selected = (sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null ? sessionStorage.getItem("LOGIN_DEPT_CD") : this.CD1000000040[0].value)
+              } else {
+                this.dept_cd_selected = (sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null ? sessionStorage.getItem("LOGIN_DEPT_CD") : this.CD1000000040T[0].value)
+              }
             }
 
           }
