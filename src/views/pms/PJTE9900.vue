@@ -24,7 +24,7 @@
           </li>
           <li class="filter-item">
             <div class="item-con">
-              <input type="checkbox" id="over_due_dt_yn" v-model="info.over_due_dt_yn">
+              <input type="checkbox" id="over_due_dt_yn" v-model="info.over_due_dt_yn" style="margin-bottom: 4px">
               <label>　미진항목</label>
             </div>
           </li>
@@ -75,6 +75,7 @@
               </th>
               <td colspan="5">
                 <textarea
+                    id="ptcpnmTxt"
                     cols="95"
                     rows="20"
                     v-model="ptcpnmTxt"
@@ -323,8 +324,6 @@ export default {
       this.$refs.grid.invoke("disable");
       this.$refs.grid2.invoke("disable");
       this.$refs.grid3.invoke("disable");
-      // 최초 조회 시 현재 년월 기준 조회 값 세팅
-      // this.info.week_yymm = this.getCurrentYyyymm();
       //미진항목 조회 체크박스 초기값
       this.info.over_due_dt_yn = false;
       // 권한에 따른 컬럼 활성화
@@ -348,6 +347,7 @@ export default {
       }
       // 비고 폰트사이즈
       document.getElementById("rmrk").style.fontSize = '13px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      document.getElementById("ptcpnmTxt").style.fontSize = '13px';  // 담당자 폰트 사이즈 최초값
     },
 
     // YYYY-MM 형태의 현재 년월을 구하는 함수
@@ -412,8 +412,6 @@ export default {
             } else {
               alert("이미 등록된 프로그램입니다.")
             }
-            // 조회 시 현재 년월 기준 조회 값 세팅
-            // this.info.week_yymm = this.getCurrentYyyymm();
             this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
             this.fnSearch()
           })
@@ -637,11 +635,6 @@ export default {
         this.check_bkup = true // 테이블백업  비활성화
         this.check_aut_cd = true // 행추가, 행삭제  비활성화
       }
-      if(this.info.over_due_dt_yn == true) {
-        this.info.week_yymm = ''
-      } else if (this.info.over_due_dt_yn == false && this.info.week_yymm == this.getCurrentYyyymm()) {
-        this.info.week_yymm = this.getCurrentYyyymm();
-      }
     },
     //연관작업 상세조회
     fnReSearch() {
@@ -740,6 +733,10 @@ export default {
             alert("중단일이 없어 재시작을 할 수 없습니다.");
             return false;
           }
+          if ((data[i].com_due_dt == null || data[i].com_due_dt == '') && (data[i].com_dt != null && data[i].com_dt != '')) {
+            alert("완료예정일이 없어 완료처리를 할 수 없습니다.");
+            return false;
+          }
         }
 
       }
@@ -759,7 +756,7 @@ export default {
     return {
 
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C40", "C27"],
+      comboList: ["C40-1", "C27"],
       gridData: [],
       addCheak: 'N',
 
