@@ -756,7 +756,7 @@ export default {
     return {
 
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C40", "C27"],
+      comboList: ["C40-1", "C27"],
       gridData: [],
       addCheak: 'N',
 
