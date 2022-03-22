@@ -412,8 +412,7 @@ export default {
             } else {
               alert("이미 등록된 프로그램입니다.")
             }
-            this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
-            this.fnSearch()
+            this.$refs.grid.invoke("reloadData");
           })
         }
       }
