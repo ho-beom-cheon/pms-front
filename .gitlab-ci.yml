@@ -8,13 +8,14 @@ stages:
  - test
 before_script:
   - pwd
+  - cd/home/admin/pms
   - ls
 
 build:
   stage: build
   script: 
    - echo "run build"
-   - npm run prod
+   - npm run build
 
 test:
   stage: test
