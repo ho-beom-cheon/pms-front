@@ -8,7 +8,7 @@ stages:
  - test
 before_script:
   - pwd
-  -ls
+  - ls
 
 build:
   stage: build
