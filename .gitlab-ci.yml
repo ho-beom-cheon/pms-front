@@ -10,8 +10,6 @@ stages:
 build:
   stage: build
   script: 
-   - echo "Build Start"
-   - gradle --build-cache assemble
    - echo "run build"
    - npm run build
   cache:
