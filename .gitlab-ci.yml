@@ -6,17 +6,17 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
   
- stages:
-  - build
-  - test
+stages:
+ - build
+ - test
 
 build:
   stage: build
   script: 
-  - echo "Build Start"
-  - gradle --build-cache assemble
-  - echo "run build"
-  - npm run build
+   - echo "Build Start"
+   - gradle --build-cache assemble
+   - echo "run build"
+   - npm run build
   cache:
     key: "$CI_COMMIT_REF_SLUG"
     paths:
