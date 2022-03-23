@@ -11,7 +11,8 @@ build-phase:
   before_script:
     - id
     - pwd
-    - ls
+    - cd ../
+    - sudo cp pms-front /home/admin
   script:
     - echo "run build"
     - npm run build
