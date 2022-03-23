@@ -3,29 +3,15 @@ variables:
   
 stages:
  - build
- - test
-tags:
- - pms
-before_script:
-  - pwd
-  - sudo su
-  - su admin
-  - Wjsdj!@0
-  - cd /home/admin/pms
-  - ls
-
-build:
+ 
+build-phase:      
   stage: build
-  script: 
-   - echo "run build"
-   - npm run build
-
-test:
-  stage: test
-  script: gradle check
-  cache:
-    key: "$CI_COMMIT_REF_SLUG"
-    policy: pull
-    paths:
-      - build
-      - .gradle
+  tags:
+   - pms
+  before_script:
+    - id
+    - pwd
+    - ls
+  script:
+    - echo "run build"
+    - npm run build
