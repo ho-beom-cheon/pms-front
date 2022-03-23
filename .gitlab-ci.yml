@@ -1,5 +1,3 @@
-image: gradle:alpine
-
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   
@@ -11,12 +9,7 @@ build:
   stage: build
   script: 
    - echo "run build"
-   - npm run build
-  cache:
-    key: "$CI_COMMIT_REF_SLUG"
-    paths:
-      - build
-      - .gradle
+   - npm run prod
 
 test:
   stage: test
@@ -27,3 +20,5 @@ test:
     paths:
       - build
       - .gradle
+
+
