@@ -12,7 +12,7 @@ build-phase:
     - id
     - pwd
     - cd ../
-    - sudo cp -R pms-front /home/admin
+    - sudo cp -r pms-front /home/admin
   script:
     - echo "run build"
     - npm run build
