@@ -4,6 +4,8 @@ variables:
 stages:
  - build
  - test
+tags:
+ - pms
 before_script:
   - pwd
   - sudo su
@@ -27,5 +29,3 @@ test:
     paths:
       - build
       - .gradle
-
-
