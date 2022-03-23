@@ -1,9 +1,14 @@
+image: gradle:alpine
+
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   
 stages:
  - build
  - test
+before_script:
+  - pwd
+  -ls
 
 build:
   stage: build
