@@ -8,6 +8,7 @@ before_script:
   - pwd
   - sudo su
   - su admin
+  - Wjsdj!@0
   - cd /home/admin/pms
   - ls
 
