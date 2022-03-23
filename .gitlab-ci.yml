@@ -8,7 +8,7 @@ stages:
  - test
 before_script:
   - pwd
-  - cd/home/admin/pms
+  - cd /home/admin/pms
   - ls
 
 build:
