@@ -1,29 +1,16 @@
-image: gradle:alpine
-
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   
 stages:
  - build
- - test
-
-build:
+ 
+build-phase:      
   stage: build
-  script: 
-   - echo "run build"
-   - npm run build
-  cache:
-    key: "$CI_COMMIT_REF_SLUG"
-    paths:
-      - build
-      - .gradle
-
-test:
-  stage: test
-  script: gradle check
-  cache:
-    key: "$CI_COMMIT_REF_SLUG"
-    policy: pull
-    paths:
-      - build
-      - .gradle
+  tags:
+   - pms
+  before_script:
+    - id
+    - pwd
+  script:
+    - echo "run build"
+    - npm run build
