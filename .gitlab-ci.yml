@@ -3,7 +3,6 @@ variables:
 cache:
   paths:
     - ./node_modules/
-    - build
   key: $CI_COMMIT_REF_SLUG
   
 stages:
