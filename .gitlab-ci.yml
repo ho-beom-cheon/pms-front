@@ -2,12 +2,12 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   
 stages:
- - build
+  - build
  
 build-phase:      
   stage: build
   tags:
-   - pms
+    - pms
   before_script:
     - id
     - pwd
@@ -15,4 +15,4 @@ build-phase:
   script:
     - echo "run build"
   after_script:
-   - - vue-cli-service build --mode prod
+    - vue-cli-service build --mode prod
