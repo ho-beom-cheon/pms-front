@@ -1,0 +1,23 @@
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+cache:
+  paths:
+    - ./node_modules/
+    - build
+  key: $CI_COMMIT_REF_SLUG
+  
+stages:
+  - build
+ 
+build-phase:      
+  stage: build
+  tags:
+    - pms
+  before_script:
+    - npm cache clean --force
+    - id
+    - pwd
+    - ls
+  script:
+    - echo "run build"
+    - npm run build
