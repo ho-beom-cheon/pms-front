@@ -11,7 +11,6 @@ build-phase:
   before_script:
     - id
     - pwd
-    - cd ../
   script:
     - echo "run build"
     - npm run build
