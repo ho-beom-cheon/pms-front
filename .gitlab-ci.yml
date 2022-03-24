@@ -14,4 +14,4 @@ build-phase:
     - ls
   script:
     - echo "run build"
-    #- npm run build
+    - vue-cli-service build --mode prod
