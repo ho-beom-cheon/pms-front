@@ -15,4 +15,6 @@ build-phase:
   script:
     - echo "run build"
   after_script:
+    - pwd
+    - ls
     - vue-cli-service build --mode prod
