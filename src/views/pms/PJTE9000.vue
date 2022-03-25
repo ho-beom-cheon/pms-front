@@ -97,7 +97,7 @@
                   </ul>
                   <ul class="filter-con clear-fix">
                     <li class="filter-item">
-                      <div class="item-con">조회년월일
+                      <div class="item-con">조회년월일<label title="ex) yyyy, yyyymm, yyyymmdd" style="color: red">?</label>
                         <input type="text"
                                placeholder="입력"
                                v-model="info.sel_yyyymmdd"
@@ -248,6 +248,9 @@ export default {
     }
     await this.fnSearch();
     await this.fnSearchCode();
+    // if(this.$refs.grid4.invoke("getData").length == 0){
+    //   this.$refs.grid4.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected })
+    // }
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
