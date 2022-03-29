@@ -331,10 +331,12 @@ export default {
       if (aut_cd === '500' || aut_cd === '600') {
         this.$refs.grid.invoke("enableColumn", 'work_task');
         this.$refs.grid.invoke("enableColumn", 'reg_dt');
+        this.$refs.grid.invoke("enableColumn", 'com_due_dt');
         this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
         this.$refs.grid.invoke("enableColumn", 'stop_dt');
         this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'mark');
+        this.$refs.grid.invoke("enableColumn", 'com_dt');
         this.check_aut_cd = false // 행추가,행삭제 활성화
         this.check_bkup = false // 테이블 백업 버튼 활성화
       } else {
