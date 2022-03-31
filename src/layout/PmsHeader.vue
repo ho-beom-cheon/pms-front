@@ -7,6 +7,9 @@
       <a href="./PJTE9900" v-else-if="this.projId =='0000000003'">
         <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
       </a>
+      <a href="./PJTE9005" v-else-if="this.projId =='0000000004'">
+        <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
+      </a>
       <a href="./PJTE1000" v-else>
         <img src="../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
       </a>
@@ -17,13 +20,7 @@
         <li><a href="#"></a></li>
       </ul>
       <div class="gnb-etc">
-        <a v-if="this.projId =='0000000003'">
-          <div class="imgWrap">
-            <img src="../assets/img/PE-icon/ic_profile.svg" alt="profile">
-          </div>
-          <span>{{ empnm }} 님</span>
-        </a>
-        <a v-else href="./PJTE9000">
+        <a href="./PJTE9000">
           <div class="imgWrap">
             <img src="../assets/img/PE-icon/ic_profile.svg" alt="profile">
           </div>
@@ -129,6 +126,11 @@ export default {
           id: 'PJTE9900',
           path: '/PJTE9900',
           name: 'KanbanBoard'
+        },
+        {
+          id: 'PJTE9005',
+          path: '/PJTE9005',
+          name: '인력프로파일관리'
         },
       ],
     }
