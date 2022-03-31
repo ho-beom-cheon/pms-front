@@ -42,6 +42,9 @@ const pms = {
         CD1000000038N:[],
         CD1000000039N:[],
         CD1000000040N:[],
+        CD1000000041N:[],
+        CD1000000042N:[],
+        CD1000000043N:[],
 
 
     },
@@ -91,6 +94,9 @@ const pms = {
             state.CD1000000038N = array[38];
             state.CD1000000039N = array[39];
             state.CD1000000040N = array[40];
+            state.CD1000000041N = array[41];
+            state.CD1000000042N = array[42];
+            state.CD1000000043N = array[43];
         },
     },
     actions: {

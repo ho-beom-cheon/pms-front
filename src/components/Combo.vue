@@ -685,7 +685,7 @@
         </select>
       </div>
     </li>
-    <!--  KanbanBoard 부문코드 -->
+    <!--  KanbanBoard 부문코드 시작-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40-1'">
       <div class="item-con">부문명
         <select
@@ -703,6 +703,73 @@
         </select>
       </div>
     </li>
+    <!--  KanbanBoard 부문코드 끝 -->
+    <!-- 인력프로파일관리 시작 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P1'">
+      <div class="item-con">기술등급
+        <select
+            v-model = "skill_grd_selected_iss"
+            style   = "width: 110px"
+            @change = "skill_grd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000042T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P2'">
+      <div class="item-con"><label>직원구분</label>
+        <select
+            v-model = "man_cd_selected"
+            style   = "width: 230px"
+            @change = "man_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000041N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P3'">
+      <div class="item-con"><label>기술등급</label>
+        <select
+            v-model = "skill_grd_selected"
+            style   = "width: 230px"
+            @change = "skill_grd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000042N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P4'">
+      <div class="item-con"><label>평판구분</label>
+        <select
+            v-model = "grd_cd_selected"
+            style   = "width: 230px"
+            @change = "grd_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000043N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!-- 인력프로파일관리 끝 -->
   </div>
 </template>
 
@@ -755,6 +822,10 @@ export default {
     this.real_prjt_id_change()
     this.week_sqn_cd_change()
     this.dept_cd_change()
+    this.skill_grd_change_iss()
+    this.man_cd_change()
+    this.skill_grd_change()
+    this.grd_cd_change()
   },
   data() {
     return {
@@ -800,6 +871,9 @@ export default {
       CD1000000038T : [],  CD1000000038N : [], CD1000000038 : [],
       CD1000000039T : [],  CD1000000039N : [], CD1000000039 : [],
       CD1000000040T : [],  CD1000000040N : [], CD1000000040 : [],
+      CD1000000041T : [],  CD1000000041N : [], CD1000000041 : [],
+      CD1000000042T : [],  CD1000000042N : [], CD1000000042 : [],
+      CD1000000043T : [],  CD1000000043N : [], CD1000000043 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -887,6 +961,14 @@ export default {
       // 부문코드
       dept_cd_selected : "",
       dept_cd_selected_iss : "",
+      // 기술등급(조회)
+      skill_grd_selected_iss : "",
+      // 인력구분
+      man_cd_selected : "NNN",
+      // 기술등급
+      skill_grd_selected : "NNN",
+      // 평판코드
+      grd_cd_selected : "NNN",
     }
   },
   methods: {
@@ -938,7 +1020,11 @@ export default {
     real_prjt_id_change_iss()       {  this.$emit('real_prjt_id_change_iss',       this.real_prjt_id_selected_iss)},     // 상세보기]투입프로젝트
     week_sqn_cd_change_iss()        {  this.$emit('week_sqn_cd_change_iss',        this.week_sqn_cd_selected_iss)},      // 상세보기]회차
     dept_cd_change()                {  this.$emit('dept_cd_change',                this.dept_cd_selected)},              // 부문코드
-    dept_cd_change_iss()            {  this.$emit('dept_cd_change_iss',                this.dept_cd_selected_iss)},              // 상세보기]부문코드
+    dept_cd_change_iss()            {  this.$emit('dept_cd_change_iss',            this.dept_cd_selected_iss)},          // 상세보기]부문코드
+    skill_grd_change_iss()          {  this.$emit('skill_grd_change_iss',          this.skill_grd_selected_iss)},        // 기술등급(조회)
+    man_cd_change()                 {  this.$emit('man_cd_change',                 this.man_cd_selected)},               // 인력구분
+    skill_grd_change()              {  this.$emit('skill_grd_change',              this.skill_grd_selected)},            // 기술등급
+    grd_cd_change()                 {  this.$emit('grd_cd_change',                 this.grd_cd_selected)},               // 평판코드
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -1020,6 +1106,15 @@ export default {
               } else if (i === 40) {
                 this.CD1000000040T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000040N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 41) {
+                this.CD1000000041T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000041N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 42) {
+                this.CD1000000042T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000042N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 43) {
+                this.CD1000000043T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000043N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1148,6 +1243,21 @@ export default {
               this.CD1000000040N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000040.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 41) {
+              this.CD1000000041T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000041N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000041.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 42) {
+              this.CD1000000042T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000042N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000042.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 43) {
+              this.CD1000000043T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000043N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000043.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             }
 
             this.set_yn = "Y";
@@ -1197,6 +1307,9 @@ export default {
             }
 
           }
+          if(this.CD1000000041T.length !== 0)   this.man_cd_selected            = this.CD1000000041T[0].value
+          if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
+          if(this.CD1000000043T.length !== 0)   this.grd_cd_selected            = this.CD1000000043T[0].value
         }
         this.setCdAll()
       }
@@ -1244,11 +1357,15 @@ export default {
       this.cd_all.push(this.CD1000000038N)
       this.cd_all.push(this.CD1000000039N)
       this.cd_all.push(this.CD1000000040N)
+      this.cd_all.push(this.CD1000000041N)
+      this.cd_all.push(this.CD1000000042N)
+      this.cd_all.push(this.CD1000000043N)
     },
     init()  {
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
       if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
-          sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+          sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+          sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
         this.read = false;
       }
 
@@ -1295,6 +1412,9 @@ export default {
             "1000000038",
             "1000000039",
             "1000000040",
+            "1000000041",
+            "1000000042",
+            "1000000043",
           ];
 
       // 조회영역 권한 체크
