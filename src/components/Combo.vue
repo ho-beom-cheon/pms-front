@@ -823,9 +823,6 @@ export default {
     this.week_sqn_cd_change()
     this.dept_cd_change()
     this.skill_grd_change_iss()
-    this.man_cd_change()
-    this.skill_grd_change()
-    this.grd_cd_change()
   },
   data() {
     return {
@@ -964,11 +961,11 @@ export default {
       // 기술등급(조회)
       skill_grd_selected_iss : "",
       // 인력구분
-      man_cd_selected : "NNN",
+      man_cd_selected : "",
       // 기술등급
-      skill_grd_selected : "NNN",
+      skill_grd_selected : "",
       // 평판코드
-      grd_cd_selected : "NNN",
+      grd_cd_selected : "",
     }
   },
   methods: {
@@ -1307,9 +1304,9 @@ export default {
             }
 
           }
-          if(this.CD1000000041T.length !== 0)   this.man_cd_selected            = this.CD1000000041T[0].value
-          if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
-          if(this.CD1000000043T.length !== 0)   this.grd_cd_selected            = this.CD1000000043T[0].value
+          if(this.CD1000000041.length !== 0)   this.man_cd_selected            = this.CD1000000041N[0].value
+          if(this.CD1000000042.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042N[0].value
+          if(this.CD1000000043.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
         }
         this.setCdAll()
       }
@@ -1367,6 +1364,9 @@ export default {
           sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
           sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
         this.read = false;
+      }
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000004') {
+          this.read = true;
       }
 
       this.code_it =
