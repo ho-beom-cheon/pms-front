@@ -1290,7 +1290,7 @@ export default {
           align: 'center',
           name: 'enter_dt',
           editor: {
-            type: 'text',
+            type: 'datePicker',
             options: {
               format: 'yyyy-MM',
               type: 'month',
@@ -1347,7 +1347,7 @@ export default {
           align: 'center',
           name: 'sta_dt',
           editor: {
-            type: 'text',
+            type: 'datePicker',
             options: {
               format: 'yyyy-MM',
               type: 'month',
@@ -1360,7 +1360,7 @@ export default {
           align: 'center',
           name: 'end_dt',
           editor: {
-            type: 'text',
+            type: 'datePicker',
             options: {
               format: 'yyyy-MM',
               type: 'month',
