@@ -666,76 +666,144 @@ export default {
 
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === '통합테스트' || sheetName === 'Sheet1') {
-            console.log(wb.Sheets[sheetName])
-            wb.Sheets[sheetName].A1.w = "NO"
-            wb.Sheets[sheetName].B1.w = "bzcd"
-            wb.Sheets[sheetName].C1.w = "sqn_cd"
-            wb.Sheets[sheetName].D1.w = "scnr_id"
-            wb.Sheets[sheetName].E1.w = "scnr_nm"
-            wb.Sheets[sheetName].F1.w = "tst_case_id"
-            wb.Sheets[sheetName].G1.w = "tst_case_nm"
-            wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
-            let I1 = {I1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_no'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
-            wb.Sheets[sheetName].I2.w = "frcs_sta_dt"
-            let J1 = {J1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_no'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
-            wb.Sheets[sheetName].J2.w = "frcs_end_dt"
-            wb.Sheets[sheetName].K1.w = "dvlpe_cnf_dt"
-            wb.Sheets[sheetName].L1.w = "pl_cnf_dt"
-            let M1 = {M1 : {t: 's', v: '명', r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>', h: '명', w: 'dvlpe_enm'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
-            wb.Sheets[sheetName].M2.w = "dvlpe_enm"
-            wb.Sheets[sheetName].N2.w = "dvlpe_btn"
-            let O1 = {O1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'dvlpe_eno'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
-            wb.Sheets[sheetName].O2.w = "dvlpe_eno"
-            let P1 = {P1 : {t: 's', v: 'PL', r: '<t>PL</t><phoneticPr fontId="1" type="noConversion"/>', h: 'PL', w: 'PL'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
-            wb.Sheets[sheetName].P2.w = "pl_enm"
-            wb.Sheets[sheetName].Q2.w = "pl_btn"
-            let R1 = {R1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'pl_eno'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-            wb.Sheets[sheetName].R2.w = "pl_eno"
-            let S1 = {S1 : {t: 's', v: '명', r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>', h: '명', w: 'crpe_enm'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-            wb.Sheets[sheetName].S2.w = "crpe_enm"
-            wb.Sheets[sheetName].T2.w = "crpe_btn"
-            let U1 = {U1 : {t: 's', v: '사번', r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>', h: '사번', w: 'crpe_eno'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-            wb.Sheets[sheetName].U2.w = "crpe_eno"
-            wb.Sheets[sheetName].V1.w = "atfl_mng_id_yn"
-            wb.Sheets[sheetName].W2.w = "err_tot_cnt"
-            wb.Sheets[sheetName].X2.w = "err_cmpl_cnt"
-            wb.Sheets[sheetName].Y2.w = "err_ncmpl_cnt"
-            wb.Sheets[sheetName].Z2.w = "err_btn"
-            wb.Sheets[sheetName].AA1.w = "rmrk"
-            wb.Sheets[sheetName].AB1.w = "pgm_id"
-            wb.Sheets[sheetName].AC1.w = "scrn_id"
-            wb.Sheets[sheetName].AD1.w = "trn_cd"
-            wb.Sheets[sheetName].AE1.w = "rqu_sbh_id"
-            wb.Sheets[sheetName].AF1.w = "prr_cnd"
-            wb.Sheets[sheetName].AG1.w = "inp_val"
-            wb.Sheets[sheetName].AH1.w = "tst_des"
-            wb.Sheets[sheetName].AI1.w = "oup_val"
-            wb.Sheets[sheetName].AJ1.w = "tp"
-            wb.Sheets[sheetName].AK1.w = "oup_mens"
-            wb.Sheets[sheetName].AL1.w = "tst_achi_rst"
+            try {
+              console.log(wb.Sheets[sheetName])
+              wb.Sheets[sheetName].A1.w = "NO"
+              wb.Sheets[sheetName].B1.w = "bzcd"
+              wb.Sheets[sheetName].C1.w = "sqn_cd"
+              wb.Sheets[sheetName].D1.w = "scnr_id"
+              wb.Sheets[sheetName].E1.w = "scnr_nm"
+              wb.Sheets[sheetName].F1.w = "tst_case_id"
+              wb.Sheets[sheetName].G1.w = "tst_case_nm"
+              wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
+              let I1 = {
+                I1: {
+                  t: 's',
+                  v: '사번',
+                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '사번',
+                  w: 'crpe_no'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
+              wb.Sheets[sheetName].I2.w = "frcs_sta_dt"
+              let J1 = {
+                J1: {
+                  t: 's',
+                  v: '사번',
+                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '사번',
+                  w: 'crpe_no'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
+              wb.Sheets[sheetName].J2.w = "frcs_end_dt"
+              wb.Sheets[sheetName].K1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].L1.w = "pl_cnf_dt"
+              let M1 = {
+                M1: {
+                  t: 's',
+                  v: '명',
+                  r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '명',
+                  w: 'dvlpe_enm'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
+              wb.Sheets[sheetName].M2.w = "dvlpe_enm"
+              wb.Sheets[sheetName].N2.w = "dvlpe_btn"
+              let O1 = {
+                O1: {
+                  t: 's',
+                  v: '사번',
+                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '사번',
+                  w: 'dvlpe_eno'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
+              wb.Sheets[sheetName].O2.w = "dvlpe_eno"
+              let P1 = {
+                P1: {
+                  t: 's',
+                  v: 'PL',
+                  r: '<t>PL</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: 'PL',
+                  w: 'PL'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
+              wb.Sheets[sheetName].P2.w = "pl_enm"
+              wb.Sheets[sheetName].Q2.w = "pl_btn"
+              let R1 = {
+                R1: {
+                  t: 's',
+                  v: '사번',
+                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '사번',
+                  w: 'pl_eno'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+              wb.Sheets[sheetName].R2.w = "pl_eno"
+              let S1 = {
+                S1: {
+                  t: 's',
+                  v: '명',
+                  r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '명',
+                  w: 'crpe_enm'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+              wb.Sheets[sheetName].S2.w = "crpe_enm"
+              wb.Sheets[sheetName].T2.w = "crpe_btn"
+              let U1 = {
+                U1: {
+                  t: 's',
+                  v: '사번',
+                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '사번',
+                  w: 'crpe_eno'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+              wb.Sheets[sheetName].U2.w = "crpe_eno"
+              wb.Sheets[sheetName].V1.w = "atfl_mng_id_yn"
+              wb.Sheets[sheetName].W2.w = "err_tot_cnt"
+              wb.Sheets[sheetName].X2.w = "err_cmpl_cnt"
+              wb.Sheets[sheetName].Y2.w = "err_ncmpl_cnt"
+              wb.Sheets[sheetName].Z2.w = "err_btn"
+              wb.Sheets[sheetName].AA1.w = "rmrk"
+              wb.Sheets[sheetName].AB1.w = "pgm_id"
+              wb.Sheets[sheetName].AC1.w = "scrn_id"
+              wb.Sheets[sheetName].AD1.w = "trn_cd"
+              wb.Sheets[sheetName].AE1.w = "rqu_sbh_id"
+              wb.Sheets[sheetName].AF1.w = "prr_cnd"
+              wb.Sheets[sheetName].AG1.w = "inp_val"
+              wb.Sheets[sheetName].AH1.w = "tst_des"
+              wb.Sheets[sheetName].AI1.w = "oup_val"
+              wb.Sheets[sheetName].AJ1.w = "tp"
+              wb.Sheets[sheetName].AK1.w = "oup_mens"
+              wb.Sheets[sheetName].AL1.w = "tst_achi_rst"
 
-
-            let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-            let rowObj_copy = [];
-            for(let n=1; n<rowObj.length; n++){
-              rowObj_copy[n-1] = rowObj[n];
+              let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+              let rowObj_copy = [];
+              for (let n = 1; n < rowObj.length; n++) {
+                rowObj_copy[n - 1] = rowObj[n];
+              }
+              gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+              console.log("gridExcelData ::", gridExcelData)
+              this.excelUplod = 'Y'
+              alert('업로드 파일이 적용되었습니다.')
+              this.$refs.grid.invoke('resetData', gridExcelData)
+              this.gridData = this.$refs.grid.invoke("getData");
+            } catch (e) {
+              alert('업로드 실패')
             }
-            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
-            console.log("gridExcelData ::", gridExcelData)
           }
+
         })
-        this.excelUplod = 'Y'
-        alert('업로드 파일이 적용되었습니다.')
-        this.$refs.grid.invoke('resetData', gridExcelData)
-        this.gridData = this.$refs.grid.invoke("getData");
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
@@ -807,7 +875,6 @@ export default {
   // 특정 데이터에 실행되는 함수를 선언하는 부분
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
-
     atfl_mng_id(){    // 단위테스트 케이스 변경 시 작동
       if(this.atfl_mng_id_yn !== '') {
         this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
