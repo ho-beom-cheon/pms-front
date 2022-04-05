@@ -278,13 +278,15 @@ export default {
                 this.setInfo(
                     "성공",
                     res.data.auth_token,
-                    JSON.stringify(res.data.data)
+                    JSON.stringify(res.data.data),
                 );
                 if (res.data.data[0].login_yn === "Y") {
                   if(res.data.data[0].prjt_id === "0000000001") {
                     this.$router.push('/PJTE8000');
                   } else if (res.data.data[0].prjt_id === "0000000003"){
                     this.$router.push('/PJTE9900');
+                  } else if (res.data.data[0].prjt_id === "0000000004"){
+                    this.$router.push('/PJTE9005');
                   } else {
                     this.$router.push('/PJTE1000');
                   }
@@ -298,7 +300,7 @@ export default {
                   storage.setItem("LOGIN_AUT_CD", res.data.data[0].aut_cd);              // 권한ID
                   storage.setItem("LOGIN_YN", res.data.data[0].login_yn);                // 로그인상태
                   storage.setItem("LOGIN_REAL_PRJT_ID", res.data.data[0].real_prjt_id);  // 투입프로젝트ID
-                  storage.setItem("LOGIN_DEPT_CD", res.data.data[0].dept_cd);  // 투입프로젝트ID
+                  storage.setItem("LOGIN_DEPT_CD", res.data.data[0].dept_cd);            // 투입프로젝트ID
 
                 } else if (res.data.data[0].login_yn === 'C') {
                   alert("비밀번호를 변경하세요.");

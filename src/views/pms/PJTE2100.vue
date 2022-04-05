@@ -335,7 +335,6 @@ export default {
     },
     // 저장 버튼
     fnSave(){
-      debugger
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
         axiosService.post("/PJTE2100/create", {
