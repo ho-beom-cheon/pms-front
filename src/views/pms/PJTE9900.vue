@@ -661,6 +661,8 @@ export default {
       this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_dt", this.getCurrentYyyymmdd());
       // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
       this.$refs.grid.invoke("setValue", this.NewRow - 1, "work_step_cd", '100');
+      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
+      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_nm", sessionStorage.getItem("LOGIN_EMP_NM"));
       // // 새로 ADD한 Row의 담당자와 비고 내용 셀 색 변경
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
