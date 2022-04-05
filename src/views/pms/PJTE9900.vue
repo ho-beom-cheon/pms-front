@@ -5,9 +5,10 @@
     <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
     <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
     <div class="div-img"></div>
-
+    <!-- ASIDE -- LNB -->
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
-    <div class="kanban-contents-body">
+    <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
         <ul class="filter-con clear-fix">
@@ -267,6 +268,7 @@ import {Grid} from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 // 부문 코드 (수정필요)
 const work_step_cd = [
@@ -288,6 +290,7 @@ export default {
     Combo,
     grid: Grid,
     Modal,
+    PmsSideBar
   },
 
   mounted() {
@@ -876,7 +879,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'reg_nm',
           filter: 'select',
@@ -884,7 +887,7 @@ export default {
         },
         {
           header: '등록일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 'reg_dt',
@@ -893,7 +896,7 @@ export default {
         },
         {
           header: '완료요청일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 'com_rgs_dt',
@@ -903,7 +906,7 @@ export default {
         },
         {
           header: '작업상태',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'work_step_cd',
           formatter: 'listItemText',
@@ -918,7 +921,7 @@ export default {
         },
         {
           header: '담당자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -926,7 +929,7 @@ export default {
         },
         {
           header: '참여자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'ptcp_nm',
           editor: 'text',
@@ -935,7 +938,7 @@ export default {
         },
         {
           header: '완료예정일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'com_due_dt',
           format: 'yyyy-mm-dd',
@@ -944,7 +947,7 @@ export default {
         },
         {
           header: '중단일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'stop_dt',
           format: 'yyyy-mm-dd',
@@ -953,7 +956,7 @@ export default {
         },
         {
           header: '재시작일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 're_sta_dt',
@@ -963,7 +966,7 @@ export default {
         },
         {
           header: '완료일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'com_dt',
           format: 'yyyy-mm-dd',
@@ -1001,14 +1004,13 @@ export default {
         },
         {
           header: '작업ID',
-          width: 80,
+          width: 70,
           align: 'center',
           name: 'mng_id',
           sortable: true
         },
         {
           header: '작업명',
-          width: 555,
           align: 'left',
           name: 'work_task',
           editor: 'text',
@@ -1030,7 +1032,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'reg_nm',
           filter: 'select',
@@ -1038,7 +1040,7 @@ export default {
         },
         {
           header: '담당자',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -1046,6 +1048,7 @@ export default {
         },
         {
           header: '후속작업',
+          width: 80,
           name: 'bak_work_id',
           align: 'center',
           editor: "text",
