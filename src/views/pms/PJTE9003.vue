@@ -142,7 +142,8 @@ export default {
         return previousValue.then(async() => {
           const res = await axiosService.get("/PJTE9003/fileDownload", {
                 params: {
-                  fileName:currentValue.file_nm
+                  fileName:currentValue.file_nm,
+                  filePath:currentValue.file_path
                 },
                 responseType: "blob"
               }
@@ -190,7 +191,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 300,
+      bodyHeight: 280,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: false,
@@ -271,7 +272,7 @@ export default {
           header: '파일경로',
           align: 'left',
           name: 'file_path',
-          hidden : true,
+          hidden : false,
         },
       ]
     };
@@ -282,6 +283,9 @@ export default {
 <style>
 .pop-body table th:nth-of-type(2) {
     padding-left: 0!important;
+}
+.pop-body table input:only-child{
+    width: 80%!important;
 }
 
 </style>

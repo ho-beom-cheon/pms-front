@@ -993,6 +993,9 @@ export default {
               } else if (i === 19) {
                 this.CD1000000019T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000019N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 20) {
+                this.CD1000000020T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000020N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 22) {
                 this.CD1000000022T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000022N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -1097,6 +1100,10 @@ export default {
             } else if(i === 19) {
               this.CD1000000019T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000019N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 20) {
+              this.CD1000000020T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000020N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 21) {
               this.CD1000000021T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
