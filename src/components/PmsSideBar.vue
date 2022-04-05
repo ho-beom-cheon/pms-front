@@ -179,7 +179,7 @@ export default {
         {
           id: 'PJTE9200Iteyes',
           path: '/PJTE9200',
-          name: '회의실관리'
+          name: '회의실예약'
         },
         {
           id: 'PJTE9000Iteyes',

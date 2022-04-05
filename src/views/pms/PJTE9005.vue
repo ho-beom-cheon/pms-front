@@ -9,85 +9,84 @@
     <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
-          <ul class="filter-con clear-fix">
-            <combo
-                :comboArray = "this.comboList"
-                @bkup_id_change="bkup_id_change"
-                @prjt_nm_chage="prjt_nm_chage"
-                @skill_grd_change_iss="skill_grd_change_iss"
-            ></combo>
-            <li class="filter-item">
-              <div class="item-con">주요기술
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.main_skill"
-                       style   = "width: 250px"
-                >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">주요업무
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.duty_txt"
-                       style   = "width: 272px"
-                >
-              </div>
-            </li>
-          </ul>
-          <ul class="filter-con clear-fix">
-            <li class="filter-item-n">
-              <div class="input-searchWrap" style="margin-left: 22px">이름
-                <input type="text"
-                       placeholder="직원명"
-                       v-model="info.man_nm"
-                       style="width: 90px"
-                       @keyup.enter="open_pjte9001(1)"
-                >
-                <button class="search-btn"
-                        @click="open_pjte9001_btn(1)"
-                ></button>
-              </div>
-            </li>
-            <li class="filter-item">
+        <ul class="filter-con clear-fix">
+          <combo
+              :comboArray = "this.comboList"
+              @bkup_id_change="bkup_id_change"
+              @skill_grd_change_iss="skill_grd_change_iss"
+          ></combo>
+          <li class="filter-item">
+            <div class="item-con">주요기술
               <input type="text"
-                     placeholder="직원번호"
-                     v-model="info.man_no"
-                     style="width: 90px; background-color: #f2f2f2;"
-                     :disabled=true
+                     placeholder="입력"
+                     v-model="info.main_skill"
+                     style   = "width: 250px"
               >
-            </li>
-            <li class="filter-item">
-              <div class="item-con">재직처
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.company_nm"
-                       style   = "width: 293px"
-                >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con" style="margin-left: 11px">발주처
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.exe_cpy_nm"
-                       style   = "width: 250px"
-                >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">경력프로젝트
-                <input type="text"
-                       placeholder="입력"
-                       v-model="info.proj_nm"
-                       style   = "width: 250px"
-                >
-              </div>
-            </li>
-          </ul>
-          <ul class="filter-btn">
-            <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">조회</button>
-          </ul>
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">주요업무
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.duty_txt"
+                     style   = "width: 272px"
+              >
+            </div>
+          </li>
+        </ul>
+        <ul class="filter-con clear-fix">
+          <li class="filter-item-n">
+            <div class="input-searchWrap" style="margin-left: 12px">이름
+              <input type="text"
+                     placeholder="직원명"
+                     v-model="info.man_nm"
+                     style="width: 90px"
+                     @keyup.enter="open_pjte9001(1)"
+              >
+              <button class="search-btn"
+                      @click="open_pjte9001_btn(1)"
+              ></button>
+            </div>
+          </li>
+          <li class="filter-item">
+            <input type="text"
+                   placeholder="직원번호"
+                   v-model="info.man_no"
+                   style="width: 90px; background-color: #f2f2f2;"
+                   :disabled=true
+            >
+          </li>
+          <li class="filter-item">
+            <div class="item-con">재직처
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.company_nm"
+                     style   = "width: 250px"
+              >
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con" style="margin-left: 11px">발주처
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.exe_cpy_nm"
+                     style   = "width: 250px"
+              >
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">경력프로젝트
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.proj_nm"
+                     style   = "width: 250px"
+              >
+            </div>
+          </li>
+        </ul>
+        <ul class="filter-btn">
+          <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">조회</button>
+        </ul>
       </section>
 
       <!-- page contents -->
@@ -95,7 +94,7 @@
         <div class="grid1-box" style="height: 255px">
           <div class="div-header"><h2>인력내역</h2>
             <ul class="filter-btn">
-                <button class="btn btn-filter-e" @click="gridExcelExport(1)">엑셀다운로드</button>
+              <button class="btn btn-filter-e" @click="gridExcelExport(1)">엑셀다운로드</button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -116,363 +115,363 @@
           </div>
         </div>
         <div class="grid1-box" style="height: 500px">
-            <div class="div-header-b"><h2>1. 인적사항</h2>
-              <p style="margin-left: 50px; margin-top: 8px">{{ detail.last_chg_dt }}</p>
-              <ul class="filter-btn">
-                <button class="btn btn-filter-e" style="margin-left: 20px" @click="open_file_page" :disabled="btn_atfl" >경력증빙첨부</button>
-                <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
-              </ul>
-            </div>
-            <div class="div2-body-c">
-              <ul class="filter-con clear-fix-a">
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>이름</label>
-                    <input type="text"
-                           placeholder="직원명"
-                           ref="man_nm"
-                           v-model="detail.man_nm"
-                           style="width: 88px;"
-                           @keyup.enter="open_pjte9001(2)"
-                    >
-                    <button class="search-btn-9005"
-                            @click="open_pjte9001_btn(2)"
-                    ></button>
-                    <input type="text"
-                           placeholder="직원번호"
-                           ref="man_no"
-                           v-model="detail.man_no"
-                           :disabled=true
-                           style="width: 115px; background-color: #f2f2f2; margin-left: 27px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>직급</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="rank_nm"
-                           v-model="detail.rank_nm"
-                           style="width: 230px;"
-                    >
-                  </div>
-                </li>
-                <combo
-                    :comboArray="this.comboList2"
-                    @man_cd_change="man_cd_change"
-                    ref="combo2"
-                >
-                </combo>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>생일</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.birthday"
-                             style="width: 230px"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>나이(만)</label>
-                    <input type="text"
-                           placeholder="입력불가"
-                           v-model="detail.age"
-                           ref="age"
-                           :disabled=true
-                           style="width: 230px; background-color: #f2f2f2"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%">
-                  <div class="item-con" style="width: 100%">
-                    <label>주소</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="address"
-                           v-model="detail.address"
-                           style="width: 93.25%"
-                    >
-                  </div>
-                </li>
-                <combo
-                    :comboArray="this.comboList3"
-                    @skill_grd_change="skill_grd_change"
-                    ref="combo3"
-                >
-                </combo>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>경력</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="career"
-                           v-model="detail.career"
-                           style="width: 230px;"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>현재경력</label>
-                    <input type="text"
-                           placeholder="입력불가"
-                           ref="now_career"
-                           v-model="detail.now_career"
-                           :disabled=true
-                           style="width: 230px; background-color: #f2f2f2"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>입사일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.enter_ymd"
-                             style="width: 230px"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>성별</label>
-                    <input type="text"
-                           placeholder="남 / 여"
-                           ref="sex_nm"
-                           v-model="detail.sex_nm"
-                           style="width: 230px;"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>주요기술</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="main_skill"
-                           v-model="detail.main_skill"
-                           style="width: 555px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>주요업무</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="duty_txt"
-                           v-model="detail.duty_txt"
-                           style="width: 880px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>연락처</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="cpno"
-                           v-model="detail.cpno"
-                           style="width: 230px;"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>관리회사</label>
-                    <input type="text"
-                           placeholder="정직원이 아닌 경우 입력"
-                           ref="company_nm"
-                           v-model="detail.company_nm"
-                           style="width: 230px;"
-                    >
-                  </div>
-                </li>
-                <combo
-                    :comboArray="this.comboList4"
-                    @grd_cd_change="grd_cd_change"
-                    ref="combo4"
-                >
-                </combo>
-              </ul>
-              <ul class="filter-con clear-fix-a">
-                <li class="filter-item-a" style="width: 100%; margin-top: 15px;">
-                  <div class="item-con" style="width: 100%">
-                    <label>※ 학력사항</label>
-                    <input type="text"
-                           class="placeBlack"
-                           placeholder="학교명"
-                           :disabled=true
-                           style="width: 39%; background-color:#c5c5c5; border: #c5c5c5 1px solid; text-align: center;"
-                    >
-                    <input type="text"
-                           class="placeBlack"
-                           placeholder="전공"
-                           :disabled=true
-                           style="width: 39%; background-color:#c5c5c5; border: #c5c5c5 1px solid; border-right: #ffffff 1px solid; border-left: #ffffff 1px solid;text-align: center;"
-                    >
-                    <input type="text"
-                           class="placeBlack"
-                           placeholder="졸업년월"
-                           :disabled=true
-                           style="width: 15%; background-color:#c5c5c5; border: #c5c5c5 1px solid; text-align: center;"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           placeholder="최종학력순으로 기술"
-                           style="width: 39%;"
-                           v-model="detail.scholl_nm1"
-                    >
-                    <input type="text"
-                           placeholder=""
-                           style="width: 39%;"
-                           v-model="detail.study1"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="month"
-                             style="width: 100%;"
-                             v-model="detail.gdt_ym1"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           style="width: 39%;"
-                           v-model="detail.scholl_nm2"
-                    >
-                    <input type="text"
-                           placeholder=""
-                           style="width: 39%;"
-                           v-model="detail.study2"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="month"
-                             style="width: 100%;"
-                             v-model="detail.gdt_ym2"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           style="width: 39%;"
-                           v-model="detail.scholl_nm3"
-                    >
-                    <input type="text"
-                           placeholder=""
-                           style="width: 39%;"
-                           v-model="detail.study3"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="month"
-                             style="width: 100%;"
-                             v-model="detail.gdt_ym3"
-                      ></div>
-                  </div>
-                </li>
-              </ul>
-              <ul class="filter-con clear-fix-a">
-                <li class="filter-item-a" style="width: 100%; margin-top: 15px;">
-                  <div class="item-con" style="width: 100%">
-                    <label>※ 자 격 증</label>
-                    <input type="text"
-                           class="placeBlack"
-                           placeholder="자격증명"
-                           :disabled=true
-                           style="width: 78%; background-color:#c5c5c5; border: #c5c5c5 1px solid; border-right: #ffffff 1px solid;text-align: center;"
-                    >
-                    <input type="text"
-                           class="placeBlack"
-                           placeholder="취득일자"
-                           :disabled=true
-                           style="width: 15%; background-color:#c5c5c5; border: #c5c5c5 1px solid; text-align: center;"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           placeholder="중요 자격증순으로 기술"
-                           style="width: 78%;"
-                           v-model="detail.qlfks_nm1"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="date"
-                             style="width: 100%;"
-                             v-model="detail.aqu_ymm1"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           style="width: 78%;"
-                           v-model="detail.qlfks_nm2"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="date"
-                             style="width: 100%;"
-                             v-model="detail.aqu_ymm2"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           style="width: 78%;"
-                           v-model="detail.qlfks_nm3"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="date"
-                             style="width: 100%;"
-                             v-model="detail.aqu_ymm3"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           style="width: 78%;"
-                           v-model="detail.qlfks_nm4"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="date"
-                             style="width: 100%;"
-                             v-model="detail.aqu_ymm4"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a" style="width: 100%;">
-                  <div class="item-con" style="width: 100%;">
-                    <label></label>
-                    <input type="text"
-                           style="width: 78%;"
-                           v-model="detail.qlfks_nm5"
-                    >
-                    <div class="input-dateWrap" style="width: 15%">
-                      <input type="date"
-                             style="width: 100%;"
-                             v-model="detail.aqu_ymm5"
-                      ></div>
-                  </div>
-                </li>
-              </ul>
+          <div class="div-header-b"><h2>1. 인적사항</h2>
+            <p style="margin-left: 50px; margin-top: 8px">{{ detail.last_chg_dt }}</p>
+            <ul class="filter-btn">
+              <button class="btn btn-filter-e" style="margin-left: 20px" @click="open_file_page" >경력증빙첨부</button>
+              <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
+            </ul>
+          </div>
+          <div class="div2-body-c">
+            <ul class="filter-con clear-fix-a">
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>이름</label>
+                  <input type="text"
+                         placeholder="직원명"
+                         ref="man_nm"
+                         v-model="detail.man_nm"
+                         style="width: 88px;"
+                         @keyup.enter="open_pjte9001(2)"
+                  >
+                  <button class="search-btn-9005"
+                          @click="open_pjte9001_btn(2)"
+                  ></button>
+                  <input type="text"
+                         placeholder="직원번호"
+                         ref="man_no"
+                         v-model="detail.man_no"
+                         :disabled=true
+                         style="width: 115px; background-color: #f2f2f2; margin-left: 27px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>직급</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="rank_nm"
+                         v-model="detail.rank_nm"
+                         style="width: 230px;"
+                  >
+                </div>
+              </li>
+              <combo
+                  :comboArray="this.comboList2"
+                  @man_cd_change="man_cd_change"
+                  ref="combo2"
+              >
+              </combo>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>생일</label>
+                  <div class="input-dateWrap">
+                    <input type="date"
+                           v-model="detail.birthday"
+                           style="width: 230px"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>나이(만)</label>
+                  <input type="text"
+                         placeholder="입력불가"
+                         v-model="detail.age"
+                         ref="age"
+                         :disabled=true
+                         style="width: 230px; background-color: #f2f2f2"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%">
+                <div class="item-con" style="width: 100%">
+                  <label>주소</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="address"
+                         v-model="detail.address"
+                         style="width: 93.25%"
+                  >
+                </div>
+              </li>
+              <combo
+                  :comboArray="this.comboList3"
+                  @skill_grd_change="skill_grd_change"
+                  ref="combo3"
+              >
+              </combo>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>경력</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="career"
+                         v-model="detail.career"
+                         style="width: 230px;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>현재경력</label>
+                  <input type="text"
+                         placeholder="입력불가"
+                         ref="now_career"
+                         v-model="detail.now_career"
+                         :disabled=true
+                         style="width: 230px; background-color: #f2f2f2"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>입사일자</label>
+                  <div class="input-dateWrap">
+                    <input type="date"
+                           v-model="detail.enter_ymd"
+                           style="width: 230px"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>성별</label>
+                  <input type="text"
+                         placeholder="남 / 여"
+                         ref="sex_nm"
+                         v-model="detail.sex_nm"
+                         style="width: 230px;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>주요기술</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="main_skill"
+                         v-model="detail.main_skill"
+                         style="width: 555px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>주요업무</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="duty_txt"
+                         v-model="detail.duty_txt"
+                         style="width: 880px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>연락처</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="cpno"
+                         v-model="detail.cpno"
+                         style="width: 230px;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>관리회사</label>
+                  <input type="text"
+                         placeholder="정직원이 아닌 경우 입력"
+                         ref="company_nm"
+                         v-model="detail.company_nm"
+                         style="width: 230px;"
+                  >
+                </div>
+              </li>
+              <combo
+                  :comboArray="this.comboList4"
+                  @grd_cd_change="grd_cd_change"
+                  ref="combo4"
+              >
+              </combo>
+            </ul>
+            <ul class="filter-con clear-fix-a">
+              <li class="filter-item-a" style="width: 100%; margin-top: 15px;">
+                <div class="item-con" style="width: 100%">
+                  <label>※ 학력사항</label>
+                  <input type="text"
+                         class="placeBlack"
+                         placeholder="학교명"
+                         :disabled=true
+                         style="width: 39%; background-color:#c5c5c5; border: #c5c5c5 1px solid; text-align: center;"
+                  >
+                  <input type="text"
+                         class="placeBlack"
+                         placeholder="전공"
+                         :disabled=true
+                         style="width: 39%; background-color:#c5c5c5; border: #c5c5c5 1px solid; border-right: #ffffff 1px solid; border-left: #ffffff 1px solid;text-align: center;"
+                  >
+                  <input type="text"
+                         class="placeBlack"
+                         placeholder="졸업년월"
+                         :disabled=true
+                         style="width: 15%; background-color:#c5c5c5; border: #c5c5c5 1px solid; text-align: center;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         placeholder="최종학력순으로 기술"
+                         style="width: 39%;"
+                         v-model="detail.scholl_nm1"
+                  >
+                  <input type="text"
+                         placeholder=""
+                         style="width: 39%;"
+                         v-model="detail.study1"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="month"
+                           style="width: 100%;"
+                           v-model="detail.gdt_ym1"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         style="width: 39%;"
+                         v-model="detail.scholl_nm2"
+                  >
+                  <input type="text"
+                         placeholder=""
+                         style="width: 39%;"
+                         v-model="detail.study2"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="month"
+                           style="width: 100%;"
+                           v-model="detail.gdt_ym2"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         style="width: 39%;"
+                         v-model="detail.scholl_nm3"
+                  >
+                  <input type="text"
+                         placeholder=""
+                         style="width: 39%;"
+                         v-model="detail.study3"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="month"
+                           style="width: 100%;"
+                           v-model="detail.gdt_ym3"
+                    ></div>
+                </div>
+              </li>
+            </ul>
+            <ul class="filter-con clear-fix-a">
+              <li class="filter-item-a" style="width: 100%; margin-top: 15px;">
+                <div class="item-con" style="width: 100%">
+                  <label>※ 자 격 증</label>
+                  <input type="text"
+                         class="placeBlack"
+                         placeholder="자격증명"
+                         :disabled=true
+                         style="width: 78%; background-color:#c5c5c5; border: #c5c5c5 1px solid; border-right: #ffffff 1px solid;text-align: center;"
+                  >
+                  <input type="text"
+                         class="placeBlack"
+                         placeholder="취득일자"
+                         :disabled=true
+                         style="width: 15%; background-color:#c5c5c5; border: #c5c5c5 1px solid; text-align: center;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         placeholder="중요 자격증순으로 기술"
+                         style="width: 78%;"
+                         v-model="detail.qlfks_nm1"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="date"
+                           style="width: 100%;"
+                           v-model="detail.aqu_ymm1"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         style="width: 78%;"
+                         v-model="detail.qlfks_nm2"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="date"
+                           style="width: 100%;"
+                           v-model="detail.aqu_ymm2"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         style="width: 78%;"
+                         v-model="detail.qlfks_nm3"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="date"
+                           style="width: 100%;"
+                           v-model="detail.aqu_ymm3"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         style="width: 78%;"
+                         v-model="detail.qlfks_nm4"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="date"
+                           style="width: 100%;"
+                           v-model="detail.aqu_ymm4"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item-a" style="width: 100%;">
+                <div class="item-con" style="width: 100%;">
+                  <label></label>
+                  <input type="text"
+                         style="width: 78%;"
+                         v-model="detail.qlfks_nm5"
+                  >
+                  <div class="input-dateWrap" style="width: 15%">
+                    <input type="date"
+                           style="width: 100%;"
+                           v-model="detail.aqu_ymm5"
+                    ></div>
+                </div>
+              </li>
+            </ul>
 
-            </div>
+          </div>
         </div>
         <div class="grid1-box" style="height: 242px">
           <div class="div-header"><h2>2. 재직사항</h2>
@@ -533,9 +532,9 @@
           </div>
         </div>
         <section class="filter">
-            <ul class="filter-btn">
-              <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="btn_save">저장</button>
-            </ul>
+          <ul class="filter-btn">
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" >저장</button>
+          </ul>
         </section>
         <br>
         <br>
@@ -595,7 +594,6 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     skill_grd_change_iss(params) {this.info.skill_grd_selected = params},
 
     man_cd_change(params) {this.detail.man_cd_selected = params},
@@ -619,73 +617,83 @@ export default {
     },
     // 저장 버튼
     fnSave(){
-      //필수항목 확인
-      if (this.checkPrimary() == true) {
-        if (confirm("정말 저장하시겠습니까?") == true) {
-          axiosService.post("/PJTE9005/create", {
-            gridData2: this.$refs.grid2.invoke("getData"),
-            gridData3: this.$refs.grid3.invoke("getData"),
-            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+      if(this.detail.man_no != '') {
+        // 권한이 관리자(900) 이거나 본인 일 때 저장 및 경력증빙첨부 가능
+        if (sessionStorage.getItem("LOGIN_EMP_NO") === this.detail.man_no || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
+          //필수항목 확인
+          if (this.checkPrimary() == true) {
+            if (confirm("정말 저장하시겠습니까?") == true) {
+              axiosService.post("/PJTE9005/create", {
+                gridData2: this.$refs.grid2.invoke("getData"),
+                gridData3: this.$refs.grid3.invoke("getData"),
+                prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+                login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
 
-            last_chg_dt: this.detail.last_chg_dt,  // 최종변경일자
-            man_no: this.detail.man_no,  // 인력번호
-            man_nm: this.detail.man_nm,  // 이름
-            rank_nm: this.detail.rank_nm,  // 직급명
-            man_cd: this.detail.man_cd_selected,  // 인력구분
-            birthday: this.detail.birthday,  // 생년월
-            age: this.detail.age,  // 만나이
-            address: this.detail.address,  // 주소
-            skill_grd: this.detail.skill_grd_selected,  // 기술등급
-            career: this.detail.career,  // 경력
-            now_career: this.detail.now_career,  // 현재경력
-            enter_ymd: this.detail.enter_ymd,  // 입사년월일
-            sex_nm: this.detail.sex_nm,  // 성별
-            main_skill: this.detail.main_skill,  // 주요기술
-            duty_txt: this.detail.duty_txt,  // 주요업무
-            cpno: this.detail.cpno,  // 휴대전화번호
-            company_nm: this.detail.company_nm,  // 회사명
-            grd_cd: this.detail.grd_cd_selected,  // 평판구분
-            scholl_nm1: this.detail.scholl_nm1,  // 학교명1
-            gdt_ym1: this.detail.gdt_ym1,  // 졸업년월1
-            study1: this.detail.study1,  // 전공1
-            scholl_nm2: this.detail.scholl_nm2,  // 학교명2
-            gdt_ym2: this.detail.gdt_ym2,  // 졸업년월2
-            study2: this.detail.study2,  // 전공2
-            scholl_nm3: this.detail.scholl_nm3,  // 학교명3
-            gdt_ym3: this.detail.gdt_ym3,  // 졸업년월3
-            study3: this.detail.study3,  // 전공3
-            qlfks_nm1: this.detail.qlfks_nm1,  // 자격증1
-            aqu_ymm1: this.detail.aqu_ymm1,  // 자격증취득일1
-            qlfks_nm2: this.detail.qlfks_nm2,  // 자격증2
-            aqu_ymm2: this.detail.aqu_ymm2,  // 자격증취득일2
-            qlfks_nm3: this.detail.qlfks_nm3,  // 자격증3
-            aqu_ymm3: this.detail.aqu_ymm3,  // 자격증취득일3
-            qlfks_nm4: this.detail.qlfks_nm4,  // 자격증4
-            aqu_ymm4: this.detail.aqu_ymm4,  // 자격증취득일4
-            qlfks_nm5: this.detail.qlfks_nm5,  // 자격증5
-            aqu_ymm5: this.detail.aqu_ymm5,  // 자격증취득일5
-            atfl_mng_id: this.detail.atfl_mng_id,  // 첨부파일관리ID
+                last_chg_dt: this.detail.last_chg_dt,  // 최종변경일자
+                man_no: this.detail.man_no,  // 인력번호
+                man_nm: this.detail.man_nm,  // 이름
+                rank_nm: this.detail.rank_nm,  // 직급명
+                man_cd: this.detail.man_cd_selected,  // 인력구분
+                birthday: this.detail.birthday,  // 생년월
+                age: this.detail.age,  // 만나이
+                address: this.detail.address,  // 주소
+                skill_grd: this.detail.skill_grd_selected,  // 기술등급
+                career: this.detail.career,  // 경력
+                now_career: this.detail.now_career,  // 현재경력
+                enter_ymd: this.detail.enter_ymd,  // 입사년월일
+                sex_nm: this.detail.sex_nm,  // 성별
+                main_skill: this.detail.main_skill,  // 주요기술
+                duty_txt: this.detail.duty_txt,  // 주요업무
+                cpno: this.detail.cpno,  // 휴대전화번호
+                company_nm: this.detail.company_nm,  // 회사명
+                grd_cd: this.detail.grd_cd_selected,  // 평판구분
+                scholl_nm1: this.detail.scholl_nm1,  // 학교명1
+                gdt_ym1: this.detail.gdt_ym1,  // 졸업년월1
+                study1: this.detail.study1,  // 전공1
+                scholl_nm2: this.detail.scholl_nm2,  // 학교명2
+                gdt_ym2: this.detail.gdt_ym2,  // 졸업년월2
+                study2: this.detail.study2,  // 전공2
+                scholl_nm3: this.detail.scholl_nm3,  // 학교명3
+                gdt_ym3: this.detail.gdt_ym3,  // 졸업년월3
+                study3: this.detail.study3,  // 전공3
+                qlfks_nm1: this.detail.qlfks_nm1,  // 자격증1
+                aqu_ymm1: this.detail.aqu_ymm1,  // 자격증취득일1
+                qlfks_nm2: this.detail.qlfks_nm2,  // 자격증2
+                aqu_ymm2: this.detail.aqu_ymm2,  // 자격증취득일2
+                qlfks_nm3: this.detail.qlfks_nm3,  // 자격증3
+                aqu_ymm3: this.detail.aqu_ymm3,  // 자격증취득일3
+                qlfks_nm4: this.detail.qlfks_nm4,  // 자격증4
+                aqu_ymm4: this.detail.aqu_ymm4,  // 자격증취득일4
+                qlfks_nm5: this.detail.qlfks_nm5,  // 자격증5
+                aqu_ymm5: this.detail.aqu_ymm5,  // 자격증취득일5
+                atfl_mng_id: this.detail.atfl_mng_id,  // 첨부파일관리ID
 
-          }).then(res => {
-            console.log(res);
-            if (res.data) {
-              alert("저장을 완료했습니다.");
-              this.info.man_nm = '';
-              this.info.man_no = '';
-              this.$refs.grid1.invoke("reloadData");
-              this.$refs.grid2.invoke("reloadData");
-              this.$refs.grid3.invoke("reloadData");
-              this.info.man_nm = sessionStorage.getItem("LOGIN_EMP_NM");
-              this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO");
+              }).then(res => {
+                console.log(res);
+                if (res.data) {
+                  alert("저장을 완료했습니다.");
+                  this.info.man_nm = '';
+                  this.info.man_no = '';
+                  this.$refs.grid1.invoke("reloadData");
+                  this.$refs.grid2.invoke("reloadData");
+                  this.$refs.grid3.invoke("reloadData");
+                  this.info.man_nm = sessionStorage.getItem("LOGIN_EMP_NM");
+                  this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO");
+                }
+              }).catch(e => {
+                alert("저장에 실패했습니다.")
+              })
+            } else {   //취소
+              return;
             }
-          }).catch(e => {
-            alert("저장에 실패했습니다.")
-          })
-        } else {   //취소
-          return;
+          } else {
+          }
+        } else {
+          alert('작성자 본인만 저장가능합니다.')
+          return false;
         }
       } else {
+        alert('필수값을 입력해주세요.')
       }
     },
     /* 저장을 하기위한 필수 항목 체크 */
@@ -794,15 +802,6 @@ export default {
       this.detail.qlfks_nm5           = data.contents[0].qlfks_nm5             // 자격증5
       this.detail.aqu_ymm5            = data.contents[0].aqu_ymm5              // 자격증취득일5
       this.detail.atfl_mng_id         = data.contents[0].atfl_mng_id           // 첨부파일관리ID
-
-      // 권한이 관리자(900) 이거나 본인 일 때 저장 및 경력증빙첨부 가능
-      if(sessionStorage.getItem("LOGIN_EMP_NO") === this.detail.man_no || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
-        this.btn_save = false;
-        this.btn_atfl = false; // 경력증빙첨부버튼 활성화
-      } else {
-        this.btn_save = true;
-        this.btn_atfl = true; // 경력증빙첨부버튼 활성화
-      }
     },
 
     // 행추가
@@ -863,7 +862,7 @@ export default {
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
             for(let n=0; n<rowObj.length; n++){
-              rowObj_copy[n-1] = rowObj[n];
+              rowObj_copy[n] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
@@ -902,7 +901,7 @@ export default {
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
             for(let n=0; n<rowObj.length; n++){
-              rowObj_copy[n-1] = rowObj[n];
+              rowObj_copy[n] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
@@ -1030,9 +1029,6 @@ export default {
       this.$refs.grid2.invoke("clear");
       this.$refs.grid3.invoke("clear");
 
-      this.btn_atfl = true; // 경력증빙첨부버튼 비활성화
-      this.btn_save = false; // 저장버튼 활성화
-
     },
 
   },
@@ -1046,7 +1042,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C-P1"],
+      comboList : ["C27","C-P1"],
       comboList2 : ["C-P2"],
       comboList3 : ["C-P3"],
       comboList4 : ["C-P4"],
@@ -1119,8 +1115,6 @@ export default {
         login_emp_nm          : sessionStorage.getItem("LOGIN_EMP_NM"),    // 직원명
         login_catn_dcd        : sessionStorage.getItem("LOGIN_CATN_DCD"),  // 구성원 구분코드
       },
-      btn_save : false,          // 저장 버튼 비활성화/활성화
-      btn_atfl : true,          // 경력증빙첨부 버튼 비활성화/활성화
 
       /* grid 속성 */
       count:0,
