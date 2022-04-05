@@ -301,19 +301,8 @@ export default {
 
 // 일반적인 함수를 선언하는 부분
   methods: {
-    // Combo.vue 에서 받아온 값
-    dept_cd_change(params) {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-        this.info.dept_cd_selected  = sessionStorage.getItem("LOGIN_DEPT_CD");
-        this.$refs.combo1.$data.dept_cd_selected = sessionStorage.getItem('LOGIN_DEPT_CD');
-      }else{
-        this.info.dept_cd_selected  = params;
-      }
-
-    },
-    bkup_id_change(params) {
-      this.info.bkup_id_selected = params
-    },
+    dept_cd_change(params) {this.info.dept_cd_selected = params},
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
 
     init() {
       // 그리드 초기화
@@ -328,7 +317,7 @@ export default {
       this.info.over_due_dt_yn = false;
       // 권한에 따른 컬럼 활성화
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-      if (aut_cd === '500' || aut_cd === '600') {
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
         this.$refs.grid.invoke("enableColumn", 'work_task');
         this.$refs.grid.invoke("enableColumn", 'reg_dt');
         this.$refs.grid.invoke("enableColumn", 'com_due_dt');
@@ -394,7 +383,7 @@ export default {
 
       if (this.createdRows.length !== 0) {
         if (this.vaildation(this.createdRows, "1") === true) {
-          if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+          if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900') {
             alert("개발구분 삭제 권한이 없습니다.");
             return;
           }
@@ -453,8 +442,9 @@ export default {
     },
 
     onGridUpdated1(grid) {
+
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-      if (aut_cd === '500' || aut_cd === '600') {
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900') {
         this.$refs.grid.invoke("addColumnClassName", "bak_work_id", "disableColor");
       }
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
@@ -540,7 +530,7 @@ export default {
           this.kbak_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"); // 현재후속ID 설정
           this.fnBakSearch()
           let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-          if (aut_cd === '500' || aut_cd === '600') {  // 권한이 500, 600일 때만 팝업
+          if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900') {  // 권한이 500, 600일 때만 팝업
             this.modals.bak_work_modal = true;
           }
         }
@@ -627,7 +617,7 @@ export default {
       // 버튼 비활성화/활성화 - 권한, 백업ID에 따라
       if(this.info.bkup_id_selected == '0000000000') {
         this.check_save = false // 테이블백업, 저장 활성화
-        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
           this.check_bkup = false // 테이블백업  활성화
           this.check_aut_cd = false // 행추가, 행삭제  활성화
         }
@@ -757,7 +747,7 @@ export default {
     return {
 
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C40-1", "C27"],
+      comboList: ["C40", "C27"],
       gridData: [],
       addCheak: 'N',
 
@@ -765,7 +755,7 @@ export default {
         // 조회 변수
         bkup_id_selected  : '0000000000',                                 //백업ID
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트ID
-        dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"), //부문코드
+        dept_cd_selected  : (sessionStorage.getItem("LOGIN_DEPT_CD").substring(0, 3)) === '100' ? 'TTT':(sessionStorage.getItem("LOGIN_DEPT_CD").substring(0, 3)).concat('00000'), //부문코드
         week_yymm         : this.week_yymm,                               //기준년월
         over_due_dt_yn    : this.over_due_dt_yn,                          // 미진항목(완료요청일을 넘김) 조회 체크박스
         reg_dt : '',                                                      // 등록일
