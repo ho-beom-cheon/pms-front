@@ -851,7 +851,6 @@ export default {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
         let gridExcelData;
-
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === '재직현황' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
@@ -863,14 +862,13 @@ export default {
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
-            for(let n=1; n<rowObj.length; n++){
+            for(let n=0; n<rowObj.length; n++){
               rowObj_copy[n-1] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
           }
         })
-        this.excelUplod1 = 'Y'
         alert('업로드 파일이 적용되었습니다.')
         this.$refs.grid2.invoke('resetData', gridExcelData)
       };
@@ -903,14 +901,13 @@ export default {
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
-            for(let n=1; n<rowObj.length; n++){
+            for(let n=0; n<rowObj.length; n++){
               rowObj_copy[n-1] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
           }
         })
-        this.excelUplod2 = 'Y'
         alert('업로드 파일이 적용되었습니다.')
         this.$refs.grid3.invoke('resetData', gridExcelData)
       };
