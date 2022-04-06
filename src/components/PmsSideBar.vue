@@ -1,7 +1,7 @@
 <template>
   <aside>
     <div class="page-tit"  v-if ="this.LoginId === '0000000003'">
-      ITeyes
+      ITeyes Support System
     </div>
     <div class="page-tit"  v-else>
       ITeyes PMS
