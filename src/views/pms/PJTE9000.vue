@@ -113,8 +113,8 @@
                   </ul>
                 </section>
                 <ul class="filter-btn" style="margin-bottom: 8px; margin-top: 10px">
-                  <button class="btn btn-filter-p" style = "margin-left: 20px" :disabled="aut_cd_check2">
-                    <a href="#" @click="fnSave(4)">저장</a>
+                  <button class="btn btn-filter-p" style = "margin-left: 20px" :disabled="aut_cd_check2" @click="fnSave(4)">
+                    <a href="#">저장</a>
                   </button>
                 </ul>
               </div>
@@ -221,12 +221,6 @@ import PmsSideBar from  "@/components/PmsSideBar";
 
 const storage = window.sessionStorage;
 
-//그리드 아이템 예제
-const listItem = [
-  {text:"개발", value:"1"},
-  {text:"운영", value:"2"},
-  {text:"이관", value:"3"}
-];
 
 
 export default {
@@ -248,9 +242,6 @@ export default {
     }
     await this.fnSearch();
     await this.fnSearchCode();
-    // if(this.$refs.grid4.invoke("getData").length == 0){
-    //   this.$refs.grid4.invoke("appendRow",{ prjt_id : this.info.prjt_nm_selected })
-    // }
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
@@ -442,9 +433,17 @@ export default {
     },
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {
-      this.info.bkup_id_selected = params
+      // 권한구분코드 500,600,900일 때 콤보가 활성화되면서 그리드 2,3 데이터 조회가 안되기 때문에 params 값이 있을 때만 바뀌는 것으로 수정
+      if(params){
+        this.info.bkup_id_selected = params
+      }
     },
-    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    prjt_nm_chage(params) {
+      // 권한구분코드 500,600,900일 때 콤보가 활성화되면서 그리드 2,3 데이터 조회가 안되기 때문에 params 값이 있을 때만 바뀌는 것으로 수정
+      if(params){
+        this.info.prjt_nm_selected = params
+      }
+    },
 
     fnSave(grid_num){
       // debugger;
@@ -460,6 +459,11 @@ export default {
         console.log("createdRows ::" ,this.$refs.grid1.invoke("getModifiedRows").createdRows);
         console.log("deletedRows ::" ,this.$refs.grid1.invoke("getModifiedRows").deletedRows);
 
+        // 데이터 변경을 위한 focus 이동
+        let focusedRowKey = this.$refs.grid1.invoke("getFocusedCell").rowKey
+        let focusedColumn = this.$refs.grid1.invoke("getColumns")[this.$refs.grid1.invoke("getIndexOfColumn", this.$refs.grid1.invoke("getFocusedCell").columnName)+1]
+        focusedColumn ? focusedColumn = focusedColumn.name : focusedColumn = this.$refs.grid1.invoke("getColumns")[this.$refs.grid1.invoke("getIndexOfColumn", this.$refs.grid1.invoke("getFocusedCell").columnName)-1].name
+        this.$refs.grid1.invoke("focus", focusedRowKey, focusedColumn)
 
         // 변경 데이터 저장
         this.updatedRows = this.$refs.grid1.invoke("getModifiedRows").updatedRows;
@@ -471,30 +475,35 @@ export default {
           // 프로젝트 ID 값 체크
           if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id==='' || grid_arr[i].prjt_id === undefined){
             alert(`${i+1}번째 행의 프로젝트ID 값이 없습니다.`);
+            this.$refs.grid1.invoke("focus", i, 'prjt_id')
             check = false;
             break;
           }
           // 직원번호 체크
           if(grid_arr[i].empno == null || grid_arr[i].empno==='' || grid_arr[i].empno === undefined){
             alert(`${i+1}번째 행 직원번호 값이 없습니다.`);
+            this.$refs.grid1.invoke("focus", i, 'empno')
             check = false;
             break;
           }
           // 직원명 체크
           if(grid_arr[i].empnm == null || grid_arr[i].empnm==='' || grid_arr[i].empnm === undefined){
             alert(`${i+1}번째 행 직원명 값이 없습니다.`);
+            this.$refs.grid1.invoke("focus", i, 'empnm')
             check = false;
             break;
           }
           // 로그인 비밀번호 체크
           if(grid_arr[i].lgn_pwd == null || grid_arr[i].lgn_pwd==='' || grid_arr[i].lgn_pwd === undefined){
             alert(`${i+1}번째 행 로그인 비밀번호 값이 없습니다.`);
+            this.$refs.grid1.invoke("focus", i, 'lgn_pwd')
             check = false;
             break;
           }
           // 권한구분코드 체크
           if(grid_arr[i].aut_cd == null || grid_arr[i].aut_cd==='' || grid_arr[i].aut_cd === undefined){
             alert(`${i+1}번째 행 권한구분코드 값이 없습니다.`);
+            this.$refs.grid1.invoke("focus", i, 'aut_cd')
             check = false;
             break;
           }
@@ -551,6 +560,12 @@ export default {
         console.log("createdRows ::" ,this.$refs.grid2.invoke("getModifiedRows").createdRows);
         console.log("deletedRows ::" ,this.$refs.grid2.invoke("getModifiedRows").deletedRows);
 
+        // 데이터 변경을 위한 focus 이동
+        let focusedRowKey = this.$refs.grid2.invoke("getFocusedCell").rowKey
+        let focusedColumn = this.$refs.grid2.invoke("getColumns")[this.$refs.grid2.invoke("getIndexOfColumn", this.$refs.grid2.invoke("getFocusedCell").columnName)+1]
+        focusedColumn ? focusedColumn = focusedColumn.name : focusedColumn = this.$refs.grid2.invoke("getColumns")[this.$refs.grid2.invoke("getIndexOfColumn", this.$refs.grid2.invoke("getFocusedCell").columnName)-1].name
+        this.$refs.grid2.invoke("focus", focusedRowKey, focusedColumn)
+
         // 변경 데이터 저장
         this.updatedRows2 = this.$refs.grid2.invoke("getModifiedRows").updatedRows;
         this.deletedRows2 = this.$refs.grid2.invoke("getModifiedRows").deletedRows;
@@ -563,6 +578,7 @@ export default {
           // 프로젝트 ID 체크
           if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id ==='' || grid_arr[i].prjt_id === undefined){
             alert(`${i+1}번째 행 프로젝트 ID 값이 없습니다.`)
+            this.$refs.grid2.invoke("focus", i, 'prjt_id')
             check = false
             break;
 
@@ -571,6 +587,7 @@ export default {
           // 그룹유형코드 체크
           if(grid_arr[i].grp_tycd == null || grid_arr[i].grp_tycd ==='' || grid_arr[i].grp_tycd === undefined){
             alert(`${i+1}번째 행 그룹유형코드 값이 없습니다.`)
+            this.$refs.grid2.invoke("focus", i, 'grp_tycd')
             check = false
             break;
 
@@ -579,6 +596,7 @@ export default {
           //그룹유형명 체크
           if(grid_arr[i].grp_tymm == null || grid_arr[i].grp_tymm ==='' || grid_arr[i].grp_tymm === undefined){
             alert(`${i+1}번째 행 그룹유형명 값이 없습니다.`)
+            this.$refs.grid2.invoke("focus", i, 'grp_tymm')
             check = false
             break;
 
@@ -587,6 +605,7 @@ export default {
           //정렬순서 체크
           if(grid_arr[i].sort_seq == null || grid_arr[i].sort_seq ==='' || grid_arr[i].sort_seq === undefined){
             alert(`${i+1}번째 행 정렬순서 값이 없습니다.`)
+            this.$refs.grid2.invoke("focus", i, 'sort_seq')
             check = false
             break;
 
@@ -595,6 +614,7 @@ export default {
           //사용여부 체크
           if(grid_arr[i].usg_yn == null || grid_arr[i].usg_yn ==='' || grid_arr[i].usg_yn === undefined){
             alert(`${i+1}번째 행 사용여부 값이 없습니다.`)
+            this.$refs.grid2.invoke("focus", i, 'usg_yn')
             check = false
             break;
 
@@ -650,6 +670,12 @@ export default {
         console.log("createdRows ::" ,this.$refs.grid3.invoke("getModifiedRows").createdRows);
         console.log("deletedRows ::" ,this.$refs.grid3.invoke("getModifiedRows").deletedRows);
 
+        // 데이터 변경을 위한 focus 이동
+        let focusedRowKey = this.$refs.grid3.invoke("getFocusedCell").rowKey
+        let focusedColumn = this.$refs.grid3.invoke("getColumns")[this.$refs.grid3.invoke("getIndexOfColumn", this.$refs.grid3.invoke("getFocusedCell").columnName)+1]
+        focusedColumn ? focusedColumn = focusedColumn.name : focusedColumn = this.$refs.grid3.invoke("getColumns")[this.$refs.grid3.invoke("getIndexOfColumn", this.$refs.grid3.invoke("getFocusedCell").columnName)-1].name
+        this.$refs.grid3.invoke("focus", focusedRowKey, focusedColumn)
+
         // 변경 데이터 저장
         this.updatedRows3 = this.$refs.grid3.invoke("getModifiedRows").updatedRows;
         this.deletedRows3 = this.$refs.grid3.invoke("getModifiedRows").deletedRows;
@@ -662,6 +688,7 @@ export default {
           // 프로젝트 ID 체크
           if(grid_arr[i].prjt_id == null || grid_arr[i].prjt_id ==='' || grid_arr[i].prjt_id === undefined){
             alert(`${i+1}번째 행 프로젝트 ID 값이 없습니다.`)
+            this.$refs.grid3.invoke("focus", i, 'prjt_id')
             check = false
             break;
 
@@ -670,6 +697,7 @@ export default {
           // 그룹유형코드 체크
           if(grid_arr[i].grp_tycd == null || grid_arr[i].grp_tycd ==='' || grid_arr[i].grp_tycd === undefined){
             alert(`${i+1}번째 행 그룹유형코드 값이 없습니다.`)
+            this.$refs.grid3.invoke("focus", i, 'grp_tycd')
             check = false
             break;
 
@@ -678,6 +706,7 @@ export default {
           //세부유형코드 체크
           if(grid_arr[i].dtls_tycd == null || grid_arr[i].dtls_tycd ==='' || grid_arr[i].dtls_tycd === undefined){
             alert(`${i+1}번째 행 세부유형코드 값이 없습니다.`)
+            this.$refs.grid3.invoke("focus", i, 'dtls_tycd')
             check = false
             break;
 
@@ -686,6 +715,7 @@ export default {
           //세부유형명 체크
           if(grid_arr[i].dtls_tynm == null || grid_arr[i].dtls_tynm ==='' || grid_arr[i].dtls_tynm === undefined){
             alert(`${i+1}번째 행 세부유형명 값이 없습니다.`)
+            this.$refs.grid3.invoke("focus", i, 'dtls_tynm')
             check = false
             break;
 
@@ -694,6 +724,7 @@ export default {
           //정렬순서 체크
           if(grid_arr[i].sort_seq == null || grid_arr[i].sort_seq ==='' || grid_arr[i].sort_seq === undefined){
             alert(`${i+1}번째 행 정렬순서 값이 없습니다.`)
+            this.$refs.grid3.invoke("focus", i, 'sort_seq')
             check = false
             break;
 
@@ -702,6 +733,7 @@ export default {
           //사용여부 체크
           if(grid_arr[i].use_yn == null || grid_arr[i].use_yn ==='' || grid_arr[i].use_yn === undefined){
             alert(`${i+1}번째 행 사용여부 값이 없습니다.`)
+            this.$refs.grid3.invoke("focus", i, 'use_yn')
             check = false
             break;
 
@@ -743,6 +775,14 @@ export default {
 
 
       }else if(grid_num === 4){
+
+        // 데이터 변경을 위한 focus 이동
+        let focusedRowKey = this.$refs.grid4.invoke("getFocusedCell").rowKey
+        let focusedColumn = this.$refs.grid4.invoke("getColumns")[this.$refs.grid4.invoke("getIndexOfColumn", this.$refs.grid4.invoke("getFocusedCell").columnName)+1]
+        focusedColumn ? focusedColumn = focusedColumn.name : focusedColumn = this.$refs.grid4.invoke("getColumns")[this.$refs.grid4.invoke("getIndexOfColumn", this.$refs.grid4.invoke("getFocusedCell").columnName)-1].name
+        console.log(focusedRowKey, focusedColumn)
+        this.$refs.grid4.invoke("focus", focusedRowKey, focusedColumn)
+
         // 데이터 로그 확인
         console.log("updatedRows ::" ,this.$refs.grid4.invoke("getModifiedRows").updatedRows);
         console.log("createdRows ::" ,this.$refs.grid4.invoke("getModifiedRows").createdRows);
@@ -885,7 +925,6 @@ export default {
       }else if(grid_num === 2){
         let createdRows = this.$refs.grid2.invoke("getModifiedRows").createdRows
         let checkCreatedRows = false
-        console.log("createdRows ::" ,this.$refs.grid2.invoke("getModifiedRows").createdRows);
         for(let i=0; i<createdRows.length; i++){
           if(createdRows[i].rowKey == this.curRow){
             checkCreatedRows = true
@@ -900,7 +939,6 @@ export default {
       }else if(grid_num === 3){
         let createdRows = this.$refs.grid3.invoke("getModifiedRows").createdRows
         let checkCreatedRows = false
-        console.log("createdRows ::" ,this.$refs.grid3.invoke("getModifiedRows").createdRows);
         for(let i=0; i<createdRows.length; i++){
           if(createdRows[i].rowKey == this.curRow){
             checkCreatedRows = true
@@ -936,22 +974,22 @@ export default {
           wb.Sheets[sheetName].F1.w = "bzcd"
           wb.Sheets[sheetName].G1.w = "catn_dcd"
           wb.Sheets[sheetName].H1.w = "aut_cd"
-          wb.Sheets[sheetName].I1.w = "real_prjt_id"
-          wb.Sheets[sheetName].J1.w = "dept_cd"
-          wb.Sheets[sheetName].K1.w = "plan_thw_stdt"
-          wb.Sheets[sheetName].L1.w = "plan_thw_endt"
-          wb.Sheets[sheetName].M1.w = "real_thw_stdt"
-          wb.Sheets[sheetName].N1.w = "real_thw_endt"
-          wb.Sheets[sheetName].O1.w = "email_addr"
-          wb.Sheets[sheetName].P1.w = "cpno"
-          wb.Sheets[sheetName].Q1.w = "ip_addr"
+          wb.Sheets[sheetName].I1.w = "del_yn"
+          wb.Sheets[sheetName].J1.w = "real_prjt_id"
+          wb.Sheets[sheetName].K1.w = "dept_cd"
+          wb.Sheets[sheetName].L1.w = "plan_thw_stdt"
+          wb.Sheets[sheetName].M1.w = "plan_thw_endt"
+          wb.Sheets[sheetName].N1.w = "real_thw_stdt"
+          wb.Sheets[sheetName].O1.w = "real_thw_endt"
+          wb.Sheets[sheetName].P1.w = "email_addr"
+          wb.Sheets[sheetName].Q1.w = "cpno"
+          wb.Sheets[sheetName].R1.w = "ip_addr"
 
           let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
           let gridExcelData = JSON.parse(JSON.stringify(rowObj));
 
 
           gridExcelData = gridExcelData.filter(e => e.prjt_id && e.empno)
-
           axiosService.post("/PJTE9000/excel_upload",{
             prjt_id : this.info.prjt_nm_selected,
             rowDatas : gridExcelData
@@ -959,7 +997,9 @@ export default {
             console.log(res);
             if(res.data){
               alert('업로드 파일이 적용되었습니다.')
-              this.$refs.grid1.invoke('resetData',gridExcelData)
+              // this.$refs.grid1.invoke('resetData',gridExcelData)
+              this.info.grid_num = 1
+              this.fnSearch()
 
             }
           })
@@ -1122,6 +1162,7 @@ export default {
           editor : 'text'
         },
         {
+          hidden: sessionStorage.getItem("LOGIN_AUT_CD") == 900 || sessionStorage.getItem("LOGIN_AUT_CD") == 600 || sessionStorage.getItem("LOGIN_AUT_CD") == 500 ? false : true,
           header: '로그인비밀번호',
           width: 120,
           name: 'lgn_pwd',
@@ -1162,6 +1203,21 @@ export default {
               listItems: this.$store.state.pms.CD1000000024N
             }
           }
+        },
+        {
+          header: '삭제여부',
+          width: 80,
+          name: 'del_yn',
+          align: 'center',
+          editor : {
+            type: 'radio',
+            options : {
+              listItems : [
+                { text: 'Y', value : 'Y'},
+                { text: 'N', value : 'N'},
+              ]
+            }
+          },
         },
         {
           header: '투입프로젝트',
@@ -1253,15 +1309,25 @@ export default {
         },
         {
           header: '정렬',
-          width: 100,
+          width: 50,
           name: 'sort_seq',
-          editor : 'text'
+          align: 'right',
+          editor : 'text',
         },
         {
           header: '사용',
-          width: 100,
+          width: 50,
           name: 'usg_yn',
-          editor : 'text'
+          align: 'center',
+          editor : {
+            type: 'radio',
+            options : {
+              listItems : [
+                { text: 'Y', value : 'Y'},
+                { text: 'N', value : 'N'},
+              ]
+            }
+          },
         },
         {
           header: '그리드컬럼명1',
@@ -1417,15 +1483,25 @@ export default {
         },
         {
           header: '정렬',
-          width: 100,
+          width: 50,
           name: 'sort_seq',
+          align: 'right',
           editor : 'text',
         },
         {
           header: '사용',
-          width: 100,
+          width: 50,
           name: 'use_yn',
-          editor : 'text',
+          align: 'center',
+          editor : {
+            type: 'radio',
+            options : {
+              listItems : [
+                { text: 'Y', value : 'Y'},
+                { text: 'N', value : 'N'},
+              ]
+            }
+          },
         },
         {
           header: '기타내용1',
