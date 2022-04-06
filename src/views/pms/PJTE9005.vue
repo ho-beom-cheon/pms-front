@@ -13,6 +13,7 @@
           <combo
               :comboArray = "this.comboList"
               @bkup_id_change="bkup_id_change"
+              @prjt_nm_chage="prjt_nm_chage"
               @skill_grd_change_iss="skill_grd_change_iss"
           ></combo>
           <li class="filter-item">
@@ -36,7 +37,7 @@
         </ul>
         <ul class="filter-con clear-fix">
           <li class="filter-item-n">
-            <div class="input-searchWrap" style="margin-left: 12px">이름
+            <div class="input-searchWrap" style="margin-left: 22px">이름
               <input type="text"
                      placeholder="직원명"
                      v-model="info.man_nm"
@@ -61,7 +62,7 @@
               <input type="text"
                      placeholder="입력"
                      v-model="info.company_nm"
-                     style   = "width: 250px"
+                     style   = "width: 293px"
               >
             </div>
           </li>
@@ -594,6 +595,7 @@ export default {
   methods: {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
+    prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     skill_grd_change_iss(params) {this.info.skill_grd_selected = params},
 
     man_cd_change(params) {this.detail.man_cd_selected = params},
@@ -1074,7 +1076,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C-P1"],
+      comboList : ["C27","C0","C-P1"],
       comboList2 : ["C-P2"],
       comboList3 : ["C-P3"],
       comboList4 : ["C-P4"],
