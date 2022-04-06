@@ -953,7 +953,7 @@ export default {
         {
           header: '요청자',
           width: 110,
-          align: 'center',
+          align: 'left',
           name: 'achi_nm',
         },
         {
@@ -1039,7 +1039,7 @@ export default {
         {
           header: '등급',
           width: 110,
-          align: 'left',
+          align: 'center',
           name: 'gd_txt',
         },
         {

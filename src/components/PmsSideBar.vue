@@ -35,10 +35,11 @@
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
               <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[0].name }}</a></li>
-              <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[1].name }}</a></li>
-              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[2].name }}</a></li>
-              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[3].name }}</a></li>
-              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[4].name }}</a></li>
+              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[1].name }}</a></li>
+              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[2].name }}</a></li>
+              <li id="PJTE9110Iteyes"><a href="/PJTE9110">{{ iteyes_menu_list[3].name }}</a></li>
+              <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[4].name }}</a></li>
+              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[5].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -167,11 +168,6 @@ export default {
           name: 'KanbanBoard'
         },
         {
-          id: 'PJTE9100Iteyes',
-          path: '/PJTE9100',
-          name: 'KMS게시판'
-        },
-        {
           id: 'PJTE9005Iteyes',
           path: '/PJTE9005',
           name: '인력프로파일관리'
@@ -180,6 +176,16 @@ export default {
           id: 'PJTE9200Iteyes',
           path: '/PJTE9200',
           name: '회의실예약'
+        },
+        {
+          id: 'PJTE9110Iteyes',
+          path: '/PJTE9110',
+          name: 'KMS게시판'
+        },
+        {
+          id: 'PJTE9100Iteyes',
+          path: '/PJTE9100',
+          name: 'KMS게시판생성'
         },
         {
           id: 'PJTE9000Iteyes',
