@@ -217,7 +217,7 @@
                 <div class="item-con">
                   <label>현재경력</label>
                   <input type="text"
-                         placeholder="입력불가"
+                         placeholder="경력사항 기준 자동산출"
                          ref="now_career"
                          v-model="detail.now_career"
                          :disabled=true
@@ -858,12 +858,28 @@ export default {
             wb.Sheets[sheetName].C1.w = "rsnt_dt"
             wb.Sheets[sheetName].D1.w = "rssb_bns"
             wb.Sheets[sheetName].E1.w = "rmrk"
-
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let grid2Data = this.$refs.grid2.invoke("getData");
             let rowObj_copy = [];
-            for(let n=0; n<rowObj.length; n++){
-              rowObj_copy[n] = rowObj[n];
+            if(grid2Data.length == 0) {
+              for(let n=0; n<rowObj.length; n++){
+                rowObj_copy[n] = rowObj[n];
+              }
+            } else {
+              if (confirm("기존 데이터를 유지하시겠습니까?") == true) {
+                for (let n = 0; n < rowObj.length; n++) {
+                  rowObj_copy[n] = rowObj[n];
+                }
+                for (let i = 0; i < grid2Data.length; i++) {
+                  rowObj_copy[rowObj.length + i] = grid2Data[i];
+                }
+              } else {
+                for(let n=0; n<rowObj.length; n++){
+                  rowObj_copy[n] = rowObj[n];
+                }
+              }
             }
+
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
           }
@@ -899,9 +915,25 @@ export default {
             wb.Sheets[sheetName].H1.w = "rlt_skill"
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let grid3Data = this.$refs.grid3.invoke("getData");
             let rowObj_copy = [];
-            for(let n=0; n<rowObj.length; n++){
-              rowObj_copy[n] = rowObj[n];
+            if(grid3Data.length == 0) {
+              for(let n=0; n<rowObj.length; n++){
+                rowObj_copy[n] = rowObj[n];
+              }
+            } else {
+              if (confirm("기존 데이터를 유지하시겠습니까?") == true) {
+                for (let n = 0; n < rowObj.length; n++) {
+                  rowObj_copy[n] = rowObj[n];
+                }
+                for (let i = 0; i < grid3Data.length; i++) {
+                  rowObj_copy[rowObj.length + i] = grid3Data[i];
+                }
+              } else {
+                for(let n=0; n<rowObj.length; n++){
+                  rowObj_copy[n] = rowObj[n];
+                }
+              }
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
