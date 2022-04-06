@@ -11,7 +11,7 @@ const pms = {
         CD1000000007N:[],
         CD1000000008N:[],
         CD1000000009N:[],
-        CD0000000010N:[],
+        CD1000000010N:[],
         CD1000000011N:[],
         CD1000000012N:[],
         CD1000000013N:[],
@@ -21,7 +21,7 @@ const pms = {
         CD1000000017N:[],
         CD1000000018N:[],
         CD1000000019N:[],
-        CD0000000020N:[],
+        CD1000000020N:[],
         CD1000000021N:[],
         CD1000000022N:[],
         CD1000000023N:[],
@@ -31,7 +31,7 @@ const pms = {
         CD1000000027N:[],
         CD1000000028N:[],
         CD1000000029N:[],
-        CD0000000030N:[],
+        CD1000000030N:[],
         CD1000000031N:[],
         CD1000000032N:[],
         CD1000000033N:[],
@@ -63,7 +63,7 @@ const pms = {
             state.CD1000000007N = array[7];
             state.CD1000000008N = array[8];
             state.CD1000000009N = array[9];
-            state.CD0000000010N = array[10];
+            state.CD1000000010N = array[10];
             state.CD1000000011N = array[11];
             state.CD1000000012N = array[12];
             state.CD1000000013N = array[13];
@@ -73,7 +73,7 @@ const pms = {
             state.CD1000000017N = array[17];
             state.CD1000000018N = array[18];
             state.CD1000000019N = array[19];
-            state.CD0000000020N = array[20];
+            state.CD1000000020N = array[20];
             state.CD1000000021N = array[21];
             state.CD1000000022N = array[22];
             state.CD1000000023N = array[23];
@@ -83,7 +83,7 @@ const pms = {
             state.CD1000000027N = array[27];
             state.CD1000000028N = array[28];
             state.CD1000000029N = array[29];
-            state.CD0000000030N = array[30];
+            state.CD1000000030N = array[30];
             state.CD1000000031N = array[31];
             state.CD1000000032N = array[32];
             state.CD1000000033N = array[33];

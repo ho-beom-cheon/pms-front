@@ -654,7 +654,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000009N
+              listItems: this.$store.state.pms.CD1000000020N
             }
           }
         },
@@ -710,14 +710,14 @@ export default {
         },
         {
           header: '처리단계',
-          width: 140,
+          width: 100,
           align: 'center',
           name: 'wbs_prc_sts_cd',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000035N
+              listItems: this.$store.state.pms.CD1000000019N
             }
           }
         },
