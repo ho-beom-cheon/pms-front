@@ -348,7 +348,7 @@ export default {
       columns: [
         {
           header: '신청ID',
-          width: 180,
+          width: 90,
           align: 'center',
           name: 'mng_id'/*요청자번호*/
         },
@@ -358,7 +358,7 @@ export default {
           minWidth: 50,
           maxWidth: 250,
           name: 'bzcd',
-          align: 'left',
+          align: 'center',
           formatter: 'listItemText',
           disabled : true,
           editor: {
@@ -384,7 +384,7 @@ export default {
         },
         {
           header: '신청일자',
-          width: 110,
+          width: 90,
           align: 'center',
           name: 'req_dt',
           format: 'yyyy-mm-dd',
@@ -392,35 +392,35 @@ export default {
         },
         {
           header: '신청자',
-          width: 100,
-          align: 'left',
+          width: 60,
+          align: 'center',
           name: 'reqpe_nm',
           type: 'text'
         },
         {
           header: '신청내용',
-          width: 280,
+          width: 500,
           align: 'left',
           name: 'req_txt',
           type: 'text'
         },
         {
           header: '처리일자',
-          width: 110,
+          width: 90,
           align: 'center',
           name: 'prc_dt',
           format: 'yyyy-mm-dd',
         },
         {
           header: '처리자',
-          width: 120,
-          align: 'left',
+          width: 60,
+          align: 'center',
           name: 'prcpe_nm',
           type: 'text'
         },
         {
           header: '처리내용',
-          width: 350,
+          width: 450,
           align: 'left',
           name: 'prc_txt',
           type: 'text'

@@ -1,6 +1,9 @@
 <template>
   <aside>
-    <div class="page-tit">
+    <div class="page-tit"  v-if ="this.LoginId === '0000000003'">
+      ITeyes Support System
+    </div>
+    <div class="page-tit"  v-else>
       ITeyes PMS
     </div>
     <dl>
@@ -15,7 +18,11 @@
       <div class="accordion" id="accordionExample">
         <div class="card">
           <div class="card-header" id="headingOne">
-            <button class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+            <button v-if ="this.LoginId === '0000000003'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+              ITeyes
+            </button>
+            <button v-else class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
               PMS
             </button>
@@ -27,12 +34,12 @@
               <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[1].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
-              <li id="KanbanBoard"><a href="/PJTE9900">{{ kanban_menu_list[0].name }}</a></li>
-              <li id="KanbanPjte9000"><a href="/PJTE9000">{{ kanban_menu_list[1].name }}</a></li>
-            </ul>
-            <ul class="card-body" v-else-if ="this.LoginId === '0000000004'" >
-              <li id="PJTE9005"><a href="/PJTE9005">{{ profile_menu_list[0].name }}</a></li>
-              <li id="profilePjte9000"><a href="/PJTE9000">{{ profile_menu_list[1].name }}</a></li>
+              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[0].name }}</a></li>
+              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[1].name }}</a></li>
+              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[2].name }}</a></li>
+              <li id="PJTE9110Iteyes"><a href="/PJTE9110">{{ iteyes_menu_list[3].name }}</a></li>
+              <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[4].name }}</a></li>
+              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[5].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -154,14 +161,34 @@ export default {
           name: '시스템관리'
         },
       ],
-      kanban_menu_list: [
+      iteyes_menu_list: [
         {
-          id: 'KanbanBoard',
+          id: 'PJTE9900Iteyes',
           path: '/PJTE9900',
           name: 'KanbanBoard'
         },
         {
-          id: 'KanbanPjte9000',
+          id: 'PJTE9005Iteyes',
+          path: '/PJTE9005',
+          name: '인력프로파일관리'
+        },
+        {
+          id: 'PJTE9200Iteyes',
+          path: '/PJTE9200',
+          name: '회의실예약'
+        },
+        {
+          id: 'PJTE9110Iteyes',
+          path: '/PJTE9110',
+          name: 'KMS게시판'
+        },
+        {
+          id: 'PJTE9100Iteyes',
+          path: '/PJTE9100',
+          name: 'KMS게시판생성'
+        },
+        {
+          id: 'PJTE9000Iteyes',
           path: '/PJTE9000',
           name: '시스템관리'
         },
@@ -189,15 +216,9 @@ export default {
           }
         }
       }else if(this.LoginId =='0000000003'){
-        for (let i = 0; i < this.kanban_menu_list.length; i++) {
-          if (this.$route.path == this.kanban_menu_list[i].path) {
-            this.current_menu = this.kanban_menu_list[i].name
-          }
-        }
-      }else if(this.LoginId =='0000000004'){
-        for (let i = 0; i < this.profile_menu_list.length; i++) {
-          if (this.$route.path == this.profile_menu_list[i].path) {
-            this.current_menu = this.profile_menu_list[i].name
+        for (let i = 0; i < this.iteyes_menu_list.length; i++) {
+          if (this.$route.path == this.iteyes_menu_list[i].path) {
+            this.current_menu = this.iteyes_menu_list[i].name
           }
         }
       }else{
@@ -217,15 +238,9 @@ export default {
           }
         }
       }else if(this.LoginId =='0000000003'){
-        for (let i = 0; i < this.kanban_menu_list.length; i++) {
-          if (this.$route.path == this.kanban_menu_list[i].path) {
-            document.getElementById(this.kanban_menu_list[i].id).className = 'active'
-          }
-        }
-      }else if(this.LoginId =='0000000004'){
-        for (let i = 0; i < this.profile_menu_list.length; i++) {
-          if (this.$route.path == this.profile_menu_list[i].path) {
-            document.getElementById(this.profile_menu_list[i].id).className = 'active'
+        for (let i = 0; i < this.iteyes_menu_list.length; i++) {
+          if (this.$route.path == this.iteyes_menu_list[i].path) {
+            document.getElementById(this.iteyes_menu_list[i].id).className = 'active'
           }
         }
       }else{

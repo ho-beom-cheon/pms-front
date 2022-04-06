@@ -5,9 +5,10 @@
     <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
     <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
     <div class="div-img"></div>
-
+    <!-- ASIDE -- LNB -->
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
-    <div class="kanban-contents-body">
+    <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
         <ul class="filter-con clear-fix">
@@ -267,6 +268,7 @@ import {Grid} from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 // 부문 코드 (수정필요)
 const work_step_cd = [
@@ -288,6 +290,7 @@ export default {
     Combo,
     grid: Grid,
     Modal,
+    PmsSideBar
   },
 
   mounted() {
@@ -326,15 +329,11 @@ export default {
         this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'mark');
         this.$refs.grid.invoke("enableColumn", 'com_dt');
-        this.check_aut_cd = false // 행추가,행삭제 활성화
-        this.check_bkup = false // 테이블 백업 버튼 활성화
       } else {
         this.$refs.grid.invoke("enableColumn", 'com_due_dt');
         this.$refs.grid.invoke("enableColumn", 'stop_dt');
         this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'com_dt');
-        this.check_aut_cd = true // 행추가,행삭제 비활성화
-        this.check_bkup = true // 테이블 백업 버튼 비활성화
       }
       // 비고 폰트사이즈
       document.getElementById("rmrk").style.fontSize = '13px';  // 상세내용 확대보기 폰트 사이즈 최초값
@@ -644,15 +643,20 @@ export default {
 
     // 행추가
     gridAddRow() {
-      this.addCheak = 'Y';
-      this.$refs.grid.invoke("appendRow",
-          {
-            save_yn: "N", //행르 추가하면 등록여부 'N'
-            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-            bkup_id: "0000000000",
-          },
-          {focus: true, at: 0});
-      this.fnEnable();
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+        this.addCheak = 'Y';
+        this.$refs.grid.invoke("appendRow",
+            {
+              save_yn: "N", //행르 추가하면 등록여부 'N'
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              bkup_id: "0000000000",
+            },
+            {focus: true, at: 0});
+        this.fnEnable();
+      } else {
+        alert('행추가 권한이 없습니다.');
+      }
     },
     // 추가한 행 편집 활성화
     fnEnable() {
@@ -670,12 +674,13 @@ export default {
     },
     // 행삭제
     gridDelRow() {
-      if (this.$refs.grid.invoke('getRow', this.curRow).save_yn === "Y") {
-        alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
-        return;
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+        this.addCheak = 'N'
+        this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm: false});
+      } else {
+        alert('행삭제 권한이 없습니다.');
       }
-      this.addCheak = 'N'
-      this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm: false});
     },
     // 엑셀 다운로드
     gridExcelExport() {
@@ -683,27 +688,32 @@ export default {
     },
     // 테이블백업
     tableBackUp() {
-      axiosService.get("/PJTE9900/backup_select")
-          .then(res => {
-            this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
-            this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
-            if(res.data.data.contents.length){
-              axiosService.post("/PJTE9900/backup_update", {
-                new_bkup_id : this.info.new_bkup_id,
-                new_bkup_nm : this.info.new_bkup_nm,
-                prjt_id : this.info.prjt_nm_selected,
-                login_emp_no : this.info.login_emp_no
-              }).then(res => {
-                if (res.status == 200) {
-                  alert("테이블백업이 완료되었습니다.");
-                  location.reload();
-                }
-              })
-            }
-          })
-          .catch(e => {
-            console.log(e)
-          })
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+        axiosService.get("/PJTE9900/backup_select")
+            .then(res => {
+              this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
+              this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
+              if(res.data.data.contents.length){
+                axiosService.post("/PJTE9900/backup_update", {
+                  new_bkup_id : this.info.new_bkup_id,
+                  new_bkup_nm : this.info.new_bkup_nm,
+                  prjt_id : this.info.prjt_nm_selected,
+                  login_emp_no : this.info.login_emp_no
+                }).then(res => {
+                  if (res.status == 200) {
+                    alert("테이블백업이 완료되었습니다.");
+                    location.reload();
+                  }
+                })
+              }
+            })
+            .catch(e => {
+              console.log(e)
+            })
+      } else {
+        alert('테이블백업 권한이 없습니다.');
+      }
     },
     // 유효값 검증
     vaildation(data, division) {
@@ -789,9 +799,9 @@ export default {
       crpenmTxt: this.crpenmTxt, // 담당자
       ptcpnmTxt: this.ptcpnmTxt, // 참여자
       btn_yn: true,              // 비고, 연관작업 목록 버튼 비활성화/활성화
-      check_aut_cd: true,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
+      check_aut_cd: false,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
       check_save: false,          // 저장 버튼 비활성화/활성화
-      check_bkup: true,          // 테이블백업 버튼 비활성화/활성화
+      check_bkup: false,          // 테이블백업 버튼 비활성화/활성화
 
       /* grid 속성 */
       count: 0,
@@ -876,7 +886,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'reg_nm',
           filter: 'select',
@@ -884,7 +894,7 @@ export default {
         },
         {
           header: '등록일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 'reg_dt',
@@ -893,7 +903,7 @@ export default {
         },
         {
           header: '완료요청일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 'com_rgs_dt',
@@ -903,7 +913,7 @@ export default {
         },
         {
           header: '작업상태',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'work_step_cd',
           formatter: 'listItemText',
@@ -918,7 +928,7 @@ export default {
         },
         {
           header: '담당자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -926,7 +936,7 @@ export default {
         },
         {
           header: '참여자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'ptcp_nm',
           editor: 'text',
@@ -935,7 +945,7 @@ export default {
         },
         {
           header: '완료예정일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'com_due_dt',
           format: 'yyyy-mm-dd',
@@ -944,7 +954,7 @@ export default {
         },
         {
           header: '중단일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'stop_dt',
           format: 'yyyy-mm-dd',
@@ -953,7 +963,7 @@ export default {
         },
         {
           header: '재시작일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 're_sta_dt',
@@ -963,7 +973,7 @@ export default {
         },
         {
           header: '완료일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'com_dt',
           format: 'yyyy-mm-dd',
@@ -1001,14 +1011,13 @@ export default {
         },
         {
           header: '작업ID',
-          width: 80,
+          width: 70,
           align: 'center',
           name: 'mng_id',
           sortable: true
         },
         {
           header: '작업명',
-          width: 555,
           align: 'left',
           name: 'work_task',
           editor: 'text',
@@ -1030,7 +1039,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'reg_nm',
           filter: 'select',
@@ -1038,7 +1047,7 @@ export default {
         },
         {
           header: '담당자',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -1046,6 +1055,7 @@ export default {
         },
         {
           header: '후속작업',
+          width: 80,
           name: 'bak_work_id',
           align: 'center',
           editor: "text",
