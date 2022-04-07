@@ -1052,7 +1052,7 @@ export default {
         },
         {
           header: '프로그램명',
-          width: 200,
+          width: 250,
           align: 'left',
           name: 'pgm_nm',
           ellipsis : true,
@@ -1060,14 +1060,14 @@ export default {
         },
         {
           header: '업무세부',
-          width: 180,
+          width: 100,
           align: 'left',
           name: 'bz_dtls_txt',
           editor: 'text',
         },
         {
           header: '개발구분',
-          width: 100,
+          width: 60,
           align: 'center',
           name: 'dvlp_dis_cd',
           formatter: 'listItemText',
@@ -1094,24 +1094,24 @@ export default {
           }
         },
         {
-          header: '예상시작일자',
-          width: 110,
+          header: '예상시작일',
+          width: 90,
           align: 'center',
           name: 'frcs_sta_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker'
         },
         {
-          header: '예상종료일자',
-          width: 110,
+          header: '예상종료일',
+          width: 90,
           align: 'center',
           type: 'date',
           name: 'frcs_end_dt',
           editor: 'datePicker'
         },
         {
-          header: '실제시작일자',
-          width: 110,
+          header: '실제시작일',
+          width: 90,
           align: 'center',
           name: 'sta_dt',
           format: 'yyyy-mm-dd',
@@ -1119,8 +1119,8 @@ export default {
           disabled: true,
         },
         {
-          header: '실제종료일자',
-          width: 110,
+          header: '실제종료일',
+          width: 90,
           align: 'center',
           type: 'date',
           name: 'end_dt',
@@ -1136,8 +1136,8 @@ export default {
           disabled: true,
         },
         {
-          header: 'PL확인일자',
-          width: 110,
+          header: 'PL확인일',
+          width: 90,
           align: 'center',
           name: 'pl_cnf_dt',
           editor: 'datePicker',
@@ -1145,7 +1145,7 @@ export default {
         },
         {
           header: '처리단계',
-          width: 120,
+          width: 80,
           align: 'center',
           name: 'prc_step_cd',
           formatter: 'listItemText',
@@ -1165,7 +1165,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 60,
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
@@ -1186,7 +1186,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 60,
           align: 'center',
           name: 'pl_nm',
           editor: 'text',
@@ -1207,7 +1207,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 60,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -1244,25 +1244,25 @@ export default {
         },
         {
           header: '전체',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_tot_cnt',
         },
         {
           header: '완료',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_cmpl_cnt',
         },
         {
           header: '진행',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_ncmpl_cnt',
         },
         {
           header: '등록',
-          width: 80,
+          width: 40,
           align: 'center',
           name: 'err_btn',
           renderer: CustomRenderer,
@@ -1277,7 +1277,7 @@ export default {
         },
         {
           header: '첨부파일관리ID',
-          width: 150,
+          width: 120,
           align: 'center',
           name: 'pal_atfl_mng_id_yn',
           // hidden : true,
