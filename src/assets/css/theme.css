@@ -823,7 +823,7 @@ header.GNB {
     height: var(--gnb-h);
     position: fixed;
     width: 100%;
-    z-index: 1;
+    z-index: 99;
 }
 header.GNB .gnb-logo {
     width: 240px;
@@ -915,6 +915,7 @@ footer {
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 99;
 }
 footer span {
     font-weight: normal;

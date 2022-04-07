@@ -132,6 +132,26 @@ export default {
           path: '/PJTE9005',
           name: '인력프로파일관리'
         },
+        {
+          id: 'PJTE9200',
+          path: '/PJTE9200',
+          name: '회의실예약'
+        },
+        {
+          id: 'PJTE9100',
+          path: '/PJTE9100',
+          name: 'KMS게시판생성'
+        },
+        {
+          id: 'PJTE9110',
+          path: '/PJTE9110',
+          name: 'KMS게시판'
+        },
+        {
+          id: 'PJTE9120',
+          path: '/PJTE9120',
+          name: 'KMS게시글등록'
+        },
       ],
     }
   },
