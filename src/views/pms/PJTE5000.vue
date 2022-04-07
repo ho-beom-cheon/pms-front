@@ -612,7 +612,7 @@ export default {
       columns: [
         {
           header: '관리구분',
-          width: 100,
+          width: 80,
           minWidth: 50,
           maxWidth: 250,
           name: 'mng_cd',
@@ -644,7 +644,7 @@ export default {
         },
         {
           header: '레벨',
-          width: 100,
+          width: 70,
           minWidth: 50,
           maxWidth: 250,
           name: 'step_cd',
@@ -660,7 +660,7 @@ export default {
         },
         {
           header: '관리 ID',
-          width: 130,
+          width: 90,
           align: 'center',
           name: 'mng_id',
           editor: "text",
@@ -668,49 +668,49 @@ export default {
         },
         {
           header: '상위관리 ID',
-          width: 130,
+          width: 90,
           align: 'center',
           name: 'hgrn_mng_id',
           editor: 'text',
         },
         {
           header: 'ACTIVITY명',
-          width: 120,
+          width: 300,
           align: 'left',
           name: 'acvt_nm',
           editor: 'text'
         },
         {
           header: '테스크명',
-          width: 80,
+          width: 250,
           align: 'center',
           name: 'task_nm',
           editor: 'text'
         },
         {
           header: '첨부',
-          width: 60,
+          width: 50,
           align: 'center',
           name: 'atfl_mng_id_yn',
           defaultValue: '미첨부',
         },
         {
           header: '첨부',
-          width: 60,
+          width: 50,
           align: 'center',
           name: 'atfl_mng_id',
           hidden: true,
         },
         {
           header: '담당자',
-          width: 120,
+          width: 80,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text'
         },
         {
           header: '처리단계',
-          width: 100,
+          width: 70,
           align: 'center',
           name: 'wbs_prc_sts_cd',
           formatter: 'listItemText',
@@ -722,6 +722,21 @@ export default {
           }
         },
         {
+          header: '가중치',
+          width: 50,
+          align: 'center',
+          name: 'wgt_rt',
+          editor: 'text',
+        },
+        {
+          header: '진행율',
+          width: 50,
+          align: 'center',
+          name: 'prg_rt',
+          editor: 'text',
+          disabled: true,
+        },
+        {
           header: '일자',
           width: 80,
           align: 'center',
@@ -731,7 +746,7 @@ export default {
         },
         {
           header: '시간',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'pln_sta_tim',
           format: 'yyyy-mm-dd',
@@ -747,7 +762,7 @@ export default {
         },
         {
           header: '시간',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'pln_end_tim',
           editor: 'text',
@@ -763,7 +778,7 @@ export default {
         },
         {
           header: '시간',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'acl_sta_tim',
           editor: 'text',
@@ -779,24 +794,9 @@ export default {
         },
         {
           header: '시간',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'acl_end_tim',
-          editor: 'text',
-          disabled: true,
-        },
-        {
-          header: '가중치',
-          width: 80,
-          align: 'center',
-          name: 'wgt_rt',
-          editor: 'text',
-        },
-        {
-          header: '진행율',
-          width: 80,
-          align: 'center',
-          name: 'prg_rt',
           editor: 'text',
           disabled: true,
         },
