@@ -1293,9 +1293,10 @@ export default {
               }
             }
           }
-          if(this.CD1000000041.length !== 0)   this.man_cd_selected            = this.CD1000000041N[0].value
-          if(this.CD1000000042.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042N[0].value
-          if(this.CD1000000043.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
+          if(this.CD1000000041N.length !== 0)   this.man_cd_selected            = this.CD1000000041N[0].value
+          if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
+          if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
+          if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
         }
         this.setCdAll()
       }
@@ -1415,9 +1416,7 @@ export default {
       }).then(res => {
         this.setCombo(res.data.data.contents);
         this.setTest();
-      }).catch(e => {
-
-      });
+      })
     },
   }
 }
