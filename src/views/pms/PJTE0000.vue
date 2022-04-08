@@ -302,6 +302,8 @@ export default {
                   storage.setItem("LOGIN_REAL_PRJT_ID", res.data.data[0].real_prjt_id);  // 투입프로젝트ID
                   storage.setItem("LOGIN_DEPT_CD", res.data.data[0].dept_cd);            // 투입프로젝트ID
 
+                } else if (res.data.data[0].login_yn === 'X') {
+                  alert("시스템은 사용할 수 없는 직원입니다.")
                 } else if (res.data.data[0].login_yn === 'C') {
                   alert("비밀번호를 변경하세요.");
                   this.modals.modal1 = true

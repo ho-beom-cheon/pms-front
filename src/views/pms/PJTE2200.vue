@@ -998,7 +998,7 @@ export default {
         },
         {
           header: '차수',
-          width: 70,
+          width: 50,
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
@@ -1012,7 +1012,7 @@ export default {
         },
         {
           header: '시나리오ID',
-          width: 100,
+          width: 80,
           align: 'center',
           name: 'scnr_id',
         },
@@ -1037,7 +1037,7 @@ export default {
         },
         {
           header: '처리단계',
-          width: 130,
+          width: 110,
           align: 'center',
           name: 'itg_tst_prc_cd',
           formatter: 'listItemText',
@@ -1050,7 +1050,7 @@ export default {
         },
         {
           header: '예상시작일',
-          width: 110,
+          width: 90,
           align: 'center',
           name: 'frcs_sta_dt',
           format: 'yyyy-mm-dd',
@@ -1058,7 +1058,7 @@ export default {
         },
         {
           header: '예상종료일',
-          width: 110,
+          width: 90,
           align: 'center',
           type: 'date',
           name: 'frcs_end_dt',
@@ -1066,22 +1066,22 @@ export default {
           editor: 'datePicker'
         },
         {
-          header: '개발자확인일자',
-          width: 110,
+          header: '개발자확인일',
+          width: 90,
           align: 'center',
           name: 'dvlpe_cnf_dt',
           format: 'yyyy-mm-dd',
         },
         {
-          header: 'PL확인일자',
-          width: 110,
+          header: 'PL확인일',
+          width: 90,
           align: 'center',
           name: 'pl_cnf_dt',
           format: 'yyyy-mm-dd',
         },
         {
           header: '이름',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'dvlpe_enm',
           editor: 'text',
@@ -1102,7 +1102,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'pl_enm',
           editor: 'text',
@@ -1123,7 +1123,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'crpe_enm',
           editor: 'text',
@@ -1144,7 +1144,7 @@ export default {
         },
         {
           header: '증빙첨부',
-          width: 120,
+          width: 80,
           align: 'center',
           name: 'atfl_mng_id_yn',
           // hidden : true,
@@ -1159,25 +1159,25 @@ export default {
         },
         {
           header: '전체',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_tot_cnt',
         },
         {
           header: '완료',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_cmpl_cnt',
         },
         {
           header: '미완료',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_ncmpl_cnt',
         },
         {
           header: '등록',
-          width: 80,
+          width: 40,
           name: 'err_btn',
           align: 'center',
           renderer: CustomRenderer,
@@ -1189,13 +1189,13 @@ export default {
         },
         {
           header: '프로그램ID',
-          width: 200,
+          width: 120,
           name: 'pgm_id',
           editor: "text",
         },
         {
           header: '화면ID',
-          width: 140,
+          width: 100,
           name: 'scrn_id',
           editor: "text",
         },
@@ -1207,7 +1207,7 @@ export default {
         },
         {
           header: '요구사항ID',
-          width: 150,
+          width: 100,
           name: 'rqu_sbh_id',
           editor: "text",
         },
