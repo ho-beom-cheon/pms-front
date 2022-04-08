@@ -1,9 +1,7 @@
 <template>
   <!-- CONTENTS -->
   <div class="contents">
-    <input type="hidden" name="updatedRows" v-model="updatedRows" id="updatedRows">
-    <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
-    <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
+
     <div class="div-img"></div>
     <!-- ASIDE -- LNB -->
     <PmsSideBar></PmsSideBar>
@@ -23,7 +21,7 @@
         <ul class="filter-con clear-fix">
           <li class="filter-item-a">
             <div class="item-con">게시판제목
-              <input  type="text" style="width: 60vw"  v-model="info.gesipan_titl">
+              <input  type="text" placeholder="입력" style="width: 60vw" v-model="info.gesipan_titl">
             </div>
           </li>
         </ul>
@@ -82,12 +80,66 @@
                 </div>
               </li>
             </ul>
+<!--            <table>
+              <tr>
+                <td>익명여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+                <td>소속확인여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+                <td>댓글여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+                <td>답글여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>좋아요여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+                <td>조회횟수여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+                <td>페이징여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+                <td>파일업로드여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px"
+                  >
+                </td>
+              </tr>
+            </table>-->
             <ul class="filter-con clear-fix" style="width: 100%; padding-top: 5px;">
               <li class="filter-item-a">
                 <div class="item-con">익명여부
                   <input type="checkbox"
                          v-model="detail.notice_sta_dt"
-                         style   = "width: 14px"
+                         style   = "width: 14px; margin-left: 11px"
                   >
                 </div>
               </li>
@@ -103,7 +155,7 @@
                 <div class="item-con">댓글여부
                   <input type="checkbox"
                          v-model="detail.annmt_yn"
-                         style   = "width: 14px"
+                         style   = "width: 14px; margin-left: 11px"
                   >
                 </div>
               </li>
@@ -111,7 +163,7 @@
                 <div class="item-con">답글여부
                   <input type="checkbox"
                          v-model="detail.comment_yn"
-                         style   = "width: 14px"
+                         style   = "width: 14px; margin-left: 33px"
                   >
                 </div>
               </li>
@@ -154,6 +206,7 @@
               <li class="filter-item-a">
                 <div class="item-con">게시판제목
                   <input type="text"
+                         placeholder="입력"
                          v-model="detail.gesipan_titl"
                          style   = "width: 73vw; margin: auto"
                   >
@@ -164,6 +217,7 @@
               <li class="filter-item-a">
                 <div class="item-con">게시판설명
                   <input type="textarea"
+                         placeholder="입력"
                          v-model="detail.gesipan_dsc"
                          style   = "height: 15vh; width: 73vw; margin: auto"
                   >
@@ -175,7 +229,7 @@
 
         <section class="filter">
           <ul class="filter-btn">
-            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" >저장</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
           </ul>
         </section>
       </section>
@@ -235,22 +289,13 @@ export default {
       this.$refs.grid1.invoke("clear");
       // 그리드1 전체 비활성화
       this.$refs.grid1.invoke("disable");
-
-      // 시스템 관리자가 아닌경우 자신의 이름과 번호를 조회조건에 바인딩
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
-        this.info.man_nm = sessionStorage.getItem("LOGIN_EMP_NM")
-        this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
-      }
     },
     // 저장 버튼
     fnSave() {
-      if(this.detail.man_no != '') {
         // 권한이 관리자(900) 일 때 저장 가능
         if (sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
-          //필수항목 확인
-          if (this.checkPrimary() == true) {
             if (confirm("정말 저장하시겠습니까?") == true) {
-              axiosService.post("/PJTE9005/create", {
+              axiosService.post("/PJTE9100/create", {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
                 login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
 
@@ -283,23 +328,26 @@ export default {
             } else {   //취소
               return;
             }
-          } else {
-          }
         } else {
           alert('작성자 본인만 저장가능합니다.')
           return false;
         }
-      } else {
-        alert('필수값을 입력해주세요.')
-      }
     },
 
     //신규 버튼 클릭 시 등록 영역 초기화
     fnClear(){
-      this.detail.bubun_cd        = ''    // 게시부문코드
-      this.detail.bsn_cls_cd      = ''    // 게시구분코드
-      this.detail.gesipan_titl      = ''    // 게시판제목
-      this.detail.gesipan_dsc     = ''    // 게시판설명
+      this.detail.bubun_cd        = ''      // 게시부문코드
+      this.detail.bsn_cls_cd      = ''      // 게시구분코드
+      this.detail.gesipan_titl    = ''      // 게시판제목
+      this.detail.gesipan_dsc     = ''      // 게시판설명
+      this.detail.notice_sta_dt   = false   // 익명여부
+      this.detail.afrm_yn         = false   // 소속확인여부
+      this.detail.annmt_yn        = false   // 댓글여부
+      this.detail.comment_yn      = false   // 답글여부
+      this.detail.notice_titl     = false   // 좋아요여부
+      this.detail.nmb_inq_yn      = false   // 조회횟수여부
+      this.detail.pgn_yn          = false   // 페이징여부
+      this.detail.file_upld_yn    = false   // 파일업로드여부
     },
 
     onGridUpdated1(grid) {
@@ -321,9 +369,7 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
-    rmrk() {
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk); // 비고설정
-    },
+
   },
 
 // 변수 선언부분
@@ -342,23 +388,23 @@ export default {
         bubun_cd              : '',               // 게시부문코드
         bsn_cls_cd            : '',               // 게시구분코드
         gesipan_titl          : '',               // 게시판제목
-
-        grid_num              : '',               //  그리드 번호
-        current_man_no        : '',               //  선택된 인력이름
       },
       detail : {
         bubun_cd              : '',               // 게시부문코드
         bsn_cls_cd            : '',               // 게시구분코드
         gesipan_titl          : '',               // 게시판제목
         notice_sta_dt         : '',               // 익명여부
-        afrm_yn               : '',               // 소속확인여부
         annmt_yn              : '',               // 댓글여부
         comment_yn            : '',               // 답글여부
-        notice_titl           : '',               // 좋아요여부
+        notice_titl           : '',               // 좋아요
+        bkup_id               : '',               // 백업ID
+        prjt_id               : '',               // 프로젝트ID
+        gesipan_id            : '',               // 게시판ID
+        gesipan_dsc           : '',               // 게시판설명
+        afrm_yn               : '',               // 소속확인여부
         nmb_inq_yn            : '',               // 조회횟수여부
         pgn_yn                : '',               // 페이징여부
         file_upld_yn          : '',               // 파일업로드여부
-        gesipan_dsc           : '',               // 게시판설명
       },
       login : {
         login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),    // 권한ID
@@ -384,7 +430,7 @@ export default {
       // toast ui grid 데이터
       dataSource: {
         api: {
-          readData   : { url: process.env.VUE_APP_API + '/PJTE9100/select1', method: 'GET' },
+          readData   : { url: process.env.VUE_APP_API + '/PJTE9100/select', method: 'GET' },
         },
         initialRequest: false,
         contentType : 'application/json;',
@@ -419,12 +465,7 @@ export default {
           align: 'center',
           name: 'gesipan_titl',
           formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000040N
-            }
-          }
+          editor: 'text',
         },
         {
           header: '익명',
@@ -432,12 +473,7 @@ export default {
           align: 'center',
           name: 'notice_sta_dt',
           formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000041N
-            }
-          }
+          editor: 'text',
         },
         {
           header: '댓글',
@@ -459,6 +495,71 @@ export default {
           align: 'left',
           name: 'notice_titl',
           editor: 'text',
+          hidden: true
+        },
+        {
+          header: '백업ID',
+          width: 100,
+          align: 'left',
+          name: 'bkup_id',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '프로젝트ID',
+          width: 100,
+          align: 'left',
+          name: 'prjt_id',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '게시판ID',
+          width: 100,
+          align: 'left',
+          name: 'gesipan_id',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '게시판설명',
+          width: 100,
+          align: 'left',
+          name: 'gesipan_dsc',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '소속확인여부',
+          width: 100,
+          align: 'left',
+          name: 'afrm_yn',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '조회횟수여부',
+          width: 100,
+          align: 'left',
+          name: 'nmb_inq_yn',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '페이징여부',
+          width: 100,
+          align: 'left',
+          name: 'pgn_yn',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '파일업로드여부',
+          width: 100,
+          align: 'left',
+          name: 'file_upld_yn',
+          editor: 'text',
+          hidden: true
         },
       ],
     }
@@ -486,6 +587,17 @@ export default {
   max-width: 700px;
   margin: 1.75rem auto !important;
 }
+.filter {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 15px;
+  padding-left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .filter-con .filter-item-a label {
   margin-right: 7px;
   display: inline-block;
@@ -495,6 +607,12 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: right;
+}
+
+td {
+  border-spacing: 30px;
+  padding: 5px 15px 5px 7px;
   text-align: right;
 }
 
