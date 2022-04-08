@@ -694,7 +694,7 @@
             @change = "bubun_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000044T"
+              v-for  = "(item, idx) in CD1000000044"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -726,7 +726,7 @@
             @change = "good_nm_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000047T"
+              v-for  = "(item, idx) in CD1000000046N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -734,11 +734,11 @@
         </select>
       </div>
     </li>
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C47'">
-      <div class="item-con"><label>회의실ID</label>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C47-1'">
+      <div class="item-con">회의실
         <select
             v-model = "mtng_room_id_selected"
-            style   = "width: 230px"
+            style   = "width: 180px"
             @change = "mtng_room_id_change"
         >
           <option
@@ -750,11 +750,27 @@
         </select>
       </div>
     </li>
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C48-1'">
-      <div class="item-con"><label>회의시작시간</label>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C47-2'">
+      <div class="item-con">회의실
+        <select
+            v-model = "mtng_room_id_selected_iss"
+            style   = "width: 125px; margin-left: 11px"
+            @change = "mtng_room_id_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000047N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C48-1'">
+      <div class="item-con">회의시작시간
         <select
             v-model = "rsr_strt_selected"
-            style   = "width: 230px"
+            style   = "width: 110px"
             @change = "rsr_strt_change"
         >
           <option
@@ -766,11 +782,11 @@
         </select>
       </div>
     </li>
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C48-2'">
-      <div class="item-con"><label>회의종료시간</label>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C48-2'">
+      <div class="item-con">회의종료시간
         <select
             v-model = "rsr_endt_selected"
-            style   = "width: 230px"
+            style   = "width: 110px"
             @change = "rsr_endt_change"
         >
           <option
@@ -907,6 +923,7 @@ export default {
     this.grd_cd_change()
     this.good_nm_change()
     this.mtng_room_id_change()
+    this.mtng_room_id_change_iss()
     this.rsr_strt_change()
     this.rsr_endt_change()
   },
@@ -1065,6 +1082,8 @@ export default {
       good_nm_selected : "",
       // 회의실 ID
       mtng_room_id_selected : "",
+      // 회의실 ID(아래)
+      mtng_room_id_selected_iss : "",
       // 예약시작일자
       rsr_strt_selected : "",
       // 예약종료일자
@@ -1129,6 +1148,7 @@ export default {
     bsn_cls_cd_change()             {  this.$emit('bsn_cls_cd_change',             this.bsn_cls_cd_selected)},           // 게시구분
     good_nm_change()                {  this.$emit('good_nm_change',                this.good_nm_selected)},              // 좋아요구분
     mtng_room_id_change()           {  this.$emit('mtng_room_id_change',           this.mtng_room_id_selected)},         // 회의실 ID
+    mtng_room_id_change_iss()       {  this.$emit('mtng_room_id_change_iss',       this.mtng_room_id_selected_iss)},     // 회의실 ID(아래)
     rsr_strt_change()               {  this.$emit('rsr_strt_change',               this.rsr_strt_selected)},             // 예약시작일자
     rsr_endt_change()               {  this.$emit('rsr_endt_change',               this.rsr_endt_selected)},             // 예약종료일자
 
@@ -1453,12 +1473,13 @@ export default {
           if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
           if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
           if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
-          if(this.CD1000000044T.length !== 0)   this.bubun_cd_selected          = this.CD1000000044T[0].value
-          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045N[0].value
-          if(this.CD1000000046T.length !== 0)   this.good_nm_selected           = this.CD1000000046N[0].value
-          if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047N[0].value
-          if(this.CD1000000048T.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
-          if(this.CD1000000048T.length !== 0)   this.rsr_endt_selected          = this.CD1000000048N[0].value
+          if(this.CD1000000044.length !== 0)    this.bubun_cd_selected          = this.CD1000000044[0].value
+          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
+          if(this.CD1000000046N.length !== 0)   this.good_nm_selected           = this.CD1000000046N[0].value
+          if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047T[0].value
+          if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
+          if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
+          if(this.CD1000000048N.length !== 0)   this.rsr_endt_selected          = this.CD1000000048N[0].value
         }
         this.setCdAll()
       }
