@@ -477,7 +477,6 @@ export default {
       rowHeight: 25,
       showDummyRows: false,
       open: false,
-
       // toast ui grid 데이터
       dataSource: {
         api: {
