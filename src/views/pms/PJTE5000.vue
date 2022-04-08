@@ -249,7 +249,7 @@ export default {
           console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
           console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
           console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
-
+          debugger
           // 변경 데이터 저장
           this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
           this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
@@ -319,7 +319,7 @@ export default {
         console.log("클릭" + ev.rowKey);
         this.curRow = ev.rowKey;
         let gridData = this.$refs.grid.invoke("getRow",this.curRow);
-
+        console.log("클릭 :: ");
         this.upCount = 0;
         this.downCount = 0;
 
@@ -621,6 +621,9 @@ export default {
             deleteData : { url: process.env.VUE_APP_API + '/PJTE5000/delete', method: 'PUT'},
           },
           initialRequest: false,
+          contentType : 'application/json;',
+          headers : {  'x-custom-header' : 'custom-header'  },
+          withCredentials: false,
         },
         columnOptions: {
           resizable: true
@@ -636,6 +639,13 @@ export default {
           ]
         },
         columns: [
+          {
+            header: '백업ID',
+            width: 90,
+            name: 'bkup_id',
+            hidden : false,
+            defaultValue: '0000000000'
+          },
           {
             header: '관리구분',
             width: 80,
@@ -842,6 +852,7 @@ export default {
             editor: "text",
             hidden: true,
           },
+
           {
             header: '프로젝트ID',
             width: 150,
@@ -849,6 +860,7 @@ export default {
             name: 'prjt_id',
             hidden: true,
           },
+
           {
             header: '하위건수',
             width: 80,
