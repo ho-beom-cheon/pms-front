@@ -32,212 +32,147 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="gridWrap" style="min-width: 750px;">
-          <grid
-              ref="grid"
-              :data="dataSource"
-              :header="header"
-              :columns="columns"
-              :bodyHeight="bodyHeight"
-              :showDummyRows="showDummyRows"
-              :columnOptions="columnOptions"
-              :minRowHeight="minRowHeight"
-              :rowHeight="rowHeight"
-              :rowHeaders="rowHeaders"
-              @click="onClick"
-          ></grid>
-        </div>
-        <div class="div0-b">
-          <div class="div3-b">
-            <div class="div-header-b"><h2>상세내용</h2>
-              <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
-                <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
-                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
-              </ul>
-            </div>
-            <div class="div2-body-c">
-              <ul class="filter-con clear-fix-a">
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>관리ID</label>
-                    <input type="text"
-                           placeholder="입력 불가"
-                           v-model="detail.mng_id"
-                           :disabled=true
-                           style="background-color: #f2f2f2 ; width: 150px"
-                    >
-                  </div>
-                </li>
-                <combo
-                    :comboArray="this.comboList2"
-                    @rgs_dis_cd_change_iss="rgs_dis_cd_change_iss"
-                    @iss_prc_step_cd_change_iss="iss_prc_step_cd_change_iss"
-                    @req_dis_cd_change_iss="req_dis_cd_change_iss"
-                    ref="combo2"
-                >
-                </combo>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             ref="rgs_dt"
-                             v-model="detail.rgs_dt"
-                             :disabled=true
-                             style="width: 150px; background-color: #f2f2f2;"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*요청자</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="achi_nm"
-                           v-model="detail.achi_nm"
-                           style="width: 150px; margin-right: 150px;"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치담당자</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="detail.ttmn_crpe_nm"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치업무명</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="detail.tgt_biz_nm"
-                           id="tgt_biz_nm"
-                           name="tgt_biz_nm"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치예정일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.ttmn_scd_dt"
-                             style="width: 150px"
-                      ></div>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>조치일자</label>
-                    <div class="input-dateWrap">
-                      <input type="date"
-                             v-model="detail.ttmn_dt"
-                             style="width: 150px"
-                      ></div>
-                  </div>
-                </li>
-                <combo
-                    :comboArray="this.comboList3"
-                    @urgn_cd_change_iss="urgn_cd_change_iss"
-                    @ifnc_cd_change_iss="ifnc_cd_change_iss"
-                    ref="combo3"
-                >
-                </combo>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>등급</label>
-                    <input type="text"
-                           placeholder="입력"
-                           v-model="detail.gd_txt"
-                           style="width: 150px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <label>*제목</label>
-                    <input type="text"
-                           placeholder="입력"
-                           ref="titl_nm"
-                           v-model="detail.titl_nm"
-                           style="width: 885px"
-                    >
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>*요청내용</label>
-                    </th>
-                    <td>
-                      <textarea cols="140"
-                                rows="5"
-                                placeholder="결함내용을 입력해주세요"
-                                ref="req_dis_txt"
-                                v-model="detail.req_dis_txt"
-                                style="width: 885px; line-height: normal;"
-                                @click="enlarged_view(1)"
-                      ></textarea>
-                    </td>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>조치내용</label>
-                    </th>
-                    <td>
-                      <textarea cols="140"
-                                rows="5"
-                                placeholder="조치내용을 입력해주세요"
-                                v-model="detail.ttmn_txt"
-                                style="width: 885px; line-height: normal;"
-                                @click="enlarged_view(2)"
-                      ></textarea>
-                    </td>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>해결방안내용</label>
-                    </th>
-                    <td>
-                      <textarea cols="140"
-                                rows="5"
-                                placeholder="해결방안내용을 입력해주세요"
-                                v-model="detail.slv_mpln_txt"
-                                style="width: 885px; line-height: normal;"
-                                @click="enlarged_view(3)"
-                      ></textarea>
-                    </td>
-                  </div>
-                </li>
-                <li class="filter-item-a">
-                  <div class="item-con">
-                    <th style="vertical-align: middle">
-                      <label>비고</label>
-                    </th>
-                    <td>
-                      <textarea cols="140"
-                                rows="2"
-                                placeholder="비고를 입력해주세요"
-                                v-model="detail.rmrk"
-                                style="width: 885px; line-height: normal;"
-                                @click="enlarged_view(4)"
-                      ></textarea>
-                    </td>
-                  </div>
-                </li>
-              </ul>
-            </div>
+        <div class="grid1-box" style="height: 255px">
+          <div class="gridWrap" style="min-width: 750px;">
+            <grid
+                ref="grid"
+                :data="dataSource"
+                :header="header"
+                :columns="columns"
+                :bodyHeight="bodyHeight"
+                :showDummyRows="showDummyRows"
+                :columnOptions="columnOptions"
+                :minRowHeight="minRowHeight"
+                :rowHeight="rowHeight"
+                :rowHeaders="rowHeaders"
+                @click="onClick"
+            ></grid>
           </div>
         </div>
+
+        <div class="grid1-box" style="height: 325px">
+          <div class="div-header-b">
+            <ul class="filter-btn">
+              <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">초기화</button>
+            </ul>
+          </div>
+
+          <section class="filter">
+            <ul class="filter-con clear-fix" style="width: 100%">
+              <combo
+                  :comboArray="this.comboList2"
+                  @bubun_cd_change_iss="bubun_cd_change_iss"
+                  @bsn_cls_cd_change_iss="bsn_cls_cd_change_iss"
+                  ref="combo2"
+              >
+              </combo>
+            </ul>
+            <ul class="filter-con clear-fix" style="width: 100%; padding-top: 5px;">
+              <li class="filter-item-a" style="margin-right: 15px;">
+                <div class="item-con">익명여부
+                  <input type="checkbox"
+                         v-model="detail.notice_sta_dt"
+                         style   = "width: 14px; margin-left: 11px;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="margin-right: 15px;">
+                <div class="item-con">소속확인여부
+                  <input type="checkbox"
+                         v-model="detail.afrm_yn"
+                         style   = "width: 14px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="margin-right: 15px;">
+                <div class="item-con">댓글여부
+                  <input type="checkbox"
+                         v-model="detail.annmt_yn"
+                         style   = "width: 14px; margin-left: 11px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">답글여부
+                  <input type="checkbox"
+                         v-model="detail.comment_yn"
+                         style   = "width: 14px; margin-left: 33px"
+                  >
+                </div>
+              </li>
+            </ul>
+            <ul class="filter-con clear-fix" style="width: 100%; padding-top: 5px;">
+              <li class="filter-item-a" style="margin-right: 15px;">
+                <div class="item-con">좋아요여부
+                  <input type="checkbox"
+                         v-model="detail.notice_titl"
+                         style   = "width: 14px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="margin-right: 15px;">
+                <div class="item-con">조회횟수여부
+                  <input type="checkbox"
+                         v-model="detail.nmb_inq_yn"
+                         style   = "width: 14px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a" style="margin-right: 15px;">
+                <div class="item-con">페이징여부
+                  <input type="checkbox"
+                         v-model="detail.pgn_yn"
+                         style   = "width: 14px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">파일업로드여부
+                  <input type="checkbox"
+                         v-model="detail.file_upld_yn"
+                         style   = "width: 14px"
+                  >
+                </div>
+              </li>
+            </ul>
+            <ul class="filter-con clear-fix" style="width: 100%; padding-top: 5px;">
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <th style="vertical-align: middle;">게시판제목
+                  </th>
+                  <td style="padding-left: 4px;">
+                    <input type="text"
+                           placeholder="입력"
+                           v-model="detail.gesipan_titl"
+                           style   = "width: 73vw; margin: auto"
+                    >
+                  </td>
+                </div>
+              </li>
+            </ul>
+            <ul class="filter-con clear-fix" style="width: 100%; padding-top: 5px;">
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <th style="vertical-align: middle;">게시판설명
+                  </th>
+                  <td style="padding-left: 4px;">
+                      <textarea cols="140"
+                                rows="5"
+                                placeholder="게시판내용을 입력해주세요"
+                                v-model="detail.gesipan_dsc"
+                                style="height: 15vh; width: 73vw; margin: auto;"
+                      ></textarea>
+                  </td>
+                </div>
+              </li>
+            </ul>
+          </section>
+        </div>
+        <section class="filter">
+          <ul class="filter-btn">
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">저장</button>
+          </ul>
+        </section>
       </section>
     </div>
   </div>
@@ -312,33 +247,22 @@ export default {
     bsn_cls_cd_change(params) {
       this.info.bsn_cls_cd_selected = params
     },
+    bubun_cd_change_iss(params) {
+      this.info.bubun_cd_selected = params
+    },
+    bsn_cls_cd_change_iss(params) {
+      this.info.bsn_cls_cd_selected = params
+    },
 
     init() {
       // 특정 열 비활성화
       this.$refs.grid.invoke("disable");
-      this.$refs.grid.invoke("applyTheme", 'striped', {cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
-      // 조회 필터 초기화
-      this.info.cmpl_yn = false
-      // 상세내용 초기화
-      this.detail.mng_id = ''
-      // 상세내용 확대보기 초기 폰트사이즈 설정
-      if (this.large_num == '1') {
-        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else if (this.large_num == '2') {
-        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else if (this.large_num == '3') {
-        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else if (this.large_num == '4') {
-        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      } else {
-        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';  // 상세내용 확대보기 폰트 사이즈 최초값
-      }
     },
     fnSave() {
       //백업ID가 현재 일 때만 저장
-      if (this.detail.bkup_id_selected == '0000000000') {
+      if (sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
@@ -346,67 +270,47 @@ export default {
             // 관리ID가 없으면 INSERT
             if (this.detail.mng_id == "" || this.detail.mng_id == "null") {
 
-              axiosService.post("/PJTE4000/insert",
+              axiosService.post("/PJTE9100/insert",
                   {
-                    rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
-                    titl_nm: this.detail.titl_nm,                       // (상세)제목
-                    req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
-                    req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
-                    rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                    achi_nm: this.detail.achi_nm,                       // (상세)요청자
-                    prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
-                    tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
-                    ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
-                    ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
-                    ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                    ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
-                    slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
-                    ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
-                    gd_txt: this.detail.gd_txt,                           // (상세)등급
-                    urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
-                    rmrk: this.detail.rmrk,                               // (상세)비고
-                    login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                    bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
-                    prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
-                    mng_id: this.detail.mng_id,                           // (상세)관리ID
+                    bubun_cd: this.detail.bubun_cd_selected,        // 게시부문
+                    bsn_cls_cd: this.detail.bsn_cls_cd_selected,    // 게시구분
+                    notice_sta_dt: this.detail.notice_sta_dt,       // 익명여부
+                    afrm_yn: this.detail.afrm_yn,                   // 소속확인여부
+                    annmt_yn: this.detail.annmt_yn,                 // 댓글여부
+                    comment_yn: this.detail.comment_yn,             // 답글여부
+                    notice_titl: this.detail.notice_titl,           // 좋아요여부
+                    nmb_inq_yn: this.detail.nmb_inq_yn,             // 조회횟수여부
+                    pgn_yn: this.detail.pgn_yn,                     // 페이징제목
+                    file_upld_yn: this.detail.file_upld_yn,         // 파일업로드제목
+                    gesipan_titl: this.detail.gesipan_titl,         // 게시판제목
                   }
               )
                   .then(res => {
                     if (res.status == 200) {
-                      alert("신규 저장이 완료되었습니다.");
+                      alert("저장이 완료되었습니다.");
                       //insert 후 재조회
                       this.$refs.grid.invoke("reloadData");
                     }
                   }).catch(e => {
-                alert("신규 저장에 실패하였습니다.");
+                alert("저장에 실패하였습니다.");
               })
 
               // 관리ID가 있으면 UPDATE
             } else {
 
-              axiosService.put("/PJTE4000/update",
+              axiosService.put("/PJTE9100/update",
                   {
-                    rgs_dis_cd: this.detail.rgs_dis_cd_selected,        // (상세)관리구분
-                    titl_nm: this.detail.titl_nm,                       // (상세)제목
-                    req_dis_txt: this.detail.req_dis_txt,               // (상세)요청내용
-                    req_dis_cd: this.detail.req_dis_cd_selected,        // (상세)요청구분
-                    rgs_dt: this.detail.rgs_dt,                           // (상세)요청일자
-                    achi_nm: this.detail.achi_nm,                       // (상세)요청자
-                    prc_step_cd: this.detail.prc_step_cd_selected,      // (상세)처리단계
-                    tgt_biz_nm: this.detail.tgt_biz_nm,                 // (상세)조치업무명
-                    ttmn_crpe_nm: this.detail.ttmn_crpe_nm,             // (상세)조치담당자
-                    ttmn_scd_dt: this.detail.ttmn_scd_dt,                 // (상세)조치예정일자
-                    ttmn_dt: this.detail.ttmn_dt,                         // (상세)조치일자
-                    ttmn_txt: this.detail.ttmn_txt,                     // (상세)조치내용
-                    slv_mpln_txt: this.detail.slv_mpln_txt,             // (상세)해결방안내용
-                    ifnc_cd: this.detail.ifnc_cd_selected,                // (상세)영향도
-                    gd_txt: this.detail.gd_txt,                           // (상세)등급
-                    urgn_cd: this.detail.urgn_cd_selected,                // (상세)긴급성
-                    rmrk: this.detail.rmrk,                               // (상세)비고
-                    login_emp_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                    bkup_id: this.detail.bkup_id_selected,                 // (상세)백업ID
-                    prjt_id: this.detail.prjt_id_selected,                 // (상세)프로젝트ID
-                    mng_id: this.detail.mng_id,                           // (상세)관리ID
+                    bubun_cd: this.detail.bubun_cd_selected,        // 게시부문
+                    bsn_cls_cd: this.detail.bsn_cls_cd_selected,    // 게시구분
+                    notice_sta_dt: this.detail.notice_sta_dt,       // 익명여부
+                    afrm_yn: this.detail.afrm_yn,                   // 소속확인여부
+                    annmt_yn: this.detail.annmt_yn,                 // 댓글여부
+                    comment_yn: this.detail.comment_yn,             // 답글여부
+                    notice_titl: this.detail.notice_titl,           // 좋아요여부
+                    nmb_inq_yn: this.detail.nmb_inq_yn,             // 조회횟수여부
+                    pgn_yn: this.detail.pgn_yn,                     // 페이징제목
+                    file_upld_yn: this.detail.file_upld_yn,         // 파일업로드제목
+                    gesipan_titl: this.detail.gesipan_titl,         // 게시판제목
                   }
               )
                   .then(res => {
@@ -428,38 +332,23 @@ export default {
           }
         }
       } else {
-        alert('백업정보는 저장할 수 없습니다.');
+        alert('시스템 관리자만 저장가능합니다.');
       }
     },
 
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
-      this.detail.rgs_dis_cd_selected = this.$refs.combo2.$data.CD1000000012[0].value                     // (상세)관리구분
-      this.$refs.combo2.$data.rgs_dis_cd_selected_iss = this.$refs.combo2.$data.CD1000000012[0].value
-      this.detail.prc_step_cd_selected = this.$refs.combo2.$data.CD1000000014[0].value                    // (상세)처리단계
-      this.$refs.combo2.$data.iss_prc_step_cd_selected_iss = this.$refs.combo2.$data.CD1000000014[0].value
-      this.detail.mng_id = ''                                                                             // (상세)관리ID
-      this.detail.req_dis_cd_selected = this.$refs.combo2.$data.CD1000000013[0].value                     // (상세)요청구분
-      this.$refs.combo2.$data.req_dis_cd_selected_iss = this.$refs.combo2.$data.CD1000000013[0].value
-      this.detail.rgs_dt = this.getToday()                                                                // (상세)요청일자
-      this.detail.achi_nm = sessionStorage.getItem("LOGIN_EMP_NM")                                   // (상세)요청자
-      this.detail.ttmn_crpe_nm = ''                                                                      // (상세)조치담당자
-      this.detail.tgt_biz_nm = ''                                                                        // (상세)조치업무명
-      this.detail.ttmn_scd_dt = ''                                                                       // (상세)조치예정일자
-      this.detail.ttmn_dt = ''                                                                           // (상세)조치일자
-      this.detail.ifnc_cd_selected = this.$refs.combo3.$data.CD1000000016[0].value                       // (상세)영향도
-      this.$refs.combo3.$data.ifnc_cd_selected_iss = this.$refs.combo3.$data.CD1000000016[0].value
-      this.detail.urgn_cd_selected = this.$refs.combo3.$data.CD1000000015[0].value                       // (상세)긴급성
-      this.$refs.combo3.$data.urgn_cd_selected_iss = this.$refs.combo3.$data.CD1000000015[0].value
-      this.detail.gd_txt = ''                                                                            // (상세)등급
-      this.detail.titl_nm = ''                                                                           // (상세)제목
-      this.detail.req_dis_txt = ''                                                                       // (상세)요청내용
-      this.detail.ttmn_txt = ''                                                                          // (상세)조치내용
-      this.detail.slv_mpln_txt = ''                                                                      // (상세)해결방안내용
-      this.detail.rmrk = ''                                                                              // (상세)비고
-
-      //관리구분 콤보박스 활성화
-      document.getElementById('rgs_dis_cd_iss').disabled = false
-      document.getElementById('rgs_dis_cd_iss').style.backgroundColor = '#ffffff'
+      this.detail.bubun_cd_selected_iss   = this.$refs.combo2.$data.CD1000000044N[0].value // 게시부문코드
+      this.detail.bsn_cls_cd_selected_iss = this.$refs.combo2.$data.CD1000000045N[0].value // 게시구분코드
+      this.detail.gesipan_titl            = ''                                             // 게시판제목
+      this.detail.gesipan_dsc             = ''                                             // 게시판설명
+      this.detail.notice_sta_dt           = false                                          // 익명여부
+      this.detail.afrm_yn                 = false                                          // 소속확인여부
+      this.detail.annmt_yn                = false                                          // 댓글여부
+      this.detail.comment_yn              = false                                          // 답글여부
+      this.detail.notice_titl             = false                                          // 좋아요여부
+      this.detail.nmb_inq_yn              = false                                          // 조회횟수여부
+      this.detail.pgn_yn                  = false                                          // 페이징여부
+      this.detail.file_upld_yn            = false                                          // 파일업로드여부
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
@@ -469,41 +358,24 @@ export default {
       if (currentRowData != null) {
         // console.log(currentRowData)
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
-        // 관리구분 콤보박스 비활성화 (mng_id가 있을 시)
-        if (this.detail.mng_id != '' || this.detail.mng_id != 'null' || this.detail.mng_id !== undefined) {
-          document.getElementById('rgs_dis_cd_iss').disabled = true
-          document.getElementById('rgs_dis_cd_iss').style.backgroundColor = '#f2f2f2'
-        }
       }
 
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
-      this.detail.rgs_dis_cd_selected = currentRowData.rgs_dis_cd;           // (상세)관리구분
-      this.$refs.combo2.$data.rgs_dis_cd_selected_iss = currentRowData.rgs_dis_cd;
-      this.detail.prc_step_cd_selected = currentRowData.prc_step_cd;         // (상세)처리단계
-      this.$refs.combo2.$data.iss_prc_step_cd_selected_iss = currentRowData.prc_step_cd;
-      this.detail.mng_id = currentRowData.mng_id;                            // (상세)관리ID
-      this.detail.req_dis_cd_selected = currentRowData.req_dis_cd;           // (상세)요청구분
-      this.$refs.combo2.$data.req_dis_cd_selected_iss = currentRowData.req_dis_cd;
-      this.detail.rgs_dt = currentRowData.rgs_dt;                            // (상세)요청일자
-      this.detail.achi_nm = currentRowData.achi_nm;                          // (상세)요청자
-      this.detail.ttmn_crpe_nm = currentRowData.ttmn_crpe_nm;                // (상세)조치담당자
-      this.detail.tgt_biz_nm = currentRowData.tgt_biz_nm;                    // (상세)조치업무명
-      this.detail.ttmn_scd_dt = currentRowData.ttmn_scd_dt;                  // (상세)조치예정일자
-      this.detail.ttmn_dt = currentRowData.ttmn_dt;                          // (상세)조치일자
-      this.detail.ifnc_cd_selected = currentRowData.ifnc_cd;                 // (상세)영향도
-      this.$refs.combo3.$data.ifnc_cd_selected_iss = currentRowData.ifnc_cd;
-      this.detail.urgn_cd_selected = currentRowData.urgn_cd;                 // (상세)긴급성
-      this.$refs.combo3.$data.urgn_cd_selected_iss = currentRowData.urgn_cd;
-      this.detail.gd_txt = currentRowData.gd_txt;                            // (상세)등급
-      this.detail.titl_nm = currentRowData.titl_nm;                          // (상세)제목
-      this.detail.req_dis_txt = currentRowData.req_dis_txt;                  // (상세)요청내용
-      this.detail.ttmn_txt = currentRowData.ttmn_txt;                        // (상세)조치내용
-      this.detail.slv_mpln_txt = currentRowData.slv_mpln_txt;                // (상세)해결방안내용
-      this.detail.rmrk = currentRowData.rmrk;                                // (상세)비고
-      this.detail.bkup_id_selected = currentRowData.bkup_id;                 // (상세)백업ID
-
+      this.detail.bubun_cd_selected = currentRowData.bubun_cd;        // 게시부문
+      this.$refs.combo2.$data.bubun_cd_selected = currentRowData.bubun_cd;
+      this.detail.bsn_cls_cd_selected = currentRowData.bsn_cls_cd;    // 게시구분
+      this.$refs.combo2.$data.bsn_cls_cd_selected = currentRowData.bsn_cls_cd;
+      this.detail.notice_sta_dt = currentRowData.notice_sta_dt,       // 익명여부
+      this.detail.afrm_yn = currentRowData.afrm_yn;                   // 소속확인여부
+      this.detail.annmt_yn = currentRowData.annmt_yn;                 // 댓글여부
+      this.detail.comment_yn = currentRowData.comment_yn;             // 답글여부
+      this.detail.notice_titl = currentRowData.notice_titl;           // 좋아요여부
+      this.detail.nmb_inq_yn = currentRowData.nmb_inq_yn;             // 조회횟수여부
+      this.detail.pgn_yn = currentRowData.pgn_yn;                     // 페이징제목
+      this.detail.file_upld_yn = currentRowData.file_upld_yn;         // 파일업로드제목
+      this.detail.gesipan_titl = currentRowData.gesipan_titl;         // 게시판제목
     },
     /* 저장 */
     fnSearch() {
@@ -511,86 +383,21 @@ export default {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
-    gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
-    },
-    gridExcelImport() {
-
-    },
-    /* YYYY-MM-DD형태의 오늘 날짜를 구하는 함수*/
-    getToday() {
-      var date = new Date();
-      var year = date.getFullYear();
-      var month = ("0" + (1 + date.getMonth())).slice(-2);
-      var day = ("0" + date.getDate()).slice(-2);
-
-      return year + '-' + month + '-' + day;
-    },
-    enlarged_view(num) {
-      if (num == 1) {
-        this.large_num = '1'
-      } else if (num == 2) {
-        this.large_num = '2'
-      } else if (num == 3) {
-        this.large_num = '3'
-      } else if (num == 4) {
-        this.large_num = '4'
-      }
-    },
-    textSizeUP() {  //상세내용 확대보기  (+확대버튼)
-      this.defaultFontSize++;
-      if (this.large_num == '1') {
-        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
-      } else if (this.large_num == '2') {
-        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';
-      } else if (this.large_num == '3') {
-        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
-      } else if (this.large_num == '4') {
-        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
-      } else {
-        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
-      }
-    },
-    textSizeDown() {  //상세내용 확대보기  (-축소버튼)
-      this.defaultFontSize--;
-      if (this.large_num == '1') {
-        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
-      } else if (this.large_num == '2') {
-        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';
-      } else if (this.large_num == '3') {
-        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
-      } else if (this.large_num == '4') {
-        document.getElementById("detailTextArea4").style.fontSize = this.defaultFontSize + 'px';
-      } else {
-        document.getElementById("detailTextArea").style.fontSize = this.defaultFontSize + 'px';
-      }
-    },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.rgs_dis_cd == "" || this.detail.rgs_dis_cd == "null") {            // 관리구분
-        alert('관리구분이 없습니다.');
+      if (this.detail.bubun_cd == "" || this.detail.bubun_cd == "null") {                   // 게시부문
+        alert('게시부문이 없습니다.');
         return false;
-      } else if (this.detail.prc_step_cd == "" || this.detail.prc_step_cd == "null") {   // 처리단계
-        alert('처리단계가 없습니다.');
+      } else if (this.detail.bsn_cls_cd == "" || this.detail.bsn_cls_cd == "null") {        // 게시구분
+        alert('게시구분이 없습니다.');
         return false;
-      } else if (this.detail.req_dis_cd == "" || this.detail.req_dis_cd == "null") {     // 요청구분
-        alert('요청구분이 없습니다.');
+      } else if (this.detail.gesipan_titl == "" || this.detail.gesipan_titl == "null") {     // 게시판제목
+        this.$refs.gesipan_titl.focus();
+        alert('게시판제목을 입력해주세요.');
         return false;
-      } else if (this.detail.rgs_dt == "" || this.detail.rgs_dt == "null") {                 // 요청일자
-        this.$refs.rgs_dt.focus();
-        alert('요청일자를 입력해주세요.');
-        return false;
-      } else if (this.detail.achi_nm == "" || this.detail.achi_nm == "null") {           // 요청자
-        this.$refs.achi_nm.focus();
-        alert('요청자를 입력해주세요.');
-        return false;
-      } else if (this.detail.titl_nm == "" || this.detail.titl_nm == "null") {           // 제목
-        this.$refs.titl_nm.focus();
-        alert('제목을 입력해주세요.');
-        return false;
-      } else if (this.detail.req_dis_txt == "" || this.detail.req_dis_txt == "null") {   // 요청내용
-        this.$refs.req_dis_txt.focus();
-        alert('요청내용을 입력해주세요.');
+      } else if (this.detail.gesipan_dsc == "" || this.detail.gesipan_dsc == "null") {       // 게시판설명
+        this.$refs.gesipan_dsc.focus();
+        alert('게시판설명을 입력해주세요.');
         return false;
       } else {
         return true;  // 필수 값 모두 입력 시 true
@@ -608,9 +415,8 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C44", "C45"],
-
-      large_num: '',
+      comboList: ["C44-1", "C45-1"],
+      comboList2: ["C44-2", "C45-2"],
 
       info: {
         /* 필터 변수 */
@@ -656,6 +462,7 @@ export default {
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
       },
 
+      /* grid 속성 */
       addRow: {
         grid: this.grid,
       },
@@ -670,9 +477,11 @@ export default {
       rowHeight: 25,
       showDummyRows: false,
       open: false,
+
+      // toast ui grid 데이터
       dataSource: {
         api: {
-          readData: {url: process.env.VUE_APP_API + '/PJTE4000/select', method: 'GET'},
+          readData: {url: process.env.VUE_APP_API + '/PJTE9100/select', method: 'GET'},
         },
         initialRequest: false,
       },
@@ -685,163 +494,166 @@ export default {
       },
       columns: [
         {
-          header: '관리구분',
-          width: 100,
-          align: 'left',
-          name: 'rgs_dis_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000012N
-            }
-          }
-        },
-        {
-          header: '관리ID',
-          width: 100,
-          align: 'center',
-          name: 'mng_id',
-          sortable: true
-        },
-        {
-          header: '제목',
+          header: '게시부문',
           width: 250,
-          align: 'left',
-          name: 'titl_nm',
-          ellipsis: true,
-        },
-        {
-          header: '요청내용',
-          width: 280,
-          align: 'left',
-          name: 'req_dis_txt',
-          ellipsis: true,
-        },
-        {
-          header: '요청구분',
-          width: 110,
           align: 'center',
-          name: 'req_dis_cd',
+          name: 'bubun_cd',
+          editor: 'text',
+        },
+        {
+          header: '게시구분',
+          width: 200,
+          align: 'center',
+          name: 'bsn_cls_cd',
+          editor: 'text',
+        },
+        {
+          header: '게시제목',
+          width: 575,
+          align: 'center',
+          name: 'gesipan_titl',
           formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000013N
-            }
-          }
+          editor: 'text',
         },
         {
-          header: '요청일자',
-          width: 110,
+          header: '익명',
+          width: 100,
           align: 'center',
-          name: 'rgs_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '요청자',
-          width: 110,
-          align: 'left',
-          name: 'achi_nm',
-        },
-        {
-          header: '처리단계',
-          width: 110,
-          align: 'center',
-          name: 'prc_step_cd',
+          name: 'notice_sta_dt',
           formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000014N
-            }
-          }
+          editor: 'text',
         },
         {
-          header: '조치업무명',
-          width: 120,
+          header: '댓글',
+          width: 100,
           align: 'left',
-          name: 'tgt_biz_nm',
+          name: 'annmt_yn',
+          editor: 'text',
         },
         {
-          header: '조치담당자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_crpe_nm',
-        },
-        {
-          header: '조치예정일자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_scd_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '조치일자',
-          width: 110,
-          align: 'center',
-          name: 'ttmn_dt',
-          format: 'yyyy-mm-dd',
-        },
-        {
-          header: '조치내용',
-          width: 230,
+          header: '답글',
+          width: 100,
           align: 'left',
-          name: 'ttmn_txt',
-          ellipsis: true,
+          name: 'comment_yn',
+          editor: 'text',
         },
         {
-          header: '비고',
-          width: 230,
+          header: '좋아요',
+          width: 100,
           align: 'left',
-          name: 'rmrk',
-          ellipsis: true,
+          name: 'notice_titl',
+          editor: 'text',
+          hidden: true
         },
         {
-          header: '긴급성',
-          width: 110,
-          align: 'center',
-          name: 'urgn_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000015N
-            }
-          }
-        },
-        {
-          header: '영향도',
-          width: 110,
-          align: 'center',
-          name: 'ifnc_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000016N
-            }
-          }
-        },
-
-        {
-          header: '등급',
-          width: 110,
-          align: 'center',
-          name: 'gd_txt',
-        },
-        {
-          header: '해결방안내용',
-          width: 230,
+          header: '백업ID',
+          width: 100,
           align: 'left',
-          name: 'slv_mpln_txt',
-          ellipsis: true,
+          name: 'bkup_id',
+          editor: 'text',
+          hidden: true
         },
-      ]
+        {
+          header: '프로젝트ID',
+          width: 100,
+          align: 'left',
+          name: 'prjt_id',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '게시판ID',
+          width: 100,
+          align: 'left',
+          name: 'gesipan_id',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '게시판설명',
+          width: 100,
+          align: 'left',
+          name: 'gesipan_dsc',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '소속확인여부',
+          width: 100,
+          align: 'left',
+          name: 'afrm_yn',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '조회횟수여부',
+          width: 100,
+          align: 'left',
+          name: 'nmb_inq_yn',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '페이징여부',
+          width: 100,
+          align: 'left',
+          name: 'pgn_yn',
+          editor: 'text',
+          hidden: true
+        },
+        {
+          header: '파일업로드여부',
+          width: 100,
+          align: 'left',
+          name: 'file_upld_yn',
+          editor: 'text',
+          hidden: true
+        },
+      ],
     }
   },
 };
 
 </script>
 <style>
+.disableColor {
+  background: #FFFFFF!important;
+}
+.comColor {
+  background: #B7F0B1!important;
+}
+.stopColor {
+  background: #FFC19E!important;
+}
+.inProgressColor {
+  background: #B2EBF4!important;
+}
+.lineBorder {
+  border-right: #aaa solid 1px!important;
+}
+.modal-dialog {
+  max-width: 700px;
+  margin: 1.75rem auto !important;
+}
+.filter {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 15px;
+  padding-left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.filter-con .filter-item-a label {
+  margin-right: 7px;
+  display: inline-block;
+  width: 52px;
+  font-weight: normal;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
 </style>
