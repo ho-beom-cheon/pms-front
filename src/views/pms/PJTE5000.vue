@@ -189,15 +189,8 @@ export default {
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
     bzcd_change(params)           {this.info.bzcd_selected = params},
     wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
-    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
-
-    // 렌더링 중 적용 (mounted와 동일)
-    onGridMounted(grid){
-
-    },
-    // 렌더링 후 적용됨
-    onGridUpdated(grid){
-      let gridData = this.$refs.grid.invoke("getData")
+    wbs_prc_sts_cd_change(params) {
+      this.info.wbs_prc_sts_cd_selected = params
 
       if(this.info.wbs_prc_sts_cd_selected === '100'){
         this.validated = false;
@@ -208,13 +201,24 @@ export default {
         this.$refs.grid.invoke("hideColumn",'prg_rt')
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
       }
+    },
+
+    // 렌더링 중 적용 (mounted와 동일)
+    onGridMounted(grid){
+
+    },
+    // 렌더링 후 적용됨
+    onGridUpdated(grid){
+      let gridData = this.$refs.grid.invoke("getData")
+
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+
       for(let i=0; i<gridData.length; i++) {
         if(gridData[i].wbs_cnt === "0") {
           this.$refs.grid.invoke("enableCell", i, 'prg_rt');
         }
       }
 
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -388,9 +392,11 @@ export default {
           },
           {focus:true}) ;
       let gridData = this.$refs.grid.invoke("getData")
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"step_cd");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"mng_id");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"prg_rt");
+      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"bzcd");
       // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_end_tim");
       // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_sta_tim");
     },
@@ -712,7 +718,7 @@ export default {
           name: 'step_cd',
           align: 'center',
           formatter: 'listItemText',
-          disabled: true,
+          disabled: false,
           editor: {
             type: 'select',
             options: {
@@ -868,7 +874,6 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
-          disabled: false
         },
         {
           header: '정렬',

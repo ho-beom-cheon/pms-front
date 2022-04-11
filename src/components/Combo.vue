@@ -556,7 +556,7 @@
             @change = "wbs_prc_sts_cd_change"
         >
           <option
-              v-for="(wbs_prc_sts_cd, idx) in CD1000000035T"
+              v-for="(wbs_prc_sts_cd, idx) in CD1000000035"
               :key="idx"
               v-text="wbs_prc_sts_cd.text"
               :value="wbs_prc_sts_cd.value"
@@ -1000,7 +1000,7 @@ export default {
       CD1000000032T : [],  CD1000000032N : [],
       CD1000000033T : [],  CD1000000033N : [],
       CD1000000034T : [],  CD1000000034N : [],
-      CD1000000035T : [],  CD1000000035N : [],
+      CD1000000035T : [],  CD1000000035N : [], CD1000000035 : [],
       CD1000000036T : [],  CD1000000036N : [],
       CD1000000038T : [],  CD1000000038N : [], CD1000000038 : [],
       CD1000000039T : [],  CD1000000039N : [], CD1000000039 : [],
@@ -1409,6 +1409,7 @@ export default {
             } else if(i === 35) {
               this.CD1000000035T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000035N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000035.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 36) {
               this.CD1000000036T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000036N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -1490,7 +1491,7 @@ export default {
           if(this.CD1000000025T.length !== 0)  this.file_rgs_dscd_selected       = this.CD1000000025T[0].value
           if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected      = this.CD1000000026T[0].value
           if(this.CD1000000027T.length !== 0)  this.bkup_id_selected             = this.CD1000000027T[0].value
-          if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035T[0].value
+          if(this.CD1000000035.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035[0].value
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
