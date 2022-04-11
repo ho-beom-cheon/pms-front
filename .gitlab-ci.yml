@@ -5,7 +5,7 @@ stages:
   - build
   
 build-phase:
-  image: node:16.14.0
+  image: node:14.18.1
   stage: build
   tags:
     - pms
