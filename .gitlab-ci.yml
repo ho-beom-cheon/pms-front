@@ -15,13 +15,12 @@ build-phase:
     - pms
   before_script:
     - npm cache clean --force
+    - rm -rf ./node_modules
     - id
     - pwd
     - ls
     - npm --version
     - npm install
-    - yarn add -D node-sass/^6.0.1
-    - npm show node-sass version
   script:
     - echo "run build"
     - npm run prod
