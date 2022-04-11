@@ -117,6 +117,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     cursor: pointer;
 }
 .input-dateWrap {
+    cursor: pointer;
     position: relative;
     display: inline-block;
 }
@@ -129,6 +130,27 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     height: 16px;
     background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
 }
+/*input 월 달력 START*/
+input[type="month"]::-webkit-calendar-picker-indicator{
+    opacity:0;
+    z-index: 1;
+    cursor: pointer;
+}
+.input-monthWrap {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+.input-monthWrap::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
+}
+/*input 월 달력 END*/
 .input-searchWrap {
     position: relative;
 }
@@ -807,6 +829,14 @@ table.form-table select {
 /*PJTE2100, PJTE2200그리드 내 결함등록 버튼 이미지*/
 .div-img{
     background-image: url(../../assets/img/PE-icon/ic_new.svg);
+}
+/*삭제 버튼 (게시판 사용)*/
+.div-img-delete{
+    background-image: url(../../assets/img/PE-icon/ic_delete.svg);
+}
+/*댓글 버튼 (게시판 사용)*/
+.div-img-cmnt{
+    background-image: url(../../assets/img/PE-icon/ic_cmnt.svg);
 }
 .grid1-box{
     border: 1px solid #d5d5d5;
