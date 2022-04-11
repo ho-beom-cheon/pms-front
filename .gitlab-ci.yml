@@ -16,7 +16,7 @@ build-phase:
   before_script:
     - npm cache clean --force
     - rm -rf ./node_modules ./yarn.lock
-    - yarn install
+    - npm install
     - id
     - pwd
     - ls
