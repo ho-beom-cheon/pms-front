@@ -7,10 +7,12 @@ cache:
   
 stages:
   - build
- 
+
+prepare_build:
+    image: node: 16.14.0
+    
 build-phase:
-  image: 
-    - node: 16.14.0
+  
   stage: build
   tags:
     - pms
