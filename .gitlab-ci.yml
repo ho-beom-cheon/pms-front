@@ -11,7 +11,7 @@ build-phase:
     - pms
   before_script:
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
-    - npm install
+    - npm install --save --legacy-peer-deps
     - id
     - pwd
     - ls
