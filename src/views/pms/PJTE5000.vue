@@ -232,7 +232,7 @@ export default {
             bkup_id      : this.info.bkup_id_selected,
             bzcd         : this.bzcd == null? 'TTT':this.bzcd,
             mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
-            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
             login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
           }).then(res => {
             console.log(res);
@@ -241,6 +241,7 @@ export default {
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
               this.excelUplod = 'N'
+              this.fnSearch()
             }
           })
       } else if(this.excelUplod === 'N') {
@@ -420,7 +421,7 @@ export default {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
         let gridExcelData;
-
+        debugger
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
@@ -466,6 +467,9 @@ export default {
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
             for(let n=1; n<rowObj.length; n++){
+              // if(rowObj[n].bzcd !== '100'){
+              //   rowObj[n].bzcd = (rowObj[n].bzcd).toString()
+              // }
               rowObj_copy[n-1] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
@@ -473,8 +477,13 @@ export default {
           }
         })
         this.excelUplod = 'Y'
-        alert('업로드 파일이 적용되었습니다.')
-        this.$refs.grid.invoke('resetData', gridExcelData)
+        try {
+          this.$refs.grid.invoke('resetData', gridExcelData)
+          alert('업로드 파일이 적용되었습니다.')
+        } catch (e){
+          alert('업로드에 실패했습니다.')
+        }
+
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
