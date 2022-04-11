@@ -36,8 +36,10 @@ const PJTE9001 = () => import(/* webpackChunkName: "PJTE9001" */ './views/pms/PJ
 const PJTE9002 = () => import(/* webpackChunkName: "PJTE9002" */ './views/pms/PJTE9002.vue'); menuList.push(PJTE9002); menuListStr.push("PJTE9002");
 const PJTE9003 = () => import(/* webpackChunkName: "PJTE9003" */ './views/pms/PJTE9003.vue'); menuList.push(PJTE9003); menuListStr.push("PJTE9003");
 const PJTE9005 = () => import(/* webpackChunkName: "PJTE9005" */ './views/pms/PJTE9005.vue'); menuList.push(PJTE9005); menuListStr.push("PJTE9005");
+const PJTE9200 = () => import(/* webpackChunkName: "PJTE9200" */ './views/pms/PJTE9200.vue'); menuList.push(PJTE9200); menuListStr.push("PJTE9200");
 const PJTE9900 = () => import(/* webpackChunkName: "PJTE9900" */ './views/pms/PJTE9900.vue'); menuList.push(PJTE9900); menuListStr.push("PJTE9900");
 const PJTE9120 = () => import(/* webpackChunkName: "PJTE9120" */ './views/pms/PJTE9120.vue'); menuList.push(PJTE9120); menuListStr.push("PJTE9120");
+const PJTE9110 = () => import(/* webpackChunkName: "PJTE9110" */ './views/pms/PJTE9110.vue'); menuList.push(PJTE9110); menuListStr.push("PJTE9110");
 
 // Vue 와 Router 연결
 Vue.use(Router);

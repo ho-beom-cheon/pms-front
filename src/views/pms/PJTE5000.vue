@@ -189,15 +189,8 @@ export default {
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
     bzcd_change(params)           {this.info.bzcd_selected = params},
     wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
-    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
-
-    // 렌더링 중 적용 (mounted와 동일)
-    onGridMounted(grid){
-
-    },
-    // 렌더링 후 적용됨
-    onGridUpdated(grid){
-      let gridData = this.$refs.grid.invoke("getData")
+    wbs_prc_sts_cd_change(params) {
+      this.info.wbs_prc_sts_cd_selected = params
 
       if(this.info.wbs_prc_sts_cd_selected === '100'){
         this.validated = false;
@@ -208,13 +201,24 @@ export default {
         this.$refs.grid.invoke("hideColumn",'prg_rt')
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
       }
+    },
+
+    // 렌더링 중 적용 (mounted와 동일)
+    onGridMounted(grid){
+
+    },
+    // 렌더링 후 적용됨
+    onGridUpdated(grid){
+      let gridData = this.$refs.grid.invoke("getData")
+
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+
       for(let i=0; i<gridData.length; i++) {
         if(gridData[i].wbs_cnt === "0") {
           this.$refs.grid.invoke("enableCell", i, 'prg_rt');
         }
       }
 
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -232,7 +236,7 @@ export default {
             bkup_id      : this.info.bkup_id_selected,
             bzcd         : this.bzcd == null? 'TTT':this.bzcd,
             mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
-            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
             login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
           }).then(res => {
             console.log(res);
@@ -241,6 +245,7 @@ export default {
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
               this.excelUplod = 'N'
+              this.fnSearch()
             }
           })
       } else if(this.excelUplod === 'N') {
@@ -387,9 +392,11 @@ export default {
           },
           {focus:true}) ;
       let gridData = this.$refs.grid.invoke("getData")
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"step_cd");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"mng_id");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"prg_rt");
+      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"bzcd");
       // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_end_tim");
       // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_sta_tim");
     },
@@ -420,7 +427,7 @@ export default {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
         let gridExcelData;
-
+        debugger
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
@@ -466,6 +473,9 @@ export default {
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
             for(let n=1; n<rowObj.length; n++){
+              // if(rowObj[n].bzcd !== '100'){
+              //   rowObj[n].bzcd = (rowObj[n].bzcd).toString()
+              // }
               rowObj_copy[n-1] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
@@ -473,8 +483,13 @@ export default {
           }
         })
         this.excelUplod = 'Y'
-        alert('업로드 파일이 적용되었습니다.')
-        this.$refs.grid.invoke('resetData', gridExcelData)
+        try {
+          this.$refs.grid.invoke('resetData', gridExcelData)
+          alert('업로드 파일이 적용되었습니다.')
+        } catch (e){
+          alert('업로드에 실패했습니다.')
+        }
+
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
@@ -703,7 +718,7 @@ export default {
           name: 'step_cd',
           align: 'center',
           formatter: 'listItemText',
-          disabled: true,
+          disabled: false,
           editor: {
             type: 'select',
             options: {
@@ -859,7 +874,6 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
-          disabled: false
         },
         {
           header: '정렬',
