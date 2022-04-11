@@ -22,7 +22,7 @@ build-phase:
     - npm install
   script:
     - echo "run build"
-    - npm run build
+    - npm run prod
     
     
   after_script:
