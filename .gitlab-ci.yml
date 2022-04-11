@@ -9,10 +9,9 @@ stages:
   - build
 
 prepare_build:
-    image: node: 16.14.0
+  image: node: 16.14.0
     
 build-phase:
-  
   stage: build
   tags:
     - pms
