@@ -1580,7 +1580,7 @@ export default {
     },
     init()  {
       // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
-      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000004') {
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003') {
         this.read = true;  // 인력프로파일관리는 비활성화 콤보
       } else {
         if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
