@@ -20,7 +20,7 @@ build-phase:
     - npm --version
     - npm show node-sass version
     - npm install
-    - npm install node-sass/^6.0.1
+    - yarn add -D node-sass/^6.0.1
   script:
     - echo "run build"
     - npm run prod
