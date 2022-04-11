@@ -11,7 +11,6 @@ build-phase:
     - pms
   before_script:
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
-    - npm install node-sass/7.0.1 --force
     - npm install --save --legacy-peer-deps
     - id
     - pwd
