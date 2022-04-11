@@ -10,7 +10,6 @@ build-phase:
   tags:
     - pms
   before_script:
-    - npm cache clean --force
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
     - npm install
     - id
