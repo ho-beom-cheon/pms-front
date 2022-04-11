@@ -533,7 +533,7 @@ export default {
             this.modals.bak_work_modal = true;
           }
           // 후속작업이 있을 경우 삭제버튼 활성화
-          if(this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != null) {
+          if(this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != null && this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != '') {
             this.delete_yn = false
           } else {
             this.delete_yn = true
