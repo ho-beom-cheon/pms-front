@@ -1,0 +1,27 @@
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+cache:
+  paths:
+    - ./node_modules/
+  key: $CI_COMMIT_REF_SLUG
+  
+stages:
+  - build
+  
+build-phase:
+  image: node:16.14.0
+  stage: build
+  tags:
+    - pms
+  before_script:
+    - npm cache clean --force
+    - rm -rf ./node_modules ./yarn.lock
+    - npm install
+    - id
+    - pwd
+    - ls
+  script:
+    - echo "run build"
+    - npm run prod
+  after_script:
+    - pwd
