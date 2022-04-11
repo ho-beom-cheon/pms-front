@@ -8,7 +8,9 @@ cache:
 stages:
   - build
  
-build-phase:      
+build-phase:
+  image: 
+    - node: 16.14.0
   stage: build
   tags:
     - pms
