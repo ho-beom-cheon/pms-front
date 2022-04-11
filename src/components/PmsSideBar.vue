@@ -40,6 +40,7 @@
               <li id="PJTE9110Iteyes"><a href="/PJTE9110">{{ iteyes_menu_list[3].name }}</a></li>
               <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[4].name }}</a></li>
               <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[5].name }}</a></li>
+              <li id="PJTE9120Iteyes"><a href="/PJTE9120">{{ iteyes_menu_list[6].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -197,6 +198,11 @@ export default {
           id: 'PJTE9000Iteyes',
           path: '/PJTE9000',
           name: '시스템관리'
+        },
+        {
+          id: 'PJTE9120Iteyes',
+          path: '/PJTE9120',
+          name: '게시글등록'
         },
       ],
       profile_menu_list: [

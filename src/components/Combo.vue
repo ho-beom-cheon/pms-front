@@ -686,7 +686,7 @@
       </div>
     </li>
 
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C44'">
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C44-1'">
       <div class="item-con"><label>게시부문</label>
         <select
             v-model = "bubun_cd_selected"
@@ -702,7 +702,23 @@
         </select>
       </div>
     </li>
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C45'">
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C44-2'">
+      <div class="item-con"><label>게시부문</label>
+        <select
+            v-model = "bubun_cd_selected_iss"
+            style   = "width: 230px"
+            @change = "bubun_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000044N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C45-1'">
       <div class="item-con"><label>게시구분</label>
         <select
             v-model = "bsn_cls_cd_selected"
@@ -711,6 +727,22 @@
         >
           <option
               v-for  = "(item, idx) in CD1000000045T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C45-2'">
+      <div class="item-con"><label>게시구분</label>
+        <select
+            v-model = "bsn_cls_cd_selected_iss"
+            style   = "width: 230px"
+            @change = "bsn_cls_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000045N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -919,7 +951,9 @@ export default {
     this.dept_cd_change()
     this.skill_grd_change_iss()
     this.bsn_cls_cd_change()
+    this.bsn_cls_cd_change_iss()
     this.bubun_cd_change()
+    this.bubun_cd_change_iss()
     this.grd_cd_change()
     this.good_nm_change()
     this.mtng_room_id_change()
@@ -1076,8 +1110,12 @@ export default {
       grd_cd_selected : "",
       // 게시부문
       bubun_cd_selected : "",
+      // 게시부문
+      bubun_cd_selected_iss : "",
       // 게시구분
       bsn_cls_cd_selected : "",
+      // 게시구분
+      bsn_cls_cd_selected_iss : "",
       // 좋아요구분
       good_nm_selected : "",
       // 회의실 ID
@@ -1145,7 +1183,9 @@ export default {
     skill_grd_change()              {  this.$emit('skill_grd_change',              this.skill_grd_selected)},            // 기술등급
     grd_cd_change()                 {  this.$emit('grd_cd_change',                 this.grd_cd_selected)},               // 평판코드
     bubun_cd_change()               {  this.$emit('bubun_cd_change',               this.bubun_cd_selected)},             // 부문구분
+    bubun_cd_change_iss()           {  this.$emit('bubun_cd_change_iss',           this.bubun_cd_selected_iss)},             // 부문구분
     bsn_cls_cd_change()             {  this.$emit('bsn_cls_cd_change',             this.bsn_cls_cd_selected)},           // 게시구분
+    bsn_cls_cd_change_iss()         {  this.$emit('bsn_cls_cd_change_iss',         this.bsn_cls_cd_selected_iss)},           // 게시구분
     good_nm_change()                {  this.$emit('good_nm_change',                this.good_nm_selected)},              // 좋아요구분
     mtng_room_id_change()           {  this.$emit('mtng_room_id_change',           this.mtng_room_id_selected)},         // 회의실 ID
     mtng_room_id_change_iss()       {  this.$emit('mtng_room_id_change_iss',       this.mtng_room_id_selected_iss)},     // 회의실 ID(아래)
@@ -1474,7 +1514,9 @@ export default {
           if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
           if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
           if(this.CD1000000044.length !== 0)    this.bubun_cd_selected          = this.CD1000000044[0].value
-          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
+          if(this.CD1000000044N.length !== 0)   this.bubun_cd_selected_iss      = this.CD1000000044N[0].value
+          if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045N[0].value
+          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045T[0].value
           if(this.CD1000000046N.length !== 0)   this.good_nm_selected           = this.CD1000000046N[0].value
           if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047T[0].value
           if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
