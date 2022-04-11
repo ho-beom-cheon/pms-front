@@ -1,9 +1,5 @@
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-cache:
-  paths:
-    - ./node_modules/
-  key: $CI_COMMIT_REF_SLUG
   
 stages:
   - build
