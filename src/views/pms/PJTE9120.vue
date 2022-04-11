@@ -129,7 +129,7 @@
                       >
                     </div>
                   </li>
-                  <button class="btn btn-filter-p" @click="fnSave1">등록</button>
+                  <button class="btn btn-filter-p" @click="fnEdit(2)">등록</button>
                 </ul>
               </div>
             </section>
@@ -144,6 +144,7 @@
                 :data="dataSource2"
                 :header="header"
                 :columns="columns2"
+                @click="onClick2"
                 :minBodyHeight="55"
                 :bodyHeight="167"
                 :minRowHeight="minRowHeight"
@@ -156,14 +157,84 @@
         </div>
         <section class="filter">
           <ul class="filter-btn">
-            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave1" >추가</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px" @click="addRplModal">추가</button>
           </ul>
         </section>
         <br>
         <br>
         <br>
         <br>
+        <!--   모달 추가(댓글 추가(댓글내역), 댓글 삭제 추가(비밀번호 입력), 답글정보 추가    -->
         <Modal :show.sync="modals.txt_modal1">
+          <div class="modal-pop-body">
+            <h2>
+              댓글내역
+            </h2>
+          </div>
+          <hr>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+          </table>
+          <div>
+            <grid
+                ref="grid3"
+                :data="dataSource3"
+                :header="header3"
+                :columns="columns3"
+                @click="onClick3"
+                :bodyHeight="300"
+                :width="665"
+                :showDummyRows="showDummyRows"
+                :columnOptions="columnOptions"
+                :editingEvent="editingEvent"
+                :rowHeight="rowHeight"
+                :minRowHeight="minRowHeight"
+                :rowHeaders="rowHeaders"
+            ></grid>
+          </div>
+          <br>
+          <br>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>댓글</th>
+              <td colspan="4">
+                <input type="text"
+                       v-model="detail.cmnt_titl"
+                       style="width: 260px; margin-right: 25px;"
+                >
+              </td>
+              <th>비밀번호</th>
+              <td colspan="4">
+                <input type="text"
+                       placeholder="비밀번호를 입력해주세요."
+                       v-model="detail.txt_psw"
+                       style="width: 150px; margin-left: 5px;"
+                >
+              </td>
+            </tr>
+            <br>
+            <br>
+            </tbody>
+          </table>
+          <div style="float: right">
+            <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnEdit(1)" style="margin-right: 5px" >등록</button>
+            <button id="crpenm-delete" class="btn btn-filter-p" @click="fnDelete(1)" style="margin-right: 5px">삭제</button>
+            <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
+          </div>
+        </Modal>
+        <Modal :show.sync="modals.txt_modal2">
           <div class="modal-pop-body">
             <h2>
               비밀번호
@@ -172,15 +243,35 @@
           <hr>
           <div class="item-con" style="margin-right: 5px">
             <input type="text"
-                   id="modalId"
+                   id="modalId2"
                    v-model="modalTxt"
                    ref="modalTxt"
                    style="width: 150px;"
             >
           </div>
           <div style="float: right">
-            <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px">삭제</button>
-            <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            <button id="crpenm-edit2" class="btn btn-filter-p" @click="fnDelete(2)" style="margin-right: 5px">삭제</button>
+            <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
+          </div>
+        </Modal>
+        <Modal :show.sync="modals.txt_modal3">
+          <div class="modal-pop-body">
+            <h2>
+              답글정보
+            </h2>
+          </div>
+          <hr>
+          <div class="item-con" style="margin-right: 5px">
+            <input type="text"
+                   id="modalId3"
+                   v-model="modalTxt"
+                   ref="modalTxt"
+                   style="width: 150px;"
+            >
+          </div>
+          <div style="float: right">
+            <button id="crpenm-edit3" class="btn btn-filter-p" @click="fnEdit(3)" style="margin-right: 5px">등록</button>
+            <button id="crpenm-close3" class="btn btn-filter-b" @click="fnCloseModal(3)">닫기</button>
           </div>
         </Modal>
       </section>
@@ -251,8 +342,9 @@ export default {
       // 그리드 초기화 (게시내역, 답글내역, 댓글내역 등)
       this.$refs.grid1.invoke("clear");
       this.$refs.grid2.invoke("clear");
-      // 그리드1 전체 비활성화
+      // 그리드1(게시내역), 그리드3(댓글내역) 전체 비활성화
       this.$refs.grid1.invoke("disable");
+      this.$refs.grid3.invoke("disable");
 
       // 시스템 관리자가 아닌경우 자신의 이름과 번호를 조회조건에 바인딩
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
@@ -282,7 +374,6 @@ export default {
     },
 
     onGridUpdated(grid){
-
     },
 
     // 그리드 1 클릭 이벤트 - 게시내역(그리드1) ROW 클릭 시 하단 세부내역 조회 (답글내역)
@@ -292,18 +383,64 @@ export default {
 
       // TODO 댓글 및 삭제 버튼 이벤트 추가 (게시내역, 답글내역, 댓글내역 각자 추가 필요)
       const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
-      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 팝업
+      // 댓글내역 조회(모달창)
+      if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 팝업
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+
+        this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 답글내역 조회
+        axiosService.get("/PJTE9120/select_9120_03", {
+          params: {
+            prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+          }
+        }).then(res => {
+          this.$refs.grid3.invoke("setRequestParams", this.info);
+          this.$refs.grid3.invoke("readData");
+        }).catch(e => {
+
+        });
       }
 
+      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 팝업
+        this.modals.txt_modal2 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
     },
+
+    // 그리드 2 클릭 이벤트 - 답글내역(그리드2) 삭제 클릭 시 모달 보이기
+    onClick2(ev) {
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+
+      const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
+
+      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 팝업
+        this.modals.txt_modal2 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+
+    // 그리드 3 클릭 이벤트 - 댓글내역(그리드3) 삭제 클릭 시 모달 보이기
+    onClick3(ev) {
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+
+      const currentCellData = (this.$refs.grid3.invoke("getFocusedCell"));
+
+      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 팝업
+        this.modals.txt_modal3 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+
     //더블클릭_게시정보 및 답글내역 조회 추가
     dblclick(ev) {
-      //TODO 조회수 증가 update 추가 필요
-
-      // 게시내역 ROW클릭 시 하단 게시정보 input 에 바인딩
+      // 게시내역 ROW 클릭 시 하단 게시정보 input 에 바인딩
       if (ev.columnName == 'dis_post_titl' || ev.columnName == 'post_dt' || ev.columnName == 'post_nm' || ev.columnName == 'view_cnt') {
         this.curRow = ev.rowKey;
         const currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
@@ -312,8 +449,8 @@ export default {
         }
       }
 
-      //TODO 답글내역 조회 추가
-      this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW클릭 시 인력번호
+      // 답글내역 조회
+      this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 답글내역 조회
       axiosService.get("/PJTE9120/select_9120_02", {
         params: {
           prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -322,12 +459,59 @@ export default {
         }
       }).then(res => {
         // console.log("res.data.data ::" + res.data.data)
-        this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
+        //this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
+
+      }).catch(e => {
+
+      });
+
+      // 조회수 증가
+      axiosService.put("/PJTE9120/update_9120_01", {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+      }).then(res => {
+        if(res.status == 200) {
+          this.fnSearch()
+        }
       }).catch(e => {
 
       });
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
+    },
+
+    // TODO 게시정보, 답글정보 및 댓글정보 등록 추가
+    fnEdit(num) {
+      console.log(num);
+      if(num == 1) {  // 댓글정보 등록
+
+      } else if(num == 2) { // 게시정보 등록
+
+      } else if(num == 3) { // 답글정보 등록
+
+      }
+    },
+
+    // TODO 게시정보, 답글정보, 댓글정보 삭제 추가
+    fnDelete(num) {
+      console.log(num);
+      if(num == 1) {  // 댓글정보 삭제
+
+      } else if(num == 2) { // 게시정보 삭제
+
+      } else if(num == 3) { // 답글정보 삭제
+
+      }
+      // for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+      //   if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")){
+      //     this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "mng_id"))
+      //   }
+      //   if(this.$refs.grid.invoke("getValue",i, "mng_id") == this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")){
+      //     this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",i, "mng_id"))
+      //   }
+      // }
+      // this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id");
+      // this.modals.bak_work_modal = false; //후속작업모달닫기
     },
 
     /* 게시내역 Row dblClick 시 게시정보에 Bind */
@@ -379,9 +563,21 @@ export default {
       this.$refs.grid2.invoke("clear");
     },
 
+    // TODO 답글정보 모달 오픈
+    addRplModal() {
+      this.modals.txt_modal3 = true;
+    },
+
     // TODO 모달창 추가 필요
-    fnCloseModal(){  // 모달창 닫기
-      this.modals.txt_modal1 = false;
+    fnCloseModal(num){  // 모달창 닫기
+      console.log(num)
+      if(num == 1) {
+        this.modals.txt_modal1 = false;
+      } else if(num == 2) {
+        this.modals.txt_modal2 = false;
+      } else if(num == 3) {
+        this.modals.txt_modal3 = false;
+      }
     },
 
   },
@@ -461,7 +657,7 @@ export default {
       // TODO 모달 속성 추가 필요
       /* 그리드 상세보기 모달 속성 */
       modals: {
-        txt_modal1: false,
+        txt_modal2: false,
       },
       modalTxt:this.modalTxt,
 
@@ -487,12 +683,24 @@ export default {
         headers : {  'x-custom-header' : 'custom-header'  },
         withCredentials: false,
       },
+      dataSource3: {
+        api: {
+          readData   : { url: process.env.VUE_APP_API + '/PJTE9120/select_9120_03', method: 'GET' },
+        },
+        initialRequest: false,
+        contentType : 'application/json;',
+        headers : {  'x-custom-header' : 'custom-header'  },
+        withCredentials: false,
+      },
       columnOptions: {
         resizable: true
       },
       rowHeaders:['rowNum'],
-      header:{
+      header: {
         height: 25,
+      },
+      header3: {
+        height: 30,
       },
       columns1: [ //게시내역
         {
@@ -511,7 +719,7 @@ export default {
         },
         {
           header: '게시일시',
-          width: 120,
+          width: 150,
           align: 'center',
           name: 'post_dt',
           editor: 'text',
@@ -526,21 +734,15 @@ export default {
         },
         {
           header: '조회수',
-          width: 120,
+          width: 50,
           align: 'center',
           name: 'view_cnt',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000040N
-            }
-          },
+          editor: 'text',
           //hidden: true,
         },
         {
           header: '댓글',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'cmnt_btn',
           renderer: CustomRenderer,
@@ -620,16 +822,16 @@ export default {
         {
           header: '좋아요',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'good_nm',
           editor: 'text',
           //hidden: true,
         },
         {
           header: '등록자',
-          width: 100,
-          align: 'left',
-          name: 'emp_nm',
+          width: 80,
+          align: 'center',
+          name: 'empnm',
           editor: 'text',
           //hidden: true,
         },
@@ -643,238 +845,41 @@ export default {
           //hidden: true,
         },
       ],
-      columns3: [ //답글정보
+      columns3: [ //댓글내역
         {
-          header: '수행처(발주처)',
-          width: 250,
+          header: '댓글',
+          width: 300,
           align: 'left',
-          name: 'exe_cpy_nm',
+          name: 'cmnt_titl',
           editor: 'text',
         },
         {
-          header: '시작년월',
-          width: 100,
+          header: '등록일시',
+          width: 150,
           align: 'center',
-          name: 'sta_dt',
+          name: 'db_chg_ts',
           editor: {
             type: 'datePicker',
             options: {
               format: 'yyyy-MM',
               type: 'month',
             }
-          }
+          },
         },
         {
-          header: '종료년월',
-          width: 100,
+          header: '등록자',
+          width: 80,
           align: 'center',
-          name: 'end_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
+          name: 'empnm',
+          editor: 'text'
         },
         {
-          header: '프로젝트명',
-          width: 480,
-          align: 'left',
-          name: 'proj_nm',
-          editor: 'text',
-        },
-        {
-          header: '수행업무',
-          width: 200,
-          align: 'left',
-          name: 'rssb_bns',
-          editor: 'text',
-        },
-        {
-          header: '역할',
-          width: 120,
+          header: '삭제',
+          width: 50,
           align: 'center',
-          name: 'duty_txt',
+          name: 'del_btn',
+          renderer: CustomRenderer,
           editor: 'text',
-        },
-        {
-          header: '사용기종/OS',
-          width: 120,
-          align: 'center',
-          name: 'use_os',
-          editor: 'text',
-        },
-        {
-          header: '관련기술',
-          minWidth: 120,
-          align: 'left',
-          name: 'rlt_skill',
-          editor: 'text',
-        },
-        {
-          header: '순번',
-          minWidth: 120,
-          align: 'center',
-          name: 'sqno',
-          editor: 'text',
-          hidden: true,
-        },
-      ],
-      columns4: [ //댓글내역
-        {
-          header: '수행처(발주처)',
-          width: 250,
-          align: 'left',
-          name: 'exe_cpy_nm',
-          editor: 'text',
-        },
-        {
-          header: '시작년월',
-          width: 100,
-          align: 'center',
-          name: 'sta_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '종료년월',
-          width: 100,
-          align: 'center',
-          name: 'end_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '프로젝트명',
-          width: 480,
-          align: 'left',
-          name: 'proj_nm',
-          editor: 'text',
-        },
-        {
-          header: '수행업무',
-          width: 200,
-          align: 'left',
-          name: 'rssb_bns',
-          editor: 'text',
-        },
-        {
-          header: '역할',
-          width: 120,
-          align: 'center',
-          name: 'duty_txt',
-          editor: 'text',
-        },
-        {
-          header: '사용기종/OS',
-          width: 120,
-          align: 'center',
-          name: 'use_os',
-          editor: 'text',
-        },
-        {
-          header: '관련기술',
-          minWidth: 120,
-          align: 'left',
-          name: 'rlt_skill',
-          editor: 'text',
-        },
-        {
-          header: '순번',
-          minWidth: 120,
-          align: 'center',
-          name: 'sqno',
-          editor: 'text',
-          hidden: true,
-        },
-      ],
-      columns5: [ //댓글정보
-        {
-          header: '수행처(발주처)',
-          width: 250,
-          align: 'left',
-          name: 'exe_cpy_nm',
-          editor: 'text',
-        },
-        {
-          header: '시작년월',
-          width: 100,
-          align: 'center',
-          name: 'sta_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '종료년월',
-          width: 100,
-          align: 'center',
-          name: 'end_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '프로젝트명',
-          width: 480,
-          align: 'left',
-          name: 'proj_nm',
-          editor: 'text',
-        },
-        {
-          header: '수행업무',
-          width: 200,
-          align: 'left',
-          name: 'rssb_bns',
-          editor: 'text',
-        },
-        {
-          header: '역할',
-          width: 120,
-          align: 'center',
-          name: 'duty_txt',
-          editor: 'text',
-        },
-        {
-          header: '사용기종/OS',
-          width: 120,
-          align: 'center',
-          name: 'use_os',
-          editor: 'text',
-        },
-        {
-          header: '관련기술',
-          minWidth: 120,
-          align: 'left',
-          name: 'rlt_skill',
-          editor: 'text',
-        },
-        {
-          header: '순번',
-          minWidth: 120,
-          align: 'center',
-          name: 'sqno',
-          editor: 'text',
-          hidden: true,
         },
       ],
     }
