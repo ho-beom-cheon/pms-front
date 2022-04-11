@@ -19,7 +19,6 @@ build-phase:
     - ls
     - npm --version
     - npm show node-sass version
-    - npm install
   script:
     - echo "run build"
     - npm run prod
