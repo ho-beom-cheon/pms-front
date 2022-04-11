@@ -1442,6 +1442,7 @@ export default {
 
 </script>
 <style>
+/*PJTE9005에서만 사용 CSS*/
 .disableColor {
   background: #FFFFFF!important;
 }
@@ -1458,23 +1459,5 @@ export default {
   background: url(../../assets/img/PE-icon/ic_search.svg) center/20px no-repeat;
   background-color: #B8B8B8;
   border: 0;
-}
-input[type="month"]::-webkit-calendar-picker-indicator{
-  opacity:0;
-  z-index: 1;
-  cursor: pointer;
-}
-.input-monthWrap {
-  position: relative;
-  display: inline-block;
-}
-.input-monthWrap::after {
-  content: '';
-  position: absolute;
-  right: 6px;
-  top: 4px;
-  width: 16px;
-  height: 16px;
-  background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
 }
 </style>

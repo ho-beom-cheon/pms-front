@@ -19,7 +19,7 @@
               ref="combo1"
           ></combo>
           <li class="filter-item">
-            <div class="item-con">등록기준년월
+            <div class="input-dateWrap">등록기준년월
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
