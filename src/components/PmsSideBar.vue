@@ -53,7 +53,8 @@
               <li id="PJTE5000"><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
               <li id="PJTE6000"><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
               <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-              <li id="PJTE9000"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
+              <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[10].name }}</a></li>
+              <li id="PJTE9000"><a href="/PJTE9000">{{ menu_list[11].name }}</a></li>
             </ul>
 
           </div>
@@ -142,6 +143,11 @@ export default {
           id: 'PJTE7000',
           path: '/PJTE7000',
           name: '산출물정합성체크'
+        },
+        {
+          id: 'PJTE9200',
+          path: '/PJTE9200',
+          name: '회의실예약'
         },
         {
           id: 'PJTE9000',
