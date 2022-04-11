@@ -273,24 +273,28 @@ export default {
                           alert("신규저장에 실패했습니다.")
                         })
                       } else {  // 순번이 0이 아닌경우 update
-                        axiosService.put("/PJTE9200/update", {
-                          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-                          mtng_room_id: this.detail.mtng_room_id_selected,      // 회의실번호
-                          sqno: this.detail.sqno,                               // 순번
-                          rsr_no: this.detail.rsr_no,                           // 예약자번호
-                          rsr_dt: this.detail.rsr_dt,                           // 예약일자
-                          rsrv_strt: this.detail.rsrv_strt_selected,            // 예약시작시간
-                          rsrv_endt: this.detail.rsrv_endt_selected,            // 예약종료시간
-                          mtng_ttl: this.detail.mtng_ttl,                       // 회의제목
-                          atfl_mng_id: this.detail.atfl_mng_id,                 // 첨부파일ID
-                          login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                        }).then(res => {
-                          console.log(res);
-                          this.$refs.grid.invoke("reloadData");
-                          alert("저장을 완료했습니다.")
-                        }).catch(e => {
-                          alert("저장에 실패했습니다.")
-                        })
+                        if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.rsr_no) {
+                          axiosService.put("/PJTE9200/update", {
+                            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
+                            mtng_room_id: this.detail.mtng_room_id_selected,      // 회의실번호
+                            sqno: this.detail.sqno,                               // 순번
+                            rsr_no: this.detail.rsr_no,                           // 예약자번호
+                            rsr_dt: this.detail.rsr_dt,                           // 예약일자
+                            rsrv_strt: this.detail.rsrv_strt_selected,            // 예약시작시간
+                            rsrv_endt: this.detail.rsrv_endt_selected,            // 예약종료시간
+                            mtng_ttl: this.detail.mtng_ttl,                       // 회의제목
+                            atfl_mng_id: this.detail.atfl_mng_id,                 // 첨부파일ID
+                            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+                          }).then(res => {
+                            console.log(res);
+                            this.$refs.grid.invoke("reloadData");
+                            alert("저장을 완료했습니다.")
+                          }).catch(e => {
+                            alert("저장에 실패했습니다.")
+                          })
+                        } else {
+                          alert("작성자 본인만 수정가능합니다.")
+                        }
                       }
                     } else {
                       alert('등록하려는 회의실이 이미 예약되어있습니다. 확인 후 등록해주세요.')
