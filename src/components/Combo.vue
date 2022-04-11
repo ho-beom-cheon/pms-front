@@ -1311,7 +1311,7 @@ export default {
               this.CD1000000001.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 2) {
               this.CD1000000002T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
-              this.CD1000000002N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000002N.push({"text": data[z].DTLS_TYNM, "value": parseInt(data[z].DTLS_TYCD)}); //NULL 포함 코드정보
               this.CD1000000002.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 3) {
               this.CD1000000003T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
@@ -1515,9 +1515,8 @@ export default {
           if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
           if(this.CD1000000044.length !== 0)    this.bubun_cd_selected          = this.CD1000000044[0].value
           if(this.CD1000000044N.length !== 0)   this.bubun_cd_selected_iss      = this.CD1000000044N[0].value
-          if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045N[0].value
-          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045T[0].value
-          if(this.CD1000000046N.length !== 0)   this.good_nm_selected           = this.CD1000000046N[0].value
+          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
+          if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045N[0].value
           if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047T[0].value
           if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
           if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
