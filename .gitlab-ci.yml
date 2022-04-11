@@ -1,3 +1,6 @@
+prepare_build:
+  image: node: 16.14.0
+
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 cache:
@@ -8,9 +11,6 @@ cache:
 stages:
   - build
 
-prepare_build:
-  image: node: 16.14.0
-    
 build-phase:
   stage: build
   tags:
