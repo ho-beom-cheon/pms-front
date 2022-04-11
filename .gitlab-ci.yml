@@ -19,6 +19,7 @@ build-phase:
     - ls
     - npm --version
     - npm show node-sass version
+    - npm install node-sass/^6.0.1
     - npm install
   script:
     - echo "run build"
