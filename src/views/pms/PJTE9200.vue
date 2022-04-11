@@ -293,7 +293,7 @@ export default {
                             alert("저장에 실패했습니다.")
                           })
                         } else {
-                          alert("작성자 본인만 수정가능합니다.")
+                          alert("작성자 본인만 저장가능합니다.")
                         }
                       }
                     } else {
@@ -329,6 +329,9 @@ export default {
         return false;
       } else if (this.detail.mtng_ttl == "" || this.detail.mtng_ttl == null) {
         alert('회의제목은 필수 입력사항입니다.');
+        return false;
+      } else if (parseInt(this.detail.rsrv_endt_selected) < parseInt(this.detail.rsrv_strt_selected)) {
+        alert('회의시작시간은 회의종료시간보다 늦을 수 없습니다.');
         return false;
       }else {
         return true;  // 필수 값 모두 입력 시 true
