@@ -13,7 +13,7 @@
             <combo
                 :comboArray="this.comboList"
                 @bubun_cd_change="bubun_cd_change"
-                @bsn_cls_cd_change="bsn_cls_cd_change"
+                @bsn_cls_cd_change_iss="bsn_cls_cd_change_iss"
             >
             </combo>
           </ul>
@@ -416,8 +416,8 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C44-1", "C45-1"],
-      comboList2: ["C44-2", "C45-2"],
+      comboList: ["C44-1", "C45-2"],
+      comboList2: ["C44-2", "C45-1"],
 
       info: {
         /* 필터 변수 */

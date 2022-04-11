@@ -742,7 +742,7 @@
             @change = "bsn_cls_cd_change_iss"
         >
           <option
-              v-for  = "(item, idx) in CD1000000045N"
+              v-for  = "(item, idx) in CD1000000045T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
