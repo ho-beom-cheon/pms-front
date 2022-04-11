@@ -248,10 +248,10 @@ export default {
       this.info.bsn_cls_cd_selected = params
     },
     bubun_cd_change_iss(params) {
-      this.info.bubun_cd_selected = params
+      this.detail.bubun_cd_selected_iss = params
     },
     bsn_cls_cd_change_iss(params) {
-      this.info.bsn_cls_cd_selected = params
+      this.detail.bsn_cls_cd_selected_iss = params
     },
 
     init() {
@@ -263,6 +263,7 @@ export default {
     fnSave() {
       //백업ID가 현재 일 때만 저장
       if (sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
+        console.log("저장");
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
@@ -377,7 +378,7 @@ export default {
       this.detail.file_upld_yn = currentRowData.file_upld_yn;         // 파일업로드제목
       this.detail.gesipan_titl = currentRowData.gesipan_titl;         // 게시판제목
     },
-    /* 저장 */
+    /* 조회 */
     fnSearch() {
       // 조회 서비스
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -429,21 +430,21 @@ export default {
         // 조회 변수
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
         bkup_id_selected      : '0000000000',     // 백업ID
-        bubun_cd              : '',               // 게시부문코드
-        bsn_cls_cd            : '',               // 게시구분코드
+        bubun_cd_selected     : '10000000',               // 게시부문코드
+        bsn_cls_cd_selected   : 'TTT',               // 게시구분코드
         gesipan_titl          : '',               // 게시판제목
       },
 
       detail: {
         /* 상세내용 변수 */
-        // 공통 sessionStorage 데이터
+        // 공통 sessionStorage  데이터
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
         login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),       // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
 
-        bubun_cd              : '',               // 게시부문코드
-        bsn_cls_cd            : '',               // 게시구분코드
+        bubun_cd_selected_iss : 'NNN',            // 게시부문코드
+        bsn_cls_cd_selected_iss : 'NNN',          // 게시구분코드
         gesipan_titl          : '',               // 게시판제목
         notice_sta_dt         : '',               // 익명여부
         annmt_yn              : '',               // 댓글여부
@@ -497,52 +498,56 @@ export default {
           width: 250,
           align: 'center',
           name: 'bubun_cd',
-          editor: 'text',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: this.$store.state.pms.CD1000000043N
+            }
+          }
         },
         {
           header: '게시구분',
-          width: 200,
+          width: 300,
           align: 'center',
           name: 'bsn_cls_cd',
-          editor: 'text',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: this.$store.state.pms.CD1000000044N
+            }
+          }
         },
         {
           header: '게시제목',
           width: 575,
           align: 'center',
           name: 'gesipan_titl',
-          formatter: 'listItemText',
-          editor: 'text',
         },
         {
           header: '익명',
           width: 100,
           align: 'center',
           name: 'notice_sta_dt',
-          formatter: 'listItemText',
-          editor: 'text',
         },
         {
           header: '댓글',
           width: 100,
           align: 'left',
           name: 'annmt_yn',
-          editor: 'text',
         },
         {
           header: '답글',
           width: 100,
           align: 'left',
           name: 'comment_yn',
-          editor: 'text',
         },
         {
           header: '좋아요',
           width: 100,
           align: 'left',
           name: 'notice_titl',
-          editor: 'text',
-          hidden: true
         },
         {
           header: '백업ID',
@@ -557,7 +562,6 @@ export default {
           width: 100,
           align: 'left',
           name: 'prjt_id',
-          editor: 'text',
           hidden: true
         },
         {
@@ -565,7 +569,6 @@ export default {
           width: 100,
           align: 'left',
           name: 'gesipan_id',
-          editor: 'text',
           hidden: true
         },
         {
@@ -573,7 +576,6 @@ export default {
           width: 100,
           align: 'left',
           name: 'gesipan_dsc',
-          editor: 'text',
           hidden: true
         },
         {
@@ -581,7 +583,6 @@ export default {
           width: 100,
           align: 'left',
           name: 'afrm_yn',
-          editor: 'text',
           hidden: true
         },
         {
@@ -589,7 +590,6 @@ export default {
           width: 100,
           align: 'left',
           name: 'nmb_inq_yn',
-          editor: 'text',
           hidden: true
         },
         {
@@ -597,7 +597,6 @@ export default {
           width: 100,
           align: 'left',
           name: 'pgn_yn',
-          editor: 'text',
           hidden: true
         },
         {
@@ -605,10 +604,9 @@ export default {
           width: 100,
           align: 'left',
           name: 'file_upld_yn',
-          editor: 'text',
           hidden: true
         },
-      ],
+      ]
     }
   },
 };
