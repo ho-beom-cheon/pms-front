@@ -15,16 +15,13 @@ build-phase:
     - pms
   before_script:
     - npm cache clean --force
-    - rm -rf ./node_modules
+    - rm -rf ./node_modules ./yarn.lock
+    - yarn install
     - id
     - pwd
     - ls
-    - npm --version
-    - npm install
   script:
     - echo "run build"
     - npm run prod
-    
-    
   after_script:
     - pwd
