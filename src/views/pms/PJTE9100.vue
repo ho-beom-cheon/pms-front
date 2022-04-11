@@ -358,16 +358,16 @@ export default {
       // 그리드 row 클릭 시 상세내용에 Bind
       if (currentRowData != null) {
         // console.log(currentRowData)
-        this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+        this.cellDataBind(currentRowData); // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
       }
 
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
-      this.detail.bubun_cd_selected = currentRowData.bubun_cd;        // 게시부문
-      this.$refs.combo2.$data.bubun_cd_selected = currentRowData.bubun_cd;
-      this.detail.bsn_cls_cd_selected = currentRowData.bsn_cls_cd;    // 게시구분
-      this.$refs.combo2.$data.bsn_cls_cd_selected = currentRowData.bsn_cls_cd;
+      this.detail.bubun_cd_selected_iss = currentRowData.bubun_cd;        // 게시부문
+      this.$refs.combo2.$data.bubun_cd_selected_iss = currentRowData.bubun_cd;
+      this.detail.bsn_cls_cd_selected_iss = currentRowData.bsn_cls_cd;    // 게시구분
+      this.$refs.combo2.$data.bsn_cls_cd_selected_iss = currentRowData.bsn_cls_cd;
       this.detail.notice_sta_dt = currentRowData.notice_sta_dt,       // 익명여부
       this.detail.afrm_yn = currentRowData.afrm_yn;                   // 소속확인여부
       this.detail.annmt_yn = currentRowData.annmt_yn;                 // 댓글여부
@@ -386,10 +386,10 @@ export default {
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.bubun_cd == "" || this.detail.bubun_cd == "null") {                   // 게시부문
+      if (this.detail.bubun_cd_selected_iss == "" || this.detail.bubun_cd_selected_iss == "null") {                   // 게시부문
         alert('게시부문이 없습니다.');
         return false;
-      } else if (this.detail.bsn_cls_cd == "" || this.detail.bsn_cls_cd == "null") {        // 게시구분
+      } else if (this.detail.bsn_cls_cd_selected_iss == "" || this.detail.bsn_cls_cd_selected_iss == "null") {        // 게시구분
         alert('게시구분이 없습니다.');
         return false;
       } else if (this.detail.gesipan_titl == "" || this.detail.gesipan_titl == "null") {     // 게시판제목
