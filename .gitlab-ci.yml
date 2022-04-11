@@ -17,6 +17,8 @@ build-phase:
     - id
     - pwd
     - ls
+    - npm --version
+    - npm show node-sass version
     - npm install
   script:
     - echo "run build"
