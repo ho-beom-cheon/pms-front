@@ -314,14 +314,14 @@ export default {
                     gesipan_titl: this.detail.gesipan_titl,                     // 게시판제목
                     gesipan_dsc : this.detail.gesipan_dsc,                      // 게시판설명
 
-                    annym_yn    : this.fnChkVal(this.detail.annym_yn),       // 익명여부
-                    cmnt_yn     : this.fnChkVal(this.detail.cmnt_yn),                       // 댓글여부
-                    rply_yn     : this.fnChkVal(this.detail.rply_yn),                       // 답글여부
-                    good_yn     : this.fnChkVal(this.detail.good_yn),                       // 좋아요여부
-                    afrm_yn     : this.fnChkVal(this.detail.afrm_yn),                       // 소속확인여부
-                    nmb_inq_yn  : this.fnChkVal(this.detail.nmb_inq_yn),                    // 조회횟수여부
-                    pgn_yn      : this.fnChkVal(this.detail.pgn_yn),                        // 페이징여부
-                    file_upld_yn: this.fnChkVal(this.detail.file_upld_yn),                  // 파일업로드여부
+                    annym_yn    : this.fnChkVal(this.detail.annym_yn),          // 익명여부
+                    cmnt_yn     : this.fnChkVal(this.detail.cmnt_yn),            // 댓글여부
+                    rply_yn     : this.fnChkVal(this.detail.rply_yn),            // 답글여부
+                    good_yn     : this.fnChkVal(this.detail.good_yn),            // 좋아요여부
+                    afrm_yn     : this.fnChkVal(this.detail.afrm_yn),            // 소속확인여부
+                    nmb_inq_yn  : this.fnChkVal(this.detail.nmb_inq_yn),         // 조회횟수여부
+                    pgn_yn      : this.fnChkVal(this.detail.pgn_yn),             // 페이징여부
+                    file_upld_yn: this.fnChkVal(this.detail.file_upld_yn),       // 파일업로드여부
 
                     opr_no      : this.detail.opr_no,                           //조작자번호
                     db_chg_ts   : this.detail.db_chg_ts,                        //DB변경일시
@@ -360,7 +360,7 @@ export default {
       this.detail.bkup_id                             = '';
       this.detail.prjt_id                             = '';
       this.detail.gesipan_id                          = '';
-      this.detail.bubun_cd_selected_iss               = this.$refs.combo2.$data.CD1000000044N[0].value;    // 게시부문코드
+      this.detail.bubun_cd_selected_iss               = this.$refs.combo2.$data.CD1000000044N[0].value;   // 게시부문코드
       this.$refs.combo2.$data.bubun_cd_selected_iss   = this.$refs.combo2.$data.CD1000000044N[0].value;   // 게시부문코드
       this.detail.bsn_cls_cd_selected_iss             = this.$refs.combo2.$data.CD1000000045N[0].value;   // 게시구분코드
       this.$refs.combo2.$data.bsn_cls_cd_selected_iss = this.$refs.combo2.$data.CD1000000045N[0].value;   // 게시구분코드
