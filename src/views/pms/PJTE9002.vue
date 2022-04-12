@@ -331,6 +331,7 @@ export default {
       formData.append("bzcd", this.$route.query.bzcd);
       formData.append("pgm_id", this.$route.query.pgm_id);
       formData.append("sqn_cd", this.$route.query.sqn_cd);
+      formData.append("room_sqno", this.$route.query.room_sqno);
       formData.append("tst_case_id", this.$route.query.tst_case_id);
       formData.append("jsonList", JSON.stringify(this.fileLists));
 
