@@ -20,7 +20,7 @@ build-pms:
     - npm run prod
   after_script:
     - pwd
-    - cd ../
+    - ls
     - sh publish.sh
     - sudo systemctl status nginx
     - sudo netstat -nltp
