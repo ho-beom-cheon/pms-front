@@ -844,13 +844,14 @@ export default {
     // 재직사항 그리드 엑셀업로드
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
-      // console.log(event.target.files[0])
+      console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       let input = event.target;
       let reader = new FileReader();
       reader.onload = () => {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
+        console.log("wb ::"+ wb.SheetNames);
         let gridExcelData;
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === '재직현황' || sheetName === 'Sheet1') {
@@ -865,11 +866,23 @@ export default {
             let rowObj_copy = [];
             if(grid2Data.length == 0) {
               for(let n=0; n<rowObj.length; n++){
+                if(isNaN(rowObj[n].enter_dt) == false) {
+                  rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
+                }
+                if (isNaN(rowObj[n].rsnt_dt) == false) {
+                  rowObj[n].rsnt_dt = this.excelDateToJSDate(rowObj[n].rsnt_dt)
+                }
                 rowObj_copy[n] = rowObj[n];
               }
             } else {
               if (confirm("기존 데이터를 유지하시겠습니까?") == true) {
                 for (let n = 0; n < rowObj.length; n++) {
+                  if(isNaN(rowObj[n].enter_dt) == false) {
+                    rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
+                  }
+                  if (isNaN(rowObj[n].rsnt_dt) == false) {
+                    rowObj[n].rsnt_dt = this.excelDateToJSDate(rowObj[n].rsnt_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
                 for (let i = 0; i < grid2Data.length; i++) {
@@ -877,6 +890,12 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
+                  if(isNaN(rowObj[n].enter_dt) == false) {
+                    rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
+                  }
+                  if (isNaN(rowObj[n].rsnt_dt) == false) {
+                    rowObj[n].rsnt_dt = this.excelDateToJSDate(rowObj[n].rsnt_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
               }
@@ -895,7 +914,7 @@ export default {
     // 경력사항 그리드 엑셀업로드
     gridExcelImport2(event) {
       // 엑셀파일 업로드 로직 추가
-      console.log(event.target.files[0])
+      // console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       let input = event.target;
       let reader = new FileReader();
@@ -921,11 +940,23 @@ export default {
             let rowObj_copy = [];
             if(grid3Data.length == 0) {
               for(let n=0; n<rowObj.length; n++){
+                if(isNaN(rowObj[n].sta_dt) == false) {
+                  rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                }
+                if (isNaN(rowObj[n].end_dt) == false) {
+                  rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                }
                 rowObj_copy[n] = rowObj[n];
               }
             } else {
               if (confirm("기존 데이터를 유지하시겠습니까?") == true) {
                 for (let n = 0; n < rowObj.length; n++) {
+                  if(isNaN(rowObj[n].sta_dt) == false) {
+                    rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                  }
+                  if (isNaN(rowObj[n].end_dt) == false) {
+                    rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
                 for (let i = 0; i < grid3Data.length; i++) {
@@ -933,10 +964,17 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
+                  if(isNaN(rowObj[n].sta_dt) == false) {
+                    rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                  }
+                  if (isNaN(rowObj[n].end_dt) == false) {
+                    rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
               }
             }
+
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
           }
@@ -946,6 +984,18 @@ export default {
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
+    },
+    excelDateToJSDate(excelDate) {
+      /* 엑셀에서 넘어온 숫자형태의 데이터를 날짜형태로 바꿔주는 함수
+      ex) 1. 엑셀 파일에서 2021-02 형태로 값을 입력하면 Feb-22 형태의 날짜 데이터가 자동입력됨
+          2. gridExcelImport2 함수에서
+          XLSX.utils.sheet_to_json(wb.Sheets[sheetName]) 엑셀데이터를 JSON으로 바뀌면서
+          Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
+          3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
+       */
+      var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
+      var converted_date = date.toISOString().split('T')[0].substring(0, 7);
+      return converted_date;
     },
     //직원조회 버튼 클릭 시
     open_pjte9001_btn(btn_id) {
