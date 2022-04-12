@@ -13,7 +13,7 @@
             <combo
                 :comboArray="this.comboList"
                 @bubun_cd_change="bubun_cd_change"
-                @bsn_cls_cd_change_iss="bsn_cls_cd_change_iss"
+                @bsn_cls_cd_change="bsn_cls_cd_change"
             >
             </combo>
           </ul>
@@ -62,7 +62,7 @@
               <combo
                   :comboArray="this.comboList2"
                   @bubun_cd_change_iss="bubun_cd_change_iss"
-                  @bsn_cls_cd_change="bsn_cls_cd_change"
+                  @bsn_cls_cd_change_iss="bsn_cls_cd_change_iss"
                   ref="combo2"
               >
               </combo>
@@ -245,15 +245,15 @@ export default {
     bubun_cd_change(params) {
       this.info.bubun_cd_selected = params
     },
-    bsn_cls_cd_change_iss(params) {
-      this.info.bsn_cls_cd_selected_iss = params
+    bsn_cls_cd_change(params) {
+      this.info.bsn_cls_cd_selected = params
     },
     //comboList2
     bubun_cd_change_iss(params) {
       this.detail.bubun_cd_selected_iss = params
     },
-    bsn_cls_cd_change(params) {
-      this.detail.bsn_cls_cd_selected = params
+    bsn_cls_cd_change_iss(params) {
+      this.detail.bsn_cls_cd_selected_iss = params
     },
 
     init() {
@@ -304,7 +304,7 @@ export default {
         this.detail.file_upld_yn = 'N';
       }
       //백업ID가 현재 일 때만 저장
-      if (sessionStorage.getItem("LOGIN_AUT_CD") === '100') {
+      if (sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
         //필수항목 확인
         // if (this.checkPrimary() == true) {
           //확인창
@@ -321,7 +321,7 @@ export default {
                     bubun_cd: this.detail.bubun_cd_selected_iss,            // 게시부문
                     gesipan_titl: this.detail.gesipan_titl,                 // 게시판제목
                     gesipan_dsc: this.detail.gesipan_dsc,                   // 게시판설명
-                    bsn_cls_cd: this.detail.bsn_cls_cd_selected,            // 게시구분
+                    bsn_cls_cd: this.detail.bsn_cls_cd_selected_iss,            // 게시구분
 
                     annym_yn: this.detail.annym_yn,                         // 익명여부
                     afrm_yn: this.detail.afrm_yn,                           // 소속확인여부
@@ -388,7 +388,7 @@ export default {
               axiosService.put("/PJTE9100/update",
                   {
                     bubun_cd: this.detail.bubun_cd_selected_iss,            // 게시부문
-                    bsn_cls_cd: this.detail.bsn_cls_cd_selected,            // 게시구분
+                    bsn_cls_cd: this.detail.bsn_cls_cd_selected_iss,            // 게시구분
                     gesipan_titl: this.detail.gesipan_titl,                 // 게시판제목
                     gesipan_dsc: this.detail.gesipan_dsc,                   // 게시판설명
                     annym_yn: this.detail.annym_yn,                         // 익명여부
@@ -467,23 +467,23 @@ export default {
     },
 
     fnClear() {  // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
-      this.detail.bkup_id                 = '';
-      this.detail.prjt_id                 = '';
-      this.detail.gesipan_id              = '';
-      this.detail.bubun_cd_selected_iss   = this.$refs.combo2.$data.CD1000000044N[0].value;               // 게시부문코드
+      this.detail.bkup_id                             = '';
+      this.detail.prjt_id                             = '';
+      this.detail.gesipan_id                          = '';
+      this.detail.bubun_cd_selected_iss               = this.$refs.combo2.$data.CD1000000044N[0].value;    // 게시부문코드
       this.$refs.combo2.$data.bubun_cd_selected_iss   = this.$refs.combo2.$data.CD1000000044N[0].value;   // 게시부문코드
-      this.detail.bsn_cls_cd_selected     = this.$refs.combo2.$data.CD1000000045T[0].value;               // 게시구분코드
-      this.$refs.combo2.$data.bsn_cls_cd_selected     = this.$refs.combo2.$data.CD1000000045N[0].value;   // 게시구분코드
-      this.detail.gesipan_titl            = '';                                                           // 게시판제목
-      this.detail.gesipan_dsc             = '';                                                           // 게시판설명
-      this.detail.annym_yn                = false;                                                        // 익명여부
-      this.detail.afrm_yn                 = false;                                                        // 소속확인여부
-      this.detail.cmnt_yn                 = false;                                                        // 댓글여부
-      this.detail.rply_yn                 = false;                                                        // 답글여부
-      this.detail.good_yn                 = false;                                                        // 좋아요여부
-      this.detail.nmb_inq_yn              = false;                                                        // 조회횟수여부
-      this.detail.pgn_yn                  = false;                                                        // 페이징여부
-      this.detail.file_upld_yn            = false;                                                        // 파일업로드여부
+      this.detail.bsn_cls_cd_selected_iss             = this.$refs.combo2.$data.CD1000000045N[0].value;   // 게시구분코드
+      this.$refs.combo2.$data.bsn_cls_cd_selected_iss = this.$refs.combo2.$data.CD1000000045N[0].value;   // 게시구분코드
+      this.detail.gesipan_titl                        = '';                                               // 게시판제목
+      this.detail.gesipan_dsc                         = '';                                               // 게시판설명
+      this.detail.annym_yn                            = false;                                            // 익명여부
+      this.detail.afrm_yn                             = false;                                            // 소속확인여부
+      this.detail.cmnt_yn                             = false;                                            // 댓글여부
+      this.detail.rply_yn                             = false;                                            // 답글여부
+      this.detail.good_yn                             = false;                                            // 좋아요여부
+      this.detail.nmb_inq_yn                          = false;                                            // 조회횟수여부
+      this.detail.pgn_yn                              = false;                                            // 페이징여부
+      this.detail.file_upld_yn                        = false;                                            // 파일업로드여부
     },
     onClick(ev) {
       this.curRow = ev.rowKey;
@@ -498,62 +498,62 @@ export default {
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
-      this.detail.bubun_cd_selected_iss             = currentRowData.bubun_cd;        // 게시부문
-      this.$refs.combo2.$data.bubun_cd_selected_iss = currentRowData.bubun_cd;
-      this.detail.bsn_cls_cd_selected               = currentRowData.bsn_cls_cd;      // 게시구분
-      this.$refs.combo2.$data.bsn_cls_cd_selected   = currentRowData.bsn_cls_cd;
+      this.detail.bubun_cd_selected_iss                 = currentRowData.bubun_cd;        // 게시부문
+      this.$refs.combo2.$data.bubun_cd_selected_iss     = currentRowData.bubun_cd;
+      this.detail.bsn_cls_cd_selected_iss               = currentRowData.bsn_cls_cd;      // 게시구분
+      this.$refs.combo2.$data.bsn_cls_cd_selected_iss   = currentRowData.bsn_cls_cd;
 
-      this.detail.annym_yn                          = currentRowData.annym_yn;        // 익명여부
+      this.detail.annym_yn                              = currentRowData.annym_yn;        // 익명여부
       if(this.detail.annym_yn == 'Y'){
         this.detail.annym_yn = true;
       } else{
         this.detail.annym_yn = false;
       }
-      this.detail.afrm_yn                           = currentRowData.afrm_yn;         // 소속확인여부
+      this.detail.afrm_yn                               = currentRowData.afrm_yn;         // 소속확인여부
       if(this.detail.afrm_yn == 'Y'){
         this.detail.afrm_yn = true;
       } else{
         this.detail.afrm_yn = false;
       }
-      this.detail.cmnt_yn                           = currentRowData.cmnt_yn;         // 댓글여부
+      this.detail.cmnt_yn                               = currentRowData.cmnt_yn;         // 댓글여부
       if(this.detail.cmnt_yn == 'Y'){
         this.detail.cmnt_yn = true;
       } else{
         this.detail.cmnt_yn = false;
       }
-      this.detail.rply_yn                           = currentRowData.rply_yn;         // 답글여부
+      this.detail.rply_yn                               = currentRowData.rply_yn;         // 답글여부
       if(this.detail.rply_yn == 'Y'){
         this.detail.rply_yn = true;
       } else{
         this.detail.rply_yn = false;
       }
-      this.detail.good_yn                           = currentRowData.good_yn;         // 좋아요여부
+      this.detail.good_yn                               = currentRowData.good_yn;         // 좋아요여부
       if(this.detail.good_yn == 'Y'){
         this.detail.good_yn = true;
       } else{
         this.detail.good_yn = false;
       }
-      this.detail.nmb_inq_yn                        = currentRowData.nmb_inq_yn;      // 조회횟수여부
+      this.detail.nmb_inq_yn                            = currentRowData.nmb_inq_yn;      // 조회횟수여부
       if(this.detail.nmb_inq_yn == 'Y'){
         this.detail.nmb_inq_yn = true;
       } else{
         this.detail.nmb_inq_yn = false;
       }
-      this.detail.pgn_yn                            = currentRowData.pgn_yn;          // 페이징여부
+      this.detail.pgn_yn                                = currentRowData.pgn_yn;          // 페이징여부
       if(this.detail.pgn_yn == 'Y'){
         this.detail.pgn_yn = true;
       } else{
         this.detail.pgn_yn = false;
       }
-      this.detail.file_upld_yn                      = currentRowData.file_upld_yn;    // 파일업로드여부
+      this.detail.file_upld_yn                          = currentRowData.file_upld_yn;    // 파일업로드여부
       if(this.detail.file_upld_yn == 'Y'){
         this.detail.file_upld_yn = true;
       } else{
         this.detail.file_upld_yn = false;
       }
-      this.detail.gesipan_titl                      = currentRowData.gesipan_titl;    // 게시판제목
-      this.detail.gesipan_dsc                       = currentRowData.gesipan_dsc;     // 게시판설명
-      this.detail.gesipan_id                        = currentRowData.gesipan_id;       // 게시판ID
+      this.detail.gesipan_titl                          = currentRowData.gesipan_titl;    // 게시판제목
+      this.detail.gesipan_dsc                           = currentRowData.gesipan_dsc;     // 게시판설명
+      this.detail.gesipan_id                            = currentRowData.gesipan_id;       // 게시판ID
     },
     /* 조회 */
     fnSearch() {
@@ -566,7 +566,7 @@ export default {
       if (this.detail.bubun_cd_selected_iss == "" || this.detail.bubun_cd_selected_iss == "null") {                   // 게시부문
         alert('게시부문이 없습니다.');
         return false;
-      } else if (this.detail.bsn_cls_cd_selected == "" || this.detail.bsn_cls_cd_selected == "null") {        // 게시구분
+      } else if (this.detail.bsn_cls_cd_selected_iss == "" || this.detail.bsn_cls_cd_selected_iss == "null") {        // 게시구분
         alert('게시구분이 없습니다.');
         return false;
       } else if (this.detail.gesipan_titl == "" || this.detail.gesipan_titl == "null") {     // 게시판제목
@@ -593,8 +593,8 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C44-1", "C45-2"],
-      comboList2: ["C44-2", "C45-1"],
+      comboList: ["C44-1", "C45-1"],
+      comboList2: ["C44-2", "C45-2"],
 
       info: {
         /* 필터 변수 */
@@ -609,7 +609,7 @@ export default {
         prjt_id					          : '',                                           // 프로젝트ID
         bkup_id_selected          : '0000000000',                                 // 백업ID
         bubun_cd_selected         : '10000000',                                   // 게시부문코드
-        bsn_cls_cd_selected_iss   : 'TTT',                                        // 게시구분코드
+        bsn_cls_cd_selected       : 'TTT',                                        // 게시구분코드
         gesipan_titl              : '',                                           // 게시판제목
       },
 
@@ -621,23 +621,23 @@ export default {
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
 
-        bubun_cd_selected_iss	: 'NNN',            // 게시부문코드
-        bsn_cls_cd_selected		: 'NNN',            // 게시구분코드
-        gesipan_titl			    : '',               // 게시판제목
-        annym_yn				      : '',               // 익명여부
-        cmnt_yn					      : '',               // 댓글여부
-        rply_yn					      : '',               // 답글여부
-        good_yn					      : '',               // 좋아요
-        bkup_id					      : '',               // 백업ID
-        prjt_id					      : '',               // 프로젝트ID
-        gesipan_id				    : '',               // 게시판ID
-        gesipan_dsc				    : '',               // 게시판설명
-        afrm_yn					      : '',               // 소속확인여부
-        nmb_inq_yn				    : '',               // 조회횟수여부
-        pgn_yn					      : '',               // 페이징여부
-        file_upld_yn			    : '',               // 파일업로드여부
-        opr_no					      : '',				        // 조작자번호
-        db_chg_ts				      : '',				        // DB변경일시
+        bubun_cd_selected_iss	    : 'NNN',            // 게시부문코드
+        bsn_cls_cd_selected_iss		: 'NNN',            // 게시구분코드
+        gesipan_titl			        : '',               // 게시판제목
+        annym_yn				          : '',               // 익명여부
+        cmnt_yn					          : '',               // 댓글여부
+        rply_yn					          : '',               // 답글여부
+        good_yn					          : '',               // 좋아요
+        bkup_id					          : '',               // 백업ID
+        prjt_id					          : '',               // 프로젝트ID
+        gesipan_id				        : '',               // 게시판ID
+        gesipan_dsc				        : '',               // 게시판설명
+        afrm_yn					          : '',               // 소속확인여부
+        nmb_inq_yn				        : '',               // 조회횟수여부
+        pgn_yn					          : '',               // 페이징여부
+        file_upld_yn			        : '',               // 파일업로드여부
+        opr_no					          : '',				        // 조작자번호
+        db_chg_ts				          : '',				        // DB변경일시
 
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
