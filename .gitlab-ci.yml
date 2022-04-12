@@ -4,19 +4,21 @@ variables:
 stages:
   - build
   
-build-phase:
+build-pms:
   image: node:14.18.1
   stage: build
   tags:
     - pms
   before_script:
+    - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
     - npm install --save --legacy-peer-deps
-    - id
-    - pwd
-    - ls
   script:
     - echo "run build"
     - npm run prod
   after_script:
-    - pwd
+    - echo "publish pms"
+    - cd ../
+    - sh publish.sh
+    - sudo systemctl status nginx
+    - sudo netstat -nltp

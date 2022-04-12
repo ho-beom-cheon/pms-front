@@ -464,9 +464,9 @@ export default {
       let file_rgs_dscd = '803'
       let atfl_mng_id = this.detail.atfl_mng_id
       let mng_id = this.detail.mtng_room_id_selected
-      let sqno = this.detail.sqno
+      let room_sqno = this.detail.sqno
       let bkup_id = '0000000000', prjt_id = sessionStorage.getItem("LOGIN_PROJ_ID")
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&sqno=${sqno}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&room_sqno=${room_sqno}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
     },
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
