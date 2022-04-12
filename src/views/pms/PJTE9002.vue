@@ -46,11 +46,11 @@
       <table v-if="afterSearch">
         <colgroup>
           <col width="30px">
-          <col width="40px">
-          <col width="*">
-          <col width="250px">
+          <col width="30px">
           <col width="180px">
-          <col width="150px">
+          <col width="220px">
+          <col width="200px">
+          <col width="110px">
         </colgroup>
         <thead>
           <tr style="border-bottom: 1px solid #c5c5c5;border-top: 1px solid #c5c5c5; text-align: center; height: 30px">
