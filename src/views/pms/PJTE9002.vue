@@ -415,6 +415,7 @@ export default {
   color: white;
   cursor: pointer;
 }
+/*첨부파일등록팝업에서만 사용하는 CSS*/
 .pop-body table td {
   padding-left: 0px;
   height: 30px;
