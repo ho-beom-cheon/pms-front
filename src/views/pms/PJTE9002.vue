@@ -153,7 +153,12 @@ export default {
     prjt_nm_change(params) {this.pjt_selected = params},
     // 행 추가
     addFile() {
-      let sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
+      let sqno;
+      if(this.fileLists.length == 0) {
+         sqno = 1
+      } else {
+        sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
+      }
       let file_path = '', file_nm = '', org_file_nm = '', rmrmk=''
       this.fileLists.push({
         sqno,file_path, file_nm, org_file_nm, rmrmk,
@@ -161,10 +166,6 @@ export default {
     },
     // 행 삭제
     deleteFile() {
-      if(this.check_array.length >= this.fileLists.length){
-        alert("행이 1개이상 남아있어야 합니다.");
-        return false;
-      }
       if(this.check_array.length === 0){
         alert("행을 선택해주세요.");
         return false;
