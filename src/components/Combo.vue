@@ -667,7 +667,7 @@
         </select>
       </div>
     </li>
-    <!--   부문코드 -->
+    <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
       <div class="item-con">부문명
         <select
@@ -742,7 +742,7 @@
             @change = "bsn_cls_cd_change_iss"
         >
           <option
-              v-for  = "(item, idx) in CD1000000045T"
+              v-for  = "(item, idx) in CD1000000045N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
