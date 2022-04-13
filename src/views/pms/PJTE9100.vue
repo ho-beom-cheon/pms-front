@@ -498,7 +498,7 @@ export default {
         prjt_nm_selected          : sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
         prjt_id					          : '',                                           // 프로젝트ID
         bkup_id_selected          : '0000000000',                                 // 백업ID
-        bubun_cd_selected         : '10000000',                                   // 게시부문코드
+        bubun_cd_selected         : 'TTT',                                        // 게시부문코드
         bsn_cls_cd_selected       : 'TTT',                                        // 게시구분코드
         gesipan_titl              : '',                                           // 게시판제목
       },
