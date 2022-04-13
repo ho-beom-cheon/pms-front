@@ -667,7 +667,7 @@
         </select>
       </div>
     </li>
-    <!--   부문코드 -->
+    <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
       <div class="item-con">부문명
         <select
@@ -694,7 +694,7 @@
             @change = "bubun_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000044"
+              v-for  = "(item, idx) in CD1000000044T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -742,7 +742,7 @@
             @change = "bsn_cls_cd_change_iss"
         >
           <option
-              v-for  = "(item, idx) in CD1000000045T"
+              v-for  = "(item, idx) in CD1000000045N"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -1514,7 +1514,7 @@ export default {
           if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
           if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
           if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
-          if(this.CD1000000044.length !== 0)    this.bubun_cd_selected          = this.CD1000000044[0].value
+          if(this.CD1000000044T.length !== 0)    this.bubun_cd_selected          = this.CD1000000044T[0].value
           if(this.CD1000000044N.length !== 0)   this.bubun_cd_selected_iss      = this.CD1000000044N[0].value
           if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
           if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045N[0].value
