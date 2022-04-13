@@ -667,7 +667,7 @@
         </select>
       </div>
     </li>
-    <!--   부문코드 -->
+    <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
       <div class="item-con">부문명
         <select
