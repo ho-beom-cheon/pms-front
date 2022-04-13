@@ -65,7 +65,7 @@
         </thead>
         <tbody style=" margin-top: 30px;">
           <tr style="border-bottom: 0.5px solid #d2d2d2;" v-for="(fileList, idx) in fileLists" :key="idx" >
-            <td style="padding-left: 7px; padding-right: 7px; border-right: 0.5px solid #f2f2f2;">
+            <td style="padding-left: 11px; padding-right: 11px; border-right: 0.5px solid #f2f2f2;">
               <input type="checkbox" v-model="check_array" :value="fileList.sqno"/>
             </td>
             <td style="text-align: center; border-right: 0.5px solid #f2f2f2;">{{fileList.sqno}}</td>
