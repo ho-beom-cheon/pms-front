@@ -57,6 +57,7 @@
           </ul>
           <ul class="filter-btn">
             <button class="btn btn-filter-p" @click="prgRtCalc"  :hidden="validated" style="margin-right: 20px">진행률계산</button>
+            <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
             <button class="btn btn-filter-e">
               <label for="file">엑셀업로드</label>
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
@@ -538,6 +539,11 @@ export default {
     },
     open_page() {
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
+    },
+    // 양식다운로드
+    formDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
     },
     // 유효값 검증
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
