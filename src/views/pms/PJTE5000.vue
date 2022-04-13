@@ -620,7 +620,7 @@ export default {
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
         bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
-        wbs_prc_sts_cd_selected  : 'TTT',
+        wbs_prc_sts_cd_selected  : '100',
         wbs_mng_cd_selected      : 'TTT',
 
         acl_sta_dt : null,
