@@ -230,6 +230,9 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSave() {
+      if(this.info.wbs_mng_cd_selected === '100') {
+        this.prgRtCalc();
+      }
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
           axiosService.post("/PJTE5000/insert", {
@@ -428,7 +431,7 @@ export default {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
         let gridExcelData;
-        debugger
+
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
@@ -506,13 +509,15 @@ export default {
       this.$refs.grid.invoke("focus",0, "prg_rt",true)
       let i, x, y, z, wbsCnt, roCnt, iMaxRow;
       let mngid, hgrnMngid;
-      let wgtRt, prtRt, totWgtRt;
+      let wgtRt, prtRt
+      let totWgtRt = 0.0;
+      console.log(typeof totWgtRt)
 
       iMaxRow = this.$refs.grid.invoke("getData").length; // 최대 row 수
 
       for(z=1; z<=5; z++) {
         for(i=0; i<iMaxRow; i++) {
-          totWgtRt = 0;
+          totWgtRt = 0.0;
           mngid = this.$refs.grid.invoke("getValue", i, "mng_id");
           wbsCnt = this.$refs.grid.invoke("getValue", i, "wbs_cnt");
 
@@ -527,9 +532,14 @@ export default {
               }
               if (mngid === hgrnMngid) {
                 totWgtRt = totWgtRt + wgtRt * prtRt
+
               }
             }
             // 진행율결과값 셋팅
+            if(totWgtRt == 0){
+              totWgtRt = totWgtRt.toFixed(1);
+            }
+
             this.$refs.grid.invoke("setValue", i, "prg_rt", totWgtRt.toString());
             this.flag = 'y'
           }
