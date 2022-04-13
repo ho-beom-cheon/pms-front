@@ -46,14 +46,14 @@
       <table v-if="afterSearch">
         <colgroup>
           <col width="30px">
-          <col width="100px">
-          <col width="200px">
-          <col width="300px">
+          <col width="30px">
           <col width="180px">
-          <col width="*">
+          <col width="220px">
+          <col width="200px">
+          <col width="110px">
         </colgroup>
         <thead>
-          <tr>
+          <tr style="border-bottom: 1px solid #c5c5c5;border-top: 1px solid #c5c5c5; text-align: center; height: 30px">
             <th>선택</th>
             <th>순번</th>
 <!--            <th>파일경로</th>-->
@@ -63,19 +63,19 @@
             <th>첨부</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(fileList, idx) in fileLists" :key="idx">
-            <td>
+        <tbody style=" margin-top: 30px;">
+          <tr style="border-bottom: 0.5px solid #d2d2d2;" v-for="(fileList, idx) in fileLists" :key="idx" >
+            <td style="padding-left: 7px; padding-right: 7px; border-right: 0.5px solid #f2f2f2;">
               <input type="checkbox" v-model="check_array" :value="fileList.sqno"/>
             </td>
-            <td>{{fileList.sqno}}</td>
+            <td style="text-align: center; border-right: 0.5px solid #f2f2f2;">{{fileList.sqno}}</td>
 <!--            <td>{{fileList.file_path}}</td>-->
-            <td>{{fileList.file_nm}}</td>
-            <td>{{fileList.org_file_nm}}</td>
-            <td>
+            <td style="border-right: 0.5px solid #f2f2f2; padding-left: 10px">{{fileList.file_nm}}</td>
+            <td style="border-right: 0.5px solid #f2f2f2; padding-left: 10px">{{fileList.org_file_nm}}</td>
+            <td  style="text-align: center; ">
               <input type="text" v-model="fileList.rmrmk" />
             </td>
-            <td>
+            <td  style="text-align: center;">
               <label class="input-file-button" :for="'input-file'+fileList.sqno" v-if="bkup_id === '0000000000'">
                 업로드
               </label>
@@ -414,5 +414,16 @@ export default {
   background-color:#5B5B5B;
   color: white;
   cursor: pointer;
+}
+/*첨부파일등록팝업에서만 사용하는 CSS*/
+.pop-body table td {
+  padding-left: 0px;
+  height: 30px;
+}
+.pop-body table th:nth-of-type(2) {
+  padding-left: 0px;
+}
+.pop-body table th, .pop-body table td {
+  vertical-align: middle;
 }
 </style>
