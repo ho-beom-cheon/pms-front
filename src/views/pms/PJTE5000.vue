@@ -538,6 +538,8 @@ export default {
             // 진행율결과값 셋팅
             if(totWgtRt == 0){
               totWgtRt = totWgtRt.toFixed(1);
+            } else {
+              totWgtRt = totWgtRt.toFixed(2);
             }
 
             this.$refs.grid.invoke("setValue", i, "prg_rt", totWgtRt.toString());
@@ -809,14 +811,14 @@ export default {
         {
           header: '가중치',
           width: 50,
-          align: 'center',
+          align: 'right',
           name: 'wgt_rt',
           editor: 'text',
         },
         {
           header: '진행율',
           width: 50,
-          align: 'center',
+          align: 'right',
           name: 'prg_rt',
           editor: 'text',
           disabled: true,
