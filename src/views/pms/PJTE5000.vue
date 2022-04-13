@@ -17,8 +17,8 @@
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
-                @wbs_prc_sts_cd_change="wbs_prc_sts_cd_change"
                 @wbs_mng_cd_change="wbs_mng_cd_change"
+                @wbs_prc_sts_cd_change="wbs_prc_sts_cd_change"
             ></combo>
 
             <li class="filter-item">
@@ -189,11 +189,10 @@ export default {
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
     bzcd_change(params)           {this.info.bzcd_selected = params},
-    wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
-    wbs_prc_sts_cd_change(params) {
-      this.info.wbs_prc_sts_cd_selected = params
+    wbs_mng_cd_change(params)     {
+      this.info.wbs_mng_cd_selected = params
 
-      if(this.info.wbs_prc_sts_cd_selected === '100'){
+      if(this.info.wbs_mng_cd_selected === '100'){
         this.validated = false;
         this.$refs.grid.invoke("showColumn",'prg_rt')
         this.$refs.grid.invoke("showColumn",'wgt_rt')
@@ -203,6 +202,7 @@ export default {
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
       }
     },
+    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
     // 렌더링 중 적용 (mounted와 동일)
     onGridMounted(grid){
@@ -386,7 +386,7 @@ export default {
       this.$refs.grid.invoke("appendRow",
           {
             bzcd    : this.info.bzcd_selected,
-            mng_cd  : this.info.wbs_prc_sts_cd_selected,
+            mng_cd  : this.info.wbs_mng_cd_selected,
             prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
             bkup_id : "0000000000",
             sort    : this.$refs.grid.invoke("getData").length+1,
@@ -620,8 +620,8 @@ export default {
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
         bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
-        wbs_prc_sts_cd_selected  : '100',
-        wbs_mng_cd_selected      : 'TTT',
+        wbs_mng_cd_selected      : '100',
+        wbs_prc_sts_cd_selected  : 'TTT',
 
         acl_sta_dt : null,
         acl_end_dt : null,
