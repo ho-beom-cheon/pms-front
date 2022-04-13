@@ -17,8 +17,8 @@
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
-                @wbs_prc_sts_cd_change="wbs_prc_sts_cd_change"
                 @wbs_mng_cd_change="wbs_mng_cd_change"
+                @wbs_prc_sts_cd_change="wbs_prc_sts_cd_change"
             ></combo>
 
             <li class="filter-item">
@@ -57,6 +57,7 @@
           </ul>
           <ul class="filter-btn">
             <button class="btn btn-filter-p" @click="prgRtCalc"  :hidden="validated" style="margin-right: 20px">진행률계산</button>
+            <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
             <button class="btn btn-filter-e">
               <label for="file">엑셀업로드</label>
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
@@ -188,11 +189,10 @@ export default {
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
     bzcd_change(params)           {this.info.bzcd_selected = params},
-    wbs_mng_cd_change(params)     {this.info.wbs_mng_cd_selected = params},
-    wbs_prc_sts_cd_change(params) {
-      this.info.wbs_prc_sts_cd_selected = params
+    wbs_mng_cd_change(params)     {
+      this.info.wbs_mng_cd_selected = params
 
-      if(this.info.wbs_prc_sts_cd_selected === '100'){
+      if(this.info.wbs_mng_cd_selected === '100'){
         this.validated = false;
         this.$refs.grid.invoke("showColumn",'prg_rt')
         this.$refs.grid.invoke("showColumn",'wgt_rt')
@@ -202,6 +202,7 @@ export default {
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
       }
     },
+    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
     // 렌더링 중 적용 (mounted와 동일)
     onGridMounted(grid){
@@ -229,6 +230,9 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSave() {
+      if(this.info.wbs_mng_cd_selected === '100') {
+        this.prgRtCalc();
+      }
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
           axiosService.post("/PJTE5000/insert", {
@@ -385,7 +389,7 @@ export default {
       this.$refs.grid.invoke("appendRow",
           {
             bzcd    : this.info.bzcd_selected,
-            mng_cd  : this.info.wbs_prc_sts_cd_selected,
+            mng_cd  : this.info.wbs_mng_cd_selected,
             prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
             bkup_id : "0000000000",
             sort    : this.$refs.grid.invoke("getData").length+1,
@@ -427,7 +431,7 @@ export default {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
         let gridExcelData;
-        debugger
+
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
@@ -505,13 +509,15 @@ export default {
       this.$refs.grid.invoke("focus",0, "prg_rt",true)
       let i, x, y, z, wbsCnt, roCnt, iMaxRow;
       let mngid, hgrnMngid;
-      let wgtRt, prtRt, totWgtRt;
+      let wgtRt, prtRt
+      let totWgtRt = 0.0;
+      console.log(typeof totWgtRt)
 
       iMaxRow = this.$refs.grid.invoke("getData").length; // 최대 row 수
 
       for(z=1; z<=5; z++) {
         for(i=0; i<iMaxRow; i++) {
-          totWgtRt = 0;
+          totWgtRt = 0.0;
           mngid = this.$refs.grid.invoke("getValue", i, "mng_id");
           wbsCnt = this.$refs.grid.invoke("getValue", i, "wbs_cnt");
 
@@ -526,9 +532,16 @@ export default {
               }
               if (mngid === hgrnMngid) {
                 totWgtRt = totWgtRt + wgtRt * prtRt
+
               }
             }
             // 진행율결과값 셋팅
+            if(totWgtRt == 0){
+              totWgtRt = totWgtRt.toFixed(1);
+            } else {
+              totWgtRt = totWgtRt.toFixed(2);
+            }
+
             this.$refs.grid.invoke("setValue", i, "prg_rt", totWgtRt.toString());
             this.flag = 'y'
           }
@@ -538,6 +551,11 @@ export default {
     },
     open_page() {
       this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
+    },
+    // 양식다운로드
+    formDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
     },
     // 유효값 검증
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
@@ -614,8 +632,8 @@ export default {
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
         bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
+        wbs_mng_cd_selected      : '100',
         wbs_prc_sts_cd_selected  : 'TTT',
-        wbs_mng_cd_selected      : 'TTT',
 
         acl_sta_dt : null,
         acl_end_dt : null,
@@ -793,14 +811,14 @@ export default {
         {
           header: '가중치',
           width: 50,
-          align: 'center',
+          align: 'right',
           name: 'wgt_rt',
           editor: 'text',
         },
         {
           header: '진행율',
           width: 50,
-          align: 'center',
+          align: 'right',
           name: 'prg_rt',
           editor: 'text',
           disabled: true,

@@ -551,15 +551,15 @@
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C35'">
       <div class="item-con">관리구분
         <select
-            v-model="wbs_prc_sts_cd_selected"
+            v-model="wbs_mng_cd_selected"
             style="width: 120px"
-            @change = "wbs_prc_sts_cd_change"
+            @change = "wbs_mng_cd_change"
         >
           <option
-              v-for="(wbs_prc_sts_cd, idx) in CD1000000035"
+              v-for="(wbs_mng_cd, idx) in CD1000000035"
               :key="idx"
-              v-text="wbs_prc_sts_cd.text"
-              :value="wbs_prc_sts_cd.value"
+              v-text="wbs_mng_cd.text"
+              :value="wbs_mng_cd.value"
           ></option>
         </select>
       </div>
@@ -568,15 +568,15 @@
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C19'">
       <div class="item-con">진행상태
         <select
-            v-model = "wbs_mng_cd_selected"
+            v-model = "wbs_prc_sts_cd_selected"
             style   = "width: 80px"
-            @change = "wbs_mng_cd_change"
+            @change = "wbs_prc_sts_cd_change"
         >
           <option
-              v-for  = "(wbs_mng_cd, idx) in CD1000000019T"
+              v-for  = "(wbs_prc_sts_cd, idx) in CD1000000019T"
               :key   = "idx"
-              v-text = "wbs_mng_cd.text"
-              :value = "wbs_mng_cd.value"
+              v-text = "wbs_prc_sts_cd.text"
+              :value = "wbs_prc_sts_cd.value"
           ></option>
         </select>
       </div>
@@ -667,7 +667,7 @@
         </select>
       </div>
     </li>
-    <!--   부문코드 -->
+    <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
       <div class="item-con">부문명
         <select
@@ -694,7 +694,7 @@
             @change = "bubun_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000044"
+              v-for  = "(item, idx) in CD1000000044T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -758,7 +758,7 @@
             @change = "good_nm_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000046N"
+              v-for  = "(item, idx) in CD1000000046"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -984,7 +984,7 @@ export default {
       CD1000000016T : [],  CD1000000016N : [], CD1000000016 : [],
       CD1000000017T : [],  CD1000000017N : [],
       CD1000000018T : [],  CD1000000018N : [],
-      CD1000000019T : [],  CD1000000019N : [],
+      CD1000000019T : [],  CD1000000019N : [], CD1000000019 : [],
       CD1000000020T : [],  CD1000000020N : [],
       CD1000000021T : [],  CD1000000021N : [],
       CD1000000022T : [],  CD1000000022N : [],
@@ -1376,6 +1376,7 @@ export default {
             } else if(i === 19) {
               this.CD1000000019T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000019N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000019.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 20) {
               this.CD1000000020T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
@@ -1485,13 +1486,13 @@ export default {
           if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected          = this.CD1000000013T[0].value
           if(this.CD1000000014T.length !== 0)  this.iss_prc_step_cd_selected     = this.CD1000000013T[0].value
           if(this.CD1000000018T.length !== 0)  this.ntar_bzcd_selected           = this.CD1000000018T[0].value
-          if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected          = this.CD1000000019T[0].value
+          if(this.CD1000000019.length !== 0)   this.wbs_mng_cd_selected          = this.CD1000000019[0].value
           if(this.CD1000000021T.length !== 0)  this.check_cd_selected            = this.CD1000000021T[0].value
           if(this.CD1000000022T.length !== 0)  this.file_cd_selected             = this.CD1000000022T[0].value
           if(this.CD1000000025T.length !== 0)  this.file_rgs_dscd_selected       = this.CD1000000025T[0].value
           if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected      = this.CD1000000026T[0].value
           if(this.CD1000000027T.length !== 0)  this.bkup_id_selected             = this.CD1000000027T[0].value
-          if(this.CD1000000035.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035[0].value
+          if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035T[0].value
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
@@ -1514,10 +1515,11 @@ export default {
           if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
           if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
           if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
-          if(this.CD1000000044.length !== 0)    this.bubun_cd_selected          = this.CD1000000044[0].value
+          if(this.CD1000000044T.length !== 0)    this.bubun_cd_selected          = this.CD1000000044T[0].value
           if(this.CD1000000044N.length !== 0)   this.bubun_cd_selected_iss      = this.CD1000000044N[0].value
           if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
           if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045N[0].value
+          if(this.CD1000000046.length !== 0)    this.good_nm_selected           = this.CD1000000046[0].value
           if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047T[0].value
           if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
           if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value

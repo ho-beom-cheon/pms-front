@@ -46,14 +46,14 @@
       <table v-if="afterSearch">
         <colgroup>
           <col width="30px">
-          <col width="100px">
-          <col width="200px">
-          <col width="300px">
+          <col width="30px">
           <col width="180px">
-          <col width="*">
+          <col width="220px">
+          <col width="200px">
+          <col width="110px">
         </colgroup>
         <thead>
-          <tr>
+          <tr style="border-bottom: 1px solid #c5c5c5;border-top: 1px solid #c5c5c5; text-align: center; height: 30px">
             <th>선택</th>
             <th>순번</th>
 <!--            <th>파일경로</th>-->
@@ -63,19 +63,19 @@
             <th>첨부</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(fileList, idx) in fileLists" :key="idx">
-            <td>
+        <tbody style=" margin-top: 30px;">
+          <tr style="border-bottom: 0.5px solid #d2d2d2;" v-for="(fileList, idx) in fileLists" :key="idx" >
+            <td style="padding-left: 11px; padding-right: 11px; border-right: 0.5px solid #f2f2f2;">
               <input type="checkbox" v-model="check_array" :value="fileList.sqno"/>
             </td>
-            <td>{{fileList.sqno}}</td>
+            <td style="text-align: center; border-right: 0.5px solid #f2f2f2;">{{fileList.sqno}}</td>
 <!--            <td>{{fileList.file_path}}</td>-->
-            <td>{{fileList.file_nm}}</td>
-            <td>{{fileList.org_file_nm}}</td>
-            <td>
+            <td style="border-right: 0.5px solid #f2f2f2; padding-left: 10px">{{fileList.file_nm}}</td>
+            <td style="border-right: 0.5px solid #f2f2f2; padding-left: 10px">{{fileList.org_file_nm}}</td>
+            <td  style="text-align: center; ">
               <input type="text" v-model="fileList.rmrmk" />
             </td>
-            <td>
+            <td  style="text-align: center;">
               <label class="input-file-button" :for="'input-file'+fileList.sqno" v-if="bkup_id === '0000000000'">
                 업로드
               </label>
@@ -153,7 +153,12 @@ export default {
     prjt_nm_change(params) {this.pjt_selected = params},
     // 행 추가
     addFile() {
-      let sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
+      let sqno;
+      if(this.fileLists.length == 0) {
+         sqno = 1
+      } else {
+        sqno = Number(this.fileLists[this.fileLists.length-1].sqno) + 1;
+      }
       let file_path = '', file_nm = '', org_file_nm = '', rmrmk=''
       this.fileLists.push({
         sqno,file_path, file_nm, org_file_nm, rmrmk,
@@ -161,10 +166,6 @@ export default {
     },
     // 행 삭제
     deleteFile() {
-      if(this.check_array.length >= this.fileLists.length){
-        alert("행이 1개이상 남아있어야 합니다.");
-        return false;
-      }
       if(this.check_array.length === 0){
         alert("행을 선택해주세요.");
         return false;
@@ -331,6 +332,7 @@ export default {
       formData.append("bzcd", this.$route.query.bzcd);
       formData.append("pgm_id", this.$route.query.pgm_id);
       formData.append("sqn_cd", this.$route.query.sqn_cd);
+      formData.append("room_sqno", this.$route.query.room_sqno);
       formData.append("tst_case_id", this.$route.query.tst_case_id);
       formData.append("jsonList", JSON.stringify(this.fileLists));
 
@@ -413,5 +415,16 @@ export default {
   background-color:#5B5B5B;
   color: white;
   cursor: pointer;
+}
+/*첨부파일등록팝업에서만 사용하는 CSS*/
+.pop-body table td {
+  padding-left: 0px;
+  height: 30px;
+}
+.pop-body table th:nth-of-type(2) {
+  padding-left: 0px;
+}
+.pop-body table th, .pop-body table td {
+  vertical-align: middle;
 }
 </style>
