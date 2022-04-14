@@ -6,8 +6,9 @@ variables:
 stages:
   - build
   - verify
+  - publish
   
-build-pms:
+build:
   image: node:14.18.1
   stage: build
   tags:
@@ -19,13 +20,7 @@ build-pms:
   script:
     - echo "build pms"
     - npm run prod
-  after_script:
-    - echo "publish pms"
-    - cd ../
-    - sh publish.sh
-    - sudo systemctl status nginx
-    - sudo netstat -nltp
-    
+
 sonarqube_master:
   stage: verify
   script:
@@ -33,3 +28,13 @@ sonarqube_master:
   when: manual
   only:
     - master
+publish:
+  stage: publish
+  tags:
+    - pms
+  script:
+    - echo "publish pms"
+    - cd ../
+    - sh publish.sh
+    - sudo systemctl status nginx
+    - sudo netstat -nltp
