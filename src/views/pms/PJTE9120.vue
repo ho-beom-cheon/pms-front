@@ -2,6 +2,8 @@
   <!-- CONTENTS -->
   <div class="contents">
     <div class="div-img"></div>
+    <div class="div-img-delete"></div>
+    <div class="div-img-cmnt"></div>
 
     <!-- ASIDE -- LNB -->
     <PmsSideBar></PmsSideBar>
@@ -79,9 +81,11 @@
                   <li class="filter-item">
                     <div class="item-con" style="margin-right: 15px">
                       <input type="text"
+                             id="iptPstTit"
                              v-model="detail.post_titl"
                              ref="post_titl"
                              style="width: 850px;"
+                             disabled="disabled"
                       >
                     </div>
                   </li>
@@ -96,8 +100,10 @@
                           <textarea cols="145"
                                     rows="20"
                                     style="width: 100%; height: 240px; line-height: normal;"
+                                    id="iptPstDsc"
                                     v-model="detail.post_dsc"
                                     ref="post_dsc"
+                                    disabled="disabled"
                           ></textarea>
                       </td>
                     </div>
@@ -123,13 +129,15 @@
                   <li class="filter-item">
                     <div class="item-con" style="margin-right: 5px">
                       <input type="text"
+                             id="iptTxtPsw"
                              v-model="detail.txt_psw"
                              ref="txt_psw"
                              style="width: 150px;"
+                             disabled="disabled"
                       >
                     </div>
                   </li>
-                  <button class="btn btn-filter-p" @click="fnSave1">등록</button>
+                  <button class="btn btn-filter-p" @click="fnSave(2)">등록</button>
                 </ul>
               </div>
             </section>
@@ -144,6 +152,7 @@
                 :data="dataSource2"
                 :header="header"
                 :columns="columns2"
+                @click="onClick2"
                 :minBodyHeight="55"
                 :bodyHeight="167"
                 :minRowHeight="minRowHeight"
@@ -156,14 +165,85 @@
         </div>
         <section class="filter">
           <ul class="filter-btn">
-            <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave1" >추가</button>
+            <button class="btn btn-filter-p" style="margin-left: 20px;" @click="fnOpenModal">추가</button>
           </ul>
         </section>
         <br>
         <br>
         <br>
         <br>
+        <!--   모달 추가(댓글 추가(댓글내역), 댓글 삭제 추가(비밀번호 입력), 답글정보 추가    -->
         <Modal :show.sync="modals.txt_modal1">
+          <div class="modal-pop-body">
+            <h2>
+              댓글내역
+            </h2>
+          </div>
+          <hr>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+          </table>
+          <div>
+            <grid
+                ref="grid3"
+                :data="dataSource3"
+                :header="header3"
+                :columns="columns3"
+                @click="onClick3"
+                :bodyHeight="300"
+                :width="665"
+                :showDummyRows="showDummyRows"
+                :columnOptions="columnOptions"
+                :editingEvent="editingEvent"
+                :rowHeight="rowHeight"
+                :minRowHeight="minRowHeight"
+                :rowHeaders="rowHeaders"
+            ></grid>
+          </div>
+          <br>
+          <br>
+          <div class="div-header"><h2>댓글정보</h2></div>
+          <table>
+            <colgroup>
+              <col width="60px">
+              <col width="*">
+              <col width="60px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>댓글</th>
+              <td colspan="4">
+                <input type="text"
+                       v-model="detail.cmnt_titl"
+                       style="width: 260px; margin-right: 25px;"
+                >
+              </td>
+              <th>비밀번호</th>
+              <td colspan="4">
+                <input type="text"
+                       placeholder="비밀번호를 입력해주세요."
+                       v-model="detail.txt_psw"
+                       style="width: 150px; margin-left: 5px;"
+                >
+              </td>
+            </tr>
+            <br>
+            <br>
+            </tbody>
+          </table>
+          <div style="float: right">
+            <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >등록</button>
+            <button id="crpenm-delete1" class="btn btn-filter-p" @click="fnDelete()" style="margin-right: 5px">삭제</button>
+            <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
+          </div>
+        </Modal>
+        <Modal :show.sync="modals.txt_modal2">
           <div class="modal-pop-body">
             <h2>
               비밀번호
@@ -172,15 +252,66 @@
           <hr>
           <div class="item-con" style="margin-right: 5px">
             <input type="text"
-                   id="modalId"
+                   id="modalId2"
                    v-model="modalTxt"
                    ref="modalTxt"
                    style="width: 150px;"
             >
           </div>
+          <div class="item-con" style="margin-right: 5px">
+            <input type="hidden"
+                   id="gridKey"
+                   style="width: 20px;"
+            >
+          </div>
           <div style="float: right">
-            <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px">삭제</button>
-            <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            <button id="crpenm-delete2" class="btn btn-filter-p" @click="fnDelete()" style="margin-right: 5px">삭제</button>
+            <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
+          </div>
+        </Modal>
+        <Modal :show.sync="modals.txt_modal3">
+          <div class="modal-pop-body">
+            <h2>
+              답글정보
+            </h2>
+          </div>
+          <hr>
+          <table>
+          <colgroup>
+            <col width="60px">
+            <col width="*">
+            <col width="60px">
+            <col width="*">
+          </colgroup>
+          <tbody>
+          <tr>
+            <th>답글</th>
+            <td colspan="4">
+              <input type="text"
+                     v-model="detail.rpl_titl"
+                     style="width: 260px; margin-right: 25px; background-color: #f2f2f2"
+              >
+            </td>
+            <th>비밀번호</th>
+            <td colspan="4">
+              <input type="text"
+                     placeholder="비밀번호를 입력해주세요."
+                     v-model="detail.txt_psw"
+                     style="width: 150px; margin-left: 5px;"
+              >
+            </td>
+            <combo
+                :comboArray = "this.goodNmList"
+                @good_nm_change="good_nm_change"
+            ></combo>
+          </tr>
+          <br>
+          <br>
+          </tbody>
+          </table>
+          <div style="float: right">
+            <button id="crpenm-edit3" class="btn btn-filter-p" @click="fnSave(3)" style="margin-right: 5px">등록</button>
+            <button id="crpenm-close3" class="btn btn-filter-b" @click="fnCloseModal(3)">닫기</button>
           </div>
         </Modal>
       </section>
@@ -203,8 +334,8 @@ window.fileData = (fileLists) => {
   window.pms_register.detail.atfl_mng_id = fileLists[fileLists.length-1].atfl_mng_id;
 }
 
-// 커스텀 이미지 버튼을 만들기 위한 클래스 생성
-class CustomRenderer {
+// 커스텀 이미지 버튼을 만들기 위한 클래스 생성 (댓글)
+class CustomRenderer1 {
   constructor(props) {
     const el = document.createElement('img');
     el.src = 'some-image-link';
@@ -216,10 +347,30 @@ class CustomRenderer {
     return this.el;
   }
   render(props) {
-    // 플러스 버튼 img
-    this.el.src = '/img/ic_new.e2fc07f4.svg';
+    // 댓글 버튼 img
+    this.el.src = '/img/ic_cmnt.3c78c4cd.svg';
   }
 }
+
+// 커스텀 이미지 버튼을 만들기 위한 클래스 생성 (삭제)
+class CustomRenderer2 {
+  constructor(props) {
+    const el = document.createElement('img');
+    el.src = 'some-image-link';
+
+    this.el = el;
+    this.render(props);
+  }
+  getElement() {
+    return this.el;
+  }
+  render(props) {
+    // 삭제 버튼 img
+    this.el.src = '/img/ic_delete.b3711c12.svg';
+  }
+}
+
+
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -245,14 +396,20 @@ export default {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
+    good_nm_change(params) {this.info.good_nm_selected = params},
 
     // 화면 init
     init() {
+      // TODO 게시판 목록에서 파라미터 넘겨오는 값 체크 필요
+      //console.log("게시판 목록조회 파라미터 ::", this.$store.state.pms.GesiData);
+
       // 그리드 초기화 (게시내역, 답글내역, 댓글내역 등)
       this.$refs.grid1.invoke("clear");
       this.$refs.grid2.invoke("clear");
-      // 그리드1 전체 비활성화
+      this.$refs.grid3.invoke("clear");
+      // 그리드1(게시내역), 그리드3(댓글내역) 전체 비활성화
       this.$refs.grid1.invoke("disable");
+      this.$refs.grid3.invoke("disable");
 
       // 시스템 관리자가 아닌경우 자신의 이름과 번호를 조회조건에 바인딩
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
@@ -260,10 +417,7 @@ export default {
         this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
       }
     },
-    // 게시정보 등록 버튼
-    fnSave1(){
 
-    },
     /* 게시정보 저장을 하기위한 필수 항목 체크 */
     // FIXME 비밀번호 정합성 체크
     checkPrimary() {
@@ -282,28 +436,76 @@ export default {
     },
 
     onGridUpdated(grid){
-
     },
 
-    // 그리드 1 클릭 이벤트 - 게시내역(그리드1) ROW 클릭 시 하단 세부내역 조회 (답글내역)
+    // 그리드 1 클릭 이벤트 -
     onClick1(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
 
       // TODO 댓글 및 삭제 버튼 이벤트 추가 (게시내역, 답글내역, 댓글내역 각자 추가 필요)
       const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
-      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 팝업
+      // 댓글내역 조회(모달창)
+      if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 모달 오픈
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+
+        this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 답글내역 조회
+        axiosService.get("/PJTE9120/select_9120_03", {
+          params: {
+            prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+          }
+        }).then(res => {
+          this.$refs.grid3.invoke("setRequestParams", this.info);
+          this.$refs.grid3.invoke("readData");
+        }).catch(e => {
+
+        });
       }
 
+      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 모달 오픈
+        this.modals.txt_modal2 = true;
+        document.getElementById("gridKey").value = "1"
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
     },
-    //더블클릭_게시정보 및 답글내역 조회 추가
-    dblclick(ev) {
-      //TODO 조회수 증가 update 추가 필요
 
-      // 게시내역 ROW클릭 시 하단 게시정보 input 에 바인딩
+    // 그리드 2 클릭 이벤트 - 답글내역(그리드2) 삭제 클릭 시 모달 보이기
+    onClick2(ev) {
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+
+      const currentCellData = (this.$refs.grid2.invoke("getFocusedCell"));
+
+      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 모달 오픈
+        this.modals.txt_modal2 = true;
+        document.getElementById("gridKey").value = "2"
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+
+    // 그리드 3 클릭 이벤트 - 댓글내역(그리드3) 삭제 클릭 시 모달 오픈
+    onClick3(ev) {
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+
+      const currentCellData = (this.$refs.grid3.invoke("getFocusedCell"));
+
+      if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 모달 오픈
+        this.modals.txt_modal2 = true;
+        document.getElementById("gridKey").value = "3"
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
+    },
+
+    //게시내역(그리드1) ROW 더블클릭 시 게시정보 세부내역 및 답글내역 조회
+    dblclick(ev) {
+      // 게시내역 ROW 클릭 시 하단 게시정보 input 에 바인딩
       if (ev.columnName == 'dis_post_titl' || ev.columnName == 'post_dt' || ev.columnName == 'post_nm' || ev.columnName == 'view_cnt') {
         this.curRow = ev.rowKey;
         const currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
@@ -312,8 +514,8 @@ export default {
         }
       }
 
-      //TODO 답글내역 조회 추가
-      this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW클릭 시 인력번호
+      // 답글내역 조회
+      this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 답글내역 조회
       axiosService.get("/PJTE9120/select_9120_02", {
         params: {
           prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -322,12 +524,168 @@ export default {
         }
       }).then(res => {
         // console.log("res.data.data ::" + res.data.data)
-        this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
+        //this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
+
+      }).catch(e => {
+
+      });
+
+      // 조회수 증가
+      axiosService.put("/PJTE9120/update_9120_01", {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+      }).then(res => {
+        if(res.status == 200) {
+          this.fnSearch()
+        }
       }).catch(e => {
 
       });
       this.$refs.grid2.invoke("setRequestParams", this.info);
       this.$refs.grid2.invoke("readData");
+    },
+
+    // TODO 비밀번호 정합성 체크 추가
+    fnSave(num) {
+      console.log('fnSave num?', num)
+      if(num == 1) {  // 댓글정보 등록
+        let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+        console.log('postId?', post_Id)
+        if(post_Id != null && post_Id !== '') {
+          console.log('cmnt_titl: ', this.detail.cmnt_titl)
+          console.log('prn_cmnt_cd: ', this.detail.prn_cmnt_cd)
+          console.log('txt_psw: ', this.detail.txt_psw)
+
+          axiosService.post("/PJTE9120/insert_9120_03", {
+            post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+            cmnt_titl             : this.detail.cmnt_titl,        // 댓글제목
+            prn_cmnt_cd           : this.detail.prn_cmnt_cd,      // 댓글코드
+            txt_psw               : this.detail.txt_psw,          // 글비밀번호
+            prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
+            login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
+          }).then(res => {
+            if (res.data) {
+              alert("댓글 등록이 완료되었습니다.");
+              this.onClick1()
+            } else {
+              alert("댓글 등록에 실패하였습니다.")
+            }
+          })
+
+        }
+      } else if(num == 2) { // 게시정보 등록
+        // 게시판 id에 따른 게시정보 등록
+        // TODO 게시판 ID 하드코딩 제거 필요
+        // TODO 최초 저장 이후 첨부파일 등록 open 필요
+        let gesipan_id = '0000000001'
+        console.log('gesipan_id: ', gesipan_id)
+        if(gesipan_id != null && gesipan_id !== '') {
+          console.log('post_titl: ', this.detail.post_titl)
+          console.log('post_dsc: ', this.detail.post_dsc)
+          console.log('txt_psw: ', this.detail.txt_psw)
+
+          axiosService.post("/PJTE9120/insert_9120_01", {
+            gesipan_id            : '0000000001',                 // 게시판 ID
+            post_titl             : this.detail.post_titl,        // 게시정보_게시제목
+            post_dsc              : this.detail.post_dsc,         // 게시글 설명
+            txt_psw               : this.detail.txt_psw,          // 글비밀번호
+            prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
+            login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
+          }).then(res => {
+            if (res.data) {
+              alert("게시글 등록이 완료되었습니다.");
+              this.init()
+              this.fnSearch()
+            } else {
+              alert("게시글 등록에 실패하였습니다.")
+            }
+          })
+
+        }
+      } else if(num == 3) { // 답글정보 등록
+        // 게시내역 선택한 행의 게시글 ID set
+        let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+        console.log('postId: ', post_Id)
+        if(post_Id != null && post_Id !== '') {
+          console.log('rplTitl: ', this.detail.rpl_titl)
+          console.log('txtPsw: ', this.detail.txt_psw)
+          console.log('goodNmCd: ', this.info.good_nm_selected)
+
+          axiosService.post("/PJTE9120/insert_9120_02", {
+            post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+            rpl_titl              : this.detail.rpl_titl,         // 답글제목
+            txt_psw               : this.detail.txt_psw,          // 글비밀번호
+            good_cd               : this.info.good_nm_selected,   // 좋아요 코드
+            prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
+            login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
+          }).then(res => {
+            if (res.data) {
+              alert("답글 등록이 완료되었습니다.");
+              this.modals.txt_modal3 = false;
+              this.fnSearch()
+            } else {
+              alert("답글 등록에 실패하였습니다.")
+            }
+          })
+
+        }
+      }
+    },
+
+    // TODO 비밀번호 일치 여부 로직 추가
+    fnDelete() {
+      this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+      let gridKey = document.getElementById("gridKey").value
+      console.log('gridKey?', gridKey)
+
+      if(gridKey === "1") {  // 게시정보 삭제
+        axiosService.put("/PJTE9120/delete_9120_01", {
+          post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+          prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
+        }).then(res => {
+          if (res.data) {
+            alert("삭제가 완료되었습니다.")
+            this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
+            this.init()
+            this.fnSearch();
+          } else {
+            alert("삭제에 실패하였습니다.")
+          }
+        })
+      } else if(gridKey === "2") { // 답글정보 삭제
+        axiosService.put("/PJTE9120/delete_9120_02", {
+          post_id               : this.$refs.grid2.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+          rpl_no                : this.$refs.grid2.invoke("getValue", this.curRow, "rpl_no"),  // 답글번호
+          prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
+        }).then(res => {
+          if (res.data) {
+            alert("삭제가 완료되었습니다.")
+            this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
+            this.init()
+            this.fnSearch();
+          } else {
+            alert("삭제에 실패하였습니다.")
+          }
+        })
+      } else if(gridKey == "3") { // 댓글정보 삭제
+        axiosService.put("/PJTE9120/delete_9120_03", {
+          prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
+          cmnt_no               : this.$refs.grid3.invoke("getValue", this.curRow, "cmnt_no"), // 댓글번호
+          post_id               : this.$refs.grid3.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
+        }).then(res => {
+          if (res.data) {
+            alert("삭제가 완료되었습니다.")
+            this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
+            this.init()
+            this.fnSearch();
+          } else {
+            alert("삭제에 실패하였습니다.")
+          }
+        })
+      }
     },
 
     /* 게시내역 Row dblClick 시 게시정보에 Bind */
@@ -373,15 +731,27 @@ export default {
     fnClear() {
       this.detail.post_titl           = '' // 게시제목
       this.detail.post_dsc            = '' // 게시글설명
-      this.detail.atfl_mng_id         = '' // 첨부파일관리ID
+      this.detail.atfl_mng_id         = '' // 첨부파일관리 ID
+      document.getElementById('iptPstTit').disabled = false;
+      document.getElementById('iptPstDsc').disabled = false;
+      document.getElementById('iptTxtPsw').disabled = false;
 
       // 그리드2(답글내역), 그리드3(댓글내역) 초기화
       this.$refs.grid2.invoke("clear");
     },
 
-    // TODO 모달창 추가 필요
-    fnCloseModal(){  // 모달창 닫기
-      this.modals.txt_modal1 = false;
+    fnOpenModal() {
+      this.modals.txt_modal3 = true;
+    },
+
+    fnCloseModal(num){  // 모달창 닫기
+      if(num == 1) {
+        this.modals.txt_modal1 = false;
+      } else if(num == 2) {
+        this.modals.txt_modal2 = false;
+      } else if(num == 3) {
+        this.modals.txt_modal3 = false;
+      }
     },
 
   },
@@ -396,8 +766,7 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0"], //C27 = 프로젝트 ID, C0 = 백업 ID
-      gridData2: [],
-      gridData3: [],
+      goodNmList : ["C46"],     //C46 = 좋아요
 
       file_name_list: [],
 
@@ -435,7 +804,7 @@ export default {
         cmnt_db_chg_ts      : '',                 // 댓글등록일시
         cmnt_emp_nm         : '',                 // 댓글등록자
         cmnt_no             : '',                 // 댓글번호
-        prn_cmnt_no         : '',                 // 상위댓글번호
+        prn_cmnt_cd         : '',                 // 상위댓글코드
       },
       login : {
         login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),    // 권한ID
@@ -458,10 +827,11 @@ export default {
       showDummyRows: false,
       editingEvent : "click",
 
-      // TODO 모달 속성 추가 필요
-      /* 그리드 상세보기 모달 속성 */
+      /* 그리드 상세보기 및 등록 모달 속성 */
       modals: {
-        txt_modal1: false,
+        txt_modal1: false,  // 댓글내역
+        txt_modal2: false,  // 삭제 시 비밀번호
+        txt_modal3: false,  // 답글정보
       },
       modalTxt:this.modalTxt,
 
@@ -479,8 +849,15 @@ export default {
       dataSource2: {
         api: {
           readData   : { url: process.env.VUE_APP_API + '/PJTE9120/select_9120_02', method: 'GET' },
-          createData : { url: process.env.VUE_APP_API + '/PJTE9120/create2', method: 'POST'},
-          deleteData : { url: process.env.VUE_APP_API + '/PJTE9120/delete2', method: 'PUT'},
+        },
+        initialRequest: false,
+        contentType : 'application/json;',
+        headers : {  'x-custom-header' : 'custom-header'  },
+        withCredentials: false,
+      },
+      dataSource3: {
+        api: {
+          readData   : { url: process.env.VUE_APP_API + '/PJTE9120/select_9120_03', method: 'GET' },
         },
         initialRequest: false,
         contentType : 'application/json;',
@@ -491,8 +868,11 @@ export default {
         resizable: true
       },
       rowHeaders:['rowNum'],
-      header:{
+      header: {
         height: 25,
+      },
+      header3: {
+        height: 30,
       },
       columns1: [ //게시내역
         {
@@ -511,7 +891,7 @@ export default {
         },
         {
           header: '게시일시',
-          width: 120,
+          width: 150,
           align: 'center',
           name: 'post_dt',
           editor: 'text',
@@ -526,24 +906,18 @@ export default {
         },
         {
           header: '조회수',
-          width: 120,
+          width: 50,
           align: 'center',
           name: 'view_cnt',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options: {
-              listItems: this.$store.state.pms.CD1000000040N
-            }
-          },
+          editor: 'text',
           //hidden: true,
         },
         {
           header: '댓글',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'cmnt_btn',
-          renderer: CustomRenderer,
+          renderer: CustomRenderer1,
           //hidden: true,
         },
         {
@@ -551,7 +925,7 @@ export default {
           width: 50,
           align: 'center',
           name: 'del_btn',
-          renderer: CustomRenderer,
+          renderer: CustomRenderer2,
           editor: 'text',
         },
         // 숨김처리 추가
@@ -598,6 +972,22 @@ export default {
       ],
       columns2: [ //답글내역
         {
+          header: '게시글ID',
+          width: 100,
+          align: 'center',
+          name: 'post_id',
+          editor: 'text',
+          //hidden: true,
+        },
+        {
+          header: '답글번호',
+          width: 10,
+          align: 'center',
+          name: 'rpl_no',
+          editor: 'text',
+          //hidden: true,
+        },
+        {
           header: '답글',
           width: 500,
           align: 'left',
@@ -606,7 +996,7 @@ export default {
         },
         {
           header: '등록일시',
-          width: 200,
+          width: 150,
           align: 'center',
           name: 'db_chg_ts',
           editor: {
@@ -615,12 +1005,13 @@ export default {
               format: 'yyyy-MM-dd HH:mm:ss',
               type: 'month',
             }
-          }
+          },
+          disabled: true,
         },
         {
           header: '좋아요',
           width: 100,
-          align: 'left',
+          align: 'center',
           name: 'good_nm',
           editor: 'text',
           //hidden: true,
@@ -628,8 +1019,8 @@ export default {
         {
           header: '등록자',
           width: 100,
-          align: 'left',
-          name: 'emp_nm',
+          align: 'center',
+          name: 'empnm',
           editor: 'text',
           //hidden: true,
         },
@@ -638,243 +1029,70 @@ export default {
           width: 50,
           align: 'center',
           name: 'del_btn',
-          renderer: CustomRenderer,
+          renderer: CustomRenderer2,
+          editor: 'text',
+        },
+      ],
+      columns3: [ //댓글내역
+        {
+          header: '댓글',
+          width: 200,
+          align: 'left',
+          name: 'cmnt_titl',
+          editor: 'text',
+          whiteSpace: 'pre',
+        },
+        {
+          header: '등록일시',
+          width: 150,
+          align: 'center',
+          name: 'db_chg_ts',
+          editor: {
+            type: 'datePicker',
+            options: {
+              format: 'yyyy-MM',
+              type: 'month',
+            }
+          },
+        },
+        {
+          header: '등록자',
+          width: 100,
+          align: 'center',
+          name: 'empnm',
+          editor: 'text'
+        },
+        {
+          header: '삭제',
+          width: 50,
+          align: 'center',
+          name: 'del_btn',
+          renderer: CustomRenderer2,
+          editor: 'text',
+        },
+        {
+          header: '댓글번호',
+          width: 30,
+          align: 'center',
+          name: 'cmnt_no',
           editor: 'text',
           //hidden: true,
         },
-      ],
-      columns3: [ //답글정보
         {
-          header: '수행처(발주처)',
-          width: 250,
-          align: 'left',
-          name: 'exe_cpy_nm',
-          editor: 'text',
-        },
-        {
-          header: '시작년월',
+          header: '상위댓글번호',
           width: 100,
           align: 'center',
-          name: 'sta_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
+          name: 'prn_cmnt_cd',
+          editor: 'text',
+          //hidden: true,
         },
         {
-          header: '종료년월',
-          width: 100,
+          header: '비밀번호',
+          width: 50,
           align: 'center',
-          name: 'end_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '프로젝트명',
-          width: 480,
-          align: 'left',
-          name: 'proj_nm',
+          name: 'txt_psw',
           editor: 'text',
-        },
-        {
-          header: '수행업무',
-          width: 200,
-          align: 'left',
-          name: 'rssb_bns',
-          editor: 'text',
-        },
-        {
-          header: '역할',
-          width: 120,
-          align: 'center',
-          name: 'duty_txt',
-          editor: 'text',
-        },
-        {
-          header: '사용기종/OS',
-          width: 120,
-          align: 'center',
-          name: 'use_os',
-          editor: 'text',
-        },
-        {
-          header: '관련기술',
-          minWidth: 120,
-          align: 'left',
-          name: 'rlt_skill',
-          editor: 'text',
-        },
-        {
-          header: '순번',
-          minWidth: 120,
-          align: 'center',
-          name: 'sqno',
-          editor: 'text',
-          hidden: true,
-        },
-      ],
-      columns4: [ //댓글내역
-        {
-          header: '수행처(발주처)',
-          width: 250,
-          align: 'left',
-          name: 'exe_cpy_nm',
-          editor: 'text',
-        },
-        {
-          header: '시작년월',
-          width: 100,
-          align: 'center',
-          name: 'sta_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '종료년월',
-          width: 100,
-          align: 'center',
-          name: 'end_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '프로젝트명',
-          width: 480,
-          align: 'left',
-          name: 'proj_nm',
-          editor: 'text',
-        },
-        {
-          header: '수행업무',
-          width: 200,
-          align: 'left',
-          name: 'rssb_bns',
-          editor: 'text',
-        },
-        {
-          header: '역할',
-          width: 120,
-          align: 'center',
-          name: 'duty_txt',
-          editor: 'text',
-        },
-        {
-          header: '사용기종/OS',
-          width: 120,
-          align: 'center',
-          name: 'use_os',
-          editor: 'text',
-        },
-        {
-          header: '관련기술',
-          minWidth: 120,
-          align: 'left',
-          name: 'rlt_skill',
-          editor: 'text',
-        },
-        {
-          header: '순번',
-          minWidth: 120,
-          align: 'center',
-          name: 'sqno',
-          editor: 'text',
-          hidden: true,
-        },
-      ],
-      columns5: [ //댓글정보
-        {
-          header: '수행처(발주처)',
-          width: 250,
-          align: 'left',
-          name: 'exe_cpy_nm',
-          editor: 'text',
-        },
-        {
-          header: '시작년월',
-          width: 100,
-          align: 'center',
-          name: 'sta_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '종료년월',
-          width: 100,
-          align: 'center',
-          name: 'end_dt',
-          editor: {
-            type: 'datePicker',
-            options: {
-              format: 'yyyy-MM',
-              type: 'month',
-            }
-          }
-        },
-        {
-          header: '프로젝트명',
-          width: 480,
-          align: 'left',
-          name: 'proj_nm',
-          editor: 'text',
-        },
-        {
-          header: '수행업무',
-          width: 200,
-          align: 'left',
-          name: 'rssb_bns',
-          editor: 'text',
-        },
-        {
-          header: '역할',
-          width: 120,
-          align: 'center',
-          name: 'duty_txt',
-          editor: 'text',
-        },
-        {
-          header: '사용기종/OS',
-          width: 120,
-          align: 'center',
-          name: 'use_os',
-          editor: 'text',
-        },
-        {
-          header: '관련기술',
-          minWidth: 120,
-          align: 'left',
-          name: 'rlt_skill',
-          editor: 'text',
-        },
-        {
-          header: '순번',
-          minWidth: 120,
-          align: 'center',
-          name: 'sqno',
-          editor: 'text',
-          hidden: true,
+          //hidden: true,
         },
       ],
     }
@@ -917,5 +1135,8 @@ input[type="month"]::-webkit-calendar-picker-indicator{
   width: 16px;
   height: 16px;
   background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
+}
+.modal-content {
+  width: auto;
 }
 </style>
