@@ -196,10 +196,12 @@ export default {
         this.validated = false;
         this.$refs.grid.invoke("showColumn",'prg_rt')
         this.$refs.grid.invoke("showColumn",'wgt_rt')
+        this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
       } else {
         this.validated = true;
         this.$refs.grid.invoke("hideColumn",'prg_rt')
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
+        this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
       }
     },
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
@@ -246,6 +248,8 @@ export default {
             console.log(res);
             if (res.data) {
               alert("저장이 완료되었습니다.")
+              // 저장 후 그리드 Reload
+              this.$refs.grid.invoke("reloadData");
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
               this.excelUplod = 'N'
@@ -281,6 +285,8 @@ export default {
               console.log(res)
               if (res.data) {
                 alert("저장이 완료되었습니다.")
+                // 저장 후 그리드 Reload
+                this.$refs.grid.invoke("reloadData");
                 // 저장 후 변경 데이터 배열 비움
                 this.$refs.grid.invoke("clearModifiedData")
                 this.excelUplod = 'N'
@@ -304,6 +310,8 @@ export default {
               }).then(res => {
                 console.log(res);
                 alert("저장이 완료되었습니다.")
+                // 저장 후 그리드 Reload
+                this.$refs.grid.invoke("reloadData");
               })
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
@@ -329,6 +337,8 @@ export default {
               console.log(res)
               if (res.data) {
                 alert("저장이 완료되었습니다.")
+                // 저장 후 그리드 Reload
+                this.$refs.grid.invoke("reloadData");
                 // 저장 후 변경 데이터 배열 비움
                 this.$refs.grid.invoke("clearModifiedData")
                 this.excelUplod = 'N'
@@ -381,6 +391,7 @@ export default {
         this.$refs.grid.invoke("disableColumn", 'wgt_rt');
         // this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
         // this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
+        this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
       }
     },
     gridAddRow() {
@@ -791,7 +802,7 @@ export default {
         {
           header: '담당자',
           width: 80,
-          align: 'center',
+          align: 'left',
           name: 'crpe_nm',
           editor: 'text'
         },
