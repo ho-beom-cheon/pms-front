@@ -7,7 +7,7 @@ stages:
   - build
   - verify
   - publish
-  
+
 build:
   image: node:14.18.1
   stage: build
@@ -28,6 +28,7 @@ sonarqube_master:
   when: manual
   only:
     - master
+
 publish:
   stage: publish
   tags:
@@ -38,3 +39,4 @@ publish:
     - sh publish.sh
     - sudo systemctl status nginx
     - sudo netstat -nltp
+  when: manual
