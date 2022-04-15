@@ -268,6 +268,8 @@ export default {
                         }).then(res => {
                           this.detail.sqno = res.data
                           this.$refs.grid.invoke("reloadData");
+                          document.getElementById("mtng_room").style.backgroundColor="#f2f2f2"
+                          document.getElementById("mtng_room").disabled=true
                           alert("신규저장을 완료했습니다.")
                         }).catch(e => {
                           alert("신규저장에 실패했습니다.")
@@ -345,6 +347,8 @@ export default {
     // 그리드 1 클릭 이벤트 - 인력내역(그리드1) ROW 클릭 시 하단 세부내역 조회 (인적사항, 그리드2, 그리드3)
     onClick(ev) {
       // 현재 Row 가져오기
+      document.getElementById("mtng_room").style.backgroundColor="#f2f2f2"
+      document.getElementById("mtng_room").disabled=true
       this.curRow = ev.rowKey;
       if(this.curRow === undefined){
         return;
@@ -470,6 +474,8 @@ export default {
     },
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
+      document.getElementById("mtng_room").style.backgroundColor="#ffffff"
+      document.getElementById("mtng_room").disabled=false
       this.detail.mtng_room_id_selected = this.$refs.combo2.$data.CD1000000047N[0].value                      // 회의실ID
       this.$refs.combo2.$data.mtng_room_id_selected_iss = this.$refs.combo2.$data.CD1000000047N[0].value      // 회의실ID
       this.detail.rsr_no                = sessionStorage.getItem("LOGIN_EMP_NO") // 예약자번호
