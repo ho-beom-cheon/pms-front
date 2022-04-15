@@ -32,6 +32,5 @@ sonarqube_master:
   stage: verify
   script:
     - sonar-scanner $SONAR_OPTS
-  when: manual
   only:
     - master
