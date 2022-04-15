@@ -31,6 +31,7 @@
                 :columnOptions="columnOptions"
                 :rowHeaders="rowHeaders"
                 :rowHeight="rowHeight"
+                @click="onClick1"
             ></grid>
           </div>
         </div>
@@ -84,26 +85,16 @@ export default {
       //   this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
       // }
     },
-
-    // 그리드 1 클릭 이벤트 - 인력내역(그리드1) ROW 클릭 시 하단 세부내역 조회 (인적사항, 그리드2, 그리드3)
-    /*onClick1(ev) {
+    onClick1(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
+      if(this.curRow === undefined) {
+        return;
+      }
+      this.$router.push({path : 'PJTE9120', params :  this.$refs.grid1.invoke("getRow" , this.curRow) })
       this.info.current_man_no = this.$refs.grid1.invoke("getValue", this.curRow, "man_no") // ROW클릭 시 인력번호
-      axiosService.get("/PJTE9005/select2", {
-        params: {
-          prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
-          bkup_id_selected: '0000000000',
-          current_man_no :this.$refs.grid1.invoke("getValue", this.curRow, "man_no")
-        }
-      }).then(res => {
-        // console.log("res.data.data ::" + res.data.data)
-        this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
-      }).catch(e => {
 
-      });
-
-    },*/
+    },
 
     //조회
     fnSearch(){
@@ -113,7 +104,7 @@ export default {
 
     //게시판 추가
     fnCreate(){
-
+      location.href = "http://localhost:8081/PJTE9100";
     },
 
   },
@@ -134,6 +125,11 @@ export default {
         gesipan_titl : '',
         gesipan_dsc : '',
         login_dept_cd : sessionStorage.getItem("LOGIN_DEPT_CD"),
+        annym_yn : '',
+        nmb_inq_yn : '',
+        cmnt_yn : '',
+        rply_yn : '',
+        file_upld_yn : ''
 
       },
 
@@ -187,17 +183,55 @@ export default {
         {
           header: '제목',
           width: 500,
-          align: 'center',
+          align: 'left',
           //name: 'man_nm',
           name : 'gesipan_titl',
           editor: 'text',
+          filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
         },
         {
           header: '설명',
           //align: 'center',
           name: 'gesipan_dsc',
           editor: 'text',
+          filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
         },
+        {
+          header: '익명',
+          //align: 'center',
+          name: 'annym_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '조회횟수여부',
+          //align: 'center',
+          name: 'nmb_inq_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '댓글',
+          //align: 'center',
+          name: 'cmnt_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '답글',
+          //align: 'center',
+          name: 'rply_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '파일업로드여부',
+          //align: 'center',
+          name: 'file_upld_yn',
+          editor: 'text',
+          hidden : true
+        },
+
 
       ],
     }
@@ -206,39 +240,4 @@ export default {
 
 </script>
 <style>
-.disableColor {
-  background: #FFFFFF!important;
-}
-.empBtnColor {
-  background: #BEBEBE!important;
-}
-.placeBlack::placeholder {
-  color: #000000!important;
-}
-.search-btn-9005 {
-  position: absolute;
-  width: 28px;
-  height: 24px;
-  background: url(../../assets/img/PE-icon/ic_search.svg) center/20px no-repeat;
-  background-color: #B8B8B8;
-  border: 0;
-}
-input[type="month"]::-webkit-calendar-picker-indicator{
-  opacity:0;
-  z-index: 1;
-  cursor: pointer;
-}
-.input-monthWrap {
-  position: relative;
-  display: inline-block;
-}
-.input-monthWrap::after {
-  content: '';
-  position: absolute;
-  right: 6px;
-  top: 4px;
-  width: 16px;
-  height: 16px;
-  background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
-}
 </style>
