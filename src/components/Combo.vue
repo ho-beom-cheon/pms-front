@@ -785,6 +785,7 @@
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C47-2'">
       <div class="item-con">회의실
         <select
+            id      = "mtng_room"
             v-model = "mtng_room_id_selected_iss"
             style   = "width: 125px; margin-left: 11px"
             @change = "mtng_room_id_change_iss"
