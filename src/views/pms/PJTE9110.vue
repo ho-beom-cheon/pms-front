@@ -104,7 +104,7 @@ export default {
 
     //게시판 추가
     fnCreate(){
-      location.href = "http://localhost:8081/PJTE9100";
+      location.href = process.env.VUE_APP_API + '/PJTE9100';
     },
 
   },
