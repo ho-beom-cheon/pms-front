@@ -1,6 +1,9 @@
 const pms = {
     namespaced: true,
     state: {
+        // 게시판 데이터
+        GesiData : [],
+        // 콤보리스트(그리드)
         CD0000000000N:[],
         CD1000000001N:[],
         CD1000000002N:[],
@@ -52,9 +55,12 @@ const pms = {
         CD1000000048N:[],
     },
     getters: {
-        CD1000000001N : state => state.CD1000000001N
+        // CD1000000001N : state => state.CD1000000001N
     },
     mutations: {
+        SEND_DATA(state,value) {
+            state.GesiData = value;
+        },
         SET_CD_ALL(state, array){
             state.CD0000000000N = array[0];
             state.CD1000000001N = array[1];
@@ -111,6 +117,9 @@ const pms = {
         async SET_COMBO({ commit }, data) {
             //const {data} = await loginUser(); // api 호출
             commit('SET_CD_ALL', data);
+        },
+        async SET_DATA({ commit }, data) {
+            commit('SEND_DATA', data);
         }
     }
 }
