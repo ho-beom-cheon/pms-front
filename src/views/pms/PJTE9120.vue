@@ -400,6 +400,7 @@ export default {
 
     // 화면 init
     init() {
+      console.log("게시데이터 ::", this.$store.state.pms.GesiData);
       // TODO 게시판 목록에서 파라미터 넘겨오는 값 체크 필요
       //console.log("게시판 목록조회 파라미터 ::", this.$store.state.pms.GesiData);
 

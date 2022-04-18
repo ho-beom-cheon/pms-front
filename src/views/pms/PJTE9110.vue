@@ -49,6 +49,7 @@ import PmsSideBar from  "@/components/PmsSideBar";
 import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+import {mapActions} from "vuex";
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -85,12 +86,25 @@ export default {
       //   this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
       // }
     },
+    ...mapActions("pms",["SET_DATA"]),
+    async setData(value) {
+      try {
+        await this.SET_DATA(value)
+
+      } catch (error) {
+        console.log("Error Msg : " + error)
+      }
+    },
+
     onClick1(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
       if(this.curRow === undefined) {
         return;
       }
+      let gridRow = this.$refs.grid1.invoke("getRow",this.curRow);
+
+      this.setData(gridRow);
       this.$router.push({path : 'PJTE9120', params :  this.$refs.grid1.invoke("getRow" , this.curRow) })
       this.info.current_man_no = this.$refs.grid1.invoke("getValue", this.curRow, "man_no") // ROW클릭 시 인력번호
 
