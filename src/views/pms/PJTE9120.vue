@@ -433,7 +433,7 @@ export default {
 
     onGridUpdated(grid){
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
-      // console.log("게시데이터 ::", this.$store.state.pms.GesiData);
+      console.log("게시데이터 ::", this.$store.state.pms.GesiData);
       this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
       this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
 
