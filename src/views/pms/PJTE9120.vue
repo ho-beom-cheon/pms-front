@@ -11,7 +11,7 @@
     <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
-        <ul class="filter-con clear-fix">
+        <ul class="filter-con clear-fix" :hidden=true>
           <combo
               :comboArray = "this.comboList"
               @bkup_id_change="bkup_id_change"
@@ -35,9 +35,6 @@
             </div>
           </li>
         </ul>
-        <ul class="filter-btn">
-          <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">목록</button>
-        </ul>
       </section>
 
       <!-- page contents -->
@@ -45,6 +42,7 @@
         <div class="grid1-box" style="height: 255px">
           <div class="div-header"><h2>게시내역</h2>
             <ul class="filter-btn">
+              <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">목록</button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -62,10 +60,11 @@
                 :rowHeight="rowHeight"
                 @click="onClick1"
                 @dblclick="dblclick"
+                @onGridUpdated="onGridUpdated"
             ></grid>
           </div>
         </div>
-        <div class="div0-a">
+        <div>
           <div class="div3-b">
             <div class="div-header"><h2>게시정보</h2>
               <ul class="filter-btn">
@@ -79,12 +78,12 @@
                     <label>게시제목</label>
                   </li>
                   <li class="filter-item">
-                    <div class="item-con" style="margin-right: 15px">
+                    <div class="item-con">
                       <input type="text"
                              id="iptPstTit"
                              v-model="detail.post_titl"
                              ref="post_titl"
-                             style="width: 850px;"
+                             style="width: 1550px;"
                              disabled="disabled"
                       >
                     </div>
@@ -99,7 +98,7 @@
                       <td>
                           <textarea cols="145"
                                     rows="20"
-                                    style="width: 100%; height: 240px; line-height: normal;"
+                                    style="width: 1550px; height: 240px; line-height: normal;"
                                     id="iptPstDsc"
                                     v-model="detail.post_dsc"
                                     ref="post_dsc"
@@ -400,10 +399,6 @@ export default {
 
     // 화면 init
     init() {
-      console.log("게시데이터 ::", this.$store.state.pms.GesiData);
-      // TODO 게시판 목록에서 파라미터 넘겨오는 값 체크 필요
-      //console.log("게시판 목록조회 파라미터 ::", this.$store.state.pms.GesiData);
-
       // 그리드 초기화 (게시내역, 답글내역, 댓글내역 등)
       this.$refs.grid1.invoke("clear");
       this.$refs.grid2.invoke("clear");
@@ -437,6 +432,22 @@ export default {
     },
 
     onGridUpdated(grid){
+      // TODO 게시판 목록에서 파라미터 넘겨오는 값
+      // console.log("게시데이터 ::", this.$store.state.pms.GesiData);
+      this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
+      this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
+
+      if(this.info.annym_yn === 'Y'){
+         this.validated = false;
+         this.$refs.grid1.invoke("showColumn",'post_nm')
+         this.$refs.grid2.invoke("showColumn",'empnm')
+         this.$refs.grid3.invoke("showColumn",'empnm')
+       } else {
+         this.validated = true;
+         this.$refs.grid1.invoke("hideColumn",'post_nm')
+         this.$refs.grid2.invoke("hideColumn",'empnm')
+         this.$refs.grid3.invoke("hideColumn",'empnm')
+       }
     },
 
     // 그리드 1 클릭 이벤트 -
@@ -774,7 +785,7 @@ export default {
       info : {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
         bkup_id_selected      : '0000000000',     // 백업 ID
-        gesipan_id            : '0000000001',               // 게시판 ID
+        gesipan_id            : this.$store.state.pms.GesiData.gesipan_id,               // 게시판 ID
         annym_yn              : '',               // 익명여부
         post_id               : '',               //게시글 id
       },
@@ -869,17 +880,13 @@ export default {
         resizable: true
       },
       rowHeaders:['rowNum'],
-      header: {
-        height: 25,
-      },
-      header3: {
-        height: 30,
-      },
+      header:  {height: 25,},
+      header3: {height: 30,},
       columns1: [ //게시내역
         {
           header: '게시제목',
           width: 520,
-          align: 'center',
+          align: 'left',
           name: 'dis_post_titl',
           editor: 'text',
         },
@@ -889,6 +896,7 @@ export default {
           align: 'center',
           name: 'post_titl',
           editor: 'text',
+          hidden: true,
         },
         {
           header: '게시일시',
@@ -919,7 +927,7 @@ export default {
           align: 'center',
           name: 'cmnt_btn',
           renderer: CustomRenderer1,
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '삭제',
@@ -932,7 +940,6 @@ export default {
         // 숨김처리 추가
         {
           header: '게시글설명',
-          width: 200,
           align: 'center',
           name: 'post_dsc',
           editor: 'text',
@@ -944,7 +951,7 @@ export default {
           align: 'center',
           name: 'txt_psw',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '첨부파일관리ID',
@@ -952,7 +959,7 @@ export default {
           align: 'center',
           name: 'atfl_mng_id',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '게시글 ID',
@@ -960,7 +967,7 @@ export default {
           align: 'center',
           name: 'post_id',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '백업 ID',
@@ -968,7 +975,7 @@ export default {
           align: 'center',
           name: 'bkup_id',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
       ],
       columns2: [ //답글내역
@@ -1102,42 +1109,4 @@ export default {
 
 </script>
 <style>
-.disableColor {
-  background: #FFFFFF!important;
-}
-.empBtnColor {
-  background: #BEBEBE!important;
-}
-.placeBlack::placeholder {
-  color: #000000!important;
-}
-.search-btn-9005 {
-  position: absolute;
-  width: 28px;
-  height: 24px;
-  background: url(../../assets/img/PE-icon/ic_search.svg) center/20px no-repeat;
-  background-color: #B8B8B8;
-  border: 0;
-}
-input[type="month"]::-webkit-calendar-picker-indicator{
-  opacity:0;
-  z-index: 1;
-  cursor: pointer;
-}
-.input-monthWrap {
-  position: relative;
-  display: inline-block;
-}
-.input-monthWrap::after {
-  content: '';
-  position: absolute;
-  right: 6px;
-  top: 4px;
-  width: 16px;
-  height: 16px;
-  background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
-}
-.modal-content {
-  width: auto;
-}
 </style>

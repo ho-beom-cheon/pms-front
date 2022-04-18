@@ -127,7 +127,6 @@ export default {
   watch:{
 
   },
-
 // 변수 선언부분
   data() {
     return {
@@ -169,7 +168,6 @@ export default {
         headers : {  'x-custom-header' : 'custom-header'  },
         withCredentials: false,
       },
-
       columnOptions: {
         resizable: true
       },
@@ -218,13 +216,6 @@ export default {
           hidden : true
         },
         {
-          header: '조회횟수여부',
-          //align: 'center',
-          name: 'nmb_inq_yn',
-          editor: 'text',
-          hidden : true
-        },
-        {
           header: '댓글',
           //align: 'center',
           name: 'cmnt_yn',
@@ -239,14 +230,75 @@ export default {
           hidden : true
         },
         {
+          header: '좋아요',
+          //align: 'center',
+          name: 'good_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '백업ID',
+          //align: 'center',
+          name: 'bkup_id',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '프로젝트ID',
+          //align: 'center',
+          name: 'prjt_id',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '게시판ID',
+          //align: 'center',
+          name: 'gesipan_id',
+          editor: 'text',
+          hidden : false
+        },
+        {
+          header: '소속확인여부',
+          //align: 'center',
+          name: 'afrm_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '조회횟수여부',
+          //align: 'center',
+          name: 'nmb_inq_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '페이징여부',
+          //align: 'center',
+          name: 'pgn_yn',
+          editor: 'text',
+          hidden : true
+        },
+        {
           header: '파일업로드여부',
           //align: 'center',
           name: 'file_upld_yn',
           editor: 'text',
           hidden : true
         },
-
-
+        {
+          header: '게시부문',
+          //align: 'center',
+          name: 'bubun_cd',
+          editor: 'text',
+          hidden : true
+        },
+        {
+          header: '게시구분',
+          //align: 'center',
+          name: 'bsn_cls_cd',
+          editor: 'text',
+          hidden : true
+        },
       ],
     }
   },
