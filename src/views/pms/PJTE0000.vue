@@ -3,7 +3,7 @@
   <section class="login">
     <div class="loginBx">
       <div class="top">
-        <img src="/img/logo_Eyes.bf30f8b2.svg" alt="logo">
+        <img src="../../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
       </div>
       <div class="body">
         <em>
