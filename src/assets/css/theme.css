@@ -1419,6 +1419,13 @@ aside dl dd + dd a {
     height: 5vh;
     margin: 20px;
 }
+/* PJTE9120 줄맞춤 */
+.line-con > label{
+  margin-left: 20px;
+  margin-right: 5px;
+  margin-top: 6px;
+}
+
 .tui-grid-cell-disabled {
     background-color: #f2f2f2 !important;
     color: black !important;
