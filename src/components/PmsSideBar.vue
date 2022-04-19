@@ -41,7 +41,6 @@
               <li id="PJTE9110Iteyes"><a href="/PJTE9110">{{ iteyes_menu_list[4].name }}</a></li>
               <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[5].name }}</a></li>
               <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[6].name }}</a></li>
-              <li id="PJTE9120Iteyes"><a href="/PJTE9120">{{ iteyes_menu_list[7].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -205,11 +204,6 @@ export default {
           path: '/PJTE9000',
           name: '시스템관리'
         },
-        {
-          id: 'PJTE9120Iteyes',
-          path: '/PJTE9120',
-          name: '게시글등록'
-        },
       ],
       profile_menu_list: [
         {
@@ -258,6 +252,7 @@ export default {
       }else if(this.LoginId =='0000000003'){
         for (let i = 0; i < this.iteyes_menu_list.length; i++) {
           if (this.$route.path == this.iteyes_menu_list[i].path) {
+            debugger
             document.getElementById(this.iteyes_menu_list[i].id).className = 'active'
           }
         }
