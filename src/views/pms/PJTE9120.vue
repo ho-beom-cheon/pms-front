@@ -172,7 +172,7 @@
         <br>
         <br>
         <!--   모달 추가(댓글 추가(댓글내역), 댓글 삭제 추가(비밀번호 입력), 답글정보 추가    -->
-        <Modal :show.sync="modals.txt_modal1">
+        <Modal :show.sync="modals.txt_modal1" class="modal_main">
           <div class="modal-pop-body">
             <h2>
               댓글내역
@@ -195,7 +195,8 @@
                 :columns="columns3"
                 @click="onClick3"
                 :bodyHeight="300"
-                :width="665"
+                :bodyWidth="600"
+                :width="800"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
                 :editingEvent="editingEvent"
@@ -238,7 +239,6 @@
           </table>
           <div style="float: right">
             <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >등록</button>
-            <button id="crpenm-delete1" class="btn btn-filter-p" @click="fnDelete()" style="margin-right: 5px">삭제</button>
             <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
           </div>
         </Modal>
@@ -276,37 +276,37 @@
           </div>
           <hr>
           <table>
-          <colgroup>
-            <col width="60px">
-            <col width="*">
-            <col width="60px">
-            <col width="*">
-          </colgroup>
-          <tbody>
-          <tr>
-            <th>답글</th>
-            <td colspan="4">
-              <input type="text"
-                     v-model="detail.rpl_titl"
-                     style="width: 260px; margin-right: 25px; background-color: #f2f2f2"
-              >
-            </td>
-            <th>비밀번호</th>
-            <td colspan="4">
-              <input type="text"
-                     placeholder="비밀번호를 입력해주세요."
-                     v-model="detail.txt_psw"
-                     style="width: 150px; margin-left: 5px;"
-              >
-            </td>
-            <combo
-                :comboArray = "this.goodNmList"
-                @good_nm_change="good_nm_change"
-            ></combo>
-          </tr>
-          <br>
-          <br>
-          </tbody>
+            <colgroup>
+              <col width="40px">
+              <col width="*">
+              <col width="40px">
+              <col width="*">
+            </colgroup>
+            <tbody>
+            <tr>
+              <th>답글</th>
+              <td>
+                <input type="text"
+                       v-model="detail.rpl_titl"
+                       style="width: 400px; margin-right: 25px; background-color: #f2f2f2"
+                >
+              </td>
+            </tr>
+            <tr>
+              <combo
+                  :comboArray = "this.goodNmList"
+                  @good_nm_change="good_nm_change"
+              ></combo>
+              <th>비밀번호</th>
+              <td>
+                <input type="text"
+                       placeholder="비밀번호를 입력해주세요."
+                       v-model="detail.txt_psw"
+                       style="width: 150px; margin-left: 5px;"
+                >
+              </td>
+            </tr>
+            </tbody>
           </table>
           <div style="float: right">
             <button id="crpenm-edit3" class="btn btn-filter-p" @click="fnSave(3)" style="margin-right: 5px">등록</button>
@@ -433,21 +433,25 @@ export default {
 
     onGridUpdated(grid){
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
-      // console.log("게시데이터 ::", this.$store.state.pms.GesiData);
+      console.log("게시데이터 ::", this.$store.state.pms.GesiData);
       this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
       this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
+      this.info.nmb_inq_yn   = this.$store.state.pms.GesiData.nmb_inq_yn
 
       if(this.info.annym_yn === 'Y'){
-         this.validated = false;
-         this.$refs.grid1.invoke("showColumn",'post_nm')
-         this.$refs.grid2.invoke("showColumn",'empnm')
-         this.$refs.grid3.invoke("showColumn",'empnm')
-       } else {
-         this.validated = true;
-         this.$refs.grid1.invoke("hideColumn",'post_nm')
-         this.$refs.grid2.invoke("hideColumn",'empnm')
-         this.$refs.grid3.invoke("hideColumn",'empnm')
-       }
+        this.$refs.grid1.invoke("showColumn",'post_nm')
+        this.$refs.grid2.invoke("showColumn",'empnm')
+        this.$refs.grid3.invoke("showColumn",'empnm')
+      } else {
+        this.$refs.grid1.invoke("hideColumn",'post_nm')
+        this.$refs.grid2.invoke("hideColumn",'empnm')
+        this.$refs.grid3.invoke("hideColumn",'empnm')
+      }
+      if(this.info.nmb_inq_yn === 'Y'){
+        this.$refs.grid1.invoke("showColumn",'cmnt_btn')
+      } else {
+        this.$refs.grid1.invoke("hideColumn",'cmnt_btn')
+      }
     },
 
     // 그리드 1 클릭 이벤트 -
@@ -544,8 +548,8 @@ export default {
 
       // 조회수 증가
       axiosService.put("/PJTE9120/update_9120_01", {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-          post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+        prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+        post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
       }).then(res => {
         if(res.status == 200) {
           this.fnSearch()
@@ -560,7 +564,7 @@ export default {
     // TODO 비밀번호 정합성 체크 추가
     fnSave(num) {
       console.log('fnSave num?', num)
-      if(num == 1) {  // 댓글정보 등록
+      if(num ==  1) {  // 댓글정보 등록
         let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         console.log('postId?', post_Id)
         if(post_Id != null && post_Id !== '') {
@@ -578,7 +582,9 @@ export default {
           }).then(res => {
             if (res.data) {
               alert("댓글 등록이 완료되었습니다.");
-              this.onClick1()
+              this.detail.cmnt_titl = ''
+              this.detail.txt_psw = ''
+              this.$refs.grid3.invoke("readData")
             } else {
               alert("댓글 등록에 실패하였습니다.")
             }
@@ -589,15 +595,19 @@ export default {
         // 게시판 id에 따른 게시정보 등록
         // TODO 게시판 ID 하드코딩 제거 필요
         // TODO 최초 저장 이후 첨부파일 등록 open 필요
-        let gesipan_id = '0000000001'
-        console.log('gesipan_id: ', gesipan_id)
+        if(this.checkPrimary() === false) {
+          return
+        }
+
+        let gesipan_id = this.$store.state.pms.GesiData.gesipan_id
+
         if(gesipan_id != null && gesipan_id !== '') {
           console.log('post_titl: ', this.detail.post_titl)
           console.log('post_dsc: ', this.detail.post_dsc)
           console.log('txt_psw: ', this.detail.txt_psw)
 
           axiosService.post("/PJTE9120/insert_9120_01", {
-            gesipan_id            : '0000000001',                 // 게시판 ID
+            gesipan_id            : this.$store.state.pms.GesiData.gesipan_id,                 // 게시판 ID
             post_titl             : this.detail.post_titl,        // 게시정보_게시제목
             post_dsc              : this.detail.post_dsc,         // 게시글 설명
             txt_psw               : this.detail.txt_psw,          // 글비밀번호
@@ -634,7 +644,7 @@ export default {
             if (res.data) {
               alert("답글 등록이 완료되었습니다.");
               this.modals.txt_modal3 = false;
-              this.fnSearch()
+              this.$refs.grid2.invoke('readData')
             } else {
               alert("답글 등록에 실패하였습니다.")
             }
@@ -653,6 +663,7 @@ export default {
       if(gridKey === "1") {  // 게시정보 삭제
         axiosService.put("/PJTE9120/delete_9120_01", {
           post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+          txt_psw               : this.modalTxt,
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
@@ -660,7 +671,7 @@ export default {
             alert("삭제가 완료되었습니다.")
             this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
             this.init()
-            this.fnSearch();
+            this.$refs.grid1.invoke("readData")
           } else {
             alert("삭제에 실패하였습니다.")
           }
@@ -669,6 +680,7 @@ export default {
         axiosService.put("/PJTE9120/delete_9120_02", {
           post_id               : this.$refs.grid2.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
           rpl_no                : this.$refs.grid2.invoke("getValue", this.curRow, "rpl_no"),  // 답글번호
+          txt_psw               : this.modalTxt, // 비밀번호
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
@@ -676,7 +688,9 @@ export default {
             alert("삭제가 완료되었습니다.")
             this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
             this.init()
-            this.fnSearch();
+            this.$refs.grid1.invoke("readData")
+            this.$refs.grid2.invoke("readData")
+            this.$refs.grid3.invoke("readData")
           } else {
             alert("삭제에 실패하였습니다.")
           }
@@ -686,13 +700,16 @@ export default {
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           cmnt_no               : this.$refs.grid3.invoke("getValue", this.curRow, "cmnt_no"), // 댓글번호
           post_id               : this.$refs.grid3.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+          txt_psw               : this.modalTxt, // 비밀번호
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
           if (res.data) {
             alert("삭제가 완료되었습니다.")
-            this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
+            this.modals.txt_modal2 = false; // 비밀번호
             this.init()
-            this.fnSearch();
+            this.$refs.grid1.invoke("readData")
+            this.$refs.grid2.invoke("readData")
+            this.$refs.grid3.invoke("readData")
           } else {
             alert("삭제에 실패하였습니다.")
           }
@@ -788,6 +805,7 @@ export default {
         gesipan_id            : this.$store.state.pms.GesiData.gesipan_id,               // 게시판 ID
         annym_yn              : '',               // 익명여부
         post_id               : '',               //게시글 id
+        nmb_inq_yn            : '',               //조회횟수
       },
       detail : {
         // 게시내역 dtl
@@ -880,12 +898,11 @@ export default {
         resizable: true
       },
       rowHeaders:['rowNum'],
-      header:  {height: 25,},
-      header3: {height: 30,},
-      columns1: [ //게시내역
+      header:    { height: 25,},
+      header3:   { height: 30,},
+      columns1:  [ //게시내역
         {
           header: '게시제목',
-          width: 520,
           align: 'left',
           name: 'dis_post_titl',
           editor: 'text',
@@ -927,7 +944,6 @@ export default {
           align: 'center',
           name: 'cmnt_btn',
           renderer: CustomRenderer1,
-          hidden: true,
         },
         {
           header: '삭제',
@@ -940,10 +956,10 @@ export default {
         // 숨김처리 추가
         {
           header: '게시글설명',
-          align: 'center',
+          align: 'left',
           name: 'post_dsc',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '글비밀번호',
@@ -979,22 +995,6 @@ export default {
         },
       ],
       columns2: [ //답글내역
-        {
-          header: '게시글ID',
-          width: 100,
-          align: 'center',
-          name: 'post_id',
-          editor: 'text',
-          //hidden: true,
-        },
-        {
-          header: '답글번호',
-          width: 10,
-          align: 'center',
-          name: 'rpl_no',
-          editor: 'text',
-          //hidden: true,
-        },
         {
           header: '답글',
           width: 500,
@@ -1033,6 +1033,14 @@ export default {
           //hidden: true,
         },
         {
+          header: '비밀번호',
+          width: 70,
+          align: 'right',
+          name: 'txt_psw',
+          editor: 'text',
+          //hidden: true,
+        },
+        {
           header: '삭제',
           width: 50,
           align: 'center',
@@ -1040,11 +1048,27 @@ export default {
           renderer: CustomRenderer2,
           editor: 'text',
         },
+        {
+          header: '게시글ID',
+          width: 100,
+          align: 'center',
+          name: 'post_id',
+          editor: 'text',
+          //hidden: true,
+        },
+        {
+          header: '답글번호',
+          width: 10,
+          align: 'center',
+          name: 'rpl_no',
+          editor: 'text',
+          hidden: true,
+        },
       ],
       columns3: [ //댓글내역
         {
           header: '댓글',
-          width: 200,
+          width: 300,
           align: 'left',
           name: 'cmnt_titl',
           editor: 'text',
@@ -1080,8 +1104,8 @@ export default {
         },
         {
           header: '댓글번호',
-          width: 30,
-          align: 'center',
+          width: 70,
+          align: 'right',
           name: 'cmnt_no',
           editor: 'text',
           //hidden: true,
@@ -1089,18 +1113,34 @@ export default {
         {
           header: '상위댓글번호',
           width: 100,
-          align: 'center',
+          align: 'right',
           name: 'prn_cmnt_cd',
           editor: 'text',
           //hidden: true,
         },
         {
           header: '비밀번호',
-          width: 50,
-          align: 'center',
+          width: 70,
+          align: 'right',
           name: 'txt_psw',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
+        },
+        {
+          header: '백업ID',
+          width: 70,
+          align: 'right',
+          name: 'bkup_id',
+          editor: 'text',
+          hidden: true,
+        },
+        {
+          header: '프로젝트ID',
+          width: 70,
+          align: 'right',
+          name: 'prjt_id',
+          editor: 'text',
+          hidden: true,
         },
       ],
     }
@@ -1109,4 +1149,15 @@ export default {
 
 </script>
 <style>
+.modal-content {
+  width :900px;
+}
+.modal-body .modal-mid{
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 15px;
+    height: 5vh;
+    width : 700px;
+    margin: 20px;
+}
 </style>

@@ -1,5 +1,20 @@
 <template>
   <div style="display:inline;">
+      <div class="item-con" v-for="item in this.comboList" :key="item.id" v-if="item === 'C46'"><label>좋아요</label>
+        <select
+            v-model = "good_nm_selected"
+            style   = "width: 230px"
+            @change = "good_nm_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000046"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+
     <!-- 주간보고 시작 -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
       <div class="item-con" style="margin-left : -8px">
@@ -743,22 +758,6 @@
         >
           <option
               v-for  = "(item, idx) in CD1000000045N"
-              :key   = "idx"
-              v-text = "item.text"
-              :value = "item.value"
-          ></option>
-        </select>
-      </div>
-    </li>
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C46'">
-      <div class="item-con"><label>좋아요</label>
-        <select
-            v-model = "good_nm_selected"
-            style   = "width: 230px"
-            @change = "good_nm_change"
-        >
-          <option
-              v-for  = "(item, idx) in CD1000000046"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
