@@ -98,7 +98,7 @@
                       <td>
                           <textarea cols="145"
                                     rows="20"
-                                    style="width: 1550px; height: 240px; line-height: normal;"
+                                    style="width: 1550px; height: 150px; line-height: normal;"
                                     id="iptPstDsc"
                                     v-model="detail.post_dsc"
                                     ref="post_dsc"
@@ -208,39 +208,38 @@
           <br>
           <br>
           <div class="div-header"><h2>댓글정보</h2></div>
-          <table>
+          <table style="margin-left: 10px; margin-top: 20px; height: 80px">
             <colgroup>
-              <col width="60px">
-              <col width="*">
-              <col width="60px">
+              <col width="50px">
               <col width="*">
             </colgroup>
             <tbody>
             <tr>
               <th>댓글</th>
-              <td colspan="4">
+              <td>
                 <input type="text"
                        v-model="detail.cmnt_titl"
-                       style="width: 260px; margin-right: 25px;"
-                >
-              </td>
-              <th>비밀번호</th>
-              <td colspan="4">
-                <input type="text"
-                       placeholder="비밀번호를 입력해주세요."
-                       v-model="detail.txt_psw"
-                       style="width: 150px; margin-left: 5px;"
+                       style="width: 740px;"
                 >
               </td>
             </tr>
-            <br>
-            <br>
+            <tr>
+              <th>비밀번호</th>
+              <td>
+                <input type="text"
+                       placeholder="비밀번호를 입력해주세요."
+                       v-model="detail.txt_psw"
+                       style="width: 500px; margin-right: 70px;"
+                >
+                <div style="float: right">
+                  <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >등록</button>
+                  <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
+                </div>
+              </td>
+            </tr>
             </tbody>
           </table>
-          <div style="float: right">
-            <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >등록</button>
-            <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
-          </div>
+
         </Modal>
         <Modal :show.sync="modals.txt_modal2">
           <div class="modal-pop-body">
@@ -249,12 +248,13 @@
             </h2>
           </div>
           <hr>
-          <div class="item-con" style="margin-right: 5px">
+          <div class="item-con" style="height: 50px ;margin-right: 5px" >
             <input type="text"
                    id="modalId2"
+                   placeholder="비밀번호를 입력해주세요."
                    v-model="modalTxt"
                    ref="modalTxt"
-                   style="width: 150px;"
+                   style="width: 470px; height: 30px"
             >
           </div>
           <div class="item-con" style="margin-right: 5px">
@@ -263,51 +263,47 @@
                    style="width: 20px;"
             >
           </div>
+          <br><br>
           <div style="float: right">
             <button id="crpenm-delete2" class="btn btn-filter-p" @click="fnDelete()" style="margin-right: 5px">삭제</button>
             <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
           </div>
         </Modal>
         <Modal :show.sync="modals.txt_modal3">
-          <div class="modal-pop-body">
+          <div class="modal-pop-body" >
             <h2>
               답글정보
             </h2>
           </div>
           <hr>
-          <table>
-            <colgroup>
-              <col width="40px">
-              <col width="*">
-              <col width="40px">
-              <col width="*">
-            </colgroup>
-            <tbody>
-            <tr>
-              <th>답글</th>
-              <td>
+          <ul style="height: 100px">
+            <li class="filter-item-a">
+              <div class="item-con line-con">
+                <label style="padding-left: 10px">답글</label>
                 <input type="text"
                        v-model="detail.rpl_titl"
-                       style="width: 400px; margin-right: 25px; background-color: #f2f2f2"
+                       style="width: 400px;"
                 >
-              </td>
-            </tr>
-            <tr>
-              <combo
+              </div>
+            </li>
+            <br>
+            <li class="filter-item-a">
+              <div class="item-con line-con">
+                <combo
                   :comboArray = "this.goodNmList"
                   @good_nm_change="good_nm_change"
-              ></combo>
-              <th>비밀번호</th>
-              <td>
+                >
+                </combo>
+                <label>비밀번호</label>
                 <input type="text"
                        placeholder="비밀번호를 입력해주세요."
                        v-model="detail.txt_psw"
-                       style="width: 150px; margin-left: 5px;"
+                       style="width: 215px; margin-left: 5px;"
                 >
-              </td>
-            </tr>
-            </tbody>
-          </table>
+              </div>
+            </li>
+          </ul>
+          <br>
           <div style="float: right">
             <button id="crpenm-edit3" class="btn btn-filter-p" @click="fnSave(3)" style="margin-right: 5px">등록</button>
             <button id="crpenm-close3" class="btn btn-filter-b" @click="fnCloseModal(3)">닫기</button>
@@ -541,7 +537,6 @@ export default {
       }).then(res => {
         // console.log("res.data.data ::" + res.data.data)
         //this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
-
       }).catch(e => {
 
       });
@@ -565,17 +560,16 @@ export default {
     fnSave(num) {
       console.log('fnSave num?', num)
       if(num ==  1) {  // 댓글정보 등록
+        debugger
         let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+        let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
         console.log('postId?', post_Id)
+        console.log('gridRow?', gridRow)
         if(post_Id != null && post_Id !== '') {
-          console.log('cmnt_titl: ', this.detail.cmnt_titl)
-          console.log('prn_cmnt_cd: ', this.detail.prn_cmnt_cd)
-          console.log('txt_psw: ', this.detail.txt_psw)
-
           axiosService.post("/PJTE9120/insert_9120_03", {
             post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
             cmnt_titl             : this.detail.cmnt_titl,        // 댓글제목
-            prn_cmnt_cd           : this.detail.prn_cmnt_cd,      // 댓글코드
+            prn_cmnt_cd           : gridRow.prn_cmnt_cd,          // 댓글코드
             txt_psw               : this.detail.txt_psw,          // 글비밀번호
             prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
             login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
@@ -997,7 +991,6 @@ export default {
       columns2: [ //답글내역
         {
           header: '답글',
-          width: 500,
           align: 'left',
           name: 'rpl_titl',
           editor: 'text',
@@ -1021,7 +1014,6 @@ export default {
           width: 100,
           align: 'center',
           name: 'good_nm',
-          editor: 'text',
           //hidden: true,
         },
         {
@@ -1038,7 +1030,7 @@ export default {
           align: 'right',
           name: 'txt_psw',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '삭제',
@@ -1054,7 +1046,7 @@ export default {
           align: 'center',
           name: 'post_id',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '답글번호',
@@ -1068,7 +1060,6 @@ export default {
       columns3: [ //댓글내역
         {
           header: '댓글',
-          width: 300,
           align: 'left',
           name: 'cmnt_titl',
           editor: 'text',
@@ -1108,7 +1099,7 @@ export default {
           align: 'right',
           name: 'cmnt_no',
           editor: 'text',
-          //hidden: true,
+          // hidden: true,
         },
         {
           header: '상위댓글번호',
@@ -1116,7 +1107,7 @@ export default {
           align: 'right',
           name: 'prn_cmnt_cd',
           editor: 'text',
-          //hidden: true,
+          // hidden: true,
         },
         {
           header: '비밀번호',
@@ -1160,4 +1151,8 @@ export default {
     width : 700px;
     margin: 20px;
 }
+.line-con {
+  display:flex
+}
+
 </style>

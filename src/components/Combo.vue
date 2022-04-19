@@ -1,20 +1,5 @@
 <template>
   <div style="display:inline;">
-      <div class="item-con" v-for="item in this.comboList" :key="item.id" v-if="item === 'C46'"><label>좋아요</label>
-        <select
-            v-model = "good_nm_selected"
-            style   = "width: 230px"
-            @change = "good_nm_change"
-        >
-          <option
-              v-for  = "(item, idx) in CD1000000046"
-              :key   = "idx"
-              v-text = "item.text"
-              :value = "item.value"
-          ></option>
-        </select>
-      </div>
-
     <!-- 주간보고 시작 -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
       <div class="item-con" style="margin-left : -8px">
@@ -758,6 +743,22 @@
         >
           <option
               v-for  = "(item, idx) in CD1000000045N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C46'">
+      <div class="item-con line-con"><label>좋아요</label>
+        <select
+            v-model = "good_nm_selected"
+            style   = "width: 110px"
+            @change = "good_nm_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000046"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -1581,7 +1582,7 @@ export default {
       this.cd_all.push(this.CD1000000048N)
     },
     init()  {
-      // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
+      //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
       if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003') {
         this.read = true;  // 인력프로파일관리는 비활성화 콤보
       } else {
@@ -1590,6 +1591,17 @@ export default {
             sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
           this.read = false;
         }
+      }
+      //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000000') {
+        if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
+            sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+            sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
+          this.read = false;
+        }
+      }
+      else {
+        this.read = true;
       }
 
       this.code_it =
