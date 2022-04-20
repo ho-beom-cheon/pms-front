@@ -50,6 +50,7 @@ let aRootPath = new Object();
 aRootPath.path = "/";
 aRootPath.redirect = "/login";
 aRootPath.meta = {authRequired : false}
+aRootPath.props = true
 arrRoutes.push(aRootPath) ;
 
 
@@ -65,6 +66,7 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
     console.log("tmpObj ::",tmpObj);
     tmpObj.components = {default: menuList[idx]};
     tmpObj.meta = {authRequired : false}
+    tmpObj.props = true
   }
   // 팝업 components에 header, footer 가 없기 때문에 따로 분기
   else if ("/PJTE3001/PJTE6001/PJTE9001/PJTE9002/PJTE9003/".indexOf(menuListStr[idx]) > 0){

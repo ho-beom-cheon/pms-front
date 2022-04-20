@@ -252,7 +252,6 @@ export default {
       }else if(this.LoginId =='0000000003'){
         for (let i = 0; i < this.iteyes_menu_list.length; i++) {
           if (this.$route.path == this.iteyes_menu_list[i].path) {
-            debugger
             document.getElementById(this.iteyes_menu_list[i].id).className = 'active'
           }
         }

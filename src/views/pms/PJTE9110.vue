@@ -14,7 +14,7 @@
           <div class="div-header"><h2>전체 게시판 목록</h2>
             <ul class="filter-btn">
 <!--              <button class="btn btn-filter-e" @click="gridExcelExport(1)">엑셀다운로드</button>-->
-              <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnCreate">새 게시판 추가</button>
+              <button class="btn btn-filter-p" style="margin-left: 10px"><router-link tag="a" to="/PJTE9100">새 게시판 추가</router-link></button>
             </ul>
           </div>
 
@@ -103,22 +103,16 @@ export default {
         return;
       }
       let gridRow = this.$refs.grid1.invoke("getRow",this.curRow);
-
+      debugger
       this.setData(gridRow);
-      this.$router.push({path : 'PJTE9120', params :  this.$refs.grid1.invoke("getRow" , this.curRow) })
+      this.$router.push({path : 'PJTE9120', params :  {getRow :this.$refs.grid1.invoke("getRow" , this.curRow)} })
       this.info.current_man_no = this.$refs.grid1.invoke("getValue", this.curRow, "man_no") // ROW클릭 시 인력번호
-
     },
 
     //조회
     fnSearch(){
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
-    },
-
-    //게시판 추가
-    fnCreate(){
-      location.href = process.env.VUE_APP_API + '/PJTE9100';
     },
 
   },
@@ -283,14 +277,14 @@ export default {
           //align: 'center',
           name: 'file_upld_yn',
           editor: 'text',
-          hidden : true
+          hidden : false,
         },
         {
           header: '게시부문',
           //align: 'center',
           name: 'bubun_cd',
           editor: 'text',
-          hidden : true
+          hidden : true,
         },
         {
           header: '게시구분',
