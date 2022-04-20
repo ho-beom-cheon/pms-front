@@ -36,7 +36,6 @@
           </li>
         </ul>
       </section>
-
       <!-- page contents -->
       <section class="page-contents">
         <div class="grid1-box" style="height: 255px">
@@ -84,7 +83,7 @@
                              v-model="detail.post_titl"
                              ref="post_titl"
                              style="width: 1550px;"
-                             disabled="disabled"
+                             :disabled= "gesiInput"
                       >
                     </div>
                   </li>
@@ -99,20 +98,18 @@
                           <textarea cols="145"
                                     rows="20"
                                     style="width: 1550px; height: 150px; line-height: normal;"
-                                    id="iptPstDsc"
                                     v-model="detail.post_dsc"
-                                    ref="post_dsc"
-                                    disabled="disabled"
+                                    :disabled= "gesiInput"
                           ></textarea>
                       </td>
                     </div>
                   </li>
                 </ul>
                 <ul class="filter-btn" style="margin-top: 7px;">
-                  <ul class="filter-btn" v-if="this.detail.mng_id">
-                    <th style="margin-top: 5px; margin-right: 10px">첨부파일  </th>
+                  <ul class="filter-btn" style="" v-if="show_area">
+                    <th style="margin-top: 5px; margin-right: 10px">첨부파일</th>
                     <input type="text"
-                           :disabled=true
+                           :disabled= true
                            v-model="detail.org_file_nm"
                            style="background-color: #f2f2f2; width: 500px;"
                     >
@@ -128,11 +125,9 @@
                   <li class="filter-item">
                     <div class="item-con" style="margin-right: 5px">
                       <input type="text"
-                             id="iptTxtPsw"
                              v-model="detail.txt_psw"
                              ref="txt_psw"
                              style="width: 150px;"
-                             disabled="disabled"
                       >
                     </div>
                   </li>
@@ -326,6 +321,7 @@ import {axiosService} from "@/api/http";
 // 첨부파일 팝업에서 받은 값
 window.fileData = (fileLists) => {
   window.pms_register.file_name_list = fileLists;
+  window.pms_register.detail.org_file_nm = fileLists[fileLists.length-1].org_file_nm;
   window.pms_register.detail.atfl_mng_id = fileLists[fileLists.length-1].atfl_mng_id;
 }
 
@@ -374,6 +370,11 @@ export default {
     grid: Grid,
     Modal,
     PmsSideBar
+  },
+  props: {
+    getRow: {
+          type: Array,
+      },
   },
   mounted() {
     // 화면 초기화
@@ -427,6 +428,17 @@ export default {
       }
     },
 
+    /* 답글 저장을 하기위한 필수 항목 체크 */
+    // FIXME 비밀번호 정합성 체크
+    dabgeulCheckPrimary() {
+      if (this.detail.txt_psw === "" || this.detail.txt_psw == null) {
+        alert('비밀번호는 필수 입력사항입니다.');
+        return false;
+      }else {
+        return true;  // 필수 값 모두 입력 시 true
+      }
+    },
+
     onGridUpdated(grid){
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
       console.log("게시데이터 ::", this.$store.state.pms.GesiData);
@@ -463,7 +475,7 @@ export default {
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
 
-        this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 답글내역 조회
+        this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 댓글내역 조회
         axiosService.get("/PJTE9120/select_9120_03", {
           params: {
             prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -517,6 +529,7 @@ export default {
 
     //게시내역(그리드1) ROW 더블클릭 시 게시정보 세부내역 및 답글내역 조회
     dblclick(ev) {
+      this.show_area = true
       // 게시내역 ROW 클릭 시 하단 게시정보 input 에 바인딩
       if (ev.columnName == 'dis_post_titl' || ev.columnName == 'post_dt' || ev.columnName == 'post_nm' || ev.columnName == 'view_cnt') {
         this.curRow = ev.rowKey;
@@ -525,7 +538,6 @@ export default {
           this.cellDataBind(currentRowData) // currentRowData 가 있을 때 Row 클릭 시 상세내용에 Bind
         }
       }
-
       // 답글내역 조회
       this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 답글내역 조회
       axiosService.get("/PJTE9120/select_9120_02", {
@@ -535,7 +547,7 @@ export default {
           post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         }
       }).then(res => {
-        // console.log("res.data.data ::" + res.data.data)
+        console.log("res.data.data ::" + res.data.data())
         //this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
       }).catch(e => {
 
@@ -560,14 +572,18 @@ export default {
     fnSave(num) {
       console.log('fnSave num?', num)
       if(num ==  1) {  // 댓글정보 등록
-        debugger
-        let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+        let post_Id = this.$refs.grid3.invoke("getValue", this.curRow, "post_id")
         let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
+
+        if(this.dabgeulCheckPrimary() === false) {
+          return
+        }
+
         console.log('postId?', post_Id)
         console.log('gridRow?', gridRow)
         if(post_Id != null && post_Id !== '') {
           axiosService.post("/PJTE9120/insert_9120_03", {
-            post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+            post_id               : this.$refs.grid3.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
             cmnt_titl             : this.detail.cmnt_titl,        // 댓글제목
             prn_cmnt_cd           : gridRow.prn_cmnt_cd,          // 댓글코드
             txt_psw               : this.detail.txt_psw,          // 글비밀번호
@@ -596,15 +612,13 @@ export default {
         let gesipan_id = this.$store.state.pms.GesiData.gesipan_id
 
         if(gesipan_id != null && gesipan_id !== '') {
-          console.log('post_titl: ', this.detail.post_titl)
-          console.log('post_dsc: ', this.detail.post_dsc)
-          console.log('txt_psw: ', this.detail.txt_psw)
 
           axiosService.post("/PJTE9120/insert_9120_01", {
             gesipan_id            : this.$store.state.pms.GesiData.gesipan_id,                 // 게시판 ID
             post_titl             : this.detail.post_titl,        // 게시정보_게시제목
             post_dsc              : this.detail.post_dsc,         // 게시글 설명
             txt_psw               : this.detail.txt_psw,          // 글비밀번호
+            atfl_mng_id           : this.detail.atfl_mng_id,      // 첨부파일관리 ID
             prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
             login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
           }).then(res => {
@@ -715,7 +729,8 @@ export default {
     cellDataBind(currentRowData) {
       this.detail.post_titl = currentRowData.post_titl;              // (상세)게시글제목
       this.detail.post_dsc = currentRowData.post_dsc;                // (상세)게시글설명
-      // TODO 첨부파일 관련 추가 필요
+      this.detail.atfl_mng_id = currentRowData.atfl_mng_id;          // (상세)첨부파일관리 ID
+      this.detail.org_file_nm = currentRowData.org_file_nm;          // (상세)첨부피일명
     },
 
     // 조회한 데이터로 게시내역 데이터 바인딩
@@ -743,21 +758,20 @@ export default {
 
     // 첨부파일 추가 팝업 오픈
     open_file_page() {
-      let file_rgs_dscd = '801'
+      let file_rgs_dscd = '802'
       let atfl_mng_id = this.detail.atfl_mng_id
-      let mng_id = this.detail.man_no
+      // let mng_id = this.detail.man_no
       let bkup_id = '0000000000', prjt_id = sessionStorage.getItem("LOGIN_PROJ_ID")
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
     },
 
     // [신규] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
+      this.show_area = false
       this.detail.post_titl           = '' // 게시제목
       this.detail.post_dsc            = '' // 게시글설명
       this.detail.atfl_mng_id         = '' // 첨부파일관리 ID
-      document.getElementById('iptPstTit').disabled = false;
-      document.getElementById('iptPstDsc').disabled = false;
-      document.getElementById('iptTxtPsw').disabled = false;
+      this.detail.org_file_nm         = '' // 첨부파일
 
       // 그리드2(답글내역), 그리드3(댓글내역) 초기화
       this.$refs.grid2.invoke("clear");
@@ -781,7 +795,10 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
-
+    file_name_list() {
+      // 1. 첨부파일 1개만 보여줄 때
+      this.detail.org_file_nm = this.file_name_list[0].org_file_nm
+    }
   },
 
   // 변수 선언부분
@@ -790,6 +807,10 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C27","C0"], //C27 = 프로젝트 ID, C0 = 백업 ID
       goodNmList : ["C46"],     //C46 = 좋아요
+
+      show_area : false,
+
+      gesiInput : true,
 
       file_name_list: [],
 
@@ -961,7 +982,7 @@ export default {
           align: 'center',
           name: 'txt_psw',
           editor: 'text',
-          hidden: true,
+          // hidden: true,
         },
         {
           header: '첨부파일관리ID',
@@ -969,7 +990,14 @@ export default {
           align: 'center',
           name: 'atfl_mng_id',
           editor: 'text',
-          hidden: true,
+          hidden: false,
+        },
+        {
+          header: '원본파일명',
+          width: 100,
+          align: 'center',
+          name: 'org_file_nm',
+          // hidden: true,
         },
         {
           header: '게시글 ID',
@@ -993,7 +1021,6 @@ export default {
           header: '답글',
           align: 'left',
           name: 'rpl_titl',
-          editor: 'text',
         },
         {
           header: '등록일시',
@@ -1038,7 +1065,6 @@ export default {
           align: 'center',
           name: 'del_btn',
           renderer: CustomRenderer2,
-          editor: 'text',
         },
         {
           header: '게시글ID',
@@ -1099,7 +1125,7 @@ export default {
           align: 'right',
           name: 'cmnt_no',
           editor: 'text',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '상위댓글번호',
@@ -1107,7 +1133,7 @@ export default {
           align: 'right',
           name: 'prn_cmnt_cd',
           editor: 'text',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '비밀번호',
@@ -1115,7 +1141,7 @@ export default {
           align: 'right',
           name: 'txt_psw',
           editor: 'text',
-          hidden: true,
+          // hidden: true,
         },
         {
           header: '백업ID',
