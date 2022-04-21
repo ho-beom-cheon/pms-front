@@ -97,6 +97,7 @@
                       <td>
                           <textarea cols="145"
                                     rows="20"
+                                    id="iptPstDsc"
                                     style="width: 1550px; height: 150px; line-height: normal;"
                                     v-model="detail.post_dsc"
                                     :disabled= "gesiInput"
@@ -106,7 +107,7 @@
                   </li>
                 </ul>
                 <ul class="filter-btn" style="margin-top: 7px;">
-                  <ul class="filter-btn" style="" v-if="show_area">
+                  <ul class="filter-btn" style="justify-content: flex-start" v-if="show_area">
                     <th style="margin-top: 5px; margin-right: 10px">첨부파일</th>
                     <input type="text"
                            :disabled= true
@@ -125,8 +126,7 @@
                   <li class="filter-item">
                     <div class="item-con" style="margin-right: 5px">
                       <input type="text"
-                             v-model="detail.txt_psw"
-                             ref="txt_psw"
+                             v-model="detail.txt_psw_post"
                              style="width: 150px;"
                       >
                     </div>
@@ -223,7 +223,7 @@
               <td>
                 <input type="text"
                        placeholder="비밀번호를 입력해주세요."
-                       v-model="detail.txt_psw"
+                       v-model="detail.txt_psw_comment"
                        style="width: 500px; margin-right: 70px;"
                 >
                 <div style="float: right">
@@ -292,7 +292,7 @@
                 <label>비밀번호</label>
                 <input type="text"
                        placeholder="비밀번호를 입력해주세요."
-                       v-model="detail.txt_psw"
+                       v-model="detail.txt_psw_reply"
                        style="width: 215px; margin-left: 5px;"
                 >
               </div>
@@ -414,13 +414,13 @@ export default {
     /* 게시정보 저장을 하기위한 필수 항목 체크 */
     // FIXME 비밀번호 정합성 체크
     checkPrimary() {
-      if (this.detail.post_titl == "" || this.detail.post_titl == null) {
+      if (this.detail.post_titl === "" || this.detail.post_titl == null) {
         alert('게시제목은 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.post_dsc == "" || this.detail.post_dsc == null) {
+      } else if (this.detail.post_dsc === "" || this.detail.post_dsc == null) {
         alert('게시내용은 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.txt_psw == "" || this.detail.txt_psw == null) {
+      } else if (this.detail.txt_psw_post === "" || this.detail.txt_psw_post == null) {
         alert('비밀번호는 필수 입력사항입니다.');
         return false;
       }else {
@@ -430,8 +430,19 @@ export default {
 
     /* 답글 저장을 하기위한 필수 항목 체크 */
     // FIXME 비밀번호 정합성 체크
-    dabgeulCheckPrimary() {
-      if (this.detail.txt_psw === "" || this.detail.txt_psw == null) {
+    replyCheckPrimary() {
+      if (this.detail.txt_psw_reply === "" || this.detail.txt_psw_reply == null) {
+        alert('비밀번호는 필수 입력사항입니다.');
+        return false;
+      }else {
+        return true;  // 필수 값 모두 입력 시 true
+      }
+    },
+
+    /* 댓글 저장을 하기위한 필수 항목 체크 */
+    // FIXME 비밀번호 정합성 체크
+    commentCheckPrimary() {
+      if (this.detail.txt_psw_comment === "" || this.detail.txt_psw_comment == null) {
         alert('비밀번호는 필수 입력사항입니다.');
         return false;
       }else {
@@ -469,11 +480,14 @@ export default {
 
       // TODO 댓글 및 삭제 버튼 이벤트 추가 (게시내역, 답글내역, 댓글내역 각자 추가 필요)
       const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
+      const currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
+
       // 댓글내역 조회(모달창)
       if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 모달 오픈
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+        this.detail.post_id = currentRowData.post_id
 
         this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 댓글내역 조회
         axiosService.get("/PJTE9120/select_9120_03", {
@@ -516,7 +530,8 @@ export default {
     onClick3(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
-
+      let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
+      console.log("댓글클릭확인 ::", gridRow)
       const currentCellData = (this.$refs.grid3.invoke("getFocusedCell"));
 
       if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 모달 오픈
@@ -529,7 +544,10 @@ export default {
 
     //게시내역(그리드1) ROW 더블클릭 시 게시정보 세부내역 및 답글내역 조회
     dblclick(ev) {
+      this.updateYn = 'Y'
       this.show_area = true
+      this.gesiInput = true
+      this.detail.txt_psw_post = ''
       // 게시내역 ROW 클릭 시 하단 게시정보 input 에 바인딩
       if (ev.columnName == 'dis_post_titl' || ev.columnName == 'post_dt' || ev.columnName == 'post_nm' || ev.columnName == 'view_cnt') {
         this.curRow = ev.rowKey;
@@ -547,8 +565,6 @@ export default {
           post_id :this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         }
       }).then(res => {
-        console.log("res.data.data ::" + res.data.data())
-        //this.setEmpData(res.data.data); // 조회한 데이터로 바인딩
       }).catch(e => {
 
       });
@@ -568,35 +584,33 @@ export default {
       this.$refs.grid2.invoke("readData");
     },
 
-    // TODO 비밀번호 정합성 체크 추가
     fnSave(num) {
       console.log('fnSave num?', num)
       if(num ==  1) {  // 댓글정보 등록
-        let post_Id = this.$refs.grid3.invoke("getValue", this.curRow, "post_id")
+        let post_id  = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
 
-        if(this.dabgeulCheckPrimary() === false) {
+
+        if(this.commentCheckPrimary() === false) {
           return
         }
-
-        console.log('postId?', post_Id)
-        console.log('gridRow?', gridRow)
-        if(post_Id != null && post_Id !== '') {
+        if(this.detail.post_id  != null && this.detail.post_id  !== '') {
           axiosService.post("/PJTE9120/insert_9120_03", {
-            post_id               : this.$refs.grid3.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
-            cmnt_titl             : this.detail.cmnt_titl,        // 댓글제목
-            prn_cmnt_cd           : gridRow.prn_cmnt_cd,          // 댓글코드
-            txt_psw               : this.detail.txt_psw,          // 글비밀번호
-            prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
-            login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
+            post_id               : post_id,             // 게시글 ID
+            cmnt_titl             : this.detail.cmnt_titl,                                   // 댓글제목
+            prn_cmnt_cd           : gridRow == null ? this.detail.prn_cmnt_cd : gridRow.prn_cmnt_cd,            // 댓글코드
+            txt_psw               : this.detail.txt_psw_comment,                             // 글비밀번호
+            prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),            // 프로젝트 ID
+            login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")              // 로그인직원번호
           }).then(res => {
             if (res.data) {
               alert("댓글 등록이 완료되었습니다.");
               this.detail.cmnt_titl = ''
-              this.detail.txt_psw = ''
+              this.detail.txt_psw_conmment = '';
               this.$refs.grid3.invoke("readData")
             } else {
               alert("댓글 등록에 실패하였습니다.")
+              this.detail.txt_psw_conmment = '';
             }
           })
 
@@ -608,43 +622,63 @@ export default {
         if(this.checkPrimary() === false) {
           return
         }
-
         let gesipan_id = this.$store.state.pms.GesiData.gesipan_id
 
         if(gesipan_id != null && gesipan_id !== '') {
-
-          axiosService.post("/PJTE9120/insert_9120_01", {
-            gesipan_id            : this.$store.state.pms.GesiData.gesipan_id,                 // 게시판 ID
-            post_titl             : this.detail.post_titl,        // 게시정보_게시제목
-            post_dsc              : this.detail.post_dsc,         // 게시글 설명
-            txt_psw               : this.detail.txt_psw,          // 글비밀번호
-            atfl_mng_id           : this.detail.atfl_mng_id,      // 첨부파일관리 ID
-            prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
-            login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
-          }).then(res => {
-            if (res.data) {
-              alert("게시글 등록이 완료되었습니다.");
-              this.init()
-              this.fnSearch()
-            } else {
-              alert("게시글 등록에 실패하였습니다.")
-            }
-          })
+          if(this.updateYn === 'N') {
+            axiosService.post("/PJTE9120/insert_9120_01", {
+              gesipan_id: this.$store.state.pms.GesiData.gesipan_id,                 // 게시판 ID
+              post_titl: this.detail.post_titl,        // 게시정보_게시제목
+              post_dsc: this.detail.post_dsc,         // 게시글 설명
+              txt_psw: this.detail.txt_psw_post,     // 글비밀번호
+              atfl_mng_id: this.detail.atfl_mng_id,      // 첨부파일관리 ID
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
+            }).then(res => {
+              if (res.data) {
+                alert("게시글 등록이 완료되었습니다.");
+                this.detail.txt_psw_post = '';
+                this.init()
+                this.fnSearch()
+              } else {
+                alert("게시글 등록에 실패하였습니다.")
+                this.detail.txt_psw_post = '';
+              }
+            })
+          } else if(this.updateYn === 'Y') {
+            axiosService.put("/PJTE9120/update_9120_02", {
+              post_id: this.detail.post_id,
+              txt_psw: this.detail.txt_psw_post,     // 글비밀번호
+              atfl_mng_id: this.detail.atfl_mng_id,      // 첨부파일관리 ID
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
+            }).then(res => {
+              if (res.data) {
+                alert("첨부파일 등록이 완료되었습니다.");
+                this.detail.txt_psw_post = '';
+                this.init()
+                this.fnSearch()
+              } else {
+                alert("첨부파일 등록에 실패하였습니다.")
+                this.detail.txt_psw_post = '';
+              }
+            })
+          }
 
         }
       } else if(num == 3) { // 답글정보 등록
         // 게시내역 선택한 행의 게시글 ID set
+        if(this.replyCheckPrimary() === false) {
+          return
+        }
         let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         console.log('postId: ', post_Id)
         if(post_Id != null && post_Id !== '') {
-          console.log('rplTitl: ', this.detail.rpl_titl)
-          console.log('txtPsw: ', this.detail.txt_psw)
-          console.log('goodNmCd: ', this.info.good_nm_selected)
 
           axiosService.post("/PJTE9120/insert_9120_02", {
-            post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+            post_id               : this.detail.post_id, // 게시글 ID
             rpl_titl              : this.detail.rpl_titl,         // 답글제목
-            txt_psw               : this.detail.txt_psw,          // 글비밀번호
+            txt_psw               : this.detail.txt_psw_reply,    // 글비밀번호
             good_cd               : this.info.good_nm_selected,   // 좋아요 코드
             prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
             login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
@@ -652,6 +686,7 @@ export default {
             if (res.data) {
               alert("답글 등록이 완료되었습니다.");
               this.modals.txt_modal3 = false;
+              this.detail.txt_psw_reply = ''
               this.$refs.grid2.invoke('readData')
             } else {
               alert("답글 등록에 실패하였습니다.")
@@ -670,7 +705,7 @@ export default {
 
       if(gridKey === "1") {  // 게시정보 삭제
         axiosService.put("/PJTE9120/delete_9120_01", {
-          post_id               : this.$refs.grid1.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
+          post_id               : this.detail.post_id, // 게시글 ID
           txt_psw               : this.modalTxt,
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
@@ -727,6 +762,7 @@ export default {
 
     /* 게시내역 Row dblClick 시 게시정보에 Bind */
     cellDataBind(currentRowData) {
+      this.detail.post_id   = currentRowData.post_id
       this.detail.post_titl = currentRowData.post_titl;              // (상세)게시글제목
       this.detail.post_dsc = currentRowData.post_dsc;                // (상세)게시글설명
       this.detail.atfl_mng_id = currentRowData.atfl_mng_id;          // (상세)첨부파일관리 ID
@@ -752,7 +788,7 @@ export default {
       this.detail.birthday            = data.contents[0].birthday              // 생년월
       this.$refs.combo3.$data.skill_grd_selected = data.contents[0].skill_grd;       // 인력구분(콤보)
       this.detail.career              = data.contents[0].career                // 경력
-      this.$refs.combo4.$data.grd_cd_selected = data.contents[0].grd_cd;       // 인력구분(콤보)
+      this.$refs.combo4.$data.grd_cd_selected = data.contents[0].grd_cd;       // 인력구분분(콤보)
       this.detail.atfl_mng_id         = data.contents[0].atfl_mng_id           // 첨부파일관리ID
     },
 
@@ -767,12 +803,14 @@ export default {
 
     // [신규] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
+      this.updateYn = 'N'
       this.show_area = false
       this.detail.post_titl           = '' // 게시제목
       this.detail.post_dsc            = '' // 게시글설명
       this.detail.atfl_mng_id         = '' // 첨부파일관리 ID
       this.detail.org_file_nm         = '' // 첨부파일
 
+      this.gesiInput = false
       // 그리드2(답글내역), 그리드3(댓글내역) 초기화
       this.$refs.grid2.invoke("clear");
     },
@@ -784,11 +822,14 @@ export default {
     fnCloseModal(num){  // 모달창 닫기
       if(num == 1) {
         this.modals.txt_modal1 = false;
+        this.detail.txt_psw_comment = ''
+        this.detail.cmnt_titl = ''
       } else if(num == 2) {
         this.modals.txt_modal2 = false;
       } else if(num == 3) {
         this.modals.txt_modal3 = false;
       }
+
     },
 
   },
@@ -808,11 +849,11 @@ export default {
       comboList : ["C27","C0"], //C27 = 프로젝트 ID, C0 = 백업 ID
       goodNmList : ["C46"],     //C46 = 좋아요
 
-      show_area : false,
-
+      show_area : false,     //첨부파일 영역 보여주기 유무
+      updateYn  : 'N',       //게시정보 신규 여부
       gesiInput : true,
 
-      file_name_list: [],
+      file_name_list: [],    // 첨부파일 데이터
 
       info : {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
@@ -831,24 +872,26 @@ export default {
         // 게시정보 dtl
         post_titl           : '',                 // 게시글제목
         post_dsc            : '',                 // 게시글설명
-        txt_psw             : '',                 // 글비밀번호 (+답글내역 dtl + 댓글내역 dtl)
         atfl_mng_id         : '',                 // 첨부파일관리 ID
         bkup_id             : '',                 // 백업 ID
-        prjt_id             : '',                 // 프로젝트 ID (+답글내역 dtl + 댓글내역 dtl)
-        post_id             : '',                 // 게시글 ID (+답글내역 dtl + 댓글내역 dtl)
+        prjt_id             : '',                 // 프로젝트 ID
+        post_id             : '',                 // 게시글 ID
         gesipan_id          : '',                 // 게시판 ID
         org_file_nm         : '',                 // 원파일명
+        txt_psw_post       : '',                  // 게시글 비밀번호
         // 답글내역 dtl
         rpl_titl            : '',                 // 답글제목
         rpl_db_chg_ts       : '',                 // 답글등록일시
         good_nm             : '',                 // 좋아요구분명
         rpl_emp_nm          : '',                 // 답글등록자
         rpl_no              : '',                 // 답글번호
+        txt_psw_reply       : '',                 // 답글 비밀번호
         // 댓글내역 dtl
         cmnt_titl           : '',                 // 댓글제목
         cmnt_db_chg_ts      : '',                 // 댓글등록일시
         cmnt_emp_nm         : '',                 // 댓글등록자
         cmnt_no             : '',                 // 댓글번호
+        txt_psw_comment     : '',                 // 댓글비밀번호
         prn_cmnt_cd         : '',                 // 상위댓글코드
       },
       login : {
@@ -1056,8 +1099,7 @@ export default {
           width: 70,
           align: 'right',
           name: 'txt_psw',
-          editor: 'text',
-          hidden: true,
+          // hidden: true,
         },
         {
           header: '삭제',
@@ -1133,14 +1175,13 @@ export default {
           align: 'right',
           name: 'prn_cmnt_cd',
           editor: 'text',
-          hidden: true,
+          // hidden: true,
         },
         {
           header: '비밀번호',
           width: 70,
           align: 'right',
           name: 'txt_psw',
-          editor: 'text',
           // hidden: true,
         },
         {
