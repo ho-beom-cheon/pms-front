@@ -1229,7 +1229,13 @@ export default {
           header: '부문코드',
           width: 80,
           name: 'dept_cd',
-          editor : 'text'
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000044N
+            }
+          }
         },
         {
           header: '계획투입시작일자',

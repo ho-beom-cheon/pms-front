@@ -1152,7 +1152,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000002N
+              listItems: this.$store.state.pms.CD1000000044N
             }
           }
         },
