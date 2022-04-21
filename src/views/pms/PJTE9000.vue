@@ -1227,7 +1227,7 @@ export default {
         },
         {
           header: '부문코드',
-          width: 80,
+          width: 140,
           name: 'dept_cd',
           formatter: 'listItemText',
           editor: {
