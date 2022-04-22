@@ -16,40 +16,19 @@
                 :comboArray = "this.comboList"
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
-                @dept_cd_change="dept_cd_change"
+                @bzcd_change="bzcd_change"
             ></combo>
           </ul>
           <ul class="filter-btn">
-            <button class="btn btn-filter-e" id="excelUpBtn">
+            <button class="btn btn-filter-e">
               <label for="file">엑셀업로드</label>
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
             </button>
-            <button class="btn btn-filter-e" id="excelDwnBtn" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" id="addRowBtn" @click="gridAddRow">행추가</button>
-            <button class="btn btn-filter-b" id="delRowBtn" @click="gridDelRow">행삭제</button>
+            <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+            <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
+            <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
+            <button class="btn btn-filter-p" @click="fnSave" style="margin-left: 20px">저장</button>
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
-          </ul>
-
-          <!-- grid contents -->
-          <div class="gridWrap" style="min-width: 750px;">
-            <grid
-                ref="grid"
-                :data="dataSource"
-                :header="header"
-                :columns="columns"
-                :bodyHeight="bodyHeight"
-                :showDummyRows="showDummyRows"
-                :columnOptions="columnOptions"
-                :editingEvent="editingEvent"
-                :rowHeight="rowHeight"
-                :minRowHeight="minRowHeight"
-                :rowHeaders="rowHeaders"
-                @click="onClick"
-                @onGridUpdated="onGridUpdated"
-            ></grid>
-          </div>
-          <ul class="filter-btn" style="margin-top: 7px">
-            <button class="btn btn-filter-p" id="saveBtn" @click="fnSave" style="margin-left: 20px">저장</button>
           </ul>
         </div>
       </section>
@@ -59,23 +38,53 @@
 <script>
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
+import WindowPopup from "./PJTE3001.vue";          // 결함등록팝업
 import Combo from "@/components/Combo"
+import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import XLSX from "xlsx";
 import PmsSideBar from  "@/components/PmsSideBar";
 
+// 첨부파일 팝업에서 받은 값
+window.fileData = (fileLists, num) => {
+  console.log(fileLists);
+  window.pms_register.file_name_list = fileLists;
+  window.pms_register.atfl_num = num;
+  window.pms_register.atfl_mng_id_yn = fileLists[1].atfl_mng_id;
+  window.pms_register.atfl_mng_id = fileLists[1].atfl_mng_id;
+}
+
+// 커스텀 이미지 버튼을 만들기 위한 클래스 생성
+class CustomRenderer {
+  constructor(props) {
+    const el = document.createElement('img');
+    el.src = 'some-image-link';
+
+    this.el = el;
+    this.render(props);
+  }
+  getElement() {
+    return this.el;
+  }
+  render(props) {
+    // 결함등록 버튼 img
+    this.el.src = '/img/ic_logOut.8c60a751.svg';
+  }
+}
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
-    Combo,
-    PmsSideBar,
     grid: Grid,
+    Combo,
+    WindowPopup,
+    Modal,
+    PmsSideBar,
   },
-  mounted: function () {
+  mounted() {
     this.init()
     this.fnSearch()
-    window.input_personnel = this;
+    window.pms_register = this;
   },
 // 함수를 선언하는 부분
 // 일반적인 함수를 선언하는 부분
@@ -83,7 +92,23 @@ export default {
     // Combo.vue 에서 받아온 값
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
-    dept_cd_change(params)        {this.info.dept_cd_selected = params},
+    bzcd_change(params)           {this.info.bzcd_selected = params},
+    wbs_mng_cd_change(params)     {
+      this.info.wbs_mng_cd_selected = params
+
+      if(this.info.wbs_mng_cd_selected === '100'){
+        this.validated = false;
+        this.$refs.grid.invoke("showColumn",'prg_rt')
+        this.$refs.grid.invoke("showColumn",'wgt_rt')
+        this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
+      } else {
+        this.validated = true;
+        this.$refs.grid.invoke("hideColumn",'prg_rt')
+        this.$refs.grid.invoke("hideColumn",'wgt_rt')
+        this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
+      }
+    },
+    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
     // 렌더링 중 적용 (mounted와 동일)
     onGridMounted(grid){
@@ -91,19 +116,35 @@ export default {
     },
     // 렌더링 후 적용됨
     onGridUpdated(grid){
-      let gridData = this.$refs.grid.invoke("getData");
+      let gridData = this.$refs.grid.invoke("getData")
+
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+
+      for(let i=0; i<gridData.length; i++) {
+        if(gridData[i].wbs_cnt === "0") {
+          this.$refs.grid.invoke("enableCell", i, 'prg_rt');
+        }
+      }
+
+    },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modalTxt = document.getElementById("modalId").value;
+      this.modals.txt_modal1 = false;
+    },
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
     },
     fnSave() {
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
-          axiosService.post("/PJTE9310/insert_9310_01", {
+          axiosService.post("/PJTE5000/insert", {
             gridData     : this.gridData,
             bkup_id      : this.info.bkup_id_selected,
             bzcd         : this.bzcd == null? 'TTT':this.bzcd,
             mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
             prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-            login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
           }).then(res => {
             console.log(res);
             if (res.data) {
@@ -134,7 +175,7 @@ export default {
 
         if (this.createdRows.length !== 0) {
           if (this.vaildation(this.createdRows, "1") === true) {
-            axiosService.post("/PJTE9310/insert_9310_01", {
+            axiosService.post("/PJTE5000/insert", {
               gridData     : this.createdRows,
               bkup_id      : this.info.bkup_id_selected,
               bzcd         : this.bzcd,
@@ -162,7 +203,7 @@ export default {
         if (this.updatedRows.length !== 0) {
           if (this.vaildation(this.updatedRows, "1") === true) {
             try {
-              axiosService.put("/PJTE9310/update", {
+              axiosService.put("/PJTE5000/update", {
                 updatedRows   : this.updatedRows,
                 bkup_id      : this.info.bkup_id_selected,
                 prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -186,7 +227,7 @@ export default {
         }
         if (this.deletedRows.length !== 0) {
           if (this.vaildation(this.deletedRows, "1") === true) {
-            axiosService.put("/PJTE9310/delete_9310_01", {
+            axiosService.put("/PJTE5000/delete", {
               gridData     : this.deletedRows,
               bkup_id      : this.info.bkup_id_selected,
               bzcd         : this.bzcd == null? 'TTT':this.bzcd,
@@ -221,6 +262,12 @@ export default {
       this.upCount = 0;
       this.downCount = 0;
 
+      // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
+      if(ev.columnName === 'atfl_mng_id_yn' && this.addCheak === 'N') {
+        this.count = 1
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='700', bzcd = gridData.bzcd, mng_id=gridData.mng_id, mng_cd=gridData.mng_cd
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&mng_cd=${mng_cd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+      }
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
       if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
@@ -229,26 +276,25 @@ export default {
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
     },
-    gridInit() {
-      this.$refs.grid.invoke("clear");
-    },
-    init() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
-        // 엑셀업로드 및 다운로드, 행추가 및 삭제, 저장 버튼 숨기기
-        document.getElementById('excelUpBtn').hidden = true;
-        document.getElementById('excelDwnBtn').hidden = true;
-        document.getElementById('addRowBtn').hidden = true;
-        document.getElementById('delRowBtn').hidden = true;
-        document.getElementById('saveBtn').hidden = true;
-      }
-    },
     fnSearch() {
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
+    gridInit() {
+      this.$refs.grid.invoke("clear");
+    },
+    init() {
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        // 특정 열 비활성화
+        this.$refs.grid.invoke("disableColumn", 'wgt_rt');
+        // this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
+        // this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
+        this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
+      }
+    },
     gridAddRow() {
       if(this.autCheck() === false){ return; }  //권한 체크
-      this.addCheak = 'Y';
+      this.addCheak = 'y';
       this.$refs.grid.invoke("appendRow",
           {
             bzcd    : this.info.bzcd_selected,
@@ -272,7 +318,7 @@ export default {
       this.$refs.grid.invoke("removeRow", this.curRow);
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "투입인력현황", useFormattedValue : true});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
     },
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
@@ -286,29 +332,46 @@ export default {
         let gridExcelData;
 
         wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === '투입인력현황' || sheetName === 'Sheet1') {
+          if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
-            wb.Sheets[sheetName].A1.w = "NO"        // no
-            wb.Sheets[sheetName].B1.w = "dept_nm"   // 부문
-            wb.Sheets[sheetName].C1.w = "hdq_nm"    // 소속본부
-            wb.Sheets[sheetName].D1.w = "tm_nm"     // 소속팀
-            wb.Sheets[sheetName].E1.w = "rank_nm"   // 직급
-            wb.Sheets[sheetName].F1.w = "empnm"     // 성명
-            let G1 = {G1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'ent_dt'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], G1)
-            wb.Sheets[sheetName].G2.w = "ent_dt"    // 입사일
-            wb.Sheets[sheetName].H1.w = "inp_prj_nm"// 투입프로젝트
-            let I1 = {I1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'inp_dt'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
-            wb.Sheets[sheetName].I2.w = "inp_dt"    // 투입일
-            let J1 = {J1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'wth_dt'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
-            wb.Sheets[sheetName].J2.w = "wth_dt"    // 철수일(예정)
-            wb.Sheets[sheetName].K1.w = "prj_typ_nm"// 프로젝트구분명
-            wb.Sheets[sheetName].L1.w = "prf_ar"    // 수행지역
-            wb.Sheets[sheetName].M1.w = "inp_cls_cd"// 투입구분
-            wb.Sheets[sheetName].N1.w = "rmrk"      // 비고
-            wb.Sheets[sheetName].O1.w = "wth_sch_yn"// 철수예정
+            wb.Sheets[sheetName].A1.w = "NO"
+            wb.Sheets[sheetName].B1.w = "mng_cd"
+            wb.Sheets[sheetName].C1.w = "bzcd"
+            wb.Sheets[sheetName].D1.w = "step_cd"
+            wb.Sheets[sheetName].E1.w = "mng_id"
+            wb.Sheets[sheetName].F1.w = "hgrn_mng_id"
+            wb.Sheets[sheetName].G1.w = "acvt_nm"
+            wb.Sheets[sheetName].H1.w = "task_nm"
+            wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName].J1.w = "crpe_nm"
+            wb.Sheets[sheetName].K1.w = "wbs_prc_sts_cd"
+            wb.Sheets[sheetName].L1.w = "wgt_rt"
+            wb.Sheets[sheetName].M1.w = "prg_rt"
+            let N1 = {N1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_sta_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], N1)
+            wb.Sheets[sheetName].N2.w = "pln_sta_dt"
+            let O1 = {O1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_sta_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
+            wb.Sheets[sheetName].O2.w = "pln_sta_tim"
+            let P1 = {P1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
+            wb.Sheets[sheetName].P2.w = "pln_end_dt"
+            let Q1 = {Q1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_end_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
+            wb.Sheets[sheetName].Q2.w = "pln_end_tim"
+            let R1 = {R1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_sta_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+            wb.Sheets[sheetName].R2.w = "acl_sta_dt"
+            let S1 = {S1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_sta_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+            wb.Sheets[sheetName].S2.w = "acl_sta_tim"
+            let T1 = {T1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
+            wb.Sheets[sheetName].T2.w = "acl_end_dt"
+            let U1 = {U1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_end_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+            wb.Sheets[sheetName].U2.w = "acl_end_tim"
+            wb.Sheets[sheetName].V1.w = "rmrk"
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
@@ -335,7 +398,7 @@ export default {
       event.target.value = '';
     },
     autCheck() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         alert("권한이 부족합니다.")
         return false;
       }
@@ -382,6 +445,12 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분 
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음 
   watch: {
+    atfl_mng_id() {    // 단위테스트 케이스 변경 시 작동
+      if (this.atfl_mng_id_yn !== '') {
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id_yn', '첨부');
+        this.$refs.grid.invoke("setValue", this.curRow, 'atfl_mng_id', this.atfl_mng_id);
+      }
+    },
   },
 // 변수 선언부분 
   data() {
@@ -392,19 +461,33 @@ export default {
       login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
       validated : true,
-      comboList : ["C27","C0","C40"], //프로젝트ID, 백업ID, 부문명
+      comboList : ["C27","C0","C1","C19","C35"],
+      atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
+      atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
+      flag                : 'N', //진행율 계산 체크
       addCheak            : 'N', // 행추가 체크
-      editingEvent        : "click",
-      excelUplod          : 'N', // 엑셀 업로드
+      editingEvent : "click",
+      excelUplod: 'N',           // 엑셀 업로드
 
       info: {
         pgm_id: this.pgm_id,    // 프로그램ID
         pgm_nm: this.pgm_nm,    // 프로그램명
+        task_nm: this.task_nm,  // task명
+        crpe_nm: this.crpe_nm,  // 담당자명
+
+        atfl_mng_id         : this.atfl_mng_id,  // 단위테스트 케이스 첨부파일관리
+        atfl_mng_id_yn      : this.atfl_mng_id_yn,  // 단위테스트 케이스 첨부파일관리
 
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
-        //bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
-        dept_cd_selected         : 'TTT',                    // 부문명
+        bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
+        wbs_mng_cd_selected      : '100',
+        wbs_prc_sts_cd_selected  : 'TTT',
+
+        acl_sta_dt : null,
+        acl_end_dt : null,
+        pln_sta_dt : null,
+        pln_end_dt : null,
 
       },
       addRow: {
@@ -415,6 +498,12 @@ export default {
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
       createdRows : this.createdRows,
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
 
       check_Yn: false,  // 삭제프로그램/소스취약점포함
 
@@ -451,35 +540,32 @@ export default {
       columns: [
         {
           header: '부분',
-          width: 100,
+          width: 70,
           name: 'dept_nm',
           align: 'center',
           editor: "text",
-          filter: 'select',
         },
         {
           header: '소속본부',
-          width: 150,
+          width: 70,
           name: 'hdq_nm',
           align: 'center',
           editor: "text",
-          filter: 'select',
         },
         {
           header: '소속팀',
-          width: 150,
+          width: 70,
           name: 'tm_nm',
-          align: 'left',
+          align: 'center',
           editor: "text",
-          filter: 'select',
         },
         {
           header: '직급',
-          width: 70,
+          width: 90,
           align: 'center',
           name: 'rank_nm',
           editor: "text",
-          filter: 'select',
+          disabled: true,
         },
         {
           header: '직원번호',
@@ -487,7 +573,7 @@ export default {
           align: 'center',
           name: 'empno',
           editor: 'text',
-          hidden: true,
+          //hidden: true,
         },
         {
           header: '성명',
@@ -495,24 +581,21 @@ export default {
           align: 'center',
           name: 'empnm',
           editor: 'text',
-          filter: 'select',
         },
         {
           header: '입사일',
-          width: 90,
+          width: 80,
           align: 'center',
           name: 'ent_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true,
+          editor: 'datePicker'
         },
         {
           header: '투입프로젝트',
-          width: 350,
-          align: 'left',
+          width: 80,
+          align: 'center',
           name: 'inp_prj_nm',
-          editor: 'text',
-          filter: 'select',
+          editor: 'text'
         },
         {
           header: '투입일',
@@ -520,8 +603,7 @@ export default {
           align: 'center',
           name: 'inp_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true,
+          editor: 'datePicker'
         },
         {
           header: '철수일(예정)',
@@ -529,8 +611,7 @@ export default {
           align: 'center',
           name: 'wth_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker',
-          sortable: true,
+          editor: 'datePicker'
         },
         {
           header: '구분',
@@ -538,14 +619,12 @@ export default {
           align: 'center',
           name: 'prj_typ_nm',
           editor: 'text',
-          filter: 'select',
         },
         {
           header: '수행지역',
           width: 60,
           align: 'center',
           name: 'prf_ar',
-          filter: 'select',
         },
         {
           header: '투입구분',
@@ -557,13 +636,12 @@ export default {
             options:{
               listItems: this.$store.state.pms.CD1000000001N
             }
-          },
-          filter: 'select',
+          }
         },
         {
           header: '비고',
           width: 200,
-          align: 'left',
+          align: 'center',
           name: 'rmrk',
         },
         {
@@ -580,11 +658,10 @@ export default {
               ]
             }
           },
-          filter: 'select',
         },
         {
           header: '부문코드',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'dept_cd',
           //hidden: true,
