@@ -30,8 +30,9 @@
 
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <ul class="card-body" v-if ="this.LoginId === '0000000001'" >
-              <li id="WeekPjte8000"><a href="/PJTE8000">{{ week_menu_list[0].name }}</a></li>
-              <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[1].name }}</a></li>
+              <li id="WeekPjte9110"><a href="/PJTE9110">{{ week_menu_list[0].name }}</a></li>
+              <li id="WeekPjte9100"><a href="/PJTE9100">{{ week_menu_list[1].name }}</a></li>
+              <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[2].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
               <li id="PJTE1000Iteyes"><a href="/PJTE1000">{{ iteyes_menu_list[0].name }}</a></li>
@@ -159,9 +160,14 @@ export default {
       ],
       week_menu_list: [
         {
-          id: 'WeekPjte8000',
-          path: '/PJTE8000',
-          name: '주간보고'
+          id: 'WeekPjte9110',
+          path: '/PJTE9110',
+          name: 'KMS게시판'
+        },
+        {
+          id: 'WeekPjte9100',
+          path: '/PJTE9100',
+          name: 'KMS게시판생성'
         },
         {
           id: 'WeekPjte9000',

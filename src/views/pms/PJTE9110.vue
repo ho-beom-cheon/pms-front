@@ -103,7 +103,6 @@ export default {
         return;
       }
       let gridRow = this.$refs.grid1.invoke("getRow",this.curRow);
-      debugger
       this.setData(gridRow);
       this.$router.push({path : 'PJTE9120', params :  {getRow :this.$refs.grid1.invoke("getRow" , this.curRow)} })
       this.info.current_man_no = this.$refs.grid1.invoke("getValue", this.curRow, "man_no") // ROW클릭 시 인력번호

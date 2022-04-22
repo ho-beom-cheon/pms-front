@@ -107,6 +107,7 @@
 <script>
 import {axiosService} from "@/api/http";
 import Modal from "@/components/Modal.vue";
+import {mapActions} from "vuex";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
@@ -161,6 +162,7 @@ export default {
       newPassword     : "",     // 변경할 패스워드
       isActive        : true,
       flag            : false,
+      gesipanId       : [],
       modals: {
         modal1: false,
       }
@@ -168,6 +170,16 @@ export default {
   },
 
   methods: {
+    ...mapActions("pms",["SET_DATA"]),
+    async setData(value) {
+      try {
+        debugger
+        await this.SET_DATA(value)
+
+      } catch (error) {
+        console.log("Error Msg : " + error)
+      }
+    },
     /* 비밀번호 변경 조건 체크*/
     passwordChg() {
       if(this.vaildation()) {
@@ -262,6 +274,7 @@ export default {
         alert("변경 비밀번호와 변경 비밀번호 확인이 틀립니다.");
       }
     },
+
     /* 로그인 체크 */
     login() {
       this.sessionClear();
@@ -282,9 +295,11 @@ export default {
                 );
                 if (res.data.data[0].login_yn === "Y") {
                   if(res.data.data[0].prjt_id === "0000000001") {
-                    this.$router.push('/PJTE8000');
+                    this.$router.push('/PJTE9110');
                   } else if (res.data.data[0].prjt_id === "0000000003"){
-                    this.$router.push('/PJTE8000');
+                    this.gesipanId = {"gesipan_id" : '0000000001'}
+                    this.setData(this.gesipanId);
+                    this.$router.push('/PJTE1000');
                   } else if (res.data.data[0].prjt_id === "0000000004"){
                     this.$router.push('/PJTE9005');
                   } else {
