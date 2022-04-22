@@ -361,7 +361,7 @@ class CustomRenderer2 {
   }
 }
 
-
+let currentRowData;
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
@@ -442,7 +442,11 @@ export default {
     /* 댓글 저장을 하기위한 필수 항목 체크 */
     // FIXME 비밀번호 정합성 체크
     commentCheckPrimary() {
-      if (this.detail.txt_psw_comment === "" || this.detail.txt_psw_comment == null) {
+      if(this.detail.cmnt_titl === "" || this.detail.cmnt_titl == null) {
+        alert('댓글을 입력해주세요.');
+        return false;
+      }
+      else if (this.detail.txt_psw_comment === "" || this.detail.txt_psw_comment == null) {
         alert('비밀번호는 필수 입력사항입니다.');
         return false;
       }else {
@@ -480,14 +484,15 @@ export default {
 
       // TODO 댓글 및 삭제 버튼 이벤트 추가 (게시내역, 답글내역, 댓글내역 각자 추가 필요)
       const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
-      const currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
+      currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
+      this.detail.post_id = currentRowData.post_id
 
+      console.log("currentRowData ::", currentRowData);
       // 댓글내역 조회(모달창)
       if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 모달 오픈
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-        this.detail.post_id = currentRowData.post_id
 
         this.info.post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id") // ROW 클릭 시 해당 게시글의 댓글내역 조회
         axiosService.get("/PJTE9120/select_9120_03", {
@@ -590,13 +595,12 @@ export default {
         let post_id  = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
 
-
         if(this.commentCheckPrimary() === false) {
           return
         }
         if(this.detail.post_id  != null && this.detail.post_id  !== '') {
           axiosService.post("/PJTE9120/insert_9120_03", {
-            post_id               : post_id,             // 게시글 ID
+            post_id               : currentRowData.post_id,             // 게시글 ID
             cmnt_titl             : this.detail.cmnt_titl,                                   // 댓글제목
             prn_cmnt_cd           : gridRow == null ? this.detail.prn_cmnt_cd : gridRow.prn_cmnt_cd,            // 댓글코드
             txt_psw               : this.detail.txt_psw_comment,                             // 글비밀번호
@@ -606,11 +610,12 @@ export default {
             if (res.data) {
               alert("댓글 등록이 완료되었습니다.");
               this.detail.cmnt_titl = ''
-              this.detail.txt_psw_conmment = '';
+              this.detail.txt_psw_comment = ''
               this.$refs.grid3.invoke("readData")
             } else {
               alert("댓글 등록에 실패하였습니다.")
-              this.detail.txt_psw_conmment = '';
+              this.detail.cmnt_titl = ''
+              this.detail.txt_psw_comment = ''
             }
           })
 
@@ -699,14 +704,24 @@ export default {
 
     // TODO 비밀번호 일치 여부 로직 추가
     fnDelete() {
-      this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+      this.detail.post_id  = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+      this.detail.rpl_cnt  = this.$refs.grid1.invoke("getValue", this.curRow, "rpl_cnt")
+      this.detail.cmnt_cnt = this.$refs.grid1.invoke("getValue", this.curRow, "cmnt_cnt")
+
       let gridKey = document.getElementById("gridKey").value
       console.log('gridKey?', gridKey)
 
       if(gridKey === "1") {  // 게시정보 삭제
+        debugger
+        if(this.modalTxt !== this.$refs.grid1.invoke("getValue", this.curRow, "txt_psw")){
+          alert("비밀번호가 일치하지 않습니다")
+          return
+        }
         axiosService.put("/PJTE9120/delete_9120_01", {
           post_id               : this.detail.post_id, // 게시글 ID
           txt_psw               : this.modalTxt,
+          rpl_cnt               : this.detail.rpl_cnt,
+          cmnt_cnt              : this.detail.cmnt_cnt,
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
@@ -816,6 +831,8 @@ export default {
     },
 
     fnOpenModal() {
+      this.detail.txt_psw_reply = ''
+      this.detail.rpl_titl = ''
       this.modals.txt_modal3 = true;
     },
 
@@ -824,12 +841,12 @@ export default {
         this.modals.txt_modal1 = false;
         this.detail.txt_psw_comment = ''
         this.detail.cmnt_titl = ''
+        this.fnSearch()
       } else if(num == 2) {
         this.modals.txt_modal2 = false;
       } else if(num == 3) {
         this.modals.txt_modal3 = false;
       }
-
     },
 
   },
@@ -991,7 +1008,7 @@ export default {
         {
           header: '조회수',
           width: 50,
-          align: 'center',
+          align: 'right',
           name: 'view_cnt',
           editor: 'text',
           //hidden: true,
@@ -1020,8 +1037,8 @@ export default {
           hidden: true,
         },
         {
-          header: '글비밀번호',
-          width: 50,
+          header: '비밀번호',
+          width: 80,
           align: 'center',
           name: 'txt_psw',
           editor: 'text',
@@ -1029,7 +1046,7 @@ export default {
         },
         {
           header: '첨부파일관리ID',
-          width: 80,
+          width: 180,
           align: 'center',
           name: 'atfl_mng_id',
           editor: 'text',
@@ -1037,8 +1054,8 @@ export default {
         },
         {
           header: '원본파일명',
-          width: 100,
-          align: 'center',
+          width: 180,
+          align: 'left',
           name: 'org_file_nm',
           // hidden: true,
         },
@@ -1049,6 +1066,20 @@ export default {
           name: 'post_id',
           editor: 'text',
           hidden: true,
+        },
+        {
+          header: '답글갯수',
+          width: 80,
+          align: 'right',
+          name: 'rpl_cnt',
+          // hidden: true,
+        },
+        {
+          header: '댓글갯수',
+          width: 80,
+          align: 'right',
+          name: 'cmnt_cnt',
+          // hidden: true,
         },
         {
           header: '백업 ID',
@@ -1151,7 +1182,6 @@ export default {
           width: 100,
           align: 'center',
           name: 'empnm',
-          editor: 'text'
         },
         {
           header: '삭제',
