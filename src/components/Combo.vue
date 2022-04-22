@@ -961,6 +961,7 @@ export default {
     this.mtng_room_id_change_iss()
     this.rsr_strt_change()
     this.rsr_endt_change()
+    this.inp_cls_cd_change()
   },
   data() {
     return {
@@ -1014,6 +1015,7 @@ export default {
       CD1000000046T : [],  CD1000000046N : [], CD1000000046 : [],
       CD1000000047T : [],  CD1000000047N : [], CD1000000047 : [],
       CD1000000048T : [],  CD1000000048N : [], CD1000000048 : [],
+      CD1000000049T : [],  CD1000000049N : [], CD1000000049 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -1127,6 +1129,8 @@ export default {
       rsr_strt_selected : "",
       // 예약종료일자
       rsr_endt_selected : "",
+      // 투입구분
+      inp_cls_cd_selected : "",
     }
   },
   methods: {
@@ -1184,14 +1188,15 @@ export default {
     skill_grd_change()              {  this.$emit('skill_grd_change',              this.skill_grd_selected)},            // 기술등급
     grd_cd_change()                 {  this.$emit('grd_cd_change',                 this.grd_cd_selected)},               // 평판코드
     bubun_cd_change()               {  this.$emit('bubun_cd_change',               this.bubun_cd_selected)},             // 부문구분
-    bubun_cd_change_iss()           {  this.$emit('bubun_cd_change_iss',           this.bubun_cd_selected_iss)},             // 부문구분
+    bubun_cd_change_iss()           {  this.$emit('bubun_cd_change_iss',           this.bubun_cd_selected_iss)},         // 부문구분
     bsn_cls_cd_change()             {  this.$emit('bsn_cls_cd_change',             this.bsn_cls_cd_selected)},           // 게시구분
-    bsn_cls_cd_change_iss()         {  this.$emit('bsn_cls_cd_change_iss',         this.bsn_cls_cd_selected_iss)},           // 게시구분
+    bsn_cls_cd_change_iss()         {  this.$emit('bsn_cls_cd_change_iss',         this.bsn_cls_cd_selected_iss)},       // 게시구분
     good_nm_change()                {  this.$emit('good_nm_change',                this.good_nm_selected)},              // 좋아요구분
     mtng_room_id_change()           {  this.$emit('mtng_room_id_change',           this.mtng_room_id_selected)},         // 회의실 ID
     mtng_room_id_change_iss()       {  this.$emit('mtng_room_id_change_iss',       this.mtng_room_id_selected_iss)},     // 회의실 ID(아래)
     rsr_strt_change()               {  this.$emit('rsr_strt_change',               this.rsr_strt_selected)},             // 예약시작일자
     rsr_endt_change()               {  this.$emit('rsr_endt_change',               this.rsr_endt_selected)},             // 예약종료일자
+    inp_cls_cd_change()             {  this.$emit('inp_cls_cd_change',             this.inp_cls_cd_selected)},           // 투입구분
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -1300,6 +1305,9 @@ export default {
               } else if (i === 48) {
                 this.CD1000000048T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000048N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 49) {
+                this.CD1000000049T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000049N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1463,6 +1471,10 @@ export default {
               this.CD1000000048T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000048N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000048.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            }  else if(i === 49) {
+              this.CD1000000049T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000049N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000049.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
             }
             this.set_yn = "Y";
             this.row++;
@@ -1524,7 +1536,7 @@ export default {
           if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047T[0].value
           if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
           if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
-          if(this.CD1000000048N.length !== 0)   this.rsr_endt_selected          = this.CD1000000048N[0].value
+          if(this.CD1000000049N.length !== 0)   this.inp_cls_cd_selected        = this.CD1000000049N[0].value
         }
         this.setCdAll()
       }
@@ -1581,6 +1593,7 @@ export default {
       this.cd_all.push(this.CD1000000046N)
       this.cd_all.push(this.CD1000000047N)
       this.cd_all.push(this.CD1000000048N)
+      this.cd_all.push(this.CD1000000049N)
     },
     init()  {
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -1656,6 +1669,7 @@ export default {
             "1000000046",
             "1000000047",
             "1000000048",
+            "1000000049",
           ];
 
       // 조회영역 권한 체크
