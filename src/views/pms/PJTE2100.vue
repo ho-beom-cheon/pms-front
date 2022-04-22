@@ -751,11 +751,10 @@ export default {
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
             wb.Sheets[sheetName].X2.w = "crpe_no"
             wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
-            wb.Sheets[sheetName].Z2.w = "err_tot_cnt"``
+            wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
             wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
             wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
             wb.Sheets[sheetName].AC2.w = "err_btn"
-            wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
             wb.Sheets[sheetName].AD1.w = "rqu_sbh_id"
             wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
             wb.Sheets[sheetName].AF1.w = "rmrk"
@@ -1145,14 +1144,14 @@ export default {
         },
         {
           header: '처리단계',
-          width: 80,
+          width: 110,
           align: 'center',
           name: 'prc_step_cd',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000044N
+              listItems: this.$store.state.pms.CD1000000002N
             }
           }
         },
@@ -1270,7 +1269,7 @@ export default {
         {
           header: '요구사항 ID',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'rqu_sbh_id',
           ellipsis : true,
           editor: 'text',
