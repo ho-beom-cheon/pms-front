@@ -212,12 +212,13 @@
             <tr>
               <th>댓글</th>
               <td>
-                <input type="text"
+                <textarea type="text"
                        v-model="detail.cmnt_titl"
-                       style="width: 740px;"
-                >
+                       style="width: 740px;height: 100px"
+                ></textarea>
               </td>
             </tr>
+            <br>
             <tr>
               <th>비밀번호</th>
               <td>
