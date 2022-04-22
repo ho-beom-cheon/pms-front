@@ -34,13 +34,14 @@
               <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[1].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
-              <li id="PJTE8000Iteyes"><a href="/PJTE8000">{{ iteyes_menu_list[0].name }}</a></li>
-              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[1].name }}</a></li>
-              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[2].name }}</a></li>
-              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[3].name }}</a></li>
-              <li id="PJTE9110Iteyes"><a href="/PJTE9110">{{ iteyes_menu_list[4].name }}</a></li>
-              <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[5].name }}</a></li>
-              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[6].name }}</a></li>
+              <li id="PJTE1000Iteyes"><a href="/PJTE1000">{{ iteyes_menu_list[0].name }}</a></li>
+              <li id="PJTE8000Iteyes"><a href="/PJTE8000">{{ iteyes_menu_list[1].name }}</a></li>
+              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[2].name }}</a></li>
+              <li id="PJTE9120Iteyes"><a href="/PJTE9120">{{ iteyes_menu_list[3].name }}</a></li>
+              <li id="PJTE9310Iteyes"><a href="/PJTE9310">{{ iteyes_menu_list[4].name }}</a></li>
+              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
+              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
+              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -170,6 +171,11 @@ export default {
       ],
       iteyes_menu_list: [
         {
+          id: 'PJTE1000Iteyes',
+          path: '/PJTE1000',
+          name: '공지사항'
+        },
+        {
           id: 'PJTE8000Iteyes',
           path: '/PJTE8000',
           name: '주간보고'
@@ -180,6 +186,16 @@ export default {
           name: 'KanbanBoard'
         },
         {
+          id: 'PJTE9120Iteyes',
+          path: '/PJTE9120',
+          name: '준비중인 프로젝트 현황'
+        },
+        {
+          id: 'PJTE9310Iteyes',
+          path: '/PJTE9310',
+          name: '투입인력현황'
+        },
+        {
           id: 'PJTE9005Iteyes',
           path: '/PJTE9005',
           name: '인력프로파일관리'
@@ -188,16 +204,6 @@ export default {
           id: 'PJTE9200Iteyes',
           path: '/PJTE9200',
           name: '회의실예약'
-        },
-        {
-          id: 'PJTE9110Iteyes',
-          path: '/PJTE9110',
-          name: 'KMS게시판'
-        },
-        {
-          id: 'PJTE9100Iteyes',
-          path: '/PJTE9100',
-          name: 'KMS게시판생성'
         },
         {
           id: 'PJTE9000Iteyes',
