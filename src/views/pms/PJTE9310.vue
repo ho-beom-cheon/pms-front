@@ -30,6 +30,40 @@
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
 
+          <Modal :show.sync="modals.txt_modal1">
+            <div class="modal-pop-body">
+              <h2>
+                비고상세보기
+              </h2>
+            </div>
+            <hr>
+            <table>
+              <colgroup>
+                <col width="60px">
+                <col width="*">
+                <col width="60px">
+                <col width="*">
+              </colgroup>
+              <tbody>
+              <br>
+              <tr>
+                <td colspan="5">
+                <textarea
+                    id="modalId"
+                    cols="72"
+                    rows="20"
+                    v-model="modalTxt"
+                    style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
+                ></textarea>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div style="float: right">
+              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+              <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </Modal>
           <!-- grid contents -->
           <div class="gridWrap" style="min-width: 750px;">
             <grid
@@ -60,6 +94,7 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import Combo from "@/components/Combo"
+import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import XLSX from "xlsx";
@@ -70,6 +105,7 @@ export default {
   components: {
     Combo,
     PmsSideBar,
+    Modal,
     grid: Grid,
   },
   mounted: function () {
@@ -94,14 +130,21 @@ export default {
       let gridData = this.$refs.grid.invoke("getData");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
     },
+    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
+      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.modalTxt = document.getElementById("modalId").value;
+      this.modals.txt_modal1 = false;
+    },
+    fnCloseModal(){  // 모달창 닫기
+      this.modals.txt_modal1 = false;
+    },
     fnSave() {
+      // 엑셀 업로드 했을 때
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
           axiosService.post("/PJTE9310/insert_9310_01", {
             gridData     : this.gridData,
             bkup_id      : this.info.bkup_id_selected,
-            bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-            mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
             prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
             login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
           }).then(res => {
@@ -137,10 +180,8 @@ export default {
             axiosService.post("/PJTE9310/insert_9310_01", {
               gridData     : this.createdRows,
               bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd,
-              mng_cd       : this.mng_cd,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
             }).then(res => {
               console.log(res)
               if (res.data) {
@@ -189,10 +230,8 @@ export default {
             axiosService.put("/PJTE9310/delete_9310_01", {
               gridData     : this.deletedRows,
               bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-              mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
             }).then(res => {
               console.log(res)
               if (res.data) {
@@ -220,7 +259,6 @@ export default {
       console.log("클릭 :: ");
       this.upCount = 0;
       this.downCount = 0;
-
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
       if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
@@ -251,21 +289,13 @@ export default {
       this.addCheak = 'Y';
       this.$refs.grid.invoke("appendRow",
           {
-            bzcd    : this.info.bzcd_selected,
-            mng_cd  : this.info.wbs_mng_cd_selected,
             prjt_id : sessionStorage.getItem("LOGIN_PROJ_ID"),
             bkup_id : "0000000000",
             sort    : this.$refs.grid.invoke("getData").length+1,
           },
-          {focus:true}) ;
+          {focus:true, at:0});
       let gridData = this.$refs.grid.invoke("getData")
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
-      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"step_cd");
-      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"mng_id");
-      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"prg_rt");
-      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"bzcd");
-      // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_end_tim");
-      // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_sta_tim");
     },
     gridDelRow() {
       if(this.autCheck() === false){ return; }  //권한 체크
@@ -313,9 +343,6 @@ export default {
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
             for(let n=1; n<rowObj.length; n++){
-              // if(rowObj[n].bzcd !== '100'){
-              //   rowObj[n].bzcd = (rowObj[n].bzcd).toString()
-              // }
               rowObj_copy[n-1] = rowObj[n];
             }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
@@ -339,9 +366,6 @@ export default {
         alert("권한이 부족합니다.")
         return false;
       }
-    },
-    open_page() {
-      this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
     },
     // 유효값 검증
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
@@ -387,25 +411,19 @@ export default {
   data() {
     return {
       login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
-      login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
       login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
-      login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+      login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
 
       validated : true,
-      comboList : ["C27","C0","C40"], //프로젝트ID, 백업ID, 부문명
+      comboList : ["C27","C0","C40"], //프로젝트 ID, 백업 ID, 부문명(부문코드)
       addCheak            : 'N', // 행추가 체크
       editingEvent        : "click",
       excelUplod          : 'N', // 엑셀 업로드
 
       info: {
-        pgm_id: this.pgm_id,    // 프로그램ID
-        pgm_nm: this.pgm_nm,    // 프로그램명
-
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
-        //bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         dept_cd_selected         : 'TTT',                    // 부문명
-
       },
       addRow: {
         grid: this.grid,
@@ -415,6 +433,12 @@ export default {
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
       createdRows : this.createdRows,
+
+      /* 그리드 상세보기 모달 속성 */
+      modals: {
+        txt_modal1: false,
+      },
+      modalTxt:this.modalTxt,
 
       check_Yn: false,  // 삭제프로그램/소스취약점포함
 
@@ -499,7 +523,7 @@ export default {
         },
         {
           header: '입사일',
-          width: 90,
+          width: 120,
           align: 'center',
           name: 'ent_dt',
           format: 'yyyy-mm-dd',
@@ -516,7 +540,7 @@ export default {
         },
         {
           header: '투입일',
-          width: 80,
+          width: 120,
           align: 'center',
           name: 'inp_dt',
           format: 'yyyy-mm-dd',
@@ -525,7 +549,7 @@ export default {
         },
         {
           header: '철수일(예정)',
-          width: 80,
+          width: 120,
           align: 'center',
           name: 'wth_dt',
           format: 'yyyy-mm-dd',
@@ -542,7 +566,7 @@ export default {
         },
         {
           header: '수행지역',
-          width: 60,
+          width: 80,
           align: 'center',
           name: 'prf_ar',
           filter: 'select',
