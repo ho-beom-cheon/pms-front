@@ -456,7 +456,6 @@ export default {
 
     onGridUpdated(grid){
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
-      console.log("게시데이터 ::", this.$store.state.pms.GesiData);
       this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
       this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
       this.info.nmb_inq_yn   = this.$store.state.pms.GesiData.nmb_inq_yn
@@ -481,13 +480,14 @@ export default {
     onClick1(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
-
+      if(this.curRow === undefined){
+        return
+      }
       // TODO 댓글 및 삭제 버튼 이벤트 추가 (게시내역, 답글내역, 댓글내역 각자 추가 필요)
       const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
       currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
       this.detail.post_id = currentRowData.post_id
 
-      console.log("currentRowData ::", currentRowData);
       // 댓글내역 조회(모달창)
       if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 모달 오픈
         this.modals.txt_modal1 = true;
@@ -536,7 +536,6 @@ export default {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
       let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
-      console.log("댓글클릭확인 ::", gridRow)
       const currentCellData = (this.$refs.grid3.invoke("getFocusedCell"));
 
       if(ev.columnName == 'del_btn') {  // 컬럼명이 <삭제버튼>일 때만 모달 오픈
@@ -590,7 +589,7 @@ export default {
     },
 
     fnSave(num) {
-      console.log('fnSave num?', num)
+
       if(num ==  1) {  // 댓글정보 등록
         let post_id  = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
@@ -677,7 +676,7 @@ export default {
           return
         }
         let post_Id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
-        console.log('postId: ', post_Id)
+
         if(post_Id != null && post_Id !== '') {
 
           axiosService.post("/PJTE9120/insert_9120_02", {
@@ -709,7 +708,6 @@ export default {
       this.detail.cmnt_cnt = this.$refs.grid1.invoke("getValue", this.curRow, "cmnt_cnt")
 
       let gridKey = document.getElementById("gridKey").value
-      console.log('gridKey?', gridKey)
 
       if(gridKey === "1") {  // 게시정보 삭제
         debugger

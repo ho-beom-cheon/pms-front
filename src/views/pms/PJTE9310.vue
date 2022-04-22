@@ -46,32 +46,6 @@ import {axiosService} from "@/api/http"; // Date-picker 스타일적용
 import XLSX from "xlsx";
 import PmsSideBar from  "@/components/PmsSideBar";
 
-// 첨부파일 팝업에서 받은 값
-window.fileData = (fileLists, num) => {
-  console.log(fileLists);
-  window.pms_register.file_name_list = fileLists;
-  window.pms_register.atfl_num = num;
-  window.pms_register.atfl_mng_id_yn = fileLists[1].atfl_mng_id;
-  window.pms_register.atfl_mng_id = fileLists[1].atfl_mng_id;
-}
-
-// 커스텀 이미지 버튼을 만들기 위한 클래스 생성
-class CustomRenderer {
-  constructor(props) {
-    const el = document.createElement('img');
-    el.src = 'some-image-link';
-
-    this.el = el;
-    this.render(props);
-  }
-  getElement() {
-    return this.el;
-  }
-  render(props) {
-    // 결함등록 버튼 img
-    this.el.src = '/img/ic_logOut.8c60a751.svg';
-  }
-}
 export default {
 // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
@@ -81,179 +55,10 @@ export default {
     Modal,
     PmsSideBar,
   },
-  mounted() {
-    this.init()
-    this.fnSearch()
-    window.pms_register = this;
-  },
-// 함수를 선언하는 부분
-// 일반적인 함수를 선언하는 부분
+
   methods: {
-    // Combo.vue 에서 받아온 값
-    bkup_id_change(params)        {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
-    bzcd_change(params)           {this.info.bzcd_selected = params},
-    wbs_mng_cd_change(params)     {
-      this.info.wbs_mng_cd_selected = params
 
-      if(this.info.wbs_mng_cd_selected === '100'){
-        this.validated = false;
-        this.$refs.grid.invoke("showColumn",'prg_rt')
-        this.$refs.grid.invoke("showColumn",'wgt_rt')
-        this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
-      } else {
-        this.validated = true;
-        this.$refs.grid.invoke("hideColumn",'prg_rt')
-        this.$refs.grid.invoke("hideColumn",'wgt_rt')
-        this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
-      }
-    },
-    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
 
-    // 렌더링 중 적용 (mounted와 동일)
-    onGridMounted(grid){
-
-    },
-    // 렌더링 후 적용됨
-    onGridUpdated(grid){
-      let gridData = this.$refs.grid.invoke("getData")
-
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
-
-      for(let i=0; i<gridData.length; i++) {
-        if(gridData[i].wbs_cnt === "0") {
-          this.$refs.grid.invoke("enableCell", i, 'prg_rt');
-        }
-      }
-
-    },
-    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
-      this.modalTxt = document.getElementById("modalId").value;
-      this.modals.txt_modal1 = false;
-    },
-    fnCloseModal(){  // 모달창 닫기
-      this.modals.txt_modal1 = false;
-    },
-    fnSave() {
-      if(this.excelUplod === 'Y') {
-        this.gridData = this.$refs.grid.invoke("getData");
-          axiosService.post("/PJTE5000/insert", {
-            gridData     : this.gridData,
-            bkup_id      : this.info.bkup_id_selected,
-            bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-            mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
-            prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
-          }).then(res => {
-            console.log(res);
-            if (res.data) {
-              alert("저장이 완료되었습니다.")
-              // 저장 후 그리드 Reload
-              this.$refs.grid.invoke("reloadData");
-              // 저장 후 변경 데이터 배열 비움
-              this.$refs.grid.invoke("clearModifiedData")
-              this.excelUplod = 'N'
-              this.fnSearch()
-            }
-          })
-      } else if(this.excelUplod === 'N') {
-        // 변경 사항 유무 체크
-        if (this.$refs.grid.invoke("isModified") === false) {
-          alert("변경된 내용이 없습니다.");
-          return;
-        }
-        // 데이터 로그 확인
-        console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
-        console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
-        console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
-
-        // 변경 데이터 저장
-        this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-        this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
-        this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
-
-        if (this.createdRows.length !== 0) {
-          if (this.vaildation(this.createdRows, "1") === true) {
-            axiosService.post("/PJTE5000/insert", {
-              gridData     : this.createdRows,
-              bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd,
-              mng_cd       : this.mng_cd,
-              prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
-            }).then(res => {
-              console.log(res)
-              if (res.data) {
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-                // 저장 후 변경 데이터 배열 비움
-                this.$refs.grid.invoke("clearModifiedData")
-                this.excelUplod = 'N'
-              } else {
-                alert("이미 등록된 프로그램입니다.")
-              }
-              this.fnSearch()
-            })
-          } else {
-            return;
-          }
-        }
-        if (this.updatedRows.length !== 0) {
-          if (this.vaildation(this.updatedRows, "1") === true) {
-            try {
-              axiosService.put("/PJTE5000/update", {
-                updatedRows   : this.updatedRows,
-                bkup_id      : this.info.bkup_id_selected,
-                prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-                login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
-              }).then(res => {
-                console.log(res);
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-              })
-              // 저장 후 변경 데이터 배열 비움
-              this.$refs.grid.invoke("clearModifiedData")
-              this.excelUplod = 'N'
-            } catch (e) {
-              console.log("업데이트 오류 ::", e);
-            }
-          } else {
-            return;
-          }
-          return;
-        }
-        if (this.deletedRows.length !== 0) {
-          if (this.vaildation(this.deletedRows, "1") === true) {
-            axiosService.put("/PJTE5000/delete", {
-              gridData     : this.deletedRows,
-              bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-              mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
-            }).then(res => {
-              console.log(res)
-              if (res.data) {
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-                // 저장 후 변경 데이터 배열 비움
-                this.$refs.grid.invoke("clearModifiedData")
-                this.excelUplod = 'N'
-              } else {
-                alert("저장에 실패하였습니다.")
-              }
-              this.fnSearch()
-            })
-          } else {
-            return;
-          }
-        }
-      }
-    },
     onClick(ev) {
       console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
@@ -442,8 +247,8 @@ export default {
       return  true;
     },
   },
-// 특정 데이터에 실행되는 함수를 선언하는 부분 
-// newValue, oldValue 두개의 매개변수를 사용할 수 있음 
+// 특정 데이터에 실행되는 함수를 선언하는 부분
+// newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch: {
     atfl_mng_id() {    // 단위테스트 케이스 변경 시 작동
       if (this.atfl_mng_id_yn !== '') {
@@ -452,7 +257,7 @@ export default {
       }
     },
   },
-// 변수 선언부분 
+// 변수 선언부분
   data() {
     return {
       login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
