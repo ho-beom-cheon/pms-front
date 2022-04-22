@@ -6,7 +6,7 @@
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- 필터영역 -->
-      <section class="filter">
+      <section class="filter" :hidden="prjt_gbn">
         <ul class="filter-con clear-fix">
           <combo
               :comboArray="this.comboList"
@@ -29,7 +29,7 @@
       <!-- page contents -->
       <section class="page-contents">
         <div class="multiGridWrap-a">
-          <div class="div1-a">
+          <div class="div1-a" :hidden="prjt_gbn">
             <div class="div-header-a"><h2>TO-DO현황</h2>
             </div>
             <div class="div-grid-a">
@@ -49,7 +49,7 @@
               ></grid>
             </div>
           </div>
-          <div class="div2-a">
+          <div class="div2-a" :hidden="prjt_gbn">
             <div class="div-header-a"><h2>TO-DO상세내역</h2>
             </div>
             <div class="div-grid-a">
@@ -226,6 +226,11 @@ export default {
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
+    if(sessionStorage.getItem("LOGIN_PROJ_ID") === "0000000003") {
+      this.prjt_gbn = true;
+    } else {
+      this.prjt_gbn = false;
+    }
     // console.log("created");
   },
   beforeMount() {
@@ -456,21 +461,26 @@ export default {
       this.detail.org_file_nm = currentRowData.org_file_nm;              // (상세)원파일명
     },
     fnSearch() {
-
       /*조회 시 그리드 구분코드 this.info.gubun를 파라메터로 넘겨서 조회*/
-      //그리드 1
-      this.info.gubun = "1";
-      this.$refs.grid1.invoke("setRequestParams", this.info);
-      this.$refs.grid1.invoke("readData");
-      //그리드 2
-      this.info.gubun = "2"
-      this.$refs.grid2.invoke("setRequestParams", this.info);
-      this.$refs.grid2.invoke("readData");
-      //그리드 3
-      this.info.gubun = "3"
-      this.$refs.grid3.invoke("setRequestParams", this.info);
-      this.$refs.grid3.invoke("readData");
-
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") !== "0000000003") {
+        //그리드 1
+        this.info.gubun = "1";
+        this.$refs.grid1.invoke("setRequestParams", this.info);
+        this.$refs.grid1.invoke("readData");
+        //그리드 2
+        this.info.gubun = "2"
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+        //그리드 3
+        this.info.gubun = "3"
+        this.$refs.grid3.invoke("setRequestParams", this.info);
+        this.$refs.grid3.invoke("readData");
+      } else if(sessionStorage.getItem("LOGIN_PROJ_ID") === "0000000003") {
+        //그리드 3
+        this.info.gubun = "3"
+        this.$refs.grid3.invoke("setRequestParams", this.info);
+        this.$refs.grid3.invoke("readData");
+      }
     },
 
     open_pjte9001(event) {
@@ -549,6 +559,8 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList: ["C27", "C0"],
       comboList2: ["C18"],
+
+      prjt_gbn: false,
 
       info: {
         // 그리드 조회 변수
