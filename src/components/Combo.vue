@@ -1604,6 +1604,8 @@ export default {
             sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
             sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
           this.read = false;
+        } else {
+          this.read = true;
         }
       }
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -1613,10 +1615,11 @@ export default {
             sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
           this.read = false;
         }
+        else {
+          this.read = true;
+        }
       }
-      else {
-        this.read = true;
-      }
+
 
       this.code_it =
           [
