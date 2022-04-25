@@ -248,7 +248,7 @@ export default {
           //align: 'center',
           name: 'gesipan_id',
           editor: 'text',
-          hidden : false
+          hidden : true
         },
         {
           header: '소속확인여부',
@@ -276,7 +276,7 @@ export default {
           //align: 'center',
           name: 'file_upld_yn',
           editor: 'text',
-          hidden : false,
+          hidden : true,
         },
         {
           header: '게시부문',

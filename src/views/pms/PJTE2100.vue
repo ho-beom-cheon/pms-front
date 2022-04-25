@@ -250,7 +250,7 @@ class CustomRenderer {
   }
   render(props) {
     // 결함등록 버튼 img
-    this.el.src = '/img/ic_new.e2fc07f4.svg';
+    this.el.src = '../../img/ic_new.e2fc07f4.svg';
   }
 }
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -264,7 +264,7 @@ class SearchBtn {
   getElement() {return this.el;}
   render(props) {
     // 직원조회 버튼 img
-    this.el.src = '/img/ic_search.21e28c8b.svg';
+    this.el.src = '';
   }
 }
 
