@@ -299,4 +299,8 @@ export default {
 
 </script>
 <style>
+/*가운데 정렬을 위해서 강제로 맞춰줌.*/
+.tui-grid-cell-header{
+  padding: 0px !important;
+}
 </style>
