@@ -162,7 +162,17 @@ export default {
       newPassword     : "",     // 변경할 패스워드
       isActive        : true,
       flag            : false,
-      gesipanId       : [],
+      gesipan : {
+        gesipanid       : "",
+        annym_yn        : "",
+        afrm_yn         : "",
+        cmnt_yn         : "",
+        rply_yn         : "",
+        good_yn         : "",
+        nmb_inq_yn      : "",
+        pgn_yn          : "",
+        file_upld_yn    : "",
+      },
       modals: {
         modal1: false,
       }
@@ -297,8 +307,16 @@ export default {
                   if(res.data.data[0].prjt_id === "0000000001") {
                     this.$router.push('/PJTE9110');
                   } else if (res.data.data[0].prjt_id === "0000000003"){
-                    this.gesipanId = {"gesipan_id" : '0000000001'}
-                    this.setData(this.gesipanId);
+                    this.gesipan.gesipan_id       = '0000000001'
+                    this.gesipan.annym_yn         = 'N'
+                    this.gesipan.afrm_yn          = 'Y'
+                    this.gesipan.cmnt_yn          = 'Y'
+                    this.gesipan.rply_yn          = 'Y'
+                    this.gesipan.good_yn          = 'Y'
+                    this.gesipan.nmb_inq_yn       = 'Y'
+                    this.gesipan.pgn_yn           = 'Y'
+                    this.gesipan.file_upld_yn     = 'Y'
+                    this.setData(this.gesipan);
                     this.$router.push('/PJTE1000');
                   } else if (res.data.data[0].prjt_id === "0000000004"){
                     this.$router.push('/PJTE9005');

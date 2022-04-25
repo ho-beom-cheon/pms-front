@@ -60,6 +60,7 @@ const pms = {
     },
     mutations: {
         SEND_DATA(state,value) {
+            debugger
             state.GesiData = value;
         },
         SET_CD_ALL(state, array){
