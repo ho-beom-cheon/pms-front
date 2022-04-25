@@ -70,7 +70,7 @@
           </div>
           <div class="div0-a">
             <div class="div3-a">
-              <div class="div-header-a"><h2>프로젝트 공지사항</h2>
+              <div class="div-header-a"><h2>공지사항</h2>
               </div>
               <div class="div-grid-a">
                 <grid

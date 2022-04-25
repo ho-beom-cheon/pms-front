@@ -39,7 +39,9 @@
       <!-- page contents -->
       <section class="page-contents">
         <div class="grid1-box" style="height: 255px">
-          <div class="div-header"><h2>게시내역</h2>
+          <div class="div-header">
+            <h2 v-if="this.info.prjt_nm_selected === '0000000003'">진행중 프로젝트내역</h2>
+            <h2 v-else>게시내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">목록</button>
             </ul>
@@ -65,7 +67,9 @@
         </div>
         <div>
           <div class="div3-b">
-            <div class="div-header"><h2>게시정보</h2>
+            <div class="div-header">
+              <h2 v-if="this.info.prjt_nm_selected === '0000000003'">프로젝트 정보</h2>
+              <h2 v-else>게시정보</h2>
               <ul class="filter-btn">
                 <button class="btn btn-filter-e" style="margin-left: 20px" @click="fnClear">신규</button>
               </ul>
@@ -73,7 +77,7 @@
             <section class="filter-1000" style="padding-top: 0px">
               <div class="col">
                 <ul class="filter-con clear-fix">
-                  <li class="filter-item" style="width: 40px">
+                  <li class="filter-item" style="width: 40px; min-width: 40px">
                     <label>게시제목</label>
                   </li>
                   <li class="filter-item">
@@ -107,7 +111,7 @@
                   </li>
                 </ul>
                 <ul class="filter-btn" style="margin-top: 7px;">
-                  <ul class="filter-btn" style="justify-content: flex-start" v-if="show_area">
+                  <ul class="filter-btn" style="justify-content: flex-start" v-if="showArea">
                     <th style="margin-top: 5px; margin-right: 10px">첨부파일</th>
                     <input type="text"
                            :disabled= true
@@ -212,10 +216,10 @@
             <tr>
               <th>댓글</th>
               <td>
-                <textarea type="text"
+                <input type="text"
                        v-model="detail.cmnt_titl"
-                       style="width: 740px;height: 100px"
-                ></textarea>
+                       style="width: 740px;"
+                >
               </td>
             </tr>
             <br>
@@ -457,9 +461,17 @@ export default {
 
     onGridUpdated(grid){
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
+      debugger
       this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
       this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
       this.info.nmb_inq_yn   = this.$store.state.pms.GesiData.nmb_inq_yn
+
+      if(this.$store.state.pms.GesiData.rply_yn === 'Y'){
+        this.showRply = false
+      }
+      if(this.$store.state.pms.GesiData.file_upld_yn === 'Y'){
+        this.showFile = false
+      }
 
       if(this.info.annym_yn === 'Y'){
         this.$refs.grid1.invoke("showColumn",'post_nm')
@@ -550,7 +562,7 @@ export default {
     //게시내역(그리드1) ROW 더블클릭 시 게시정보 세부내역 및 답글내역 조회
     dblclick(ev) {
       this.updateYn = 'Y'
-      this.show_area = true
+      this.showArea = true
       this.gesiInput = true
       this.detail.txt_psw_post = ''
       // 게시내역 ROW 클릭 시 하단 게시정보 input 에 바인딩
@@ -711,7 +723,6 @@ export default {
       let gridKey = document.getElementById("gridKey").value
 
       if(gridKey === "1") {  // 게시정보 삭제
-        debugger
         if(this.modalTxt !== this.$refs.grid1.invoke("getValue", this.curRow, "txt_psw")){
           alert("비밀번호가 일치하지 않습니다")
           return
@@ -818,7 +829,7 @@ export default {
     // [신규] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
       this.updateYn = 'N'
-      this.show_area = false
+      this.showArea = false
       this.detail.post_titl           = '' // 게시제목
       this.detail.post_dsc            = '' // 게시글설명
       this.detail.atfl_mng_id         = '' // 첨부파일관리 ID
@@ -865,8 +876,10 @@ export default {
       comboList : ["C27","C0"], //C27 = 프로젝트 ID, C0 = 백업 ID
       goodNmList : ["C46"],     //C46 = 좋아요
 
-      show_area : false,     //첨부파일 영역 보여주기 유무
-      updateYn  : 'N',       //게시정보 신규 여부
+      showArea : false,     //첨부파일 영역 선택
+      showFile : false,     //첨부파일 영역 보여주기 유무
+      showRply : false,     //  유무
+      updateYn  : 'N',      //게시정보 신규 여부
       gesiInput : true,
 
       file_name_list: [],    // 첨부파일 데이터
@@ -875,9 +888,15 @@ export default {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
         bkup_id_selected      : '0000000000',     // 백업 ID
         gesipan_id            : this.$store.state.pms.GesiData.gesipan_id,               // 게시판 ID
-        annym_yn              : '',               // 익명여부
-        post_id               : '',               //게시글 id
-        nmb_inq_yn            : '',               //조회횟수
+        annym_yn              : this.$store.state.pms.GesiData.annym_yn,                 // 익명여부
+        post_id               : this.$store.state.pms.GesiData.post_id,                  //게시글 id
+        nmb_inq_yn            : this.$store.state.pms.GesiData.nmb_inq_yn,               //조회횟수
+        afrm_yn               : this.$store.state.pms.GesiData.afrm_yn,
+        cmnt_yn               : this.$store.state.pms.GesiData.cmnt_yn,
+        rply_yn               : this.$store.state.pms.GesiData.rply_yn,
+        good_yn               : this.$store.state.pms.GesiData.good_yn,
+        pgn_yn                : this.$store.state.pms.GesiData.pgn_yn,
+        file_upld_yn          : this.$store.state.pms.GesiData.file_upld_yn,
       },
       detail : {
         // 게시내역 dtl
@@ -1041,7 +1060,7 @@ export default {
           align: 'center',
           name: 'txt_psw',
           editor: 'text',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '첨부파일관리ID',
@@ -1049,14 +1068,14 @@ export default {
           align: 'center',
           name: 'atfl_mng_id',
           editor: 'text',
-          hidden: false,
+          hidden: true,
         },
         {
           header: '원본파일명',
           width: 180,
           align: 'left',
           name: 'org_file_nm',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '게시글 ID',
@@ -1071,14 +1090,14 @@ export default {
           width: 80,
           align: 'right',
           name: 'rpl_cnt',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '댓글갯수',
           width: 80,
           align: 'right',
           name: 'cmnt_cnt',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '백업 ID',
@@ -1114,7 +1133,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'good_nm',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '등록자',
@@ -1122,14 +1141,14 @@ export default {
           align: 'center',
           name: 'empnm',
           editor: 'text',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '비밀번호',
           width: 70,
           align: 'right',
           name: 'txt_psw',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '삭제',
@@ -1181,6 +1200,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'empnm',
+          hidden: true,
         },
         {
           header: '삭제',
@@ -1204,14 +1224,14 @@ export default {
           align: 'right',
           name: 'prn_cmnt_cd',
           editor: 'text',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '비밀번호',
           width: 70,
           align: 'right',
           name: 'txt_psw',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '백업ID',

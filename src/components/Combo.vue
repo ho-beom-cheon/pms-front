@@ -532,7 +532,7 @@
     </li>
     <!--    공지업무코드-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C18'">
-      <div class="item-con">공지업무
+      <div class="item-con">공지구분
         <select
             v-model="ntar_bzcd_selected"
             style="width: 165px; margin-left: 8px"
@@ -1598,7 +1598,7 @@ export default {
     init()  {
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
       if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003') {
-        this.read = true;  // 인력프로파일관리는 비활성화 콤보
+        this.read = false;  // 인력프로파일관리는 비활성화 콤보
       } else {
         if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
             sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
