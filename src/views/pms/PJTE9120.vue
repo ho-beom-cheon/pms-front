@@ -1226,7 +1226,7 @@ export default {
           align: 'right',
           name: 'cmnt_no',
           editor: 'text',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '상위댓글번호',
@@ -1234,7 +1234,7 @@ export default {
           align: 'right',
           name: 'prn_cmnt_cd',
           editor: 'text',
-          // hidden: true,
+          hidden: true,
         },
         {
           header: '비밀번호',
