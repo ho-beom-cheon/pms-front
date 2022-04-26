@@ -693,7 +693,7 @@ export default {
       } else if(num ==  4) {  // 댓글정보 신규 등록
         let post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         let gridRow = this.$refs.grid3.invoke("getRow", this.curRow);
-
+        debugger
         if (this.commentCheckPrimary() === false) {
           return
         }
@@ -719,7 +719,6 @@ export default {
           })
 
         }
-        gridRow = ''
       }
     },
 
