@@ -222,16 +222,16 @@
                 >
               </td>
             </tr>
-            <br>
             <tr>
               <th>비밀번호</th>
               <td>
                 <input type="text"
                        placeholder="비밀번호를 입력해주세요."
                        v-model="detail.txt_psw_comment"
-                       style="width: 500px; margin-right: 70px;"
+                       style="width: 400px; margin-right: 70px;"
                 >
                 <div style="float: right">
+                  <button id="crpenm-new1" class="btn btn-filter-e" @click="fnSave(4)" style="margin-right: 5px" >신규</button>
                   <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >등록</button>
                   <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
                 </div>
@@ -502,6 +502,7 @@ export default {
 
       // 댓글내역 조회(모달창)
       if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 모달 오픈
+        this.curRow = '';
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
@@ -601,19 +602,21 @@ export default {
     },
 
     fnSave(num) {
-
       if(num ==  1) {  // 댓글정보 등록
         let post_id  = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
-        let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
-
-        if(this.commentCheckPrimary() === false) {
-          return
+        let gridRow = ''
+        if(this.curRow !== ''){gridRow = this.$refs.grid3.invoke("getRow",this.curRow);}
+        if(gridRow === ''){
+           alert("행을 선택해주세요")
+           return
         }
+        if(this.commentCheckPrimary() === false) {return}
         if(this.detail.post_id  != null && this.detail.post_id  !== '') {
           axiosService.post("/PJTE9120/insert_9120_03", {
-            post_id               : currentRowData.post_id,             // 게시글 ID
-            cmnt_titl             : this.detail.cmnt_titl,                                   // 댓글제목
-            prn_cmnt_cd           : gridRow == null ? this.detail.prn_cmnt_cd : gridRow.prn_cmnt_cd,            // 댓글코드
+            post_id               : currentRowData.post_id,                                  // 게시글 ID
+            cmnt_titl             : this.detail.cmnt_titl,                                   // 댓글제목             // 댓글코드
+            prn_cmnt_cd           : gridRow.prn_cmnt_cd,                                     // 댓글코드
+            cmnt_no               : gridRow.cmnt_no,                                         // 댓글코드
             txt_psw               : this.detail.txt_psw_comment,                             // 글비밀번호
             prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),            // 프로젝트 ID
             login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")              // 로그인직원번호
@@ -687,6 +690,36 @@ export default {
           })
 
         }
+      } else if(num ==  4) {  // 댓글정보 신규 등록
+        let post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
+        let gridRow = this.$refs.grid3.invoke("getRow", this.curRow);
+
+        if (this.commentCheckPrimary() === false) {
+          return
+        }
+        if (this.detail.post_id != null && this.detail.post_id !== '') {
+          axiosService.post("/PJTE9120/insert_9120_03", {
+            post_id: currentRowData.post_id,                                  // 게시글 ID
+            cmnt_titl: this.detail.cmnt_titl,                                 // 댓글제목
+            prn_cmnt_cd: this.detail.prn_cmnt_cd,                             // 댓글코드
+            txt_psw: this.detail.txt_psw_comment,                             // 글비밀번호
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),            // 프로젝트 ID
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")              // 로그인직원번호
+          }).then(res => {
+            if (res.data) {
+              alert("댓글 등록이 완료되었습니다.");
+              this.detail.cmnt_titl = ''
+              this.detail.txt_psw_comment = ''
+              this.$refs.grid3.invoke("readData")
+            } else {
+              alert("댓글 등록에 실패하였습니다.")
+              this.detail.cmnt_titl = ''
+              this.detail.txt_psw_comment = ''
+            }
+          })
+
+        }
+        gridRow = ''
       }
     },
 
@@ -743,6 +776,7 @@ export default {
         axiosService.put("/PJTE9120/delete_9120_03", {
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           cmnt_no               : this.$refs.grid3.invoke("getValue", this.curRow, "cmnt_no"), // 댓글번호
+          prn_cmnt_cd           : this.$refs.grid3.invoke("getValue", this.curRow, "prn_cmnt_cd"), // 상위댓글번호
           post_id               : this.$refs.grid3.invoke("getValue", this.curRow, "post_id"), // 게시글 ID
           txt_psw               : this.modalTxt, // 비밀번호
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
