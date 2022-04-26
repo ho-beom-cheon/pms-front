@@ -273,9 +273,9 @@
                 <div class="item-con">
                   <label style="vertical-align: text-top; ">현/이전투입<br>프로젝트명</label>
                   <input type="text"
-                         placeholder="입력"
                          v-model="detail.inp_prj_nm"
-                         style="width: 555px;vertical-align: text-top; "
+                         style="width: 555px;vertical-align: text-top; background-color: #f2f2f2;"
+                         :disabled = true
                   >
                 </div>
               </li>
@@ -285,7 +285,8 @@
                   <div class="input-dateWrap">
                   <input type="date"
                          v-model="detail.wth_dt"
-                         style="width: 230px;"
+                         style="width: 230px; background-color: #f2f2f2;"
+                         :disabled = true
                   >
                   </div>
                 </div>
@@ -294,21 +295,21 @@
                 <div class="item-con">
                   <label>투입구분코드</label>
                   <input type="text"
-                         placeholder="입력"
                          ref="cpno"
                          v-model="detail.inp_cls_cd"
-                         style="width: 190px;"
+                         style="width: 190px; background-color: #f2f2f2;"
+                         :disabled = true
                   >
                 </div>
               </li>
               <li class="filter-item-a">
                 <div class="item-con">
-                  <label style="width: 120px;">차기프로젝트/업무</label>
+                  <label style="width: 120px; vertical-align: text-top; ">희망 차기<br>프로젝트/업무</label>
                   <input type="text"
                          placeholder="입력"
                          ref="cpno"
                          v-model="detail.nxt_prj_nm"
-                         style="width: 230px;"
+                         style="width: 230px; vertical-align: text-top; "
                   >
                 </div>
               </li>
@@ -687,10 +688,7 @@ export default {
                 now_career: this.detail.now_career,         // 현재경력
                 enter_ymd: this.detail.enter_ymd,           // 입사년월일
                 sex_nm: this.detail.sex_nm,                 // 성별
-                inp_prj_nm: this.detail.inp_prj_nm,         // 현/이전투입프로젝트명
-                wth_dt: this.detail.wth_dt,                 // 철수일자
                 nxt_prj_nm: this.detail.nxt_prj_nm,         // 차기프로젝트/업무
-                inp_cls_cd: this.detail.inp_cls_cd,         // 투입구분코드
                 main_skill: this.detail.main_skill,         // 주요기술
                 duty_txt: this.detail.duty_txt,             // 주요업무
                 cpno: this.detail.cpno,                     // 휴대전화번호
