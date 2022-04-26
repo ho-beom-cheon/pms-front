@@ -193,7 +193,7 @@
                          placeholder="입력"
                          ref="address"
                          v-model="detail.address"
-                         style="width: 93.25%"
+                         style="width: 93.45%"
                   >
                 </div>
               </li>
@@ -266,6 +266,49 @@
                          ref="duty_txt"
                          v-model="detail.duty_txt"
                          style="width: 880px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label style="vertical-align: text-top; ">현/이전투입<br>프로젝트명</label>
+                  <input type="text"
+                         placeholder="입력"
+                         v-model="detail.inp_prj_nm"
+                         style="width: 555px;vertical-align: text-top; "
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>철수일자</label>
+                  <div class="input-dateWrap">
+                  <input type="date"
+                         v-model="detail.wth_dt"
+                         style="width: 230px;"
+                  >
+                  </div>
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>투입구분코드</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="cpno"
+                         v-model="detail.inp_cls_cd"
+                         style="width: 190px;"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label style="width: 120px;">차기프로젝트/업무</label>
+                  <input type="text"
+                         placeholder="입력"
+                         ref="cpno"
+                         v-model="detail.nxt_prj_nm"
+                         style="width: 230px;"
                   >
                 </div>
               </li>
@@ -631,44 +674,48 @@ export default {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
                 login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
 
-                last_chg_dt: this.detail.last_chg_dt,  // 최종변경일자
-                man_no: this.detail.man_no,  // 인력번호
-                man_nm: this.detail.man_nm,  // 이름
-                rank_nm: this.detail.rank_nm,  // 직급명
-                man_cd: this.detail.man_cd_selected,  // 인력구분
-                birthday: this.detail.birthday,  // 생년월
-                age: this.detail.age,  // 만나이
-                address: this.detail.address,  // 주소
+                last_chg_dt: this.detail.last_chg_dt,       // 최종변경일자
+                man_no: this.detail.man_no,                 // 인력번호
+                man_nm: this.detail.man_nm,                 // 이름
+                rank_nm: this.detail.rank_nm,               // 직급명
+                man_cd: this.detail.man_cd_selected,        // 인력구분
+                birthday: this.detail.birthday,             // 생년월
+                age: this.detail.age,                       // 만나이
+                address: this.detail.address,               // 주소
                 skill_grd: this.detail.skill_grd_selected,  // 기술등급
-                career: this.detail.career,  // 경력
-                now_career: this.detail.now_career,  // 현재경력
-                enter_ymd: this.detail.enter_ymd,  // 입사년월일
-                sex_nm: this.detail.sex_nm,  // 성별
-                main_skill: this.detail.main_skill,  // 주요기술
-                duty_txt: this.detail.duty_txt,  // 주요업무
-                cpno: this.detail.cpno,  // 휴대전화번호
-                company_nm: this.detail.company_nm,  // 회사명
-                grd_cd: this.detail.grd_cd_selected,  // 평판구분
-                scholl_nm1: this.detail.scholl_nm1,  // 학교명1
-                gdt_ym1: this.detail.gdt_ym1,  // 졸업년월1
-                study1: this.detail.study1,  // 전공1
-                scholl_nm2: this.detail.scholl_nm2,  // 학교명2
-                gdt_ym2: this.detail.gdt_ym2,  // 졸업년월2
-                study2: this.detail.study2,  // 전공2
-                scholl_nm3: this.detail.scholl_nm3,  // 학교명3
-                gdt_ym3: this.detail.gdt_ym3,  // 졸업년월3
-                study3: this.detail.study3,  // 전공3
-                qlfks_nm1: this.detail.qlfks_nm1,  // 자격증1
-                aqu_ymm1: this.detail.aqu_ymm1,  // 자격증취득일1
-                qlfks_nm2: this.detail.qlfks_nm2,  // 자격증2
-                aqu_ymm2: this.detail.aqu_ymm2,  // 자격증취득일2
-                qlfks_nm3: this.detail.qlfks_nm3,  // 자격증3
-                aqu_ymm3: this.detail.aqu_ymm3,  // 자격증취득일3
-                qlfks_nm4: this.detail.qlfks_nm4,  // 자격증4
-                aqu_ymm4: this.detail.aqu_ymm4,  // 자격증취득일4
-                qlfks_nm5: this.detail.qlfks_nm5,  // 자격증5
-                aqu_ymm5: this.detail.aqu_ymm5,  // 자격증취득일5
-                atfl_mng_id: this.detail.atfl_mng_id,  // 첨부파일관리ID
+                career: this.detail.career,                 // 경력
+                now_career: this.detail.now_career,         // 현재경력
+                enter_ymd: this.detail.enter_ymd,           // 입사년월일
+                sex_nm: this.detail.sex_nm,                 // 성별
+                inp_prj_nm: this.detail.inp_prj_nm,         // 현/이전투입프로젝트명
+                wth_dt: this.detail.wth_dt,                 // 철수일자
+                nxt_prj_nm: this.detail.nxt_prj_nm,         // 차기프로젝트/업무
+                inp_cls_cd: this.detail.inp_cls_cd,         // 투입구분코드
+                main_skill: this.detail.main_skill,         // 주요기술
+                duty_txt: this.detail.duty_txt,             // 주요업무
+                cpno: this.detail.cpno,                     // 휴대전화번호
+                company_nm: this.detail.company_nm,         // 회사명
+                grd_cd: this.detail.grd_cd_selected,        // 평판구분
+                scholl_nm1: this.detail.scholl_nm1,         // 학교명1
+                gdt_ym1: this.detail.gdt_ym1,               // 졸업년월1
+                study1: this.detail.study1,                 // 전공1
+                scholl_nm2: this.detail.scholl_nm2,         // 학교명2
+                gdt_ym2: this.detail.gdt_ym2,               // 졸업년월2
+                study2: this.detail.study2,                 // 전공2
+                scholl_nm3: this.detail.scholl_nm3,         // 학교명3
+                gdt_ym3: this.detail.gdt_ym3,               // 졸업년월3
+                study3: this.detail.study3,                 // 전공3
+                qlfks_nm1: this.detail.qlfks_nm1,           // 자격증1
+                aqu_ymm1: this.detail.aqu_ymm1,             // 자격증취득일1
+                qlfks_nm2: this.detail.qlfks_nm2,           // 자격증2
+                aqu_ymm2: this.detail.aqu_ymm2,             // 자격증취득일2
+                qlfks_nm3: this.detail.qlfks_nm3,           // 자격증3
+                aqu_ymm3: this.detail.aqu_ymm3,             // 자격증취득일3
+                qlfks_nm4: this.detail.qlfks_nm4,           // 자격증4
+                aqu_ymm4: this.detail.aqu_ymm4,             // 자격증취득일4
+                qlfks_nm5: this.detail.qlfks_nm5,           // 자격증5
+                aqu_ymm5: this.detail.aqu_ymm5,             // 자격증취득일5
+                atfl_mng_id: this.detail.atfl_mng_id,       // 첨부파일관리ID
 
               }).then(res => {
                 console.log(res);
@@ -778,6 +825,10 @@ export default {
       this.detail.now_career          = data.contents[0].now_career            // 현재경력
       this.detail.enter_ymd           = data.contents[0].enter_ymd             // 입사년월일
       this.detail.sex_nm              = data.contents[0].sex_nm                // 성별
+      this.detail.inp_prj_nm          = data.contents[0].inp_prj_nm            // 현/이전투입프로젝트명
+      this.detail.wth_dt              = data.contents[0].wth_dt                // 철수일자
+      this.detail.nxt_prj_nm          = data.contents[0].nxt_prj_nm            // 차기프로젝트/업무
+      this.detail.inp_cls_cd          = data.contents[0].inp_cls_cd            // 투입구분코드
       this.detail.main_skill          = data.contents[0].main_skill            // 주요기술
       this.detail.duty_txt            = data.contents[0].duty_txt              // 주요업무
       this.detail.cpno                = data.contents[0].cpno                  // 휴대전화번호
@@ -890,6 +941,7 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
+                  debugger
                   if(isNaN(rowObj[n].enter_dt) == false) {
                     rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
                   }
@@ -939,6 +991,7 @@ export default {
             let grid3Data = this.$refs.grid3.invoke("getData");
             let rowObj_copy = [];
             if(grid3Data.length == 0) {
+
               for(let n=0; n<rowObj.length; n++){
                 if(isNaN(rowObj[n].sta_dt) == false) {
                   rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
@@ -964,6 +1017,7 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
+
                   if(isNaN(rowObj[n].sta_dt) == false) {
                     rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
                   }
@@ -993,6 +1047,7 @@ export default {
           Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
           3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
        */
+      debugger
       var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
       var converted_date = date.toISOString().split('T')[0].substring(0, 7);
       return converted_date;
@@ -1082,6 +1137,10 @@ export default {
       this.detail.now_career          = '' // 현재경력
       this.detail.enter_ymd           = '' // 입사년월일
       this.detail.sex_nm              = '' // 성별
+      this.detail.inp_prj_nm          = '' // 현/이전투입프로젝트명
+      this.detail.wth_dt              = '' // 철수일자
+      this.detail.nxt_prj_nm          = '' // 차기프로젝트/업무
+      this.detail.inp_cls_cd          = '' //투입구분코드
       this.detail.main_skill          = '' // 주요기술
       this.detail.duty_txt            = '' // 주요업무
       this.detail.cpno                = '' // 휴대전화번호
@@ -1165,6 +1224,10 @@ export default {
         now_career          : '',                     // 현재경력
         enter_ymd           : '',                     // 입사년월일
         sex_nm              : '',                     // 성별
+        inp_prj_nm          : '',                     // 현/이전투입프로젝트명
+        wth_dt              : '',                     // 철수일자
+        nxt_prj_nm          : '',                     // 차기프로젝트/업무
+        inp_cls_cd          : '',                     // 투입구분코드
         main_skill          : '',                     // 주요기술
         duty_txt            : '',                     // 주요업무
         cpno                : '',                     // 휴대전화번호

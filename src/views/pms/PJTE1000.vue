@@ -675,7 +675,7 @@ export default {
           format: 'yyyy-mm-dd',
         },
         {
-          header: '공지업무',
+          header: '공지구분',
           width: 150,
           align: 'left',
           name: 'ntar_bzcd',
