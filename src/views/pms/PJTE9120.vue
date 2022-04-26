@@ -124,10 +124,10 @@
                     <th style="margin-top: 5px; margin-right: 10px;">첨부파일</th>
                     <th style="margin-top: 5px; margin-right: 335px">첨부파일등록은 저장 후 가능합니다.</th>
                   </ul>
-                  <li class="filter-item" style="width: 50px">
+                  <li class="filter-item" style="width: 50px" v-if="regDis">
                     <label style="margin-top: 5px; width: 50px">비밀번호</label>
                   </li>
-                  <li class="filter-item">
+                  <li class="filter-item" v-if="regDis">
                     <div class="item-con" style="margin-right: 5px">
                       <input type="text"
                              v-model="detail.txt_psw_post"
@@ -135,7 +135,7 @@
                       >
                     </div>
                   </li>
-                  <button class="btn btn-filter-p" @click="fnSave(2)">등록</button>
+                  <button class="btn btn-filter-p" @click="fnSave(2)" v-if="regDis">등록</button>
                 </ul>
               </div>
             </section>
@@ -461,7 +461,6 @@ export default {
 
     onGridUpdated(grid){
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
-      debugger
       this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
       this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
       this.info.nmb_inq_yn   = this.$store.state.pms.GesiData.nmb_inq_yn
@@ -561,8 +560,8 @@ export default {
 
     //게시내역(그리드1) ROW 더블클릭 시 게시정보 세부내역 및 답글내역 조회
     dblclick(ev) {
-      this.updateYn = 'Y'
       this.showArea = true
+      this.regDis = false
       this.gesiInput = true
       this.detail.txt_psw_post = ''
       // 게시내역 ROW 클릭 시 하단 게시정보 input 에 바인딩
@@ -636,13 +635,10 @@ export default {
         // 게시판 id에 따른 게시정보 등록
         // TODO 게시판 ID 하드코딩 제거 필요
         // TODO 최초 저장 이후 첨부파일 등록 open 필요
-        if(this.checkPrimary() === false) {
-          return
-        }
+        if(this.checkPrimary() === false) {return}
         let gesipan_id = this.$store.state.pms.GesiData.gesipan_id
 
         if(gesipan_id != null && gesipan_id !== '') {
-          if(this.updateYn === 'N') {
             axiosService.post("/PJTE9120/insert_9120_01", {
               gesipan_id: this.$store.state.pms.GesiData.gesipan_id,                 // 게시판 ID
               post_titl: this.detail.post_titl,        // 게시정보_게시제목
@@ -662,27 +658,7 @@ export default {
                 this.detail.txt_psw_post = '';
               }
             })
-          } else if(this.updateYn === 'Y') {
-            axiosService.put("/PJTE9120/update_9120_02", {
-              post_id: this.detail.post_id,
-              txt_psw: this.detail.txt_psw_post,     // 글비밀번호
-              atfl_mng_id: this.detail.atfl_mng_id,      // 첨부파일관리 ID
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트 ID
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")    // 로그인직원번호
-            }).then(res => {
-              if (res.data) {
-                alert("첨부파일 등록이 완료되었습니다.");
-                this.detail.txt_psw_post = '';
-                this.init()
-                this.fnSearch()
-              } else {
-                alert("첨부파일 등록에 실패하였습니다.")
-                this.detail.txt_psw_post = '';
-              }
-            })
           }
-
-        }
       } else if(num == 3) { // 답글정보 등록
         // 게시내역 선택한 행의 게시글 ID set
         if(this.replyCheckPrimary() === false) {
@@ -821,15 +797,15 @@ export default {
     open_file_page() {
       let file_rgs_dscd = '802'
       let atfl_mng_id = this.detail.atfl_mng_id
-      // let mng_id = this.detail.man_no
+      let mng_id = this.detail.post_id
       let bkup_id = '0000000000', prjt_id = sessionStorage.getItem("LOGIN_PROJ_ID")
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
     },
 
     // [신규] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
-      this.updateYn = 'N'
       this.showArea = false
+      this.regDis = true
       this.detail.post_titl           = '' // 게시제목
       this.detail.post_dsc            = '' // 게시글설명
       this.detail.atfl_mng_id         = '' // 첨부파일관리 ID
@@ -876,11 +852,11 @@ export default {
       comboList : ["C27","C0"], //C27 = 프로젝트 ID, C0 = 백업 ID
       goodNmList : ["C46"],     //C46 = 좋아요
 
-      showArea : false,     //첨부파일 영역 선택
-      showFile : false,     //첨부파일 영역 보여주기 유무
-      showRply : false,     //  유무
-      updateYn  : 'N',      //게시정보 신규 여부
-      gesiInput : true,
+      showArea  : false,     //첨부파일 영역 선택
+      showFile  : false,     //첨부파일 영역 보여주기 유무
+      showRply  : false,     //댓글 영역 보여주기 유무
+      gesiInput : true,      //프로젝트정보 보여주기 유무
+      regDis    : false,     //등록 버튼
 
       file_name_list: [],    // 첨부파일 데이터
 
