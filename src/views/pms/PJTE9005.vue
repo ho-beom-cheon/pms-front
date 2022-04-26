@@ -1348,7 +1348,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000040N
+              listItems: this.$store.state.pms.CD1000000041N
             }
           }
         },
@@ -1361,21 +1361,21 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000041N
+              listItems: this.$store.state.pms.CD1000000042N
             }
           }
         },
         {
           header: '경력',
           width: 120,
-          align: 'left',
+          align: 'right',
           name: 'career',
           editor: 'text',
         },
         {
           header: '현재경력',
           width: 120,
-          align: 'left',
+          align: 'right',
           name: 'now_career',
           editor: 'text',
         },
@@ -1409,7 +1409,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000042N
+              listItems: this.$store.state.pms.CD1000000043N
             }
           }
         },
