@@ -60,7 +60,7 @@
               </tbody>
             </table>
             <div style="float: right">
-              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
+<!--              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>-->
               <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
             </div>
           </Modal>
@@ -128,7 +128,8 @@ export default {
     // 렌더링 후 적용됨
     onGridUpdated(grid){
       let gridData = this.$refs.grid.invoke("getData");
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      // this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("setColumnValues", "prjt_id", this.login_proj_id, false);
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -151,7 +152,7 @@ export default {
             login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
           }).then(res => {
             console.log(res);
-            if (res.data) {
+            if (res.data === true) {
               alert("저장이 완료되었습니다.");
               // 저장 후 그리드 Reload
               this.$refs.grid.invoke("reloadData");
@@ -159,6 +160,8 @@ export default {
               this.$refs.grid.invoke("clearModifiedData");
               this.excelUplod = 'N';
               this.fnSearch();
+            } else {
+              alert("저장에 실패했습니다.");
             }
           })
         } else {
@@ -413,7 +416,6 @@ export default {
         if(data[i].inp_cls_cd === null)       { alert("투입구분은 필수 입력 사항입니다");     return false;}
         if(data[i].rmrk === null)             { alert("비고는 필수 입력 사항입니다");        return false;}
         if(data[i].wth_sch_yn === null)       { alert("철수예정여부는 필수 입력 사항입니다"); return false;}
-        if(data[i].dept_cd === null)          { alert("부문코드는 필수 입력 사항입니다");     return false;}
       }
       return  true;
     },
@@ -494,7 +496,6 @@ export default {
           width: 100,
           name: 'dept_nm',
           align: 'left',
-          editor: "text",
           filter: 'select',
         },
         {
@@ -502,7 +503,6 @@ export default {
           width: 150,
           name: 'hdq_nm',
           align: 'left',
-          editor: "text",
           filter: 'select',
         },
         {
@@ -510,7 +510,6 @@ export default {
           width: 150,
           name: 'tm_nm',
           align: 'left',
-          editor: "text",
           filter: 'select',
         },
         {
@@ -518,7 +517,6 @@ export default {
           width: 70,
           align: 'center',
           name: 'rank_nm',
-          editor: "text",
           filter: 'select',
         },
         {
@@ -526,7 +524,6 @@ export default {
           width: 90,
           align: 'center',
           name: 'empnm',
-          editor: 'text',
           filter: 'select',
         },
         {
@@ -543,13 +540,13 @@ export default {
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true,
+          disabled : true,
         },
         {
           header: '투입프로젝트',
           width: 350,
           align: 'left',
           name: 'inp_prj_nm',
-          editor: 'text',
           filter: 'select',
         },
         {
@@ -560,6 +557,7 @@ export default {
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true,
+          disabled : true,
         },
         {
           header: '철수일(예정)',
@@ -569,13 +567,13 @@ export default {
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true,
+          disabled : true,
         },
         {
           header: '구분',
           width: 50,
           align: 'center',
           name: 'prj_typ_nm',
-          editor: 'text',
           filter: 'select',
         },
         {
@@ -597,6 +595,7 @@ export default {
               listItems: this.$store.state.pms.CD1000000049N
             }
           },
+          disabled : true,
           filter: 'select',
         },
         {
@@ -619,6 +618,7 @@ export default {
               ]
             }
           },
+          disabled : true,
           filter: 'select',
         },
         {
@@ -626,7 +626,7 @@ export default {
           width: 80,
           align: 'center',
           name: 'dept_cd',
-          //hidden: true,
+          hidden: true,
         },
         {
           header: '프로젝트ID',
