@@ -273,7 +273,7 @@ export default {
         this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
         if (this.createdRows.length !== 0) {
-          if (this.vaildation(this.createdRows, "1") === true) {
+          if (this.validation(this.createdRows, "1") === true) {
             axiosService.post("/PJTE5000/insert", {
               gridData     : this.createdRows,
               bkup_id      : this.info.bkup_id_selected,
@@ -300,7 +300,7 @@ export default {
           }
         }
         if (this.updatedRows.length !== 0) {
-          if (this.vaildation(this.updatedRows, "1") === true) {
+          if (this.validation(this.updatedRows, "1") === true) {
             try {
               axiosService.put("/PJTE5000/update", {
                 updatedRows   : this.updatedRows,
@@ -325,7 +325,7 @@ export default {
           return;
         }
         if (this.deletedRows.length !== 0) {
-          if (this.vaildation(this.deletedRows, "1") === true) {
+          if (this.validation(this.deletedRows, "1") === true) {
             axiosService.put("/PJTE5000/delete", {
               gridData     : this.deletedRows,
               bkup_id      : this.info.bkup_id_selected,
@@ -569,38 +569,38 @@ export default {
       this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
     },
     // 유효값 검증
-    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
-    vaildation(data) {
-      // for(let i=0; i<data.length; i++){
-      //   /* 출력 영역  */
-      //   if(data[i].wbs_prc_sts_cd === null) { alert("관리구분코드는 필수 입력 사항입니다");      return false;}
-      //   if(data[i].bzcd === null)           { alert("업무구분코드는 필수 입력 사항입니다");      return false;}
-      //   if(data[i].step_cd === null)          { alert("단계구분코드는 필수 입력 사항입니다");    return false;}
-      //   if(data[i].mng_id === null)         { alert("관리ID는 필수 입력 사항입니다");   return false;}
-      //
-      //   if(data[i].acvt_nm === null)        { alert("ACTIVITY명은 필수 입력 사항입니다");  return false;}
-      //   if(data[i].task_nm === null)        { alert("테스크명은 필수 입력 사항입니다");   return false;}
-      //   if(data[i].crpe_nm === null)        { alert("담당자명은 필수 입력 사항입니다");   return false;}
-      //   if(data[i].mng_id === null)         { alert("처리단계는 필수 입력 사항입니다");      return false;}
-      //   if(data[i].pln_sta_dt === null)     { alert("계획시작일자는 필수 입력 사항입니다");   return false;}
-      //   if(data[i].pln_sta_tim === null)    { alert("계획시작시간은 필수 입력 사항입니다");      return false;}
-      //   if(data[i].pln_end_dt === null)     { alert("계획종료일자는 필수 입력 사항입니다");   return false;}
-      //   if(data[i].pnl_end_tim === null)    { alert("계획종료시간은 필수 입력 사항입니다");      return false;}
-      //
-      //   if(data[i].sort === null)           { alert("정렬은 필수 입력 사항입니다");   return false;}
-      //   if(data[i].prjt_id === null)        { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
-      //   if(data[i].wbs_cnt === null)        { alert("하위건수는 필수 입력 사항입니다");   return false;}
-      //
-      //   if(data[i].step_cd >= '200') {
-      //     if (data[i].hgrn_mng_id === null) {alert("상위관리ID는 필수 입력 사항입니다"); return false;}
-      //   }
-      //   if(data[i].wbs_prc_sts_cd === '100') {
-      //     if(data[i].wgt_rt === null)         { alert("가중치는 필수 입력 사항입니다");   return false;}
-      //     if(data[i].prg_rt === null)         { alert("진행율은 필수 입력 사항입니다");   return false;}
-      //   }
-      //   //if(data[i].atfl_mng_id === null)  { alert("첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-      //
-      // }
+    // validation('검증 데이터', '일반저장(1) | 기타저장(2) 구분')
+    validation(data) {
+      for(let i=0; i<data.length; i++){
+        /* 출력 영역  */
+        if(data[i].wbs_prc_sts_cd === null) { alert("관리구분코드는 필수 입력 사항입니다");      return false;}
+        if(data[i].bzcd === null)           { alert("업무구분코드는 필수 입력 사항입니다");      return false;}
+        if(data[i].step_cd === null)          { alert("단계구분코드는 필수 입력 사항입니다");    return false;}
+        if(data[i].mng_id === null)         { alert("관리ID는 필수 입력 사항입니다");   return false;}
+
+        if(data[i].acvt_nm === null)        { alert("ACTIVITY명은 필수 입력 사항입니다");  return false;}
+        if(data[i].task_nm === null)        { alert("테스크명은 필수 입력 사항입니다");   return false;}
+        if(data[i].crpe_nm === null)        { alert("담당자명은 필수 입력 사항입니다");   return false;}
+        if(data[i].mng_id === null)         { alert("처리단계는 필수 입력 사항입니다");      return false;}
+        if(data[i].pln_sta_dt === null)     { alert("계획시작일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].pln_sta_tim === null)    { alert("계획시작시간은 필수 입력 사항입니다");      return false;}
+        if(data[i].pln_end_dt === null)     { alert("계획종료일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].pnl_end_tim === null)    { alert("계획종료시간은 필수 입력 사항입니다");      return false;}
+
+        if(data[i].sort === null)           { alert("정렬은 필수 입력 사항입니다");   return false;}
+        if(data[i].prjt_id === null)        { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
+        if(data[i].wbs_cnt === null)        { alert("하위건수는 필수 입력 사항입니다");   return false;}
+
+        if(data[i].step_cd >= '200') {
+          if (data[i].hgrn_mng_id === null) {alert("상위관리ID는 필수 입력 사항입니다"); return false;}
+        }
+        if(data[i].wbs_prc_sts_cd === '100') {
+          if(data[i].wgt_rt === null)         { alert("가중치는 필수 입력 사항입니다");   return false;}
+          if(data[i].prg_rt === null)         { alert("진행율은 필수 입력 사항입니다");   return false;}
+        }
+        //if(data[i].atfl_mng_id === null)  { alert("첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+
+      }
       return  true;
     },
   },

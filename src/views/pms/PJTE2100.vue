@@ -673,7 +673,7 @@ export default {
             wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
             wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
             wb.Sheets[sheetName].H1.w = "frcs_sta_dt"
-            wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
+            wb.Sheets[sheetName].H2.w = "frcs_end_dt"
             let I1 = {
               I1: {
                 t: 's',
@@ -761,11 +761,32 @@ export default {
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
+
             for (let n = 1; n < rowObj.length; n++) {
-              rowObj_copy[n - 1] = rowObj[n];
-            }
+                if(isNaN(rowObj[n].frcs_sta_dt) === false && rowObj[n].frcs_sta_dt !== '') {
+                  if(this.checkSpecial(rowObj[n].frcs_sta_dt)){
+                    console.log("날짜 특수문자 포함 여부 확인 ::", rowObj[n].frcs_sta_dt)
+                  }
+                  rowObj[n].frcs_sta_dt = this.excelDateToJSDate(rowObj[n].frcs_sta_dt)
+                }
+                if(isNaN(rowObj[n].frcs_end_dt) === false && rowObj[n].frcs_end_dt !== '') {
+                  rowObj[n].frcs_end_dt = this.excelDateToJSDate(rowObj[n].frcs_end_dt)
+                }
+                if(isNaN(rowObj[n].sta_dt) === false && rowObj[n].sta_dt !== '') {
+                  rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                }
+                if (isNaN(rowObj[n].end_dt) === false && rowObj[n].end_dt !== '') {
+                  rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                }
+                if (isNaN(rowObj[n].pl_cnf_dt) === false && rowObj[n].pl_cnf_dt !== '') {
+                  rowObj[n].pl_cnf_dt = this.excelDateToJSDate(rowObj[n].pl_cnf_dt)
+                }
+                if (isNaN(rowObj[n].dvlpe_cnf_dt) === false && rowObj[n].dvlpe_cnf_dt !== '') {
+                  rowObj[n].dvlpe_cnf_dt = this.excelDateToJSDate(rowObj[n].dvlpe_cnf_dt)
+                }
+                rowObj_copy[n - 1] = rowObj[n];
+              }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
-            console.log("gridExcelData ::", gridExcelData)
           }
         })
         this.excelUplod = 'Y'
@@ -779,6 +800,29 @@ export default {
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
     },
+    // 특수 문자가 있나 없나 체크
+    checkSpecial(str) {
+    	let special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+      debugger
+    	if(special_pattern.test(str) === true) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    },
+    excelDateToJSDate(excelDate) {
+      /* 엑셀에서 넘어온 숫자형태의 데이터를 날짜형태로 바꿔주는 함수
+      ex) 1. 엑셀 파일에서 2021-02 형태로 값을 입력하면 Feb-22 형태의 날짜 데이터가 자동입력됨
+          2. gridExcelImport2 함수에서
+          XLSX.utils.sheet_to_json(wb.Sheets[sheetName]) 엑셀데이터를 JSON으로 바뀌면서
+          Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
+          3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
+       */
+      let date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
+      let converted_date = date.toISOString().split('T')[0].substring(0, 10);
+      return converted_date;
+    },
+
     //직원조회 버튼 클릭 시
     open_pjte9001_btn(btn_id) {
       let empnm = ''

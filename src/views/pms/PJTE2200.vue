@@ -369,7 +369,7 @@ export default {
         this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
         if (this.createdRows.length !== 0) {
-          if (this.vaildation(this.createdRows, "1") === true) {
+          if (this.validation(this.createdRows, "1") === true) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
@@ -386,7 +386,7 @@ export default {
           this.$refs.grid.invoke("reloadData");
         }
         if (this.updatedRows.length !== 0) {
-          if (this.vaildation(this.updatedRows, "1") === true) {
+          if (this.validation(this.updatedRows, "1") === true) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -418,7 +418,7 @@ export default {
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
 
       if(this.updatedRows.length !== 0) {
-        if (this.vaildation(this.updatedRows, "2") === true) {
+        if (this.validation(this.updatedRows, "2") === true) {
           try {
             // 데이터 파라메타 전달
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -583,8 +583,8 @@ export default {
       this.fnEnable();
     },
     // 유효값 검증
-    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
-    vaildation(data, division) {
+    // validation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
+    validation(data, division) {
       for(let i=0; i<data.length; i++){
         // 저장과 기타항목수정 분류
         if(division === "1") {
@@ -630,9 +630,7 @@ export default {
         if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
         if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
         if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
-
       }
-
       return  true;
     },
     onGridUpdated(grid){
