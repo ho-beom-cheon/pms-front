@@ -283,8 +283,6 @@ export default {
         // 엑셀업로드 및 다운로드, 행추가 및 삭제, 저장 버튼 숨기기
         document.getElementById('excelUpBtn').hidden = true;
         document.getElementById('excelDwnBtn').hidden = true;
-        document.getElementById('addRowBtn').hidden = true;
-        document.getElementById('delRowBtn').hidden = true;
         document.getElementById('saveBtn').hidden = true;
       }
     },
