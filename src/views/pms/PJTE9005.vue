@@ -293,7 +293,7 @@
               </li>
               <li class="filter-item-a">
                 <div class="item-con">
-                  <label>투입구분코드</label>
+                  <label>투입구분</label>
                   <input type="text"
                          ref="cpno"
                          v-model="detail.inp_cls_cd"
@@ -304,9 +304,9 @@
               </li>
               <li class="filter-item-a">
                 <div class="item-con">
-                  <label style="width: 120px; vertical-align: text-top; ">희망 차기<br>프로젝트/업무</label>
+                  <label style="width: 120px; vertical-align: text-top; ">차기 희망<br>프로젝트및업무</label>
                   <input type="text"
-                         placeholder="입력"
+                         placeholder="앞으로 하고싶은 프로젝트 및 업무 작성"
                          ref="cpno"
                          v-model="detail.nxt_prj_nm"
                          style="width: 230px; vertical-align: text-top; "
