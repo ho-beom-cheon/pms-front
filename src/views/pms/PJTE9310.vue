@@ -60,7 +60,7 @@
               </tbody>
             </table>
             <div style="float: right">
-<!--              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>-->
+              <button id="crpenm-edit" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit">수정</button>
               <button id="crpenm-close" class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
             </div>
           </Modal>
@@ -117,9 +117,9 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    prjt_nm_change(params)         {this.info.prjt_nm_selected = params},
+    prjt_nm_change(params)        {this.info.prjt_nm_selected = params},
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
-    dept_cd_change(params)        {this.info.dept_cd_selected = params},
+    dept_cd_change(params)        {this.info.dept_cd_selected = params; this.fnSearch();},
 
     // 렌더링 중 적용 (mounted와 동일)
     onGridMounted(grid){
@@ -128,136 +128,93 @@ export default {
     // 렌더링 후 적용됨
     onGridUpdated(grid){
       let gridData = this.$refs.grid.invoke("getData");
-      // this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
-      this.$refs.grid.invoke("setColumnValues", "prjt_id", this.login_proj_id, false);
+      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
       this.modalTxt = document.getElementById("modalId").value;
+      // console.log("확인::", document.getElementById("modalId").value);
+      // console.log("this.curRow::", this.curRow);
+      // console.log("this.modalTxt::", this.modalTxt);
       this.modals.txt_modal1 = false;
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
     },
     fnSave() {
-      // 엑셀 업로드 했을 때
-      if(this.excelUplod === 'Y') {
-        this.gridData = this.$refs.grid.invoke("getData");
-        if(this.validation(this.gridData) === true) {
-          console.log('gridData? > ', this.gridData);
-          axiosService.post("/PJTE9310/insert_9310_01", {
-            gridData     : this.gridData,
-            bkup_id      : this.info.bkup_id_selected,
-            prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-            login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
-          }).then(res => {
-            console.log(res);
-            if (res.data === true) {
-              alert("저장이 완료되었습니다.");
-              // 저장 후 그리드 Reload
-              this.$refs.grid.invoke("reloadData");
-              // 저장 후 변경 데이터 배열 비움
-              this.$refs.grid.invoke("clearModifiedData");
-              this.excelUplod = 'N';
-              this.fnSearch();
-            } else {
-              alert("저장에 실패했습니다.");
-            }
-          })
-        } else {
-          return;
-        }
-      } else if(this.excelUplod === 'N') {
-        // 변경 사항 유무 체크
-        if (this.$refs.grid.invoke("isModified") === false) {
-          alert("변경된 내용이 없습니다.");
-          return;
-        }
-        // 데이터 로그 확인
-        console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
-        console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
-        console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      // 데이터 로그 확인
+      console.log("updatedRows ::", this.$refs.grid.invoke("getModifiedRows").updatedRows);
+      console.log("createdRows ::", this.$refs.grid.invoke("getModifiedRows").createdRows);
+      console.log("deletedRows ::", this.$refs.grid.invoke("getModifiedRows").deletedRows);
+      // 변경 데이터 저장
 
-        // 변경 데이터 저장
-        this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-        this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
-        this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
+      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+      this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
+      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
-        if (this.createdRows.length !== 0) {
-          if (this.validation(this.createdRows) === true) {
+      if(this.excelUplod === 'N') {
+        if(this.updatedRows.length !== 0) {
+          // 엑셀 업로드는 하지 않았지만 변경한 행이 존재할 때
+          this.gridData = this.$refs.grid.invoke("getData");
+          if(this.validation(this.gridData) === true) {
+            console.log('gridData? > ', this.gridData);
             axiosService.post("/PJTE9310/insert_9310_01", {
-              gridData     : this.createdRows,
-              bkup_id      : this.info.bkup_id_selected,
-              prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
-            }).then(res => {
-              console.log(res)
-              if (res.data) {
-                alert("저장이 완료되었습니다.");
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-                // 저장 후 변경 데이터 배열 비움
-                this.$refs.grid.invoke("clearModifiedData");
-                this.excelUplod = 'N';
-              } else {
-                alert("이미 등록된 프로그램입니다.");
-              }
-              this.fnSearch();
-            })
-          } else {
-            return;
-          }
-        }
-        if (this.updatedRows.length !== 0) {
-          if (this.validation(this.updatedRows) === true) {
-            try {
-              axiosService.put("/PJTE9310/update", {
-                updatedRows   : this.updatedRows,
-                bkup_id      : this.info.bkup_id_selected,
-                prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-                login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
-              }).then(res => {
-                console.log(res);
-                alert("저장이 완료되었습니다.");
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-              })
-              // 저장 후 변경 데이터 배열 비움
-              this.$refs.grid.invoke("clearModifiedData");
-              this.excelUplod = 'N';
-            } catch (e) {
-              console.log("업데이트 오류 ::", e);
-            }
-          } else {
-            return;
-          }
-          return;
-        }
-        if (this.deletedRows.length !== 0) {
-          if (this.validation(this.deletedRows) === true) {
-            axiosService.put("/PJTE9310/delete_9310_01", {
-              gridData     : this.deletedRows,
+              gridData     : this.gridData,
               bkup_id      : this.info.bkup_id_selected,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
             }).then(res => {
               console.log(res);
-              if (res.data) {
-                alert("저장이 완료되었습니다.")
+              if (res.data === true) {
+                alert("저장이 완료되었습니다.");
                 // 저장 후 그리드 Reload
                 this.$refs.grid.invoke("reloadData");
                 // 저장 후 변경 데이터 배열 비움
                 this.$refs.grid.invoke("clearModifiedData");
                 this.excelUplod = 'N';
+                this.fnSearch();
               } else {
-                alert("저장에 실패하였습니다.");
+                alert("저장에 실패했습니다.");
               }
-              this.fnSearch();
             })
           } else {
             return;
           }
+        } else {
+          // 변경 사항 유무 체크
+          if (this.$refs.grid.invoke("isModified") === false) {
+            alert("변경된 내용이 없습니다.");
+            return;
+          }
         }
+
+      } else if(this.excelUplod === 'Y' || this.updatedRows.length !== 0) {
+          // 엑셀 업로드나 변경한 행이 존재할 때
+          this.gridData = this.$refs.grid.invoke("getData");
+          if(this.validation(this.gridData) === true) {
+            console.log('gridData? > ', this.gridData);
+            axiosService.post("/PJTE9310/insert_9310_01", {
+              gridData     : this.gridData,
+              bkup_id      : this.info.bkup_id_selected,
+              prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
+            }).then(res => {
+              console.log(res);
+              if (res.data === true) {
+                alert("저장이 완료되었습니다.");
+                // 저장 후 그리드 Reload
+                this.$refs.grid.invoke("reloadData");
+                // 저장 후 변경 데이터 배열 비움
+                this.$refs.grid.invoke("clearModifiedData");
+                this.excelUplod = 'N';
+                this.fnSearch();
+              } else {
+                alert("저장에 실패했습니다.");
+              }
+            })
+          } else {
+            return;
+          }
       }
     },
     onClick(ev) {
@@ -378,6 +335,7 @@ export default {
         this.excelUplod = 'Y';
         try {
           this.$refs.grid.invoke('resetData', gridExcelData);
+          this.$refs.grid.invoke("setColumnValues", "prjt_id", this.login_proj_id);
           alert('업로드 파일이 적용되었습니다.');
         } catch (e){
           alert('업로드에 실패했습니다.');
@@ -512,8 +470,8 @@ export default {
         },
         {
           header: '직급',
-          width: 70,
-          align: 'center',
+          width: 100,
+          align: 'left',
           name: 'rank_nm',
           filter: 'select',
         },
@@ -538,7 +496,6 @@ export default {
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true,
-          disabled : true,
         },
         {
           header: '투입프로젝트',
@@ -546,6 +503,7 @@ export default {
           align: 'left',
           name: 'inp_prj_nm',
           filter: 'select',
+          editor: 'text',
         },
         {
           header: '투입일',
@@ -555,7 +513,6 @@ export default {
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true,
-          disabled : true,
         },
         {
           header: '철수일(예정)',
@@ -565,7 +522,6 @@ export default {
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
           sortable: true,
-          disabled : true,
         },
         {
           header: '구분',
@@ -573,6 +529,7 @@ export default {
           align: 'center',
           name: 'prj_typ_nm',
           filter: 'select',
+          editor: 'text',
         },
         {
           header: '수행지역',
@@ -580,6 +537,7 @@ export default {
           align: 'center',
           name: 'prf_ar',
           filter: 'select',
+          editor: 'text',
         },
         {
           header: '투입구분',
@@ -593,7 +551,6 @@ export default {
               listItems: this.$store.state.pms.CD1000000049N
             }
           },
-          disabled : true,
           filter: 'select',
         },
         {
@@ -616,7 +573,6 @@ export default {
               ]
             }
           },
-          disabled : true,
           filter: 'select',
         },
         {
@@ -625,6 +581,7 @@ export default {
           align: 'center',
           name: 'dept_cd',
           hidden: true,
+          editor: 'text',
         },
         {
           header: '프로젝트ID',
