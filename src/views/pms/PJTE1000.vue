@@ -690,6 +690,7 @@ export default {
           header: '제목',
           align: 'left',
           name: 'titl_txt',
+          filter: { type: 'text'},
         },
       ],
     }
