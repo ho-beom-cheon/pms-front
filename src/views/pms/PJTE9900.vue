@@ -207,6 +207,7 @@
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
+                  @keydown="onClick"
                   @onGridUpdated="onGridUpdated1"
                   @beforeExport="beforeExport"
               ></grid>
@@ -397,12 +398,12 @@ export default {
             // console.log(res)
             if (res.data === true) {
               alert("저장이 완료되었습니다.")
+              this.$refs.grid.invoke("reloadData");
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
             } else {
               alert("이미 등록된 프로그램입니다.")
             }
-            this.$refs.grid.invoke("reloadData");
           })
         }
       }
@@ -495,6 +496,9 @@ export default {
       // console.log("beforeExport::", grid)
     },
 
+    onKeyDown(ev){
+      console.log(ev)
+    },
     // 그리드 1 클릭 이벤트
     onClick(ev) {
       // 현재 Row 가져오기
