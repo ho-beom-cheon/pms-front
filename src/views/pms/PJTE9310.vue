@@ -161,6 +161,7 @@ export default {
             axiosService.post("/PJTE9310/insert_9310_01", {
               gridData     : this.gridData,
               bkup_id      : this.info.bkup_id_selected,
+              dept_cd      : this.info.dept_cd_selected,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
             }).then(res => {
@@ -196,6 +197,7 @@ export default {
             axiosService.post("/PJTE9310/insert_9310_01", {
               gridData     : this.gridData,
               bkup_id      : this.info.bkup_id_selected,
+              dept_cd      : this.info.dept_cd_selected,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
             }).then(res => {
@@ -355,23 +357,7 @@ export default {
     validation(data) {
       for(let i=0; i<data.length; i++){
         /* 출력 영역  */
-        if(data[i].dept_nm === null)          { alert("부문은 필수 입력 사항입니다");      return false;}
-        if(data[i].hdq_nm === null)           { alert("소속본부는 필수 입력 사항입니다");   return false;}
-        if(data[i].tm_nm === null)            { alert("소속팀은 필수 입력 사항입니다");     return false;}
-        if(data[i].rank_nm === null)          { alert("직급은 필수 입력 사항입니다");       return false;}
-
-        if(data[i].empnm === null)            { alert("성명은 필수 입력 사항입니다");       return false;}
         if(data[i].empno === null)            { alert("직원번호는 필수 입력 사항입니다");    return false;}
-        if(data[i].ent_dt === null)           { alert("입사일은 필수 입력 사항입니다");      return false;}
-        if(data[i].inp_prj_nm === null)       { alert("투입프로젝트는 필수 입력 사항입니다"); return false;}
-        if(data[i].inp_dt === null)           { alert("투입일은 필수 입력 사항입니다");      return false;}
-        if(data[i].wth_dt === null)           { alert("철수일은 필수 입력 사항입니다");      return false;}
-        if(data[i].prj_typ_nm === null)       { alert("구분은 필수 입력 사항입니다");        return false;}
-        if(data[i].prf_ar === null)           { alert("수행지역은 필수 입력 사항입니다");     return false;}
-
-        if(data[i].inp_cls_cd === null)       { alert("투입구분은 필수 입력 사항입니다");     return false;}
-        if(data[i].rmrk === null)             { alert("비고는 필수 입력 사항입니다");        return false;}
-        if(data[i].wth_sch_yn === null)       { alert("철수예정여부는 필수 입력 사항입니다"); return false;}
       }
       return  true;
     },
@@ -469,7 +455,7 @@ export default {
           filter: 'select',
         },
         {
-          header: '직급',
+          header: '직급/직책',
           width: 100,
           align: 'left',
           name: 'rank_nm',
@@ -477,20 +463,21 @@ export default {
         },
         {
           header: '성명',
-          width: 90,
+          width: 70,
           align: 'center',
           name: 'empnm',
-          filter: 'select',
+          filter: 'text',
         },
         {
           header: '번호',
-          width: 100,
+          width: 90,
           align: 'center',
           name: 'empno',
+          filter: 'text',
         },
         {
           header: '입사일',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'ent_dt',
           format: 'yyyy-mm-dd',
@@ -502,12 +489,12 @@ export default {
           width: 350,
           align: 'left',
           name: 'inp_prj_nm',
-          filter: 'select',
+          filter: 'text',
           editor: 'text',
         },
         {
           header: '투입일',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'inp_dt',
           format: 'yyyy-mm-dd',
@@ -516,7 +503,7 @@ export default {
         },
         {
           header: '철수일(예정)',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'wth_dt',
           format: 'yyyy-mm-dd',
@@ -558,6 +545,7 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
+          filter: 'text',
         },
         {
           header: '철수예정',
@@ -573,7 +561,6 @@ export default {
               ]
             }
           },
-          filter: 'select',
         },
         {
           header: '부문코드',
