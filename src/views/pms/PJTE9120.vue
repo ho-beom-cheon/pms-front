@@ -472,7 +472,7 @@ export default {
         this.showFile = false
       }
 
-      if(this.info.annym_yn === 'Y'){
+      if(this.info.annym_yn === 'N'){
         this.$refs.grid1.invoke("showColumn",'post_nm')
         this.$refs.grid2.invoke("showColumn",'empnm')
         this.$refs.grid3.invoke("showColumn",'empnm')
