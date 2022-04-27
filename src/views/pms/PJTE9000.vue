@@ -1160,7 +1160,7 @@ export default {
           editor : 'text'
         },
         {
-          header: sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000003' || sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000001' ? '직위' : '업무',
+          header: sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000003' || sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000001' ? '직책' : '업무',
           width: 100,
           name: 'bzcd',
           formatter: 'listItemText',
