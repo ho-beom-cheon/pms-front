@@ -261,7 +261,6 @@ export default {
     getCount() {
       return this.count;
     }
-
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
