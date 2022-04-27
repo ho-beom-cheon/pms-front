@@ -6,8 +6,8 @@
     <!-- 컨텐츠 영역 -->
     <div class="contents-body">
       <!-- 필터영역 -->
-      <section class="filter" :hidden="prjt_gbn">
-        <ul class="filter-con clear-fix">
+      <section class="filter">
+        <ul class="filter-con clear-fix" :hidden="prjt_gbn">
           <combo
               :comboArray="this.comboList"
               @bkup_id_change="bkup_id_change"
@@ -15,8 +15,8 @@
           ></combo>
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
-        <ul class="filter-btn">
-          <button class="btn btn-filter-d"
+        <ul class="filter-btn" >
+          <button class="btn btn-filter-d" :hidden="prjt_gbn"
                   style="margin-left: 10px;"
                   @click="open_file_page(3)">설계산출물 양식 ⓘ
           </button>
