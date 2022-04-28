@@ -1520,14 +1520,14 @@ export default {
         {
           header: '역할',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'duty_txt',
           editor: 'text',
         },
         {
           header: '사용기종/OS',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'use_os',
           editor: 'text',
         },
