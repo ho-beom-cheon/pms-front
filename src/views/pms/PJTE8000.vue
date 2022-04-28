@@ -608,6 +608,10 @@ export default {
     /* 조회 */
     fnSearch() {
       // 조회 서비스
+      if (this.info.week_yymm == "" || this.info.week_yymm == null) {
+        alert('조회 주간년월이 필수 입력항목입니다.');
+        return false;
+      }
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
       document.getElementById("openFile").hidden =true;
