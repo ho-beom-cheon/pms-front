@@ -115,7 +115,7 @@
             ></grid>
           </div>
         </div>
-        <div class="grid1-box" style="height: 520px">
+        <div class="grid1-box" style="height: 510px">
           <div class="div-header-b"><h2>1. 인적사항</h2>
             <p style="margin-left: 50px; margin-top: 8px">{{ detail.last_chg_dt }}</p>
             <ul class="filter-btn">
