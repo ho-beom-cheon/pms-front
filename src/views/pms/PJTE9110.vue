@@ -166,7 +166,7 @@ export default {
       },
       rowHeaders:['rowNum'],
       header:{
-        height: 45,
+        height: 25,
       },
       columns1: [
         {
