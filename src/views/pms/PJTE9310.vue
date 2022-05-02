@@ -482,7 +482,7 @@ export default {
           name: 'ent_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
-          sortable: true,
+          filter: 'text',
         },
         {
           header: '투입프로젝트',
@@ -499,7 +499,7 @@ export default {
           name: 'inp_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
-          sortable: true,
+          filter: 'text',
         },
         {
           header: '철수일(예정)',
@@ -508,7 +508,7 @@ export default {
           name: 'wth_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
-          sortable: true,
+          filter: 'text',
         },
         {
           header: '구분',
@@ -593,5 +593,8 @@ export default {
 <style>
 .disableColor {
   background: #FFFFFF!important;
+}
+.tui-grid-filter-dropdown {
+  width : 160px;
 }
 </style>
