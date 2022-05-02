@@ -1430,3 +1430,6 @@ aside dl dd + dd a {
     background-color: #f2f2f2 !important;
     color: black !important;
 }
+.tui-grid-filter-dropdown {
+  width : 160px !important;
+}

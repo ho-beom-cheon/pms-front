@@ -1008,6 +1008,7 @@ export default {
           align: 'left',
           name: 'dis_post_titl',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '게시제목',
@@ -1122,6 +1123,7 @@ export default {
           header: '답글',
           align: 'left',
           name: 'rpl_titl',
+          filter: 'text',
         },
         {
           header: '등록일시',
@@ -1189,6 +1191,7 @@ export default {
           align: 'left',
           name: 'cmnt_titl',
           editor: 'text',
+          filter: 'text',
           whiteSpace: 'pre',
         },
         {
