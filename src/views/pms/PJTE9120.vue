@@ -1,5 +1,5 @@
 <template>
-  <!-- CONTENTS -->
+  <!-- CONTENTS test -->
   <div class="contents">
     <div class="div-img"></div>
     <div class="div-img-delete"></div>
@@ -693,7 +693,7 @@ export default {
       } else if(num ==  4) {  // 댓글정보 신규 등록
         let post_id = this.$refs.grid1.invoke("getValue", this.curRow, "post_id")
         let gridRow = this.$refs.grid3.invoke("getRow", this.curRow);
-        debugger
+
         if (this.commentCheckPrimary() === false) {
           return
         }
@@ -1008,6 +1008,7 @@ export default {
           align: 'left',
           name: 'dis_post_titl',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '게시제목',
@@ -1122,6 +1123,7 @@ export default {
           header: '답글',
           align: 'left',
           name: 'rpl_titl',
+          filter: 'text',
         },
         {
           header: '등록일시',
@@ -1189,6 +1191,7 @@ export default {
           align: 'left',
           name: 'cmnt_titl',
           editor: 'text',
+          filter: 'text',
           whiteSpace: 'pre',
         },
         {

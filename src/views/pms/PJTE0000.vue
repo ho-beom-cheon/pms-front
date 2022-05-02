@@ -183,7 +183,6 @@ export default {
     ...mapActions("pms",["SET_DATA"]),
     async setData(value) {
       try {
-        debugger
         await this.SET_DATA(value)
 
       } catch (error) {

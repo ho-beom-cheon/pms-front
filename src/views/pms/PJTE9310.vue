@@ -594,4 +594,7 @@ export default {
 .disableColor {
   background: #FFFFFF!important;
 }
+.tui-grid-filter-dropdown {
+  width : 160px;
+}
 </style>
