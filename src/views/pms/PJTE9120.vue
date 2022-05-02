@@ -367,6 +367,7 @@ export default {
       }
       return true;
     },
+    // test
     init() {
       if (storage.getItem("jwt-auth-token")) {
         this.message = storage.getItem('LOGIN_EMP_NO') + "로 로그인 되었습니다.";
