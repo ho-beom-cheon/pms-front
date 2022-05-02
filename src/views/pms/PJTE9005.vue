@@ -939,7 +939,6 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
-                  debugger
                   if(isNaN(rowObj[n].enter_dt) == false) {
                     rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
                   }
@@ -1045,7 +1044,6 @@ export default {
           Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
           3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
        */
-      debugger
       var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
       var converted_date = date.toISOString().split('T')[0].substring(0, 7);
       return converted_date;

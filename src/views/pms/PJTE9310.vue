@@ -482,7 +482,7 @@ export default {
           name: 'ent_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
-          filter: 'text',
+          sortable: true,
         },
         {
           header: '투입프로젝트',
@@ -499,7 +499,7 @@ export default {
           name: 'inp_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
-          filter: 'text',
+          sortable: true,
         },
         {
           header: '철수일(예정)',
