@@ -1,8 +1,8 @@
 const webpack = require('webpack');
-
+const path = require('path');
 module.exports = {
-  outputDir: "../src/main/resources/static",
-  indexPath: "../static/index.html",
+  outputDir: path.resolve(__dirname + '/dist'),
+  indexPath: "../dist/index.html",
   devServer: {
     //disableHostCheck: true,
     port:8081,

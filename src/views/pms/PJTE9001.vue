@@ -71,9 +71,11 @@
         </tbody>
       </table>
       <hr>
+    </div>
+    <div>
       <!-- page contents -->
       <section class="page-contents">
-        <div class="gridWrap" style="min-width: 500px;">
+        <div style="padding: 0px 20px 0px;">
           <grid
               ref="grid"
               :data="dataSource"
@@ -269,8 +271,8 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 300,
-      rowHeight: 40,
+      bodyHeight: 315,
+      rowHeight: 25,
       minRowHeight: 10,
       showDummyRows: false,
       open: false,
@@ -292,20 +294,7 @@ export default {
       },
       columns: [
         {
-          header: '프로젝트명',
-          align: 'left',
-          name: 'prjt_id',
-          width: 180,
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems:this.$store.state.pms.CD0000000000N
-            }
-          }
-        },
-        {
-          header: '업무구분　　',
+          header: '업무구분',
           align: 'center',
           name: 'bzcd',
           width: 100,
@@ -318,18 +307,26 @@ export default {
           }
         },
         {
+          header: '부서',
+          align: 'left',
+          name: 'dept_nm',
+        },
+        {
           header: '직원번호',
           align: 'center',
+          width: 100,
           name: 'empno',
         },
         {
           header: '직원명',
           align: 'center',
+          width: 100,
           name: 'empnm',
         },
         {
           header: '직급',
           align: 'center',
+          width: 100,
           name: 'rank_nm',
         },
       ],
@@ -340,5 +337,7 @@ export default {
 </script>
 
 <style>
-
+.pop-body {
+  padding: 25px 20px 0px;
+}
 </style>

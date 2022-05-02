@@ -446,11 +446,8 @@ export default {
     },
 
     fnSave(grid_num){
-      // debugger;
       let grid_arr = [];
       let check = true;
-
-
 
       // 그리드 1 저장
       if(grid_num === 1){
@@ -975,15 +972,8 @@ export default {
           wb.Sheets[sheetName].G1.w = "catn_dcd"
           wb.Sheets[sheetName].H1.w = "aut_cd"
           wb.Sheets[sheetName].I1.w = "del_yn"
-          wb.Sheets[sheetName].J1.w = "real_prjt_id"
-          wb.Sheets[sheetName].K1.w = "dept_cd"
-          wb.Sheets[sheetName].L1.w = "plan_thw_stdt"
-          wb.Sheets[sheetName].M1.w = "plan_thw_endt"
-          wb.Sheets[sheetName].N1.w = "real_thw_stdt"
-          wb.Sheets[sheetName].O1.w = "real_thw_endt"
-          wb.Sheets[sheetName].P1.w = "email_addr"
-          wb.Sheets[sheetName].Q1.w = "cpno"
-          wb.Sheets[sheetName].R1.w = "ip_addr"
+          wb.Sheets[sheetName].J1.w = "dept_cd"
+          wb.Sheets[sheetName].K1.w = "real_prjt_id"
 
           let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
           let gridExcelData = JSON.parse(JSON.stringify(rowObj));
@@ -1053,10 +1043,6 @@ export default {
       addRow : {
         grid : this.grid,
       },
-      frcs_sta_dt : '',    // 계획일자STA
-      frcs_end_dt : '',    // 계획일자END
-      sta_dt      : '',    // 실제일자STA
-      end_dt      : '',    // 실제일자END
 
       check_Yn    : false,  // 삭제프로그램/소스취약점포함
 
@@ -1131,7 +1117,7 @@ export default {
         },
         {
           header: '프로젝트',
-          width: 150,
+          width: 200,
           name: 'prjt_id',
           formatter: 'listItemText',
           disabled : true,
@@ -1144,20 +1130,22 @@ export default {
         },
         {
           header: '직원번호',
-          width: 120,
+          width: 100,
           name: 'empno',
           editor : 'text',
+          align: 'center',
           disabled : true,
         },
         {
           header: '직원명',
-          width: 120,
+          width: 80,
           name: 'empnm',
+          align: 'center',
           editor : 'text'
         },
         {
           header: '직급명',
-          width: 120,
+          width: 80,
           name: 'rank_nm',
           editor : 'text'
         },
@@ -1169,8 +1157,8 @@ export default {
           editor : 'text'
         },
         {
-          header: '업무구분코드',
-          width: 120,
+          header: sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000003' || sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000001' ? '직책' : '업무',
+          width: 100,
           name: 'bzcd',
           formatter: 'listItemText',
           editor: {
@@ -1181,9 +1169,10 @@ export default {
           }
         },
         {
-          header: '구성원구분코드',
-          width: 120,
+          header: '직원구분',
+          width: 90,
           name: 'catn_dcd',
+          align: 'center',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -1193,8 +1182,8 @@ export default {
           }
         },
         {
-          header: '권한구분코드',
-          width: 120,
+          header: '권한',
+          width: 100,
           name: 'aut_cd',
           formatter: 'listItemText',
           editor: {
@@ -1205,8 +1194,8 @@ export default {
           }
         },
         {
-          header: '삭제여부',
-          width: 80,
+          header: '퇴사',
+          width: 60,
           name: 'del_yn',
           align: 'center',
           editor : {
@@ -1220,67 +1209,30 @@ export default {
           },
         },
         {
-          header: '투입프로젝트',
-          width: 120,
-          name: 'real_prjt_id',
-          editor : 'text'
-        },
-        {
-          header: '부문코드',
-          width: 80,
+          header: '소속',
+          width: 160,
           name: 'dept_cd',
-          editor : 'text'
+          formatter: 'listItemText',
+          editor : {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000044N
+            }
+          }
         },
         {
-          header: '계획투입시작일자',
-          width: 120,
-          align: 'center',
-          name: 'plan_thw_stdt',
-          format: 'yyyy-mm-dd',
-          editor : 'datePicker'
+          header: '투입프로젝트코드',
+          width: 300,
+          name: 'real_prjt_id',
+          formatter: 'listItemText',
+          editor : {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000038N
+            }
+          }
         },
-        {
-          header: '계획투입종료일자',
-          width: 120,
-          align: 'center',
-          name: 'plan_thw_endt',
-          format: 'yyyy-mm-dd',
-          editor : 'datePicker'
-        },
-        {
-          header: '실제투입시작일자',
-          width: 120,
-          align: 'center',
-          name: 'real_thw_stdt',
-          format: 'yyyy-mm-dd',
-          editor : 'datePicker'
-        },
-        {
-          header: '실제투입종료일자',
-          width: 120,
-          align: 'center',
-          name: 'real_thw_endt',
-          format: 'yyyy-mm-dd',
-          editor : 'datePicker'
-        },
-        {
-          header: '이메일주소',
-          width: 120,
-          name: 'email_addr',
-          editor : 'text'
-        },
-        {
-          header: '휴대폰번호',
-          width: 120,
-          name: 'cpno',
-          editor : 'text'
-        },
-        {
-          header: 'IP주소',
-          width: 120,
-          name: 'ip_addr',
-          editor : 'text'
-        },
+
       ],
       columns2: [
         {

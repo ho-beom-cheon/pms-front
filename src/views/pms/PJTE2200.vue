@@ -369,7 +369,7 @@ export default {
         this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
         if (this.createdRows.length !== 0) {
-          if (this.vaildation(this.createdRows, "1") === true) {
+          if (this.validation(this.createdRows, "1") === true) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
@@ -386,7 +386,7 @@ export default {
           this.$refs.grid.invoke("reloadData");
         }
         if (this.updatedRows.length !== 0) {
-          if (this.vaildation(this.updatedRows, "1") === true) {
+          if (this.validation(this.updatedRows, "1") === true) {
             try {
               // 데이터 파라메타 전달
               this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -418,7 +418,7 @@ export default {
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
 
       if(this.updatedRows.length !== 0) {
-        if (this.vaildation(this.updatedRows, "2") === true) {
+        if (this.validation(this.updatedRows, "2") === true) {
           try {
             // 데이터 파라메타 전달
             this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
@@ -583,8 +583,8 @@ export default {
       this.fnEnable();
     },
     // 유효값 검증
-    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
-    vaildation(data, division) {
+    // validation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
+    validation(data, division) {
       for(let i=0; i<data.length; i++){
         // 저장과 기타항목수정 분류
         if(division === "1") {
@@ -630,9 +630,7 @@ export default {
         if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
         if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
         if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
-
       }
-
       return  true;
     },
     onGridUpdated(grid){
@@ -998,7 +996,7 @@ export default {
         },
         {
           header: '차수',
-          width: 70,
+          width: 50,
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
@@ -1012,7 +1010,7 @@ export default {
         },
         {
           header: '시나리오ID',
-          width: 100,
+          width: 80,
           align: 'center',
           name: 'scnr_id',
         },
@@ -1037,7 +1035,7 @@ export default {
         },
         {
           header: '처리단계',
-          width: 130,
+          width: 110,
           align: 'center',
           name: 'itg_tst_prc_cd',
           formatter: 'listItemText',
@@ -1050,7 +1048,7 @@ export default {
         },
         {
           header: '예상시작일',
-          width: 110,
+          width: 90,
           align: 'center',
           name: 'frcs_sta_dt',
           format: 'yyyy-mm-dd',
@@ -1058,7 +1056,7 @@ export default {
         },
         {
           header: '예상종료일',
-          width: 110,
+          width: 90,
           align: 'center',
           type: 'date',
           name: 'frcs_end_dt',
@@ -1066,22 +1064,22 @@ export default {
           editor: 'datePicker'
         },
         {
-          header: '개발자확인일자',
-          width: 110,
+          header: '개발자확인일',
+          width: 90,
           align: 'center',
           name: 'dvlpe_cnf_dt',
           format: 'yyyy-mm-dd',
         },
         {
-          header: 'PL확인일자',
-          width: 110,
+          header: 'PL확인일',
+          width: 90,
           align: 'center',
           name: 'pl_cnf_dt',
           format: 'yyyy-mm-dd',
         },
         {
           header: '이름',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'dvlpe_enm',
           editor: 'text',
@@ -1102,7 +1100,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'pl_enm',
           editor: 'text',
@@ -1123,7 +1121,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 50,
           align: 'center',
           name: 'crpe_enm',
           editor: 'text',
@@ -1144,7 +1142,7 @@ export default {
         },
         {
           header: '증빙첨부',
-          width: 120,
+          width: 80,
           align: 'center',
           name: 'atfl_mng_id_yn',
           // hidden : true,
@@ -1159,25 +1157,25 @@ export default {
         },
         {
           header: '전체',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_tot_cnt',
         },
         {
           header: '완료',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_cmpl_cnt',
         },
         {
           header: '미완료',
-          width: 80,
+          width: 40,
           align: 'right',
           name: 'err_ncmpl_cnt',
         },
         {
           header: '등록',
-          width: 80,
+          width: 40,
           name: 'err_btn',
           align: 'center',
           renderer: CustomRenderer,
@@ -1189,13 +1187,13 @@ export default {
         },
         {
           header: '프로그램ID',
-          width: 200,
+          width: 120,
           name: 'pgm_id',
           editor: "text",
         },
         {
           header: '화면ID',
-          width: 140,
+          width: 100,
           name: 'scrn_id',
           editor: "text",
         },
@@ -1207,7 +1205,7 @@ export default {
         },
         {
           header: '요구사항ID',
-          width: 150,
+          width: 100,
           name: 'rqu_sbh_id',
           editor: "text",
         },

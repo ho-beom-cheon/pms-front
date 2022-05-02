@@ -30,16 +30,19 @@
 
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <ul class="card-body" v-if ="this.LoginId === '0000000001'" >
-              <li id="WeekPjte8000"><a href="/PJTE8000">{{ week_menu_list[0].name }}</a></li>
-              <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[1].name }}</a></li>
+              <li id="WeekPjte9110"><a href="/PJTE9110">{{ week_menu_list[0].name }}</a></li>
+              <li id="WeekPjte9100"><a href="/PJTE9100">{{ week_menu_list[1].name }}</a></li>
+              <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[2].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
-              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[0].name }}</a></li>
-              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[1].name }}</a></li>
-              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[2].name }}</a></li>
-              <li id="PJTE9110Iteyes"><a href="/PJTE9110">{{ iteyes_menu_list[3].name }}</a></li>
-              <li id="PJTE9100Iteyes"><a href="/PJTE9100">{{ iteyes_menu_list[4].name }}</a></li>
-              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[5].name }}</a></li>
+              <li id="PJTE1000Iteyes"><a href="/PJTE1000">{{ iteyes_menu_list[0].name }}</a></li>
+              <li id="PJTE8000Iteyes"><a href="/PJTE8000">{{ iteyes_menu_list[1].name }}</a></li>
+              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[2].name }}</a></li>
+              <li id="PJTE9120Iteyes"><a href="/PJTE9120">{{ iteyes_menu_list[3].name }}</a></li>
+              <li id="PJTE9310Iteyes"><a href="/PJTE9310">{{ iteyes_menu_list[4].name }}</a></li>
+              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
+              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
+              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -52,7 +55,8 @@
               <li id="PJTE5000"><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
               <li id="PJTE6000"><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
               <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-              <li id="PJTE9000"><a href="/PJTE9000">{{ menu_list[10].name }}</a></li>
+              <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[10].name }}</a></li>
+              <li id="PJTE9000"><a href="/PJTE9000">{{ menu_list[11].name }}</a></li>
             </ul>
 
           </div>
@@ -143,6 +147,11 @@ export default {
           name: '산출물정합성체크'
         },
         {
+          id: 'PJTE9200',
+          path: '/PJTE9200',
+          name: '회의실예약'
+        },
+        {
           id: 'PJTE9000',
           path: '/PJTE9000',
           name: '시스템관리'
@@ -151,9 +160,14 @@ export default {
       ],
       week_menu_list: [
         {
-          id: 'WeekPjte8000',
-          path: '/PJTE8000',
-          name: '주간보고'
+          id: 'WeekPjte9110',
+          path: '/PJTE9110',
+          name: 'KMS게시판'
+        },
+        {
+          id: 'WeekPjte9100',
+          path: '/PJTE9100',
+          name: 'KMS게시판생성'
         },
         {
           id: 'WeekPjte9000',
@@ -163,9 +177,29 @@ export default {
       ],
       iteyes_menu_list: [
         {
+          id: 'PJTE1000Iteyes',
+          path: '/PJTE1000',
+          name: '공지사항'
+        },
+        {
+          id: 'PJTE8000Iteyes',
+          path: '/PJTE8000',
+          name: '주간보고'
+        },
+        {
           id: 'PJTE9900Iteyes',
           path: '/PJTE9900',
           name: 'KanbanBoard'
+        },
+        {
+          id: 'PJTE9120Iteyes',
+          path: '/PJTE9120',
+          name: '준비중인 프로젝트 현황'
+        },
+        {
+          id: 'PJTE9310Iteyes',
+          path: '/PJTE9310',
+          name: '투입인력현황'
         },
         {
           id: 'PJTE9005Iteyes',
@@ -176,16 +210,6 @@ export default {
           id: 'PJTE9200Iteyes',
           path: '/PJTE9200',
           name: '회의실예약'
-        },
-        {
-          id: 'PJTE9110Iteyes',
-          path: '/PJTE9110',
-          name: 'KMS게시판'
-        },
-        {
-          id: 'PJTE9100Iteyes',
-          path: '/PJTE9100',
-          name: 'KMS게시판생성'
         },
         {
           id: 'PJTE9000Iteyes',

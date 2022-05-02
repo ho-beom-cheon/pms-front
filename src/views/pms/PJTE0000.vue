@@ -3,7 +3,7 @@
   <section class="login">
     <div class="loginBx">
       <div class="top">
-        <img src="/img/logo_Eyes.bf30f8b2.svg" alt="logo">
+        <img src="../../assets/img/PE-icon/logo_Eyes.svg" alt="logo">
       </div>
       <div class="body">
         <em>
@@ -107,6 +107,7 @@
 <script>
 import {axiosService} from "@/api/http";
 import Modal from "@/components/Modal.vue";
+import {mapActions} from "vuex";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, emprow, empcol) => {
@@ -161,6 +162,17 @@ export default {
       newPassword     : "",     // 변경할 패스워드
       isActive        : true,
       flag            : false,
+      gesipan : {
+        gesipanid       : "",
+        annym_yn        : "",
+        afrm_yn         : "",
+        cmnt_yn         : "",
+        rply_yn         : "",
+        good_yn         : "",
+        nmb_inq_yn      : "",
+        pgn_yn          : "",
+        file_upld_yn    : "",
+      },
       modals: {
         modal1: false,
       }
@@ -168,6 +180,15 @@ export default {
   },
 
   methods: {
+    ...mapActions("pms",["SET_DATA"]),
+    async setData(value) {
+      try {
+        await this.SET_DATA(value)
+
+      } catch (error) {
+        console.log("Error Msg : " + error)
+      }
+    },
     /* 비밀번호 변경 조건 체크*/
     passwordChg() {
       if(this.vaildation()) {
@@ -262,6 +283,7 @@ export default {
         alert("변경 비밀번호와 변경 비밀번호 확인이 틀립니다.");
       }
     },
+
     /* 로그인 체크 */
     login() {
       this.sessionClear();
@@ -282,9 +304,19 @@ export default {
                 );
                 if (res.data.data[0].login_yn === "Y") {
                   if(res.data.data[0].prjt_id === "0000000001") {
-                    this.$router.push('/PJTE8000');
+                    this.$router.push('/PJTE9110');
                   } else if (res.data.data[0].prjt_id === "0000000003"){
-                    this.$router.push('/PJTE9900');
+                    this.gesipan.gesipan_id       = '0000000001'
+                    this.gesipan.annym_yn         = 'N'
+                    this.gesipan.afrm_yn          = 'Y'
+                    this.gesipan.cmnt_yn          = 'Y'
+                    this.gesipan.rply_yn          = 'Y'
+                    this.gesipan.good_yn          = 'Y'
+                    this.gesipan.nmb_inq_yn       = 'Y'
+                    this.gesipan.pgn_yn           = 'Y'
+                    this.gesipan.file_upld_yn     = 'Y'
+                    this.setData(this.gesipan);
+                    this.$router.push('/PJTE1000');
                   } else if (res.data.data[0].prjt_id === "0000000004"){
                     this.$router.push('/PJTE9005');
                   } else {
@@ -302,6 +334,8 @@ export default {
                   storage.setItem("LOGIN_REAL_PRJT_ID", res.data.data[0].real_prjt_id);  // 투입프로젝트ID
                   storage.setItem("LOGIN_DEPT_CD", res.data.data[0].dept_cd);            // 투입프로젝트ID
 
+                } else if (res.data.data[0].login_yn === 'X') {
+                  alert("시스템은 사용할 수 없는 직원입니다.")
                 } else if (res.data.data[0].login_yn === 'C') {
                   alert("비밀번호를 변경하세요.");
                   this.modals.modal1 = true

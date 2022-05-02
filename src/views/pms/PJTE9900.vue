@@ -19,7 +19,7 @@
               ref="combo1"
           ></combo>
           <li class="filter-item">
-            <div class="item-con">등록기준년월
+            <div class="input-dateWrap">등록기준년월
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
@@ -32,7 +32,6 @@
         </ul>
 
         <ul class="filter-btn">
-          <button class="btn btn-filter-p" @click="tableBackUp" :disabled="check_bkup">테이블백업</button>
           <button class="btn btn-filter-e" style="margin-right: 20px" @click="gridExcelExport">엑셀다운로드</button>
           <button class="btn btn-filter-b" @click="gridAddRow" :disabled="check_aut_cd">행추가</button>
           <button class="btn btn-filter-b" @click="gridDelRow" :disabled="check_aut_cd">행삭제</button>
@@ -184,7 +183,8 @@
             </tbody>
           </table>
           <div style="float: right">
-            <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">후속작업등록</button>
+            <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">등록</button>
+            <button id="crpenm-delete" class="btn btn-filter-p" style="margin-right: 5px" @click="fnDelete" :disabled="delete_yn">삭제</button>
             <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
           </div>
         </Modal>
@@ -207,6 +207,7 @@
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
+                  @keydown="onClick"
                   @onGridUpdated="onGridUpdated1"
                   @beforeExport="beforeExport"
               ></grid>
@@ -397,12 +398,12 @@ export default {
             // console.log(res)
             if (res.data === true) {
               alert("저장이 완료되었습니다.")
+              this.$refs.grid.invoke("reloadData");
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
             } else {
               alert("이미 등록된 프로그램입니다.")
             }
-            this.$refs.grid.invoke("reloadData");
           })
         }
       }
@@ -456,7 +457,7 @@ export default {
       let gridRow = '';
       gridRow = this.$refs.grid.invoke("getRowCount");
       for(let i=0; i<gridRow; i++) {
-        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료`
           this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
         } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
           this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
@@ -495,6 +496,9 @@ export default {
       // console.log("beforeExport::", grid)
     },
 
+    onKeyDown(ev){
+      console.log(ev)
+    },
     // 그리드 1 클릭 이벤트
     onClick(ev) {
       // 현재 Row 가져오기
@@ -531,6 +535,12 @@ export default {
           let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
           if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900') {  // 권한이 500, 600일 때만 팝업
             this.modals.bak_work_modal = true;
+          }
+          // 후속작업이 있을 경우 삭제버튼 활성화
+          if(this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != null && this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != '') {
+            this.delete_yn = false
+          } else {
+            this.delete_yn = true
           }
         }
       }
@@ -608,6 +618,18 @@ export default {
         this.modals.bak_work_modal = false;
       }
     },
+    fnDelete() {
+      for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+        if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")){
+          this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "mng_id"))
+        }
+        if(this.$refs.grid.invoke("getValue",i, "mng_id") == this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")){
+          this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",i, "mng_id"))
+        }
+      }
+      this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id");
+      this.modals.bak_work_modal = false; //후속작업모달닫기
+    },
     //조회
     fnSearch() {
       this.info.gubun = "1";
@@ -615,14 +637,12 @@ export default {
       this.$refs.grid.invoke("readData");
       // 버튼 비활성화/활성화 - 권한, 백업ID에 따라
       if(this.info.bkup_id_selected == '0000000000') {
-        this.check_save = false // 테이블백업, 저장 활성화
+        this.check_save = false // 저장 활성화
         if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
-          this.check_bkup = false // 테이블백업  활성화
           this.check_aut_cd = false // 행추가, 행삭제  활성화
         }
       } else {
         this.check_save = true // 저장  비활성화
-        this.check_bkup = true // 테이블백업  비활성화
         this.check_aut_cd = true // 행추가, 행삭제  비활성화
       }
     },
@@ -801,7 +821,7 @@ export default {
       btn_yn: true,              // 비고, 연관작업 목록 버튼 비활성화/활성화
       check_aut_cd: false,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
       check_save: false,          // 저장 버튼 비활성화/활성화
-      check_bkup: false,          // 테이블백업 버튼 비활성화/활성화
+      delete_yn: true,
 
       /* grid 속성 */
       count: 0,

@@ -115,7 +115,7 @@
             ></grid>
           </div>
         </div>
-        <div class="grid1-box" style="height: 500px">
+        <div class="grid1-box" style="height: 510px">
           <div class="div-header-b"><h2>1. 인적사항</h2>
             <p style="margin-left: 50px; margin-top: 8px">{{ detail.last_chg_dt }}</p>
             <ul class="filter-btn">
@@ -193,7 +193,7 @@
                          placeholder="입력"
                          ref="address"
                          v-model="detail.address"
-                         style="width: 93.25%"
+                         style="width: 93.45%"
                   >
                 </div>
               </li>
@@ -266,6 +266,50 @@
                          ref="duty_txt"
                          v-model="detail.duty_txt"
                          style="width: 880px"
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label style="vertical-align: text-top; ">현/이전투입<br>프로젝트명</label>
+                  <input type="text"
+                         v-model="detail.inp_prj_nm"
+                         style="width: 555px;vertical-align: text-top; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>철수일자</label>
+                  <div class="input-dateWrap">
+                  <input type="date"
+                         v-model="detail.wth_dt"
+                         style="width: 230px; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
+                  </div>
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>투입구분</label>
+                  <input type="text"
+                         ref="cpno"
+                         v-model="detail.inp_cls_cd"
+                         style="width: 190px; background-color: #f2f2f2;"
+                         :disabled = true
+                  >
+                </div>
+              </li>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label style="width: 120px; vertical-align: text-top; ">차기 희망<br>프로젝트및업무</label>
+                  <input type="text"
+                         placeholder="앞으로 하고싶은 프로젝트 및 업무 작성"
+                         ref="cpno"
+                         v-model="detail.nxt_prj_nm"
+                         style="width: 230px; vertical-align: text-top; "
                   >
                 </div>
               </li>
@@ -631,44 +675,45 @@ export default {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
                 login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
 
-                last_chg_dt: this.detail.last_chg_dt,  // 최종변경일자
-                man_no: this.detail.man_no,  // 인력번호
-                man_nm: this.detail.man_nm,  // 이름
-                rank_nm: this.detail.rank_nm,  // 직급명
-                man_cd: this.detail.man_cd_selected,  // 인력구분
-                birthday: this.detail.birthday,  // 생년월
-                age: this.detail.age,  // 만나이
-                address: this.detail.address,  // 주소
+                last_chg_dt: this.detail.last_chg_dt,       // 최종변경일자
+                man_no: this.detail.man_no,                 // 인력번호
+                man_nm: this.detail.man_nm,                 // 이름
+                rank_nm: this.detail.rank_nm,               // 직급명
+                man_cd: this.detail.man_cd_selected,        // 인력구분
+                birthday: this.detail.birthday,             // 생년월
+                age: this.detail.age,                       // 만나이
+                address: this.detail.address,               // 주소
                 skill_grd: this.detail.skill_grd_selected,  // 기술등급
-                career: this.detail.career,  // 경력
-                now_career: this.detail.now_career,  // 현재경력
-                enter_ymd: this.detail.enter_ymd,  // 입사년월일
-                sex_nm: this.detail.sex_nm,  // 성별
-                main_skill: this.detail.main_skill,  // 주요기술
-                duty_txt: this.detail.duty_txt,  // 주요업무
-                cpno: this.detail.cpno,  // 휴대전화번호
-                company_nm: this.detail.company_nm,  // 회사명
-                grd_cd: this.detail.grd_cd_selected,  // 평판구분
-                scholl_nm1: this.detail.scholl_nm1,  // 학교명1
-                gdt_ym1: this.detail.gdt_ym1,  // 졸업년월1
-                study1: this.detail.study1,  // 전공1
-                scholl_nm2: this.detail.scholl_nm2,  // 학교명2
-                gdt_ym2: this.detail.gdt_ym2,  // 졸업년월2
-                study2: this.detail.study2,  // 전공2
-                scholl_nm3: this.detail.scholl_nm3,  // 학교명3
-                gdt_ym3: this.detail.gdt_ym3,  // 졸업년월3
-                study3: this.detail.study3,  // 전공3
-                qlfks_nm1: this.detail.qlfks_nm1,  // 자격증1
-                aqu_ymm1: this.detail.aqu_ymm1,  // 자격증취득일1
-                qlfks_nm2: this.detail.qlfks_nm2,  // 자격증2
-                aqu_ymm2: this.detail.aqu_ymm2,  // 자격증취득일2
-                qlfks_nm3: this.detail.qlfks_nm3,  // 자격증3
-                aqu_ymm3: this.detail.aqu_ymm3,  // 자격증취득일3
-                qlfks_nm4: this.detail.qlfks_nm4,  // 자격증4
-                aqu_ymm4: this.detail.aqu_ymm4,  // 자격증취득일4
-                qlfks_nm5: this.detail.qlfks_nm5,  // 자격증5
-                aqu_ymm5: this.detail.aqu_ymm5,  // 자격증취득일5
-                atfl_mng_id: this.detail.atfl_mng_id,  // 첨부파일관리ID
+                career: this.detail.career,                 // 경력
+                now_career: this.detail.now_career,         // 현재경력
+                enter_ymd: this.detail.enter_ymd,           // 입사년월일
+                sex_nm: this.detail.sex_nm,                 // 성별
+                nxt_prj_nm: this.detail.nxt_prj_nm,         // 차기프로젝트/업무
+                main_skill: this.detail.main_skill,         // 주요기술
+                duty_txt: this.detail.duty_txt,             // 주요업무
+                cpno: this.detail.cpno,                     // 휴대전화번호
+                company_nm: this.detail.company_nm,         // 회사명
+                grd_cd: this.detail.grd_cd_selected,        // 평판구분
+                scholl_nm1: this.detail.scholl_nm1,         // 학교명1
+                gdt_ym1: this.detail.gdt_ym1,               // 졸업년월1
+                study1: this.detail.study1,                 // 전공1
+                scholl_nm2: this.detail.scholl_nm2,         // 학교명2
+                gdt_ym2: this.detail.gdt_ym2,               // 졸업년월2
+                study2: this.detail.study2,                 // 전공2
+                scholl_nm3: this.detail.scholl_nm3,         // 학교명3
+                gdt_ym3: this.detail.gdt_ym3,               // 졸업년월3
+                study3: this.detail.study3,                 // 전공3
+                qlfks_nm1: this.detail.qlfks_nm1,           // 자격증1
+                aqu_ymm1: this.detail.aqu_ymm1,             // 자격증취득일1
+                qlfks_nm2: this.detail.qlfks_nm2,           // 자격증2
+                aqu_ymm2: this.detail.aqu_ymm2,             // 자격증취득일2
+                qlfks_nm3: this.detail.qlfks_nm3,           // 자격증3
+                aqu_ymm3: this.detail.aqu_ymm3,             // 자격증취득일3
+                qlfks_nm4: this.detail.qlfks_nm4,           // 자격증4
+                aqu_ymm4: this.detail.aqu_ymm4,             // 자격증취득일4
+                qlfks_nm5: this.detail.qlfks_nm5,           // 자격증5
+                aqu_ymm5: this.detail.aqu_ymm5,             // 자격증취득일5
+                atfl_mng_id: this.detail.atfl_mng_id,       // 첨부파일관리ID
 
               }).then(res => {
                 console.log(res);
@@ -778,6 +823,10 @@ export default {
       this.detail.now_career          = data.contents[0].now_career            // 현재경력
       this.detail.enter_ymd           = data.contents[0].enter_ymd             // 입사년월일
       this.detail.sex_nm              = data.contents[0].sex_nm                // 성별
+      this.detail.inp_prj_nm          = data.contents[0].inp_prj_nm            // 현/이전투입프로젝트명
+      this.detail.wth_dt              = data.contents[0].wth_dt                // 철수일자
+      this.detail.nxt_prj_nm          = data.contents[0].nxt_prj_nm            // 차기프로젝트/업무
+      this.detail.inp_cls_cd          = data.contents[0].inp_cls_cd            // 투입구분코드
       this.detail.main_skill          = data.contents[0].main_skill            // 주요기술
       this.detail.duty_txt            = data.contents[0].duty_txt              // 주요업무
       this.detail.cpno                = data.contents[0].cpno                  // 휴대전화번호
@@ -844,13 +893,14 @@ export default {
     // 재직사항 그리드 엑셀업로드
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
-      // console.log(event.target.files[0])
+      console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       let input = event.target;
       let reader = new FileReader();
       reader.onload = () => {
         let fileData = reader.result;
         let wb = XLSX.read(fileData, {type: 'binary'});
+        console.log("wb ::"+ wb.SheetNames);
         let gridExcelData;
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === '재직현황' || sheetName === 'Sheet1') {
@@ -865,11 +915,23 @@ export default {
             let rowObj_copy = [];
             if(grid2Data.length == 0) {
               for(let n=0; n<rowObj.length; n++){
+                if(isNaN(rowObj[n].enter_dt) == false) {
+                  rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
+                }
+                if (isNaN(rowObj[n].rsnt_dt) == false) {
+                  rowObj[n].rsnt_dt = this.excelDateToJSDate(rowObj[n].rsnt_dt)
+                }
                 rowObj_copy[n] = rowObj[n];
               }
             } else {
               if (confirm("기존 데이터를 유지하시겠습니까?") == true) {
                 for (let n = 0; n < rowObj.length; n++) {
+                  if(isNaN(rowObj[n].enter_dt) == false) {
+                    rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
+                  }
+                  if (isNaN(rowObj[n].rsnt_dt) == false) {
+                    rowObj[n].rsnt_dt = this.excelDateToJSDate(rowObj[n].rsnt_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
                 for (let i = 0; i < grid2Data.length; i++) {
@@ -877,6 +939,12 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
+                  if(isNaN(rowObj[n].enter_dt) == false) {
+                    rowObj[n].enter_dt = this.excelDateToJSDate(rowObj[n].enter_dt)
+                  }
+                  if (isNaN(rowObj[n].rsnt_dt) == false) {
+                    rowObj[n].rsnt_dt = this.excelDateToJSDate(rowObj[n].rsnt_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
               }
@@ -895,7 +963,7 @@ export default {
     // 경력사항 그리드 엑셀업로드
     gridExcelImport2(event) {
       // 엑셀파일 업로드 로직 추가
-      console.log(event.target.files[0])
+      // console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       let input = event.target;
       let reader = new FileReader();
@@ -920,12 +988,25 @@ export default {
             let grid3Data = this.$refs.grid3.invoke("getData");
             let rowObj_copy = [];
             if(grid3Data.length == 0) {
+
               for(let n=0; n<rowObj.length; n++){
+                if(isNaN(rowObj[n].sta_dt) == false) {
+                  rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                }
+                if (isNaN(rowObj[n].end_dt) == false) {
+                  rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                }
                 rowObj_copy[n] = rowObj[n];
               }
             } else {
               if (confirm("기존 데이터를 유지하시겠습니까?") == true) {
                 for (let n = 0; n < rowObj.length; n++) {
+                  if(isNaN(rowObj[n].sta_dt) == false) {
+                    rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                  }
+                  if (isNaN(rowObj[n].end_dt) == false) {
+                    rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
                 for (let i = 0; i < grid3Data.length; i++) {
@@ -933,10 +1014,18 @@ export default {
                 }
               } else {
                 for(let n=0; n<rowObj.length; n++){
+
+                  if(isNaN(rowObj[n].sta_dt) == false) {
+                    rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+                  }
+                  if (isNaN(rowObj[n].end_dt) == false) {
+                    rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+                  }
                   rowObj_copy[n] = rowObj[n];
                 }
               }
             }
+
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
             console.log("gridExcelData ::", gridExcelData)
           }
@@ -946,6 +1035,18 @@ export default {
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
+    },
+    excelDateToJSDate(excelDate) {
+      /* 엑셀에서 넘어온 숫자형태의 데이터를 날짜형태로 바꿔주는 함수
+      ex) 1. 엑셀 파일에서 2021-02 형태로 값을 입력하면 Feb-22 형태의 날짜 데이터가 자동입력됨
+          2. gridExcelImport2 함수에서
+          XLSX.utils.sheet_to_json(wb.Sheets[sheetName]) 엑셀데이터를 JSON으로 바뀌면서
+          Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
+          3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
+       */
+      var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
+      var converted_date = date.toISOString().split('T')[0].substring(0, 7);
+      return converted_date;
     },
     //직원조회 버튼 클릭 시
     open_pjte9001_btn(btn_id) {
@@ -1032,6 +1133,10 @@ export default {
       this.detail.now_career          = '' // 현재경력
       this.detail.enter_ymd           = '' // 입사년월일
       this.detail.sex_nm              = '' // 성별
+      this.detail.inp_prj_nm          = '' // 현/이전투입프로젝트명
+      this.detail.wth_dt              = '' // 철수일자
+      this.detail.nxt_prj_nm          = '' // 차기프로젝트/업무
+      this.detail.inp_cls_cd          = '' //투입구분코드
       this.detail.main_skill          = '' // 주요기술
       this.detail.duty_txt            = '' // 주요업무
       this.detail.cpno                = '' // 휴대전화번호
@@ -1115,6 +1220,10 @@ export default {
         now_career          : '',                     // 현재경력
         enter_ymd           : '',                     // 입사년월일
         sex_nm              : '',                     // 성별
+        inp_prj_nm          : '',                     // 현/이전투입프로젝트명
+        wth_dt              : '',                     // 철수일자
+        nxt_prj_nm          : '',                     // 차기프로젝트/업무
+        inp_cls_cd          : '',                     // 투입구분코드
         main_skill          : '',                     // 주요기술
         duty_txt            : '',                     // 주요업무
         cpno                : '',                     // 휴대전화번호
@@ -1235,7 +1344,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000040N
+              listItems: this.$store.state.pms.CD1000000041N
             }
           }
         },
@@ -1248,21 +1357,21 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000041N
+              listItems: this.$store.state.pms.CD1000000042N
             }
           }
         },
         {
           header: '경력',
           width: 120,
-          align: 'left',
+          align: 'right',
           name: 'career',
           editor: 'text',
         },
         {
           header: '현재경력',
           width: 120,
-          align: 'left',
+          align: 'right',
           name: 'now_career',
           editor: 'text',
         },
@@ -1296,7 +1405,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000042N
+              listItems: this.$store.state.pms.CD1000000043N
             }
           }
         },
@@ -1409,14 +1518,14 @@ export default {
         {
           header: '역할',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'duty_txt',
           editor: 'text',
         },
         {
           header: '사용기종/OS',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'use_os',
           editor: 'text',
         },
@@ -1442,6 +1551,7 @@ export default {
 
 </script>
 <style>
+/*PJTE9005에서만 사용 CSS*/
 .disableColor {
   background: #FFFFFF!important;
 }
@@ -1458,23 +1568,5 @@ export default {
   background: url(../../assets/img/PE-icon/ic_search.svg) center/20px no-repeat;
   background-color: #B8B8B8;
   border: 0;
-}
-input[type="month"]::-webkit-calendar-picker-indicator{
-  opacity:0;
-  z-index: 1;
-  cursor: pointer;
-}
-.input-monthWrap {
-  position: relative;
-  display: inline-block;
-}
-.input-monthWrap::after {
-  content: '';
-  position: absolute;
-  right: 6px;
-  top: 4px;
-  width: 16px;
-  height: 16px;
-  background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
 }
 </style>

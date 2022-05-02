@@ -1,6 +1,9 @@
 const pms = {
     namespaced: true,
     state: {
+        // 게시판 데이터
+        GesiData : [],
+        // 콤보리스트(그리드)
         CD0000000000N:[],
         CD1000000001N:[],
         CD1000000002N:[],
@@ -45,13 +48,21 @@ const pms = {
         CD1000000041N:[],
         CD1000000042N:[],
         CD1000000043N:[],
-
-
+        CD1000000044N:[],
+        CD1000000045N:[],
+        CD1000000046N:[],
+        CD1000000047N:[],
+        CD1000000048N:[],
+        CD1000000049N:[],
     },
     getters: {
-        CD1000000001N : state => state.CD1000000001N
+        // CD1000000001N : state => state.CD1000000001N
     },
     mutations: {
+        SEND_DATA(state,value) {
+            debugger
+            state.GesiData = value;
+        },
         SET_CD_ALL(state, array){
             state.CD0000000000N = array[0];
             state.CD1000000001N = array[1];
@@ -97,12 +108,21 @@ const pms = {
             state.CD1000000041N = array[41];
             state.CD1000000042N = array[42];
             state.CD1000000043N = array[43];
+            state.CD1000000044N = array[44];
+            state.CD1000000045N = array[45];
+            state.CD1000000046N = array[46];
+            state.CD1000000047N = array[47];
+            state.CD1000000048N = array[48];
+            state.CD1000000049N = array[49];
         },
     },
     actions: {
         async SET_COMBO({ commit }, data) {
             //const {data} = await loginUser(); // api 호출
             commit('SET_CD_ALL', data);
+        },
+        async SET_DATA({ commit }, data) {
+            commit('SEND_DATA', data);
         }
     }
 }
