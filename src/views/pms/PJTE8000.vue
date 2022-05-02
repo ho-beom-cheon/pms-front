@@ -86,8 +86,10 @@
         </div>
         <div class="div0-d">
           <div class="div3-b">
-            <div class="div-header-b"><h2>금주 주간보고 등록</h2> <p style="margin-left: 570px">* : 필수입력 항목입니다.</p>
-
+            <div class="div-header-b"><h2>금주 주간보고 등록</h2>
+              <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
+                <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
+              </ul>
             </div>
             <div class="div2-body-c">
               <ul class="filter-con clear-fix-a">
