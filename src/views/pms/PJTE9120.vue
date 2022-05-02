@@ -1,5 +1,5 @@
 <template>
-  <!-- CONTENTS -->
+  <!-- CONTENTS test -->
   <div class="contents">
     <div class="div-img"></div>
     <div class="div-img-delete"></div>
