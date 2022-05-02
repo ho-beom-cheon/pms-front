@@ -803,7 +803,7 @@ export default {
     // 특수 문자가 있나 없나 체크
     checkSpecial(str) {
     	let special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-      debugger
+
     	if(special_pattern.test(str) === true) {
     		return true;
     	} else {
