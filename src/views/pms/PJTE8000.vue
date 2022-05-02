@@ -565,7 +565,6 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
-
     window.pms_register = this;
   },
   beforeUpdate() {
