@@ -3,6 +3,12 @@
     <div class="page-tit"  v-if ="this.LoginId === '0000000003'">
       ITeyes Support System
     </div>
+    <div class="page-tit"  v-else-if ="this.LoginId === '0000000001'">
+      KMS게시판
+    </div>
+    <div class="page-tit"  v-else-if ="this.LoginId === '0000000010'">
+      기술연구소(내부프로젝트)
+    </div>
     <div class="page-tit"  v-else>
       ITeyes PMS
     </div>
@@ -18,9 +24,17 @@
       <div class="accordion" id="accordionExample">
         <div class="card">
           <div class="card-header" id="headingOne">
-            <button v-if ="this.LoginId === '0000000003'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+            <button v-if ="this.LoginId === '0000000001'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+              KMS게시판
+            </button>
+            <button v-else-if  ="this.LoginId === '0000000003'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
               ITeyes
+            </button>
+            <button v-else-if  ="this.LoginId === '0000000010'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
+                    aria-expanded="true" aria-controls="collapseOne">
+              기술연구소
             </button>
             <button v-else class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
@@ -43,6 +57,19 @@
               <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
               <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
               <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
+            </ul>
+            <ul class="card-body" v-else-if ="this.LoginId === '0000000010'" >
+              <li id="PJTE1000Tch"><a href="/PJTE1000">{{ tch_menu_list[0].name }}</a></li>
+              <li id="PJTE2100Tch"><a href="/PJTE2100">{{ tch_menu_list[1].name }}</a></li>
+              <li id="PJTE2110Tch"><a href="/PJTE2110">{{ tch_menu_list[2].name }}</a></li>
+              <li id="PJTE2200Tch"><a href="/PJTE2200">{{ tch_menu_list[3].name }}</a></li>
+              <li id="PJTE2210Tch"><a href="/PJTE2210">{{ tch_menu_list[4].name }}</a></li>
+              <li id="PJTE3000Tch"><a href="/PJTE3000">{{ tch_menu_list[5].name }}</a></li>
+              <li id="PJTE4000Tch"><a href="/PJTE4000">{{ tch_menu_list[6].name }}</a></li>
+              <li id="PJTE5000Tch"><a href="/PJTE5000">{{ tch_menu_list[7].name }}</a></li>
+              <li id="PJTE6000Tch"><a href="/PJTE6000">{{ tch_menu_list[8].name }}</a></li>
+              <li id="PJTE9900Tch"><a href="/PJTE9900">{{ tch_menu_list[9].name }}</a></li>
+              <li id="PJTE9000Tch"><a href="/PJTE9000">{{ tch_menu_list[10].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -217,14 +244,59 @@ export default {
           name: '시스템관리'
         },
       ],
-      profile_menu_list: [
+      tch_menu_list: [
         {
-          id: 'PJTE9005',
-          path: '/PJTE9005',
-          name: '인력프로파일관리'
+          id: 'PJTE1000',
+          path: '/PJTE1000',
+          name: '기술연수소현황'
         },
         {
-          id: 'profilePjte9000',
+          id: 'PJTE2100',
+          path: '/PJTE2100',
+          name: '개발현황'
+        },
+        {
+          id: 'PJTE2110',
+          path: '/PJTE2110',
+          name: '개발진척현황'
+        },
+        {
+          id: 'PJTE2200',
+          path: '/PJTE2200',
+          name: '통합테스트'
+        },
+        {
+          id: 'PJTE2210',
+          path: '/PJTE2210',
+          name: '통합테스트진척현황'
+        },
+        {
+          id: 'PJTE3000',
+          path: '/PJTE3000',
+          name: '결함관리'
+        },
+        {
+          id: 'PJTE4000',
+          path: '/PJTE4000',
+          name: 'ActionItem및이슈관리현황'
+        },
+        {
+          id: 'PJTE5000',
+          path: '/PJTE5000',
+          name: 'WBS관리'
+        },
+        {
+          id: 'PJTE6000',
+          path: '/PJTE6000',
+          name: 'PMS신청관리'
+        },
+        {
+          id: 'PJTE9900',
+          path: '/PJTE9900',
+          name: 'KanbanBoard'
+        },
+        {
+          id: 'PJTE9000',
           path: '/PJTE9000',
           name: '시스템관리'
         },
@@ -243,6 +315,12 @@ export default {
         for (let i = 0; i < this.iteyes_menu_list.length; i++) {
           if (this.$route.path == this.iteyes_menu_list[i].path) {
             this.current_menu = this.iteyes_menu_list[i].name
+          }
+        }
+      }else if(this.LoginId =='0000000010'){
+        for (let i = 0; i < this.tch_menu_list.length; i++) {
+          if (this.$route.path == this.tch_menu_list[i].path) {
+            this.current_menu = this.tch_menu_list[i].name
           }
         }
       }else{
@@ -265,6 +343,12 @@ export default {
         for (let i = 0; i < this.iteyes_menu_list.length; i++) {
           if (this.$route.path == this.iteyes_menu_list[i].path) {
             document.getElementById(this.iteyes_menu_list[i].id).className = 'active'
+          }
+        }
+      }else if(this.LoginId =='0000000010'){
+        for (let i = 0; i < this.tch_menu_list.length; i++) {
+          if (this.$route.path == this.tch_menu_list[i].path) {
+            document.getElementById(this.tch_menu_list[i].id).className = 'active'
           }
         }
       }else{
