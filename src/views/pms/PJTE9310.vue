@@ -508,7 +508,7 @@ export default {
           name: 'wth_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
-          sortable: true,
+          filter: 'text',
         },
         {
           header: '구분',

@@ -320,7 +320,9 @@ export default {
                     this.$router.push('/PJTE1000');
                   } else if (res.data.data[0].prjt_id === "0000000004"){
                     this.$router.push('/PJTE9005');
-                  } else {
+                  } else if (res.data.data[0].prjt_id === "0000000010"){
+                    this.$router.push('/PJTE1000');
+                  }else {
                     this.$router.push('/PJTE1000');
                   }
                   /* 세션 스토리지 값 저장 */
