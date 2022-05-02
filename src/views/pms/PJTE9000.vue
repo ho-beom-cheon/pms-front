@@ -446,11 +446,8 @@ export default {
     },
 
     fnSave(grid_num){
-      // debugger;
       let grid_arr = [];
       let check = true;
-
-
 
       // 그리드 1 저장
       if(grid_num === 1){
