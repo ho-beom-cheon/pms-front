@@ -207,7 +207,7 @@
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
-                  @keydown="onClick"
+                  @keydown="onKeyDown"
                   @onGridUpdated="onGridUpdated1"
                   @beforeExport="beforeExport"
               ></grid>
@@ -496,8 +496,23 @@ export default {
       // console.log("beforeExport::", grid)
     },
 
+    // 그리드 1 키보드 입력 이벤트
     onKeyDown(ev){
-      console.log(ev)
+      // console.log(ev)
+      this.curRow = ev.rowKey;
+      // 그리드 키보드 이벤트 시 Rowkey로 비고(Back-Log) 바인딩
+      this.rmrk = this.$refs.grid.invoke("getValue", this.curRow, "rmrk");
+      this.info.gubun = "2";
+
+      if(ev.keyboardEvent.key == 'ArrowUp') {  // 화살표 위방향 눌렀을 때
+        this.info.con_work_id = this.$refs.grid.invoke("getValue", this.curRow - 1, "con_work_id");
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+      } else if (ev.keyboardEvent.key == 'ArrowDown') { // 화살표 아래방향 눌렀을 때
+        this.info.con_work_id = this.$refs.grid.invoke("getValue", this.curRow + 1, "con_work_id");
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+      }
     },
     // 그리드 1 클릭 이벤트
     onClick(ev) {
