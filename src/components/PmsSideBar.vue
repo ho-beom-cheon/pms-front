@@ -4,10 +4,10 @@
       ITeyes Support System
     </div>
     <div class="page-tit"  v-else-if ="this.LoginId === '0000000001'">
-      KMS게시판
+      KMS
     </div>
     <div class="page-tit"  v-else-if ="this.LoginId === '0000000010'">
-      기술연구소(내부프로젝트)
+      기술연구소
     </div>
     <div class="page-tit"  v-else>
       ITeyes PMS
