@@ -45,8 +45,8 @@
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <ul class="card-body" v-if ="this.LoginId === '0000000001'" >
               <li id="WeekPjte9110"><a href="/PJTE9110">{{ week_menu_list[0].name }}</a></li>
-              <li id="WeekPjte9100"><a href="/PJTE9100">{{ week_menu_list[1].name }}</a></li>
-              <li id="WeekPjte9000"><a href="/PJTE9000">{{ week_menu_list[2].name }}</a></li>
+              <li id="WeekPjte9100" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9100">{{ week_menu_list[1].name }}</a></li>
+              <li id="WeekPjte9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ week_menu_list[2].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
               <li id="PJTE1000Iteyes"><a href="/PJTE1000">{{ iteyes_menu_list[0].name }}</a></li>
@@ -56,7 +56,7 @@
               <li id="PJTE9310Iteyes"><a href="/PJTE9310">{{ iteyes_menu_list[4].name }}</a></li>
               <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
               <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
-              <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
+              <li id="PJTE9000Iteyes" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
               <li id="PJTE9300Iteyes" v-if ="this.LoginEnpid === '202111010' ||  this.LoginEnpid === '202010002'" ><a href="/PJTE9300">{{ iteyes_menu_list[8].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000010'" >
@@ -70,7 +70,7 @@
               <li id="PJTE5000Tch"><a href="/PJTE5000">{{ tch_menu_list[7].name }}</a></li>
               <li id="PJTE6000Tch"><a href="/PJTE6000">{{ tch_menu_list[8].name }}</a></li>
               <li id="PJTE9900Tch"><a href="/PJTE9900">{{ tch_menu_list[9].name }}</a></li>
-              <li id="PJTE9000Tch"><a href="/PJTE9000">{{ tch_menu_list[10].name }}</a></li>
+              <li id="PJTE9000Tch" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ tch_menu_list[10].name }}</a></li>
             </ul>
             <ul class="card-body" v-else >
               <li id="PJTE1000"><a href="/PJTE1000">{{ menu_list[0].name }}</a></li>
@@ -84,7 +84,7 @@
               <li id="PJTE6000"><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
               <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
               <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[10].name }}</a></li>
-              <li id="PJTE9000"><a href="/PJTE9000">{{ menu_list[11].name }}</a></li>
+              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[11].name }}</a></li>
             </ul>
 
           </div>
@@ -123,6 +123,7 @@ export default {
     return {
       LoginId : storage.getItem('LOGIN_PROJ_ID'),
       LoginEnpid : storage.getItem('LOGIN_EMP_NO'),
+      LoginAutCd : storage.getItem('LOGIN_AUT_CD'),
       current_menu: '',
       menu_list: [
         {
