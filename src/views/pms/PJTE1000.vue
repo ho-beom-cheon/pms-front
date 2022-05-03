@@ -7,7 +7,7 @@
     <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
-        <ul class="filter-con clear-fix">
+        <ul class="filter-con clear-fix" :hidden="prjt_gbn">
           <combo
               :comboArray="this.comboList"
               @bkup_id_change="bkup_id_change"
@@ -15,8 +15,8 @@
           ></combo>
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
-        <ul class="filter-btn">
-          <button class="btn btn-filter-d"
+        <ul class="filter-btn" >
+          <button class="btn btn-filter-d" :hidden="prjt_gbn"
                   style="margin-left: 10px;"
                   @click="open_file_page(3)">설계산출물 양식 ⓘ
           </button>
@@ -29,7 +29,7 @@
       <!-- page contents -->
       <section class="page-contents">
         <div class="multiGridWrap-a">
-          <div class="div1-a">
+          <div class="div1-a" :hidden="prjt_gbn">
             <div class="div-header-a"><h2>TO-DO현황</h2>
             </div>
             <div class="div-grid-a">
@@ -49,7 +49,7 @@
               ></grid>
             </div>
           </div>
-          <div class="div2-a">
+          <div class="div2-a" :hidden="prjt_gbn">
             <div class="div-header-a"><h2>TO-DO상세내역</h2>
             </div>
             <div class="div-grid-a">
@@ -70,7 +70,7 @@
           </div>
           <div class="div0-a">
             <div class="div3-a">
-              <div class="div-header-a"><h2>프로젝트 공지사항</h2>
+              <div class="div-header-a"><h2>공지사항</h2>
               </div>
               <div class="div-grid-a">
                 <grid
@@ -226,6 +226,11 @@ export default {
 // 화면 동작 시 제일 처음 실행되는 부분
 // 변수 초기화
   created() {
+    if(sessionStorage.getItem("LOGIN_PROJ_ID") === "0000000003") {
+      this.prjt_gbn = true;
+    } else {
+      this.prjt_gbn = false;
+    }
     // console.log("created");
   },
   beforeMount() {
@@ -256,7 +261,6 @@ export default {
     getCount() {
       return this.count;
     }
-
   },
 // 일반적인 함수를 선언하는 부분
   methods: {
@@ -456,21 +460,26 @@ export default {
       this.detail.org_file_nm = currentRowData.org_file_nm;              // (상세)원파일명
     },
     fnSearch() {
-
       /*조회 시 그리드 구분코드 this.info.gubun를 파라메터로 넘겨서 조회*/
-      //그리드 1
-      this.info.gubun = "1";
-      this.$refs.grid1.invoke("setRequestParams", this.info);
-      this.$refs.grid1.invoke("readData");
-      //그리드 2
-      this.info.gubun = "2"
-      this.$refs.grid2.invoke("setRequestParams", this.info);
-      this.$refs.grid2.invoke("readData");
-      //그리드 3
-      this.info.gubun = "3"
-      this.$refs.grid3.invoke("setRequestParams", this.info);
-      this.$refs.grid3.invoke("readData");
-
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") !== "0000000003") {
+        //그리드 1
+        this.info.gubun = "1";
+        this.$refs.grid1.invoke("setRequestParams", this.info);
+        this.$refs.grid1.invoke("readData");
+        //그리드 2
+        this.info.gubun = "2"
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+        //그리드 3
+        this.info.gubun = "3"
+        this.$refs.grid3.invoke("setRequestParams", this.info);
+        this.$refs.grid3.invoke("readData");
+      } else if(sessionStorage.getItem("LOGIN_PROJ_ID") === "0000000003") {
+        //그리드 3
+        this.info.gubun = "3"
+        this.$refs.grid3.invoke("setRequestParams", this.info);
+        this.$refs.grid3.invoke("readData");
+      }
     },
 
     open_pjte9001(event) {
@@ -549,6 +558,8 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList: ["C27", "C0"],
       comboList2: ["C18"],
+
+      prjt_gbn: false,
 
       info: {
         // 그리드 조회 변수
@@ -663,7 +674,7 @@ export default {
           format: 'yyyy-mm-dd',
         },
         {
-          header: '공지업무',
+          header: '공지구분',
           width: 150,
           align: 'left',
           name: 'ntar_bzcd',
@@ -679,6 +690,7 @@ export default {
           header: '제목',
           align: 'left',
           name: 'titl_txt',
+          filter: { type: 'text'},
         },
       ],
     }

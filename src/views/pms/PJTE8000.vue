@@ -89,7 +89,6 @@
             <div class="div-header-b"><h2>금주 주간보고 등록</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
-                <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave">등록</button>
               </ul>
             </div>
             <div class="div2-body-c">
@@ -245,17 +244,21 @@
                       <td class="td-box" style ="margin-top: 2px;">첨부파일</td>
                       <td>
                         <input type="text" :disabled=true
+                               placeholder="첨부파일등록은 저장 후 가능합니다."
                                v-model="detail.org_file_nm"
-                               style="margin-top:3px; height: 22px;background-color: #f2f2f2;width: 590px;">
+                               style="margin-top:3px; height: 22px;background-color: #f2f2f2;width: 505px;">
                       </td>
                     <td>
                       <input type="text" :hidden="true"
                              v-model="detail.atfl_mng_id"
                              style="height: 22px;background-color: #f2f2f2;width: 590px;">
                     </td>
-                      <td>
-                        <button id="openFile" class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(1)">첨부</button>
-                      </td>
+                    <td>
+                        <button id="openFile" disabled="true" class="btn btn-filter-p" style = "margin-left : 10px;margin-bottom : 5px;" @click="open_file_page(1)">첨부</button>
+                    </td>
+                    <td>
+                      <button class="btn btn-filter-p" style = "margin-left : 10px;margin-bottom : 5px;" @click="fnSave">등록</button>
+                    </td>
                   </div>
                 </li>
               </ul>
@@ -416,13 +419,13 @@
                       <input type="text" :disabled=true v-model="detail.bef_org_file_nm" style="margin-top:3px;height: 22px;background-color: #f2f2f2;width: 590px;">
                     </td>
                     <td>
-                      <button  id="openFile1" class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
+                      <button  id="openFile1" disabled="true" class="btn btn-filter-p" style = "margin-left : 15px;margin-bottom : 5px;" @click="open_file_page(2)">첨부</button>
                     </td>
                   </div>
                 </li>
               </ul>
-            </div>
 
+            </div>
           </div>
         </div>
         <Modal :show.sync="detail.modals.txt_modal1">
@@ -562,7 +565,6 @@ export default {
     this.init();
     // 최초조회
     this.fnSearch();
-
     window.pms_register = this;
   },
   beforeUpdate() {
@@ -608,10 +610,12 @@ export default {
     /* 조회 */
     fnSearch() {
       // 조회 서비스
+      if (this.info.week_yymm == "" || this.info.week_yymm == null) {
+        alert('조회 주간년월이 필수 입력항목입니다.');
+        return false;
+      }
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-      document.getElementById("openFile").hidden =true;
-      document.getElementById("openFile1").hidden =true;
       this.fnWekVail();
       },
     //등록,업데이트
@@ -647,7 +651,8 @@ export default {
                       alert("등록 완료되었습니다.");
                       //insert 후 재조회
                       this.$refs.grid.invoke("reloadData");
-                      document.getElementById("openFile").hidden =false;
+                      document.getElementById("openFile").disabled =false;
+                      document.getElementById("openFile1").disabled =false;
                     }
                   }).catch(e => {
                 alert("등록 실패하였습니다.");
@@ -697,9 +702,9 @@ export default {
                 this.detail.bef_atfl_mng_id = res.data.data.contents[0].bef_atfl_mng_id
                 this.detail.bef_org_file_nm =  res.data.data.contents[0].bef_org_file_nm
                 if( this.detail.bef_atfl_mng_id != null &&  this.detail.bef_atfl_mng_id != '' ){
-                  document.getElementById("openFile1").hidden =false;
+                  document.getElementById("openFile1").disabled =false;
                 }else{
-                  document.getElementById("openFile1").hidden =true;
+                  document.getElementById("openFile1").disabled =true;
                 }
 
               }else if(res_data.length == 0){ //다건이 조회되었을대 경고알림.
@@ -749,9 +754,10 @@ export default {
       } else if (btn_id == '2') {
         empnm = this.detail.pm_nm
       }
-      if((empnm === '' || empnm == "null" || empnm === undefined)) {
+      if((empnm === '' || empnm == null || empnm === undefined)) {
+        empnm = ''
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
       } else {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
@@ -829,8 +835,8 @@ export default {
     },
     fnLastWeekClear(){
       //첨부파일 버튼 히든
-      document.getElementById("openFile").hidden =true;
-      document.getElementById("openFile1").hidden =true;
+      document.getElementById("openFile").disabled =true;
+      document.getElementById("openFile1").disabled =true;
       //지난주 주간보고 초기화
       this.detail.bef_pm_nm = ''                                                                            // (상세)pm명
       this.detail.bef_pm_no = ''                                                                            // (상세)pmno
@@ -857,13 +863,25 @@ export default {
     },
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
+
+      if(currentRowData.dept_cd != null && currentRowData.dept_cd != ''){
+        this.detail.dept_cd_selected = currentRowData.dept_cd;                            // (상세)부문명
+        this.$refs.combo2.$data.dept_cd_selected_iss = currentRowData.dept_cd;            // 부문명
+      }else{
+        this.detail.dept_cd_selected = this.info.login_dept_cd;                            // (상세)부문명
+        this.$refs.combo2.$data.dept_cd_selected_iss =this.info.login_dept_cd;            // 부문명
+      }
+      if(currentRowData.week_yymm != null && currentRowData.week_yymm != ''){
+        this.detail.week_yymm = this.getYyyymm(currentRowData.week_yymm);                 // (상세)주간년월
+      }else{
+        this.detail.week_yymm =  this.info.week_yymm;                 // (상세)주간년월
+      }
       this.detail.real_prjt_id_selected = currentRowData.real_prjt_id;                  // (상세)프로젝트
       this.$refs.combo2.$data.real_prjt_id_selected_iss = currentRowData.real_prjt_id;  //(상세)프로젝트
-      this.detail.dept_cd_selected = currentRowData.dept_cd;                            // (상세)부문명
-      this.$refs.combo2.$data.dept_cd_selected_iss = currentRowData.dept_cd;            // 부문명
+
       this.detail.pm_nm = currentRowData.pm_nm;                                         // (상세)pm명
       this.detail.pm_no = currentRowData.pm_no;                                         // (상세)pm번호
-      this.detail.week_yymm = this.getYyyymm(currentRowData.week_yymm);                 // (상세)주간년월
+
       this.detail.week_sqn_cd_selected = currentRowData.week_sqn_cd;                    // (상세)차수
       this.$refs.combo3.$data.week_sqn_cd_selected_iss = currentRowData.week_sqn_cd;    // 차수
       this.detail.all_pred_prg = currentRowData.all_pred_prg;                           // (상세)전체 예정진척율
@@ -895,13 +913,14 @@ export default {
 
       this.fnWekVail();
       //클릭했을때 첨부파일버튼 활성화
-      document.getElementById("openFile").hidden =false;
 
-      //지난주간보고 첨부파일 아이디가 있으면 첨부파일 활성화
-      if( this.detail.bef_atfl_mng_id != null &&  this.detail.bef_atfl_mng_id != '' ){
-        document.getElementById("openFile1").hidden =false;
+      // 첨부파일 아이디가 있으면 첨부파일 활성화
+      if( this.detail.pm_nm != null &&  this.detail.pm_nm != '' ){
+        document.getElementById("openFile").disabled =false;
+        document.getElementById("openFile1").disabled =false;
       }else{
-        document.getElementById("openFile1").hidden =true;
+        document.getElementById("openFile").disabled =true;
+        document.getElementById("openFile1").disabled =true;
       }
     },
 
@@ -1108,6 +1127,7 @@ export default {
         login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),     // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
         login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
+        login_dept_cd: sessionStorage.getItem("LOGIN_DEPT_CD"),  // 부서코드
 
         bkup_id_selected      : '0000000000',              // 백업ID
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명

@@ -253,7 +253,7 @@
         <select
             v-model = "prjt_nm_selected"
             style   = "width: 180px"
-            :disabled="read"
+            :disabled="true"
             @change="prjt_nm_chage"
         >
           <option
@@ -532,7 +532,7 @@
     </li>
     <!--    공지업무코드-->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C18'">
-      <div class="item-con">공지업무
+      <div class="item-con">공지구분
         <select
             v-model="ntar_bzcd_selected"
             style="width: 165px; margin-left: 8px"
@@ -551,15 +551,15 @@
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C35'">
       <div class="item-con">관리구분
         <select
-            v-model="wbs_prc_sts_cd_selected"
+            v-model="wbs_mng_cd_selected"
             style="width: 120px"
-            @change = "wbs_prc_sts_cd_change"
+            @change = "wbs_mng_cd_change"
         >
           <option
-              v-for="(wbs_prc_sts_cd, idx) in CD1000000035T"
+              v-for="(wbs_mng_cd, idx) in CD1000000035"
               :key="idx"
-              v-text="wbs_prc_sts_cd.text"
-              :value="wbs_prc_sts_cd.value"
+              v-text="wbs_mng_cd.text"
+              :value="wbs_mng_cd.value"
           ></option>
         </select>
       </div>
@@ -568,15 +568,15 @@
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C19'">
       <div class="item-con">진행상태
         <select
-            v-model = "wbs_mng_cd_selected"
+            v-model = "wbs_prc_sts_cd_selected"
             style   = "width: 80px"
-            @change = "wbs_mng_cd_change"
+            @change = "wbs_prc_sts_cd_change"
         >
           <option
-              v-for  = "(wbs_mng_cd, idx) in CD1000000019T"
+              v-for  = "(wbs_prc_sts_cd, idx) in CD1000000019T"
               :key   = "idx"
-              v-text = "wbs_mng_cd.text"
-              :value = "wbs_mng_cd.value"
+              v-text = "wbs_prc_sts_cd.text"
+              :value = "wbs_prc_sts_cd.value"
           ></option>
         </select>
       </div>
@@ -667,7 +667,7 @@
         </select>
       </div>
     </li>
-    <!--   부문코드 -->
+    <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
       <div class="item-con">부문명
         <select
@@ -685,6 +685,219 @@
         </select>
       </div>
     </li>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C44-1'">
+      <div class="item-con"><label>게시부문</label>
+        <select
+            v-model = "bubun_cd_selected"
+            style   = "width: 230px"
+            @change = "bubun_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000044T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C44-2'">
+      <div class="item-con"><label>게시부문</label>
+        <select
+            v-model = "bubun_cd_selected_iss"
+            style   = "width: 230px"
+            @change = "bubun_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000044N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C45-1'">
+      <div class="item-con"><label>게시구분</label>
+        <select
+            v-model = "bsn_cls_cd_selected"
+            style   = "width: 230px"
+            @change = "bsn_cls_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000045T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C45-2'">
+      <div class="item-con"><label>게시구분</label>
+        <select
+            v-model = "bsn_cls_cd_selected_iss"
+            style   = "width: 230px"
+            @change = "bsn_cls_cd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000045N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C46'">
+      <div class="item-con line-con"><label>좋아요</label>
+        <select
+            v-model = "good_nm_selected"
+            style   = "width: 110px"
+            @change = "good_nm_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000046"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C47-1'">
+      <div class="item-con">회의실
+        <select
+            v-model = "mtng_room_id_selected"
+            style   = "width: 180px"
+            @change = "mtng_room_id_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000047T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C47-2'">
+      <div class="item-con">회의실
+        <select
+            id      = "mtng_room"
+            v-model = "mtng_room_id_selected_iss"
+            style   = "width: 125px; margin-left: 11px"
+            @change = "mtng_room_id_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000047N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C48-1'">
+      <div class="item-con">회의시작시간
+        <select
+            v-model = "rsr_strt_selected"
+            style   = "width: 110px"
+            @change = "rsr_strt_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000048N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C48-2'">
+      <div class="item-con">회의종료시간
+        <select
+            v-model = "rsr_endt_selected"
+            style   = "width: 110px"
+            @change = "rsr_endt_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000048N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <!-- 인력프로파일관리 시작 -->
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P1'">
+      <div class="item-con">기술등급
+        <select
+            v-model = "skill_grd_selected_iss"
+            style   = "width: 110px"
+            @change = "skill_grd_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000042T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P2'">
+      <div class="item-con"><label>직원구분</label>
+        <select
+            v-model = "man_cd_selected"
+            style   = "width: 230px"
+            @change = "man_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000041N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P3'">
+      <div class="item-con"><label>기술등급</label>
+        <select
+            v-model = "skill_grd_selected"
+            style   = "width: 230px"
+            @change = "skill_grd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000042N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-P4'">
+      <div class="item-con"><label>평판구분</label>
+        <select
+            v-model = "grd_cd_selected"
+            style   = "width: 230px"
+            @change = "grd_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000043N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!-- 인력프로파일관리 끝 -->
   </div>
 </template>
 
@@ -737,6 +950,18 @@ export default {
     this.real_prjt_id_change()
     this.week_sqn_cd_change()
     this.dept_cd_change()
+    this.skill_grd_change_iss()
+    this.bsn_cls_cd_change()
+    this.bsn_cls_cd_change_iss()
+    this.bubun_cd_change()
+    this.bubun_cd_change_iss()
+    this.grd_cd_change()
+    this.good_nm_change()
+    this.mtng_room_id_change()
+    this.mtng_room_id_change_iss()
+    this.rsr_strt_change()
+    this.rsr_endt_change()
+    this.inp_cls_cd_change()
   },
   data() {
     return {
@@ -761,7 +986,7 @@ export default {
       CD1000000016T : [],  CD1000000016N : [], CD1000000016 : [],
       CD1000000017T : [],  CD1000000017N : [],
       CD1000000018T : [],  CD1000000018N : [],
-      CD1000000019T : [],  CD1000000019N : [],
+      CD1000000019T : [],  CD1000000019N : [], CD1000000019 : [],
       CD1000000020T : [],  CD1000000020N : [],
       CD1000000021T : [],  CD1000000021N : [],
       CD1000000022T : [],  CD1000000022N : [],
@@ -777,11 +1002,20 @@ export default {
       CD1000000032T : [],  CD1000000032N : [],
       CD1000000033T : [],  CD1000000033N : [],
       CD1000000034T : [],  CD1000000034N : [],
-      CD1000000035T : [],  CD1000000035N : [],
+      CD1000000035T : [],  CD1000000035N : [], CD1000000035 : [],
       CD1000000036T : [],  CD1000000036N : [],
       CD1000000038T : [],  CD1000000038N : [], CD1000000038 : [],
       CD1000000039T : [],  CD1000000039N : [], CD1000000039 : [],
-      CD1000000040T : [],  CD1000000040N : [],
+      CD1000000040T : [],  CD1000000040N : [], CD1000000040 : [],
+      CD1000000041T : [],  CD1000000041N : [], CD1000000041 : [],
+      CD1000000042T : [],  CD1000000042N : [], CD1000000042 : [],
+      CD1000000043T : [],  CD1000000043N : [], CD1000000043 : [],
+      CD1000000044T : [],  CD1000000044N : [], CD1000000044 : [],
+      CD1000000045T : [],  CD1000000045N : [], CD1000000045 : [],
+      CD1000000046T : [],  CD1000000046N : [], CD1000000046 : [],
+      CD1000000047T : [],  CD1000000047N : [], CD1000000047 : [],
+      CD1000000048T : [],  CD1000000048N : [], CD1000000048 : [],
+      CD1000000049T : [],  CD1000000049N : [], CD1000000049 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -869,6 +1103,34 @@ export default {
       // 부문코드
       dept_cd_selected : "",
       dept_cd_selected_iss : "",
+      // 기술등급(조회)
+      skill_grd_selected_iss : "",
+      // 인력구분
+      man_cd_selected : "",
+      // 기술등급
+      skill_grd_selected : "",
+      // 평판코드
+      grd_cd_selected : "",
+      // 게시부문
+      bubun_cd_selected : "",
+      // 게시부문
+      bubun_cd_selected_iss : "",
+      // 게시구분
+      bsn_cls_cd_selected : "",
+      // 게시구분
+      bsn_cls_cd_selected_iss : "",
+      // 좋아요구분
+      good_nm_selected : "",
+      // 회의실 ID
+      mtng_room_id_selected : "",
+      // 회의실 ID(아래)
+      mtng_room_id_selected_iss : "",
+      // 예약시작일자
+      rsr_strt_selected : "",
+      // 예약종료일자
+      rsr_endt_selected : "",
+      // 투입구분
+      inp_cls_cd_selected : "",
     }
   },
   methods: {
@@ -920,7 +1182,21 @@ export default {
     real_prjt_id_change_iss()       {  this.$emit('real_prjt_id_change_iss',       this.real_prjt_id_selected_iss)},     // 상세보기]투입프로젝트
     week_sqn_cd_change_iss()        {  this.$emit('week_sqn_cd_change_iss',        this.week_sqn_cd_selected_iss)},      // 상세보기]회차
     dept_cd_change()                {  this.$emit('dept_cd_change',                this.dept_cd_selected)},              // 부문코드
-    dept_cd_change_iss()            {  this.$emit('dept_cd_change_iss',                this.dept_cd_selected_iss)},              // 상세보기]부문코드
+    dept_cd_change_iss()            {  this.$emit('dept_cd_change_iss',            this.dept_cd_selected_iss)},          // 상세보기]부문코드
+    skill_grd_change_iss()          {  this.$emit('skill_grd_change_iss',          this.skill_grd_selected_iss)},        // 기술등급(조회)
+    man_cd_change()                 {  this.$emit('man_cd_change',                 this.man_cd_selected)},               // 인력구분
+    skill_grd_change()              {  this.$emit('skill_grd_change',              this.skill_grd_selected)},            // 기술등급
+    grd_cd_change()                 {  this.$emit('grd_cd_change',                 this.grd_cd_selected)},               // 평판코드
+    bubun_cd_change()               {  this.$emit('bubun_cd_change',               this.bubun_cd_selected)},             // 부문구분
+    bubun_cd_change_iss()           {  this.$emit('bubun_cd_change_iss',           this.bubun_cd_selected_iss)},         // 부문구분
+    bsn_cls_cd_change()             {  this.$emit('bsn_cls_cd_change',             this.bsn_cls_cd_selected)},           // 게시구분
+    bsn_cls_cd_change_iss()         {  this.$emit('bsn_cls_cd_change_iss',         this.bsn_cls_cd_selected_iss)},       // 게시구분
+    good_nm_change()                {  this.$emit('good_nm_change',                this.good_nm_selected)},              // 좋아요구분
+    mtng_room_id_change()           {  this.$emit('mtng_room_id_change',           this.mtng_room_id_selected)},         // 회의실 ID
+    mtng_room_id_change_iss()       {  this.$emit('mtng_room_id_change_iss',       this.mtng_room_id_selected_iss)},     // 회의실 ID(아래)
+    rsr_strt_change()               {  this.$emit('rsr_strt_change',               this.rsr_strt_selected)},             // 예약시작일자
+    rsr_endt_change()               {  this.$emit('rsr_endt_change',               this.rsr_endt_selected)},             // 예약종료일자
+    inp_cls_cd_change()             {  this.$emit('inp_cls_cd_change',             this.inp_cls_cd_selected)},           // 투입구분
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -975,6 +1251,9 @@ export default {
               } else if (i === 19) {
                 this.CD1000000019T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000019N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 20) {
+                this.CD1000000020T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000020N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 22) {
                 this.CD1000000022T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000022N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -1002,6 +1281,33 @@ export default {
               } else if (i === 40) {
                 this.CD1000000040T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000040N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 41) {
+                this.CD1000000041T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000041N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 42) {
+                this.CD1000000042T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000042N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 43) {
+                this.CD1000000043T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000043N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 44) {
+                this.CD1000000044T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000044N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              }  else if (i === 45) {
+                this.CD1000000045T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000045N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 46) {
+                this.CD1000000046T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000046N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 47) {
+                this.CD1000000047T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000047N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 48) {
+                this.CD1000000048T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000048N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 49) {
+                this.CD1000000049T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000049N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1079,6 +1385,11 @@ export default {
             } else if(i === 19) {
               this.CD1000000019T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000019N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000019.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+            } else if(i === 20) {
+              this.CD1000000020T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000020N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 21) {
               this.CD1000000021T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
@@ -1095,7 +1406,6 @@ export default {
             } else if(i === 24) {
               this.CD1000000024T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000024N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 25) {
               this.CD1000000025T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000025N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -1103,19 +1413,16 @@ export default {
             }  else if(i === 26) {
               this.CD1000000026T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000026N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text":     data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 27) {
               this.CD1000000027T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000027N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 35) {
               this.CD1000000035T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000035N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000035.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 36) {
               this.CD1000000036T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000036N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 38) {
               this.CD1000000038T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000038N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -1123,14 +1430,52 @@ export default {
             } else if(i === 39) {
               this.CD1000000039T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000039N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-               this.CD1000000039.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000039.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 40) {
               this.CD1000000040T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000040N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
-              // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
+              this.CD1000000040.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 41) {
+              this.CD1000000041T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000041N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000041.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 42) {
+              this.CD1000000042T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000042N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000042.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 43) {
+              this.CD1000000043T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000043N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000043.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 44) {
+              this.CD1000000044T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000044N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000044.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 45) {
+              this.CD1000000045T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000045N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000045.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            }  else if(i === 45) {
+              this.CD1000000045T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000045N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000045.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            }  else if(i === 46) {
+              this.CD1000000046T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000046N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000046.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            }  else if(i === 47) {
+              this.CD1000000047T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000047N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000047.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            }  else if(i === 48) {
+              this.CD1000000048T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000048N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000048.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            }  else if(i === 49) {
+              this.CD1000000049T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000049N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000049.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
             }
-
             this.set_yn = "Y";
             this.row++;
           }
@@ -1154,7 +1499,7 @@ export default {
           if(this.CD1000000013T.length !== 0)  this.req_dis_cd_selected          = this.CD1000000013T[0].value
           if(this.CD1000000014T.length !== 0)  this.iss_prc_step_cd_selected     = this.CD1000000013T[0].value
           if(this.CD1000000018T.length !== 0)  this.ntar_bzcd_selected           = this.CD1000000018T[0].value
-          if(this.CD1000000019T.length !== 0)  this.wbs_mng_cd_selected          = this.CD1000000019T[0].value
+          if(this.CD1000000019.length !== 0)   this.wbs_mng_cd_selected          = this.CD1000000019[0].value
           if(this.CD1000000021T.length !== 0)  this.check_cd_selected            = this.CD1000000021T[0].value
           if(this.CD1000000022T.length !== 0)  this.file_cd_selected             = this.CD1000000022T[0].value
           if(this.CD1000000025T.length !== 0)  this.file_rgs_dscd_selected       = this.CD1000000025T[0].value
@@ -1166,7 +1511,32 @@ export default {
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
           if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038N[0].value
           if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039N[0].value
-          if(this.CD1000000040T.length !== 0)  this.dept_cd_selected             =  (sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null ? sessionStorage.getItem("LOGIN_DEPT_CD"): this.CD1000000040T[0].value)
+          if(this.CD1000000040T.length !== 0)  {
+            if(sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null) {
+              if (sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003' || sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000001') {
+                if (sessionStorage.getItem("LOGIN_DEPT_CD").substring(0, 3) == '100') {
+                  this.dept_cd_selected = this.CD1000000040T[0].value
+                } else {
+                  this.dept_cd_selected = (sessionStorage.getItem("LOGIN_DEPT_CD").substring(0, 3)).concat('00000')
+                }
+              } else {
+                this.dept_cd_selected = this.CD1000000040T[0].value
+              }
+            }
+          }
+          if(this.CD1000000041N.length !== 0)   this.man_cd_selected            = this.CD1000000041N[0].value
+          if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
+          if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
+          if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
+          if(this.CD1000000044T.length !== 0)    this.bubun_cd_selected          = this.CD1000000044T[0].value
+          if(this.CD1000000044N.length !== 0)   this.bubun_cd_selected_iss      = this.CD1000000044N[0].value
+          if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
+          if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045N[0].value
+          if(this.CD1000000046.length !== 0)    this.good_nm_selected           = this.CD1000000046[0].value
+          if(this.CD1000000047T.length !== 0)   this.mtng_room_id_selected      = this.CD1000000047T[0].value
+          if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
+          if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
+          if(this.CD1000000049N.length !== 0)   this.inp_cls_cd_selected        = this.CD1000000049N[0].value
         }
         this.setCdAll()
       }
@@ -1211,16 +1581,45 @@ export default {
       this.cd_all.push(this.CD1000000034N)
       this.cd_all.push(this.CD1000000035N)
       this.cd_all.push(this.CD1000000036N)
+      this.cd_all.push(this.CD1000000037N)
       this.cd_all.push(this.CD1000000038N)
       this.cd_all.push(this.CD1000000039N)
       this.cd_all.push(this.CD1000000040N)
+      this.cd_all.push(this.CD1000000041N)
+      this.cd_all.push(this.CD1000000042N)
+      this.cd_all.push(this.CD1000000043N)
+      this.cd_all.push(this.CD1000000044N)
+      this.cd_all.push(this.CD1000000045N)
+      this.cd_all.push(this.CD1000000046N)
+      this.cd_all.push(this.CD1000000047N)
+      this.cd_all.push(this.CD1000000048N)
+      this.cd_all.push(this.CD1000000049N)
     },
     init()  {
-      // 백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
-      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
-          sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
-        this.read = false;
+      //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003') {
+        this.read = false;  // 인력프로파일관리는 비활성화 콤보
+      } else {
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
+            sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+            sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
+          this.read = false;
+        } else {
+          this.read = true;
+        }
       }
+      //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000000') {
+        if (sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
+            sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+            sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
+          this.read = false;
+        }
+        else {
+          this.read = true;
+        }
+      }
+
 
       this.code_it =
           [
@@ -1265,6 +1664,15 @@ export default {
             "1000000038",
             "1000000039",
             "1000000040",
+            "1000000041",
+            "1000000042",
+            "1000000043",
+            "1000000044",
+            "1000000045",
+            "1000000046",
+            "1000000047",
+            "1000000048",
+            "1000000049",
           ];
 
       // 조회영역 권한 체크
@@ -1275,9 +1683,7 @@ export default {
       }).then(res => {
         this.setCombo(res.data.data.contents);
         this.setTest();
-      }).catch(e => {
-
-      });
+      })
     },
   }
 }

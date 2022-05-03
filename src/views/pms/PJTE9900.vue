@@ -5,9 +5,10 @@
     <input type="hidden" name="deletedRows" v-model="deletedRows" id="deletedRows">
     <input type="hidden" name="createdRows" v-model="createdRows" id="createdRows">
     <div class="div-img"></div>
-
+    <!-- ASIDE -- LNB -->
+    <PmsSideBar></PmsSideBar>
     <!-- 컨텐츠 영역 -->
-    <div class="kanban-contents-body">
+    <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
         <ul class="filter-con clear-fix">
@@ -18,20 +19,19 @@
               ref="combo1"
           ></combo>
           <li class="filter-item">
-            <div class="item-con">기준년월
+            <div class="input-dateWrap">등록기준년월
               <input  type="month" style="width: 125px"  v-model="info.week_yymm">
             </div>
           </li>
           <li class="filter-item">
             <div class="item-con">
-              <input type="checkbox" id="over_due_dt_yn" v-model="info.over_due_dt_yn">
+              <input type="checkbox" id="over_due_dt_yn" v-model="info.over_due_dt_yn" style="margin-bottom: 4px">
               <label>　미진항목</label>
             </div>
           </li>
         </ul>
 
         <ul class="filter-btn">
-          <button class="btn btn-filter-p" @click="tableBackUp" :disabled="check_bkup">테이블백업</button>
           <button class="btn btn-filter-e" style="margin-right: 20px" @click="gridExcelExport">엑셀다운로드</button>
           <button class="btn btn-filter-b" @click="gridAddRow" :disabled="check_aut_cd">행추가</button>
           <button class="btn btn-filter-b" @click="gridDelRow" :disabled="check_aut_cd">행삭제</button>
@@ -75,6 +75,7 @@
               </th>
               <td colspan="5">
                 <textarea
+                    id="ptcpnmTxt"
                     cols="95"
                     rows="20"
                     v-model="ptcpnmTxt"
@@ -182,7 +183,8 @@
             </tbody>
           </table>
           <div style="float: right">
-            <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">후속작업등록</button>
+            <button id="crpenm-edit2" class="btn btn-filter-p" style="margin-right: 5px" @click="fnEdit(2)">등록</button>
+            <button id="crpenm-delete" class="btn btn-filter-p" style="margin-right: 5px" @click="fnDelete" :disabled="delete_yn">삭제</button>
             <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
           </div>
         </Modal>
@@ -205,6 +207,7 @@
                   :minRowHeight="minRowHeight"
                   :rowHeaders="rowHeaders"
                   @click="onClick"
+                  @keydown="onKeyDown"
                   @onGridUpdated="onGridUpdated1"
                   @beforeExport="beforeExport"
               ></grid>
@@ -266,6 +269,7 @@ import {Grid} from '@toast-ui/vue-grid';
 import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+import PmsSideBar from  "@/components/PmsSideBar";
 
 // 부문 코드 (수정필요)
 const work_step_cd = [
@@ -287,6 +291,7 @@ export default {
     Combo,
     grid: Grid,
     Modal,
+    PmsSideBar
   },
 
   mounted() {
@@ -300,19 +305,8 @@ export default {
 
 // 일반적인 함수를 선언하는 부분
   methods: {
-    // Combo.vue 에서 받아온 값
-    dept_cd_change(params) {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
-        this.info.dept_cd_selected  = sessionStorage.getItem("LOGIN_DEPT_CD");
-        this.$refs.combo1.$data.dept_cd_selected = sessionStorage.getItem('LOGIN_DEPT_CD');
-      }else{
-        this.info.dept_cd_selected  = params;
-      }
-
-    },
-    bkup_id_change(params) {
-      this.info.bkup_id_selected = params
-    },
+    dept_cd_change(params) {this.info.dept_cd_selected = params},
+    bkup_id_change(params) {this.info.bkup_id_selected = params},
 
     init() {
       // 그리드 초기화
@@ -323,29 +317,28 @@ export default {
       this.$refs.grid.invoke("disable");
       this.$refs.grid2.invoke("disable");
       this.$refs.grid3.invoke("disable");
-      // 최초 조회 시 현재 년월 기준 조회 값 세팅
-      this.info.week_yymm = this.getCurrentYyyymm();
       //미진항목 조회 체크박스 초기값
       this.info.over_due_dt_yn = false;
       // 권한에 따른 컬럼 활성화
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-      if (aut_cd === '500' || aut_cd === '600') {
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
         this.$refs.grid.invoke("enableColumn", 'work_task');
         this.$refs.grid.invoke("enableColumn", 'reg_dt');
+        this.$refs.grid.invoke("enableColumn", 'com_due_dt');
         this.$refs.grid.invoke("enableColumn", 'com_rgs_dt');
+        this.$refs.grid.invoke("enableColumn", 'stop_dt');
+        this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'mark');
-        this.check_aut_cd = false // 행추가,행삭제 활성화
-        this.check_bkup = false // 테이블 백업 버튼 활성화
+        this.$refs.grid.invoke("enableColumn", 'com_dt');
       } else {
         this.$refs.grid.invoke("enableColumn", 'com_due_dt');
         this.$refs.grid.invoke("enableColumn", 'stop_dt');
         this.$refs.grid.invoke("enableColumn", 're_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'com_dt');
-        this.check_aut_cd = true // 행추가,행삭제 비활성화
-        this.check_bkup = true // 테이블 백업 버튼 비활성화
       }
       // 비고 폰트사이즈
       document.getElementById("rmrk").style.fontSize = '13px';  // 상세내용 확대보기 폰트 사이즈 최초값
+      document.getElementById("ptcpnmTxt").style.fontSize = '13px';  // 담당자 폰트 사이즈 최초값
     },
 
     // YYYY-MM 형태의 현재 년월을 구하는 함수
@@ -390,7 +383,7 @@ export default {
 
       if (this.createdRows.length !== 0) {
         if (this.vaildation(this.createdRows, "1") === true) {
-          if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
+          if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900') {
             alert("개발구분 삭제 권한이 없습니다.");
             return;
           }
@@ -405,15 +398,12 @@ export default {
             // console.log(res)
             if (res.data === true) {
               alert("저장이 완료되었습니다.")
+              this.$refs.grid.invoke("reloadData");
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
             } else {
               alert("이미 등록된 프로그램입니다.")
             }
-            // 조회 시 현재 년월 기준 조회 값 세팅
-            this.info.week_yymm = this.getCurrentYyyymm();
-            this.info.dept_cd_selected = sessionStorage.getItem("LOGIN_DEPT_CD");
-            this.fnSearch()
           })
         }
       }
@@ -452,8 +442,9 @@ export default {
     },
 
     onGridUpdated1(grid) {
+
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-      if (aut_cd === '500' || aut_cd === '600') {
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900') {
         this.$refs.grid.invoke("addColumnClassName", "bak_work_id", "disableColor");
       }
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
@@ -464,51 +455,72 @@ export default {
 
       // 작업 상태에 따라 셀 색상 변경
       let gridRow = '';
-        gridRow = this.$refs.grid.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
+      gridRow = this.$refs.grid.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료`
+          this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
         }
+      }
     },
     onGridUpdated2(grid) {
       let gridRow = '';
-        gridRow = this.$refs.grid2.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
+      gridRow = this.$refs.grid2.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+          this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid2.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
         }
+      }
     },
     onGridUpdated3(grid) {
       let gridRow = '';
-        gridRow = this.$refs.grid3.invoke("getRowCount");
-        for(let i=0; i<gridRow; i++) {
-          if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
-          } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
-            this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
-          }
+      gridRow = this.$refs.grid3.invoke("getRowCount");
+      for(let i=0; i<gridRow; i++) {
+        if(grid.instance.store.data.rawData[i].work_step_cd === "400" ){  //완료
+          this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "comColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "300"){  // 중단
+          this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "stopColor");
+        } else if(grid.instance.store.data.rawData[i].work_step_cd === "200"){  // 진행중
+          this.$refs.grid3.invoke("addCellClassName", grid.instance.store.data.rawData[i].rowKey , "work_step_cd", "inProgressColor");
         }
+      }
     },
     beforeExport(grid) {
       // console.log("beforeExport::", grid)
     },
 
+    // 그리드 1 키보드 입력 이벤트
+    onKeyDown(ev){
+      // console.log(ev)
+      this.curRow = ev.rowKey;
+      // 그리드 키보드 이벤트 시 Rowkey로 비고(Back-Log) 바인딩
+      this.rmrk = this.$refs.grid.invoke("getValue", this.curRow, "rmrk");
+      this.info.gubun = "2";
+
+      if(ev.keyboardEvent.key == 'ArrowUp') {  // 화살표 위방향 눌렀을 때
+        this.info.con_work_id = this.$refs.grid.invoke("getValue", this.curRow - 1, "con_work_id");
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+      } else if (ev.keyboardEvent.key == 'ArrowDown') { // 화살표 아래방향 눌렀을 때
+        this.info.con_work_id = this.$refs.grid.invoke("getValue", this.curRow + 1, "con_work_id");
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
+      }
+    },
     // 그리드 1 클릭 이벤트
     onClick(ev) {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
+      if(this.curRow === undefined){
+        return;
+      }
       if(this.$refs.grid.invoke("getValue", this.curRow, "mng_id")){
         // 수정, 연관작업 상세조회 버튼 활성화
         this.btn_yn = false;
@@ -528,15 +540,23 @@ export default {
       }
       // 컬럼명이 <후속작업>일 때만 모달 팝업
       if (ev.columnName == 'bak_work_id') {
-        this.info.work_task = '';  // 작업명 초기화
-        this.info.mng_id = ''      // 작업ID 초기화
-        this.info.current_mng_id = this.$refs.grid.invoke("getValue", this.curRow, "mng_id"); // 현재작업ID 설정
-        this.info.back_work_id = ''; // 후속작업ID 초기화
-        this.kbak_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"); // 현재후속ID 설정
-        this.fnBakSearch()
-        let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
-        if (aut_cd === '500' || aut_cd === '600') {  // 권한이 500, 600일 때만 팝업
-          this.modals.bak_work_modal = true;
+        if(this.$refs.grid.invoke("getValue", this.curRow, "mng_id") != null) {
+          this.info.work_task = '';  // 작업명 초기화
+          this.info.mng_id = ''      // 작업ID 초기화
+          this.info.current_mng_id = this.$refs.grid.invoke("getValue", this.curRow, "mng_id"); // 현재작업ID 설정
+          this.info.back_work_id = this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id"); // 후속작업ID 초기화
+          this.kbak_id = this.$refs.grid.invoke("getValue", this.curRow, "con_work_id"); // 현재후속ID 설정
+          this.fnBakSearch()
+          let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD")
+          if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900') {  // 권한이 500, 600일 때만 팝업
+            this.modals.bak_work_modal = true;
+          }
+          // 후속작업이 있을 경우 삭제버튼 활성화
+          if(this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != null && this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id") != '') {
+            this.delete_yn = false
+          } else {
+            this.delete_yn = true
+          }
         }
       }
 
@@ -613,6 +633,18 @@ export default {
         this.modals.bak_work_modal = false;
       }
     },
+    fnDelete() {
+      for(let i=0; i<(this.$refs.grid.invoke("getRowCount")); i++) { //연관작업설정
+        if(this.$refs.grid.invoke("getValue", i, "con_work_id") == this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")){
+          this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",this.curRow, "mng_id"))
+        }
+        if(this.$refs.grid.invoke("getValue",i, "mng_id") == this.$refs.grid.invoke("getValue", this.curRow, "bak_work_id")){
+          this.$refs.grid.invoke("setValue", i, "con_work_id", this.$refs.grid.invoke("getValue",i, "mng_id"))
+        }
+      }
+      this.$refs.grid.invoke("setValue", this.curRow, "bak_work_id");
+      this.modals.bak_work_modal = false; //후속작업모달닫기
+    },
     //조회
     fnSearch() {
       this.info.gubun = "1";
@@ -620,14 +652,12 @@ export default {
       this.$refs.grid.invoke("readData");
       // 버튼 비활성화/활성화 - 권한, 백업ID에 따라
       if(this.info.bkup_id_selected == '0000000000') {
-        this.check_save = false // 테이블백업, 저장 활성화
-        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600') {
-          this.check_bkup = false // 테이블백업  활성화
+        this.check_save = false // 저장 활성화
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
           this.check_aut_cd = false // 행추가, 행삭제  활성화
         }
       } else {
         this.check_save = true // 저장  비활성화
-        this.check_bkup = true // 테이블백업  비활성화
         this.check_aut_cd = true // 행추가, 행삭제  비활성화
       }
     },
@@ -648,17 +678,20 @@ export default {
 
     // 행추가
     gridAddRow() {
-      this.$refs.grid.invoke("setFrozenColumnCount", 0);
-      this.addCheak = 'Y';
-      this.$refs.grid.invoke("appendRow",
-          {
-            bzcd: sessionStorage.getItem("LOGIN_BZCD"),
-            save_yn: "N", //행르 추가하면 등록여부 'N'
-            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-            bkup_id: "0000000000",
-          },
-          {focus: true});
-      this.fnEnable();
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+        this.addCheak = 'Y';
+        this.$refs.grid.invoke("appendRow",
+            {
+              save_yn: "N", //행르 추가하면 등록여부 'N'
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              bkup_id: "0000000000",
+            },
+            {focus: true, at: 0});
+        this.fnEnable();
+      } else {
+        alert('행추가 권한이 없습니다.');
+      }
     },
     // 추가한 행 편집 활성화
     fnEnable() {
@@ -667,6 +700,8 @@ export default {
       this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_dt", this.getCurrentYyyymmdd());
       // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
       this.$refs.grid.invoke("setValue", this.NewRow - 1, "work_step_cd", '100');
+      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
+      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_nm", sessionStorage.getItem("LOGIN_EMP_NM"));
       // // 새로 ADD한 Row의 담당자와 비고 내용 셀 색 변경
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
@@ -674,12 +709,13 @@ export default {
     },
     // 행삭제
     gridDelRow() {
-      if (this.$refs.grid.invoke('getRow', this.curRow).save_yn === "Y") {
-        alert("등록된 목록은 삭제불가함. PMS 관리자에게 요청하세요.");
-        return;
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+        this.addCheak = 'N'
+        this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm: false});
+      } else {
+        alert('행삭제 권한이 없습니다.');
       }
-      this.addCheak = 'N'
-      this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm: false});
     },
     // 엑셀 다운로드
     gridExcelExport() {
@@ -687,26 +723,32 @@ export default {
     },
     // 테이블백업
     tableBackUp() {
-      axiosService.get("/PJTE9900/backup_select")
-          .then(res => {
-            this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
-            this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
-            if(res.data.data.contents.length){
-              axiosService.post("/PJTE9900/backup_update", {
-                new_bkup_id : this.info.new_bkup_id,
-                new_bkup_nm : this.info.new_bkup_nm,
-                prjt_id : this.info.prjt_nm_selected,
-                login_emp_no : this.info.login_emp_no
-              }).then(res => {
-                if (res.status == 200) {
-                  alert("테이블백업이 완료되었습니다.");
-                }
-              })
-            }
-          })
-          .catch(e => {
-            console.log(e)
-          })
+      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+        axiosService.get("/PJTE9900/backup_select")
+            .then(res => {
+              this.info.new_bkup_id = res.data.data.contents[0].new_bkup_id
+              this.info.new_bkup_nm = res.data.data.contents[0].new_bkup_nm
+              if(res.data.data.contents.length){
+                axiosService.post("/PJTE9900/backup_update", {
+                  new_bkup_id : this.info.new_bkup_id,
+                  new_bkup_nm : this.info.new_bkup_nm,
+                  prjt_id : this.info.prjt_nm_selected,
+                  login_emp_no : this.info.login_emp_no
+                }).then(res => {
+                  if (res.status == 200) {
+                    alert("테이블백업이 완료되었습니다.");
+                    location.reload();
+                  }
+                })
+              }
+            })
+            .catch(e => {
+              console.log(e)
+            })
+      } else {
+        alert('테이블백업 권한이 없습니다.');
+      }
     },
     // 유효값 검증
     vaildation(data, division) {
@@ -725,12 +767,12 @@ export default {
 
         }
         if (division === "2") {
-          if(data[i].com_due_dt == null || data[i].com_due_dt == "" || data[i].crpe_nm == null || data[i].crpe_nm == ""){
-            alert("담당자와 완료예정일은 필수 입력 사항입니다.");
-            return false;
-          }
           if ((data[i].stop_dt == null || data[i].stop_dt == '') && (data[i].re_sta_dt != null && data[i].re_sta_dt != '')) {
             alert("중단일이 없어 재시작을 할 수 없습니다.");
+            return false;
+          }
+          if ((data[i].com_due_dt == null || data[i].com_due_dt == '') && (data[i].com_dt != null && data[i].com_dt != '')) {
+            alert("완료예정일이 없어 완료처리를 할 수 없습니다.");
             return false;
           }
         }
@@ -744,7 +786,7 @@ export default {
   watch: {
     rmrk() {
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", this.rmrk); // 비고설정
-    }
+    },
   },
 
 // 변수 선언부분
@@ -760,9 +802,9 @@ export default {
         // 조회 변수
         bkup_id_selected  : '0000000000',                                 //백업ID
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),   // 프로젝트ID
-        dept_cd_selected  : sessionStorage.getItem("LOGIN_DEPT_CD"), //부문코드
+        dept_cd_selected  : (sessionStorage.getItem("LOGIN_DEPT_CD").substring(0, 3)) === '100' ? 'TTT':(sessionStorage.getItem("LOGIN_DEPT_CD").substring(0, 3)).concat('00000'), //부문코드
         week_yymm         : this.week_yymm,                               //기준년월
-        over_due_dt_yn       : this.over_due_dt_yn,                             // 미진항목(완료요청일을 넘김) 조회 체크박스
+        over_due_dt_yn    : this.over_due_dt_yn,                          // 미진항목(완료요청일을 넘김) 조회 체크박스
         reg_dt : '',                                                      // 등록일
         work_step_cd : work_step_cd,                                      // 작업상태
         con_work_id : '',                                                 // 연관작업
@@ -792,9 +834,9 @@ export default {
       crpenmTxt: this.crpenmTxt, // 담당자
       ptcpnmTxt: this.ptcpnmTxt, // 참여자
       btn_yn: true,              // 비고, 연관작업 목록 버튼 비활성화/활성화
-      check_aut_cd: true,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
+      check_aut_cd: false,        // 권한에 따른 행추가, 행삭제 버튼 비활성화/활성화
       check_save: false,          // 저장 버튼 비활성화/활성화
-      check_bkup: true,          // 테이블백업 버튼 비활성화/활성화
+      delete_yn: true,
 
       /* grid 속성 */
       count: 0,
@@ -879,7 +921,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'reg_nm',
           filter: 'select',
@@ -887,7 +929,7 @@ export default {
         },
         {
           header: '등록일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 'reg_dt',
@@ -896,7 +938,7 @@ export default {
         },
         {
           header: '완료요청일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 'com_rgs_dt',
@@ -906,7 +948,7 @@ export default {
         },
         {
           header: '작업상태',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'work_step_cd',
           formatter: 'listItemText',
@@ -921,7 +963,7 @@ export default {
         },
         {
           header: '담당자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -929,7 +971,7 @@ export default {
         },
         {
           header: '참여자',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'ptcp_nm',
           editor: 'text',
@@ -938,7 +980,7 @@ export default {
         },
         {
           header: '완료예정일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'com_due_dt',
           format: 'yyyy-mm-dd',
@@ -947,7 +989,7 @@ export default {
         },
         {
           header: '중단일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'stop_dt',
           format: 'yyyy-mm-dd',
@@ -956,7 +998,7 @@ export default {
         },
         {
           header: '재시작일',
-          width: 105,
+          width: 95,
           align: 'center',
           type: 'date',
           name: 're_sta_dt',
@@ -966,7 +1008,7 @@ export default {
         },
         {
           header: '완료일',
-          width: 105,
+          width: 95,
           align: 'center',
           name: 'com_dt',
           format: 'yyyy-mm-dd',
@@ -1004,14 +1046,13 @@ export default {
         },
         {
           header: '작업ID',
-          width: 80,
+          width: 70,
           align: 'center',
           name: 'mng_id',
           sortable: true
         },
         {
           header: '작업명',
-          width: 555,
           align: 'left',
           name: 'work_task',
           editor: 'text',
@@ -1033,7 +1074,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'reg_nm',
           filter: 'select',
@@ -1041,7 +1082,7 @@ export default {
         },
         {
           header: '담당자',
-          width: 105,
+          width: 80,
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
@@ -1049,6 +1090,7 @@ export default {
         },
         {
           header: '후속작업',
+          width: 80,
           name: 'bak_work_id',
           align: 'center',
           editor: "text",

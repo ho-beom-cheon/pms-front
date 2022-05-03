@@ -117,6 +117,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     cursor: pointer;
 }
 .input-dateWrap {
+    cursor: pointer;
     position: relative;
     display: inline-block;
 }
@@ -129,6 +130,27 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     height: 16px;
     background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
 }
+/*input 월 달력 START*/
+input[type="month"]::-webkit-calendar-picker-indicator{
+    opacity:0;
+    z-index: 1;
+    cursor: pointer;
+}
+.input-monthWrap {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+.input-monthWrap::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background: url(../../assets/img/PE-icon/ic_input_cal.svg) center/cover no-repeat;
+}
+/*input 월 달력 END*/
 .input-searchWrap {
     position: relative;
 }
@@ -808,6 +830,14 @@ table.form-table select {
 .div-img{
     background-image: url(../../assets/img/PE-icon/ic_new.svg);
 }
+/*삭제 버튼 (게시판 사용)*/
+.div-img-delete{
+    background-image: url(../../assets/img/PE-icon/ic_delete.svg);
+}
+/*댓글 버튼 (게시판 사용)*/
+.div-img-cmnt{
+    background-image: url(../../assets/img/PE-icon/ic_cmnt.svg);
+}
 .grid1-box{
     border: 1px solid #d5d5d5;
     margin: 5px;
@@ -823,7 +853,7 @@ header.GNB {
     height: var(--gnb-h);
     position: fixed;
     width: 100%;
-    z-index: 1;
+    z-index: 99;
 }
 header.GNB .gnb-logo {
     width: 240px;
@@ -915,6 +945,7 @@ footer {
     left: 0;
     right: 0;
     width: 100%;
+    z-index: 99;
 }
 footer span {
     font-weight: normal;
@@ -1230,7 +1261,7 @@ aside dl dd + dd a {
 }
 .pop-body table th,
 .pop-body table td {
-    padding: 3px 0 3px 4px;
+
     vertical-align: top;
 }
 .pop-body table td {
@@ -1388,7 +1419,17 @@ aside dl dd + dd a {
     height: 5vh;
     margin: 20px;
 }
+/* PJTE9120 줄맞춤 */
+.line-con > label{
+  margin-left: 20px;
+  margin-right: 5px;
+  margin-top: 6px;
+}
+
 .tui-grid-cell-disabled {
     background-color: #f2f2f2 !important;
     color: black !important;
+}
+.tui-grid-filter-dropdown {
+  width : 160px !important;
 }

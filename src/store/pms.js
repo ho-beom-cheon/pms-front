@@ -1,6 +1,9 @@
 const pms = {
     namespaced: true,
     state: {
+        // 게시판 데이터
+        GesiData : [],
+        // 콤보리스트(그리드)
         CD0000000000N:[],
         CD1000000001N:[],
         CD1000000002N:[],
@@ -11,7 +14,7 @@ const pms = {
         CD1000000007N:[],
         CD1000000008N:[],
         CD1000000009N:[],
-        CD0000000010N:[],
+        CD1000000010N:[],
         CD1000000011N:[],
         CD1000000012N:[],
         CD1000000013N:[],
@@ -21,7 +24,7 @@ const pms = {
         CD1000000017N:[],
         CD1000000018N:[],
         CD1000000019N:[],
-        CD0000000020N:[],
+        CD1000000020N:[],
         CD1000000021N:[],
         CD1000000022N:[],
         CD1000000023N:[],
@@ -31,7 +34,7 @@ const pms = {
         CD1000000027N:[],
         CD1000000028N:[],
         CD1000000029N:[],
-        CD0000000030N:[],
+        CD1000000030N:[],
         CD1000000031N:[],
         CD1000000032N:[],
         CD1000000033N:[],
@@ -42,13 +45,24 @@ const pms = {
         CD1000000038N:[],
         CD1000000039N:[],
         CD1000000040N:[],
-
-
+        CD1000000041N:[],
+        CD1000000042N:[],
+        CD1000000043N:[],
+        CD1000000044N:[],
+        CD1000000045N:[],
+        CD1000000046N:[],
+        CD1000000047N:[],
+        CD1000000048N:[],
+        CD1000000049N:[],
     },
     getters: {
-        CD1000000001N : state => state.CD1000000001N
+        // CD1000000001N : state => state.CD1000000001N
     },
     mutations: {
+        SEND_DATA(state,value) {
+            debugger
+            state.GesiData = value;
+        },
         SET_CD_ALL(state, array){
             state.CD0000000000N = array[0];
             state.CD1000000001N = array[1];
@@ -60,7 +74,7 @@ const pms = {
             state.CD1000000007N = array[7];
             state.CD1000000008N = array[8];
             state.CD1000000009N = array[9];
-            state.CD0000000010N = array[10];
+            state.CD1000000010N = array[10];
             state.CD1000000011N = array[11];
             state.CD1000000012N = array[12];
             state.CD1000000013N = array[13];
@@ -70,7 +84,7 @@ const pms = {
             state.CD1000000017N = array[17];
             state.CD1000000018N = array[18];
             state.CD1000000019N = array[19];
-            state.CD0000000020N = array[20];
+            state.CD1000000020N = array[20];
             state.CD1000000021N = array[21];
             state.CD1000000022N = array[22];
             state.CD1000000023N = array[23];
@@ -80,7 +94,7 @@ const pms = {
             state.CD1000000027N = array[27];
             state.CD1000000028N = array[28];
             state.CD1000000029N = array[29];
-            state.CD0000000030N = array[30];
+            state.CD1000000030N = array[30];
             state.CD1000000031N = array[31];
             state.CD1000000032N = array[32];
             state.CD1000000033N = array[33];
@@ -91,12 +105,24 @@ const pms = {
             state.CD1000000038N = array[38];
             state.CD1000000039N = array[39];
             state.CD1000000040N = array[40];
+            state.CD1000000041N = array[41];
+            state.CD1000000042N = array[42];
+            state.CD1000000043N = array[43];
+            state.CD1000000044N = array[44];
+            state.CD1000000045N = array[45];
+            state.CD1000000046N = array[46];
+            state.CD1000000047N = array[47];
+            state.CD1000000048N = array[48];
+            state.CD1000000049N = array[49];
         },
     },
     actions: {
         async SET_COMBO({ commit }, data) {
             //const {data} = await loginUser(); // api 호출
             commit('SET_CD_ALL', data);
+        },
+        async SET_DATA({ commit }, data) {
+            commit('SEND_DATA', data);
         }
     }
 }
