@@ -57,6 +57,7 @@
               <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
               <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
               <li id="PJTE9000Iteyes"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
+              <li id="PJTE9300Iteyes" v-if ="this.LoginEnpid === '202111010' ||  this.LoginEnpid === '202010002'" ><a href="/PJTE9300">{{ iteyes_menu_list[8].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000010'" >
               <li id="PJTE1000Tch"><a href="/PJTE1000">{{ tch_menu_list[0].name }}</a></li>
@@ -121,6 +122,7 @@ export default {
 
     return {
       LoginId : storage.getItem('LOGIN_PROJ_ID'),
+      LoginEnpid : storage.getItem('LOGIN_EMP_NO'),
       current_menu: '',
       menu_list: [
         {
@@ -242,6 +244,11 @@ export default {
           id: 'PJTE9000Iteyes',
           path: '/PJTE9000',
           name: '시스템관리'
+        },
+        {
+          id: 'PJTE9300Iteyes',
+          path: '/PJTE9300',
+          name: '프로젝트인력요청현황'
         },
       ],
       tch_menu_list: [

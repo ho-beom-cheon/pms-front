@@ -253,7 +253,7 @@
         <select
             v-model = "prjt_nm_selected"
             style   = "width: 180px"
-            :disabled="read"
+            :disabled="true"
             @change="prjt_nm_chage"
         >
           <option
