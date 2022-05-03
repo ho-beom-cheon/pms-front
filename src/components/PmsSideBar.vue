@@ -4,13 +4,13 @@
       ITeyes Support System
     </div>
     <div class="page-tit"  v-else-if ="this.LoginId === '0000000001'">
-      KMS
+      KMS System
     </div>
     <div class="page-tit"  v-else-if ="this.LoginId === '0000000010'">
-      기술연구소
+      기술연구소 System
     </div>
     <div class="page-tit"  v-else>
-      ITeyes PMS
+      ITeyes PMS System
     </div>
     <dl>
       <dd>
@@ -26,11 +26,11 @@
           <div class="card-header" id="headingOne">
             <button v-if ="this.LoginId === '0000000001'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-              KMS게시판
+              KMS
             </button>
             <button v-else-if  ="this.LoginId === '0000000003'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-              ITeyes
+              ITeyes Support
             </button>
             <button v-else-if  ="this.LoginId === '0000000010'" class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
@@ -38,7 +38,7 @@
             </button>
             <button v-else class="menu-group" type="button" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-              PMS
+              ITeyes PMS
             </button>
           </div>
 
