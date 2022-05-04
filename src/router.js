@@ -40,6 +40,7 @@ const PJTE9110 = () => import(/* webpackChunkName: "PJTE9110" */ './views/pms/PJ
 const PJTE9120 = () => import(/* webpackChunkName: "PJTE9120" */ './views/pms/PJTE9120.vue'); menuList.push(PJTE9120); menuListStr.push("PJTE9120");
 const PJTE9100 = () => import(/* webpackChunkName: "PJTE9100" */ './views/pms/PJTE9100.vue'); menuList.push(PJTE9100); menuListStr.push("PJTE9100");
 const PJTE9200 = () => import(/* webpackChunkName: "PJTE9200" */ './views/pms/PJTE9200.vue'); menuList.push(PJTE9200); menuListStr.push("PJTE9200");
+const PJTE9300 = () => import(/* webpackChunkName: "PJTE9300" */ './views/pms/PJTE9300.vue'); menuList.push(PJTE9300); menuListStr.push("PJTE9300");
 const PJTE9310 = () => import(/* webpackChunkName: "PJTE9310" */ './views/pms/PJTE9310.vue'); menuList.push(PJTE9310); menuListStr.push("PJTE9310");
 const PJTE9900 = () => import(/* webpackChunkName: "PJTE9900" */ './views/pms/PJTE9900.vue'); menuList.push(PJTE9900); menuListStr.push("PJTE9900");
 
