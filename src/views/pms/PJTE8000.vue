@@ -20,7 +20,6 @@
                 <input  type="month"
                         style="width: 125px"
                         v-model="info.week_yymm"
-                        @change="getWeekVal(info.week_yymm)"
                 >
               </div>
             </li>
@@ -609,10 +608,20 @@ export default {
     },
     /* 조회 */
     fnSearch() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = ("0" + (1 + date.getMonth())).slice(-2);
+      var curDate = year + '-' + month;
+
       // 조회 서비스
       if (this.info.week_yymm == "" || this.info.week_yymm == null) {
         alert('조회 주간년월이 필수 입력항목입니다.');
         return false;
+      }
+      if(curDate == this.info.week_yymm){
+        this.info.week_seq_val ='Y';
+      }else{
+        this.info.week_seq_val ='N';
       }
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -946,13 +955,11 @@ export default {
       var year = date.getFullYear();
       var month = ("0" + (1 + date.getMonth())).slice(-2);
       var curDate = year + '-' + month;
-
       if(curDate == data){
         this.info.week_seq_val ='Y';
       }else{
         this.info.week_seq_val ='N';
       }
-
       console.log(this.info.week_seq_val);
     },
 
