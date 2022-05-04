@@ -779,7 +779,7 @@ export default {
           whiteSpace: 'pre',
         },
         {
-          header: '테스크명',
+          header: '산출물',
           width: 250,
           align: 'center',
           name: 'task_nm',
