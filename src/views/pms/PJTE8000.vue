@@ -20,7 +20,6 @@
                 <input  type="month"
                         style="width: 125px"
                         v-model="info.week_yymm"
-                        @change="getWeekVal(info.week_yymm)"
                 >
               </div>
             </li>
@@ -564,6 +563,7 @@ export default {
     // 초기화
     this.init();
     // 최초조회
+    this.info.dept_cd_selected = sessionStorage.getItem('LOGIN_DEPT_CD').substr(0,4)+"0000"
     this.fnSearch();
     window.pms_register = this;
   },
@@ -609,10 +609,19 @@ export default {
     },
     /* 조회 */
     fnSearch() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = ("0" + (1 + date.getMonth())).slice(-2);
+      var curDate = year + '-' + month;
       // 조회 서비스
       if (this.info.week_yymm == "" || this.info.week_yymm == null) {
         alert('조회 주간년월이 필수 입력항목입니다.');
         return false;
+      }
+      if(curDate == this.info.week_yymm){
+        this.info.week_seq_val ='Y';
+      }else{
+        this.info.week_seq_val ='N';
       }
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
@@ -810,9 +819,15 @@ export default {
         this.detail.real_prjt_id_selected = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')                    // (상세)프로젝트
         this.$refs.combo2.$data.real_prjt_id_selected_iss = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')
       }
+      let dept_cd = ''
+      if(sessionStorage.getItem('LOGIN_DEPT_CD') == null || sessionStorage.getItem('LOGIN_DEPT_CD') == ''){
+        dept_cd = this.$refs.combo2.$data.CD1000000040N[0].value
+      } else {
+        dept_cd = sessionStorage.getItem('LOGIN_DEPT_CD').substr(0,4)+"0000"
+      }
 
-      this.detail.dept_cd_selected = this.$refs.combo2.$data.CD1000000040N[0].value                         // (상세) 부문명
-      this.$refs.combo2.$data.dept_cd_selected_iss = this.$refs.combo2.$data.CD1000000040N[0].value
+      this.detail.dept_cd_selected = dept_cd                       // (상세) 부문명
+      this.$refs.combo2.$data.dept_cd_selected_iss = sessionStorage.getItem('LOGIN_DEPT_CD').substr(0,4)+"0000"
       this.detail.pm_nm = sessionStorage.getItem('LOGIN_EMP_NM')                                                                             // (상세)pm명
       this.detail.pm_no = sessionStorage.getItem('LOGIN_EMP_NO')                                                                            // (상세)pmno
       this.detail.week_yymm = this.getToday()                                                               // (상세)주간년월
@@ -946,13 +961,11 @@ export default {
       var year = date.getFullYear();
       var month = ("0" + (1 + date.getMonth())).slice(-2);
       var curDate = year + '-' + month;
-
       if(curDate == data){
         this.info.week_seq_val ='Y';
       }else{
         this.info.week_seq_val ='N';
       }
-
       console.log(this.info.week_seq_val);
     },
 
