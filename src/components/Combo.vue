@@ -248,6 +248,7 @@
       </tr>
       </tbody>
     </table>
+<!--   메인 cpmbo -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트
         <select
