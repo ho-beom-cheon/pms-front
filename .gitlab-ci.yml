@@ -4,7 +4,15 @@ variables:
   GIT_STRATEGY: clone
 
 stages:
+  - verify
   - publish
+
+sonarqube_master:
+  stage: verify
+  script:
+    - sonar-scanner $SONAR_OPTS
+  only:
+    - master
 
 build-publish:
   image: node:14.18.1
@@ -28,3 +36,4 @@ build-publish:
     - sh publish.sh
     - sudo systemctl status nginx
     - sudo netstat -nltp
+  when: manual
