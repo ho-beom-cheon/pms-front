@@ -15,17 +15,20 @@ build-publish:
   before_script:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
-    - npm cache clear --force
-    - pwd
-    - ls
-    - npm install --save --legacy-peer-deps
-    - npm install trim@^1.0.5 --save
+    - npm install --save --legacy-peer-deps -g
+    - npm install --save trim@v^1.0.5 -g
+    - npm install --save trim@v^1.0.4 -g
   script:
     - echo "build pms"
     - npm run prod
   after_script:
-    - pwd
-    - ls
+    - echo "publish pms"
+    - cd ../
+    - sh publish.sh
+    - sudo systemctl status nginx
+    - sudo netstat -nltp
+  when: manual
+
 
 sonarqube_master:
   stage: verify
