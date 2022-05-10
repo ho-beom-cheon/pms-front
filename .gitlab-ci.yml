@@ -16,9 +16,10 @@ build-publish:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
     - npm cache clear --force
+    - pwd
+    - ls
     - npm install --save --legacy-peer-deps
-    - npm init
-    - node main.js
+    - npm install trim@^1.0.5 --save
   script:
     - echo "build pms"
     - npm run prod
