@@ -14,14 +14,17 @@ build-publish:
   before_script:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
+    - ls
+    - pwd
     - npm install --save --legacy-peer-deps
   script:
     - echo "build pms"
     - npm run prod
+    - ls
+    - pwd
   after_script:
     - echo "publish pms"
     - cd ../
     - sh publish.sh
     - sudo systemctl status nginx
     - sudo netstat -nltp
-  when: manual
