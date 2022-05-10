@@ -7,13 +7,6 @@ stages:
   - verify
   - publish
 
-sonarqube_master:
-  stage: verify
-  script:
-    - sonar-scanner $SONAR_OPTS
-  only:
-    - master
-
 build-publish:
   image: node:14.18.1
   stage: publish
@@ -22,14 +15,11 @@ build-publish:
   before_script:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
-    - ls
-    - pwd
+    - npm cache clear --force
     - npm install --save --legacy-peer-deps
   script:
     - echo "build pms"
     - npm run prod
-    - ls
-    - pwd
   after_script:
     - echo "publish pms"
     - cd ../
@@ -37,3 +27,15 @@ build-publish:
     - sudo systemctl status nginx
     - sudo netstat -nltp
   when: manual
+
+
+sonarqube_master:
+  stage: verify
+  script:
+    - sonar-scanner $SONAR_OPTS
+  only:
+    - master
+	
+	
+	
+	
