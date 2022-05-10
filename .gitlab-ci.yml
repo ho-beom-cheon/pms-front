@@ -34,7 +34,3 @@ sonarqube_master:
     - sonar-scanner $SONAR_OPTS
   only:
     - master
-	
-	
-	
-	
