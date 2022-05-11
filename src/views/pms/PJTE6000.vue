@@ -263,7 +263,7 @@ export default {
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
     checkRegisterData() {
-      if(this.checkRegisterData === true){
+      if(this.checkRegisterData){
         debugger
         this.$refs.grid.invoke("setRequestParams", this.info);
         this.$refs.grid.invoke("readData");
