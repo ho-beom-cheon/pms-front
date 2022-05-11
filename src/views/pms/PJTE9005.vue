@@ -642,7 +642,6 @@ export default {
     bkup_id_change(params) {this.info.bkup_id_selected = params},
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     skill_grd_change_iss(params) {this.info.skill_grd_selected = params},
-
     man_cd_change(params) {this.detail.man_cd_selected = params},
     skill_grd_change(params) {this.detail.skill_grd_selected = params},
     grd_cd_change(params) {this.detail.grd_cd_selected = params},
