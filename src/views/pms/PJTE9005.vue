@@ -634,6 +634,7 @@ export default {
   },
   updated(){
     this.setNo();
+
   },
 
 // 일반적인 함수를 선언하는 부분
