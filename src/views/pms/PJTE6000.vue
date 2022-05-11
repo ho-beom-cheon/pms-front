@@ -242,6 +242,7 @@ export default {
     },
     // 그리드 데이터 조회
     fnSearch(){
+
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
