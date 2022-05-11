@@ -264,7 +264,6 @@ export default {
   watch:{
     checkRegisterData() {
       if(this.checkRegisterData){
-        debugger
         this.$refs.grid.invoke("setRequestParams", this.info);
         this.$refs.grid.invoke("readData");
         this.checkRegisterData = false;
@@ -379,7 +378,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000010N
+              listItems: this.$store.state.pms.CD0000000010N
             }
           }
         },
