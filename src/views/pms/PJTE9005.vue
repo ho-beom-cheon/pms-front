@@ -119,9 +119,9 @@
           <div class="div-header-b"><h2>1. 인적사항</h2>
             <p style="margin-left: 50px; margin-top: 8px">{{ detail.last_chg_dt }}</p>
             <ul class="filter-btn">
-              <button class="btn btn-filter-e" style="margin-left: 20px" @click="open_file_page1" >기술등급 기준표</button>
-              <button class="btn btn-filter-e" style="margin-left: 20px" @click="open_file_page" >경력증빙첨부</button>
-              <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
+              <button class="btn btn-filter-e" style="margin-left: 5px" @click="open_file_page1" >기술등급 기준표</button>
+              <button class="btn btn-filter-e" style="margin-left: 5px" @click="open_file_page" >경력증빙첨부</button>
+              <button class="btn btn-filter-b" style="margin-left: 5px" @click="fnClear">신규초기화</button>
             </ul>
           </div>
           <div class="div2-body-c">
