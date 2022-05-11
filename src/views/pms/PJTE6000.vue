@@ -263,11 +263,12 @@ export default {
   // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
     checkRegisterData() {
-      // if(this.checkRegisterData){
-      //   this.$refs.grid.invoke("setRequestParams", this.info);
-      //   this.$refs.grid.invoke("readData");
-      //   this.checkRegisterData = false;
-      // }
+      if(this.checkRegisterData === true){
+        debugger
+        this.$refs.grid.invoke("setRequestParams", this.info);
+        this.$refs.grid.invoke("readData");
+        this.checkRegisterData = false;
+      }
     },
     // check_Yn 값 변하면 info 내의 check_Yn 값 변화
     check_Yn () {
