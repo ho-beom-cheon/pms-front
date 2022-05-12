@@ -248,7 +248,7 @@
       </tr>
       </tbody>
     </table>
-<!--   메인 cpmbo -->
+    <!--   메인 cpmbo -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트
         <select
@@ -1510,7 +1510,7 @@ export default {
           if(this.CD1000000036T.length !== 0)  this.search_cd_selected           = this.CD1000000036T[0].value
           if(this.CD1000000038T.length !== 0)  this.real_prjt_id_selected        = this.CD1000000038T[0].value
           if(this.CD1000000039T.length !== 0)  this.week_sqn_cd_selected         = this.CD1000000039T[0].value
-          if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038N[0].value
+          if(this.CD1000000038.length !== 0)   this.real_prjt_id_selected_iss    = this.CD1000000038[0].value
           if(this.CD1000000039.length !== 0)   this.week_sqn_cd_selected_iss     = this.CD1000000039N[0].value
           if(this.CD1000000040T.length !== 0)  {
             if(sessionStorage.getItem("LOGIN_DEPT_CD") !== '' && sessionStorage.getItem("LOGIN_DEPT_CD") !== null) {
@@ -1528,8 +1528,9 @@ export default {
           if(this.CD1000000041N.length !== 0)   this.man_cd_selected            = this.CD1000000041N[0].value
           if(this.CD1000000042T.length !== 0)   this.skill_grd_selected_iss     = this.CD1000000042T[0].value
           if(this.CD1000000042N.length !== 0)   this.skill_grd_selected         = this.CD1000000042N[0].value
+          if(this.CD1000000042.length !== 0)    this.skill_grd_selected         = this.CD1000000042[0].value
           if(this.CD1000000043N.length !== 0)   this.grd_cd_selected            = this.CD1000000043N[0].value
-          if(this.CD1000000044T.length !== 0)    this.bubun_cd_selected          = this.CD1000000044T[0].value
+          if(this.CD1000000044T.length !== 0)   this.bubun_cd_selected          = this.CD1000000044T[0].value
           if(this.CD1000000044N.length !== 0)   this.bubun_cd_selected_iss      = this.CD1000000044N[0].value
           if(this.CD1000000045T.length !== 0)   this.bsn_cls_cd_selected        = this.CD1000000045T[0].value
           if(this.CD1000000045N.length !== 0)   this.bsn_cls_cd_selected_iss    = this.CD1000000045N[0].value
@@ -1595,6 +1596,8 @@ export default {
       this.cd_all.push(this.CD1000000047N)
       this.cd_all.push(this.CD1000000048N)
       this.cd_all.push(this.CD1000000049N)
+      this.cd_all.push(this.CD1000000038) //50번째
+      this.cd_all.push(this.CD1000000042) //51번째
     },
     init()  {
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)

@@ -19,8 +19,6 @@
             ></combo>
           </ul>
           <ul class="filter-btn">
-            <!--            <button class="btn btn-filter-b" id="addRowBtn" @click="gridAddRow">행추가</button>-->
-            <!--            <button class="btn btn-filter-b" id="delRowBtn" @click="gridDelRow">행삭제</button>-->
             <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
@@ -53,7 +51,7 @@
             ></grid>
           </div>
         </div>
-        <ul class="filter-btn" style="margin-top: 7px">
+        <ul class="filter-btn" style="margin: 5px">
           <button class="btn btn-filter-p" id="saveBtn" @click="fnSave">저장</button>
         </ul>
         <div class="grid1-box" style="height: 350px">
@@ -71,7 +69,9 @@
                 :editingEvent="editingEvent"
                 :columnOptions="columnOptions"
                 :rowHeight="rowHeight"
+                :rowHeaders="rowHeaders"
                 @click="onClick2"
+                @onGridUpdated="onGridUpdated"
             ></grid>
           </div>
         </div>
@@ -140,104 +140,57 @@ export default {
     prjt_nm_change(params)        {this.info.prjt_nm_selected = params},
     bkup_id_change(params)        {this.info.bkup_id_selected = params},
 
-    // 렌더링 중 적용 (mounted와 동일)
-    onGridMounted(grid){
-    },
     // 렌더링 후 적용됨
     onGridUpdated(grid){
       let gridData = this.$refs.grid.invoke("getData");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
     },
-    fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
-      this.modalTxt = document.getElementById("modalId").value;
-      // console.log("확인::", document.getElementById("modalId").value);
-      // console.log("this.curRow::", this.curRow);
-      // console.log("this.modalTxt::", this.modalTxt);
-      this.modals.txt_modal1 = false;
-    },
-    fnCloseModal(){  // 모달창 닫기
-      this.modals.txt_modal1 = false;
-    },
     fnSave() {
-       if (this.checkPrimary() == true) {
-        //확인창
-        if (confirm("정말 저장하시겠습니까??") == true) {
-          // 프로젝트ID가 없으면 INSERT
-          if (this.detail.prjt_id == "" || this.detail.prjt_id == "null") {
-            axiosService.put("/PJTE9300/insert_9300_01", {
-              gridData: this.updatedRows,
-              bkup_id: this.info.bkup_id_selected,
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+      // 변경 데이터 저장
+      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+      this.deletedRows = this.$refs.grid.invoke("getModifiedRows").deletedRows;
+      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
 
-              real_prjt_id: this.info.real_prjt_id,
-              sqno: this.info.sqno,
-              sch_ent_dt: this.info.sch_ent_dt,
-              skill_grd: this.info.skill_grd,
-              main_skill: this.info.main_skill,
-              duty_txt: this.info.duty_txt,
-              oth_cnt: this.info.oth_cnt,
-              nmbr_rcrt: this.info.nmbr_rcrt,
-              aplc_dtls: this.info.aplc_dtls,
-              del_yn: this.info.del_yn,
-
-            }).then(res => {
-              if (res.data === true) {
-                alert("저장이 완료되었습니다.");
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-              }
-            }).catch(e => {
+      if (confirm("저장하시겠습니까??") === true) {
+        // 프로젝트ID가 없으면 INSERT
+        if(this.createdRows.length !== 0) {
+          axiosService.post("/PJTE9300/insert_9300_01", {
+            gridData: this.createdRows,
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+            bkup_id: this.info.bkup_id_selected,
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          }).then(res => {
+            if (res.data === true) {
+              alert("저장이 완료되었습니다.");
+              // 저장 후 그리드 Reload
+              this.$refs.grid.invoke("reloadData");
+            }
+          }).catch(e => {
               alert("저장에 실패하였습니다.");
-            });
-            //프로젝트ID가 있으면 update
-          } else {
-            axiosService.put("/PJTE9300/update_9300_01", {
-              gridData: this.updatedRows,
-              bkup_id: '0000000000',                                  //백업ID
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  //프로젝트ID
-              skill_grd: this.info.skill_grd,
-              main_skill: this.info.main_skill,
-              duty_txt: this.info.duty_txt,
-              oth_cnt: this.info.oth_cnt,
-              nmbr_rcrt: this.info.nmbr_rcrt,
-              orp_no: this.info.opr_no,
-              db_chg_ts: this.info.db_chg_ts,
-            }).then(res => {
-              if (res.data === true) {
-                alert("저장이 완료되었습니다.");
-                // update 후 재조회
-                this.$refs.grid.invoke("reloadData");
-              }
-            }).catch(e => {
-              alert("저장에 실패하였습니다.");
-            });
-          }
-        } else { //취소
-          retrun;
+          });
+          //프로젝트ID가 있으면 update
+        } else if(this.updatedRows.length !== 0){
+          axiosService.put("/PJTE9300/update_9300_01", {
+            gridData: this.updatedRows,
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+            bkup_id: this.info.bkup_id_selected,
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          }).then(res => {
+            if (res.data === true) {
+              alert("저장이 완료되었습니다.");
+              // update 후 재조회
+              this.$refs.grid.invoke("reloadData");
+            }
+          }).catch(e => {
+            alert("저장에 실패하였습니다.");
+          });
+        } else {
+          alert("변경된 내용이 없습니다");
         }
-        }
-      },
-    /* 저장을 하기위한 필수 항목 체크 */
-    checkPrimary() {
-      if (this.info.real_prjt_id == "" || this.info.real_prjt_id == "null") {                   // 프로젝트명
-        this.$refs.real_prjt_id.focus();
-        alert('프로젝트명은 필수 입력사항입니다.');
+      } else { //취소
         return false;
-        /*      } else if (this.detail.bsn_cls_cd_selected_iss == "NNN" || this.detail.bsn_cls_cd_selected_iss == "" || this.detail.bsn_cls_cd_selected_iss == "null") {        // 게시구분
-                alert('게시구분은 필수 입력사항입니다.');
-                return false;
-              } else if (this.detail.gesipan_titl == "" || this.detail.gesipan_titl == "null") {     // 게시판제목
-                this.$refs.gesipan_titl.focus();
-                alert('게시판제목을 입력해주세요.');
-                return false;
-              } else if (this.detail.gesipan_dsc == "" || this.detail.gesipan_dsc == "null") {       // 게시판설명
-                this.$refs.gesipan_dsc.focus();
-                alert('게시판설명을 입력해주세요.');
-                return false; */
-      } else {
-        return true;  // 필수 값 모두 입력 시 true
       }
+     // }
     },
     onClick(ev) {
       //console.log("클릭" + ev.rowKey);
@@ -246,38 +199,45 @@ export default {
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
 
       if(ev.columnName === 'aplc_dtls_btn'){      //지원
-        axiosService.put("/PJTE9300/update_9300_02", {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-          real_prjt_id :this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
-          sqno :this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
-        }).then(res => { // 리턴값
-          if(res.status == 200) {
-            this.fnSearch()
-          }
-        }).catch(e => {  //오류
+        if(confirm("지원하시겠습니까?")===true) {
+          axiosService.put("/PJTE9300/update_9300_02", {
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            real_prjt_id: this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+            login_emp_nm: sessionStorage.getItem("LOGIN_EMP_NM"),
+            sqno: this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
+          }).then(res => { // 리턴값
+            if (res.status == 200) {
+              alert("지원 완료되었습니다.");
+              this.fnSearch()
+            }
+          }).catch(e => {  //오류
+            alert("지원 실패.");
+          });
 
-        });
+        }
       }
       if(ev.columnName === 'del_btn'){
-        console.log("클릭:" + ev.rowKey);
+/*      console.log("클릭:" + ev.rowKey);
         console.log("real_prjt_id:" + this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"));
-
         console.log("prjt_id:" + sessionStorage.getItem("LOGIN_PROJ_ID"));
-
         console.log("sqno:" + this.$refs.grid.invoke("getValue", this.curRow, "sqno"));
+*/
+        if(confirm("삭제하시겠습니까?") === true) {
+          axiosService.put("/PJTE9300/update_9300_03", {
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),   //삭제
+            real_prjt_id: this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
+            sqno: this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
+          }).then(res => { // 리턴값
+            if (res.status == 200) {
+              alert("삭제 완료되었습니다.");
+              this.fnSearch()
+            }
+          }).catch(e => {  //오류
+            alert("삭제 실패.");
 
-
-        axiosService.put("/PJTE9300/update_9300_03", {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),   //삭제
-          real_prjt_id :this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
-          sqno :this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
-        }).then(res => { // 리턴값
-          if(res.status == 200) {
-            this.fnSearch()
-          }
-        }).catch(e => {  //오류
-
-        });
+          });
+        }
       }
     },
     // 그리드 2,3 클릭 이벤트
@@ -285,9 +245,10 @@ export default {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
     },
-    gridInit() {
+/*    gridInit() {
       this.$refs.grid.invoke("clear");
     },
+*/
     init() {
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         //  저장 버튼 숨기기
@@ -314,7 +275,6 @@ export default {
     gridAddRow() {
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
-        console.log("this.$store.state.pms.CD1000000038", this.$store.state.pms.CD1000000038)
         this.addCheak = 'Y';
         this.$refs.grid.invoke("appendRow",
             {
@@ -322,7 +282,7 @@ export default {
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
               bkup_id: "0000000000",
             },
-            {focus: true, at: 0});
+            {focus: true}); //, at: 0  내림차순되게함
         this.fnEnable();
       } else {
         alert('행추가 권한이 없습니다.');
@@ -331,17 +291,10 @@ export default {
     },
     // 추가한 행 편집 활성화
     fnEnable() {
+      // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
-      // 새로 ADD한 Row의 등록일을 현재 날짜로 세팅
-      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_dt", this.getCurrentYyyymmdd());
-      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
-      this.$refs.grid.invoke("setValue", this.NewRow - 1, "work_step_cd", '100');
-      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
-      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_nm", sessionStorage.getItem("LOGIN_EMP_NM"));
-      // // 새로 ADD한 Row의 담당자와 비고 내용 셀 색 변경
-      this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
-      // this.$refs.grid.invoke("enableCell", this.NewRow - 1, "mark");
+      this.$refs.grid.invoke("enableRow", this.NewRow-1);
+
     },
     //행삭제
     gridDelRow() {
@@ -353,22 +306,17 @@ export default {
         alert('행삭제 권한이 없습니다.');
       }
     },
-    autCheck() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
-        alert("권한이 부족합니다.");
-        return false;
+    // YYYYMMDD 형태의 현재 년월일을 구하는 함수
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
       }
-    },
-    // 유효값 검증
-    validation(data) {
-      for(let i=0; i<data.length; i++){
-        /* 출력 영역  */
-        if(data[i].empno === null)
-        { alert("직원번호는 필수 입력 사항입니다");
-          return false;
-        }
-      }
-      return  true;
+      return year + '-' +  month + '-' + day;
     },
   },
 // 변수 선언부분
@@ -376,12 +324,10 @@ export default {
     return {
       login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
       login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-
       validated : true,
       comboList : ["C27","C0"], //프로젝트 ID, 백업 ID
       addCheak            : 'N', // 행추가 체크
       editingEvent        : "click",
-
       info: {
         prjt_nm_selected : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected : '0000000000',
@@ -459,11 +405,12 @@ export default {
       columns: [
         {
           header: '프로젝트명',
-          width: 250,
+          width: 350,
           name: 'real_prjt_id',
           align: 'left',
-          //editor: 'text',
-            editor : {
+          formatter: 'listItemText',
+          disabled: true,
+          editor : {
             type : 'select',
             options:{
               listItems: this.$store.state.pms.CD1000000038
@@ -472,7 +419,7 @@ export default {
         },
         {
           header: '투입예정일자',
-          width: 90,
+          width: 110,
           name: 'sch_ent_dt',
           align: 'center',
           format: 'yyyy-mm-dd',
@@ -480,9 +427,9 @@ export default {
         },
         {
           header: '등급',
-          width: 50,
+          width: 70,
           name: 'skill_grd',
-          align: 'left',
+          align: 'center',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -501,7 +448,7 @@ export default {
         },
         {
           header: '요청업무',
-          width: 250,
+          // width: 250,
           align: 'left',
           name: 'duty_txt',
           editor: 'text',
@@ -525,14 +472,14 @@ export default {
           width: 90,
           align: 'center',
           name: 'opr_nm',
-          editor: 'text',
+          // editor: 'text',
         },
         {
           header: '지원자내용',
           width: 90,
           align: 'left',
           name: 'aplc_dtls',
-          editor: 'text',
+          // editor: 'text',
         },
         {
           header: '지원',
@@ -578,6 +525,7 @@ export default {
           defaultValue: '0000000000'
         },
       ],
+
       columns2: [
         {
           header: '직원명',
