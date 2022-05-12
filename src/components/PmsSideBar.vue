@@ -57,7 +57,7 @@
               <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
               <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
               <li id="PJTE9000Iteyes" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
-              <li id="PJTE9300Iteyes" v-if ="this.LoginEnpid === '202111010' ||  this.LoginEnpid === '202010002'" ><a href="/PJTE9300">{{ iteyes_menu_list[8].name }}</a></li>
+              <li id="PJTE9300Iteyes" v-if ="this.LoginEnpid === '202111010' ||  this.LoginEnpid === '202010002' || this.LoginEnpid === '201903007'" ><a href="/PJTE9300">{{ iteyes_menu_list[8].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000010'" >
               <li id="PJTE1000Tch"><a href="/PJTE1000">{{ tch_menu_list[0].name }}</a></li>
@@ -82,9 +82,10 @@
               <li id="PJTE4000"><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
               <li id="PJTE5000"><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
               <li id="PJTE6000"><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
-              <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[9].name }}</a></li>
-              <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[10].name }}</a></li>
-              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[11].name }}</a></li>
+              <li id="PJTE7000"><a href="/PJTE7100">{{ menu_list[9].name }}</a></li>
+              <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[10].name }}</a></li>
+              <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[11].name }}</a></li>
+              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[12].name }}</a></li>
             </ul>
 
           </div>
@@ -170,6 +171,11 @@ export default {
           id: 'PJTE6000',
           path: '/PJTE6000',
           name: 'PMS신청관리'
+        },
+        {
+          id: 'PJTE7100',
+          path: '/PJTE7100',
+          name: 'As-Is대To-Be매핑관리'
         },
         {
           id: 'PJTE7000',

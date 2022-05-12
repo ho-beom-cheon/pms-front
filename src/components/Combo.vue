@@ -248,6 +248,7 @@
       </tr>
       </tbody>
     </table>
+<!--   메인 cpmbo -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트
         <select
@@ -898,6 +899,42 @@
       </div>
     </li>
     <!-- 인력프로파일관리 끝 -->
+
+    <!-- As-Is대To-Be매핑 시작 -->
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-51'">
+      <div class="item-con"><label>As-Is프로그램유형</label>
+        <select
+            v-model = "as_pgm_dis_cd_selected"
+            style   = "width: 230px"
+            @change = "as_pgm_dis_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000051N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-52'">
+      <div class="item-con"><label>전환상태</label>
+        <select
+            v-model = "trn_stt_cd_selected"
+            style   = "width: 230px"
+            @change = "trn_stt_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000052N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <!-- As-Is대To-Be매핑 끝 -->
   </div>
 </template>
 
@@ -962,6 +999,8 @@ export default {
     this.rsr_strt_change()
     this.rsr_endt_change()
     this.inp_cls_cd_change()
+    this.as_pgm_dis_cd_change()
+    this.trn_stt_cd_change()
   },
   data() {
     return {
@@ -1016,6 +1055,9 @@ export default {
       CD1000000047T : [],  CD1000000047N : [], CD1000000047 : [],
       CD1000000048T : [],  CD1000000048N : [], CD1000000048 : [],
       CD1000000049T : [],  CD1000000049N : [], CD1000000049 : [],
+      CD1000000050T : [],  CD1000000050N : [], CD1000000050 : [],
+      CD1000000051T : [],  CD1000000051N : [], CD1000000051 : [],
+      CD1000000052T : [],  CD1000000052N : [], CD1000000052 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -1131,6 +1173,10 @@ export default {
       rsr_endt_selected : "",
       // 투입구분
       inp_cls_cd_selected : "",
+      // As-Is프로그램유형
+      as_pgm_dis_cd_selected : "",
+      // 전환상태
+      trn_stt_cd_selected : "",
     }
   },
   methods: {
@@ -1197,6 +1243,8 @@ export default {
     rsr_strt_change()               {  this.$emit('rsr_strt_change',               this.rsr_strt_selected)},             // 예약시작일자
     rsr_endt_change()               {  this.$emit('rsr_endt_change',               this.rsr_endt_selected)},             // 예약종료일자
     inp_cls_cd_change()             {  this.$emit('inp_cls_cd_change',             this.inp_cls_cd_selected)},           // 투입구분
+    as_pgm_dis_cd_change()          {  this.$emit('as_pgm_dis_cd_change',          this.as_pgm_dis_cd_selected)},        // As-Is프로그램유형
+    trn_stt_cd_change()             {  this.$emit('trn_stt_cd_change',             this.trn_stt_cd_selected)},           // 전환상태
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -1308,6 +1356,15 @@ export default {
               } else if (i === 49) {
                 this.CD1000000049T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000049N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 50) {
+                this.CD1000000050T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000050N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 51) {
+                this.CD1000000051T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000051N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 52) {
+                this.CD1000000051T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000051N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1475,6 +1532,18 @@ export default {
               this.CD1000000049T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000049N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000049.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 50) {
+              this.CD1000000050T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000050N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000050.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 51) {
+              this.CD1000000051T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000051N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000051.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 52) {
+              this.CD1000000052T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000052N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000052.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
             }
             this.set_yn = "Y";
             this.row++;
@@ -1537,6 +1606,8 @@ export default {
           if(this.CD1000000047N.length !== 0)   this.mtng_room_id_selected_iss  = this.CD1000000047N[0].value
           if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
           if(this.CD1000000049N.length !== 0)   this.inp_cls_cd_selected        = this.CD1000000049N[0].value
+          if(this.CD1000000051N.length !== 0)   this.as_pgm_dis_cd_selected     = this.CD1000000051N[0].value
+          if(this.CD1000000052N.length !== 0)   this.trn_stt_cd_selected        = this.CD1000000052N[0].value
         }
         this.setCdAll()
       }
@@ -1594,6 +1665,9 @@ export default {
       this.cd_all.push(this.CD1000000047N)
       this.cd_all.push(this.CD1000000048N)
       this.cd_all.push(this.CD1000000049N)
+      this.cd_all.push(this.CD1000000050N)
+      this.cd_all.push(this.CD1000000051N)
+      this.cd_all.push(this.CD1000000052N)
     },
     init()  {
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -1673,6 +1747,9 @@ export default {
             "1000000047",
             "1000000048",
             "1000000049",
+            "1000000050",
+            "1000000051",
+            "1000000052",
           ];
 
       // 조회영역 권한 체크

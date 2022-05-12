@@ -119,8 +119,9 @@
           <div class="div-header-b"><h2>1. 인적사항</h2>
             <p style="margin-left: 50px; margin-top: 8px">{{ detail.last_chg_dt }}</p>
             <ul class="filter-btn">
-              <button class="btn btn-filter-e" style="margin-left: 20px" @click="open_file_page" >경력증빙첨부</button>
-              <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
+              <button class="btn btn-filter-e" style="margin-left: 5px" @click="open_file_page1" >기술등급 기준표</button>
+              <button class="btn btn-filter-e" style="margin-left: 5px" @click="open_file_page" >경력증빙첨부</button>
+              <button class="btn btn-filter-b" style="margin-left: 5px" @click="fnClear">신규초기화</button>
             </ul>
           </div>
           <div class="div2-body-c">
@@ -641,7 +642,6 @@ export default {
     bkup_id_change(params) {this.info.bkup_id_selected = params},
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     skill_grd_change_iss(params) {this.info.skill_grd_selected = params},
-
     man_cd_change(params) {this.detail.man_cd_selected = params},
     skill_grd_change(params) {this.detail.skill_grd_selected = params},
     grd_cd_change(params) {this.detail.grd_cd_selected = params},
@@ -1107,6 +1107,14 @@ export default {
     setNo() {
       if(this.info.man_nm === "") this.info.man_no = "";
       if(this.detail.man_nm === "") this.detail.man_no = "";
+    },
+    // 첨부파일등록 팝업 오픈
+    open_file_page1() {
+      let file_rgs_dscd = '903'
+      let atfl_mng_id = '0000000000'
+      let mng_id = ''
+      let bkup_id = '0000000000', prjt_id = sessionStorage.getItem("LOGIN_PROJ_ID")
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
     },
     // 첨부파일등록 팝업 오픈
     open_file_page() {
