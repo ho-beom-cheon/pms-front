@@ -190,7 +190,7 @@ input[type="month"]::-webkit-calendar-picker-indicator{
     width: 40px;
     height: 38px;
     background: url(../../assets/img/PE-icon/ic_search.svg) center/16px no-repeat;
-    background-color: #B8B8B8;
+    background-color: #d5e0f9;
     border: 0;
 }
 input[type="checkbox"] {
@@ -287,16 +287,19 @@ input[type="radio"] {
     min-width: 120px;
     height: 42px;
     padding: 0px 10px;
-    background: var(--primary);
+    background-color: #f82b0f;
+    box-shadow: 0 0 3px 3px rgba(254, 45, 45, 0.38);
     font-weight: bold;
     font-size: 16px;
     line-height: 22px;
     color: #fff;
-    border: 0;
+    border: 1px;
     margin: 0;
 }
 .btn.btn-primary:hover {
-    background-color: var(--primary-b);
+    /*background-color: var(--primary-b);*/
+    background-color: #e0f7e8;
+    color: #111;
 }
 .btn.btn-primary + .btn.btn-primary {
     margin-left: 8px;
@@ -961,22 +964,27 @@ footer span + span {
 section.login {
     width: 100vw;
     height: 100vh;
-    background-color: #DFDFDF;
-    padding-top: 100px;
+    background-color: #0D192C;
+    padding-top: 5%;
 }
 section.login .loginBx {
     width: 560px;
+    height: 650px;
     padding: 60px 40px;
     margin: 0 auto;
     box-sizing: border-box;
-    background-color: #fff;
+    border-radius: 16px;
+    background-color: #15263F;
+    box-shadow: 0 25px 50px 0 rgba(245, 240, 240, 0.1);
 }
+
 
 section.login .loginBx .top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 46px;
+    text-shadow: 2px 2px 2px gray;
 }
 section.login .loginBx .body {
     padding-bottom: 33px;
@@ -984,21 +992,30 @@ section.login .loginBx .body {
 section.login .loginBx .body em {
     display: block;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 20px;
     line-height: 22px;
     margin-bottom: 14px;
-    color: var(--primary);
+    /*color: var(--primary);*/
+    color: #FFFFFf;
+    text-shadow: 2px 2px 2px gray;
 }
 section.login .loginBx .body h1 {
     font-size: 22px;
     font-weight: 700;
     line-height: 30px;
     margin-bottom: 20px;
+    color: #8BACD9;
 }
 section.login .loginBx .body .info-msg {
     margin-bottom: 23px;
 }
-
+.loginFont {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 30px;
+    margin-bottom: 20px;
+    color: #8BACD9 !important;
+}
 
 /* ASIDE -- LNB */
 aside .page-tit {

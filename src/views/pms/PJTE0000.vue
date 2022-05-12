@@ -7,7 +7,7 @@
       </div>
       <div class="body">
         <em>
-          로그인
+          LOGIN
         </em>
         <h1>
           최초비밀번호를 변경해야 로그인할 수 있습니다. <br>
@@ -15,34 +15,36 @@
         </h1>
         <span class="info-msg">
           <i class="ic-info"></i>
-          <p>최초비밀번호 : 사번 + 211111</p>
-        </span>
+          <p style="color: #FFFFFF !important;">최초비밀번호 : 사번 + 211111</p>
+        </span><br>
         <table class="form-table">
           <tbody>
           <tr>
-            <th>프로젝트</th>
+            <th class="loginFont">프로젝트</th>
             <td>
-              <select v-model="pjt_selected" style="width: 300px;">
+              <select v-model="pjt_selected" style="width: 300px; border-radius: 10px;">
                 <option
                     v-for   = "(pjt_list,idx) in pjt_list"
                     :key    ="idx"
                     v-text  ="pjt_list.text"
                     :value  ="pjt_list.value"
+                    style="font-size: 14px;border-left-width:0;border-right-width:0;border-top-width:0;border-bottom-width:1px;"
                 ></option>
               </select>
             </td>
           </tr>
           <tr>
-            <th>로그인 사번</th>
+            <th class="loginFont">로그인 사번</th>
             <td>
               <div class="input-searchWrap">
                 <input type="text"
                        placeholder="로그인 사번"
                        v-model="userId"
-                       style="width: 300px;"
+                       style="width: 255px; border-radius: 10px;"
                        @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn3"
+                        style="border-radius: 10px;"
                         @click="open_pjte9001(1)"
                 ></button>
               </div>
@@ -50,10 +52,10 @@
             </td>
           </tr>
           <tr>
-            <th>비밀번호</th>
+            <th class="loginFont">비밀번호</th>
             <td>
               <input type="password" placeholder="비밀번호" name="password"
-                     id="password" v-model="password" style="width: 300px;"
+                     id="password" v-model="password" style="width: 300px; border-radius: 10px;"
                      @keyup.enter="login"
               >
               <p class="mt-1" style="color:red; font-size: small" v-if="pwCheak">비밀번호는 필수 입력 사항입니다.</p>
@@ -62,9 +64,12 @@
           </tbody>
         </table>
       </div>
+      <br><br><br><br><br>
       <div class="bottom">
-        <base-button class="btn btn-primary" @click="login">로그인</base-button>
-        <base-button class="btn btn-primary" @click="passwordChg">비밀번호변경</base-button>
+        <div style="float: right">
+          <button class="btn btn-primary" @click="login">로그인</button>
+          <button class="btn btn-primary" @click="passwordChg">비밀번호변경</button>
+        </div>
         <modal :show.sync="modals.modal1">
           <h3 slot="header" class="modal-title" id="modal-title-default">비밀번호 변경</h3>
           <div class="modal-mid">
