@@ -21,7 +21,7 @@
               <input type="text"
                      placeholder="입력"
                      v-model="info.main_skill"
-                     style   = "width: 250px"
+                     style   = "width: 150px"
               >
             </div>
           </li>
@@ -30,7 +30,25 @@
               <input type="text"
                      placeholder="입력"
                      v-model="info.duty_txt"
-                     style   = "width: 272px"
+                     style   = "width: 150px"
+              >
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">경력주요기술
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.car_main_skill"
+                     style   = "width: 150px"
+              >
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">경력주요업무
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.car_duty_txt"
+                     style   = "width: 150px"
               >
             </div>
           </li>
@@ -1205,6 +1223,8 @@ export default {
         skill_grd_selected    : 'TTT',            // 기술등급
         main_skill            : '',               // 주요기술
         duty_txt              : '',               // 주요업무
+        car_main_skill        : '',               // 경력주요기술
+        car_duty_txt          : '',               // 경력주요업무
         man_no                : '',               // 인력번호
         man_nm                : '',               // 이름
         company_nm            : '',               // 재직처
