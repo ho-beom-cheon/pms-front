@@ -1260,7 +1260,7 @@ export default {
         },
         {
           header: '그룹유형명',
-          width: 100,
+          width: 200,
           name: 'grp_tymm',
           filter: { type: 'text'},
           editor : 'text'
@@ -1289,13 +1289,13 @@ export default {
         },
         {
           header: '그리드컬럼명1',
-          width: 150,
+          width: 200,
           name: 'grid_colm_nm1',
           editor : 'text'
         },
         {
           header: '그리드컬럼명2',
-          width: 150,
+          width: 200,
           name: 'grid_colm_nm2',
           editor : 'text'
         },
@@ -1425,17 +1425,18 @@ export default {
         {
           header: '그룹유형코드',
           width: 100,
+          align: 'center',
           name: 'grp_tycd',
         },
         {
           header: '세부유형코드',
-          width: 150,
+          width: 100,
           name: 'dtls_tycd',
           editor : 'text',
         },
         {
           header: '세부유형명',
-          width: 150,
+          width: 200,
           name: 'dtls_tynm',
           editor : 'text',
         },
