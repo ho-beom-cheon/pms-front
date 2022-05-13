@@ -904,25 +904,19 @@ export default {
               return false;
             }
           } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].prc_step_cd !== "300") {
+            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200" && data[i].prc_step_cd !== "300") {
               alert("권한이 부족합니다.")
               return false;
             }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300") { //권한 ID[300:IT]
-            if (data[i].prc_step_cd !== "400" && data[i].prc_step_cd !== "600") {
-              alert("권한이 부족합니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[400:현업]
-            if (data[i].prc_step_cd !== "500" && data[i].prc_step_cd !== "600") {
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT]
+            if (data[i].prc_step_cd !== "400") {
               alert("권한이 부족합니다.")
               return false;
             }
           }
           //권한ID[500:PM,600:PMO] - 모두 가능
           if(this.addCheak === 'N') {
-            if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-            if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+            if(data[i].atfl_mng_id === '' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100") )  { alert("단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
           }
         }
         /* 출력 영역  */
@@ -939,9 +933,6 @@ export default {
         if(data[i].crpe_no === null)      { alert("담당자 사번은 필수 입력 사항입니다");   return false;}
         if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
         if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
-
-
-
       }
       return  true;
     },
