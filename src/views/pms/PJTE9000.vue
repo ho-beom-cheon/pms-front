@@ -1141,12 +1141,14 @@ export default {
           width: 80,
           name: 'empnm',
           align: 'center',
+          filter: { type: 'text'},
           editor : 'text'
         },
         {
           header: '직급명',
           width: 80,
           name: 'rank_nm',
+          filter: 'select',
           editor : 'text'
         },
         {
@@ -1161,6 +1163,7 @@ export default {
           width: 100,
           name: 'bzcd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -1186,6 +1189,7 @@ export default {
           width: 100,
           name: 'aut_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -1213,6 +1217,7 @@ export default {
           width: 160,
           name: 'dept_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor : {
             type: 'select',
             options:{
@@ -1257,6 +1262,7 @@ export default {
           header: '그룹유형명',
           width: 100,
           name: 'grp_tymm',
+          filter: { type: 'text'},
           editor : 'text'
         },
         {
