@@ -449,6 +449,7 @@ export default {
     /* 그리드 Row onClick클릭 시 상세내용에 Bind */
     cellDataBind(currentRowData) {
       this.detail.ntar_bzcd_selected = currentRowData.ntar_bzcd;         // (상세)공지구분
+      this.$refs.combo2.$data.ntar_bzcd_selected = currentRowData.ntar_bzcd;
       this.detail.bkup_id_selected = currentRowData.bkup_id;             // (상세)백업ID
       this.detail.mng_id = currentRowData.mng_id;                        // (상세)관리ID
       this.detail.rgs_dt = currentRowData.rgs_dt;                        // (상세)공지일자
@@ -585,7 +586,7 @@ export default {
 
         bkup_id_selected: '0000000000',                                 // 백업ID
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
-        ntar_bzcd_selected: '100',        // 공지구분
+        ntar_bzcd_selected: this.ntar_bzcd_selected,        // 공지구분
         mng_id: this.mng_id,              // 관리ID
         rgs_dt: this.rgs_dt,              // 요청일자
         titl_txt: this.titl_txt,          // 제목내용
