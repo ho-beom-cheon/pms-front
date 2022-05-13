@@ -193,10 +193,18 @@ export default {
      // }
     },
     onClick(ev) {
+      debugger
       //console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
-      let gridData = this.$refs.grid.invoke("getRow",this.curRow);
+      let gridData = this.$refs.grid.invoke("getData");
+
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+
+      if(this.addCheak === 'Y'){
+        if(this.curRow === gridData.length-1){
+          return;
+        }
+      }
 
       if(ev.columnName === 'aplc_dtls_btn'){      //지원
         if(confirm("지원하시겠습니까?")===true) {
@@ -209,12 +217,12 @@ export default {
           }).then(res => { // 리턴값
             if (res.status == 200) {
               alert("지원 완료되었습니다.");
+              12
               this.fnSearch()
             }
           }).catch(e => {  //오류
             alert("지원 실패.");
           });
-
         }
       }
       if(ev.columnName === 'del_btn'){
@@ -273,7 +281,9 @@ export default {
     },
     //행추가
     gridAddRow() {
+      debugger
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      this.$refs.grid.invoke("setFrozenColumnCount", 0);
       if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
         this.addCheak = 'Y';
         this.$refs.grid.invoke("appendRow",
@@ -283,18 +293,19 @@ export default {
               bkup_id: "0000000000",
             },
             {focus: true}); //, at: 0  내림차순되게함
-        this.fnEnable();
       } else {
         alert('행추가 권한이 없습니다.');
       }
-
+      this.fnEnable();
     },
     // 추가한 행 편집 활성화
     fnEnable() {
+
       // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
       this.$refs.grid.invoke("enableRow", this.NewRow-1);
-
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "aplc_dtls_btn");
+      this.$refs.grid.invoke("disableCell", this.NewRow-1, "del_btn");
     },
     //행삭제
     gridDelRow() {
