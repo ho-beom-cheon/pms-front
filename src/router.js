@@ -14,7 +14,6 @@ const EditSample = () => import(/* webpackChunkName: "edit-sample" */ './views/e
 const GridSample = () => import(/* webpackChunkName: "grid-sample" */ './views/example/GridSample.vue'); menuList.push(GridSample); menuListStr.push("GridSample");
 const ExGridAndExcel = () => import(/* webpackChunkName: "grid-excel" */ './views/example/ExGridAndExcel.vue'); menuList.push(ExGridAndExcel); menuListStr.push("ExGridAndExcel");
 const ExTran = () => import(/* webpackChunkName: "exTran" */ './views/example/ExTran.vue'); menuList.push(ExTran); menuListStr.push("ExTran");
-const NetMain = () => import(/* webpackChunkName: "netMain" */ './views/net/NetMain.vue'); menuList.push(NetMain); menuListStr.push("NetMain");
 
 /* PMS */
 const PJTE0000 = () => import(/* webpackChunkName: "PJTE0000" */ './views/pms/PJTE0000.vue'); menuList.push(PJTE0000); menuListStr.push("login");

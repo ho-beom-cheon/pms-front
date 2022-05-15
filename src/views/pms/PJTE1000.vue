@@ -28,6 +28,13 @@
       </section>
       <!-- page contents -->
       <section class="page-contents">
+        <div class="day-div">
+          <div class="today">
+            <p>What day is it today?</p>
+            <div class="day-div"><number class="number" :from="0" :to="2022" :duration="2"/>/<number class="number" :from="0" :to="5" :duration="2"/> /<number class="number" :from="0" :to="15" :duration="2"/>
+            </div>
+          </div>
+        </div>
         <div class="multiGridWrap-a">
           <div class="div1-a" :hidden="prjt_gbn">
             <div class="div-header-a"><h2>TO-DO현황</h2>
@@ -699,4 +706,26 @@ export default {
 
 </script>
 <style>
+.today {
+  margin: 20px auto;
+  text-align: center;
+}
+.today p {
+  font-size: 50px;
+  line-height: 1;
+}
+.day-div {
+  margin: 80px 0 0 0;
+  padding: 10px;
+  font-size: 60px;
+  font-weight: bold;
+  color: #707070;
+}
+.number {
+  letter-spacing: 2px;
+  /*background: #FFDBDB;*/
+  padding: 10px 10px;
+  border-radius: 20px;
+  align-items: center;
+}
 </style>

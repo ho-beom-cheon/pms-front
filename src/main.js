@@ -17,16 +17,20 @@ fd
 */
 import Vue from "vue";
 import Vuex from 'vuex';
+import Vuebar from 'vuebar';
 import VueRouter from 'vue-router';
 import App from "./App.vue";
 import { router } from "./router";
 import store from "./store/index";
 import Argon from "./plugins/argon-kit";
+import VueNumber from 'vue-number-animation';  // number 애니메이션
 import './registerServiceWorker'
 
 Vue.config.productionTip = false;
 Vue.use(Argon);
 Vue.use(Vuex);
+Vue.use(Vuebar);
+Vue.use(VueNumber);
 Vue.use(VueRouter);
 
 new Vue({
