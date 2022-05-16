@@ -673,10 +673,10 @@ export default {
               let I1 = {
                 I1: {
                   t: 's',
-                  v: '사번',
-                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
-                  h: '사번',
-                  w: 'crpe_no'
+                  v: '예상시작일',
+                  r: '<t>예상시작일</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '예상시작일',
+                  w: 'frcs_sta_dt'
                 }
               }
               wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
@@ -684,10 +684,10 @@ export default {
               let J1 = {
                 J1: {
                   t: 's',
-                  v: '사번',
-                  r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
-                  h: '사번',
-                  w: 'crpe_no'
+                  v: '예상종료일',
+                  r: '<t>예상종료일</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '예상종료일',
+                 w: 'frcs_end_dt'
                 }
               }
               wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
@@ -723,7 +723,7 @@ export default {
                   v: 'PL',
                   r: '<t>PL</t><phoneticPr fontId="1" type="noConversion"/>',
                   h: 'PL',
-                  w: 'PL'
+                  w: 'pl_enm'
                 }
               }
               wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
@@ -792,6 +792,7 @@ export default {
               this.excelUplod = 'Y'
               alert('업로드 파일이 적용되었습니다.')
               this.$refs.grid.invoke('resetData', gridExcelData)
+
               this.gridData = this.$refs.grid.invoke("getData");
             } catch (e) {
               console.log(e);
