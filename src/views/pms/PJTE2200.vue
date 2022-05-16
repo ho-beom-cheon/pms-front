@@ -145,7 +145,7 @@
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
             <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
-            <button class="btn btn-filter-p" @click="fnSave">조회</button>
+            <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
