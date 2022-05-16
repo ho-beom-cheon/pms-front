@@ -338,6 +338,7 @@ export default {
     // 저장 버튼
     fnSave(){
       if(this.excelUplod === 'Y') {
+        alert(this.excelUplod)
         this.gridData = this.$refs.grid.invoke("getData");
         axiosService.post("/PJTE2100/create", {
           excelUplod   : this.excelUplod,
@@ -1196,7 +1197,7 @@ export default {
         {
           header: '진행현황',
           width: 250,
-          align: 'center',
+          align: 'left',
           name: 'prg_txt',
           editor: 'text',
         },
