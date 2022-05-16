@@ -97,6 +97,7 @@ export default {
         {id: 'PJTE9120', path: '/PJTE9120', name: '준비중인프로젝트현황'},
         {id: 'PJTE9310', path: '/PJTE9310', name: '투입인력현황'},
         {id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리'},
+        {id: 'PJTE9300', path: '/PJTE9300', name: '프로젝트인력요청현황'},
       ],
     }
   },

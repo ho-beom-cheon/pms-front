@@ -190,10 +190,8 @@ export default {
       } else { //취소
         return false;
       }
-     // }
     },
     onClick(ev) {
-      debugger
       //console.log("클릭" + ev.rowKey);
       this.curRow = ev.rowKey;
       let gridData = this.$refs.grid.invoke("getData");
@@ -217,7 +215,6 @@ export default {
           }).then(res => { // 리턴값
             if (res.status == 200) {
               alert("지원 완료되었습니다.");
-              12
               this.fnSearch()
             }
           }).catch(e => {  //오류
@@ -243,7 +240,6 @@ export default {
             }
           }).catch(e => {  //오류
             alert("삭제 실패.");
-
           });
         }
       }
@@ -253,10 +249,6 @@ export default {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
     },
-/*    gridInit() {
-      this.$refs.grid.invoke("clear");
-    },
-*/
     init() {
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         //  저장 버튼 숨기기
@@ -281,7 +273,6 @@ export default {
     },
     //행추가
     gridAddRow() {
-      debugger
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       this.$refs.grid.invoke("setFrozenColumnCount", 0);
       if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
@@ -300,7 +291,6 @@ export default {
     },
     // 추가한 행 편집 활성화
     fnEnable() {
-
       // 새로 ADD한 Row를 enable시킴
       this.NewRow = this.$refs.grid.invoke("getRowCount");
       this.$refs.grid.invoke("enableRow", this.NewRow-1);
