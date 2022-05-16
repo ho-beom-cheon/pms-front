@@ -569,6 +569,7 @@ export default {
     //   this.pop = window.open("../SWZP0041/", "open_page", "width=1000, height=800");
     // },
     fnSearch() {
+      this.excelUplod = 'N'
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
