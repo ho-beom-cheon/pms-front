@@ -605,6 +605,7 @@ export default {
       if(this.searchVaildation() === false) {
         return;
       }
+      this.excelUplod = 'N'
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
     },
