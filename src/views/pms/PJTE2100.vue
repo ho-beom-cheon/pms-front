@@ -348,6 +348,8 @@ export default {
         }).then(res => {
           console.log(res);
           if (res.data) {
+            alert("저장이 완료되었습니다.")
+            this.fnSearch()
           }
         }).catch(e => {
           alert("이미 등록된 프로그램입니다.")
@@ -676,41 +678,30 @@ export default {
             wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
             wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
             wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
-            wb.Sheets[sheetName].H1.w = "frcs_sta_dt"
-            wb.Sheets[sheetName].H2.w = "frcs_end_dt"
+            let H1 = {
+              H1: {
+                t: 's',
+                v: '예상시작일',
+                r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
+                h: '예상시작일',
+                w: 'frcs_sta_dt'
+              }
+            }
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], H1)
+            wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
             let I1 = {
               I1: {
                 t: 's',
-                v: '예상종료일자',
+                v: '예상종료일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '예상종료일자',
+                h: '예상종료일',
                 w: 'frcs_end_dt'
               }
             }
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
             wb.Sheets[sheetName].I2.w = "frcs_end_dt"
-            let J1 = {
-              J1: {
-                t: 's',
-                v: '실제시작일자',
-                r: '<t>실제시작일자</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '실제시작일자',
-                w: 'sta_dt'
-              }
-            }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
-            wb.Sheets[sheetName].J2.w = "sta_dt"
-            let K1 = {
-              K1: {
-                t: 's',
-                v: '실제종료일자',
-                r: '<t>실제종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '실제종료일자',
-                w: 'end_dt'
-              }
-            }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
-            wb.Sheets[sheetName].K2.w = "end_dt"
+            wb.Sheets[sheetName].J1.w = "sta_dt"
+            wb.Sheets[sheetName].K1.w = "end_dt"
             wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
             wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
             wb.Sheets[sheetName].N1.w = "prc_step_cd"
@@ -767,27 +758,6 @@ export default {
             let rowObj_copy = [];
 
             for (let n = 1; n < rowObj.length; n++) {
-                if(isNaN(rowObj[n].frcs_sta_dt) === false && rowObj[n].frcs_sta_dt !== '') {
-                  if(this.checkSpecial(rowObj[n].frcs_sta_dt)){
-                    console.log("날짜 특수문자 포함 여부 확인 ::", rowObj[n].frcs_sta_dt)
-                  }
-                  rowObj[n].frcs_sta_dt = this.excelDateToJSDate(rowObj[n].frcs_sta_dt)
-                }
-                if(isNaN(rowObj[n].frcs_end_dt) === false && rowObj[n].frcs_end_dt !== '') {
-                  rowObj[n].frcs_end_dt = this.excelDateToJSDate(rowObj[n].frcs_end_dt)
-                }
-                if(isNaN(rowObj[n].sta_dt) === false && rowObj[n].sta_dt !== '') {
-                  rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
-                }
-                if (isNaN(rowObj[n].end_dt) === false && rowObj[n].end_dt !== '') {
-                  rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
-                }
-                if (isNaN(rowObj[n].pl_cnf_dt) === false && rowObj[n].pl_cnf_dt !== '') {
-                  rowObj[n].pl_cnf_dt = this.excelDateToJSDate(rowObj[n].pl_cnf_dt)
-                }
-                if (isNaN(rowObj[n].dvlpe_cnf_dt) === false && rowObj[n].dvlpe_cnf_dt !== '') {
-                  rowObj[n].dvlpe_cnf_dt = this.excelDateToJSDate(rowObj[n].dvlpe_cnf_dt)
-                }
                 rowObj_copy[n - 1] = rowObj[n];
               }
             gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
