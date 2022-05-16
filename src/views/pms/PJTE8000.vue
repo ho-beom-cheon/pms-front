@@ -86,7 +86,7 @@
         <div class="div0-d">
           <div class="div3-b">
             <div class="div-header-b"><h2>금주 주간보고 등록</h2>
-              <ul class="filter-btn"><p>* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회 가능합니다.]</p>
+              <ul class="filter-btn"><p>* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</p>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
               </ul>
             </div>
@@ -216,7 +216,7 @@
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="이슈내용을 입력해주세요.(이슈내용은 프로젝트 PM 또는 관리자만 조회 가능합니다.)"
+                                placeholder="이슈내용을 입력해주세요.(이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.)"
                                 v-model="detail.iss_txt"
                                 style="width: 685px;height:80px;"
                                 @dblclick="modalView(2)"
@@ -392,7 +392,7 @@
                       <textarea cols="140"
                                 rows="5"
                                 v-model="detail.bef_iss_txt"
-                                placeholder="이슈내용은 프로젝트 PM 또는 관리자만 조회 가능합니다."
+                                placeholder="이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다."
                                 readonly="readonly"
                                 style="width: 685px;height:80px;"
                                 @dblclick="modalView(5)"
@@ -595,7 +595,6 @@ export default {
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
     dept_cd_change(params)             {this.info.dept_cd_selected = params},
     // 금주주간보고 등록 차수,프로젝트명
-
     real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
 
     week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
