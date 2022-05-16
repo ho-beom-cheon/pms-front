@@ -136,14 +136,16 @@
           <ul class="filter-btn">
             <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
             <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-            <button class="btn btn-filter-e">
-              <label for="file">엑셀업로드</label>
-              <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
-            </button>
+            <div title="업무구분과 차수를 선택한 후 엑셀을 업로드 할 수 있습니다.">
+              <button class="btn btn-filter-e" v-bind:disabled="this.info.bzcd_selected=='TTT'||this.info.sqn_cd_selected=='TTT'">
+                <label for="file">엑셀업로드</label>
+                <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
+              </button>
+            </div>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
             <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
-            <button class="btn btn-filter-p" @click="fnSearch">조회</button>
+            <button class="btn btn-filter-p" @click="fnSave">조회</button>
           </ul>
         </div>
       </section>
@@ -344,6 +346,8 @@ export default {
         axiosService.post("/PJTE2200/create", {
           excelUplod            : this.excelUplod,
           gridData              : this.gridData,
+          bzcd                  : this.info.bzcd_selected,
+          sqn_cd                : this.info.sqn_cd_selected,
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
@@ -595,25 +599,18 @@ export default {
               return false;
             }
           } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].prc_step_cd !== "300") {
+            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200" && data[i].prc_step_cd !== "300") {
               alert("권한이 부족합니다.")
               return false;
             }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300") { //권한 ID[300:IT]
-            if (data[i].prc_step_cd !== "400" && data[i].prc_step_cd !== "600") {
-              alert("권한이 부족합니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[400:현업]
-            if (data[i].prc_step_cd !== "500" && data[i].prc_step_cd !== "600") {
+          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT, 400:현업]
+            if (data[i].prc_step_cd !== "400") {
               alert("권한이 부족합니다.")
               return false;
             }
           }
-          //권한ID[500:PM,600:PMO] - 모두 가능
 
-          if(data[i].atfl_mng_id === null)  { alert("단위테스트결과서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
-          if(data[i].pal_atfl_mng_id === null)  { alert("설계서 첨부파일관리ID는 필수 입력 사항입니다");   return false;}
+          if((data[i].atfl_mng_id === null || data[i].atfl_mng_id === "") && data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" )  { alert("통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
         }
         /* 출력 영역  */
         if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
@@ -623,11 +620,9 @@ export default {
         if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
         if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
         if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
-        if(data[i].dvlpe_cnf_dt === null || data[i].dvlpe_cnf_dt === "")   { alert("개발자확인일자는 필수 입력 사항입니다");   return false;}
-        if(data[i].rqu_sbh_id === null || data[i].rqu_sbh_id === "")       { alert("요구사항 ID는 필수 입력 사항입니다");     return false;}
-        if(data[i].tst_rst === null || data[i].tst_rst === "")             { alert("테스트 결과는 필수 입력 사항입니다");     return false;}
-        if(data[i].tst_achi_rst  === null || data[i].tst_achi_rst  === "") { alert("테스트 수행결과는 필수 입력 사항입니다");  return false;}
-        if(data[i].atfl_mng_id  === null || data[i].atfl_mng_id  === "")   { alert("첨부파일관리 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")         { alert("개발자는 필수 입력 사항입니다");    return false;}
+        if(data[i].pl_eno === null || data[i].pl_eno === "")               { alert("PL는 필수 입력 사항입니다");    return false;}
+        if(data[i].crpe_eno === null || data[i].crpe_eno === "")           { alert("담당현업은 필수 입력 사항입니다");    return false;}
         if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
         if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
       }
@@ -786,6 +781,7 @@ export default {
               wb.Sheets[sheetName].AL1.w = "tst_achi_rst"
 
               let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+              console.log("rowObj", rowObj);
               let rowObj_copy = [];
               for (let n = 1; n < rowObj.length; n++) {
                 rowObj_copy[n - 1] = rowObj[n];
@@ -797,6 +793,7 @@ export default {
               this.$refs.grid.invoke('resetData', gridExcelData)
               this.gridData = this.$refs.grid.invoke("getData");
             } catch (e) {
+              console.log(e);
               alert('업로드 실패')
             }
           }
