@@ -105,10 +105,12 @@
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e">
+              <div title="업무구분을 선택한 후 엑셀을 업로드 할 수 있습니다.">
+              <button class="btn btn-filter-e" v-bind:disabled="this.info.bzcd_selected=='TTT'">
                 <label for="file">엑셀업로드</label>
                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
               </button>
+              </div>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
               <button class="btn btn-filter-b" @click="gridAddRow" :disabled="validated">행추가</button>
               <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
@@ -340,6 +342,7 @@ export default {
         axiosService.post("/PJTE2100/create", {
           excelUplod   : this.excelUplod,
           gridData     : this.gridData,
+          bzcd         : this.info.bzcd_selected,
           prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
