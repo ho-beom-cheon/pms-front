@@ -145,7 +145,7 @@
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
             <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
-            <button class="btn btn-filter-p" @click="fnSearch">조회</button>
+            <button class="btn btn-filter-p" @click="fnSave">조회</button>
           </ul>
         </div>
       </section>
@@ -790,8 +790,7 @@ export default {
               console.log("gridExcelData ::", gridExcelData)
               this.excelUplod = 'Y'
               alert('업로드 파일이 적용되었습니다.')
-              this.$refs.grid.resetData(gridExcelData);
-              // this.$refs.grid.invoke('resetData', gridExcelData)
+              this.$refs.grid.invoke('resetData', gridExcelData)
               this.gridData = this.$refs.grid.invoke("getData");
             } catch (e) {
               console.log(e);
@@ -1279,9 +1278,5 @@ export default {
 }
 .empBtnColor {
   background: #BEBEBE!important;
-}
-.tooltip {
-  position: relative;
-  display: block;
 }
 </style>
