@@ -339,21 +339,28 @@ export default {
     fnSave(){
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
-        axiosService.post("/PJTE2100/create", {
-          excelUplod   : this.excelUplod,
-          gridData     : this.gridData,
-          bzcd         : this.info.bzcd_selected,
-          prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-          login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
-        }).then(res => {
-          console.log(res);
-          if (res.data) {
-            alert("저장이 완료되었습니다.")
-            this.fnSearch()
+        if (this.gridData.length !== 0) {
+          if (this.vaildation(this.gridData, "2") === true) {
+            axiosService.post("/PJTE2100/create", {
+              excelUplod: this.excelUplod,
+              bzcd: this.info.bzcd_selected,
+              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              gridData: this.gridData
+            }).then(res => {
+              console.log(res);
+              if (res.data) {
+                alert("엑셀 업로드 저장이 완료되었습니다.")
+                this.fnSearch()
+              }
+            }).catch(e => {
+              alert("등록중 오류 ::"+ e)
+            })
+          } else {
+            return;
           }
-        }).catch(e => {
-          alert("이미 등록된 프로그램입니다.")
-        })
+        }
       } else if(this.excelUplod === 'N') {
         // 변경 사항 유무 체크
         if (this.$refs.grid.invoke("isModified") === false) {
@@ -375,27 +382,27 @@ export default {
             if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
               for (let i = 0; i < this.createdRows.length; i++) {
                 if (this.createdRows[i].dvlp_dis_cd === "900") {
-                  alert("개발구분 삭제 권한이 없습니다.");
+                  alert((i+1)+"번째 개발구분 삭제 권한이 없습니다.");
                   return;
                 }
               }
             }
             axiosService.post("/PJTE2100/create", {
               excelUplod: this.excelUplod,
-              gridData: this.createdRows,
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              gridData: this.createdRows
             }).then(res => {
               console.log(res)
               if (res.data === true) {
-                alert("저장이 완료되었습니다.")
-                // 저장 후 변경 데이터 배열 비움
-                this.$refs.grid.invoke("clearModifiedData")
+                alert("신규 개발현황이 저장이 완료되었습니다.")
                 this.excelUplod = 'N'
+                this.fnSearch()
               } else {
-                alert("이미 등록된 프로그램입니다.")
+                alert("등록중 오류 ::"+ e)
+                return;
               }
-              this.fnSearch()
             })
           } else {
             return;
@@ -407,22 +414,29 @@ export default {
               if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
                 for (let i = 0; i < this.updatedRows.length; i++) {
                   if (this.updatedRows[i].dvlp_dis_cd === "900") {
-                    alert("삭제 권한이 없습니다.");
+                    alert((i+1)+"번째 삭제 권한이 없습니다.");
                     return;
                   }
                 }
               }
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-              this.$refs.grid.invoke("setRequestParams", this.login);
-              // update api 요청
-              this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-              // 저장 후 변경 데이터 배열 비움
-              this.$refs.grid.invoke("clearModifiedData")
-              this.excelUplod = 'N'
+              axiosService.post("/PJTE2100/update", {
+                login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+                login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+                login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+                gridData: this.updatedRows
+              }).then(res => {
+                console.log(res)
+                if (res.data === true) {
+                  alert("변경된 정보가 수정되었습니다.")
+                  this.excelUplod = 'N'
+                  this.fnSearch()
+                } else {
+                  alert("수정중 오류 ::"+ e)
+                  return;
+                }
+              })
             } catch (e) {
-              console.log("업데이트 오류 ::", e);
+              alert("수정중 오류 ::"+ e)
             }
           } else {
             return;
@@ -439,15 +453,25 @@ export default {
       }
       // 변경 데이터 저장
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-
       if(this.updatedRows.length !== 0){
         if(this.vaildation(this.updatedRows, "2") === true) {
           try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-            // update api 요청
-            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
+            axiosService.post("/PJTE2100/update", {
+              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              gridData: this.updatedRows
+            }).then(res => {
+              console.log(res)
+              if (res.data === true) {
+                alert("변경된 기타정보가 수정되었습니다.")
+                this.excelUplod = 'N'
+                this.fnSearch()
+              } else {
+                alert("수정중 오류 ::"+ e)
+                return;
+              }
+            })
           } catch (e) {
             console.log("업데이트 오류 ::", e);
           }
@@ -455,8 +479,6 @@ export default {
           this.$refs.grid.invoke("reloadData");
         }
       }
-      // 저장 후 변경 데이터 배열 비움
-      this.$refs.grid.invoke("clearModifiedData")
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
@@ -873,18 +895,19 @@ export default {
 
           /* 권한 ID에 따른 처리단계 체크 */
           if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
+            if(data[i].prc_step_cd === null)  { alert((i+1)+"번째 처리단계는 필수 입력 사항입니다");      return false;}
             if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
-              alert("권한이 부족합니다.")
+              alert((i+1)+"번째 권한이 부족합니다. 개발자만 가능한 처리단계입니다.")
               return false;
             }
           } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
             if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200" && data[i].prc_step_cd !== "300") {
-              alert("권한이 부족합니다.")
+              alert((i+1)+"번째 권한이 부족합니다. PL만 가능한 처리단계입니다.")
               return false;
             }
           } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT]
             if (data[i].prc_step_cd !== "400") {
-              alert("권한이 부족합니다.")
+              alert((i+1)+"번째 권한이 부족합니다. 담당현업만 가능한 처리단계입니다.")
               return false;
             }
           }
@@ -894,19 +917,16 @@ export default {
           }
         }
         /* 출력 영역  */
-        if(data[i].bzcd === null)         { alert("업무구분은 필수 입력 사항입니다");      return false;}
-        if(data[i].pgm_id === null)       { alert("프로그램ID는 필수 입력 사항입니다");    return false;}
-        if(data[i].pgm_nm === null)       {  alert("프로그램명은 필수 입력 사항입니다");   return false;}
-        if(data[i].dvlp_dis_cd === null)  { alert("개발구분은 필수 입력 사항입니다");      return false;}
-        if(data[i].pgm_dis_cd === null)   { alert("프로그램 구분은 필수 입력 사항입니다");  return false;}
-        if(data[i].frcs_sta_dt === null)  { alert("예상시작일자는 필수 입력 사항입니다");   return false;}
-        if(data[i].frcs_end_dt === null)  { alert("예상종료일자는 필수 입력 사항입니다");   return false;}
-        if(data[i].prc_step_cd === null)  { alert("처리단계는 필수 입력 사항입니다");      return false;}
-        if(data[i].dvlpe_no === null)     { alert("개발자 사번은 필수 입력 사항입니다");   return false;}
-        if(data[i].pl_no === null)        { alert("PL 사번은 필수 입력 사항입니다");      return false;}
-        if(data[i].crpe_no === null)      { alert("담당자 사번은 필수 입력 사항입니다");   return false;}
-        if(data[i].bkup_id === null)      { alert("백업 ID는 필수 입력 사항입니다");      return false;}
-        if(data[i].prjt_id === null)      { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
+        if(data[i].bzcd === null)         { alert((i+1)+"번째 업무구분은 필수 입력 사항입니다");      return false;}
+        if(data[i].pgm_id === null)       { alert((i+1)+"번째 프로그램ID는 필수 입력 사항입니다");    return false;}
+        if(data[i].pgm_nm === null)       {  alert((i+1)+"번째 프로그램명은 필수 입력 사항입니다");   return false;}
+        if(data[i].dvlp_dis_cd === null)  { alert((i+1)+"번째 개발구분은 필수 입력 사항입니다");      return false;}
+        if(data[i].pgm_dis_cd === null)   { alert((i+1)+"번째 프로그램 구분은 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null)  { alert((i+1)+"번째 예상시작일은 필수 입력 사항입니다");   return false;}
+        if(data[i].frcs_end_dt === null)  { alert((i+1)+"번째 예상종료일은 필수 입력 사항입니다");   return false;}
+        if(data[i].dvlpe_no === null)     { alert((i+1)+"번째 개발자 사번은 필수 입력 사항입니다");   return false;}
+        if(data[i].pl_no === null)        { alert((i+1)+"번째 PL 사번은 필수 입력 사항입니다");      return false;}
+        if(data[i].crpe_no === null)      { alert((i+1)+"번째 담당자 사번은 필수 입력 사항입니다");   return false;}
       }
       return  true;
     },
@@ -950,6 +970,9 @@ export default {
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
       pal_atfl_mng_id     : '',  // 설계서 첨부파일관리
       pal_atfl_mng_id_yn  : '',  // 설계서 첨부파일관리
+      up_aut_cd : '',
+      up_emp_no : '',
+      up_proj_id : '',
 
       info : {
         pgm_id                : this.pgm_id,          // 프로그램ID
@@ -1007,7 +1030,7 @@ export default {
         api: {
           readData   : { url: process.env.VUE_APP_API + '/PJTE2100/select', method: 'GET' },
           createData : { url: process.env.VUE_APP_API + '/PJTE2100/create', method: 'POST'},
-          updateData : { url: process.env.VUE_APP_API + '/PJTE2100/update', method: 'PUT'},
+          updateData : { url: process.env.VUE_APP_API + '/PJTE2100/update', method: 'POST'},
           deleteData : { url: process.env.VUE_APP_API + '/PJTE2100/delete', method: 'PUT'},
         },
         initialRequest: false,
@@ -1136,7 +1159,7 @@ export default {
           disabled: true,
         },
         {
-          header: '개발자확인일자',
+          header: '개발자확인일',
           width: 110,
           align: 'center',
           name: 'dvlpe_cnf_dt',
