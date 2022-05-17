@@ -82,7 +82,7 @@
               <li id="PJTE4000"><a href="/PJTE4000">{{ menu_list[6].name }}</a></li>
               <li id="PJTE5000"><a href="/PJTE5000">{{ menu_list[7].name }}</a></li>
               <li id="PJTE6000"><a href="/PJTE6000">{{ menu_list[8].name }}</a></li>
-              <li id="PJTE7000"><a href="/PJTE7100">{{ menu_list[9].name }}</a></li>
+              <li id="PJTE7100"><a href="/PJTE7100">{{ menu_list[9].name }}</a></li>
               <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[10].name }}</a></li>
               <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[11].name }}</a></li>
               <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[12].name }}</a></li>
