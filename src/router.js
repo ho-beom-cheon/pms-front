@@ -30,6 +30,7 @@ const PJTE5000 = () => import(/* webpackChunkName: "PJTE5000" */ './views/pms/PJ
 const PJTE6000 = () => import(/* webpackChunkName: "PJTE6000" */ './views/pms/PJTE6000.vue'); menuList.push(PJTE6000); menuListStr.push("PJTE6000");
 const PJTE6001 = () => import(/* webpackChunkName: "PJTE6001" */ './views/pms/PJTE6001.vue'); menuList.push(PJTE6001); menuListStr.push("PJTE6001");
 const PJTE7000 = () => import(/* webpackChunkName: "PJTE7000" */ './views/pms/PJTE7000.vue'); menuList.push(PJTE7000); menuListStr.push("PJTE7000");
+const PJTE7100 = () => import(/* webpackChunkName: "PJTE7100" */ './views/pms/PJTE7100.vue'); menuList.push(PJTE7100); menuListStr.push("PJTE7100");
 const PJTE8000 = () => import(/* webpackChunkName: "PJTE8000" */ './views/pms/PJTE8000.vue'); menuList.push(PJTE8000); menuListStr.push("PJTE8000");
 const PJTE9000 = () => import(/* webpackChunkName: "PJTE9000" */ './views/pms/PJTE9000.vue'); menuList.push(PJTE9000); menuListStr.push("PJTE9000");
 const PJTE9001 = () => import(/* webpackChunkName: "PJTE9001" */ './views/pms/PJTE9001.vue'); menuList.push(PJTE9001); menuListStr.push("PJTE9001");

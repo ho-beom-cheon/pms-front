@@ -902,10 +902,11 @@
 
     <!-- As-Is대To-Be매핑 시작 -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-51'">
-      <div class="item-con"><label>As-Is프로그램유형</label>
+      <div class="item-con">As-Is프로그램유형
         <select
+            id      = "as_pgm_dis_cd"
             v-model = "as_pgm_dis_cd_selected"
-            style   = "width: 230px"
+            style   = "width: 415px;margin-left : 5px"
             @change = "as_pgm_dis_cd_change"
         >
           <option
@@ -919,10 +920,10 @@
     </li>
 
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-52'">
-      <div class="item-con"><label>전환상태</label>
+      <div class="item-con"  style   = "margin-left : 43px">전환상태
         <select
             v-model = "trn_stt_cd_selected"
-            style   = "width: 230px"
+            style   = "width: 230px;margin-left : 5px"
             @change = "trn_stt_cd_change"
         >
           <option
@@ -1363,8 +1364,8 @@ export default {
                 this.CD1000000051T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000051N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 52) {
-                this.CD1000000051T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
-                this.CD1000000051N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+                this.CD1000000052T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000052N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
