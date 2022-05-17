@@ -157,14 +157,17 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSave() {
+      // 프로젝트ID가 없으면 INSERT
+      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
+      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
 
-        if (confirm("정말 저장하시겠습니까??") == true) {
-          // 프로젝트ID가 없으면 INSERT
-          this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
-          this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
-
+        if(this.createdRows.length === 0 && this.updatedRows.length === 0 ){
+          alert("신규추가 및 변경된 정보가 없습니다.");
+          return;
+        }
+        if (confirm("정말 저장하시겠습니까?") == true) {
           if (this.createdRows.length !== 0) {
-            axiosService.put("/PJTE9300/insert_9300_01", {
+            axiosService.post("/PJTE9300/insert_9300_01", {
               bkup_id: '0000000000',
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
@@ -184,11 +187,11 @@ export default {
           }
 
           if (this.updatedRows.length !== 0) {
-              axiosService.put("/PJTE9300/update_9300_01", {
-                gridData: this.updatedRows,
+              axiosService.post("/PJTE9300/update_9300_01", {
                 bkup_id: '0000000000',                                  //백업ID
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  //프로젝트ID
                 login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
+                gridData: this.updatedRows,
               }).then(res => {
                 if (res.data === true) {
                   alert("저장이 완료되었습니다.");
@@ -408,10 +411,11 @@ export default {
       columns: [
         {
           header: '프로젝트명',
-          width: 350,
+          width: 320,
           name: 'real_prjt_id',
           align: 'left',
           formatter: 'listItemText',
+          filter: 'select',
           editor : {
             type : 'select',
             options:{
@@ -421,7 +425,7 @@ export default {
         },
         {
           header: '투입예정일자',
-          width: 90,
+          width: 110,
           name: 'sch_ent_dt',
           align: 'center',
           format: 'yyyy-mm-dd',
@@ -430,7 +434,7 @@ export default {
         },
         {
           header: '등급',
-          width: 50,
+          width: 80,
           name: 'skill_grd',
           align: 'center',
           formatter: 'listItemText',
@@ -475,7 +479,7 @@ export default {
         },
         {
           header: '등록자',
-          width: 90,
+          width: 70,
           align: 'center',
           name: 'opr_nm',
         },
