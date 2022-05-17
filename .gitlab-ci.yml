@@ -4,8 +4,21 @@ variables:
   GIT_STRATEGY: clone
 
 stages:
+  - test
   - verify
   - publish
+
+test:
+  image: node:14.18.1
+  stage: test
+  before_script:
+    - echo "before_script"
+    - rm -rf ./node_modules ./yarn.lock ./package-lock.json
+    - npm cache clear --force
+    - npm install --save --legacy-peer-deps
+  script:
+    - echo "build pms"
+    - npm run build
 
 build-publish:
   image: node:14.18.1
@@ -15,6 +28,7 @@ build-publish:
   before_script:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
+    - npm cache clear --force
     - npm install --save --legacy-peer-deps
   script:
     - echo "build pms"
@@ -26,7 +40,8 @@ build-publish:
     - sudo systemctl status nginx
     - sudo netstat -nltp
   when: manual
-
+  only:
+    - master
 
 sonarqube_master:
   stage: verify

@@ -21,7 +21,7 @@
               <input type="text"
                      placeholder="입력"
                      v-model="info.main_skill"
-                     style   = "width: 250px"
+                     style   = "width: 150px"
               >
             </div>
           </li>
@@ -30,7 +30,25 @@
               <input type="text"
                      placeholder="입력"
                      v-model="info.duty_txt"
-                     style   = "width: 272px"
+                     style   = "width: 150px"
+              >
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">경력주요기술
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.car_main_skill"
+                     style   = "width: 150px"
+              >
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">경력주요업무
+              <input type="text"
+                     placeholder="입력"
+                     v-model="info.car_duty_txt"
+                     style   = "width: 150px"
               >
             </div>
           </li>
@@ -628,8 +646,7 @@ export default {
   mounted() {
     // 화면 접속 시 데이터 조회
     this.fnSearch();
-    // 화면 초기화
-    this.init();
+
     window.pms_register = this;
   },
   updated(){
@@ -661,6 +678,7 @@ export default {
         this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
       }
     },
+
     // 저장 버튼
     fnSave(){
       if(this.detail.man_no != '') {
@@ -777,10 +795,11 @@ export default {
       // 현재 Row 가져오기
       this.curRow = ev.rowKey;
       this.info.current_man_no = this.$refs.grid1.invoke("getValue", this.curRow, "man_no") // ROW클릭 시 인력번호
+
       axiosService.get("/PJTE9005/select2", {
         params: {
           prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
-          bkup_id_selected: '0000000000',
+          bkup_id_selected: this.info.bkup_id_selected,
           current_man_no :this.$refs.grid1.invoke("getValue", this.curRow, "man_no")
         }
       }).then(res => {
@@ -802,8 +821,64 @@ export default {
 
     //조회
     fnSearch(){
+      this.setInitEmpData();
+      // 그리드 초기화
+      this.$refs.grid1.invoke("clear");
+      this.$refs.grid2.invoke("clear");
+      this.$refs.grid3.invoke("clear");
+
       this.$refs.grid1.invoke("setRequestParams", this.info);
       this.$refs.grid1.invoke("readData");
+
+    },
+
+    // 인적사항 데이터 초기화
+    setInitEmpData() {
+      this.detail.last_chg_dt         = ''           // 최종변경일자
+      this.detail.man_no              = ''                // 인력번호
+      this.detail.man_nm              = ''                // 이름
+      this.detail.rank_nm             = ''               // 직급명
+      this.detail.man_cd_selected     = ''                // 인력구분
+      this.$refs.combo2.$data.man_cd_selected = '';       // 인력구분(콤보)
+      this.detail.birthday            = ''              // 생년월
+      this.detail.age                 = ''                   // 만나이
+      this.detail.address             = ''              // 주소
+      this.detail.skill_grd_selected  = ''             // 기술등급
+      this.$refs.combo3.$data.skill_grd_selected = '';       // 인력구분(콤보)
+      this.detail.career              = ''                // 경력
+      this.detail.now_career          = ''            // 현재경력
+      this.detail.enter_ymd           = ''             // 입사년월일
+      this.detail.sex_nm              = ''                // 성별
+      this.detail.inp_prj_nm          = ''            // 현/이전투입프로젝트명
+      this.detail.wth_dt              = ''                // 철수일자
+      this.detail.nxt_prj_nm          = ''            // 차기프로젝트/업무
+      this.detail.inp_cls_cd          = ''            // 투입구분코드
+      this.detail.main_skill          = ''            // 주요기술
+      this.detail.duty_txt            = ''              // 주요업무
+      this.detail.cpno                = ''                  // 휴대전화번호
+      this.detail.company_nm          = ''            // 회사명
+      this.detail.grd_cd_selected     = ''                // 평판구분
+      this.$refs.combo4.$data.grd_cd_selected = '';       // 인력구분(콤보)
+      this.detail.scholl_nm1          = ''            // 학교명1
+      this.detail.gdt_ym1             = ''               // 졸업년월1
+      this.detail.study1              = ''                // 전공1
+      this.detail.scholl_nm2          = ''            // 학교명2
+      this.detail.gdt_ym2             = ''               // 졸업년월2
+      this.detail.study2              = ''                // 전공2
+      this.detail.scholl_nm3          = ''            // 학교명3
+      this.detail.gdt_ym3             = ''               // 졸업년월3
+      this.detail.study3              = ''                // 전공3
+      this.detail.qlfks_nm1           = ''             // 자격증1
+      this.detail.aqu_ymm1            = ''              // 자격증취득일1
+      this.detail.qlfks_nm2           = ''             // 자격증2
+      this.detail.aqu_ymm2            = ''              // 자격증취득일2
+      this.detail.qlfks_nm3           = ''            // 자격증3
+      this.detail.aqu_ymm3            = ''              // 자격증취득일3
+      this.detail.qlfks_nm4           = ''             // 자격증4
+      this.detail.aqu_ymm4            = ''              // 자격증취득일4
+      this.detail.qlfks_nm5           = ''             // 자격증5
+      this.detail.aqu_ymm5            = ''             // 자격증취득일5
+      this.detail.atfl_mng_id         = ''           // 첨부파일관리ID
     },
 
     // 조회한 데이터로 인적사항 데이터 바인딩
@@ -1205,6 +1280,8 @@ export default {
         skill_grd_selected    : 'TTT',            // 기술등급
         main_skill            : '',               // 주요기술
         duty_txt              : '',               // 주요업무
+        car_main_skill        : '',               // 경력주요기술
+        car_duty_txt          : '',               // 경력주요업무
         man_no                : '',               // 인력번호
         man_nm                : '',               // 이름
         company_nm            : '',               // 재직처

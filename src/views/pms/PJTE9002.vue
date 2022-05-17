@@ -311,6 +311,13 @@ export default {
       let login_proj_id = sessionStorage.getItem("LOGIN_PROJ_ID");
       let login_aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
 
+      for(let i = 0; i < this.fileLists.length; i++){
+        if(this.fileLists[i].file_nm.length < 1){
+          alert("저장할 파일을 첨부해주세요.")
+          return false
+        }
+      }
+
       const formData = new FormData();
 
       this.fileLists.map(async fileList => {
@@ -319,6 +326,7 @@ export default {
         fileList.file = null;
 
       })
+
       formData.append("login_emp_no", login_emp_no);
       formData.append("login_proj_id", login_proj_id);
       formData.append("login_aut_cd", login_aut_cd);
@@ -346,6 +354,7 @@ export default {
         }
       })
       .then(res => {
+        console.log(res)
         if(res.data.split('/')[0] === "success"){
           alert("첨부파일이 저장되었습니다.")
           this.fileLists.push({
@@ -354,6 +363,8 @@ export default {
           opener.fileData(this.fileLists, this.atfl_num );
           this.fileLists.pop();
           // window.close();
+        } else{
+          alert("저장이 실패되었습니다.")
         }
       })
       .catch(e => {

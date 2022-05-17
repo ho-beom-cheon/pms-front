@@ -160,7 +160,7 @@
       <tr>
         <th>프로젝트</th>
         <td>
-          <select v-model="prjt_nm_selected_pop" style="width: 300px; background-color: #f2f2f2" :disabled="read" @change = "prjt_nm_change_pop">
+          <select v-model="prjt_nm_selected_pop" style="width: 300px; background-color: #f2f2f2" :disabled="true" @change = "prjt_nm_change_pop">
             <option
                 v-for   = "(pjt_list,idx) in CD0000000000"
                 :key    ="idx"
@@ -173,7 +173,7 @@
           파일등록구분
         </th>
         <td>
-          <select v-model="file_rgs_dscd_selected_pop" style="width: 300px; background-color: #f2f2f2" :disabled="read" @change = "file_rgs_dscd_change_pop">
+          <select v-model="file_rgs_dscd_selected_pop" style="width: 300px; background-color: #f2f2f2" :disabled="true" @change = "file_rgs_dscd_change_pop">
             <option
                 v-for   = "(file_rgs_dscd,idx) in CD1000000025"
                 :key    ="idx"
