@@ -342,20 +342,29 @@ export default {
     // 저장 버튼
     fnSave(){
       if(this.excelUplod === 'Y') {
-
-        axiosService.post("/PJTE2200/create", {
-          excelUplod            : this.excelUplod,
-          gridData              : this.gridData,
-          bzcd                  : this.info.bzcd_selected,
-          sqn_cd                : this.info.sqn_cd_selected,
-          prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
-          login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
-        }).then(res => {
-          if (res.data) {
-            alert("저장이 완료되었습니다.");
-            this.fnSearch();
+        this.gridData = this.$refs.grid.invoke("getData");
+        if (this.gridData.length !== 0) {
+          if (this.validation(this.gridData, "2") === true) {
+              axiosService.post("/PJTE2200/create", {
+                excelUplod            : this.excelUplod,
+                bzcd                  : this.info.bzcd_selected,
+                sqn_cd                : this.info.sqn_cd_selected,
+                login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+                login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+                login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+                gridData              : this.gridData
+              }).then(res => {
+                if (res.data) {
+                  alert("엑셀 업로드 저장이 완료되었습니다.");
+                  this.fnSearch();
+                }
+              }).catch(e => {
+                alert("등록중 오류 ::"+ e)
+              })
+          } else {
+            return;
           }
-        })
+        }
       } else if(this.excelUplod === 'N') {
         // 변경 사항 유무 체크
         if (this.$refs.grid.invoke("isModified") === false) {
@@ -375,12 +384,20 @@ export default {
         if (this.createdRows.length !== 0) {
           if (this.validation(this.createdRows, "1") === true) {
             try {
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.createdRows));
-              // create api 요청
-              this.$refs.grid.invoke("request", "createData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-              this.$refs.grid.invoke("reloadData");
+              axiosService.post("/PJTE2200/create", {
+                excelUplod            : this.excelUplod,
+                bzcd                  : this.info.bzcd_selected,
+                sqn_cd                : this.info.sqn_cd_selected,
+                login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+                login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+                login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+                gridData              : this.createdRows
+              }).then(res => {
+                if (res.data) {
+                  alert("신규 통합테스트가 저장이 완료되었습니다.");
+                  this.fnSearch();
+                }
+              })
             } catch (e) {
               console.log(e);
             }
@@ -392,22 +409,27 @@ export default {
         if (this.updatedRows.length !== 0) {
           if (this.validation(this.updatedRows, "1") === true) {
             try {
-              // 데이터 파라메타 전달
-              this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-              this.$refs.grid.invoke("setRequestParams", this.login);
-              // update api 요청
-              this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-              alert("저장이 완료되었습니다.")
-              this.$refs.grid.invoke("reloadData");
+              axiosService.post("/PJTE2200/update", {
+                excelUplod            : this.excelUplod,
+                bzcd                  : this.info.bzcd_selected,
+                sqn_cd                : this.info.sqn_cd_selected,
+                login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+                login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+                login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+                gridData              : this.updatedRows
+              }).then(res => {
+                if (res.data) {
+                  alert("변경된 정보가 수정되었습니다.");
+                  this.fnSearch();
+                }
+              })
+
             } catch (e) {
               console.log("업데이트 오류 ::", e);
             }
           }
         }
       }
-      // 저장 후 변경 데이터 배열 비움
-      this.$refs.grid.invoke("clearModifiedData")
-      this.$refs.grid.invoke("reloadData");
       this.excelUplod = 'N'
     },
 
@@ -424,19 +446,25 @@ export default {
       if(this.updatedRows.length !== 0) {
         if (this.validation(this.updatedRows, "2") === true) {
           try {
-            // 데이터 파라메타 전달
-            this.$refs.grid.invoke("setRequestParams", JSON.stringify(this.updatedRows));
-            // update api 요청
-            this.$refs.grid.invoke("request", "updateData", {showConfirm: false});
-            alert("저장이 완료되었습니다.")
+            axiosService.post("/PJTE2200/update", {
+              excelUplod            : this.excelUplod,
+              bzcd                  : this.info.bzcd_selected,
+              sqn_cd                : this.info.sqn_cd_selected,
+              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              gridData              : this.updatedRows
+            }).then(res => {
+              if (res.data) {
+                alert("변경된 정보가 수정되었습니다.");
+                this.fnSearch();
+              }
+            })
           } catch (e) {
             console.log("업데이트 오류 ::", e);
           }
         }
       }
-      // 저장 후 변경 데이터 배열 비움
-      this.$refs.grid.invoke("clearModifiedData")
-      this.$refs.grid.invoke("reloadData");
     },
 
     /* 그리드 직원명 입력 후
@@ -595,37 +623,36 @@ export default {
         if(division === "1") {
           /* 권한 ID에 따른 처리단계 체크 */
           if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
-            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
-              alert("권한이 부족합니다.")
+            if(data[i].itg_tst_prc_cd === null)  { alert((i+1)+"번째 처리단계는 필수 입력 사항입니다");      return false;}
+            if (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" && data[i].itg_tst_prc_cd !== "200") {
+              alert((i+1)+"번째 권한이 부족합니다. 개발자만 가능한 처리단계입니다.")
               return false;
             }
           } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200" && data[i].prc_step_cd !== "300") {
-              alert("권한이 부족합니다.")
+            if (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" && data[i].itg_tst_prc_cd !== "200" && data[i].itg_tst_prc_cd !== "300") {
+              alert((i+1)+"번째 권한이 부족합니다. PL만 가능한 처리단계입니다.")
               return false;
             }
           } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT, 400:현업]
-            if (data[i].prc_step_cd !== "400") {
-              alert("권한이 부족합니다.")
+            if (data[i].itg_tst_prc_cd !== "400") {
+              alert((i+1)+"번째 권한이 부족합니다. 담당현업만 가능한 처리단계입니다.")
               return false;
             }
           }
 
-          if((data[i].atfl_mng_id === null || data[i].atfl_mng_id === "") && data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" )  { alert("통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+          if((data[i].atfl_mng_id === null || data[i].atfl_mng_id === "") && data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" )  { alert("통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
         }
         /* 출력 영역  */
-        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert("업무구분은 필수 입력 사항입니다");       return false;}
-        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert("시나리오 ID는 필수 입력 사항입니다");     return false;}
-        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert("시나리오명은 필수 입력 사항입니다");      return false;}
-        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert("테스트케이스 ID는 필수 입력 사항입니다");  return false;}
-        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert("테스트케이스 명은 필수 입력 사항입니다");  return false;}
-        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert("예상시작일자는 필수 입력 사항입니다");    return false;}
-        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert("예상종료일자는 필수 입력 사항입니다");    return false;}
-        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")         { alert("개발자는 필수 입력 사항입니다");    return false;}
-        if(data[i].pl_eno === null || data[i].pl_eno === "")               { alert("PL는 필수 입력 사항입니다");    return false;}
-        if(data[i].crpe_eno === null || data[i].crpe_eno === "")           { alert("담당현업은 필수 입력 사항입니다");    return false;}
-        if(data[i].bkup_id  === null || data[i].bkup_id  === "")           { alert("백업 ID는 필수 입력 사항입니다");         return false;}
-        if(data[i].prjt_id  === null || data[i].prjt_id  === "")           { alert("프로젝트 ID는 필수 입력 사항입니다");      return false;}
+        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert((i+1)+"번째 업무구분은 필수 입력 사항입니다");       return false;}
+        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert((i+1)+"번째 시나리오 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert((i+1)+"번째 시나리오명은 필수 입력 사항입니다");      return false;}
+        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert((i+1)+"번째 테스트케이스 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert((i+1)+"번째 테스트케이스 명은 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert((i+1)+"번째 예상시작일은 필수 입력 사항입니다");    return false;}
+        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert((i+1)+"번째 예상종료일은 필수 입력 사항입니다");    return false;}
+        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")         { alert((i+1)+"번째 개발자는 필수 입력 사항입니다");    return false;}
+        if(data[i].pl_eno === null || data[i].pl_eno === "")               { alert((i+1)+"번째 PL는 필수 입력 사항입니다");    return false;}
+        if(data[i].crpe_eno === null || data[i].crpe_eno === "")           { alert((i+1)+"번째 담당현업은 필수 입력 사항입니다");    return false;}
       }
       return  true;
     },
@@ -692,10 +719,12 @@ export default {
               }
               wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
               wb.Sheets[sheetName].J2.w = "frcs_end_dt"
-              wb.Sheets[sheetName].K1.w = "dvlpe_cnf_dt"
-              wb.Sheets[sheetName].L1.w = "pl_cnf_dt"
-              let M1 = {
-                M1: {
+              wb.Sheets[sheetName].K2.w = "sta_dt"
+              wb.Sheets[sheetName].L2.w = "end_dt"
+              wb.Sheets[sheetName].M1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].N1.w = "pl_cnf_dt"
+              let O1 = {
+                O1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -703,11 +732,21 @@ export default {
                   w: 'dvlpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
-              wb.Sheets[sheetName].M2.w = "dvlpe_enm"
-              wb.Sheets[sheetName].N2.w = "dvlpe_btn"
-              let O1 = {
-                O1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
+              wb.Sheets[sheetName].O2.w = "dvlpe_enm"
+              let P1 = {
+                P1: {
+                  t: 's',
+                  v: '버튼',
+                  r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '버튼',
+                  w: 'dvlpe_btn'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
+              wb.Sheets[sheetName].P2.w = "dvlpe_btn"
+              let Q1 = {
+                Q1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -715,22 +754,32 @@ export default {
                   w: 'dvlpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
-              wb.Sheets[sheetName].O2.w = "dvlpe_eno"
-              let P1 = {
-                P1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
+              wb.Sheets[sheetName].Q2.w = "dvlpe_eno"
+              let R1 = {
+                R1: {
                   t: 's',
-                  v: 'PL',
-                  r: '<t>PL</t><phoneticPr fontId="1" type="noConversion"/>',
-                  h: 'PL',
+                  v: '명',
+                  r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '명',
                   w: 'pl_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
-              wb.Sheets[sheetName].P2.w = "pl_enm"
-              wb.Sheets[sheetName].Q2.w = "pl_btn"
-              let R1 = {
-                R1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+              wb.Sheets[sheetName].R2.w = "pl_enm"
+              let S1 = {
+                S1: {
+                  t: 's',
+                  v: '버튼',
+                  r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '버튼',
+                  w: 'pl_btn'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+              wb.Sheets[sheetName].S2.w = "pl_btn"
+              let T1 = {
+                T1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -738,10 +787,10 @@ export default {
                   w: 'pl_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-              wb.Sheets[sheetName].R2.w = "pl_eno"
-              let S1 = {
-                S1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
+              wb.Sheets[sheetName].T2.w = "pl_eno"
+              let U1 = {
+                U1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -749,11 +798,21 @@ export default {
                   w: 'crpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-              wb.Sheets[sheetName].S2.w = "crpe_enm"
-              wb.Sheets[sheetName].T2.w = "crpe_btn"
-              let U1 = {
-                U1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+              wb.Sheets[sheetName].U2.w = "crpe_enm"
+              let V1 = {
+                V1: {
+                  t: 's',
+                  v: '버튼',
+                  r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
+                  h: '버튼',
+                  w: 'crpe_btn'
+                }
+              }
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+              wb.Sheets[sheetName].V2.w = "crpe_btn"
+              let W1 = {
+                W1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -761,25 +820,26 @@ export default {
                   w: 'crpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-              wb.Sheets[sheetName].U2.w = "crpe_eno"
-              wb.Sheets[sheetName].V1.w = "atfl_mng_id_yn"
-              wb.Sheets[sheetName].W2.w = "err_tot_cnt"
-              wb.Sheets[sheetName].X2.w = "err_cmpl_cnt"
-              wb.Sheets[sheetName].Y2.w = "err_ncmpl_cnt"
-              wb.Sheets[sheetName].Z2.w = "err_btn"
-              wb.Sheets[sheetName].AA1.w = "rmrk"
-              wb.Sheets[sheetName].AB1.w = "pgm_id"
-              wb.Sheets[sheetName].AC1.w = "scrn_id"
-              wb.Sheets[sheetName].AD1.w = "trn_cd"
-              wb.Sheets[sheetName].AE1.w = "rqu_sbh_id"
-              wb.Sheets[sheetName].AF1.w = "prr_cnd"
-              wb.Sheets[sheetName].AG1.w = "inp_val"
-              wb.Sheets[sheetName].AH1.w = "tst_des"
-              wb.Sheets[sheetName].AI1.w = "oup_val"
-              wb.Sheets[sheetName].AJ1.w = "tp"
-              wb.Sheets[sheetName].AK1.w = "oup_mens"
-              wb.Sheets[sheetName].AL1.w = "tst_achi_rst"
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
+              wb.Sheets[sheetName].W2.w = "crpe_eno"
+              wb.Sheets[sheetName].X1.w = "atfl_mng_id_yn"
+              wb.Sheets[sheetName].Y2.w = "err_tot_cnt"
+              wb.Sheets[sheetName].Z2.w = "err_cmpl_cnt"
+              wb.Sheets[sheetName].AA2.w = "err_ncmpl_cnt"
+              wb.Sheets[sheetName].AB2.w = "err_btn"
+              wb.Sheets[sheetName].AC1.w = "rmrk"
+              wb.Sheets[sheetName].AD1.w = "pgm_id"
+              wb.Sheets[sheetName].AE1.w = "scrn_id"
+              wb.Sheets[sheetName].AF1.w = "trn_cd"
+              wb.Sheets[sheetName].AG1.w = "rqu_sbh_id"
+              wb.Sheets[sheetName].AH1.w = "prr_cnd"
+              wb.Sheets[sheetName].AI1.w = "inp_val"
+              wb.Sheets[sheetName].AJ1.w = "tst_des"
+              wb.Sheets[sheetName].AK1.w = "oup_val"
+              wb.Sheets[sheetName].AL1.w = "tp"
+              wb.Sheets[sheetName].AM1.w = "oup_mens"
+              wb.Sheets[sheetName].AN1.w = "tst_rst"
+              wb.Sheets[sheetName].AO1.w = "tst_achi_rst"
 
               let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
               console.log("rowObj", rowObj);
@@ -953,7 +1013,7 @@ export default {
         api: {
           readData   : { url: process.env.VUE_APP_API + '/PJTE2200/select', method: 'GET' },
           createData : { url: process.env.VUE_APP_API + '/PJTE2200/create', method: 'POST'},
-          updateData : { url: process.env.VUE_APP_API + '/PJTE2200/update', method: 'PUT'},
+          updateData : { url: process.env.VUE_APP_API + '/PJTE2200/update', method: 'POST'},
         },
         initialRequest: false,
         contentType: 'application/json;',
@@ -968,12 +1028,13 @@ export default {
         height: 45,
         complexColumns: [
           {header: '결함건수',  name: 'mergeColumn1', childNames: ['col19', 'col20', 'col21']},
-          {header: '테스트계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
-          {header: '결함',      name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt','err_btn']},
-          {header: '개발자',     name: 'mergeColumn4', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno']},
-          {header: 'PL',        name: 'mergeColumn5', childNames: ['pl_enm', 'pl_btn','pl_eno']},
-          {header: '담당현업',   name: 'mergeColumn6', childNames: ['crpe_enm', 'crpe_btn','crpe_eno']},
-          {header: '통합테스트',   name: 'mergeColumn7', childNames: ['atfl_mng_id_yn']},
+          {header: '계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
+          {header: '실적', name: 'mergeColumn3', childNames: ['sta_dt', 'end_dt']},
+          {header: '결함',      name: 'mergeColumn4', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt','err_btn']},
+          {header: '개발자',     name: 'mergeColumn5', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno']},
+          {header: 'PL',        name: 'mergeColumn6', childNames: ['pl_enm', 'pl_btn','pl_eno']},
+          {header: '담당현업',   name: 'mergeColumn7', childNames: ['crpe_enm', 'crpe_btn','crpe_eno']},
+          {header: '통합테스트',   name: 'mergeColumn8', childNames: ['atfl_mng_id_yn']},
         ]
       },
       columns: [
@@ -1061,6 +1122,21 @@ export default {
           name: 'frcs_end_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker'
+        },
+        {
+          header: '실제시작일',
+          width: 90,
+          align: 'center',
+          name: 'sta_dt',
+          format: 'yyyy-mm-dd',
+        },
+        {
+          header: '실제종료일',
+          width: 90,
+          align: 'center',
+          type: 'date',
+          name: 'end_dt',
+          format: 'yyyy-mm-dd',
         },
         {
           header: '개발자확인일',
@@ -1247,7 +1323,7 @@ export default {
         {
           header: '테스트결과',
           width: 100,
-          name: 'oup_mens',
+          name: 'tst_rst',
           editor: "text",
         },
         {
