@@ -51,13 +51,13 @@
             <ul class="card-body" v-else-if ="this.LoginId === '0000000003'" >
               <li id="PJTE1000Iteyes"><a href="/PJTE1000">{{ iteyes_menu_list[0].name }}</a></li>
               <li id="PJTE8000Iteyes"><a href="/PJTE8000">{{ iteyes_menu_list[1].name }}</a></li>
-              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[2].name }}</a></li>
-              <li id="PJTE9120Iteyes"><a href="/PJTE9120">{{ iteyes_menu_list[3].name }}</a></li>
-              <li id="PJTE9310Iteyes"><a href="/PJTE9310">{{ iteyes_menu_list[4].name }}</a></li>
-              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[5].name }}</a></li>
-              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[6].name }}</a></li>
-              <li id="PJTE9000Iteyes" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ iteyes_menu_list[7].name }}</a></li>
-              <li id="PJTE9300Iteyes" v-if ="this.LoginEnpid === '202111010' ||  this.LoginEnpid === '202010002' || this.LoginEnpid === '201903007'" ><a href="/PJTE9300">{{ iteyes_menu_list[8].name }}</a></li>
+              <li id="PJTE9300Iteyes"><a href="/PJTE9300">{{ iteyes_menu_list[2].name }}</a></li>
+              <li id="PJTE9900Iteyes"><a href="/PJTE9900">{{ iteyes_menu_list[3].name }}</a></li>
+              <li id="PJTE9120Iteyes"><a href="/PJTE9120">{{ iteyes_menu_list[4].name }}</a></li>
+              <li id="PJTE9310Iteyes"><a href="/PJTE9310">{{ iteyes_menu_list[5].name }}</a></li>
+              <li id="PJTE9005Iteyes"><a href="/PJTE9005">{{ iteyes_menu_list[6].name }}</a></li>
+              <li id="PJTE9200Iteyes"><a href="/PJTE9200">{{ iteyes_menu_list[7].name }}</a></li>
+              <li id="PJTE9000Iteyes" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ iteyes_menu_list[8].name }}</a></li>
             </ul>
             <ul class="card-body" v-else-if ="this.LoginId === '0000000010'" >
               <li id="PJTE1000Tch"><a href="/PJTE1000">{{ tch_menu_list[0].name }}</a></li>
@@ -223,6 +223,11 @@ export default {
           name: '주간보고'
         },
         {
+          id: 'PJTE9300Iteyes',
+          path: '/PJTE9300',
+          name: '프로젝트인력요청현황'
+        },
+        {
           id: 'PJTE9900Iteyes',
           path: '/PJTE9900',
           name: 'KanbanBoard'
@@ -251,11 +256,6 @@ export default {
           id: 'PJTE9000Iteyes',
           path: '/PJTE9000',
           name: '시스템관리'
-        },
-        {
-          id: 'PJTE9300Iteyes',
-          path: '/PJTE9300',
-          name: '프로젝트인력요청현황'
         },
       ],
       tch_menu_list: [
