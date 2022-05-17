@@ -177,12 +177,12 @@ export default {
             prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
           }).then(res => {
             if (res.data === true) {
-              alert("저장이 완료되었습니다.");
+              alert("수정이 완료되었습니다.");
               // update 후 재조회
               this.$refs.grid.invoke("reloadData");
             }
           }).catch(e => {
-            alert("저장에 실패하였습니다.");
+            alert("수정에 실패하였습니다.");
           });
         } else {
           alert("변경된 내용이 없습니다");
