@@ -51,7 +51,7 @@
               <div class="item-con">실제종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.acl_end_dt" v-model="info.acl_sta_dt"></div>
                 ~
-                <div class="input-dateWrap"><input type="date" :max="info.acl_sta_dt" v-model="info.acl_end_dt"></div>
+                <div class="input-dateWrap"><input type="date" :min="info.acl_sta_dt" v-model="info.acl_end_dt"></div>
               </div>
             </li>
           </ul>
