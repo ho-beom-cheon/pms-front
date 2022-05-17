@@ -11,7 +11,8 @@ stages:
 test:
   stage: test
   script:
-    - ./gradlew $GRADLE_OPTS check
+    - echo "build pms"
+    - npm run build
 
 build-publish:
   image: node:14.18.1
