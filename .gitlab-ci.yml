@@ -15,6 +15,7 @@ build-publish:
   before_script:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
+    - npm cache clear --force
     - npm install --save --legacy-peer-deps
   script:
     - echo "build pms"
