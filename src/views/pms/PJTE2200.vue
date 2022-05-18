@@ -619,40 +619,51 @@ export default {
     // validation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
     validation(data, division) {
       for(let i=0; i<data.length; i++){
-        // 저장과 기타항목수정 분류
-        if(division === "1") {
-          /* 권한 ID에 따른 처리단계 체크 */
-          if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
-            if(data[i].itg_tst_prc_cd === null)  { alert((i+1)+"번째 처리단계는 필수 입력 사항입니다");      return false;}
-            if (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" && data[i].itg_tst_prc_cd !== "200") {
-              alert((i+1)+"번째 권한이 부족합니다. 개발자만 가능한 처리단계입니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" && data[i].itg_tst_prc_cd !== "200" && data[i].itg_tst_prc_cd !== "300") {
-              alert((i+1)+"번째 권한이 부족합니다. PL만 가능한 처리단계입니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT, 400:현업]
-            if (data[i].itg_tst_prc_cd !== "400") {
-              alert((i+1)+"번째 권한이 부족합니다. 담당현업만 가능한 처리단계입니다.")
-              return false;
-            }
-          }
+        let pgm_nm = "["+data[i].tst_case_nm+"]은/는"
+        let pgm_nm1 = "["+data[i].tst_case_nm+"]"
+        let dvlpe_no = data[i].dvlpe_eno
+        let pl_no    = data[i].pl_eno
+        let crpe_no  = data[i].crpe_eno
+        let pass_yn  = "N"
 
-          if((data[i].atfl_mng_id === null || data[i].atfl_mng_id === "") && data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" )  { alert("통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === "500" || sessionStorage.getItem("LOGIN_AUT_CD") === "600" || sessionStorage.getItem("LOGIN_AUT_CD") === "900"){
+          pass_yn  = "Y"
         }
         /* 출력 영역  */
-        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert((i+1)+"번째 업무구분은 필수 입력 사항입니다");       return false;}
-        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert((i+1)+"번째 시나리오 ID는 필수 입력 사항입니다");     return false;}
-        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert((i+1)+"번째 시나리오명은 필수 입력 사항입니다");      return false;}
-        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert((i+1)+"번째 테스트케이스 ID는 필수 입력 사항입니다");  return false;}
-        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert((i+1)+"번째 테스트케이스 명은 필수 입력 사항입니다");  return false;}
-        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert((i+1)+"번째 예상시작일은 필수 입력 사항입니다");    return false;}
-        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert((i+1)+"번째 예상종료일은 필수 입력 사항입니다");    return false;}
-        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")         { alert((i+1)+"번째 개발자는 필수 입력 사항입니다");    return false;}
-        if(data[i].pl_eno === null || data[i].pl_eno === "")               { alert((i+1)+"번째 PL는 필수 입력 사항입니다");    return false;}
-        if(data[i].crpe_eno === null || data[i].crpe_eno === "")           { alert((i+1)+"번째 담당현업은 필수 입력 사항입니다");    return false;}
+        if(data[i].bzcd === null || data[i].bzcd === "")                     { alert(pgm_nm+" 업무구분은 필수 입력 사항입니다");       return false;}
+        if(data[i].scnr_id === null || data[i].scnr_id === "")               { alert(pgm_nm+" 시나리오 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].scnr_nm === null || data[i].scnr_nm === "")               { alert(pgm_nm+" 시나리오명은 필수 입력 사항입니다");      return false;}
+        if(data[i].tst_case_id === null || data[i].tst_case_id === "")       { alert(pgm_nm+" 테스트케이스 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")       { alert(pgm_nm+" 테스트케이스 명은 필수 입력 사항입니다");  return false;}
+        if(data[i].itg_tst_prc_cd === null || data[i].itg_tst_prc_cd === "") { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")       { alert(pgm_nm+" 예상시작일은 필수 입력 사항입니다");    return false;}
+        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")       { alert(pgm_nm+" 예상종료일은 필수 입력 사항입니다");    return false;}
+        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")           { alert(pgm_nm+" 개발자는 필수 입력 사항입니다");    return false;}
+        if(data[i].pl_eno === null || data[i].pl_eno === "")                 { alert(pgm_nm+" PL는 필수 입력 사항입니다");    return false;}
+        if(data[i].crpe_eno === null || data[i].crpe_eno === "")             { alert(pgm_nm+" 담당현업은 필수 입력 사항입니다");    return false;}
+
+        // 저장과 기타항목수정 분류
+        if(division === "1") {
+          if(pass_yn === 'N') {
+            if (data[i].itg_tst_prc_cd === "000" || data[i].itg_tst_prc_cd === "100" || data[i].itg_tst_prc_cd === "200") {
+              if (dvlpe_no != sessionStorage.getItem("LOGIN_EMP_NO") && pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[테스트전,테스트시작,테스트자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                return false;
+              }
+            } else if (data[i].itg_tst_prc_cd === "300") {
+              if (pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[PL확인]는 PL만 가능한 처리단계입니다.")
+                return false;
+              }
+            } else if (data[i].itg_tst_prc_cd === "400") {
+              if (crpe_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[테스트완료]는 담당현업만 가능한 처리단계입니다.")
+                return false;
+              }
+            }
+            if(data[i].atfl_mng_id === '' && (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100") )  { alert(pgm_nm + " 통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+          }
+        }
       }
       return  true;
     },
