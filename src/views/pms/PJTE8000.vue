@@ -428,7 +428,7 @@
             </div>
           </div>
         </div>
-        <Modal :show.sync="detail.modals.txt_modal1">
+        <Modal :show.sync="detail.modals.txt_modal1"  class="modal_main">
           <div class="div-header-b">
             <h2 v-if="this.large_num == '1'">금주 프로젝트 진행현황 확대보기</h2>
             <h2 v-if="this.large_num == '2'">금주 이슈내용 확대보기</h2>
@@ -443,12 +443,10 @@
           </div>
           <tr>
             <textarea v-if="this.large_num == '1'"
-                      cols="200"
-                      rows="105"
                       id="detailTextArea1"
                       v-model="detail.prg_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '2'"
                       cols="200"
@@ -456,7 +454,7 @@
                       id="detailTextArea2"
                       v-model="detail.iss_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '3'"
                       cols="200"
@@ -464,7 +462,7 @@
                       id="detailTextArea3"
                       v-model="detail.req_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '4'"
                       cols="200"
@@ -472,7 +470,7 @@
                       id="detailTextArea4"
                       v-model="detail.bef_prg_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '5'"
                       cols="200"
@@ -480,7 +478,7 @@
                       id="detailTextArea5"
                       v-model="detail.bef_iss_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '6'"
                       cols="200"
@@ -488,7 +486,7 @@
                       id="detailTextArea6"
                       v-model="detail.bef_req_txt"
                       :disabled=true
-                      style="height: 425px; width: 465px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
             ></textarea>
             <div style="float: right;margin-top: 5px">
               <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
@@ -1523,4 +1521,25 @@ export default {
 
 </script>
 <style>
+.modal-content {
+  width :1680px;
+  height : 800px;
+}
+.modal-body .modal-mid{
+  background-color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+  height: 5vh;
+  width : 700px;
+  margin: 20px;
+}
+.line-con {
+  display:flex
+}
+.modal-dialog {
+  max-width: 1680px;
+  max-height: 800px;
+  margin-left : 7.75rem;
+}
 </style>
+
