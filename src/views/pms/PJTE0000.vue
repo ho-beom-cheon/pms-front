@@ -334,7 +334,8 @@ export default {
                   storage.setItem("LOGIN_AUT_CD", res.data.data[0].aut_cd);              // 권한ID
                   storage.setItem("LOGIN_YN", res.data.data[0].login_yn);                // 로그인상태
                   storage.setItem("LOGIN_REAL_PRJT_ID", res.data.data[0].real_prjt_id);  // 투입프로젝트ID
-                  storage.setItem("LOGIN_DEPT_CD", res.data.data[0].dept_cd);            // 투입프로젝트ID
+                  storage.setItem("LOGIN_DEPT_CD", res.data.data[0].dept_cd);            // 소속코드
+                  storage.setItem("LOGIN_DEPT_NM", res.data.data[0].dept_nm);            // 소속명
 
                 } else if (res.data.data[0].login_yn === 'X') {
                   alert("시스템은 사용할 수 없는 직원입니다.")

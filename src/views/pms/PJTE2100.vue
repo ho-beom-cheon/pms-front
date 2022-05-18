@@ -892,7 +892,6 @@ export default {
       for(let i=0; i<data.length; i++){
         // 저장과 기타항목수정 분류
         if(division === "1") {
-
           /* 권한 ID에 따른 처리단계 체크 */
           if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
             if(data[i].prc_step_cd === null)  { alert((i+1)+"번째 처리단계는 필수 입력 사항입니다");      return false;}

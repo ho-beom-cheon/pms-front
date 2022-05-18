@@ -102,7 +102,7 @@ class CustomRenderer {
   }
   render(props) {
     // 지원 버튼 img
-    this.el.src = '/img/ic_new.e2fc07f4.svg';
+    this.el.src = '../../img/ic_new.e2fc07f4.svg';
   }
 }
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -116,7 +116,7 @@ class CustomRenderer2 {
   getElement() {return this.el;}
   render(props) {
     // 삭제 버튼 img
-    this.el.src = '/img/ic_delete.b3711c12.svg';
+    this.el.src = '../../img/ic_delete.b3711c12.svg';
   }
 }
 
@@ -151,90 +151,67 @@ export default {
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
       this.modalTxt = document.getElementById("modalId").value;
-      // console.log("확인::", document.getElementById("modalId").value);
-      // console.log("this.curRow::", this.curRow);
-      // console.log("this.modalTxt::", this.modalTxt);
       this.modals.txt_modal1 = false;
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
     },
     fnSave() {
-       if (this.checkPrimary() == true) {
-        //확인창
-        if (confirm("정말 저장하시겠습니까??") == true) {
-          // 프로젝트ID가 없으면 INSERT
-          if (this.detail.prjt_id == "" || this.detail.prjt_id == "null") {
-            axiosService.put("/PJTE9300/insert_9300_01", {
-              gridData: this.updatedRows,
-              bkup_id: this.info.bkup_id_selected,
+      // 프로젝트ID가 없으면 INSERT
+      this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
+      this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
+
+        if(this.createdRows.length === 0 && this.updatedRows.length === 0 ){
+          alert("신규추가 및 변경된 정보가 없습니다.");
+          return;
+        }
+        if (confirm("정말 저장하시겠습니까?") == true) {
+          if (this.createdRows.length !== 0) {
+            axiosService.post("/PJTE9300/insert_9300_01", {
+              bkup_id: '0000000000',
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-
-              real_prjt_id: this.info.real_prjt_id,
-              sqno: this.info.sqno,
-              sch_ent_dt: this.info.sch_ent_dt,
-              skill_grd: this.info.skill_grd,
-              main_skill: this.info.main_skill,
-              duty_txt: this.info.duty_txt,
-              oth_cnt: this.info.oth_cnt,
-              nmbr_rcrt: this.info.nmbr_rcrt,
-              aplc_dtls: this.info.aplc_dtls,
-              del_yn: this.info.del_yn,
-
+              login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
+              gridData: this.createdRows,
             }).then(res => {
               if (res.data === true) {
-                alert("저장이 완료되었습니다.");
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
+                if (this.updatedRows.length === 0) {
+                  alert("저장이 완료되었습니다.");
+                  // 저장 후 그리드 Reload
+                  this.$refs.grid.invoke("reloadData");
+                }
               }
             }).catch(e => {
               alert("저장에 실패하였습니다.");
             });
             //프로젝트ID가 있으면 update
-          } else {
-            axiosService.put("/PJTE9300/update_9300_01", {
-              gridData: this.updatedRows,
-              bkup_id: '0000000000',                                  //백업ID
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  //프로젝트ID
-              skill_grd: this.info.skill_grd,
-              main_skill: this.info.main_skill,
-              duty_txt: this.info.duty_txt,
-              oth_cnt: this.info.oth_cnt,
-              nmbr_rcrt: this.info.nmbr_rcrt,
-              orp_no: this.info.opr_no,
-              db_chg_ts: this.info.db_chg_ts,
-            }).then(res => {
-              if (res.data === true) {
-                alert("저장이 완료되었습니다.");
-                // update 후 재조회
-                this.$refs.grid.invoke("reloadData");
-              }
-            }).catch(e => {
-              alert("저장에 실패하였습니다.");
-            });
+          }
+
+          if (this.updatedRows.length !== 0) {
+              axiosService.post("/PJTE9300/update_9300_01", {
+                bkup_id: '0000000000',                                  //백업ID
+                prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  //프로젝트ID
+                login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
+                gridData: this.updatedRows,
+              }).then(res => {
+                if (res.data === true) {
+                  alert("저장이 완료되었습니다.");
+                  // update 후 재조회
+                  this.$refs.grid.invoke("reloadData");
+                }
+              }).catch(e => {
+                alert("저장에 실패하였습니다.");
+              });
           }
         } else { //취소
           retrun;
         }
-        }
       },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.info.real_prjt_id == "" || this.info.real_prjt_id == "null") {                   // 프로젝트명
+      if (this.detail.prjt_id == "" || this.detail.prjt_id == "null") {                   // 프로젝트명
         this.$refs.real_prjt_id.focus();
         alert('프로젝트명은 필수 입력사항입니다.');
         return false;
-        /*      } else if (this.detail.bsn_cls_cd_selected_iss == "NNN" || this.detail.bsn_cls_cd_selected_iss == "" || this.detail.bsn_cls_cd_selected_iss == "null") {        // 게시구분
-                alert('게시구분은 필수 입력사항입니다.');
-                return false;
-              } else if (this.detail.gesipan_titl == "" || this.detail.gesipan_titl == "null") {     // 게시판제목
-                this.$refs.gesipan_titl.focus();
-                alert('게시판제목을 입력해주세요.');
-                return false;
-              } else if (this.detail.gesipan_dsc == "" || this.detail.gesipan_dsc == "null") {       // 게시판설명
-                this.$refs.gesipan_dsc.focus();
-                alert('게시판설명을 입력해주세요.');
-                return false; */
       } else {
         return true;  // 필수 값 모두 입력 시 true
       }
@@ -250,6 +227,9 @@ export default {
           prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
           real_prjt_id :this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
           sqno :this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
+          login_emp_nm:sessionStorage.getItem("LOGIN_EMP_NM"),
+          login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
+          login_dept_nm:sessionStorage.getItem("LOGIN_DEPT_NM"),
         }).then(res => { // 리턴값
           if(res.status == 200) {
             this.fnSearch()
@@ -260,24 +240,26 @@ export default {
       }
       if(ev.columnName === 'del_btn'){
         console.log("클릭:" + ev.rowKey);
-        console.log("real_prjt_id:" + this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"));
+        let opr_no = this.$refs.grid.invoke("getValue", this.curRow, "opr_no")
+        let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+        let emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
 
-        console.log("prjt_id:" + sessionStorage.getItem("LOGIN_PROJ_ID"));
+        if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' || emp_no === opr_no ) {
+          axiosService.put("/PJTE9300/update_9300_03", {
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),   //삭제
+            real_prjt_id: this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
+            sqno: this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
+            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+          }).then(res => { // 리턴값
+            if (res.status == 200) {
+              this.fnSearch()
+            }
+          }).catch(e => {  //오류
 
-        console.log("sqno:" + this.$refs.grid.invoke("getValue", this.curRow, "sqno"));
-
-
-        axiosService.put("/PJTE9300/update_9300_03", {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),   //삭제
-          real_prjt_id :this.$refs.grid.invoke("getValue", this.curRow, "real_prjt_id"),
-          sqno :this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
-        }).then(res => { // 리턴값
-          if(res.status == 200) {
-            this.fnSearch()
-          }
-        }).catch(e => {  //오류
-
-        });
+          });
+        } else {
+          alert('삭제 권한이 없습니다. 삭제는 등록자 또는 관리자만 가능합니다.');
+        }
       }
     },
     // 그리드 2,3 클릭 이벤트
@@ -289,10 +271,7 @@ export default {
       this.$refs.grid.invoke("clear");
     },
     init() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
-        //  저장 버튼 숨기기
-        document.getElementById('saveBtn').hidden = true;
-      }
+      this.$refs.grid2.invoke("disable");
     },
     fnSearch() {
       this.$refs.grid.invoke("setRequestParams", this.info);
@@ -302,9 +281,7 @@ export default {
       // 버튼 비활성화/활성화 - 권한, 백업ID에 따라
       if(this.info.bkup_id_selected == '0000000000') {
         this.check_save = false // 저장 활성화
-        if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
-          this.check_aut_cd = false // 행추가, 행삭제  활성화
-        }
+        this.check_aut_cd = false // 행추가, 행삭제  활성화
       } else {
         this.check_save = true // 저장  비활성화
         this.check_aut_cd = true // 행추가, 행삭제  비활성화
@@ -312,8 +289,6 @@ export default {
     },
     //행추가
     gridAddRow() {
-      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
         console.log("this.$store.state.pms.CD1000000038", this.$store.state.pms.CD1000000038)
         this.addCheak = 'Y';
         this.$refs.grid.invoke("appendRow",
@@ -324,10 +299,6 @@ export default {
             },
             {focus: true, at: 0});
         this.fnEnable();
-      } else {
-        alert('행추가 권한이 없습니다.');
-      }
-
     },
     // 추가한 행 편집 활성화
     fnEnable() {
@@ -341,34 +312,16 @@ export default {
       // // 새로 ADD한 Row의 담당자와 비고 내용 셀 색 변경
       this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
-      // this.$refs.grid.invoke("enableCell", this.NewRow - 1, "mark");
     },
     //행삭제
     gridDelRow() {
-      let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' ) {
+      let opr_no = this.$refs.grid.invoke("getValue", this.curRow, "opr_no")
+      if (opr_no === '' || opr_no === null) {
         this.addCheak = 'N'
         this.$refs.grid.invoke("removeRow", this.curRow, {showConfirm: false});
       } else {
-        alert('행삭제 권한이 없습니다.');
+        alert('행삭제는 추가된 행만 삭제 가능합니다.');
       }
-    },
-    autCheck() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
-        alert("권한이 부족합니다.");
-        return false;
-      }
-    },
-    // 유효값 검증
-    validation(data) {
-      for(let i=0; i<data.length; i++){
-        /* 출력 영역  */
-        if(data[i].empno === null)
-        { alert("직원번호는 필수 입력 사항입니다");
-          return false;
-        }
-      }
-      return  true;
     },
   },
 // 변수 선언부분
@@ -459,11 +412,12 @@ export default {
       columns: [
         {
           header: '프로젝트명',
-          width: 250,
+          width: 320,
           name: 'real_prjt_id',
           align: 'left',
-          //editor: 'text',
-            editor : {
+          formatter: 'listItemText',
+          filter: 'select',
+          editor : {
             type : 'select',
             options:{
               listItems: this.$store.state.pms.CD1000000038
@@ -472,49 +426,53 @@ export default {
         },
         {
           header: '투입예정일자',
-          width: 90,
+          width: 110,
           name: 'sch_ent_dt',
           align: 'center',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
+          filter: 'text',
         },
         {
           header: '등급',
-          width: 50,
+          width: 80,
           name: 'skill_grd',
-          align: 'left',
+          align: 'center',
           formatter: 'listItemText',
           editor: {
             type: 'select',
             options:{
               listItems: this.$store.state.pms.CD1000000042
             }
-          }
-          // filter: 'select',
+          },
+          filter: 'select',
         },
         {
           header: '요청기술',
-          width: 100,
+          width: 230,
           align: 'left',
           name: 'main_skill',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '요청업무',
-          width: 250,
+          width: 230,
           align: 'left',
           name: 'duty_txt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '기타내용',
-          width: 100,
+          width: 200,
           align: 'left',
           name: 'oth_cnt',
           editor: 'text',
+          filter: 'text',
         },
         {
-          header: '요청인원',
+          header: '요청인원수',
           width: 80,
           align: 'right',
           name: 'nmbr_rcrt',
@@ -522,17 +480,16 @@ export default {
         },
         {
           header: '등록자',
-          width: 90,
+          width: 70,
           align: 'center',
           name: 'opr_nm',
-          editor: 'text',
         },
         {
           header: '지원자내용',
-          width: 90,
+          width: 180,
           align: 'left',
           name: 'aplc_dtls',
-          editor: 'text',
+          filter: 'text',
         },
         {
           header: '지원',
@@ -581,35 +538,40 @@ export default {
       columns2: [
         {
           header: '직원명',
-          width: 90,
+          width: 110,
           align: 'center',
           name: 'empnm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '주요기술',
-          width: 350,
-          align: 'center',
+          width: 250,
+          align: 'left',
           name: 'main_skill',
+          filter: 'text',
         },
         {
           header: '주요업무',
-          width: 350,
-          align: 'center',
+          width: 250,
+          align: 'left',
           name: 'duty_txt',
+          filter: 'text',
         },
         {
           header: '등급',
-          width: 90,
-          align: 'left',
+          width: 60,
+          align: 'center',
           name: 'skill_grd_nm',
+          filter: 'select',
         },
         {
           header: '현/이전프로젝트',
-          minWidth: 250,
+          minWidth: 350,
           align: 'left',
           name: 'inp_prj_nm',
           editor: 'text',
+          filter: 'select',
         },
         {
           header: '차기희망프로젝트 및 업무',
@@ -617,14 +579,24 @@ export default {
           align: 'center',
           name: 'nxt_prj_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '철수예정일',
-          minWidth: 120,
+          minWidth: 100,
           align: 'center',
           name: 'wth_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
+          filter: 'text',
+        },
+        {
+          header: '투입구분',
+          minWidth: 100,
+          align: 'center',
+          name: 'inp_cls_cd',
+          editor: 'text',
+          filter: 'select',
         },
       ],
     }

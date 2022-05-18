@@ -539,7 +539,7 @@ export default {
       scrollX:false,
       scrollY:false,
       bodyHeight: 630,
-      minRowHeight: 10,
+      minRowHeight: 20,
       rowHeight: 25,
       showDummyRows: false,
       editingEvent : "click",
@@ -559,7 +559,7 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 40,
+        height: 45,
         complexColumns: [
           {header: 'As-Is',           name: 'mergeColumn1', childNames: ['as_pgm_id','as_pgm_nm']},
           {header: 'To-Be',           name: 'mergeColumn2', childNames: ['to_pgm_id','to_pgm_nm']},
@@ -572,6 +572,7 @@ export default {
           align: 'left',
           name: 'as_pgm_id',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '프로그램명',
@@ -579,6 +580,7 @@ export default {
           align: 'left',
           name: 'as_pgm_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '프로그램 ID',
@@ -586,6 +588,7 @@ export default {
           align: 'left',
           name: 'to_pgm_id',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '프로그램명',
@@ -593,6 +596,7 @@ export default {
           align: 'left',
           name: 'to_pgm_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '프로그램유형',
@@ -600,6 +604,7 @@ export default {
           align: 'center',
           name: 'as_pgm_dis_nm',
           editor: 'text',
+          filter: 'select',
         },
         {
           header: '사용프로그램',
@@ -607,6 +612,7 @@ export default {
           align: 'left',
           name: 'use_pgm_txt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '전환담당자',
@@ -614,6 +620,7 @@ export default {
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '전환상태',
@@ -621,6 +628,7 @@ export default {
           align: 'center',
           name: 'trn_stt_nm',
           editor: 'text',
+          filter: 'select',
         },
         {
           header: '시작일자',
@@ -628,6 +636,7 @@ export default {
           align: 'center',
           name: 'sta_dt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '종료일자',
@@ -635,12 +644,14 @@ export default {
           align: 'center',
           name: 'end_dt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '비고',
           align: 'left',
           name: 'rmrk',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: 'ASIS프로그램구분코드',

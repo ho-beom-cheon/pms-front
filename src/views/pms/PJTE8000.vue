@@ -87,6 +87,7 @@
           <div class="div3-b">
             <div class="div-header-b"><h2>금주 주간보고 등록</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</p>
+                <button class="btn btn-filter-e" style="margin-left: 20px"><router-link tag="a" to="/PJTE9300">본사인력요청</router-link></button>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
               </ul>
             </div>
