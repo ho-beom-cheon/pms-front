@@ -58,13 +58,11 @@
           <ul class="filter-btn">
             <button class="btn btn-filter-p" @click="prgRtCalc"  :hidden="validated" style="margin-right: 20px">진행률계산</button>
             <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-            <button class="btn btn-filter-e">
+            <button class="btn btn-filter-e" :disabled="aut_cd_check">
               <label for="file">엑셀업로드</label>
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
             </button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" @click="gridUpRow" style="margin-left: 20px">+ 행위로</button>
-            <button class="btn btn-filter-b" @click="gridDownRow">- 행아래</button>
             <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
             <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
             <button class="btn btn-filter-p" @click="fnSave" style="margin-left: 20px">저장</button>
@@ -186,9 +184,12 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params)        {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
-    bzcd_change(params)           {this.info.bzcd_selected = params},
+    bkup_id_change(params)        {this.info.bkup_id_selected = params;
+      this.$refs.grid.invoke("clear");},
+    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params;
+      this.$refs.grid.invoke("clear");},
+    bzcd_change(params)           {this.info.bzcd_selected = params;
+      this.$refs.grid.invoke("clear");},
     wbs_mng_cd_change(params)     {
       this.info.wbs_mng_cd_selected = params
 
@@ -203,8 +204,10 @@ export default {
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
         this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
       }
+      this.$refs.grid.invoke("clear");
     },
-    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
+    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params
+      this.$refs.grid.invoke("clear");},
 
     // 렌더링 중 적용 (mounted와 동일)
     onGridMounted(grid){
@@ -239,16 +242,17 @@ export default {
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
           axiosService.post("/PJTE5000/insert", {
-            gridData     : this.gridData,
-            bkup_id      : this.info.bkup_id_selected,
-            bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-            mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
+            bkup_id      : '0000000000',
+            bzcd         : this.info.bzcd_selected,
+            mng_cd       : this.info.wbs_mng_cd_selected,
             prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+            login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+            excelUplod   : this.excelUplod,
+            gridData     : this.gridData,
           }).then(res => {
             console.log(res);
             if (res.data) {
-              alert("저장이 완료되었습니다.")
+              alert("엑셀 업로드 저장이 완료되었습니다.")
               // 저장 후 그리드 Reload
               this.$refs.grid.invoke("reloadData");
               // 저장 후 변경 데이터 배열 비움
@@ -276,21 +280,24 @@ export default {
         if (this.createdRows.length !== 0) {
           if (this.validation(this.createdRows, "1") === true) {
             axiosService.post("/PJTE5000/insert", {
-              gridData     : this.createdRows,
-              bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd,
-              mng_cd       : this.mng_cd,
+              bkup_id      : '0000000000',
+              bzcd         : this.info.bzcd_selected,
+              mng_cd       : this.info.wbs_mng_cd_selected,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+              excelUplod   : this.excelUplod,
+              gridData     : this.createdRows,
             }).then(res => {
               console.log(res)
               if (res.data) {
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-                // 저장 후 변경 데이터 배열 비움
-                this.$refs.grid.invoke("clearModifiedData")
-                this.excelUplod = 'N'
+                if(this.updatedRows.length === 0 && this.deletedRows.length === 0){
+                    alert("신규 저장이 완료되었습니다.")
+                    // 저장 후 그리드 Reload
+                    this.$refs.grid.invoke("reloadData");
+                    // 저장 후 변경 데이터 배열 비움
+                    this.$refs.grid.invoke("clearModifiedData")
+                    this.excelUplod = 'N'
+                }
               } else {
                 alert("이미 등록된 프로그램입니다.")
               }
@@ -304,15 +311,20 @@ export default {
           if (this.validation(this.updatedRows, "1") === true) {
             try {
               axiosService.put("/PJTE5000/update", {
-                updatedRows   : this.updatedRows,
-                bkup_id      : this.info.bkup_id_selected,
+                bkup_id      : '0000000000',
+                bzcd         : this.info.bzcd_selected,
+                mng_cd       : this.info.wbs_mng_cd_selected,
                 prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-                login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
+                login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+                excelUplod   : this.excelUplod,
+                updatedRows   : this.updatedRows,
               }).then(res => {
                 console.log(res);
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
+                if(this.deletedRows.length === 0) {
+                  alert("수정이 완료되었습니다.")
+                  // 저장 후 그리드 Reload
+                  this.$refs.grid.invoke("reloadData");
+                }
               })
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
@@ -328,12 +340,13 @@ export default {
         if (this.deletedRows.length !== 0) {
           if (this.validation(this.deletedRows, "1") === true) {
             axiosService.put("/PJTE5000/delete", {
-              gridData     : this.deletedRows,
-              bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-              mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
+              bkup_id      : '0000000000',
+              bzcd         : this.info.bzcd_selected,
+              mng_cd       : this.info.wbs_mng_cd_selected,
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              excelUplod   : this.excelUplod,
+              gridData     : this.deletedRows,
             }).then(res => {
               console.log(res)
               if (res.data) {
@@ -394,6 +407,12 @@ export default {
         // this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
       }
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
+        this.aut_cd_check = false
+      } else {
+        this.aut_cd_check = true
+      }
+
     },
     gridAddRow() {
       if(this.autCheck() === false){ return; }  //권한 체크
@@ -511,9 +530,11 @@ export default {
       event.target.value = '';
     },
     autCheck() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
+      if(this.info.wbs_mng_cd_selected === '100' && sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         alert("권한이 부족합니다.")
         return false;
+      } else {
+        return true;
       }
     },
     // 진행률 계산 함수
@@ -621,6 +642,8 @@ export default {
       login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
       login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
+      aut_cd_check:false,
+
       validated : true,
       comboList : ["C27","C0","C1","C19","C35"],
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
@@ -697,7 +720,7 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 40,
+        height: 50,
         complexColumns: [
           {header: '계획시작',           name: 'mergeColumn1', childNames: ['pln_sta_dt','pln_sta_tim']},
           {header: '계획종료',           name: 'mergeColumn2', childNames: ['pln_end_dt','pln_end_tim']},
