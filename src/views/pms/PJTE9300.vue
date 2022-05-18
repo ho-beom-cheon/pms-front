@@ -102,7 +102,7 @@ class CustomRenderer {
   }
   render(props) {
     // 지원 버튼 img
-    this.el.src = '/img/ic_new.e2fc07f5.svg';
+    this.el.src = '../../img/ic_new.e2fc07f4.svg';
   }
 }
 // 그리드 내  커스텀 이미지 버튼을 만들기 위한 클래스 생성
@@ -116,7 +116,7 @@ class CustomRenderer2 {
   getElement() {return this.el;}
   render(props) {
     // 삭제 버튼 img
-    this.el.src = '/img/ic_delete.b3711c15.svg';
+    this.el.src = '../../img/ic_delete.b3711c12.svg';
   }
 }
 
