@@ -70,6 +70,7 @@
                 :showDummyRows="showDummyRows"
                 :editingEvent="editingEvent"
                 :columnOptions="columnOptions"
+                :rowHeaders="rowHeaders"
                 :rowHeight="rowHeight"
                 @click="onClick2"
             ></grid>
@@ -161,51 +162,60 @@ export default {
       this.createdRows = this.$refs.grid.invoke("getModifiedRows").createdRows;
       this.updatedRows = this.$refs.grid.invoke("getModifiedRows").updatedRows;
 
-        if(this.createdRows.length === 0 && this.updatedRows.length === 0 ){
-          alert("신규추가 및 변경된 정보가 없습니다.");
-          return;
+      if(this.createdRows.length === 0 && this.updatedRows.length === 0 ){
+        alert("신규추가 및 변경된 정보가 없습니다.");
+        return;
+      }
+      if (confirm("정말 저장하시겠습니까?") == true) {
+        if (this.createdRows.length !== 0) {
+          axiosService.post("/PJTE9300/insert_9300_01", {
+            bkup_id: '0000000000',
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
+            gridData: this.createdRows,
+          }).then(res => {
+            if (res.data === true) {
+              if (this.updatedRows.length === 0) {
+                alert("저장이 완료되었습니다.");
+                // 저장 후 그리드 Reload
+                this.$refs.grid.invoke("reloadData");
+              }
+            }
+          }).catch(e => {
+            alert("저장에 실패하였습니다.");
+          });
+          //프로젝트ID가 있으면 update
         }
-        if (confirm("정말 저장하시겠습니까?") == true) {
-          if (this.createdRows.length !== 0) {
-            axiosService.post("/PJTE9300/insert_9300_01", {
-              bkup_id: '0000000000',
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
-              gridData: this.createdRows,
+
+        if (this.updatedRows.length !== 0) {
+          let opr_no = this.$refs.grid.invoke("getValue", this.curRow, "opr_no")
+          let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+          let emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
+          if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900' || emp_no === opr_no) {
+            axiosService.put("/PJTE9300/update_9300_01", {
+              bkup_id: '0000000000',                                  //백업ID
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  //프로젝트ID
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              gridData: this.updatedRows,
             }).then(res => {
+              console.log(res.data);
               if (res.data === true) {
-                if (this.updatedRows.length === 0) {
-                  alert("저장이 완료되었습니다.");
-                  // 저장 후 그리드 Reload
-                  this.$refs.grid.invoke("reloadData");
-                }
+                alert("저장이 완료되었습니다.");
+                // update 후 재조회
+                this.$refs.grid.invoke("reloadData");
               }
             }).catch(e => {
               alert("저장에 실패하였습니다.");
             });
-            //프로젝트ID가 있으면 update
+          }else {
+            alert("등록자만 수정가능합니다.");
+            return false;
           }
-
-          if (this.updatedRows.length !== 0) {
-              axiosService.post("/PJTE9300/update_9300_01", {
-                bkup_id: '0000000000',                                  //백업ID
-                prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  //프로젝트ID
-                login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
-                gridData: this.updatedRows,
-              }).then(res => {
-                if (res.data === true) {
-                  alert("저장이 완료되었습니다.");
-                  // update 후 재조회
-                  this.$refs.grid.invoke("reloadData");
-                }
-              }).catch(e => {
-                alert("저장에 실패하였습니다.");
-              });
-          }
-        } else { //취소
-          retrun;
         }
-      },
+      } else { //취소
+        retrun;
+      }
+    },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
       if (this.detail.prjt_id == "" || this.detail.prjt_id == "null") {                   // 프로젝트명
@@ -289,29 +299,21 @@ export default {
     },
     //행추가
     gridAddRow() {
-        console.log("this.$store.state.pms.CD1000000038", this.$store.state.pms.CD1000000038)
-        this.addCheak = 'Y';
-        this.$refs.grid.invoke("appendRow",
-            {
-              save_yn: "N", //행르 추가하면 등록여부 'N'
-              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              bkup_id: "0000000000",
-            },
-            {focus: true, at: 0});
-        this.fnEnable();
+      console.log("this.$store.state.pms.CD1000000038N", this.$store.state.pms.CD1000000038N)
+      this.addCheak = 'Y';
+      this.$refs.grid.invoke("appendRow",
+          {
+            save_yn: "N", //행르 추가하면 등록여부 'N'
+            prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+            bkup_id: "0000000000",
+          },
+          {focus: true});
+      this.fnEnable();
     },
     // 추가한 행 편집 활성화
     fnEnable() {
       this.NewRow = this.$refs.grid.invoke("getRowCount");
-      // 새로 ADD한 Row의 등록일을 현재 날짜로 세팅
-      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_dt", this.getCurrentYyyymmdd());
-      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
-      this.$refs.grid.invoke("setValue", this.NewRow - 1, "work_step_cd", '100');
-      // 새로 ADD한 Row의 작업상태를 '100'으로 세팅
-      this.$refs.grid.invoke("setValue", this.NewRow - 1, "reg_nm", sessionStorage.getItem("LOGIN_EMP_NM"));
-      // // 새로 ADD한 Row의 담당자와 비고 내용 셀 색 변경
-      this.$refs.grid.invoke("addColumnClassName", "crpe_nm", "disableColor");
-      this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("enableRow", this.NewRow-1);
     },
     //행삭제
     gridDelRow() {
@@ -416,11 +418,12 @@ export default {
           name: 'real_prjt_id',
           align: 'left',
           formatter: 'listItemText',
+          disabled: true,
           filter: 'select',
           editor : {
             type : 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000038
+              listItems: this.$store.state.pms.CD1000000038N
             }
           }
         },
@@ -442,7 +445,7 @@ export default {
           editor: {
             type: 'select',
             options:{
-              listItems: this.$store.state.pms.CD1000000042
+              listItems: this.$store.state.pms.CD1000000042N
             }
           },
           filter: 'select',
@@ -457,7 +460,7 @@ export default {
         },
         {
           header: '요청업무',
-          width: 230,
+          //width: 230,
           align: 'left',
           name: 'duty_txt',
           editor: 'text',

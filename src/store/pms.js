@@ -42,7 +42,7 @@ const pms = {
         CD1000000035N:[],
         CD1000000036N:[],
         CD1000000037N:[],
-        //CD1000000038N:[],
+        CD1000000038N:[],
         CD1000000038:[],
         CD1000000039N:[],
         CD1000000040N:[],
@@ -62,7 +62,6 @@ const pms = {
     },
     mutations: {
         SEND_DATA(state,value) {
-            debugger
             state.GesiData = value;
         },
         SET_CD_ALL(state, array){
@@ -104,11 +103,11 @@ const pms = {
             state.CD1000000035N = array[35];
             state.CD1000000036N = array[36];
             state.CD1000000037N = array[37];
-            state.CD1000000038 = array[38];
+            state.CD1000000038N = array[38];
             state.CD1000000039N = array[39];
             state.CD1000000040N = array[40];
             state.CD1000000041N = array[41];
-            state.CD1000000042 = array[42];
+            state.CD1000000042N = array[42];
             state.CD1000000043N = array[43];
             state.CD1000000044N = array[44];
             state.CD1000000045N = array[45];
@@ -116,8 +115,8 @@ const pms = {
             state.CD1000000047N = array[47];
             state.CD1000000048N = array[48];
             state.CD1000000049N = array[49];
-            //state.CD1000000038 =array[50];
-            //state.CD1000000042 =array[51];
+            state.CD1000000038 =array[50];
+            state.CD1000000042 =array[51];
         },
     },
     actions: {
