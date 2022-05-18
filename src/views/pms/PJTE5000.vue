@@ -235,7 +235,6 @@ export default {
       this.modals.txt_modal1 = false;
     },
     fnSave() {
-      console.log(this.info.wbs_prc_sts_cd_selected);
       if(this.info.wbs_mng_cd_selected === '100') {
         this.prgRtCalc();
       }
@@ -602,15 +601,18 @@ export default {
 
         if(data[i].acvt_nm === null)          { alert("ACTIVITY명은 필수 입력 사항입니다");  return false;}
         if(data[i].crpe_nm === null)          { alert("담당자명은 필수 입력 사항입니다");   return false;}
+
         if(this.info.wbs_mng_cd_selected == '200'){
           if(data[i].wbs_prc_sts_cd === 'NNN')   { alert("처리단계는 필수 입력 사항입니다");      return false;}
         }
+
         if(data[i].pln_sta_dt === null)       { alert("계획시작일자는 필수 입력 사항입니다");   return false;}
         if(data[i].pln_sta_tim === null)      { alert("계획시작시간은 필수 입력 사항입니다");      return false;}
         if(data[i].pln_end_dt === null)       { alert("계획종료일자는 필수 입력 사항입니다");   return false;}
         if(data[i].pnl_end_tim === null)      { alert("계획종료시간은 필수 입력 사항입니다");      return false;}
 
         if(data[i].prjt_id === null)          { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
+
 
         if(data[i].step_cd >= '200') {
           if (data[i].hgrn_mng_id === null)   {alert("상위관리ID는 필수 입력 사항입니다"); return false;}
