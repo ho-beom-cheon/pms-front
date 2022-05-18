@@ -22,10 +22,10 @@
             ></combo>
 
             <li class="filter-item">
-              <div class="item-con">Task명
+              <div class="item-con">ACTIVITY명
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.task_nm"
+                       v-model="info.acvt_nm"
                        style="width: 250px"
                 >
               </div>
@@ -51,20 +51,18 @@
               <div class="item-con">실제종료일자
                 <div class="input-dateWrap"><input type="date" :max="info.acl_end_dt" v-model="info.acl_sta_dt"></div>
                 ~
-                <div class="input-dateWrap"><input type="date" :max="info.acl_sta_dt" v-model="info.acl_end_dt"></div>
+                <div class="input-dateWrap"><input type="date" :min="info.acl_sta_dt" v-model="info.acl_end_dt"></div>
               </div>
             </li>
           </ul>
           <ul class="filter-btn">
             <button class="btn btn-filter-p" @click="prgRtCalc"  :hidden="validated" style="margin-right: 20px">진행률계산</button>
             <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-            <button class="btn btn-filter-e">
+            <button class="btn btn-filter-e" :disabled="aut_cd_check">
               <label for="file">엑셀업로드</label>
               <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
             </button>
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-            <button class="btn btn-filter-b" @click="gridUpRow" style="margin-left: 20px">+ 행위로</button>
-            <button class="btn btn-filter-b" @click="gridDownRow">- 행아래</button>
             <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
             <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
             <button class="btn btn-filter-p" @click="fnSave" style="margin-left: 20px">저장</button>
@@ -186,9 +184,12 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    bkup_id_change(params)        {this.info.bkup_id_selected = params},
-    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},
-    bzcd_change(params)           {this.info.bzcd_selected = params},
+    bkup_id_change(params)        {this.info.bkup_id_selected = params;
+      this.$refs.grid.invoke("clear");},
+    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params;
+      this.$refs.grid.invoke("clear");},
+    bzcd_change(params)           {this.info.bzcd_selected = params;
+      this.$refs.grid.invoke("clear");},
     wbs_mng_cd_change(params)     {
       this.info.wbs_mng_cd_selected = params
 
@@ -203,8 +204,10 @@ export default {
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
         this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
       }
+      this.$refs.grid.invoke("clear");
     },
-    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params},
+    wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params
+      this.$refs.grid.invoke("clear");},
 
     // 렌더링 중 적용 (mounted와 동일)
     onGridMounted(grid){
@@ -238,16 +241,17 @@ export default {
       if(this.excelUplod === 'Y') {
         this.gridData = this.$refs.grid.invoke("getData");
           axiosService.post("/PJTE5000/insert", {
-            gridData     : this.gridData,
-            bkup_id      : this.info.bkup_id_selected,
-            bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-            mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
+            bkup_id      : '0000000000',
+            bzcd         : this.info.bzcd_selected,
+            mng_cd       : this.info.wbs_mng_cd_selected,
             prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-            login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+            login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+            excelUplod   : this.excelUplod,
+            gridData     : this.gridData,
           }).then(res => {
             console.log(res);
             if (res.data) {
-              alert("저장이 완료되었습니다.")
+              alert("엑셀 업로드 저장이 완료되었습니다.")
               // 저장 후 그리드 Reload
               this.$refs.grid.invoke("reloadData");
               // 저장 후 변경 데이터 배열 비움
@@ -275,21 +279,24 @@ export default {
         if (this.createdRows.length !== 0) {
           if (this.validation(this.createdRows, "1") === true) {
             axiosService.post("/PJTE5000/insert", {
-              gridData     : this.createdRows,
-              bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd,
-              mng_cd       : this.mng_cd,
+              bkup_id      : '0000000000',
+              bzcd         : this.info.bzcd_selected,
+              mng_cd       : this.info.wbs_mng_cd_selected,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+              excelUplod   : this.excelUplod,
+              gridData     : this.createdRows,
             }).then(res => {
               console.log(res)
               if (res.data) {
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
-                // 저장 후 변경 데이터 배열 비움
-                this.$refs.grid.invoke("clearModifiedData")
-                this.excelUplod = 'N'
+                if(this.updatedRows.length === 0 && this.deletedRows.length === 0){
+                    alert("신규 저장이 완료되었습니다.")
+                    // 저장 후 그리드 Reload
+                    this.$refs.grid.invoke("reloadData");
+                    // 저장 후 변경 데이터 배열 비움
+                    this.$refs.grid.invoke("clearModifiedData")
+                    this.excelUplod = 'N'
+                }
               } else {
                 alert("이미 등록된 프로그램입니다.")
               }
@@ -303,15 +310,20 @@ export default {
           if (this.validation(this.updatedRows, "1") === true) {
             try {
               axiosService.put("/PJTE5000/update", {
-                updatedRows   : this.updatedRows,
-                bkup_id      : this.info.bkup_id_selected,
+                bkup_id      : '0000000000',
+                bzcd         : this.info.bzcd_selected,
+                mng_cd       : this.info.wbs_mng_cd_selected,
                 prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
-                login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO")
+                login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+                excelUplod   : this.excelUplod,
+                updatedRows   : this.updatedRows,
               }).then(res => {
                 console.log(res);
-                alert("저장이 완료되었습니다.")
-                // 저장 후 그리드 Reload
-                this.$refs.grid.invoke("reloadData");
+                if(this.deletedRows.length === 0) {
+                  alert("수정이 완료되었습니다.")
+                  // 저장 후 그리드 Reload
+                  this.$refs.grid.invoke("reloadData");
+                }
               })
               // 저장 후 변경 데이터 배열 비움
               this.$refs.grid.invoke("clearModifiedData")
@@ -327,12 +339,13 @@ export default {
         if (this.deletedRows.length !== 0) {
           if (this.validation(this.deletedRows, "1") === true) {
             axiosService.put("/PJTE5000/delete", {
-              gridData     : this.deletedRows,
-              bkup_id      : this.info.bkup_id_selected,
-              bzcd         : this.bzcd == null? 'TTT':this.bzcd,
-              mng_cd       : this.mng_cd == null? 'TTT':this.mng_cd,
+              bkup_id      : '0000000000',
+              bzcd         : this.info.bzcd_selected,
+              mng_cd       : this.info.wbs_mng_cd_selected,
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO")
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              excelUplod   : this.excelUplod,
+              gridData     : this.deletedRows,
             }).then(res => {
               console.log(res)
               if (res.data) {
@@ -393,6 +406,12 @@ export default {
         // this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
       }
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
+        this.aut_cd_check = false
+      } else {
+        this.aut_cd_check = true
+      }
+
     },
     gridAddRow() {
       if(this.autCheck() === false){ return; }  //권한 체크
@@ -510,9 +529,11 @@ export default {
       event.target.value = '';
     },
     autCheck() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
+      if(this.info.wbs_mng_cd_selected === '100' && sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         alert("권한이 부족합니다.")
         return false;
+      } else {
+        return true;
       }
     },
     // 진행률 계산 함수
@@ -573,32 +594,33 @@ export default {
     validation(data) {
       for(let i=0; i<data.length; i++){
         /* 출력 영역  */
-        if(data[i].wbs_prc_sts_cd === null) { alert("관리구분코드는 필수 입력 사항입니다");      return false;}
-        if(data[i].bzcd === null)           { alert("업무구분코드는 필수 입력 사항입니다");      return false;}
+        if(data[i].mng_cd === null)           { alert("관리구분코드는 필수 입력 사항입니다");      return false;}
+        if(data[i].bzcd === null)             { alert("업무구분코드는 필수 입력 사항입니다");      return false;}
         if(data[i].step_cd === null)          { alert("단계구분코드는 필수 입력 사항입니다");    return false;}
-        if(data[i].mng_id === null)         { alert("관리ID는 필수 입력 사항입니다");   return false;}
+        if(data[i].mng_id === null)           { alert("관리ID는 필수 입력 사항입니다");   return false;}
 
-        if(data[i].acvt_nm === null)        { alert("ACTIVITY명은 필수 입력 사항입니다");  return false;}
-        if(data[i].task_nm === null)        { alert("테스크명은 필수 입력 사항입니다");   return false;}
-        if(data[i].crpe_nm === null)        { alert("담당자명은 필수 입력 사항입니다");   return false;}
-        if(data[i].mng_id === null)         { alert("처리단계는 필수 입력 사항입니다");      return false;}
-        if(data[i].pln_sta_dt === null)     { alert("계획시작일자는 필수 입력 사항입니다");   return false;}
-        if(data[i].pln_sta_tim === null)    { alert("계획시작시간은 필수 입력 사항입니다");      return false;}
-        if(data[i].pln_end_dt === null)     { alert("계획종료일자는 필수 입력 사항입니다");   return false;}
-        if(data[i].pnl_end_tim === null)    { alert("계획종료시간은 필수 입력 사항입니다");      return false;}
+        if(data[i].acvt_nm === null)          { alert("ACTIVITY명은 필수 입력 사항입니다");  return false;}
+        if(data[i].crpe_nm === null)          { alert("담당자명은 필수 입력 사항입니다");   return false;}
 
-        if(data[i].sort === null)           { alert("정렬은 필수 입력 사항입니다");   return false;}
-        if(data[i].prjt_id === null)        { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
-        if(data[i].wbs_cnt === null)        { alert("하위건수는 필수 입력 사항입니다");   return false;}
+        if(this.info.wbs_mng_cd_selected == '200'){
+          if(data[i].wbs_prc_sts_cd === 'NNN')   { alert("처리단계는 필수 입력 사항입니다");      return false;}
+        }
+
+        if(data[i].pln_sta_dt === null)       { alert("계획시작일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].pln_sta_tim === null)      { alert("계획시작시간은 필수 입력 사항입니다");      return false;}
+        if(data[i].pln_end_dt === null)       { alert("계획종료일자는 필수 입력 사항입니다");   return false;}
+        if(data[i].pnl_end_tim === null)      { alert("계획종료시간은 필수 입력 사항입니다");      return false;}
+
+        if(data[i].prjt_id === null)          { alert("프로젝트 ID는 필수 입력 사항입니다");   return false;}
+
 
         if(data[i].step_cd >= '200') {
-          if (data[i].hgrn_mng_id === null) {alert("상위관리ID는 필수 입력 사항입니다"); return false;}
+          if (data[i].hgrn_mng_id === null)   {alert("상위관리ID는 필수 입력 사항입니다"); return false;}
         }
-        if(data[i].wbs_prc_sts_cd === '100') {
+        if(data[i].mng_cd === '100') {
           if(data[i].wgt_rt === null)         { alert("가중치는 필수 입력 사항입니다");   return false;}
           if(data[i].prg_rt === null)         { alert("진행율은 필수 입력 사항입니다");   return false;}
         }
-        //if(data[i].atfl_mng_id === null)  { alert("첨부파일관리ID는 필수 입력 사항입니다");   return false;}
 
       }
       return  true;
@@ -622,6 +644,8 @@ export default {
       login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
       login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트ID
 
+      aut_cd_check:false,
+
       validated : true,
       comboList : ["C27","C0","C1","C19","C35"],
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
@@ -634,7 +658,7 @@ export default {
       info: {
         pgm_id: this.pgm_id,    // 프로그램ID
         pgm_nm: this.pgm_nm,    // 프로그램명
-        task_nm: this.task_nm,  // task명
+        acvt_nm: this.acvt_nm,  // task명
         crpe_nm: this.crpe_nm,  // 담당자명
 
         atfl_mng_id         : this.atfl_mng_id,  // 단위테스트 케이스 첨부파일관리
@@ -698,7 +722,7 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 40,
+        height: 50,
         complexColumns: [
           {header: '계획시작',           name: 'mergeColumn1', childNames: ['pln_sta_dt','pln_sta_tim']},
           {header: '계획종료',           name: 'mergeColumn2', childNames: ['pln_end_dt','pln_end_tim']},
@@ -729,8 +753,9 @@ export default {
           minWidth: 50,
           maxWidth: 250,
           name: 'bzcd',
-          align: 'center',
+          align: 'left',
           disabled: true,
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -746,6 +771,7 @@ export default {
           maxWidth: 250,
           name: 'step_cd',
           align: 'center',
+          filter: 'select',
           formatter: 'listItemText',
           disabled: false,
           editor: {
@@ -762,6 +788,7 @@ export default {
           name: 'mng_id',
           editor: "text",
           disabled: true,
+          filter: 'text',
         },
         {
           header: '상위관리 ID',
@@ -769,6 +796,7 @@ export default {
           align: 'center',
           name: 'hgrn_mng_id',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: 'ACTIVITY명',
@@ -777,13 +805,15 @@ export default {
           name: 'acvt_nm',
           editor: 'text',
           whiteSpace: 'pre',
+          filter: 'text',
         },
         {
-          header: '테스크명',
+          header: '산출물',
           width: 250,
-          align: 'center',
+          align: 'left',
           name: 'task_nm',
-          editor: 'text'
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '첨부',
@@ -793,7 +823,7 @@ export default {
           defaultValue: '미첨부',
         },
         {
-          header: '첨부',
+          header: '첨부파일관리ID',
           width: 50,
           align: 'center',
           name: 'atfl_mng_id',
@@ -804,12 +834,14 @@ export default {
           width: 80,
           align: 'left',
           name: 'crpe_nm',
-          editor: 'text'
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '처리단계',
           width: 70,
           align: 'center',
+          filter: 'select',
           name: 'wbs_prc_sts_cd',
           formatter: 'listItemText',
           editor: {
@@ -840,14 +872,14 @@ export default {
           align: 'center',
           name: 'pln_sta_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
+          editor: 'datePicker',
+          filter: 'text',
         },
         {
           header: '시간',
           width: 50,
           align: 'center',
           name: 'pln_sta_tim',
-          format: 'yyyy-mm-dd',
           editor: 'text',
           disabled: false,
         },
@@ -856,7 +888,9 @@ export default {
           width: 80,
           align: 'center',
           name: 'pln_end_dt',
-          editor: 'datePicker'
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          filter: 'text',
         },
         {
           header: '시간',
@@ -873,6 +907,7 @@ export default {
           name: 'acl_sta_dt',
           editor: 'datePicker',
           disabled: true,
+          filter: 'text',
         },
         {
           header: '시간',
@@ -889,6 +924,7 @@ export default {
           name: 'acl_end_dt',
           editor: 'datePicker',
           disabled: true,
+          filter: 'text',
         },
         {
           header: '시간',
@@ -903,6 +939,7 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
+          filter: 'text',
         },
         {
           header: '정렬',

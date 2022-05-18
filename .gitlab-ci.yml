@@ -2,10 +2,23 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   SONAR_OPTS: "-Dsonar.host.url=https://sonar.iteyes-lab.gurmwi.io -Dsonar.login=$SONAR_TOKEN -Dsonar.gitlab.project_id=$CI_PROJECT_PATH -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.gitlab.query_max_retry=50 -Dsonar.gitlab.query_wait=5000"
   GIT_STRATEGY: clone
-  
+
 stages:
+  - test
   - verify
   - publish
+
+test:
+  image: node:14.18.1
+  stage: test
+  before_script:
+    - echo "before_script"
+    - rm -rf ./node_modules ./yarn.lock ./package-lock.json
+    - npm cache clear --force
+    - npm install --save --legacy-peer-deps
+  script:
+    - echo "build pms"
+    - npm run build
 
 build-publish:
   image: node:14.18.1
@@ -15,6 +28,7 @@ build-publish:
   before_script:
     - echo "before_script"
     - rm -rf ./node_modules ./yarn.lock ./package-lock.json
+    - npm cache clear --force
     - npm install --save --legacy-peer-deps
   script:
     - echo "build pms"
@@ -26,7 +40,8 @@ build-publish:
     - sudo systemctl status nginx
     - sudo netstat -nltp
   when: manual
-
+  only:
+    - master
 
 sonarqube_master:
   stage: verify

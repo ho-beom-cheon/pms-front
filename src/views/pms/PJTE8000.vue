@@ -86,7 +86,8 @@
         <div class="div0-d">
           <div class="div3-b">
             <div class="div-header-b"><h2>금주 주간보고 등록</h2>
-              <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
+              <ul class="filter-btn"><p>* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</p>
+                <button class="btn btn-filter-e" style="margin-left: 20px"><router-link tag="a" to="/PJTE9300">본사인력요청</router-link></button>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
               </ul>
             </div>
@@ -216,7 +217,7 @@
                     <td>
                       <textarea cols="140"
                                 rows="5"
-                                placeholder="이슈내용을 입력해주세요"
+                                placeholder="이슈내용을 입력해주세요.(이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.)"
                                 v-model="detail.iss_txt"
                                 style="width: 685px;height:80px;"
                                 @dblclick="modalView(2)"
@@ -392,6 +393,7 @@
                       <textarea cols="140"
                                 rows="5"
                                 v-model="detail.bef_iss_txt"
+                                placeholder="이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다."
                                 readonly="readonly"
                                 style="width: 685px;height:80px;"
                                 @dblclick="modalView(5)"
@@ -594,7 +596,6 @@ export default {
     real_prjt_id_change(params)        {this.info.real_prjt_id_selected = params},
     dept_cd_change(params)             {this.info.dept_cd_selected = params},
     // 금주주간보고 등록 차수,프로젝트명
-
     real_prjt_id_change_iss(params)    {this.detail.real_prjt_id_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
 
     week_sqn_cd_change_iss(params)     {this.detail.week_sqn_cd_selected = params; this.fnLastWeekClear(); this.fnWekVail()},
@@ -637,7 +638,9 @@ export default {
           if (confirm("정말 등록/변경 하시겠습니까??") == true) {
               axiosService.post("/PJTE8000/insert",
                   {
-                    prjt_id: sessionStorage.getItem('LOGIN_PROJ_ID'),        // (상세)프로젝트아이디
+                    prjt_id: this.info.login_proj_id,        // (상세)프로젝트아이디
+                    bef_emp_no: this.info.login_emp_no,
+                    bef_aut_cd: this.info.login_aut_cd,
                     real_prjt_id: this.detail.real_prjt_id_selected,                       // (상세)제목
                     week_yymm: this.detail.week_yymm,               // (상세)요청내용
                     week_sqn_cd: this.detail.week_sqn_cd_selected,        // (상세)요청구분
@@ -681,6 +684,8 @@ export default {
       let week_sqn_cd_selected = this.detail.week_sqn_cd_selected
       let real_prjt_id_selected = this.detail.real_prjt_id_selected
       let dept_cd_selected = this.detail.dept_cd_selected
+      let bef_emp_no = this.info.login_emp_no
+      let bef_aut_cd = this.info.login_aut_cd
 
       if ((week_sqn_cd_selected != null && week_sqn_cd_selected != '') && (real_prjt_id_selected != null && real_prjt_id_selected != '')) {
         axiosService.get("/PJTE8000/select02", {
@@ -689,6 +694,8 @@ export default {
             week_sqn_cd_selected,
             real_prjt_id_selected,
             dept_cd_selected,
+            bef_emp_no,
+            bef_aut_cd,
           }
         })
             .then(res => {
@@ -1152,6 +1159,8 @@ export default {
         real_prjt_id_selected : 'TTT',                    // 프로젝트콤보
         week_sqn_cd_selected  : 'TTT',                    // 차수콤보
         dept_cd_selected      : 'TTT',                    // 부문명
+        bef_aut_cd            : sessionStorage.getItem("LOGIN_AUT_CD"),
+        bef_emp_no            : sessionStorage.getItem("LOGIN_EMP_NO"),
 
         week_seq_val : 'Y',
       },

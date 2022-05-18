@@ -85,10 +85,13 @@ export default {
         {id: 'PJTE9100', path: '/PJTE9100', name: 'KMS게시판생성'},
         {id: 'PJTE9110', path: '/PJTE9110', name: 'KMS게시판'},
         {id: 'PJTE9120', path: '/PJTE9120', name: 'KMS게시글등록'},
+        {id: 'PJTE7100', path: '/PJTE7100', name: 'As-Is대To-Be매핑관리'},
+        {id: 'PJTE9300', path: '/PJTE9300', name: '프로젝트인력요청현황'},
       ],
       menu_list2: [
         {id: 'PJTE1000', path: '/PJTE1000', name: '공지사항'},
         {id: 'PJTE8000', path: '/PJTE8000', name: '주간보고'},
+        {id: 'PJTE9300', path: '/PJTE9300', name: '프로젝트인력요청현황'},
         {id: 'PJTE9900', path: '/PJTE9900', name: 'KanbanBoard'},
         {id: 'PJTE9005', path: '/PJTE9005', name: '인력프로파일관리'},
         {id: 'PJTE9200', path: '/PJTE9200', name: '회의실예약'},
