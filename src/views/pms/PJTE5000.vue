@@ -22,10 +22,10 @@
             ></combo>
 
             <li class="filter-item">
-              <div class="item-con">Task명
+              <div class="item-con">ACTIVITY명
                 <input type="text"
                        placeholder="입력"
-                       v-model="info.task_nm"
+                       v-model="info.acvt_nm"
                        style="width: 250px"
                 >
               </div>
@@ -633,7 +633,7 @@ export default {
       info: {
         pgm_id: this.pgm_id,    // 프로그램ID
         pgm_nm: this.pgm_nm,    // 프로그램명
-        task_nm: this.task_nm,  // task명
+        acvt_nm: this.acvt_nm,  // task명
         crpe_nm: this.crpe_nm,  // 담당자명
 
         atfl_mng_id         : this.atfl_mng_id,  // 단위테스트 케이스 첨부파일관리
@@ -728,8 +728,9 @@ export default {
           minWidth: 50,
           maxWidth: 250,
           name: 'bzcd',
-          align: 'center',
+          align: 'left',
           disabled: true,
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -745,6 +746,7 @@ export default {
           maxWidth: 250,
           name: 'step_cd',
           align: 'center',
+          filter: 'select',
           formatter: 'listItemText',
           disabled: false,
           editor: {
@@ -761,6 +763,7 @@ export default {
           name: 'mng_id',
           editor: "text",
           disabled: true,
+          filter: 'text',
         },
         {
           header: '상위관리 ID',
@@ -768,6 +771,7 @@ export default {
           align: 'center',
           name: 'hgrn_mng_id',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: 'ACTIVITY명',
@@ -776,13 +780,15 @@ export default {
           name: 'acvt_nm',
           editor: 'text',
           whiteSpace: 'pre',
+          filter: 'text',
         },
         {
           header: '산출물',
           width: 250,
-          align: 'center',
+          align: 'left',
           name: 'task_nm',
-          editor: 'text'
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '첨부',
@@ -792,7 +798,7 @@ export default {
           defaultValue: '미첨부',
         },
         {
-          header: '첨부',
+          header: '첨부파일관리ID',
           width: 50,
           align: 'center',
           name: 'atfl_mng_id',
@@ -803,12 +809,14 @@ export default {
           width: 80,
           align: 'left',
           name: 'crpe_nm',
-          editor: 'text'
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '처리단계',
           width: 70,
           align: 'center',
+          filter: 'select',
           name: 'wbs_prc_sts_cd',
           formatter: 'listItemText',
           editor: {
@@ -839,14 +847,14 @@ export default {
           align: 'center',
           name: 'pln_sta_dt',
           format: 'yyyy-mm-dd',
-          editor: 'datePicker'
+          editor: 'datePicker',
+          filter: 'text',
         },
         {
           header: '시간',
           width: 50,
           align: 'center',
           name: 'pln_sta_tim',
-          format: 'yyyy-mm-dd',
           editor: 'text',
           disabled: false,
         },
@@ -855,7 +863,9 @@ export default {
           width: 80,
           align: 'center',
           name: 'pln_end_dt',
-          editor: 'datePicker'
+          format: 'yyyy-mm-dd',
+          editor: 'datePicker',
+          filter: 'text',
         },
         {
           header: '시간',
@@ -872,6 +882,7 @@ export default {
           name: 'acl_sta_dt',
           editor: 'datePicker',
           disabled: true,
+          filter: 'text',
         },
         {
           header: '시간',
@@ -888,6 +899,7 @@ export default {
           name: 'acl_end_dt',
           editor: 'datePicker',
           disabled: true,
+          filter: 'text',
         },
         {
           header: '시간',
@@ -902,6 +914,7 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
+          filter: 'text',
         },
         {
           header: '정렬',
