@@ -229,6 +229,7 @@ export default {
           sqno :this.$refs.grid.invoke("getValue", this.curRow, "sqno"),
           login_emp_nm:sessionStorage.getItem("LOGIN_EMP_NM"),
           login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"),
+          login_dept_nm:sessionStorage.getItem("LOGIN_DEPT_NM"),
         }).then(res => { // 리턴값
           if(res.status == 200) {
             this.fnSearch()
