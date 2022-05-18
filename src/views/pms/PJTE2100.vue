@@ -898,6 +898,7 @@ export default {
         if(data[i].pl_no === null)        { alert(pgm_nm+" PL 사번은 필수 입력 사항입니다");      return false;}
         if(data[i].crpe_no === null)      { alert(pgm_nm+" 담당자 사번은 필수 입력 사항입니다");   return false;}
 
+
         if(pass_yn === "N"){
           if(data[i].dvlp_dis_cd === "900"){
             alert(pgm_nm1+"의 개발구분[삭제]는 PMO만 가능합니다.\nPMS신청관리 화면에서 신청하세요.");

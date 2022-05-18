@@ -642,6 +642,7 @@ export default {
         if(data[i].pl_eno === null || data[i].pl_eno === "")                 { alert(pgm_nm+" PL는 필수 입력 사항입니다");    return false;}
         if(data[i].crpe_eno === null || data[i].crpe_eno === "")             { alert(pgm_nm+" 담당현업은 필수 입력 사항입니다");    return false;}
 
+
         // 저장과 기타항목수정 분류
         if(division === "1") {
           if(pass_yn === 'N') {
