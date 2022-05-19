@@ -520,8 +520,8 @@ export default {
       this.$refs.grid.invoke("getRow", this.curRow);
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn') {
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='200', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&bzcd=${bzcd}&pgm_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='200', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id, sqn_cd=gridData.sqn_cd
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&bzcd=${bzcd}&tst_case_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}&sqn_cd=${sqn_cd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -619,42 +619,66 @@ export default {
     // validation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
     validation(data, division) {
       for(let i=0; i<data.length; i++){
-        // 저장과 기타항목수정 분류
-        if(division === "1") {
-          /* 권한 ID에 따른 처리단계 체크 */
-          if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
-            if(data[i].itg_tst_prc_cd === null)  { alert((i+1)+"번째 처리단계는 필수 입력 사항입니다");      return false;}
-            if (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" && data[i].itg_tst_prc_cd !== "200") {
-              alert((i+1)+"번째 권한이 부족합니다. 개발자만 가능한 처리단계입니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" && data[i].itg_tst_prc_cd !== "200" && data[i].itg_tst_prc_cd !== "300") {
-              alert((i+1)+"번째 권한이 부족합니다. PL만 가능한 처리단계입니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT, 400:현업]
-            if (data[i].itg_tst_prc_cd !== "400") {
-              alert((i+1)+"번째 권한이 부족합니다. 담당현업만 가능한 처리단계입니다.")
-              return false;
-            }
-          }
+        let pgm_nm = "["+data[i].tst_case_nm+"]은/는"
+        let pgm_nm1 = "["+data[i].tst_case_nm+"]"
+        let dvlpe_no = data[i].dvlpe_eno
+        let pl_no    = data[i].pl_eno
+        let crpe_no  = data[i].crpe_eno
+        let pass_yn  = "N"
 
-          if((data[i].atfl_mng_id === null || data[i].atfl_mng_id === "") && data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100" )  { alert("통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === "500" || sessionStorage.getItem("LOGIN_AUT_CD") === "600" || sessionStorage.getItem("LOGIN_AUT_CD") === "900"){
+          pass_yn  = "Y"
         }
         /* 출력 영역  */
-        if(data[i].bzcd === null || data[i].bzcd === "")                   { alert((i+1)+"번째 업무구분은 필수 입력 사항입니다");       return false;}
-        if(data[i].scnr_id === null || data[i].scnr_id === "")             { alert((i+1)+"번째 시나리오 ID는 필수 입력 사항입니다");     return false;}
-        if(data[i].scnr_nm === null || data[i].scnr_nm === "")             { alert((i+1)+"번째 시나리오명은 필수 입력 사항입니다");      return false;}
-        if(data[i].tst_case_id === null || data[i].tst_case_id === "")     { alert((i+1)+"번째 테스트케이스 ID는 필수 입력 사항입니다");  return false;}
-        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")     { alert((i+1)+"번째 테스트케이스 명은 필수 입력 사항입니다");  return false;}
-        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")     { alert((i+1)+"번째 예상시작일은 필수 입력 사항입니다");    return false;}
-        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")     { alert((i+1)+"번째 예상종료일은 필수 입력 사항입니다");    return false;}
-        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")         { alert((i+1)+"번째 개발자는 필수 입력 사항입니다");    return false;}
-        if(data[i].pl_eno === null || data[i].pl_eno === "")               { alert((i+1)+"번째 PL는 필수 입력 사항입니다");    return false;}
-        if(data[i].crpe_eno === null || data[i].crpe_eno === "")           { alert((i+1)+"번째 담당현업은 필수 입력 사항입니다");    return false;}
+        if(data[i].bzcd === null || data[i].bzcd === "")                     { alert(pgm_nm+" 업무구분은 필수 입력 사항입니다");       return false;}
+        if(data[i].scnr_id === null || data[i].scnr_id === "")               { alert(pgm_nm+" 시나리오 ID는 필수 입력 사항입니다");     return false;}
+        if(data[i].scnr_nm === null || data[i].scnr_nm === "")               { alert(pgm_nm+" 시나리오명은 필수 입력 사항입니다");      return false;}
+        if(data[i].tst_case_id === null || data[i].tst_case_id === "")       { alert(pgm_nm+" 테스트케이스 ID는 필수 입력 사항입니다");  return false;}
+        if(data[i].tst_case_nm === null || data[i].tst_case_nm === "")       { alert(pgm_nm+" 테스트케이스 명은 필수 입력 사항입니다");  return false;}
+        if(data[i].itg_tst_prc_cd === null || data[i].itg_tst_prc_cd === "") { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null || data[i].frcs_sta_dt === "")       { alert(pgm_nm+" 예상시작일은 필수 입력 사항입니다");    return false;}
+        if(data[i].frcs_end_dt === null || data[i].frcs_end_dt === "")       { alert(pgm_nm+" 예상종료일은 필수 입력 사항입니다");    return false;}
+        if(data[i].dvlpe_eno === null || data[i].dvlpe_eno === "")           { alert(pgm_nm+" 개발자는 필수 입력 사항입니다");    return false;}
+        if(data[i].pl_eno === null || data[i].pl_eno === "")                 { alert(pgm_nm+" PL는 필수 입력 사항입니다");    return false;}
+        if(data[i].crpe_eno === null || data[i].crpe_eno === "")             { alert(pgm_nm+" 담당현업은 필수 입력 사항입니다");    return false;}
+
+
+        // 저장과 기타항목수정 분류
+        if(division === "1") {
+          if(pass_yn === 'N') {
+            if (data[i].itg_tst_prc_cd === "000" || data[i].itg_tst_prc_cd === "100" || data[i].itg_tst_prc_cd === "200") {
+              if (dvlpe_no != sessionStorage.getItem("LOGIN_EMP_NO") && pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[테스트전,테스트시작,테스트자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                return false;
+              }
+            } else if (data[i].itg_tst_prc_cd === "300") {
+              if (pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[PL확인]는 PL만 가능한 처리단계입니다.")
+                return false;
+              }
+            } else if (data[i].itg_tst_prc_cd === "400") {
+              if (crpe_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[테스트완료]는 담당현업만 가능한 처리단계입니다.")
+                return false;
+              }
+            }
+            if(this.untValidation(data,data[i].scnr_id) === false && (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100") )  { alert(pgm_nm + " 통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+          }
+        }
       }
       return  true;
+    },
+    // 통합테스트 시나리오 증빙 여부 검증
+    untValidation(data,scnr_id) {
+      let unt_tst_yn = false
+      for(let i=0; i<data.length; i++) {
+        let sh_scnr_id = data[i].scnr_id
+        let atfl_mng_id = data[i].atfl_mng_id
+        if(sh_scnr_id === scnr_id && atfl_mng_id != ''){
+          unt_tst_yn = true
+        }
+      }
+        return  unt_tst_yn;
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
@@ -697,8 +721,9 @@ export default {
               wb.Sheets[sheetName].F1.w = "tst_case_id"
               wb.Sheets[sheetName].G1.w = "tst_case_nm"
               wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
-              let I1 = {
-                I1: {
+              wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
+              let J1 = {
+                J1: {
                   t: 's',
                   v: '예상시작일',
                   r: '<t>예상시작일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -706,10 +731,10 @@ export default {
                   w: 'frcs_sta_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
-              wb.Sheets[sheetName].I2.w = "frcs_sta_dt"
-              let J1 = {
-                J1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
+              wb.Sheets[sheetName].J2.w = "frcs_sta_dt"
+              let K1 = {
+                K1: {
                   t: 's',
                   v: '예상종료일',
                   r: '<t>예상종료일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -717,14 +742,14 @@ export default {
                  w: 'frcs_end_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
-              wb.Sheets[sheetName].J2.w = "frcs_end_dt"
-              wb.Sheets[sheetName].K2.w = "sta_dt"
-              wb.Sheets[sheetName].L2.w = "end_dt"
-              wb.Sheets[sheetName].M1.w = "dvlpe_cnf_dt"
-              wb.Sheets[sheetName].N1.w = "pl_cnf_dt"
-              let O1 = {
-                O1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
+              wb.Sheets[sheetName].K2.w = "frcs_end_dt"
+              wb.Sheets[sheetName].L2.w = "sta_dt"
+              wb.Sheets[sheetName].M2.w = "end_dt"
+              wb.Sheets[sheetName].N1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].O1.w = "pl_cnf_dt"
+              let P1 = {
+                P1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -732,10 +757,10 @@ export default {
                   w: 'dvlpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
-              wb.Sheets[sheetName].O2.w = "dvlpe_enm"
-              let P1 = {
-                P1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
+              wb.Sheets[sheetName].P2.w = "dvlpe_enm"
+              let Q1 = {
+                Q1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -743,10 +768,10 @@ export default {
                   w: 'dvlpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
-              wb.Sheets[sheetName].P2.w = "dvlpe_btn"
-              let Q1 = {
-                Q1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
+              wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
+              let R1 = {
+                R1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -754,10 +779,10 @@ export default {
                   w: 'dvlpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
-              wb.Sheets[sheetName].Q2.w = "dvlpe_eno"
-              let R1 = {
-                R1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+              wb.Sheets[sheetName].R2.w = "dvlpe_eno"
+              let S1 = {
+                S1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -765,10 +790,10 @@ export default {
                   w: 'pl_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-              wb.Sheets[sheetName].R2.w = "pl_enm"
-              let S1 = {
-                S1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+              wb.Sheets[sheetName].S2.w = "pl_enm"
+              let T1 = {
+                T1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -776,10 +801,10 @@ export default {
                   w: 'pl_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-              wb.Sheets[sheetName].S2.w = "pl_btn"
-              let T1 = {
-                T1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
+              wb.Sheets[sheetName].T2.w = "pl_btn"
+              let U1 = {
+                U1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -787,10 +812,10 @@ export default {
                   w: 'pl_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
-              wb.Sheets[sheetName].T2.w = "pl_eno"
-              let U1 = {
-                U1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+              wb.Sheets[sheetName].U2.w = "pl_eno"
+              let V1 = {
+                V1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -798,10 +823,10 @@ export default {
                   w: 'crpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-              wb.Sheets[sheetName].U2.w = "crpe_enm"
-              let V1 = {
-                V1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+              wb.Sheets[sheetName].V2.w = "crpe_enm"
+              let W1 = {
+                W1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -809,10 +834,10 @@ export default {
                   w: 'crpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
-              wb.Sheets[sheetName].V2.w = "crpe_btn"
-              let W1 = {
-                W1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
+              wb.Sheets[sheetName].W2.w = "crpe_btn"
+              let X1 = {
+                X1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -820,9 +845,8 @@ export default {
                   w: 'crpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
-              wb.Sheets[sheetName].W2.w = "crpe_eno"
-              wb.Sheets[sheetName].X1.w = "atfl_mng_id_yn"
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
+              wb.Sheets[sheetName].X2.w = "crpe_eno"
               wb.Sheets[sheetName].Y2.w = "err_tot_cnt"
               wb.Sheets[sheetName].Z2.w = "err_cmpl_cnt"
               wb.Sheets[sheetName].AA2.w = "err_ncmpl_cnt"
@@ -1107,6 +1131,13 @@ export default {
           }
         },
         {
+          header: '증빙첨부',
+          width: 80,
+          align: 'center',
+          name: 'atfl_mng_id_yn',
+          defaultValue: '미첨부',
+        },
+        {
           header: '예상시작일',
           width: 90,
           align: 'center',
@@ -1214,14 +1245,6 @@ export default {
           width: 80,
           align: 'center',
           name: 'crpe_eno',
-        },
-        {
-          header: '증빙첨부',
-          width: 80,
-          align: 'center',
-          name: 'atfl_mng_id_yn',
-          // hidden : true,
-          defaultValue: '미첨부',
         },
         {
           header: '증빙첨부',
@@ -1343,6 +1366,13 @@ export default {
           width: 100,
           name: 'prjt_id',
           hidden : true,
+        },
+        {
+          header: '통합테스트시나리오대상여부',
+          width: 90,
+          name: 'unt_tst_yn',
+          align: 'center',
+          hidden : true
         },
       ],
     }
