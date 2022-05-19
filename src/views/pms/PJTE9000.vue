@@ -37,6 +37,7 @@
                 <div class="div-grid-c">
                 </div>
                 <ul class="filter-btn" style="margin-top: 25px">
+                  <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
                   <button class="btn btn-filter-e" :disabled="aut_cd_check2">
                     <label for="file">엑셀업로드</label>
                     <input type="file" id="file"  @change="gridExcelImport" accept=".xlsx, .xls" style="display: none;"/>
@@ -895,6 +896,11 @@ export default {
       this.NewRow = this.$refs.grid1.invoke("getRowCount");
       this.$refs.grid1.invoke("enableCell", this.NewRow-1, 'empno');
       this.$refs.grid1.invoke("focus", this.NewRow-1, 'empno');
+    },
+    // 양식다운로드
+    formDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
     },
     // 행추가
     gridAddRow(grid_num){
