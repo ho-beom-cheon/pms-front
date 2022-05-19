@@ -520,8 +520,8 @@ export default {
       this.$refs.grid.invoke("getRow", this.curRow);
       // grid 셀 클릭 시 윈도우 팝업 호출(함수화예정)
       if(ev.columnName === 'atfl_mng_id_yn') {
-        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='200', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id
-        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&bzcd=${bzcd}&pgm_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
+        let bkup_id='0000000000', prjt_id=gridData.prjt_id, atfl_mng_id=gridData.atfl_mng_id != null?gridData.atfl_mng_id:'', file_rgs_dscd='200', bzcd = gridData.bzcd, tst_case_id=gridData.tst_case_id, sqn_cd=gridData.sqn_cd
+        this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&bzcd=${bzcd}&tst_case_id=${tst_case_id}&file_rgs_dscd=${file_rgs_dscd}&sqn_cd=${sqn_cd}`, "open_file_page", "width=1000, height=800");
       }
 
       // 결함등록 Column 클릭 시 결함등록팝업 호출
@@ -662,11 +662,23 @@ export default {
                 return false;
               }
             }
-            if(data[i].atfl_mng_id === '' && (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100") )  { alert(pgm_nm + " 통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+            if(this.untValidation(data,data[i].scnr_id) === false && (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100") )  { alert(pgm_nm + " 통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
           }
         }
       }
       return  true;
+    },
+    // 통합테스트 시나리오 증빙 여부 검증
+    untValidation(data,scnr_id) {
+      let unt_tst_yn = false
+      for(let i=0; i<data.length; i++) {
+        let sh_scnr_id = data[i].scnr_id
+        let atfl_mng_id = data[i].atfl_mng_id
+        if(sh_scnr_id === scnr_id && atfl_mng_id != ''){
+          unt_tst_yn = true
+        }
+      }
+        return  unt_tst_yn;
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
@@ -709,8 +721,9 @@ export default {
               wb.Sheets[sheetName].F1.w = "tst_case_id"
               wb.Sheets[sheetName].G1.w = "tst_case_nm"
               wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
-              let I1 = {
-                I1: {
+              wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
+              let J1 = {
+                J1: {
                   t: 's',
                   v: '예상시작일',
                   r: '<t>예상시작일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -718,10 +731,10 @@ export default {
                   w: 'frcs_sta_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
-              wb.Sheets[sheetName].I2.w = "frcs_sta_dt"
-              let J1 = {
-                J1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
+              wb.Sheets[sheetName].J2.w = "frcs_sta_dt"
+              let K1 = {
+                K1: {
                   t: 's',
                   v: '예상종료일',
                   r: '<t>예상종료일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -729,14 +742,14 @@ export default {
                  w: 'frcs_end_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
-              wb.Sheets[sheetName].J2.w = "frcs_end_dt"
-              wb.Sheets[sheetName].K2.w = "sta_dt"
-              wb.Sheets[sheetName].L2.w = "end_dt"
-              wb.Sheets[sheetName].M1.w = "dvlpe_cnf_dt"
-              wb.Sheets[sheetName].N1.w = "pl_cnf_dt"
-              let O1 = {
-                O1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
+              wb.Sheets[sheetName].K2.w = "frcs_end_dt"
+              wb.Sheets[sheetName].L2.w = "sta_dt"
+              wb.Sheets[sheetName].M2.w = "end_dt"
+              wb.Sheets[sheetName].N1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].O1.w = "pl_cnf_dt"
+              let P1 = {
+                P1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -744,10 +757,10 @@ export default {
                   w: 'dvlpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
-              wb.Sheets[sheetName].O2.w = "dvlpe_enm"
-              let P1 = {
-                P1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
+              wb.Sheets[sheetName].P2.w = "dvlpe_enm"
+              let Q1 = {
+                Q1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -755,10 +768,10 @@ export default {
                   w: 'dvlpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
-              wb.Sheets[sheetName].P2.w = "dvlpe_btn"
-              let Q1 = {
-                Q1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
+              wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
+              let R1 = {
+                R1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -766,10 +779,10 @@ export default {
                   w: 'dvlpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
-              wb.Sheets[sheetName].Q2.w = "dvlpe_eno"
-              let R1 = {
-                R1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+              wb.Sheets[sheetName].R2.w = "dvlpe_eno"
+              let S1 = {
+                S1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -777,10 +790,10 @@ export default {
                   w: 'pl_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-              wb.Sheets[sheetName].R2.w = "pl_enm"
-              let S1 = {
-                S1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+              wb.Sheets[sheetName].S2.w = "pl_enm"
+              let T1 = {
+                T1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -788,10 +801,10 @@ export default {
                   w: 'pl_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-              wb.Sheets[sheetName].S2.w = "pl_btn"
-              let T1 = {
-                T1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
+              wb.Sheets[sheetName].T2.w = "pl_btn"
+              let U1 = {
+                U1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -799,10 +812,10 @@ export default {
                   w: 'pl_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
-              wb.Sheets[sheetName].T2.w = "pl_eno"
-              let U1 = {
-                U1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+              wb.Sheets[sheetName].U2.w = "pl_eno"
+              let V1 = {
+                V1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -810,10 +823,10 @@ export default {
                   w: 'crpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-              wb.Sheets[sheetName].U2.w = "crpe_enm"
-              let V1 = {
-                V1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+              wb.Sheets[sheetName].V2.w = "crpe_enm"
+              let W1 = {
+                W1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -821,10 +834,10 @@ export default {
                   w: 'crpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
-              wb.Sheets[sheetName].V2.w = "crpe_btn"
-              let W1 = {
-                W1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
+              wb.Sheets[sheetName].W2.w = "crpe_btn"
+              let X1 = {
+                X1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -832,9 +845,8 @@ export default {
                   w: 'crpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
-              wb.Sheets[sheetName].W2.w = "crpe_eno"
-              wb.Sheets[sheetName].X1.w = "atfl_mng_id_yn"
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
+              wb.Sheets[sheetName].X2.w = "crpe_eno"
               wb.Sheets[sheetName].Y2.w = "err_tot_cnt"
               wb.Sheets[sheetName].Z2.w = "err_cmpl_cnt"
               wb.Sheets[sheetName].AA2.w = "err_ncmpl_cnt"
@@ -1119,6 +1131,13 @@ export default {
           }
         },
         {
+          header: '증빙첨부',
+          width: 80,
+          align: 'center',
+          name: 'atfl_mng_id_yn',
+          defaultValue: '미첨부',
+        },
+        {
           header: '예상시작일',
           width: 90,
           align: 'center',
@@ -1226,14 +1245,6 @@ export default {
           width: 80,
           align: 'center',
           name: 'crpe_eno',
-        },
-        {
-          header: '증빙첨부',
-          width: 80,
-          align: 'center',
-          name: 'atfl_mng_id_yn',
-          // hidden : true,
-          defaultValue: '미첨부',
         },
         {
           header: '증빙첨부',
@@ -1355,6 +1366,13 @@ export default {
           width: 100,
           name: 'prjt_id',
           hidden : true,
+        },
+        {
+          header: '통합테스트시나리오대상여부',
+          width: 90,
+          name: 'unt_tst_yn',
+          align: 'center',
+          hidden : true
         },
       ],
     }
