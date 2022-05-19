@@ -188,6 +188,25 @@
             <button id="crpenm-close2" class="btn btn-filter-b" @click="fnCloseModal(2)">닫기</button>
           </div>
         </Modal>
+        <Modal :show.sync="modals.txt_modal1"  class="modal_main">
+          <div class="div-header-b">
+            <h2>비고 확대보기</h2>
+            <ul class="filter-btn">
+              <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
+              <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
+            </ul>
+          </div>
+          <tr>
+              <textarea id="detailTextArea1"
+                        v-model="rmrk"
+                        :disabled=true
+                        style="height: 690px; width:700px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+              ></textarea>
+            <div style="float: right;margin-top: 5px">
+              <button class="btn btn-filter-b" @click="fnCloseModal(3)">닫기</button>
+            </div>
+          </tr>
+        </Modal>
       </section>
       <!-- page contents -->
       <section class="page-contents">
@@ -228,6 +247,7 @@
                         placeholder="비고를 확인 할 작업항목을 선택하세요."
                         v-model="rmrk"
                         style=" margin-left: 10px; height: 206px; width: 100%; border: 1px solid #bdbdbd; line-height: normal"
+                        @dblclick="modalView()"
                     ></textarea>
                   </div>
                 </li>
@@ -579,7 +599,21 @@ export default {
     dblClick3(ev) {
       this.fnEdit(2);
     },
-
+    //더블클릭시 레이어 띄우기위해
+    modalView(){
+      //true일때 레이어 오픈
+      this.modals.txt_modal1 = true;
+    },
+    //상세내용 확대보기  (+확대버튼)
+    textSizeUP() {
+      this.defaultFontSize++;
+      document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
+    },
+    //상세내용 확대보기  (-축소버튼)
+    textSizeDown() {
+      this.defaultFontSize--;
+      document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
+    },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(num) {
       if(num == 1){ //담당자모달팝업 수정버튼
@@ -631,6 +665,8 @@ export default {
         this.modals.crpe_nm_modal = false;
       }else if(num == 2) {
         this.modals.bak_work_modal = false;
+      }else if(num == 3) {
+        this.modals.txt_modal1 = false;
       }
     },
     fnDelete() {
@@ -798,6 +834,8 @@ export default {
       gridData: [],
       addCheak: 'N',
 
+      large_num : '',
+
       info: {
         // 조회 변수
         bkup_id_selected  : '0000000000',                                 //백업ID
@@ -829,6 +867,7 @@ export default {
       modals: {
         crpe_nm_modal: false,   // 담당자, 참여자 모달팝업
         bak_work_modal: false,   // 후속작업 모달팝업
+        txt_modal1: false     //비고 모달 팝업
       },
       modalTxt: this.modalTxt,   // 비고
       crpenmTxt: this.crpenmTxt, // 담당자
@@ -838,6 +877,7 @@ export default {
       check_save: false,          // 저장 버튼 비활성화/활성화
       delete_yn: true,
 
+      defaultFontSize: 40,
       /* grid 속성 */
       count: 0,
       curRow: -1,
@@ -1167,5 +1207,8 @@ export default {
   max-width: 700px;
   margin: 1.75rem auto !important;
 }
-
+.modal-content {
+  width :1680px;
+  height : 800px;
+}
 </style>
