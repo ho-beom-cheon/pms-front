@@ -50,6 +50,10 @@
         <div class="grid1-box" style="height: 470px">
           <div class="div-header"><h2>As-Is 대 To-Be 매핑내역</h2>
             <ul class="filter-btn">
+              <button class="btn btn-filter-e">
+                <label for="file">엑셀업로드</label>
+                <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
+              </button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             </ul>
           </div>
@@ -211,6 +215,7 @@ import { Grid } from '@toast-ui/vue-grid';
 import PmsSideBar from  "@/components/PmsSideBar";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
+import XLSX from "xlsx";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
@@ -288,6 +293,7 @@ export default {
                     document.getElementById("as_pgm_dis_cd").style.backgroundColor="#f2f2f2";
                     document.getElementById("as_pgm_dis_cd").disabled=true;
                     alert("신규저장을 완료했습니다.")
+                    this.fnSearch()
                   }).catch(e => {
                     alert("신규저장에 실패했습니다.")
                   })
@@ -314,10 +320,12 @@ export default {
                 dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
                 rmrk: this.detail.rmrk,                                // 비고
                 login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+                excelUplod: this.excelUplod,
               }).then(res => {
                 console.log(res);
                 this.$refs.grid.invoke("reloadData");
                 alert("저장을 완료했습니다.")
+                this.fnSearch()
               }).catch(e => {
                 alert("저장에 실패했습니다.")
               })
@@ -386,6 +394,7 @@ export default {
     fnSearch(){
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
+      this.excelUplod = 'N'
     },
 
     // 조회한 데이터로 인적사항 데이터 바인딩
@@ -484,6 +493,90 @@ export default {
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
+
+    // 재직사항 그리드 엑셀업로드
+    gridExcelImport(event) {
+      // 엑셀파일 업로드 로직 추가
+      console.log(event.target.files[0])
+      this.file = event.target.files ? event.target.files[0] : null;
+      let input = event.target;
+      let reader = new FileReader();
+      reader.onload = () => {
+        let fileData = reader.result;
+        let wb = XLSX.read(fileData, {type: 'binary'});
+        console.log("wb ::"+ wb.SheetNames);
+        let gridExcelData;
+        wb.SheetNames.forEach((sheetName, idx) => {
+          if (sheetName === 'As-Is대To-Be매핑관리' || sheetName === 'Sheet1') {
+            console.log(wb.Sheets[sheetName])
+            wb.Sheets[sheetName].B1.w = "as_pgm_id"
+            wb.Sheets[sheetName].C1.w = "as_pgm_nm"
+            wb.Sheets[sheetName].D1.w = "to_pgm_id"
+            wb.Sheets[sheetName].E1.w = "to_pgm_nm"
+            wb.Sheets[sheetName].F1.w = "as_pgm_dis_cd"
+            wb.Sheets[sheetName].G1.w = "use_pgm_txt"
+            wb.Sheets[sheetName].H1.w = "dvlpe_no"
+            wb.Sheets[sheetName].I1.w = "trn_stt_cd"
+            wb.Sheets[sheetName].J1.w = "sta_dt"
+            wb.Sheets[sheetName].K1.w = "end_dt"
+            wb.Sheets[sheetName].L1.w = "rmrk"
+            let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+            let rowObj_copy = [];
+
+            for (let n = 0; n < rowObj.length; n++) {
+              if (isNaN(rowObj[n].sta_dt) == false) {
+                rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+              }
+              if (isNaN(rowObj[n].end_dt) == false) {
+                rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+              }
+              rowObj_copy[n-1] = rowObj[n];
+            }
+
+            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+            console.log("gridExcelData ::", gridExcelData)
+          }
+        })
+        this.excelUplod = 'Y'
+
+        try {
+          this.$refs.grid.invoke('resetData', gridExcelData)
+          if(this.excelUplod === 'Y') {
+            axiosService.post("/PJTE7100/create", {
+              excelUplod: this.excelUplod,
+              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              rowDatas: gridExcelData
+            }).then(res => {
+              console.log(res);
+              if (res.data) {
+                alert("엑셀 업로드 저장이 완료되었습니다.")
+                this.fnSearch()
+              }
+            }).catch(e => {
+              alert("등록중 오류 ::"+ e)
+            })
+          }
+        } catch (e){
+          alert('업로드에 실패했습니다.')
+        }
+      };
+      reader.readAsBinaryString(input.files[0]);
+      event.target.value = '';
+    },
+    excelDateToJSDate(excelDate) {
+      /* 엑셀에서 넘어온 숫자형태의 데이터를 날짜형태로 바꿔주는 함수
+      ex) 1. 엑셀 파일에서 2021-02 형태로 값을 입력하면 Feb-22 형태의 날짜 데이터가 자동입력됨
+          2. gridExcelImport2 함수에서
+          XLSX.utils.sheet_to_json(wb.Sheets[sheetName]) 엑셀데이터를 JSON으로 바뀌면서
+          Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
+          3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
+       */
+      var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
+      var converted_date = date.toISOString().split('T')[0].substring(0, 7);
+      return converted_date;
+    },
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
@@ -499,7 +592,9 @@ export default {
       comboList2 : ["C-51"],
       comboList3 : ["C-52"],
 
+      gridData: [],
       newCheck : 'Y',
+      excelUplod: 'N',
 
       info : {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
