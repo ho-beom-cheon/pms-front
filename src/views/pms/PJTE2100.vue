@@ -910,17 +910,17 @@ export default {
           if(pass_yn === 'N') {
             if (data[i].prc_step_cd === "000" || data[i].prc_step_cd === "100" || data[i].prc_step_cd === "200") {
               if (dvlpe_no != sessionStorage.getItem("LOGIN_EMP_NO") && pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
-                alert(pgm_nm + "의 처리단계[개발전,개발시작,개발자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                alert(pgm_nm1 + "의 처리단계[개발전,개발시작,개발자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
                 return false;
               }
             } else if (data[i].prc_step_cd === "300") {
               if (pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
-                alert(pgm_nm + "의 처리단계[PL확인]는 PL만 가능한 처리단계입니다.")
+                alert(pgm_nm1 + "의 처리단계[PL확인]는 PL만 가능한 처리단계입니다.")
                 return false;
               }
             } else if (data[i].prc_step_cd === "400") {
               if (crpe_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
-                alert(pgm_nm + "의 처리단계[개발종료]는 담당현업만 가능한 처리단계입니다.")
+                alert(pgm_nm1 + "의 처리단계[개발종료]는 담당현업만 가능한 처리단계입니다.")
                 return false;
               }
             }
