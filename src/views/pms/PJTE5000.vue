@@ -189,7 +189,9 @@ export default {
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params;
       this.$refs.grid.invoke("clear");},
     bzcd_change(params)           {this.info.bzcd_selected = params;
-      this.$refs.grid.invoke("clear");},
+      this.$refs.grid.invoke("clear");
+      this.excelAutCheck();
+      },
     wbs_mng_cd_change(params)     {
       this.info.wbs_mng_cd_selected = params
 
@@ -205,6 +207,7 @@ export default {
         this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
       }
       this.$refs.grid.invoke("clear");
+      this.excelAutCheck();
     },
     wbs_prc_sts_cd_change(params) {this.info.wbs_prc_sts_cd_selected = params
       this.$refs.grid.invoke("clear");},
@@ -406,12 +409,7 @@ export default {
         // this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
       }
-      if(sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
-        this.aut_cd_check = false
-      } else {
-        this.aut_cd_check = true
-      }
-
+      this.excelAutCheck();
     },
     gridAddRow() {
       if(this.autCheck() === false){ return; }  //권한 체크
@@ -534,6 +532,21 @@ export default {
         return false;
       } else {
         return true;
+      }
+    },
+    excelAutCheck() {
+      if(this.info.wbs_mng_cd_selected === '100' ) {
+        if (this.info.bzcd_selected === 'TTT' && (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900')) {
+          this.aut_cd_check = false
+        } else {
+          this.aut_cd_check = true
+        }
+      } else {
+        if (this.info.bzcd_selected != 'TTT') {
+          this.aut_cd_check = false
+        } else {
+          this.aut_cd_check = true
+        }
       }
     },
     // 진행률 계산 함수
