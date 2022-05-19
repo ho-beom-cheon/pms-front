@@ -200,7 +200,7 @@
               <textarea id="detailTextArea1"
                         v-model="rmrk"
                         :disabled=true
-                        style="height: 690px; width:700px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                        style="height: 690px; width:668px; background-color: #f2f2f2; border: none; line-height: normal; font-size : 30px"
               ></textarea>
             <div style="float: right;margin-top: 5px">
               <button class="btn btn-filter-b" @click="fnCloseModal(3)">닫기</button>
@@ -1207,8 +1207,5 @@ export default {
   max-width: 700px;
   margin: 1.75rem auto !important;
 }
-.modal-content {
-  width :1680px;
-  height : 800px;
-}
+
 </style>
