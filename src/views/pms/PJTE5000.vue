@@ -429,8 +429,6 @@ export default {
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"mng_id");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"prg_rt");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"bzcd");
-      // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_end_tim");
-      // this.$refs.grid.invoke("enableCell", gridData.length-1 ,"pln_sta_tim");
     },
     gridDelRow() {
       if(this.autCheck() === false){ return; }  //권한 체크
@@ -528,7 +526,7 @@ export default {
     },
     autCheck() {
       if(this.info.wbs_mng_cd_selected === '100' && sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
-        alert("권한이 부족합니다.")
+        alert("WBS관리에 대한 행추가 및 행삭제는 PMO만 가능합니다.\nPMS신청관리 화면에 신청하세요.")
         return false;
       } else {
         return true;
@@ -619,7 +617,7 @@ export default {
         if(data[i].acvt_nm === null)          { alert("ACTIVITY명은 필수 입력 사항입니다");   return false;}
         if(data[i].crpe_nm === null)          { alert("담당자명은 필수 입력 사항입니다");      return false;}
 
-        if(this.info.wbs_mng_cd_selected == '200'){
+        if(this.info.wbs_mng_cd_selected != '100'){
           if(data[i].wbs_prc_sts_cd === 'NNN' || data[i].wbs_prc_sts_cd === 'TTT')  { alert("처리단계는 필수 입력 사항입니다"); return false;}
         }
 

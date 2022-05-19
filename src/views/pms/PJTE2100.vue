@@ -881,6 +881,7 @@ export default {
         let pl_no    = data[i].pl_no
         let crpe_no  = data[i].crpe_no
         let pass_yn  = "N"
+        let unt_tst_yn  = data[i].unt_tst_yn
 
         if(sessionStorage.getItem("LOGIN_AUT_CD") === "500" || sessionStorage.getItem("LOGIN_AUT_CD") === "600" || sessionStorage.getItem("LOGIN_AUT_CD") === "900"){
           pass_yn  = "Y"
@@ -924,7 +925,7 @@ export default {
                 return false;
               }
             }
-            if(data[i].atfl_mng_id === '' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100") )  { alert(pgm_nm + " 단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+            if(data[i].atfl_mng_id === '' && unt_tst_yn === 'Y' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100") )  { alert(pgm_nm + " 단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
           }
         }
       }
@@ -1346,6 +1347,13 @@ export default {
           align: 'center',
           hidden : true,
           defaultValue: sessionStorage.getItem("LOGIN_PROJ_ID")
+        },
+        {
+          header: '단위테스트대상여부',
+          width: 90,
+          name: 'unt_tst_yn',
+          align: 'center',
+          hidden : true
         },
       ]
     }
