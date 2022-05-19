@@ -37,10 +37,12 @@
         <div class="grid1-box" style="height: 190px">
           <div class="div-header"><h2>산출물 상세정보</h2>
             <ul class="filter-btn">
-              <button class="btn btn-filter-e" v-if="info.file_cd_selected != 'TTT'">
-                <label for="file" @click="checkBzcd">엑셀업로드</label>
-                <input type="file" id="file"  @change="gridExcelImport" accept="application/vnd.ms-excel.sheet.macroEnabled.12" style="display: none;" :disabled="read"/>
-              </button>
+              <div title="업무구분과 산출물구분을 선택한 후 엑셀을 업로드 할 수 있습니다.">
+                <button class="btn btn-filter-e" v-bind:disabled="this.info.file_cd_selected === 'TTT' || this.info.bzcd_selected === 'TTT'">
+                  <label for="file" @click="checkBzcd">엑셀업로드</label>
+                  <input type="file" id="file"  @change="gridExcelImport" accept="application/vnd.ms-excel.sheet.macroEnabled.12" style="display: none;"/>
+                </button>
+              </div>
               <div class="btn btn-filter-e">
                 <a href="#" @click="gridExcelExport(1)">엑셀다운로드</a>
               </div>
