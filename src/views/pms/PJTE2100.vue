@@ -379,14 +379,6 @@ export default {
 
         if (this.createdRows.length !== 0) {
           if (this.vaildation(this.createdRows, "1") === true) {
-            if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
-              for (let i = 0; i < this.createdRows.length; i++) {
-                if (this.createdRows[i].dvlp_dis_cd === "900") {
-                  alert((i+1)+"번째 개발구분 삭제 권한이 없습니다.");
-                  return;
-                }
-              }
-            }
             axiosService.post("/PJTE2100/create", {
               excelUplod: this.excelUplod,
               login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
@@ -411,14 +403,6 @@ export default {
         if (this.updatedRows.length !== 0) {
           if (this.vaildation(this.updatedRows, "1") === true) {
             try {
-              if (sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600') {
-                for (let i = 0; i < this.updatedRows.length; i++) {
-                  if (this.updatedRows[i].dvlp_dis_cd === "900") {
-                    alert((i+1)+"번째 삭제 권한이 없습니다.");
-                    return;
-                  }
-                }
-              }
               axiosService.post("/PJTE2100/update", {
                 login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
                 login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
@@ -487,7 +471,7 @@ export default {
       this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
       this.addCheak = 'N';
       // 열고정
-      this.$refs.grid.invoke("setFrozenColumnCount", 4);
+      this.$refs.grid.invoke("setFrozenColumnCount", 3);
     },
     beforeExport(grid){
       console.log("beforeExport::" , grid)
@@ -635,7 +619,7 @@ export default {
     },
     // 행추가
     gridAddRow(){
-      this.$refs.grid.invoke("setFrozenColumnCount", 0);
+      //this.$refs.grid.invoke("setFrozenColumnCount", 0);
       this.addCheak = 'Y';
       this.$refs.grid.invoke("appendRow",
           {
@@ -891,41 +875,59 @@ export default {
     vaildation(data, division) {
       for(let i=0; i<data.length; i++){
         // 저장과 기타항목수정 분류
-        if(division === "1") {
-          /* 권한 ID에 따른 처리단계 체크 */
-          if (sessionStorage.getItem("LOGIN_AUT_CD") === "100") {        //권한 ID[100:개발자]
-            if(data[i].prc_step_cd === null)  { alert((i+1)+"번째 처리단계는 필수 입력 사항입니다");      return false;}
-            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200") {
-              alert((i+1)+"번째 권한이 부족합니다. 개발자만 가능한 처리단계입니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "200") { //권한 ID[200:PL]
-            if (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "200" && data[i].prc_step_cd !== "300") {
-              alert((i+1)+"번째 권한이 부족합니다. PL만 가능한 처리단계입니다.")
-              return false;
-            }
-          } else if (sessionStorage.getItem("LOGIN_AUT_CD") === "300" || sessionStorage.getItem("LOGIN_AUT_CD") === "400") { //권한 ID[300:IT]
-            if (data[i].prc_step_cd !== "400") {
-              alert((i+1)+"번째 권한이 부족합니다. 담당현업만 가능한 처리단계입니다.")
-              return false;
-            }
-          }
-          //권한ID[500:PM,600:PMO] - 모두 가능
-          if(this.addCheak === 'N') {
-            if(data[i].atfl_mng_id === '' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100") )  { alert("단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
-          }
+        let pgm_nm = "["+data[i].pgm_nm+"]은/는"
+        let pgm_nm1 = "["+data[i].pgm_nm+"]"
+        let dvlpe_no = data[i].dvlpe_no
+        let pl_no    = data[i].pl_no
+        let crpe_no  = data[i].crpe_no
+        let pass_yn  = "N"
+        let unt_tst_yn  = data[i].unt_tst_yn
+
+        if(sessionStorage.getItem("LOGIN_AUT_CD") === "500" || sessionStorage.getItem("LOGIN_AUT_CD") === "600" || sessionStorage.getItem("LOGIN_AUT_CD") === "900"){
+          pass_yn  = "Y"
         }
         /* 출력 영역  */
-        if(data[i].bzcd === null)         { alert((i+1)+"번째 업무구분은 필수 입력 사항입니다");      return false;}
-        if(data[i].pgm_id === null)       { alert((i+1)+"번째 프로그램ID는 필수 입력 사항입니다");    return false;}
-        if(data[i].pgm_nm === null)       {  alert((i+1)+"번째 프로그램명은 필수 입력 사항입니다");   return false;}
-        if(data[i].dvlp_dis_cd === null)  { alert((i+1)+"번째 개발구분은 필수 입력 사항입니다");      return false;}
-        if(data[i].pgm_dis_cd === null)   { alert((i+1)+"번째 프로그램 구분은 필수 입력 사항입니다");  return false;}
-        if(data[i].frcs_sta_dt === null)  { alert((i+1)+"번째 예상시작일은 필수 입력 사항입니다");   return false;}
-        if(data[i].frcs_end_dt === null)  { alert((i+1)+"번째 예상종료일은 필수 입력 사항입니다");   return false;}
-        if(data[i].dvlpe_no === null)     { alert((i+1)+"번째 개발자 사번은 필수 입력 사항입니다");   return false;}
-        if(data[i].pl_no === null)        { alert((i+1)+"번째 PL 사번은 필수 입력 사항입니다");      return false;}
-        if(data[i].crpe_no === null)      { alert((i+1)+"번째 담당자 사번은 필수 입력 사항입니다");   return false;}
+        if(data[i].bzcd === null)         { alert(pgm_nm+" 업무구분은 필수 입력 사항입니다");      return false;}
+        if(data[i].pgm_id === null)       { alert(pgm_nm+" 프로그램ID는 필수 입력 사항입니다");    return false;}
+        if(data[i].pgm_nm === null)       { alert(pgm_nm+" 프로그램명은 필수 입력 사항입니다");   return false;}
+        if(data[i].dvlp_dis_cd === null)  { alert(pgm_nm+" 개발구분은 필수 입력 사항입니다");      return false;}
+        if(data[i].pgm_dis_cd === null)   { alert(pgm_nm+" 프로그램 구분은 필수 입력 사항입니다");  return false;}
+        if(data[i].frcs_sta_dt === null)  { alert(pgm_nm+" 예상시작일은 필수 입력 사항입니다");   return false;}
+        if(data[i].frcs_end_dt === null)  { alert(pgm_nm+" 예상종료일은 필수 입력 사항입니다");   return false;}
+        if(data[i].prc_step_cd === null)  { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");      return false;}
+        if(data[i].dvlpe_no === null)     { alert(pgm_nm+" 개발자 사번은 필수 입력 사항입니다");   return false;}
+        if(data[i].pl_no === null)        { alert(pgm_nm+" PL 사번은 필수 입력 사항입니다");      return false;}
+        if(data[i].crpe_no === null)      { alert(pgm_nm+" 담당자 사번은 필수 입력 사항입니다");   return false;}
+
+
+        if(pass_yn === "N"){
+          if(data[i].dvlp_dis_cd === "900"){
+            alert(pgm_nm1+"의 개발구분[삭제]는 PMO만 가능합니다.\nPMS신청관리 화면에서 신청하세요.");
+            return false;
+          }
+        }
+        if(division === "1") {
+          //권한ID[500:PM,600:PMO] - 모두 가능
+          if(pass_yn === 'N') {
+            if (data[i].prc_step_cd === "000" || data[i].prc_step_cd === "100" || data[i].prc_step_cd === "200") {
+              if (dvlpe_no != sessionStorage.getItem("LOGIN_EMP_NO") && pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[개발전,개발시작,개발자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                return false;
+              }
+            } else if (data[i].prc_step_cd === "300") {
+              if (pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[PL확인]는 PL만 가능한 처리단계입니다.")
+                return false;
+              }
+            } else if (data[i].prc_step_cd === "400") {
+              if (crpe_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
+                alert(pgm_nm1 + "의 처리단계[개발종료]는 담당현업만 가능한 처리단계입니다.")
+                return false;
+              }
+            }
+            if(data[i].atfl_mng_id === '' && unt_tst_yn === 'Y' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100") )  { alert(pgm_nm + " 단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+          }
+        }
       }
       return  true;
     },
@@ -1097,11 +1099,10 @@ export default {
         },
         {
           header: '개발구분',
-          width: 60,
+          width: 80,
           align: 'center',
           name: 'dvlp_dis_cd',
           formatter: 'listItemText',
-          type:'text',
           editor: {
             type: 'select',
             options:{
@@ -1346,6 +1347,13 @@ export default {
           align: 'center',
           hidden : true,
           defaultValue: sessionStorage.getItem("LOGIN_PROJ_ID")
+        },
+        {
+          header: '단위테스트대상여부',
+          width: 90,
+          name: 'unt_tst_yn',
+          align: 'center',
+          hidden : true
         },
       ]
     }

@@ -359,7 +359,7 @@
                               id="detailTextArea"
                               v-model="detail.req_dis_txt"
                               :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
                     ></textarea>
                     <textarea v-else-if="this.large_num == '1'"
                               cols="103"
@@ -367,7 +367,7 @@
                               id="detailTextArea1"
                               v-model="detail.req_dis_txt"
                               :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
                     ></textarea>
                     <textarea v-else-if="this.large_num == '2'"
                               cols="103"
@@ -375,7 +375,7 @@
                               id="detailTextArea2"
                               v-model="detail.ttmn_txt"
                               :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
                     ></textarea>
                     <textarea v-else-if="this.large_num == '3'"
                               cols="103"
@@ -383,7 +383,7 @@
                               id="detailTextArea3"
                               v-model="detail.slv_mpln_txt"
                               :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
                     ></textarea>
                     <textarea v-else-if="this.large_num == '4'"
                               cols="103"
@@ -391,7 +391,7 @@
                               id="detailTextArea4"
                               v-model="detail.rmrk"
                               :disabled=true
-                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal"
+                              style="height: 425px; width: 647px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
                     ></textarea>
                   </td>
                 </li>

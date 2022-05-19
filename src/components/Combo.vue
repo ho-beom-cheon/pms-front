@@ -248,7 +248,7 @@
       </tr>
       </tbody>
     </table>
-<!--   메인 cpmbo -->
+    <!--   메인 cpmbo -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C0'">
       <div class="item-con">프로젝트
         <select
@@ -900,6 +900,7 @@
     </li>
     <!-- 인력프로파일관리 끝 -->
 
+    <!-- As-Is대To-Be매핑 시작 -->
     <!-- As-Is대To-Be매핑 시작 -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-51'">
       <div class="item-con">As-Is프로그램유형
