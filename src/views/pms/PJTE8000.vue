@@ -55,7 +55,6 @@
             >
             </combo>
             <li class="filter-btn">
-              <button class="btn btn-filter-e" @click="gridExcelExport"  style="margin-top: 5px">엑셀다운로드</button>
               <button class="btn btn-filter-p" style="margin-left: 20px;margin-top: 5px" @click="fnSearch" >조회</button>
             </li>
           </ul>
@@ -66,6 +65,9 @@
       <section class="page-contents">
         <div class="grid1-box">
           <div class="div-header-b"><h2>주간보고 내역</h2>
+            <li class="filter-btn">
+              <button class="btn btn-filter-e" @click="gridExcelExport"  style="margin-top: 5px">엑셀다운로드</button>
+            </li>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
             <grid
