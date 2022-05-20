@@ -645,6 +645,7 @@ export default {
           width: 400,
           align: 'left',
           name: 'todo_txt',
+          filter: 'text',
         },
         {
           header: '시작일자',
@@ -652,6 +653,7 @@ export default {
           align: 'center',
           name: 'pln_sta_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '종료일자',
@@ -659,11 +661,13 @@ export default {
           align: 'center',
           name: 'pln_end_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '결함내용',
           align: 'left',
           name: 'rmrk',
+          filter: 'text',
         },
       ],
       columns3: [
@@ -673,12 +677,14 @@ export default {
           align: 'center',
           name: 'rgs_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '공지구분',
           width: 150,
           align: 'left',
           name: 'ntar_bzcd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',

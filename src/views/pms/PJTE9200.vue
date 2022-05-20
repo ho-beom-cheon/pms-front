@@ -593,6 +593,7 @@ export default {
           align: 'center',
           name: 'rsr_dt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '시작시간',
@@ -614,12 +615,14 @@ export default {
           align: 'left',
           name: 'mtng_room_nm',
           editor: 'text',
+          filter: 'select',
         },
         {
           header: '회의제목',
           align: 'left',
           name: 'mtng_ttl',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '예약자',
@@ -627,6 +630,7 @@ export default {
           align: 'center',
           name: 'rsr_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '순번',
