@@ -992,8 +992,7 @@ export default {
           }).then(res => {
             console.log(res);
             if(res.data){
-              alert('업로드 파일이 적용되었습니다.')
-              // this.$refs.grid1.invoke('resetData',gridExcelData)
+              alert('사용자 엑셀업로드 정보가 저장되었습니다.')
               this.info.grid_num = 1
               this.fnSearch()
 
