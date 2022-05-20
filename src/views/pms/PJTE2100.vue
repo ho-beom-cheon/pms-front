@@ -684,8 +684,11 @@ export default {
             wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
             wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
             wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
-            let H1 = {
-              H1: {
+            wb.Sheets[sheetName].H1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName].I1.w = "prc_step_cd"
+            wb.Sheets[sheetName].J1.w = "prg_txt"
+            let K1 = {
+              K1: {
                 t: 's',
                 v: '예상시작일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -693,10 +696,10 @@ export default {
                 w: 'frcs_sta_dt'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], H1)
-            wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
-            let I1 = {
-              I1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
+            wb.Sheets[sheetName].K2.w = "frcs_sta_dt"
+            let L1 = {
+              L1: {
                 t: 's',
                 v: '예상종료일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -704,18 +707,16 @@ export default {
                 w: 'frcs_end_dt'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
-            wb.Sheets[sheetName].I2.w = "frcs_end_dt"
-            wb.Sheets[sheetName].J1.w = "sta_dt"
-            wb.Sheets[sheetName].K1.w = "end_dt"
-            wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
-            wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
-            wb.Sheets[sheetName].N1.w = "prc_step_cd"
-            wb.Sheets[sheetName].O1.w = "prg_txt"
-            wb.Sheets[sheetName].P2.w = "dvlpe_nm"
-            wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
-            let R1 = {
-              R1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], L1)
+            wb.Sheets[sheetName].L2.w = "frcs_end_dt"
+            wb.Sheets[sheetName].M1.w = "sta_dt"
+            wb.Sheets[sheetName].N1.w = "end_dt"
+            wb.Sheets[sheetName].O1.w = "dvlpe_cnf_dt"
+            wb.Sheets[sheetName].P1.w = "pl_cnf_dt"
+            wb.Sheets[sheetName].Q2.w = "dvlpe_nm"
+            wb.Sheets[sheetName].R2.w = "dvlpe_btn"
+            let S1 = {
+              S1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -723,12 +724,12 @@ export default {
                 w: 'dvlpe_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-            wb.Sheets[sheetName].R2.w = "dvlpe_no"
-            wb.Sheets[sheetName].S2.w = "pl_nm"
-            wb.Sheets[sheetName].T2.w = "pl_btn"
-            let U1 = {
-              U1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+            wb.Sheets[sheetName].S2.w = "dvlpe_no"
+            wb.Sheets[sheetName].T2.w = "pl_nm"
+            wb.Sheets[sheetName].U2.w = "pl_btn"
+            let V1 = {
+              V1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -736,12 +737,12 @@ export default {
                 w: 'pl_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-            wb.Sheets[sheetName].U2.w = "pl_no"
-            wb.Sheets[sheetName].V2.w = "crpe_nm"
-            wb.Sheets[sheetName].W2.w = "crpe_btn"
-            let X1 = {
-              X1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+            wb.Sheets[sheetName].V2.w = "pl_no"
+            wb.Sheets[sheetName].W2.w = "crpe_nm"
+            wb.Sheets[sheetName].X2.w = "crpe_btn"
+            let Y1 = {
+              Y1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -749,9 +750,8 @@ export default {
                 w: 'crpe_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
-            wb.Sheets[sheetName].X2.w = "crpe_no"
-            wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Y1)
+            wb.Sheets[sheetName].Y2.w = "crpe_no"
             wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
             wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
             wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
@@ -892,9 +892,9 @@ export default {
         if(data[i].pgm_nm === null)       { alert(pgm_nm+" 프로그램명은 필수 입력 사항입니다");   return false;}
         if(data[i].dvlp_dis_cd === null)  { alert(pgm_nm+" 개발구분은 필수 입력 사항입니다");      return false;}
         if(data[i].pgm_dis_cd === null)   { alert(pgm_nm+" 프로그램 구분은 필수 입력 사항입니다");  return false;}
+        if(data[i].prc_step_cd === null)  { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");      return false;}
         if(data[i].frcs_sta_dt === null)  { alert(pgm_nm+" 예상시작일은 필수 입력 사항입니다");   return false;}
         if(data[i].frcs_end_dt === null)  { alert(pgm_nm+" 예상종료일은 필수 입력 사항입니다");   return false;}
-        if(data[i].prc_step_cd === null)  { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");      return false;}
         if(data[i].dvlpe_no === null)     { alert(pgm_nm+" 개발자 사번은 필수 입력 사항입니다");   return false;}
         if(data[i].pl_no === null)        { alert(pgm_nm+" PL 사번은 필수 입력 사항입니다");      return false;}
         if(data[i].crpe_no === null)      { alert(pgm_nm+" 담당자 사번은 필수 입력 사항입니다");   return false;}
@@ -1125,6 +1125,34 @@ export default {
           }
         },
         {
+          header: '첨부파일관리ID',
+          width: 130,
+          align: 'center',
+          name: 'atfl_mng_id_yn',
+          type : 'text',
+          defaultValue: '미첨부',
+        },
+        {
+          header: '처리단계',
+          width: 110,
+          align: 'center',
+          name: 'prc_step_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000002N
+            }
+          }
+        },
+        {
+          header: '진행현황',
+          width: 250,
+          align: 'left',
+          name: 'prg_txt',
+          editor: 'text',
+        },
+        {
           header: '예상시작일',
           width: 90,
           align: 'center',
@@ -1174,26 +1202,7 @@ export default {
           editor: 'datePicker',
           disabled: true,
         },
-        {
-          header: '처리단계',
-          width: 110,
-          align: 'center',
-          name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: this.$store.state.pms.CD1000000002N
-            }
-          }
-        },
-        {
-          header: '진행현황',
-          width: 250,
-          align: 'left',
-          name: 'prg_txt',
-          editor: 'text',
-        },
+
         {
           header: '이름',
           width: 60,
@@ -1256,14 +1265,6 @@ export default {
           width: 80,
           align: 'center',
           name: 'crpe_no',
-        },
-        {
-          header: '첨부파일관리ID',
-          width: 130,
-          align: 'center',
-          name: 'atfl_mng_id_yn',
-          type : 'text',
-          defaultValue: '미첨부',
         },
         {
           header: '첨부파일관리ID',
