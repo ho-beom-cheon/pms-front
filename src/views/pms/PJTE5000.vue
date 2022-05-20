@@ -459,7 +459,7 @@ export default {
         let gridExcelData;
 
         wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === 'WBS관리' || sheetName === 'Sheet1') {
+          if (sheetName === 'WBS관리' || sheetName === '이행관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "NO"
             wb.Sheets[sheetName].B1.w = "mng_cd"
