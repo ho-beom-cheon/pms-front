@@ -129,7 +129,7 @@
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
             <h2>
-              비고상세보기
+              상세보기
             </h2>
           </div>
           <hr>
@@ -175,6 +175,7 @@
               :minRowHeight="minRowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
+              @dblclick="dblonClick"
               @onGridUpdated="onGridUpdated"
               @beforeExport="beforeExport"
               @editingFinish="editingFinish"
@@ -467,6 +468,7 @@ export default {
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "prg_txt", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
       this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
       this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
@@ -533,12 +535,6 @@ export default {
       let gridData = this.$refs.grid.invoke("getData");
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
-        this.modals.txt_modal1 = true;
-        this.modalTxt = currentCellData.value;
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      }
-
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
       if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
         let empnm = ''
@@ -571,7 +567,7 @@ export default {
       }
       if(ev.columnName === 'pal_atfl_mng_id_yn') {
         this.count = 2
-        let bkup_id='0000000000', prjt_id=gridRow.prjt_id, pal_atfl_mng_id=gridRow.pal_atfl_mng_id != null?gridRow.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridRow.pgm_id
+        let bkup_id='0000000000', prjt_id=gridRow.prjt_id, pal_atfl_mng_id=gridRow.pal_atfl_mng_id != null?gridRow.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridRow.bzcd, pgm_id=gridRow.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${pal_atfl_mng_id}&bzcd=${bzcd}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
@@ -582,10 +578,28 @@ export default {
         let cctn_bzcd= this.$refs.grid.invoke("getValue", this.curRow, 'bzcd');
         let rgs_dscd= '1100'
         let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=930");
+      }
+    },
+    dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+      let gridRow = this.$refs.grid.invoke("getRow",this.curRow);
+      let gridData = this.$refs.grid.invoke("getData");
+
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      this.col_nm = ev.columnName
+      if(this.col_nm == 'rmrk'){
+        this.header_col_nm = "비고 상세보기"
+      } else {
+        this.header_col_nm = "개발진행현황 상세보기"
       }
 
-
+      if(ev.columnName == 'rmrk' || ev.columnName == 'prg_txt') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
     },
     // 양식다운로드
     formDownload(){
@@ -595,12 +609,11 @@ export default {
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=700");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
-
+      this.$refs.grid.invoke("setValue", this.curRow, this.col_nm, document.getElementById("modalId").value);
       console.log("확인::", document.getElementById("modalId").value);
       console.log("this.curRow::", this.curRow);
       this.modals.txt_modal1 = false;
@@ -967,6 +980,8 @@ export default {
       excelUplod: 'N',
       addCheak: 'N',
       validated: false,
+      col_nm: '',
+      header_col_nm: '',
 
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
@@ -1152,7 +1167,6 @@ export default {
           width: 250,
           align: 'left',
           name: 'prg_txt',
-          editor: 'text',
           filter: 'text',
         },
         {

@@ -59,7 +59,6 @@
             <col width="80px">
             <col width="250px">
             <col width="400px">
-            <col width="300px">
           </colgroup>
           <tr>
             <th style="font-weight: bold">다운로드파일명</th>
