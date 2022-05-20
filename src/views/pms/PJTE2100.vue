@@ -1108,7 +1108,7 @@ export default {
           editor: 'text',
         },
         {
-          header: '업무세부',
+          header: '업무상세분류',
           width: 100,
           align: 'left',
           name: 'bz_dtls_txt',
