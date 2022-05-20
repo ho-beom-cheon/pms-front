@@ -568,6 +568,7 @@ export default {
           width: 250,
           align: 'left',
           name: 'bubun_cd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -581,6 +582,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'bsn_cls_cd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -592,6 +594,7 @@ export default {
         {
           header: '게시제목',
           align: 'left',
+          filter: 'text',
           name: 'gesipan_titl',
         },
         {

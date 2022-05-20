@@ -298,6 +298,7 @@ export default {
           align: 'center',
           name: 'bzcd',
           width: 100,
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -310,18 +311,21 @@ export default {
           header: '부서',
           align: 'left',
           name: 'dept_nm',
+          filter: 'select',
         },
         {
           header: '직원번호',
           align: 'center',
           width: 100,
           name: 'empno',
+          filter: 'text',
         },
         {
           header: '직원명',
           align: 'center',
           width: 100,
           name: 'empnm',
+          filter: 'text',
         },
         {
           header: '직급',

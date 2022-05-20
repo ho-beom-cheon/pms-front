@@ -24,13 +24,6 @@
                 @prc_step_cd_change="prc_step_cd_change"
             ></combo>
             <li class="filter-item">
-              <div class="item-con">예상종료일자
-                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
-                ~
-                <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
-              </div>
-            </li>
-            <li class="filter-item">
               <div class="item-con">프로그램ID
                 <input type="text"
                        placeholder="입력"
@@ -94,12 +87,20 @@
               >
             </li>
             <li class="filter-item">
+              <div class="item-con">예상종료일자
+                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
+                ~
+                <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
+              </div>
+            </li>
+            <li class="filter-item">
               <div class="item-con">개발자완료일자
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_end_dt" v-model="info.dvlpe_sta_dt"></div>
                 ~
                 <div class="input-dateWrap"><input type="date" :min="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
+            <button class="btn btn-filter-p" style="margin-left: 47px" @click="fnSearch">조회</button>
           </ul>
           <div class="mt-1">
             <ul class="filter-btn">
@@ -116,7 +117,7 @@
               <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
               <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
               <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
-              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
+
             </ul>
           </div>
         </div>
@@ -960,7 +961,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C1","C2","C3","C4"],
+      comboList : ["C27","C0","C1","C3","C4","C2"],
 
       gridData: [],
       excelUplod: 'N',
@@ -991,7 +992,8 @@ export default {
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected      : '0000000000',
-        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
+        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+                                sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         dvlp_dis_cd_selected  : 'TTT',
         pgm_dis_cd_selected   : 'TTT',
         prc_step_cd_selected  : 'TTT',
@@ -1146,11 +1148,12 @@ export default {
           }
         },
         {
-          header: '진행현황',
+          header: '개발진행현황',
           width: 250,
           align: 'left',
           name: 'prg_txt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '예상시작일',
@@ -1306,13 +1309,13 @@ export default {
           name: 'rqu_sbh_id',
           ellipsis : true,
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '첨부파일관리ID',
           width: 120,
           align: 'center',
           name: 'pal_atfl_mng_id_yn',
-          // hidden : true,
           defaultValue: '미첨부',
         },
         {
@@ -1327,6 +1330,7 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
+          filter: 'text',
         },
         {
           header: '등록여부',

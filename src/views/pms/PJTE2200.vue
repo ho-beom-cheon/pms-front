@@ -19,7 +19,6 @@
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
                 @sqn_cd_change="sqn_cd_change"
-                @pgm_dis_cd_change="pgm_dis_cd_change"
                 @itg_tst_prc_cd_change="itg_tst_prc_cd_change"
             ></combo>
             <li class="filter-item">
@@ -31,13 +30,6 @@
                        @keyup.enter="fnSearch"
                        style="width: 100px"
                 >
-              </div>
-            </li>
-            <li class="filter-item">
-              <div class="item-con">예상종료일자
-                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt02" v-model="info.frcs_end_dt01"></div>
-                ~
-                <div class="input-dateWrap"><input type="date" :min="info.frcs_end_dt01" v-model="info.frcs_end_dt02"></div>
               </div>
             </li>
             <li class="filter-item">
@@ -126,12 +118,20 @@
               >
             </li>
             <li class="filter-item">
+              <div class="item-con">예상종료일자
+                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt02" v-model="info.frcs_end_dt01"></div>
+                ~
+                <div class="input-dateWrap"><input type="date" :min="info.frcs_end_dt01" v-model="info.frcs_end_dt02"></div>
+              </div>
+            </li>
+            <li class="filter-item">
               <div class="item-con">개발자확인일자
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt02" v-model="info.dvlpe_cnf_dt01"></div>
                 ~
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_cnf_dt01" v-model="info.dvlpe_cnf_dt02"></div>
               </div>
             </li>
+            <button class="btn btn-filter-p" style="margin-left: 50px" @click="fnSearch">조회</button>
           </ul>
           <ul class="filter-btn">
             <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
@@ -145,7 +145,6 @@
             <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
             <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
-            <button class="btn btn-filter-p" @click="fnSearch">조회</button>
           </ul>
         </div>
       </section>
@@ -329,7 +328,6 @@ export default {
     },
     bzcd_change(params) {this.info.bzcd_selected = params},
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
-    pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     itg_tst_prc_cd_change(params) {this.info.itg_tst_prc_cd_selected = params},
 
     init() {
@@ -720,10 +718,11 @@ export default {
               wb.Sheets[sheetName].E1.w = "scnr_nm"
               wb.Sheets[sheetName].F1.w = "tst_case_id"
               wb.Sheets[sheetName].G1.w = "tst_case_nm"
-              wb.Sheets[sheetName].H1.w = "itg_tst_prc_cd"
-              wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
-              let J1 = {
-                J1: {
+              wb.Sheets[sheetName].H1.w = "atfl_mng_id_yn"
+              wb.Sheets[sheetName].I1.w = "itg_tst_prc_cd"
+              wb.Sheets[sheetName].J1.w = "rmrk"
+              let K1 = {
+                K1: {
                   t: 's',
                   v: '예상시작일',
                   r: '<t>예상시작일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -731,10 +730,10 @@ export default {
                   w: 'frcs_sta_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], J1)
-              wb.Sheets[sheetName].J2.w = "frcs_sta_dt"
-              let K1 = {
-                K1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
+              wb.Sheets[sheetName].K2.w = "frcs_sta_dt"
+              let L1 = {
+                L1: {
                   t: 's',
                   v: '예상종료일',
                   r: '<t>예상종료일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -742,14 +741,14 @@ export default {
                  w: 'frcs_end_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
-              wb.Sheets[sheetName].K2.w = "frcs_end_dt"
-              wb.Sheets[sheetName].L2.w = "sta_dt"
-              wb.Sheets[sheetName].M2.w = "end_dt"
-              wb.Sheets[sheetName].N1.w = "dvlpe_cnf_dt"
-              wb.Sheets[sheetName].O1.w = "pl_cnf_dt"
-              let P1 = {
-                P1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName],L1)
+              wb.Sheets[sheetName].L2.w = "frcs_end_dt"
+              wb.Sheets[sheetName].M2.w = "sta_dt"
+              wb.Sheets[sheetName].N2.w = "end_dt"
+              wb.Sheets[sheetName].O1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].P1.w = "pl_cnf_dt"
+              let Q1 = {
+                Q1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -757,10 +756,10 @@ export default {
                   w: 'dvlpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
-              wb.Sheets[sheetName].P2.w = "dvlpe_enm"
-              let Q1 = {
-                Q1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
+              wb.Sheets[sheetName].Q2.w = "dvlpe_enm"
+              let R1 = {
+                R1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -768,10 +767,10 @@ export default {
                   w: 'dvlpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
-              wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
-              let R1 = {
-                R1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+              wb.Sheets[sheetName].R2.w = "dvlpe_btn"
+              let S1 = {
+                S1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -779,10 +778,10 @@ export default {
                   w: 'dvlpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-              wb.Sheets[sheetName].R2.w = "dvlpe_eno"
-              let S1 = {
-                S1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+              wb.Sheets[sheetName].S2.w = "dvlpe_eno"
+              let T1 = {
+                T1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -790,10 +789,10 @@ export default {
                   w: 'pl_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-              wb.Sheets[sheetName].S2.w = "pl_enm"
-              let T1 = {
-                T1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
+              wb.Sheets[sheetName].T2.w = "pl_enm"
+              let U1 = {
+                U1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -801,10 +800,10 @@ export default {
                   w: 'pl_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
-              wb.Sheets[sheetName].T2.w = "pl_btn"
-              let U1 = {
-                U1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+              wb.Sheets[sheetName].U2.w = "pl_btn"
+              let V1 = {
+                V1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -812,10 +811,10 @@ export default {
                   w: 'pl_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-              wb.Sheets[sheetName].U2.w = "pl_eno"
-              let V1 = {
-                V1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+              wb.Sheets[sheetName].V2.w = "pl_eno"
+              let W1 = {
+                W1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -823,10 +822,10 @@ export default {
                   w: 'crpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
-              wb.Sheets[sheetName].V2.w = "crpe_enm"
-              let W1 = {
-                W1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
+              wb.Sheets[sheetName].W2.w = "crpe_enm"
+              let X1 = {
+                X1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -834,10 +833,10 @@ export default {
                   w: 'crpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
-              wb.Sheets[sheetName].W2.w = "crpe_btn"
-              let X1 = {
-                X1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
+              wb.Sheets[sheetName].X2.w = "crpe_btn"
+              let Y1 = {
+                Y1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -845,13 +844,12 @@ export default {
                   w: 'crpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
-              wb.Sheets[sheetName].X2.w = "crpe_eno"
-              wb.Sheets[sheetName].Y2.w = "err_tot_cnt"
-              wb.Sheets[sheetName].Z2.w = "err_cmpl_cnt"
-              wb.Sheets[sheetName].AA2.w = "err_ncmpl_cnt"
-              wb.Sheets[sheetName].AB2.w = "err_btn"
-              wb.Sheets[sheetName].AC1.w = "rmrk"
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Y1)
+              wb.Sheets[sheetName].Y2.w = "crpe_eno"
+              wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
+              wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
+              wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
+              wb.Sheets[sheetName].AC2.w = "err_btn"
               wb.Sheets[sheetName].AD1.w = "pgm_id"
               wb.Sheets[sheetName].AE1.w = "scrn_id"
               wb.Sheets[sheetName].AF1.w = "trn_cd"
@@ -967,7 +965,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C1","C4","C6","C26"],
+      comboList : ["C27","C0","C1","C6","C26"],
 
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
@@ -990,9 +988,8 @@ export default {
 
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
-        bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
+        bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' || sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         sqn_cd_selected          : 'TTT',
-        pgm_dis_cd_selected      : 'TTT',
         itg_tst_prc_cd_selected  : 'TTT',
 
         frcs_end_dt01: '',        // 예상종료일자 (시작)
@@ -1094,28 +1091,39 @@ export default {
         },
         {
           header: '시나리오ID',
-          width: 80,
+          width: 90,
           align: 'center',
           name: 'scnr_id',
+          filter: 'text',
         },
         {
           header: '시나리오명',
           width: 200,
           align: 'left',
           name: 'scnr_nm',
-          editor: 'text'
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '테스트케이스ID',
           width: 130,
           align: 'center',
           name: 'tst_case_id',
+          filter: 'text',
         },
         {
           header: '테스트케이스명',
           width: 200,
           align: 'left',
           name: 'tst_case_nm',
+          filter: 'text',
+        },
+        {
+          header: '증빙첨부',
+          width: 80,
+          align: 'center',
+          name: 'atfl_mng_id_yn',
+          defaultValue: '미첨부',
         },
         {
           header: '처리단계',
@@ -1131,11 +1139,10 @@ export default {
           }
         },
         {
-          header: '증빙첨부',
-          width: 80,
-          align: 'center',
-          name: 'atfl_mng_id_yn',
-          defaultValue: '미첨부',
+          header: '테스트진행현황',
+          width: 250,
+          name: 'rmrk',
+          filter: 'text',
         },
         {
           header: '예상시작일',
@@ -1279,81 +1286,88 @@ export default {
           renderer: CustomRenderer,
         },
         {
-          header: '미진사유',
-          width: 400,
-          name: 'rmrk',
-        },
-        {
           header: '프로그램ID',
           width: 120,
           name: 'pgm_id',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '화면ID',
           width: 100,
           name: 'scrn_id',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '거래코드',
           width: 90,
           name: 'trn_cd',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '요구사항ID',
           width: 100,
           name: 'rqu_sbh_id',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '사전조건',
           width: 90,
           name: 'prr_cnd',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '입력값',
           width: 90,
           name: 'inp_val',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '테스트설명/절차',
           width: 130,
           name: 'tst_des',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '출력값',
           width: 90,
           name: 'oup_val',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '유형',
           width: 90,
           name: 'tp',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '출력수단',
           width: 150,
           name: 'oup_mens',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '테스트결과',
           width: 100,
           name: 'tst_rst',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '테스트수행결과',
           width: 100,
           name: 'tst_achi_rst',
           editor: "text",
+          filter: 'text',
         },
         {
           header: '백업ID',

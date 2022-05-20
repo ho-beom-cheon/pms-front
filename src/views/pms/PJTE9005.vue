@@ -1502,6 +1502,7 @@ export default {
           align: 'left',
           name: 'company_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '재직시작년월',
@@ -1535,6 +1536,7 @@ export default {
           align: 'left',
           name: 'rssb_bns',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '비고',
@@ -1542,6 +1544,7 @@ export default {
           align: 'left',
           name: 'rmrk',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '순번',
@@ -1559,6 +1562,7 @@ export default {
           align: 'left',
           name: 'exe_cpy_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '시작년월',
@@ -1592,6 +1596,7 @@ export default {
           align: 'left',
           name: 'proj_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '수행업무',
@@ -1599,6 +1604,7 @@ export default {
           align: 'left',
           name: 'rssb_bns',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '역할',
@@ -1606,6 +1612,7 @@ export default {
           align: 'left',
           name: 'duty_txt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '사용기종/OS',
@@ -1613,6 +1620,7 @@ export default {
           align: 'left',
           name: 'use_os',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '관련기술',
@@ -1620,6 +1628,7 @@ export default {
           align: 'left',
           name: 'rlt_skill',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '순번',
