@@ -154,7 +154,7 @@
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
             <h2>
-              미진사유상세보기
+              테스트진행현황 상세보기
             </h2>
           </div>
           <hr>
@@ -539,7 +539,7 @@ export default {
           rgs_dscd = '2400' //4차통합테스트단계
         }
         let bkup_id='0000000000', prjt_id=this.info.prjt_nm_selected
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&cctn_sqn_cd=${cctn_sqn_cd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&cctn_sqn_cd=${cctn_sqn_cd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=930");
       }
 
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
@@ -563,16 +563,20 @@ export default {
           window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&emp_row=${emprow}&emp_col=${empcol}&`, "open_emp_page", "width=700, height=600");
         }
       }
+    },
+    dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+      let gridRow = this.$refs.grid.invoke("getRow",this.curRow);
+      let gridData = this.$refs.grid.invoke("getData");
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+      this.col_nm = ev.columnName
+      if(ev.columnName == 'rmrk' ) {  // 컬럼명이 <비고>일 때만 팝업
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       }
-    },
-    dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
-      this.curRow = ev.rowKey;
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
       this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
@@ -585,7 +589,7 @@ export default {
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=700");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
@@ -683,6 +687,8 @@ export default {
       this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
       this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
       this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
+      // 열고정
+      this.$refs.grid.invoke("setFrozenColumnCount", 6);
     },
     fnEnable() {
       // 새로 ADD한 Row를 enable시킴
