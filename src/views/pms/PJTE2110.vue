@@ -433,9 +433,10 @@ export default {
         },
         {
           header: '담당자',
-          width: 55,
+          width: 70,
           align: 'left',
           name: 'emp_nm',
+          filter: 'text',
         },
         {
           header: '전체',
@@ -593,7 +594,7 @@ export default {
         height: 45,
         complexColumns: [
           {header: '완료여부', name: 'mergeColumn1', childNames: ['pl_yn', 'crpe_yn']},
-          {header: '개발완료일자', name: 'mergeColumn2', childNames: ['dvlpe_cnf_dt']},
+          {header: '개발완료일/', name: 'mergeColumn2', childNames: ['dvlpe_cnf_dt']},
         ]
       },
       columns4: [
@@ -613,45 +614,52 @@ export default {
         },
         {
           header: '미진구분',
-          width: 60,
+          width: 90,
           align: 'left',
           name: 'nprrn_kbn',
+          filter: 'select',
         },
         {
           header: '프로그램ID',
           width: 140,
           align: 'left',
           name: 'pgm_id',
+          filter: 'text',
         },
         {
           header: '프로그램명',
           width: 250,
           align: 'left',
           name: 'pgm_nm',
+          filter: 'text',
         },
         {
           header: '예정종료일',
           width: 90,
           align: 'center',
           name: 'frcs_end_dt',
+          filter: 'text',
         },
         {
           header: '조치일',
           width: 90,
           align: 'center',
           name: 'dvlpe_cnf_dt',
+          filter: 'text',
         },
         {
           header: '담당자',
-          width: 50,
+          width: 70,
           align: 'center',
           name: 'dvlpe_nm',
+          filter: 'text',
         },
         {
           header: 'PL',
-          width: 50,
+          width: 70,
           align: 'center',
           name: 'pl_nm',
+          filter: 'text',
         },
         {
           header: '담당자',
@@ -670,6 +678,7 @@ export default {
           width: 210,
           align: 'left',
           name: 'nprrn',
+          filter: 'text',
         },
       ],
     }

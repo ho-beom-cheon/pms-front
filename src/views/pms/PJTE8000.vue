@@ -1281,6 +1281,7 @@ export default {
           width: 400,
           align: 'left',
           name: 'real_prjt_nm',
+          filter: 'text',
         },
         {
           header: '시작일자',
@@ -1306,6 +1307,7 @@ export default {
           width: 60,
           align: 'center',
           name: 'pm_nm',
+          filter: 'text',
         },
         {
           header: '사원번호',
@@ -1377,6 +1379,7 @@ export default {
           align: 'left',
           name: 'prg_txt',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '이슈내용',
@@ -1384,6 +1387,7 @@ export default {
           align: 'left',
           name: 'iss_txt',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '요청내용',
@@ -1391,6 +1395,7 @@ export default {
           align: 'left',
           name: 'req_txt',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '첨부파일',

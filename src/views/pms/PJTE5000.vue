@@ -850,7 +850,7 @@ export default {
         },
         {
           header: '처리단계',
-          width: 70,
+          width: 80,
           align: 'center',
           filter: 'select',
           name: 'wbs_prc_sts_cd',
