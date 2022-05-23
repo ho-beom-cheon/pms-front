@@ -303,7 +303,9 @@ export default {
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),    // 프로젝트
         bkup_id_selected      : '0000000000',     // 백업ID
-        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"), // 업무구분
+        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+                                sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+                                sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         req_dscd_selected     : 'TTT',      // 신청구분
         req_prc_step_cd_selected : 'TTT',   // 처리구분
         check_Yn : 'N',     // 완료건포함(데이터 조회용)
