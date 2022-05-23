@@ -152,6 +152,8 @@ export default {
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
       let emp_no = sessionStorage.getItem("LOGIN_EMP_NO");
 
+      this.btn_img(); //지원 및 삭제 이미지 삽입
+
       if (aut_cd === '500' || aut_cd === '600' || aut_cd === '900') {
         this.$refs.grid.invoke("addRowClassName", i, "disableColor");
         this.$refs.grid.invoke("enableCell", i, "sch_ent_dt");
@@ -268,7 +270,7 @@ export default {
           }
         }).catch(e => {  //오류
             console.log(e)
-        });a
+        });
       }
       if(ev.columnName === 'del_btn'){
         console.log("클릭:" + ev.rowKey);
@@ -334,6 +336,7 @@ export default {
           },
           {focus: true});
       this.fnEnable();
+      this.btn_img();
     },
     // 추가한 행 편집 활성화
     fnEnable() {
@@ -349,7 +352,19 @@ export default {
       } else {
         alert('행삭제는 추가된 행만 삭제 가능합니다.');
       }
-    }
+    },
+    //지원, 삭제 이미지
+    btn_img(){
+      let gridData = this.$refs.grid.invoke("getData");
+
+      if(gridData.length !== 0){
+        for (var i = 0; i < gridData.length; i++) {
+          this.$refs.grid.invoke("addCellClassName", i, "del_btn", "del-btn-img");
+          this.$refs.grid.invoke("addCellClassName", i, "aplc_dtls_btn", "new-btn-img");
+        }
+      }
+    },
+
 
   },
 // 변수 선언부분
@@ -525,14 +540,14 @@ export default {
           width: 50,
           align: 'center',
           name: 'aplc_dtls_btn',
-          renderer: CustomRenderer,
+          //renderer: CustomRenderer,
         },
         {
           header: '삭제',
           width: 50,
           align: 'center',
           name: 'del_btn',
-          renderer: CustomRenderer2,
+          //renderer: CustomRenderer2,
         },
         {
           header: '프로젝트ID',
