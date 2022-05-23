@@ -75,8 +75,14 @@
       <section class="page-contents">
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
-            <h2>
-              비고상세보기
+            <h2 v-bind:hidden="this.col_nm1!='1'">
+              산출물 내용편집 및 상세보기
+            </h2>
+            <h2 v-bind:hidden="this.col_nm1!='2'">
+              태스크명 편집 및 상세보기
+            </h2>
+            <h2 v-bind:hidden="this.col_nm1!='3'">
+              비고 내용편집 및 상세보기
             </h2>
           </div>
           <hr>
@@ -206,6 +212,7 @@ export default {
           this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
           this.$refs.grid.invoke("disableColumn", 'pln_end_tim');
         }
+        this.$refs.grid.invoke("setColumnHeaders", {task_nm: '산출물'})
       } else {
         this.validated = true;
         this.$refs.grid.invoke("hideColumn",'prg_rt')
@@ -215,6 +222,7 @@ export default {
         this.$refs.grid.invoke("enableColumn", 'pln_sta_tim');
         this.$refs.grid.invoke("enableColumn", 'pln_sta_dt');
         this.$refs.grid.invoke("enableColumn", 'pln_end_tim');
+        this.$refs.grid.invoke("setColumnHeaders", {task_nm: '태스크명'})
       }
       this.$refs.grid.invoke("clear");
       this.excelAutCheck();
@@ -231,6 +239,7 @@ export default {
       let gridData = this.$refs.grid.invoke("getData")
 
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "task_nm", "disableColor");
 
       for(let i=0; i<gridData.length; i++) {
         if(gridData[i].wbs_cnt === "0") {
@@ -240,7 +249,7 @@ export default {
 
     },
     fnEdit(){   // 모달창에서 수정버튼 클릭 시 그리드Text 변경
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
+      this.$refs.grid.invoke("setValue", this.curRow, this.col_nm, document.getElementById("modalId").value);
       this.modalTxt = document.getElementById("modalId").value;
       this.modals.txt_modal1 = false;
     },
@@ -395,7 +404,17 @@ export default {
       }
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
+      this.col_nm = ev.columnName;
+      if(ev.columnName == 'rmrk' || ev.columnName == 'task_nm') {  // 컬럼명이 <비고>일 때만 팝업
+        if(ev.columnName == 'rmrk'){
+          this.col_nm1 = '3'
+        } else {
+          if(this.info.wbs_mng_cd_selected == '100'){
+            this.col_nm1 = '1'
+          } else {
+            this.col_nm1 = '2'
+          }
+        }
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
@@ -718,6 +737,8 @@ export default {
 
       check_Yn: false,  // 삭제프로그램/소스취약점포함
 
+      col_nm:'',
+      col_nm1:0,
       downCount: 0,
       upCount : 0,
       curRow: -1,
@@ -837,7 +858,6 @@ export default {
           width: 250,
           align: 'left',
           name: 'task_nm',
-          editor: 'text',
           filter: 'text',
         },
         {
