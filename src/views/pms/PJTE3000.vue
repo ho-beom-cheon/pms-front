@@ -395,7 +395,9 @@ export default {
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected      : '0000000000',
-        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"), // 업무구분
+        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+                       sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+                       sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         err_rgs_dscd_selected: 'TTT',               // 등록단계구분
         err_tycd_selected: 'TTT',                   // 결함유형
         err_prc_step_cd_selected: 'TTT',            // 처리단계
