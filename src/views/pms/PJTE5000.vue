@@ -200,11 +200,21 @@ export default {
         this.$refs.grid.invoke("showColumn",'prg_rt')
         this.$refs.grid.invoke("showColumn",'wgt_rt')
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
+        if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+          this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
+          this.$refs.grid.invoke("disableColumn", 'pln_sta_tim');
+          this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
+          this.$refs.grid.invoke("disableColumn", 'pln_end_tim');
+        }
       } else {
         this.validated = true;
         this.$refs.grid.invoke("hideColumn",'prg_rt')
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
         this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
+        this.$refs.grid.invoke("enableColumn", 'pln_end_dt');
+        this.$refs.grid.invoke("enableColumn", 'pln_sta_tim');
+        this.$refs.grid.invoke("enableColumn", 'pln_sta_dt');
+        this.$refs.grid.invoke("enableColumn", 'pln_end_tim');
       }
       this.$refs.grid.invoke("clear");
       this.excelAutCheck();
@@ -405,8 +415,10 @@ export default {
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'wgt_rt');
-        // this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
-        // this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
+        this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
+        this.$refs.grid.invoke("disableColumn", 'pln_sta_tim');
+        this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
+        this.$refs.grid.invoke("disableColumn", 'pln_end_tim');
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
       }
       this.excelAutCheck();
