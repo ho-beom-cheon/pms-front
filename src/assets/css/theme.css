@@ -1433,3 +1433,15 @@ aside dl dd + dd a {
 .tui-grid-filter-dropdown {
   width : 160px !important;
 }
+.del-btn-img{
+    background: url(../../assets/img/PE-icon/ic_delete.svg) center/16px no-repeat;
+    background-color: #B8B8B8;
+}
+.cmnt-btn-img{
+    background: url(../../assets/img/PE-icon/ic_cmnt.svg) center/16px no-repeat;
+    background-color: #B8B8B8;
+}
+.new-btn-img{
+    background: url(../../assets/img/PE-icon/ic_new.svg) center/24px no-repeat;
+    background-color: #B8B8B8;
+}
