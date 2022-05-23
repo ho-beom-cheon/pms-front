@@ -198,9 +198,10 @@ export default {
     //직원조회 버튼 클릭 시
     open_pjte9001_btn(btn_id) {
       let empnm = this.prcpe_nm
-      if((empnm === '' || empnm == "null" || empnm === undefined)) {
+      if((empnm === '' || empnm == null || empnm === undefined)) {
         let bkup_id = this.bkup_id, prjt_id =  this.prjt_id
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+        empnm = ''
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
       } else {
         let bkup_id = this.bkup_id, prjt_id =  this.prjt_id
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
@@ -330,11 +331,24 @@ export default {
     updateRegisterData() {
       console.log('update')
       console.log(this.prcpe_no)
+      if(this.req_prc_step_cd_selected === '200' &&  (this.prcpe_no === '' || this.prcpe_no == null || this.prcpe_no === undefined)){
+        alert('처리자를 선택해주세요.')
+        this.$refs.prcpe_no.focus();
+        return false;
+      }
+
+      if(this.req_prc_step_cd_selected === '300' && (this.prc_txt == null || this.prc_txt === '' || this.prc_txt === undefined)){
+        alert('보류 선택시에는 처리내용에 보류사유를 작성해주셔야 합니다.');
+        this.$refs.prc_txt.focus();
+        return false;
+      }
+
       if(this.req_prc_step_cd_selected === '400' && (this.prc_txt == null || this.prc_txt === '' || this.prc_txt === undefined)){
         alert('처리완료 선택시에는 처리내용을 작성해주셔야 합니다.');
         this.$refs.prc_txt.focus();
         return false;
       }
+
       axiosService.post('/PJTE6001/update',{
         bzcd: this.bzcd_selected,
         req_dscd : this.req_dscd_selected,
