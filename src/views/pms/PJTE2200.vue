@@ -1015,7 +1015,7 @@ export default {
         txt_modal1: false,
       },
       modalTxt:this.modalTxt,
-        ,
+
       addRow: {
         grid: this.grid,
       },
