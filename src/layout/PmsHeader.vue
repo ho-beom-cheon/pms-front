@@ -26,7 +26,7 @@
           <div class="imgWrap">
             <img src="../assets/img/PE-icon/ic_profile.svg" alt="profile">
           </div>
-          <span>{{ empnm }} 님</span>
+          <span>{{ empnm }} 님 {{deptNm}}</span>
         </a>
         <button class="btn logOut" @click="logout">로그아웃</button>
       </div>
@@ -61,6 +61,7 @@ export default {
     return {
       empnm: sessionStorage.getItem('LOGIN_EMP_NM'),
       projId : sessionStorage.getItem('LOGIN_PROJ_ID'),
+      deptNm : sessionStorage.getItem('LOGIN_DEPT_NM') == '' ? '':'['+sessionStorage.getItem('LOGIN_DEPT_NM')+']',
       list: this.$router.options.routes,
 
       current_menu: '',
