@@ -255,7 +255,7 @@ export default {
       // 파라미터 설정
       if(mng_id == null || mng_id==='' || mng_id === undefined) mng_id=''
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-      this.pop = window.open(`../PJTE6001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}`, "open_page", "width=1000, height=800");
+      this.pop = window.open(`../PJTE6001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}`, "open_page", "width=1000, height=860");
     }
 
   },
@@ -361,6 +361,7 @@ export default {
           maxWidth: 250,
           name: 'bzcd',
           align: 'center',
+          filter: 'select',
           formatter: 'listItemText',
           disabled : true,
           editor: {
@@ -377,6 +378,7 @@ export default {
           name: 'req_dscd',
           formatter: 'listItemText',
           disabled : true,
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -390,21 +392,23 @@ export default {
           align: 'center',
           name: 'req_dt',
           format: 'yyyy-mm-dd',
-
+          filter: 'text',
         },
         {
           header: '신청자',
           width: 60,
           align: 'center',
           name: 'reqpe_nm',
-          type: 'text'
+          type: 'text',
+          filter: 'text',
         },
         {
           header: '신청내용',
           width: 500,
           align: 'left',
           name: 'req_txt',
-          type: 'text'
+          type: 'text',
+          filter: 'text',
         },
         {
           header: '처리일자',
@@ -412,20 +416,23 @@ export default {
           align: 'center',
           name: 'prc_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '처리자',
           width: 60,
           align: 'center',
           name: 'prcpe_nm',
-          type: 'text'
+          type: 'text',
+          filter: 'text',
         },
         {
           header: '처리내용',
           width: 450,
           align: 'left',
           name: 'prc_txt',
-          type: 'text'
+          type: 'text',
+          filter: 'text',
         },
         {
           header: '처리상태',
@@ -433,6 +440,7 @@ export default {
           name: 'req_prc_step_cd',
           formatter: 'listItemText',
           disabled : true,
+          filter: 'select',
           editor: {
             type: 'select',
             options:{

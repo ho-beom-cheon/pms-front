@@ -290,7 +290,7 @@ export default {
         let bkup_id = '0000000000';                                                     //백업ID
         let prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
         let rgpe_nm = this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=930");
       }
     },
 
