@@ -24,13 +24,6 @@
                 @prc_step_cd_change="prc_step_cd_change"
             ></combo>
             <li class="filter-item">
-              <div class="item-con">예상종료일자
-                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
-                ~
-                <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
-              </div>
-            </li>
-            <li class="filter-item">
               <div class="item-con">프로그램ID
                 <input type="text"
                        placeholder="입력"
@@ -94,12 +87,20 @@
               >
             </li>
             <li class="filter-item">
+              <div class="item-con">예상종료일자
+                <div class="input-dateWrap"><input type="date" :max="info.frcs_end_dt" v-model="info.frcs_sta_dt"></div>
+                ~
+                <div class="input-dateWrap"><input type="date" :min="info.frcs_sta_dt" v-model="info.frcs_end_dt"></div>
+              </div>
+            </li>
+            <li class="filter-item">
               <div class="item-con">개발자완료일자
                 <div class="input-dateWrap"><input type="date" :max="info.dvlpe_end_dt" v-model="info.dvlpe_sta_dt"></div>
                 ~
                 <div class="input-dateWrap"><input type="date" :min="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
+            <button class="btn btn-filter-p" style="margin-left: 47px" @click="fnSearch">조회</button>
           </ul>
           <div class="mt-1">
             <ul class="filter-btn">
@@ -116,7 +117,7 @@
               <button class="btn btn-filter-b" @click="gridDelRow" :disabled="validated">행삭제</button>
               <button class="btn btn-filter-b" @click="fnEtcSave" :disabled="validated">기타항목수정</button>
               <button class="btn btn-filter-p" style="margin-left: 20px" @click="fnSave" :disabled="validated">저장</button>
-              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
+
             </ul>
           </div>
         </div>
@@ -128,7 +129,7 @@
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
             <h2>
-              비고상세보기
+              상세보기
             </h2>
           </div>
           <hr>
@@ -174,6 +175,7 @@
               :minRowHeight="minRowHeight"
               :rowHeaders="rowHeaders"
               @click="onClick"
+              @dblclick="dblonClick"
               @onGridUpdated="onGridUpdated"
               @beforeExport="beforeExport"
               @editingFinish="editingFinish"
@@ -466,6 +468,7 @@ export default {
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+      this.$refs.grid.invoke("addColumnClassName", "prg_txt", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
       this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
       this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
@@ -532,12 +535,6 @@ export default {
       let gridData = this.$refs.grid.invoke("getData");
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
-      if(ev.columnName == 'rmrk') {  // 컬럼명이 <비고>일 때만 팝업
-        this.modals.txt_modal1 = true;
-        this.modalTxt = currentCellData.value;
-        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      }
-
       // 그리드 내 직원조회 버튼 클릭 시 직원조회팝업
       if(ev.columnName === 'dvlpe_btn' || ev.columnName === 'pl_btn' || ev.columnName === 'crpe_btn') {
         let empnm = ''
@@ -570,7 +567,7 @@ export default {
       }
       if(ev.columnName === 'pal_atfl_mng_id_yn') {
         this.count = 2
-        let bkup_id='0000000000', prjt_id=gridRow.prjt_id, pal_atfl_mng_id=gridRow.pal_atfl_mng_id != null?gridRow.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridData.bzcd, pgm_id=gridRow.pgm_id
+        let bkup_id='0000000000', prjt_id=gridRow.prjt_id, pal_atfl_mng_id=gridRow.pal_atfl_mng_id != null?gridRow.pal_atfl_mng_id:'', file_rgs_dscd='101', bzcd = gridRow.bzcd, pgm_id=gridRow.pgm_id
         this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${pal_atfl_mng_id}&bzcd=${bzcd}&pgm_id=${pgm_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
       }
 
@@ -581,10 +578,28 @@ export default {
         let cctn_bzcd= this.$refs.grid.invoke("getValue", this.curRow, 'bzcd');
         let rgs_dscd= '1100'
         let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&cctn_id=${cctn_id}&cctn_nm=${cctn_nm}&cctn_bzcd=${cctn_bzcd}&rgs_dscd=${rgs_dscd}&`, "open_page", "width=1000, height=930");
+      }
+    },
+    dblonClick(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+      let gridRow = this.$refs.grid.invoke("getRow",this.curRow);
+      let gridData = this.$refs.grid.invoke("getData");
+
+      const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
+      this.col_nm = ev.columnName
+      if(this.col_nm == 'rmrk'){
+        this.header_col_nm = "비고 상세보기"
+      } else {
+        this.header_col_nm = "개발진행현황 상세보기"
       }
 
-
+      if(ev.columnName == 'rmrk' || ev.columnName == 'prg_txt') {  // 컬럼명이 <비고>일 때만 팝업
+        this.modals.txt_modal1 = true;
+        this.modalTxt = currentCellData.value;
+        const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      }
     },
     // 양식다운로드
     formDownload(){
@@ -594,12 +609,11 @@ export default {
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=700");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
-      this.$refs.grid.invoke("setValue", this.curRow, "rmrk", document.getElementById("modalId").value);
-
+      this.$refs.grid.invoke("setValue", this.curRow, this.col_nm, document.getElementById("modalId").value);
       console.log("확인::", document.getElementById("modalId").value);
       console.log("this.curRow::", this.curRow);
       this.modals.txt_modal1 = false;
@@ -684,8 +698,11 @@ export default {
             wb.Sheets[sheetName].E1.w = "bz_dtls_txt"
             wb.Sheets[sheetName].F1.w = "dvlp_dis_cd"
             wb.Sheets[sheetName].G1.w = "pgm_dis_cd"
-            let H1 = {
-              H1: {
+            wb.Sheets[sheetName].H1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName].I1.w = "prc_step_cd"
+            wb.Sheets[sheetName].J1.w = "prg_txt"
+            let K1 = {
+              K1: {
                 t: 's',
                 v: '예상시작일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -693,10 +710,10 @@ export default {
                 w: 'frcs_sta_dt'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], H1)
-            wb.Sheets[sheetName].H2.w = "frcs_sta_dt"
-            let I1 = {
-              I1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
+            wb.Sheets[sheetName].K2.w = "frcs_sta_dt"
+            let L1 = {
+              L1: {
                 t: 's',
                 v: '예상종료일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -704,18 +721,16 @@ export default {
                 w: 'frcs_end_dt'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], I1)
-            wb.Sheets[sheetName].I2.w = "frcs_end_dt"
-            wb.Sheets[sheetName].J1.w = "sta_dt"
-            wb.Sheets[sheetName].K1.w = "end_dt"
-            wb.Sheets[sheetName].L1.w = "dvlpe_cnf_dt"
-            wb.Sheets[sheetName].M1.w = "pl_cnf_dt"
-            wb.Sheets[sheetName].N1.w = "prc_step_cd"
-            wb.Sheets[sheetName].O1.w = "prg_txt"
-            wb.Sheets[sheetName].P2.w = "dvlpe_nm"
-            wb.Sheets[sheetName].Q2.w = "dvlpe_btn"
-            let R1 = {
-              R1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], L1)
+            wb.Sheets[sheetName].L2.w = "frcs_end_dt"
+            wb.Sheets[sheetName].M1.w = "sta_dt"
+            wb.Sheets[sheetName].N1.w = "end_dt"
+            wb.Sheets[sheetName].O1.w = "dvlpe_cnf_dt"
+            wb.Sheets[sheetName].P1.w = "pl_cnf_dt"
+            wb.Sheets[sheetName].Q2.w = "dvlpe_nm"
+            wb.Sheets[sheetName].R2.w = "dvlpe_btn"
+            let S1 = {
+              S1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -723,12 +738,12 @@ export default {
                 w: 'dvlpe_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-            wb.Sheets[sheetName].R2.w = "dvlpe_no"
-            wb.Sheets[sheetName].S2.w = "pl_nm"
-            wb.Sheets[sheetName].T2.w = "pl_btn"
-            let U1 = {
-              U1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+            wb.Sheets[sheetName].S2.w = "dvlpe_no"
+            wb.Sheets[sheetName].T2.w = "pl_nm"
+            wb.Sheets[sheetName].U2.w = "pl_btn"
+            let V1 = {
+              V1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -736,12 +751,12 @@ export default {
                 w: 'pl_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-            wb.Sheets[sheetName].U2.w = "pl_no"
-            wb.Sheets[sheetName].V2.w = "crpe_nm"
-            wb.Sheets[sheetName].W2.w = "crpe_btn"
-            let X1 = {
-              X1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+            wb.Sheets[sheetName].V2.w = "pl_no"
+            wb.Sheets[sheetName].W2.w = "crpe_nm"
+            wb.Sheets[sheetName].X2.w = "crpe_btn"
+            let Y1 = {
+              Y1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -749,9 +764,8 @@ export default {
                 w: 'crpe_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
-            wb.Sheets[sheetName].X2.w = "crpe_no"
-            wb.Sheets[sheetName].Y1.w = "atfl_mng_id_yn"
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Y1)
+            wb.Sheets[sheetName].Y2.w = "crpe_no"
             wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
             wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
             wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
@@ -892,9 +906,9 @@ export default {
         if(data[i].pgm_nm === null)       { alert(pgm_nm+" 프로그램명은 필수 입력 사항입니다");   return false;}
         if(data[i].dvlp_dis_cd === null)  { alert(pgm_nm+" 개발구분은 필수 입력 사항입니다");      return false;}
         if(data[i].pgm_dis_cd === null)   { alert(pgm_nm+" 프로그램 구분은 필수 입력 사항입니다");  return false;}
+        if(data[i].prc_step_cd === null)  { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");      return false;}
         if(data[i].frcs_sta_dt === null)  { alert(pgm_nm+" 예상시작일은 필수 입력 사항입니다");   return false;}
         if(data[i].frcs_end_dt === null)  { alert(pgm_nm+" 예상종료일은 필수 입력 사항입니다");   return false;}
-        if(data[i].prc_step_cd === null)  { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");      return false;}
         if(data[i].dvlpe_no === null)     { alert(pgm_nm+" 개발자 사번은 필수 입력 사항입니다");   return false;}
         if(data[i].pl_no === null)        { alert(pgm_nm+" PL 사번은 필수 입력 사항입니다");      return false;}
         if(data[i].crpe_no === null)      { alert(pgm_nm+" 담당자 사번은 필수 입력 사항입니다");   return false;}
@@ -960,12 +974,14 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C1","C2","C3","C4"],
+      comboList : ["C27","C0","C1","C3","C4","C2"],
 
       gridData: [],
       excelUplod: 'N',
       addCheak: 'N',
       validated: false,
+      col_nm: '',
+      header_col_nm: '',
 
       atfl_mng_id         : '',  // 단위테스트 케이스 첨부파일관리
       atfl_mng_id_yn      : '',  // 단위테스트 케이스 첨부파일관리
@@ -991,7 +1007,8 @@ export default {
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected      : '0000000000',
-        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
+        bzcd_selected         : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+                                sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         dvlp_dis_cd_selected  : 'TTT',
         pgm_dis_cd_selected   : 'TTT',
         prc_step_cd_selected  : 'TTT',
@@ -1091,7 +1108,7 @@ export default {
           editor: 'text',
         },
         {
-          header: '업무세부',
+          header: '업무상세분류',
           width: 100,
           align: 'left',
           name: 'bz_dtls_txt',
@@ -1123,6 +1140,34 @@ export default {
 
             }
           }
+        },
+        {
+          header: '첨부파일관리ID',
+          width: 130,
+          align: 'center',
+          name: 'atfl_mng_id_yn',
+          type : 'text',
+          defaultValue: '미첨부',
+        },
+        {
+          header: '처리단계',
+          width: 110,
+          align: 'center',
+          name: 'prc_step_cd',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000002N
+            }
+          }
+        },
+        {
+          header: '개발진행현황',
+          width: 250,
+          align: 'left',
+          name: 'prg_txt',
+          filter: 'text',
         },
         {
           header: '예상시작일',
@@ -1174,26 +1219,7 @@ export default {
           editor: 'datePicker',
           disabled: true,
         },
-        {
-          header: '처리단계',
-          width: 110,
-          align: 'center',
-          name: 'prc_step_cd',
-          formatter: 'listItemText',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: this.$store.state.pms.CD1000000002N
-            }
-          }
-        },
-        {
-          header: '진행현황',
-          width: 250,
-          align: 'left',
-          name: 'prg_txt',
-          editor: 'text',
-        },
+
         {
           header: '이름',
           width: 60,
@@ -1261,14 +1287,6 @@ export default {
           header: '첨부파일관리ID',
           width: 130,
           align: 'center',
-          name: 'atfl_mng_id_yn',
-          type : 'text',
-          defaultValue: '미첨부',
-        },
-        {
-          header: '첨부파일관리ID',
-          width: 130,
-          align: 'center',
           name: 'atfl_mng_id',
           type : 'text',
           hidden : true,
@@ -1305,13 +1323,13 @@ export default {
           name: 'rqu_sbh_id',
           ellipsis : true,
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '첨부파일관리ID',
           width: 120,
           align: 'center',
           name: 'pal_atfl_mng_id_yn',
-          // hidden : true,
           defaultValue: '미첨부',
         },
         {
@@ -1326,6 +1344,7 @@ export default {
           width: 200,
           align: 'left',
           name: 'rmrk',
+          filter: 'text',
         },
         {
           header: '등록여부',

@@ -619,7 +619,7 @@ export default {
         {
           header: '차기희망프로젝트 및 업무',
           minWidth: 350,
-          align: 'center',
+          align: 'left',
           name: 'nxt_prj_nm',
           editor: 'text',
           filter: 'text',
