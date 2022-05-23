@@ -154,7 +154,7 @@
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
             <h2>
-              테스트진행현황 상세보기
+              테스트진행현황 편집 및 상세보기
             </h2>
           </div>
           <hr>

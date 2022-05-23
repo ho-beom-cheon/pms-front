@@ -128,8 +128,11 @@
         <!-- Modal popup contents -->
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
-            <h2>
-              상세보기
+            <h2 v-bind:hidden="this.col_nm!='prg_txt'">
+              개발진행현황 편집 및 상세보기
+            </h2>
+            <h2 v-bind:hidden="this.col_nm!='rmrk'">
+              비고 내용편집 및 상세보기
             </h2>
           </div>
           <hr>
@@ -589,11 +592,6 @@ export default {
 
       const currentCellData = (this.$refs.grid.invoke("getFocusedCell"));
       this.col_nm = ev.columnName
-      if(this.col_nm == 'rmrk'){
-        this.header_col_nm = "비고 상세보기"
-      } else {
-        this.header_col_nm = "개발진행현황 상세보기"
-      }
 
       if(ev.columnName == 'rmrk' || ev.columnName == 'prg_txt') {  // 컬럼명이 <비고>일 때만 팝업
         this.modals.txt_modal1 = true;
