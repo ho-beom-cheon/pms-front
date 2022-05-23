@@ -1404,6 +1404,7 @@ export default {
           align: 'center',
           name: 'man_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '번호',
@@ -1419,12 +1420,14 @@ export default {
           align: 'center',
           name: 'rank_nm',
           editor: 'text',
+          filter: 'select',
         },
         {
           header: '직원구분',
           width: 120,
           align: 'center',
           name: 'man_cd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -1438,6 +1441,7 @@ export default {
           width: 80,
           align: 'center',
           name: 'skill_grd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -1452,6 +1456,7 @@ export default {
           align: 'right',
           name: 'career',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '현재경력',
@@ -1459,6 +1464,7 @@ export default {
           align: 'right',
           name: 'now_career',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '주요기술',
@@ -1466,6 +1472,7 @@ export default {
           align: 'left',
           name: 'main_skill',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '주요업무',
@@ -1473,6 +1480,7 @@ export default {
           align: 'left',
           name: 'duty_txt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '자격증',
@@ -1480,6 +1488,7 @@ export default {
           align: 'left',
           name: 'qlfks_nm1',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '평판',
