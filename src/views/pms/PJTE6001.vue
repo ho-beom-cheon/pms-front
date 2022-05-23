@@ -58,7 +58,6 @@
             <textarea cols="30" rows="10" placeholder="신청내용을 입력해주세요" v-model="req_txt" ref="req_txt"></textarea>
           </td>
         </tr>
-
         <tr>
           <th>
             처리자
@@ -96,9 +95,8 @@
         </tr>
         <tr v-else>
           <th>첨부파일</th>
-          <td>
+          <td colspan="4">
             <span>첨부파일등록은 저장 후 가능합니다.</span>
-
           </td>
         </tr>
         </tbody>

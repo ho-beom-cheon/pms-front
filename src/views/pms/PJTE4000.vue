@@ -902,6 +902,7 @@ export default {
           align: 'left',
           name: 'rgs_dis_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options: {
@@ -922,6 +923,7 @@ export default {
           align: 'left',
           name: 'titl_nm',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '요청내용',
@@ -929,6 +931,7 @@ export default {
           align: 'left',
           name: 'req_dis_txt',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '요청구분',
@@ -936,6 +939,7 @@ export default {
           align: 'center',
           name: 'req_dis_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options: {
@@ -949,12 +953,14 @@ export default {
           align: 'center',
           name: 'rgs_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '요청자',
           width: 110,
           align: 'left',
           name: 'achi_nm',
+          filter: 'text',
         },
         {
           header: '처리단계',
@@ -962,6 +968,7 @@ export default {
           align: 'center',
           name: 'prc_step_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options: {
@@ -974,12 +981,14 @@ export default {
           width: 120,
           align: 'left',
           name: 'tgt_biz_nm',
+          filter: 'text',
         },
         {
           header: '조치담당자',
           width: 110,
           align: 'center',
           name: 'ttmn_crpe_nm',
+          filter: 'text',
         },
         {
           header: '조치예정일자',
@@ -987,6 +996,7 @@ export default {
           align: 'center',
           name: 'ttmn_scd_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '조치일자',
@@ -994,6 +1004,7 @@ export default {
           align: 'center',
           name: 'ttmn_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
         },
         {
           header: '조치내용',
@@ -1001,6 +1012,7 @@ export default {
           align: 'left',
           name: 'ttmn_txt',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '비고',
@@ -1008,12 +1020,14 @@ export default {
           align: 'left',
           name: 'rmrk',
           ellipsis: true,
+          filter: 'text',
         },
         {
           header: '긴급성',
           width: 110,
           align: 'center',
           name: 'urgn_cd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -1027,6 +1041,7 @@ export default {
           width: 110,
           align: 'center',
           name: 'ifnc_cd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -1041,6 +1056,7 @@ export default {
           width: 110,
           align: 'center',
           name: 'gd_txt',
+          filter: 'select',
         },
         {
           header: '해결방안내용',
@@ -1048,6 +1064,7 @@ export default {
           align: 'left',
           name: 'slv_mpln_txt',
           ellipsis: true,
+          filter: 'text',
         },
       ]
     }
