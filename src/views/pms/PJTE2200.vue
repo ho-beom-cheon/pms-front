@@ -336,6 +336,22 @@ export default {
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
       }
+
+      // '100' 권한,개발자명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
+        this.info.dvlpe_enm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.dvlpe_eno = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+      // '200' 권한, pl명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '200'){
+        this.info.pl_enm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.pl_eno = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+      // '300' 권한, 현업명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400'){
+        this.info.crpe_enm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.crpe_eno = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
     },
     // 저장 버튼
     fnSave(){
