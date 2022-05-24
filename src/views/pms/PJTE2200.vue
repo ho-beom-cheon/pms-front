@@ -684,9 +684,10 @@ export default {
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
-      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
-      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
-      this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName","err_btn", "new-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "search-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "search-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "search-btn-img");
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 6);
     },
@@ -1209,7 +1210,7 @@ export default {
           minWidth: 10,
           align: 'center',
           name: 'dvlpe_btn',
-          renderer: SearchBtn,
+          //renderer: SearchBtn,
         },
         {
           header: '번호',
@@ -1230,7 +1231,7 @@ export default {
           minWidth: 10,
           align: 'center',
           name: 'pl_btn',
-          renderer: SearchBtn,
+          //renderer: SearchBtn,
         },
         {
           header: '번호',
@@ -1251,7 +1252,7 @@ export default {
           minWidth: 10,
           align: 'center',
           name: 'crpe_btn',
-          renderer: SearchBtn,
+          //renderer: SearchBtn,
         },
         {
           header: '번호',
@@ -1289,7 +1290,7 @@ export default {
           width: 40,
           name: 'err_btn',
           align: 'center',
-          renderer: CustomRenderer,
+          //renderer: CustomRenderer,
         },
         {
           header: '프로그램ID',

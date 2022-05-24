@@ -158,6 +158,7 @@
                 :columnOptions="columnOptions"
                 :rowHeight="rowHeight"
                 :rowHeaders="rowHeaders"
+                @onGridUpdated="onGridUpdated1"
             ></grid>
           </div>
         </div>
@@ -202,6 +203,7 @@
                 :rowHeight="rowHeight"
                 :minRowHeight="minRowHeight"
                 :rowHeaders="rowHeaders"
+                @onGridUpdated="onGridUpdated2"
             ></grid>
           </div>
           <br>
@@ -460,6 +462,9 @@ export default {
     },
 
     onGridUpdated(grid){
+      this.$refs.grid1.invoke("addColumnClassName","del_btn", "del-btn-img");
+      this.$refs.grid1.invoke("addColumnClassName","cmnt_btn", "cmnt-btn-img");
+
       // TODO 게시판 목록에서 파라미터 넘겨오는 값
       this.info.gesipan_id = this.$store.state.pms.GesiData.gesipan_id
       this.info.annym_yn   = this.$store.state.pms.GesiData.annym_yn
@@ -488,6 +493,13 @@ export default {
       }
     },
 
+    onGridUpdated1(grid){
+      this.$refs.grid2.invoke("addColumnClassName","del_btn", "del-btn-img");
+    },
+
+    onGridUpdated2(grid){
+      this.$refs.grid3.invoke("addColumnClassName","del_btn", "del-btn-img");
+    },
     // 그리드 1 클릭 이벤트 -
     onClick1(ev) {
       // 현재 Row 가져오기
@@ -1046,14 +1058,14 @@ export default {
           width: 50,
           align: 'center',
           name: 'cmnt_btn',
-          renderer: CustomRenderer1,
+          //renderer: CustomRenderer1,
         },
         {
           header: '삭제',
           width: 50,
           align: 'center',
           name: 'del_btn',
-          renderer: CustomRenderer2,
+          //renderer: CustomRenderer2,
           editor: 'text',
         },
         // 숨김처리 추가
@@ -1166,7 +1178,7 @@ export default {
           width: 50,
           align: 'center',
           name: 'del_btn',
-          renderer: CustomRenderer2,
+          //renderer: CustomRenderer2,
         },
         {
           header: '게시글ID',
@@ -1219,7 +1231,7 @@ export default {
           width: 50,
           align: 'center',
           name: 'del_btn',
-          renderer: CustomRenderer2,
+          //renderer: CustomRenderer2,
           editor: 'text',
         },
         {
