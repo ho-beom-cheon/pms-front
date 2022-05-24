@@ -470,11 +470,12 @@ export default {
       }
     },
     onGridUpdated(grid){
+      this.$refs.grid.invoke("addColumnClassName","err_btn", "new-btn-img");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
       this.$refs.grid.invoke("addColumnClassName", "prg_txt", "disableColor");
-      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "empBtnColor");
-      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "empBtnColor");
-      this.$refs.grid.invoke("addColumnClassName", "crpe_btn", "empBtnColor");
+      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "search-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "search-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "crpe_btn","search-btn-img");
       this.addCheak = 'N';
       // 열고정
       this.$refs.grid.invoke("setFrozenColumnCount", 3);
@@ -659,6 +660,11 @@ export default {
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "dvlpe_cnf_dt");
       this.$refs.grid.invoke("disableCell", this.NewRow-1, "pl_cnf_dt");
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
+
+      this.$refs.grid.invoke("addColumnClassName","err_btn", "new-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "dvlpe_btn", "search-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "pl_btn", "search-btn-img");
+      this.$refs.grid.invoke("addColumnClassName", "crpe_btn","search-btn-img");
     },
     // 행삭제
     gridDelRow(){
@@ -943,6 +949,7 @@ export default {
       }
       return  true;
     },
+
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
@@ -965,7 +972,8 @@ export default {
       if(this.modals.txt_modal1 === true) {
         document.getElementById("modalId").focus()
       }
-    }
+    },
+
   },
 
 // 변수 선언부분
@@ -1232,7 +1240,7 @@ export default {
           minWidth: 10,
           align: 'center',
           name: 'dvlpe_btn',
-          renderer: SearchBtn,
+          //renderer: SearchBtn,
         },
         {
           header: '번호',
@@ -1253,7 +1261,7 @@ export default {
           minWidth: 10,
           align: 'center',
           name: 'pl_btn',
-          renderer: SearchBtn,
+          //renderer: SearchBtn,
         },
         {
           header: '번호',
@@ -1274,7 +1282,7 @@ export default {
           minWidth: 10,
           align: 'center',
           name: 'crpe_btn',
-          renderer: SearchBtn,
+          //renderer: SearchBtn,
         },
         {
           header: '번호',
@@ -1313,7 +1321,7 @@ export default {
           width: 40,
           align: 'center',
           name: 'err_btn',
-          renderer: CustomRenderer,
+          //renderer: CustomRenderer,
         },
         {
           header: '요구사항 ID',

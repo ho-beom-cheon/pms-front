@@ -1441,6 +1441,10 @@ aside dl dd + dd a {
     background: url(../../assets/img/PE-icon/ic_cmnt.svg) center/16px no-repeat;
     background-color: #B8B8B8;
 }
+.search-btn-img{
+    background: url(../../assets/img/PE-icon/ic_search.svg) center/16px no-repeat;
+    background-color: #BEBEBE!important;
+}
 .new-btn-img{
     background: url(../../assets/img/PE-icon/ic_new.svg) center/24px no-repeat;
     background-color: #B8B8B8;
