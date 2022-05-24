@@ -290,7 +290,7 @@ export default {
         let bkup_id = '0000000000';                                                     //백업ID
         let prjt_id = sessionStorage.getItem('LOGIN_PROJ_ID');                      //프로젝트ID
         let rgpe_nm = this.$refs.grid.invoke("getValue", this.curRow, 'rgpe_nm'); //결함등록자
-        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=800");
+        this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&rgpe_nm=${rgpe_nm}&`, "open_page", "width=1000, height=930");
       }
     },
 
@@ -395,7 +395,9 @@ export default {
 
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected      : '0000000000',
-        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"), // 업무구분
+        bzcd_selected: sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+                       sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+                       sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         err_rgs_dscd_selected: 'TTT',               // 등록단계구분
         err_tycd_selected: 'TTT',                   // 결함유형
         err_prc_step_cd_selected: 'TTT',            // 처리단계

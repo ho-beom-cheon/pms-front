@@ -1551,7 +1551,9 @@ export default {
             this.row++;
           }
           if(this.CD0000000000T.length !== 0)  this.prjt_nm_selected             = sessionStorage.getItem("LOGIN_PROJ_ID")
-          if(this.CD1000000001T.length !== 0)  this.bzcd_selected                = (sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
+          if(this.CD1000000001T.length !== 0)  this.bzcd_selected                = (sessionStorage.getItem("LOGIN_AUT_CD") === '300' ||
+          sessionStorage.getItem("LOGIN_AUT_CD") === '400' || sessionStorage.getItem("LOGIN_AUT_CD") === '500' ||
+          sessionStorage.getItem("LOGIN_AUT_CD") === '600' || sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? this.CD1000000001T[0].value:sessionStorage.getItem("LOGIN_BZCD"))
           if(this.CD1000000002T.length !== 0)  this.prc_step_cd_selected         = this.CD1000000002T[0].value
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected         = this.CD1000000003T[0].value
           if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected          = this.CD1000000004T[0].value

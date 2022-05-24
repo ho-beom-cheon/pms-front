@@ -154,7 +154,7 @@
         <Modal :show.sync="modals.txt_modal1">
           <div class="modal-pop-body">
             <h2>
-              테스트진행현황 상세보기
+              테스트진행현황 편집 및 상세보기
             </h2>
           </div>
           <hr>
@@ -335,6 +335,22 @@ export default {
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
+      }
+
+      // '100' 권한,개발자명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
+        this.info.dvlpe_enm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.dvlpe_eno = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+      // '200' 권한, pl명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '200'){
+        this.info.pl_enm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.pl_eno = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+      // '300' 권한, 현업명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400'){
+        this.info.crpe_enm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.crpe_eno = sessionStorage.getItem("LOGIN_EMP_NO")
       }
     },
     // 저장 버튼
@@ -995,7 +1011,9 @@ export default {
 
         prjt_nm_selected         : sessionStorage.getItem("LOGIN_PROJ_ID"),
         bkup_id_selected         : '0000000000',
-        bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' || sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
+        bzcd_selected            : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+                                   sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+                                   sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),
         sqn_cd_selected          : 'TTT',
         itg_tst_prc_cd_selected  : 'TTT',
 

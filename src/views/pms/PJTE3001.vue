@@ -103,7 +103,7 @@
           </td>
         </tr>
 
-        <tr v-if="mng_id">
+        <tr v-if="this.atfl_save_yn">
           <th>첨부파일</th>
           <td colspan="4">
             <input type="text" :disabled=true v-model="rgs_atfl_nm" style="background-color: #f2f2f2;">
@@ -116,7 +116,6 @@
           <th>첨부파일</th>
           <td colspan="4">
             <span>첨부파일등록은 저장 후 가능합니다.</span>
-
           </td>
         </tr>
         </tbody>
@@ -198,7 +197,7 @@
             <textarea cols="30" rows="10" ref="ttmn_txt" placeholder="조치내용을 입력해주세요"  v-model="ttmn_txt"></textarea>
           </td>
         </tr>
-        <tr v-if="mng_id">
+        <tr v-if="this.atfl_save_yn">
           <th>첨부파일</th>
           <td colspan="4">
             <input type="text" :disabled=true v-model="ttmn_atfl_nm" style="background-color: #f2f2f2;">
@@ -265,9 +264,11 @@ export default {
     this.getCombo();
     // mng_id가 있을 때 팝업 데이터 조회
     if(this.mng_id){
+      this.atfl_save_yn = true;
       this.getRegisterData();
       // mng_id가 없을 때 신규 등록을 위한팝업 데이터 조회
     } else {
+      this.atfl_save_yn = false;
       this.getNewRegisterData();
     }
   },
@@ -420,6 +421,27 @@ export default {
             this.pl_no = res_data.pl_no                                 // PL번호
           })
     },
+
+    //mng_id가 없을 때 신규 등록을 위한팝업 데이터 조회
+    getSelectMngId() {
+      axiosService.get("/PJTE3001/select_3001_03",{
+        params : {
+          bkup_id : this.bkup_id,
+          prjt_id : this.prjt_id,
+          cctn_bzcd : this.cctn_bzcd,
+          cctn_id : this.cctn_id,
+          cctn_sqn_cd : this.cctn_sqn_cd,
+          rgs_dscd : this.rgs_dscd_selected,
+          login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),
+        }
+      })
+          .then(res => {
+            let res_data = res.data.data.contents[0];
+            // console.log(res_data)
+
+            this.mng_id = res_data.mng_id   // 관리구분코드
+          })
+    },
     // 저장(신청 ID 없는 경우, insert 쿼리)
     saveRegisterData() {
       // 필수 항목 체크
@@ -478,20 +500,12 @@ export default {
 
       })
           .then(res => {
-
             if(res.data){
-              this.open_page(res.data.mng_id)
+              this.atfl_save_yn = true
+              this.getSelectMngId()
               alert("저장되었습니다.");
             }
-
           })
-    },
-
-    // mng_id 없이 저장했을 때, mng_ig 파라미터로 하여 새 페이지 오픈(첨부파일등록 보여주기 위함)
-    open_page(mng_id){
-      if(mng_id == null || mng_id==='' || mng_id === undefined) mng_id=''
-      let bkup_id='0000000000', prjt_id=sessionStorage.getItem('LOGIN_PROJ_ID')
-      this.pop = window.open(`../PJTE3001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&`, "open_page", "width=1000, height=800");
     },
 
     // 저장(mng_id 있는 경우, update 쿼리)
@@ -534,10 +548,6 @@ export default {
         this.$refs.ttmn_scd_dt.focus();
         alert('조치예정일자가 없습니다.');
         return false;
-      } else if (this.ttmn_txt === '' || this.ttmn_txt == null || this.ttmn_txt === undefined) {
-        alert('조치내용이 없습니다.');
-        this.$refs.ttmn_txt.focus();
-        return false;
       }
 
       // 결함처리단계구분코드가 [200]인 경우 : 조치담당자,PL,조치예정일자 필수
@@ -550,10 +560,6 @@ export default {
           alert('선택 된 업무PL이 없습니다.');
           this.$refs.pl_no.focus();
           return false;
-        } else if (this.ttmn_dt === '' || this.ttmn_dt == null || this.ttmn_dt === undefined) {
-          alert('선택 된 조치일자가 없습니다.');
-          this.$refs.ttmn_dt.focus();
-          return false;
         }
         // 결함처리단계구분코드가 [500, 600]인 경우 : 조치내용 필수(보류인경우 보류 사유 입력)
       } else if(this.err_prc_step_cd_selected == '600') {
@@ -564,7 +570,7 @@ export default {
         }
       } else if(this.err_prc_step_cd_selected == '500') {
         if(this.ttmn_txt === '' || this.ttmn_txt == null || this.ttmn_txt === undefined) {
-          alert('보류 사유를 입력해주세요.');
+          alert('조치내용에 보류 사유를 입력해주세요.');
           this.$refs.ttmn_txt.focus();
           return false;
         }
@@ -707,6 +713,7 @@ export default {
       cctn_bzcd : this.$route.query.cctn_bzcd,      // 연결업무구분코드
       cctn_sqn_cd : this.$route.query.cctn_sqn_cd,  // 연결차수구분코드
       atfl_num : '',
+      atfl_save_yn : false,
 
       bzcd:[],                                // 업무구분코드
 
