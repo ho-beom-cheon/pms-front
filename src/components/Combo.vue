@@ -39,7 +39,10 @@
 
     <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-40'">
       <div class="item-con" >
-        <td class="td-box"> *부문명 </td>
+        <td class="td-box">
+          <label v-bind:hidden="dept_kbn1" style="align: 'center'; ">*부문명</label>
+          <label v-bind:hidden="dept_kbn2" style="align: 'center'; ">*업무명</label>
+        </td>
         <select
             v-model = "dept_cd_selected_iss"
             style   = "width: 125px"
@@ -670,7 +673,9 @@
     </li>
     <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
-      <div class="item-con">부문명
+      <div class="item-con">
+        <label v-bind:hidden="dept_kbn1">부문명</label>
+        <label v-bind:hidden="dept_kbn2">업무명</label>
         <select
             v-model = "dept_cd_selected"
             style   = "width: 110px"
@@ -1068,6 +1073,9 @@ export default {
       row : 0,
       set_yn : "",
       read : true,
+
+      dept_kbn1 : false,
+      dept_kbn2 : true,
 
       s_day : '',
       proc_dt : '',
@@ -1696,6 +1704,14 @@ export default {
         else {
           this.read = true;
         }
+      }
+
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003') {
+        this.dept_kbn1 = false
+        this.dept_kbn2 = true
+      } else {
+        this.dept_kbn1 = true
+        this.dept_kbn2 = false
       }
 
 

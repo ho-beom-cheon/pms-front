@@ -28,12 +28,18 @@
                 @week_sqn_cd_change="week_sqn_cd_change"
             >
             </combo>
-            <li class="filter-item-n">
-              <div class="input-searchWrap">PM명
+            <li class="filter-item-n" >
+              <div class="input-searchWrap">
+                <label v-bind:hidden="this.hidden_yn1">
+                  PM명
+                </label>
+                <label v-bind:hidden="this.hidden_yn2">
+                  PM/PL명
+                </label>
                 <input type="text"
-                       placeholder="PM명"
+                       placeholder="직원명"
                        v-model="info.pm_nm"
-                       style   = "width: 90px"
+                       style   = "width: 90px; margin-right: 5px;"
                        @keyup.enter="open_pjte9001(1)"
                 >
                 <button class="search-btn"
@@ -88,8 +94,10 @@
         <div class="div0-d">
           <div class="div3-b">
             <div class="div-header-b"><h2>금주 주간보고 등록</h2>
-              <ul class="filter-btn"><p>* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</p>
-                <button class="btn btn-filter-e" style="margin-left: 20px"><router-link tag="a" to="/PJTE9300">본사인력요청</router-link></button>
+              <ul class="filter-btn">
+                <label v-bind:hidden="this.hidden_yn1">* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</label>
+                <label v-bind:hidden="this.hidden_yn2">* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM,PL,관리자만 조회/수정이 가능합니다.]</label>
+                <button v-bind:hidden="this.hidden_yn1" class="btn btn-filter-e" style="margin-left: 20px"><router-link tag="a" to="/PJTE9300">본사인력요청</router-link></button>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
               </ul>
             </div>
@@ -104,9 +112,12 @@
                 </combo>
                 <li class="filter-item-a">
                   <div class="input-searchWrap" style = "margin-left : -8px">
-                    <td class="td-box"> *PM명 </td>
+                    <td class="td-box">
+                      <label v-bind:hidden="this.hidden_yn1">*PM명</label>
+                      <label v-bind:hidden="this.hidden_yn2">*PM/PL</label>
+                    </td>
                     <input type="text"
-                           placeholder="PM명"
+                           placeholder="직원명"
                            v-model="detail.pm_nm"
                            style   = "width: 80px"
                            @keyup.enter="open_pjte9001(2)"
@@ -276,9 +287,12 @@
               <ul class="filter-con clear-fix-a" style = "margin-top : 30px">
                 <li class="filter-item-a">
                   <div class="input-searchWrap" style = "margin-left : -8px">
-                    <td class="td-box"> PM명 </td>
+                    <td class="td-box">
+                      <label v-bind:hidden="this.hidden_yn1">*PM명</label>
+                      <label v-bind:hidden="this.hidden_yn2">*PM/PL</label>
+                    </td>
                     <input type="text"
-                           placeholder="PM명"
+                           placeholder="직원명"
                            v-model="detail.bef_pm_nm"
                            style   = "width: 70px"
                            :disabled=true
@@ -607,6 +621,23 @@ export default {
       this.$refs.grid.invoke("applyTheme", 'striped' ,{cell: {disabled: {text: '#000000'}}});
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
+
+      if(this.info.login_proj_id==="0000000003"){
+        this.hidden_yn1 = false;
+        this.hidden_yn2 = true;
+        this.grid_col   = false;
+        this.$refs.grid.invoke("setColumnHeaders", {dept_nm: '부문명'});
+
+      } else {
+        this.hidden_yn1 = true;
+        this.hidden_yn2 = false;
+        this.grid_col   = true;
+        this.$refs.grid.invoke("setColumnHeaders", {dept_nm: '업무명'});
+        this.$refs.grid.invoke("setColumnHeaders", {mergeColumn1: 'PM / PL'});
+        this.$refs.grid.invoke("hideColumn",'real_prjt_nm');
+        this.$refs.grid.invoke("hideColumn",'start_prjt_date');
+        this.$refs.grid.invoke("hideColumn",'end_prjt_date');
+      }
     },
     /* 조회 */
     fnSearch() {
@@ -1208,6 +1239,10 @@ export default {
         /**/
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
+
+        hidden_yn1 : false,
+        hidden_yn2 : true,
+        grid_col   : false,
 
         /* 그리드 상세보기 모달 속성 */
         modals: {
