@@ -487,6 +487,11 @@ export default {
         this.$refs.grid3.invoke("hideColumn",'empnm')
       }
       if(this.info.nmb_inq_yn === 'Y'){
+        this.$refs.grid1.invoke("showColumn",'view_cnt')
+      } else {
+        this.$refs.grid1.invoke("hideColumn",'view_cnt')
+      }
+      if(this.info.cmnt_yn === 'Y'){
         this.$refs.grid1.invoke("showColumn",'cmnt_btn')
       } else {
         this.$refs.grid1.invoke("hideColumn",'cmnt_btn')
