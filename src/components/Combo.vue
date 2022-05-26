@@ -3,7 +3,10 @@
     <!-- 주간보고 시작 -->
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
       <div class="item-con" style="margin-left : -8px">
-        <td class="td-box"> *프로젝트 </td>
+        <td class="td-box">
+          <label v-bind:hidden="dept_kbn1">*프로젝트</label>
+          <label v-bind:hidden="dept_kbn2">*업무</label>
+        </td>
         <select
             v-model = "real_prjt_id_selected_iss"
             style   = "width: 422px"
@@ -39,9 +42,7 @@
 
     <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-40'">
       <div class="item-con" >
-        <td class="td-box">
-          <label v-bind:hidden="dept_kbn1" style="align: 'center'; ">*부문명</label>
-          <label v-bind:hidden="dept_kbn2" style="align: 'center'; ">*업무명</label>
+        <td class="td-box">*부문명
         </td>
         <select
             v-model = "dept_cd_selected_iss"
@@ -639,7 +640,9 @@
     </li>
     <!--   투입프로젝트 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C38'">
-      <div class="item-con">프로젝트
+      <div class="item-con">
+        <label v-bind:hidden="dept_kbn1">프로젝트</label>
+        <label v-bind:hidden="dept_kbn2">업무</label>
         <select
             v-model = "real_prjt_id_selected"
             style   = "width: 422px"
@@ -673,9 +676,7 @@
     </li>
     <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
-      <div class="item-con">
-        <label v-bind:hidden="dept_kbn1">부문명</label>
-        <label v-bind:hidden="dept_kbn2">업무명</label>
+      <div class="item-con">부문명
         <select
             v-model = "dept_cd_selected"
             style   = "width: 110px"
