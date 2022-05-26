@@ -30,10 +30,10 @@
             </combo>
             <li class="filter-item-n" >
               <div class="input-searchWrap">
-                <label v-bind:hidden="this.hidden_yn1">
+                <label v-bind:hidden="this.detail.hidden_yn1">
                   PM명
                 </label>
-                <label v-bind:hidden="this.hidden_yn2">
+                <label v-bind:hidden="this.detail.hidden_yn2">
                   PM/PL명
                 </label>
                 <input type="text"
@@ -55,7 +55,7 @@
                      :disabled = true
               >
             </li>
-            <combo v-bind:hidden="this.hidden_yn1"
+            <combo v-bind:hidden="this.detail.hidden_yn1"
                 :comboArray = "this.comboList1"
                 @dept_cd_change="dept_cd_change"
             >
@@ -95,9 +95,9 @@
           <div class="div3-b">
             <div class="div-header-b"><h2>금주 주간보고 등록</h2>
               <ul class="filter-btn">
-                <label v-bind:hidden="this.hidden_yn1">* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</label>
-                <label v-bind:hidden="this.hidden_yn2">* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM,PL,관리자만 조회/수정이 가능합니다.]</label>
-                <button v-bind:hidden="this.hidden_yn1" class="btn btn-filter-e" style="margin-left: 20px"><router-link tag="a" to="/PJTE9300">본사인력요청</router-link></button>
+                <label v-bind:hidden="this.detail.hidden_yn1">* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM 또는 관리자만 조회/수정이 가능합니다.]</label>
+                <label v-bind:hidden="this.detail.hidden_yn2">* : 필수입력 항목입니다. [이슈내용은 프로젝트 PM,PL,관리자만 조회/수정이 가능합니다.]</label>
+                <button v-bind:hidden="this.detail.hidden_yn1" class="btn btn-filter-e" style="margin-left: 20px"><router-link tag="a" to="/PJTE9300">본사인력요청</router-link></button>
                 <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
               </ul>
             </div>
@@ -109,7 +109,7 @@
                     ref="combo1"
                 >
                 </combo>
-                <combo v-bind:hidden="this.hidden_yn1"
+                <combo v-bind:hidden="this.detail.hidden_yn1"
                     :comboArray="this.comboList5"
                     @dept_cd_change_iss="dept_cd_change_iss"
                     ref="combo2"
@@ -118,8 +118,8 @@
                 <li class="filter-item-a">
                   <div class="input-searchWrap" style = "margin-left : -8px">
                     <td class="td-box">
-                      <label v-bind:hidden="this.hidden_yn1">*PM명</label>
-                      <label v-bind:hidden="this.hidden_yn2">*PM/PL</label>
+                      <label v-bind:hidden="this.detail.hidden_yn1"  style = "text-align: center">*PM명</label>
+                      <label v-bind:hidden="this.detail.hidden_yn2"  style = "text-align: center">*PM/PL</label>
                     </td>
                     <input type="text"
                            placeholder="직원명"
@@ -293,8 +293,8 @@
                 <li class="filter-item-a">
                   <div class="input-searchWrap" style = "margin-left : -8px">
                     <td class="td-box">
-                      <label v-bind:hidden="this.hidden_yn1">*PM명</label>
-                      <label v-bind:hidden="this.hidden_yn2">*PM/PL</label>
+                      <label v-bind:hidden="this.detail.hidden_yn1"  style = "text-align: center">*PM명</label>
+                      <label v-bind:hidden="this.detail.hidden_yn2"  style = "text-align: center">*PM/PL</label>
                     </td>
                     <input type="text"
                            placeholder="직원명"
@@ -529,12 +529,12 @@
 import '/node_modules/tui-grid/dist/tui-grid.css';
 import {Grid} from '@toast-ui/vue-grid';
 import 'tui-date-picker/dist/tui-date-picker.css'; // Date-picker 스타일적용
-import axios from "axios";
 import Combo from "@/components/Combo";
 import Modal from "@/components/Modal";
 import {axiosService} from "@/api/http";
+import XLSX from "xlsx";
 import PmsSideBar from  "@/components/PmsSideBar";
-import WindowPopup from "@/views/pms/PJTE3001";
+
 
 const storage = window.sessionStorage;
 
@@ -559,7 +559,6 @@ export default {
   components: {
     Combo,
     PmsSideBar,
-    WindowPopup,
     Modal,
     grid: Grid,
   },
@@ -628,14 +627,14 @@ export default {
       this.$refs.grid.invoke("clear");
 
       if(this.info.login_proj_id==="0000000003"){
-        this.hidden_yn1 = false;
-        this.hidden_yn2 = true;
+        this.detail.hidden_yn1 = false;
+        this.detail.hidden_yn2 = true;
         this.grid_col   = false;
         this.$refs.grid.invoke("setColumnHeaders", {real_prjt_nm: '프로젝트'});
 
       } else {
-        this.hidden_yn1 = true;
-        this.hidden_yn2 = false;
+        this.detail.hidden_yn1 = true;
+        this.detail.hidden_yn2 = false;
         this.grid_col   = true;
         this.$refs.grid.invoke("setColumnHeaders", {real_prjt_nm: '업무'});
         this.$refs.grid.invoke("setColumnHeaders", {mergeColumn1: 'PM / PL'});
@@ -1088,7 +1087,7 @@ export default {
       if (this.detail.real_prjt_id_selected == "NNN" ||this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == null) {
         alert('프로젝트가 없습니다.');
         return false;
-      } else if ((this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == null) && this.hidden_yn2 == true) {
+      } else if ((this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == null) && this.detail.hidden_yn2 == true) {
         alert('부문명이 없습니다.');
         return false;
       }  else if (this.detail.week_sqn_cd_selected == "NNN" ||this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == null) {
@@ -1099,7 +1098,7 @@ export default {
         this.detail.week_yymm = this.getToday();
         return false;
       } else if (this.detail.pm_nm == "" || this.detail.pm_nm == null) {
-        if(this.hidden_yn2 == true) {
+        if(this.detail.hidden_yn2 == true) {
           alert('PM명이 없습니다.');
         } else {
           alert('PM/PL명이 없습니다.');
