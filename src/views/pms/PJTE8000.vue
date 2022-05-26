@@ -55,7 +55,7 @@
                      :disabled = true
               >
             </li>
-            <combo
+            <combo v-bind:hidden="this.hidden_yn1"
                 :comboArray = "this.comboList1"
                 @dept_cd_change="dept_cd_change"
             >
@@ -104,8 +104,13 @@
             <div class="div2-body-c">
               <ul class="filter-con clear-fix-a">
                 <combo
-                    :comboArray="this.comboList2"
+                    :comboArray="this.comboList4"
                     @real_prjt_id_change_iss="real_prjt_id_change_iss"
+                    ref="combo1"
+                >
+                </combo>
+                <combo v-bind:hidden="this.hidden_yn1"
+                    :comboArray="this.comboList5"
                     @dept_cd_change_iss="dept_cd_change_iss"
                     ref="combo2"
                 >
@@ -626,17 +631,17 @@ export default {
         this.hidden_yn1 = false;
         this.hidden_yn2 = true;
         this.grid_col   = false;
-        this.$refs.grid.invoke("setColumnHeaders", {dept_nm: '부문명'});
+        this.$refs.grid.invoke("setColumnHeaders", {real_prjt_nm: '프로젝트'});
 
       } else {
         this.hidden_yn1 = true;
         this.hidden_yn2 = false;
         this.grid_col   = true;
-        this.$refs.grid.invoke("setColumnHeaders", {dept_nm: '업무명'});
+        this.$refs.grid.invoke("setColumnHeaders", {real_prjt_nm: '업무'});
         this.$refs.grid.invoke("setColumnHeaders", {mergeColumn1: 'PM / PL'});
-        this.$refs.grid.invoke("hideColumn",'real_prjt_nm');
         this.$refs.grid.invoke("hideColumn",'start_prjt_date');
         this.$refs.grid.invoke("hideColumn",'end_prjt_date');
+        this.$refs.grid.invoke("hideColumn",'dept_nm');
       }
     },
     /* 조회 */
@@ -852,10 +857,10 @@ export default {
     //초기화 클릭했을때
     fnClear() {
       if(sessionStorage.getItem('LOGIN_REAL_PRJT_ID') == null && sessionStorage.getItem('LOGIN_REAL_PRJT_ID') == ''){
-        this.detail.real_prjt_id_selected = this.$refs.combo2.$data.CD1000000038N[0].value                    // (상세)프로젝트
+        this.detail.real_prjt_id_selected = this.$refs.combo1.$data.CD1000000038N[0].value                    // (상세)프로젝트
       }else{
         this.detail.real_prjt_id_selected = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')                    // (상세)프로젝트
-        this.$refs.combo2.$data.real_prjt_id_selected_iss = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')
+        this.$refs.combo1.$data.real_prjt_id_selected_iss = sessionStorage.getItem('LOGIN_REAL_PRJT_ID')
       }
       let dept_cd = ''
       if(sessionStorage.getItem('LOGIN_DEPT_CD') == null || sessionStorage.getItem('LOGIN_DEPT_CD') == ''){
@@ -930,7 +935,7 @@ export default {
         this.detail.week_yymm =  this.info.week_yymm;                 // (상세)주간년월
       }
       this.detail.real_prjt_id_selected = currentRowData.real_prjt_id;                  // (상세)프로젝트
-      this.$refs.combo2.$data.real_prjt_id_selected_iss = currentRowData.real_prjt_id;  //(상세)프로젝트
+      this.$refs.combo1.$data.real_prjt_id_selected_iss = currentRowData.real_prjt_id;  //(상세)프로젝트
 
       this.detail.pm_nm = currentRowData.pm_nm;                                         // (상세)pm명
       this.detail.pm_no = currentRowData.pm_no;                                         // (상세)pm번호
@@ -1083,7 +1088,7 @@ export default {
       if (this.detail.real_prjt_id_selected == "NNN" ||this.detail.real_prjt_id_selected == "" || this.detail.real_prjt_id_selected == null) {
         alert('프로젝트가 없습니다.');
         return false;
-      } else if (this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == null) {
+      } else if ((this.detail.dept_cd_selected == "NNN" ||this.detail.dept_cd_selected == "" || this.detail.dept_cd_selected == null) && this.hidden_yn2 == true) {
         alert('부문명이 없습니다.');
         return false;
       }  else if (this.detail.week_sqn_cd_selected == "NNN" ||this.detail.week_sqn_cd_selected == "" || this.detail.week_sqn_cd_selected == null) {
@@ -1094,7 +1099,11 @@ export default {
         this.detail.week_yymm = this.getToday();
         return false;
       } else if (this.detail.pm_nm == "" || this.detail.pm_nm == null) {
-        alert('PM명이 없습니다.');
+        if(this.hidden_yn2 == true) {
+          alert('PM명이 없습니다.');
+        } else {
+          alert('PM/PL명이 없습니다.');
+        }
         return false;
       } else if (this.detail.all_real_prg < 1 || this.detail.all_real_prg == "") {
         this.$refs.all_real_prg.focus();
@@ -1162,6 +1171,9 @@ export default {
       comboList1 : ["C40"],
       comboList2 : ["C-38","C-40"],
       comboList3: ["C-39"],
+
+      comboList4: ["C-38"],
+      comboList5: ["C-40"],
 
       large_num : '',
       /*직원조회 팝업 변수*/
