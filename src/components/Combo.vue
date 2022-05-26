@@ -1,11 +1,30 @@
 <template>
   <div style="display:inline;">
     <!-- 주간보고 시작 -->
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'">
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'"  v-bind:hidden="dept_kbn1">
       <div class="item-con" style="margin-left : -8px">
         <td class="td-box">
-          <label v-bind:hidden="dept_kbn1">*프로젝트</label>
-          <label v-bind:hidden="dept_kbn2">*업무</label>
+          <label style = "text-align: center">*프로젝트</label>
+        </td>
+        <select
+            v-model = "real_prjt_id_selected_iss"
+            style   = "width: 422px"
+            @change = "real_prjt_id_change_iss"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000038N"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-38'"  v-bind:hidden="dept_kbn2">
+      <div class="item-con">
+        <td class="td-box">
+          <label style = "text-align: center">*업무</label>
         </td>
         <select
             v-model = "real_prjt_id_selected_iss"
@@ -641,20 +660,34 @@
     <!--   투입프로젝트 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C38'">
       <div class="item-con">
-        <label v-bind:hidden="dept_kbn1">프로젝트</label>
-        <label v-bind:hidden="dept_kbn2">업무</label>
-        <select
-            v-model = "real_prjt_id_selected"
-            style   = "width: 422px"
-            @change = "real_prjt_id_change"
-        >
-          <option
-              v-for  = "(item, idx) in CD1000000038T"
-              :key   = "idx"
-              v-text = "item.text"
-              :value = "item.value"
-          ></option>
-        </select>
+        <label v-bind:hidden="dept_kbn1" >프로젝트
+          <select
+              v-model = "real_prjt_id_selected"
+              style   = "width: 422px"
+              @change = "real_prjt_id_change"
+          >
+            <option
+                v-for  = "(item, idx) in CD1000000038T"
+                :key   = "idx"
+                v-text = "item.text"
+                :value = "item.value"
+            ></option>
+          </select>
+        </label>
+        <label v-bind:hidden="dept_kbn2" >업무
+          <select
+              v-model = "real_prjt_id_selected"
+              style   = "width: 422px"
+              @change = "real_prjt_id_change"
+          >
+            <option
+                v-for  = "(item, idx) in CD1000000038T"
+                :key   = "idx"
+                v-text = "item.text"
+                :value = "item.value"
+            ></option>
+          </select>
+        </label>
       </div>
     </li>
     <!--   회차 -->
