@@ -1127,6 +1127,7 @@ export default {
           name: 'prjt_id',
           formatter: 'listItemText',
           disabled : true,
+          hidden : true,
           editor: {
             type: 'select',
             options:{
@@ -1136,7 +1137,7 @@ export default {
         },
         {
           header: '직원번호',
-          width: 100,
+          width: 120,
           name: 'empno',
           editor : 'text',
           align: 'center',
@@ -1144,7 +1145,7 @@ export default {
         },
         {
           header: '직원명',
-          width: 80,
+          width: 100,
           name: 'empnm',
           align: 'center',
           filter: { type: 'text'},
@@ -1160,7 +1161,7 @@ export default {
         {
           hidden: sessionStorage.getItem("LOGIN_AUT_CD") == 900 || sessionStorage.getItem("LOGIN_AUT_CD") == 600 || sessionStorage.getItem("LOGIN_AUT_CD") == 500 ? false : true,
           header: '로그인비밀번호',
-          width: 120,
+          width: 150,
           name: 'lgn_pwd',
           editor : 'text'
         },
@@ -1221,7 +1222,7 @@ export default {
         {
           hidden: sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000001' && sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000003' ? true : false,
           header: '소속',
-          width: 160,
+          width: 200,
           name: 'dept_cd',
           formatter: 'listItemText',
           filter: 'select',
@@ -1235,7 +1236,7 @@ export default {
         {
           hidden: sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000001' && sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000003' ? true : false,
           header: '투입프로젝트코드',
-          width: 300,
+          width: 270,
           name: 'real_prjt_id',
           formatter: 'listItemText',
           editor : {
