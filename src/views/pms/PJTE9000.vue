@@ -980,6 +980,8 @@ export default {
           wb.Sheets[sheetName].I1.w = "del_yn"
           wb.Sheets[sheetName].J1.w = "dept_cd"
           wb.Sheets[sheetName].K1.w = "real_prjt_id"
+          wb.Sheets[sheetName].L1.w = "inp_dt"
+          wb.Sheets[sheetName].M1.w = "wth_dt"
 
           let rowObj =XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
           let gridExcelData = JSON.parse(JSON.stringify(rowObj));
@@ -995,7 +997,6 @@ export default {
               alert('사용자 엑셀업로드 정보가 저장되었습니다.')
               this.info.grid_num = 1
               this.fnSearch()
-
             }
           })
               .catch(e => {
@@ -1218,6 +1219,7 @@ export default {
           },
         },
         {
+          hidden: sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000001' && sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000003' ? true : false,
           header: '소속',
           width: 160,
           name: 'dept_cd',
@@ -1231,6 +1233,7 @@ export default {
           }
         },
         {
+          hidden: sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000001' && sessionStorage.getItem("LOGIN_PROJ_ID") != '0000000003' ? true : false,
           header: '투입프로젝트코드',
           width: 300,
           name: 'real_prjt_id',
@@ -1242,7 +1245,24 @@ export default {
             }
           }
         },
-
+        {
+          hidden: sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000001' || sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000003' ? true : false,
+          header: '투입일자',
+          name: 'inp_dt',
+          width: 130,
+          align: 'center',
+          format:'yyyy-mm-dd',
+          editor:'datePicker'
+        },
+        {
+          hidden: sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000001' || sessionStorage.getItem("LOGIN_PROJ_ID") == '0000000003' ? true : false,
+          header: '철수일자',
+          name: 'wth_dt',
+          width: 130,
+          align: 'center',
+          format:'yyyy-mm-dd',
+          editor:'datePicker'
+        },
       ],
       columns2: [
         {
