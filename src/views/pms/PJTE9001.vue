@@ -155,7 +155,7 @@ export default {
     getCombo(){
       axiosService.get("/PJTE9001/combo", {
         params: {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          prjt_id: this.$route.query.prjt_id,
           bkup_id: this.bkup_id_selected
         }
       }).then(res => {
@@ -294,10 +294,11 @@ export default {
       },
       columns: [
         {
-          header: '업무구분',
+          hidden: this.$route.query.prjt_id == '0000000001' || this.$route.query.prjt_id == '0000000003' ? true : false,
+          header: '업무',
           align: 'center',
           name: 'bzcd',
-          width: 100,
+          width: 330,
           filter: 'select',
           formatter: 'listItemText',
           editor: {
@@ -308,8 +309,10 @@ export default {
           }
         },
         {
-          header: '부서',
+          hidden: this.$route.query.prjt_id == '0000000001' || this.$route.query.prjt_id == '0000000003' ? false : true,
+          header: '소속',
           align: 'left',
+          width: 150,
           name: 'dept_nm',
           filter: 'select',
         },
@@ -323,15 +326,45 @@ export default {
         {
           header: '직원명',
           align: 'center',
-          width: 100,
+          width: 80,
           name: 'empnm',
           filter: 'text',
         },
         {
           header: '직급',
           align: 'center',
-          width: 100,
+          width: 90,
           name: 'rank_nm',
+        },
+        {
+          hidden: this.$route.query.prjt_id == '0000000001' || this.$route.query.prjt_id == '0000000003' ? false : true,
+          header: '직책',
+          align: 'center',
+          name: 'bzcd',
+          width: 90,
+          filter: 'select',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:this.$store.state.pms.CD1000000001N
+            }
+          }
+        },
+        {
+          hidden: this.$route.query.prjt_id == '0000000001' || this.$route.query.prjt_id == '0000000003' ? false : true,
+          header: '직원구분',
+          align: 'center',
+          name: 'catn_dcd',
+          width: 90,
+          filter: 'select',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems:this.$store.state.pms.CD1000000041N
+            }
+          }
         },
       ],
     }
