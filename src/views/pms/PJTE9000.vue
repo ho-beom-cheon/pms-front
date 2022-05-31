@@ -924,7 +924,19 @@ export default {
     // 행삭제
     gridDelRow(grid_num){
       if(grid_num === 1){
-        this.$refs.grid1.invoke("removeRow", this.curRow);
+        let createdRows = this.$refs.grid1.invoke("getModifiedRows").createdRows
+        let checkCreatedRows = false
+        for(let i=0; i<createdRows.length; i++){
+          if(createdRows[i].rowKey == this.curRow){
+            checkCreatedRows = true
+            break;
+          }
+        }
+        if(checkCreatedRows){
+          this.$refs.grid1.invoke("removeRow", this.curRow);
+        }else{
+          alert("새로 추가한 행만 행삭제가 가능합니다.")
+        }
       }else if(grid_num === 2){
         let createdRows = this.$refs.grid2.invoke("getModifiedRows").createdRows
         let checkCreatedRows = false
