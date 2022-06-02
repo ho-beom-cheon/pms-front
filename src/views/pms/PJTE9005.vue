@@ -683,7 +683,7 @@ export default {
     fnSave(){
       if(this.detail.man_no != '') {
         // 권한이 관리자(900) 이거나 본인 일 때 저장 및 경력증빙첨부 가능
-        if (sessionStorage.getItem("LOGIN_EMP_NO") === this.detail.man_no || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
+        if (sessionStorage.getItem("LOGIN_EMP_NO") === this.detail.man_no || sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '900') {
           //필수항목 확인
           if (this.checkPrimary() == true) {
             if (confirm("정말 저장하시겠습니까?") == true) {
