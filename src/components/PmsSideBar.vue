@@ -85,8 +85,9 @@
               <li id="PJTE7100"><a href="/PJTE7100">{{ menu_list[9].name }}</a></li>
               <li id="PJTE7000"><a href="/PJTE7000">{{ menu_list[10].name }}</a></li>
               <li id="PJTE8000"><a href="/PJTE8000">{{ menu_list[11].name }}</a></li>
-              <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[12].name }}</a></li>
-              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[13].name }}</a></li>
+              <li id="PJTE8100"><a href="/PJTE8100">{{ menu_list[12].name }}</a></li>
+              <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[13].name }}</a></li>
+              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[14].name }}</a></li>
             </ul>
 
           </div>
@@ -187,6 +188,11 @@ export default {
           id: 'PJTE8000',
           path: '/PJTE8000',
           name: '주간보고'
+        },
+        {
+          id: 'PJTE8100',
+          path: '/PJTE8100',
+          name: '회의록관리'
         },
         {
           id: 'PJTE9200',
