@@ -80,6 +80,7 @@ export default {
         {id: 'PJTE7000', path: '/PJTE7000', name: '산출물정합성체크'},
         {id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리'},
         {id: 'PJTE8000', path: '/PJTE8000', name: '주간보고'},
+        {id: 'PJTE8100', path: '/PJTE8100', name: '회의록관리'},
         {id: 'PJTE9900', path: '/PJTE9900', name: 'KanbanBoard'},
         {id: 'PJTE9005', path: '/PJTE9005', name: '인력프로파일관리'},
         {id: 'PJTE9200', path: '/PJTE9200', name: '회의실예약'},
