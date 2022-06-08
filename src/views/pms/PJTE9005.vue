@@ -201,7 +201,7 @@
                          v-model="detail.age"
                          ref="age"
                          :disabled=true
-                         style="width: 230px; background-color: #f2f2f2"
+                         style="width: 220px; background-color: #f2f2f2"
                   >
                 </div>
               </li>
@@ -212,7 +212,7 @@
                          placeholder="입력"
                          ref="address"
                          v-model="detail.address"
-                         style="width: 93.45%"
+                         style="width: 93.8%"
                   >
                 </div>
               </li>
@@ -262,7 +262,7 @@
                          placeholder="남 / 여"
                          ref="sex_nm"
                          v-model="detail.sex_nm"
-                         style="width: 230px;"
+                         style="width: 218px;"
                   >
                 </div>
               </li>
@@ -273,7 +273,7 @@
                          placeholder="입력"
                          ref="main_skill"
                          v-model="detail.main_skill"
-                         style="width: 555px"
+                         style="width: 560px"
                   >
                 </div>
               </li>
@@ -284,7 +284,7 @@
                          placeholder="입력"
                          ref="duty_txt"
                          v-model="detail.duty_txt"
-                         style="width: 880px"
+                         style="width: 878px"
                   >
                 </div>
               </li>
@@ -293,7 +293,7 @@
                   <label style="vertical-align: text-top; ">현/이전투입<br>프로젝트명</label>
                   <input type="text"
                          v-model="detail.inp_prj_nm"
-                         style="width: 555px;vertical-align: text-top; background-color: #f2f2f2;"
+                         style="width: 559px;vertical-align: text-top; background-color: #f2f2f2;"
                          :disabled = true
                   >
                 </div>
@@ -316,7 +316,7 @@
                   <input type="text"
                          ref="cpno"
                          v-model="detail.inp_cls_cd"
-                         style="width: 190px; background-color: #f2f2f2;"
+                         style="width: 180px; background-color: #f2f2f2;"
                          :disabled = true
                   >
                 </div>
@@ -328,15 +328,15 @@
                          placeholder="앞으로 하고싶은 프로젝트 및 업무 작성"
                          ref="cpno"
                          v-model="detail.nxt_prj_nm"
-                         style="width: 230px; vertical-align: text-top; "
+                         style="width: 233px; vertical-align: text-top; "
                   >
                 </div>
               </li>
               <li class="filter-item-a">
                 <div class="item-con">
-                  <label>연락처</label>
+                  <label>프리랜서연락처</label>
                   <input type="text"
-                         placeholder="입력"
+                         placeholder="정직원이 아닌 경우입력(관리회사/프리랜서)"
                          ref="cpno"
                          v-model="detail.cpno"
                          style="width: 230px;"
@@ -345,7 +345,7 @@
               </li>
               <li class="filter-item-a">
                 <div class="item-con">
-                  <label>관리회사</label>
+                  <label>관리회사/담당자</label>
                   <input type="text"
                          placeholder="정직원이 아닌 경우 입력"
                          ref="company_nm"
