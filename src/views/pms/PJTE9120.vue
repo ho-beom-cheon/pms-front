@@ -42,8 +42,8 @@
           <div class="div-header">
             <h2 v-if="this.info.prjt_nm_selected === '0000000003'">진행중 프로젝트내역</h2>
             <h2 v-else>게시내역</h2>
-            <ul class="filter-btn">
-              <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">목록</button>
+            <ul class="filter-btn" v-bind:hidden="this.listYn">
+              <button class="btn btn-filter-p" style="margin-left: 10px"><router-link tag="a" to="/PJTE9110">KMS게시판가기</router-link></button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -415,6 +415,12 @@ export default {
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         this.info.man_nm = sessionStorage.getItem("LOGIN_EMP_NM")
         this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003'){
+        this.listYn = true;
+      } else {
+        this.listYn = false;
       }
     },
 
@@ -907,6 +913,7 @@ export default {
       showRply  : false,     //댓글 영역 보여주기 유무
       gesiInput : true,      //프로젝트정보 보여주기 유무
       regDis    : false,     //등록 버튼
+      listYn    : false,
 
       file_name_list: [],    // 첨부파일 데이터
 
