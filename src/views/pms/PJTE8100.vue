@@ -9,33 +9,72 @@
     <div class="contents-body">
       <!-- 필터영역 -->
       <section class="filter">
-        <ul class="filter-con clear-fix">
+        <ul class="filter-con clear-fix" style="width : 100%">
           <combo
               :comboArray = "this.comboList"
-              @prjt_nm_chage="prjt_nm_chage"
-              @bkup_id_change="bkup_id_change"
+              @prjt_nm_change="prjt_nm_change"
           ></combo>
-          <li class="filter-item">a
-            <div class="input-searchWrap" >As-Is 프로그램 ID
+          <li class="filter-item-n">
+            <div class="input-searchWrap" >작성자
               <input type="text"
-                     v-model="info.as_pgm_id"
-                     style="width: 180px"
+                     placeholder="직원명"
+                     v-model="info.athr_nm"
+                     style="width: 90px"
+                     @keyup.enter="open_pjte9001(1)"
+              >
+              <button class="search-btn"
+                      @click="open_pjte9001_btn(1)"
+              ></button>
+            </div>
+          </li>
+          <li class="filter-item">
+            <input type="text"
+                   placeholder="직원번호"
+                   v-model="info.athr_no"
+                   style="width: 90px; background-color: #f2f2f2;"
+                   :disabled=true
+            >
+          </li>
+          <li class="filter-item">
+            <div class="item-con">회의일자
+              <div class="input-dateWrap">
+                <input type="date"
+                       :max="mtn_edt"
+                       v-model="mtn_sdt"
+                       style="width: 125px"
+                ></div>
+              -
+              <div class="input-dateWrap">
+                <input type="date"
+                       :min="mtn_sdt"
+                       v-model="mtn_edt"
+                       style="width: 125px"
+                ></div>
+            </div>
+          </li>
+          <li class="filter-item">
+            <div class="item-con">
+              <input type="checkbox" id="del_yn" v-model="del_yn">
+              <label>　삭제건 포함</label>
+            </div>
+          </li>
+        </ul>
+          <ul class="filter-con clear-fix">
+          <li class="filter-item">
+            <div class="input-searchWrap" >회의주제
+              <input type="text"
+                     v-model="info.cnf_wek"
+                     style="width: 413px"
+                     placeholder="입력"
               >
             </div>
           </li>
           <li class="filter-item">
-            <div class="input-searchWrap" >To-Be 프로그램 ID
+            <div class="input-searchWrap" >회의내용
               <input type="text"
-                     v-model="info.to_pgm_id"
-                     style="width: 180px"
-              >
-            </div>
-          </li>
-          <li class="filter-item">
-            <div class="input-searchWrap" >사용프로그램
-              <input type="text"
-                     v-model="info.use_pgm_txt"
-                     style="width: 180px"
+                     v-model="info.mtn_dtl"
+                     style="width: 600px"
+                     placeholder="입력"
               >
             </div>
           </li>
@@ -47,14 +86,9 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box" style="height: 470px">
-          <div class="div-header"><h2>As-Is 대 To-Be 매핑내역</h2>
+        <div class="grid1-box" style="height: 350px">
+          <div class="div-header"><h2>회의정보</h2>
             <ul class="filter-btn">
-              <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e">
-                <label for="file">엑셀업로드</label>
-                <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
-              </button>
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             </ul>
           </div>
@@ -64,8 +98,8 @@
                 :data="dataSource"
                 :header="header"
                 :columns="columns"
-                :minBodyHeight="55"
-                :bodyHeight="380"
+                :minBodyHeight="50"
+                :bodyHeight="260"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -76,7 +110,7 @@
           </div>
         </div>
         <div class="grid1-box" style="height: 100%">
-          <div class="div-header-b"><h2>As-Is 대 To-Be 매핑정보</h2>
+          <div class="div-header-b"><h2>회의 상세정보</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">신규초기화</button>
             </ul>
@@ -84,95 +118,90 @@
           <section class="filter">
             <ul class="filter-con clear-fix" style="width: 100%">
               <li class="filter-item" style="margin-left: 12px">
-                <div class="item-con" >As-Is  프로그램 ID
+                <div class="item-con" >관리ID
                   <input type="text"
-                         placeholder="입력"
-                         id      = "as_pgm_id"
-                         v-model="detail.as_pgm_id"
-                         style= "width: 680px; margin-left: 5px"
+                         placeholder="입력불가"
+                         id      = "mng_id"
+                         v-model="detail.mng_id"
+                         style= "width: 250px; background-color: #f2f2f2 ;margin-left: 5px"
+                         :disabled = true
                   >
                 </div>
               </li>
               <li class="filter-item"   style="margin-left: 10px">
-                <div class="item-con">As-Is 프로그램명
+                <div class="item-con">회의일자
+                  <div class="input-dateWrap">
+                    <input type="date"
+                           v-model="detail.mtn_dt"
+                           style="width: 250px;margin-left: 5px"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item"   style="margin-left: 10px">
+                <div class="item-con">회의시간
                   <input type="text"
                          placeholder="입력"
-                         v-model="detail.as_pgm_nm"
-                         style= "width: 680px; margin-left: 5px"
+                         v-model="detail.mtn_tm"
+                         style= "width: 250px; margin-left: 5px"
                   >
                 </div>
               </li>
-            </ul>
-            <ul class="filter-con clear-fix" style="width: 100%">
-              <li class="filter-item" style="margin-left: 8px">
-                <div class="item-con" >To-Be 프로그램 ID
+              <li class="filter-item"   style="margin-left: 10px">
+                <div class="item-con">회의장소
                   <input type="text"
                          placeholder="입력"
-                         ref="address"
-                         v-model="detail.to_pgm_id"
-                         style="width: 680px; margin-left: 5px"
+                         v-model="detail.mtn_plc"
+                         style= "width: 250px; margin-left: 5px"
                   >
                 </div>
               </li>
-              <li class="filter-item"  style="margin-left: 6px">
-                <div class="item-con" >To-Be 프로그램명
-                  <input type="text"
-                         placeholder="입력"
-                         ref="address"
-                         v-model="detail.to_pgm_nm"
-                         style="width: 680px; margin-left: 5px"
-                  >
-                </div>
-              </li>
-            </ul>
-
-            <ul class="filter-con clear-fix" style="width: 100%">
-              <combo
-                  ref="combo2"
-                  :comboArray = "this.comboList2"
-                  @as_pgm_dis_cd_change="as_pgm_dis_cd_change"
-              >
-              </combo>
               <li class="filter-item-n">
-                <div class="input-searchWrap" style="margin-left: 26px">전환담당자
+                <div class="input-searchWrap" style="margin-left: 26px">작성자
                   <input type="text"
                          placeholder="직원명"
-                         v-model="detail.dvlpe_nm"
+                         v-model="detail.athr_nm"
                          style="width: 90px"
-                         @keyup.enter="open_pjte9001()"
+                         @keyup.enter="open_pjte9001(2)"
                   >
                   <button class="search-btn"
-                          @click="open_pjte9001_btn()"
+                          @click="open_pjte9001_btn(2)"
                   ></button>
                 </div>
               </li>
               <li class="filter-item">
                 <input type="text"
                        placeholder="직원번호"
-                       v-model="detail.dvlpe_no"
+                       v-model="detail.athr_no"
                        style="width: 90px; background-color: #f2f2f2;"
                        :disabled=true
                 >
               </li>
-              <combo
-                  ref="combo3"
-                  :comboArray = "this.comboList3"
-                  @trn_stt_cd_change="trn_stt_cd_change"
-              >
-              </combo>
+            </ul>
+            <ul class="filter-con clear-fix" style="width: 100%">
+              <li class="filter-item" style="margin-left: 2px">
+                <div class="item-con" >회의주제
+                  <input type="text"
+                         placeholder="회의주제를 입력해주세요"
+                         ref="address"
+                         v-model="detail.cnf_wek"
+                         style="width: 1510px; margin-left: 5px"
+                  >
+                </div>
+              </li>
             </ul>
             <ul class="filter-con clear-fix"  style="width: 100%">
               <li class="filter-item" style="width: 100%">
                 <div class="item-con">
-                  <th style="vertical-align: middle;text-align: right ;width: 100px">
-                    <label>사용프로그램</label>
+                  <th style="vertical-align: middle;text-align: right ;width: 46px;">
+                    <label>회의내용</label>
                   </th>
                   <td>
                       <textarea cols="140"
                                 rows="4"
-                                placeholder="사용프로그램을 입력해주세요"
-                                v-model="detail.use_pgm_txt"
-                                style="width: 1490px; margin-left: 7px"
+                                placeholder="회의내용을 입력해주세요"
+                                v-model="detail.mtn_dtl"
+                                style="width: 1510px; margin-left: 7px"
+                                @dblclick="modalView(1)"
                       ></textarea>
                   </td>
                 </div>
@@ -181,23 +210,80 @@
             <ul class="filter-con clear-fix"  style="width: 100%">
               <li class="filter-item" style="width: 100%">
                 <div class="item-con">
-                  <th style="vertical-align: middle;text-align: right ;width: 100px">
-                    <label>비고</label>
+                  <th style="vertical-align: middle;text-align: right ;width: 46px;">
+                    <label>회의결과</label>
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="3"
-                                placeholder="비고내용을 입력해주세요"
-                                v-model="detail.rmrk"
-                                style="width: 1490px; margin-left: 7px"
+                                rows="4"
+                                placeholder="회의결과를 입력해주세요"
+                                v-model="detail.mtn_rsl"
+                                style="width: 1510px; margin-left: 7px"
+                                @dblclick="modalView(2)"
                       ></textarea>
                   </td>
                 </div>
               </li>
             </ul>
-            <ul class="filter-btn">
-              <button class="btn btn-filter-p" style="margin-bottom: 4px; margin-left: 10px" @click="fnSave" >저장</button>
+            <ul class="filter-con clear-fix"  style="width: 100%">
+              <li class="filter-item" style="width: 100%">
+                <div class="item-con">
+                  <th style="vertical-align: middle;text-align: right ;width: 46px;">
+                    <label>요청사항</label>
+                  </th>
+                  <td>
+                      <textarea cols="140"
+                                rows="3"
+                                placeholder="요청사항을 입력해주세요"
+                                v-model="detail.rqs_dtl"
+                                style="width: 1510px; margin-left: 7px"
+                                @dblclick="modalView(3)"
+                      ></textarea>
+                  </td>
+                </div>
+              </li>
             </ul>
+            <ul class="filter-con clear-fix"  style="width: 100%">
+              <li class="filter-item" style="width: 100%">
+                <div class="item-con">
+                  <th style="vertical-align: middle;text-align: right ;width: 46px">
+                    <label>참석자</label>
+                  </th>
+                  <td>
+                      <textarea cols="140"
+                                rows="3"
+                                placeholder="참석자를 입력해주세요"
+                                v-model="detail.atnd_dtl"
+                                style="width: 1510px; margin-left: 7px"
+                      ></textarea>
+                  </td>
+                </div>
+              </li>
+            </ul>
+                <ul class="filter-con clear-fix" >
+                  <li class="filter-item">
+                    <div class="item-con" >첨부파일
+                      <input type="text"
+                             ref="address"
+                             v-model="detail.org_file_nm"
+                             style="background-color: #f2f2f2; width: 515px;"
+                             :disabled=true
+                      >
+                    </div>
+                  </li>
+                </ul>
+                <ul class="filter-btn" style="justify-content: start" v-if="this.detail.mng_id">
+                  <button class="btn btn-filter-e" style="margin-bottom: 4px" @click="open_file_page" >첨부</button>
+                </ul>
+                <ul class="filter-btn" style="justify-content: start" v-else>
+                  <p style="margin-bottom: 10px;">첨부파일등록은 저장 후 가능합니다.</p>
+                </ul>
+
+              <li class="filter-btn">
+                <button class="btn btn-filter-p" style="margin-bottom: 4px" @click="fnDelete" :disabled = "deleteBtn_yn">삭제</button>
+                <button class="btn btn-filter-p" style="margin-bottom: 4px; margin-left: 10px" @click="fnSave" :disabled = "saveBtn_yn">저장</button>
+              </li>
+
           </section>
         </div>
 
@@ -205,6 +291,44 @@
         <br>
         <br>
         <br>
+        <Modal :show.sync="detail.modals.txt_modal1"  class="modal_main">
+          <div class="div-header-b">
+            <h2 v-if="this.large_num == '1'">회읟내용 확대보기</h2>
+            <h2 v-if="this.large_num == '2'">회의결과 확대보기</h2>
+            <h2 v-if="this.large_num == '3'">요청사항 확대보기</h2>
+            <ul class="filter-btn">
+              <button class="btn btn-filter-b" @click="textSizeUP">+ 확대</button>
+              <button class="btn btn-filter-b" @click="textSizeDown">- 축소</button>
+            </ul>
+          </div>
+          <tr>
+            <textarea v-if="this.large_num == '1'"
+                      id="detailTextArea1"
+                      v-model="detail.mtn_dtl"
+                      :disabled=true
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+            ></textarea>
+            <textarea v-if="this.large_num == '2'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea2"
+                      v-model="detail.mtn_rsl"
+                      :disabled=true
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+            ></textarea>
+            <textarea v-if="this.large_num == '3'"
+                      cols="200"
+                      rows="105"
+                      id="detailTextArea3"
+                      v-model="detail.rqs_dtl"
+                      :disabled=true
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+            ></textarea>
+            <div style="float: right;margin-top: 5px">
+              <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>
+            </div>
+          </tr>
+        </Modal>
       </section>
     </div>
   </div>
@@ -214,20 +338,32 @@ import '/node_modules/tui-grid/dist/tui-grid.css';
 import Combo from "@/components/Combo"
 import { Grid } from '@toast-ui/vue-grid';
 import PmsSideBar from  "@/components/PmsSideBar";
+import Modal from "@/components/Modal";
 import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
 import XLSX from "xlsx";
 
+// 첨부파일 팝업에서 받은 값
+window.fileData = (fileLists) => {
+  window.pms_register.file_name_list = [...fileLists];
+}
+
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
-  window.pms_register.detail.dvlpe_nm = empnm
-  window.pms_register.detail.dvlpe_no = empno
+  if(btn_id === '1'){
+    window.pms_register.info.athr_nm = empnm
+    window.pms_register.info.athr_no = empno
+  } else if(btn_id === '2'){
+    window.pms_register.detail.athr_nm = empnm
+    window.pms_register.detail.athr_no = empno
+  }
 }
 
 export default {
   // 컴포넌트를 사용하기 위해 선언하는 영역(import 후 선언)
   components: {
     Combo,
+    Modal,
     grid: Grid,
     PmsSideBar
   },
@@ -246,10 +382,7 @@ export default {
 // 일반적인 함수를 선언하는 부분
   methods: {
     // Combo.vue 에서 받아온 값
-    prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},            // 프로젝트
-    bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
-    as_pgm_dis_cd_change(params)  {this.detail.as_pgm_dis_cd_selected = params},    // As-Is프로그램유형
-    trn_stt_cd_change(params)     {this.detail.trn_stt_cd_selected = params},// 전환상태
+    prjt_nm_change(params)        {this.info.prjt_nm_selected = params},
 
     // 화면 init
     init() {
@@ -257,71 +390,70 @@ export default {
       this.$refs.grid.invoke("clear");
       // 그리드1 전체 비활성화
       this.$refs.grid.invoke("disable");
-
     },
+
+    // 삭제
+    fnDelete() {
+      if (confirm("정말 삭제하시겠습니까?") === true) {
+        axiosService.put("/PJTE8100/delete", {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
+          mng_id: this.detail.mng_id,                               // 관리아이디
+          login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+        }).then(res => {
+          console.log(res);
+          alert("삭제에 성공했습니다.");
+          this.fnSearch();
+          this.$refs.grid.invoke("reloadData");
+        }).catch(e => {
+          alert("삭제에 실패했습니다.")
+        })
+      } else {   //취소
+        return;
+      }
+    },
+
     // 저장 버튼
     fnSave(){
       //필수항목 확인
       if (this.checkPrimary() == true) {
         if (confirm("정말 저장하시겠습니까?") === true) {
           if(this.newCheck == "Y"){
-            axiosService.get("/PJTE7100/select_7100_02", {
-              params: {
-                prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
-                bkup_id_selected: this.info.bkup_id_selected,
-                as_pgm_id: this.detail.as_pgm_id,                      // As-Is프로그램id
-                as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // As-Is프로그램유형
-              }
+            axiosService.post("/PJTE8100/insert", {
+              prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
+              mng_id: this.detail.mng_id,                            //관리id
+              cnf_wek: this.detail.cnf_wek,                          // 회의주제
+              mtn_dt: this.detail.mtn_dt,                            // 회의일자
+              mtn_tm: this.detail.mtn_tm,                            // 회의시간
+              mtn_plc: this.detail.mtn_plc,                          // 회의장소
+              athr_no: this.detail.athr_no,                          // 작성자
+              mtn_rsl: this.detail.mtn_rsl,                          // 회의결과
+              mtn_dtl: this.detail.mtn_dtl,                          // 회의내용
+              rqs_dtl: this.detail.rqs_dtl,                          // 요청사항
+              atnd_dtl: this.detail.atnd_dtl,                        // 참석자
+              login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
             }).then(res => {
-              console.log(res);
-              if (res.data) {
-                if(res.data.data.contents[0].save_yn == 'N') {
-                  axiosService.post("/PJTE7100/insert_7100_01", {
-                    prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-                    as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
-                    as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // as-is 프로그램구분코드
-                    as_pgm_nm: this.detail.as_pgm_nm,                      // as-is 프로그램명
-                    to_pgm_id: this.detail.to_pgm_id,                      // to-be 프로그램id
-                    to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
-                    use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
-                    dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
-                    Rmrk: this.detail.Rmrk,                                // 비고
-                    login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                  }).then(res => {
-                    this.$refs.grid.invoke("reloadData");
-                    document.getElementById("as_pgm_id").style.backgroundColor="#f2f2f2";
-                    document.getElementById("as_pgm_id").disabled=true;
-                    document.getElementById("as_pgm_dis_cd").style.backgroundColor="#f2f2f2";
-                    document.getElementById("as_pgm_dis_cd").disabled=true;
-                    alert("신규저장을 완료했습니다.")
-                    this.fnSearch()
-                  }).catch(e => {
-                    alert("신규저장에 실패했습니다.")
-                  })
-                }else {
-                  alert('등록하려는 As-Is 대 To-Be매핑이 이미 등록되어있습니다. 확인 후 등록해주세요.')
-                  return false;
-                }
-              }
+              this.$refs.grid.invoke("reloadData");
+              alert("신규저장을 완료했습니다.")
+              this.fnSearch()
             }).catch(e => {
-              alert("저장에 실패했습니다.")
+              alert("신규저장에 실패했습니다.")
             })
           }else{
             //기등록일때
-            if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.dvlpe_no) {
-              axiosService.put("/PJTE7100/update_7100_01", {
+            if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.athr_no) {
+              axiosService.put("/PJTE8100/update", {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-                as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
-                as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // as-is 프로그램구분코드
-                as_pgm_nm: this.detail.as_pgm_nm,                      // as-is 프로그램명
-                to_pgm_id: this.detail.to_pgm_id,                      // to-be 프로그램id
-                to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
-                trn_stt_cd : this.detail.trn_stt_cd_selected,
-                use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
-                dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
-                rmrk: this.detail.rmrk,                                // 비고
+                mng_id: this.detail.mng_id,                            //관리id
+                cnf_wek: this.detail.cnf_wek,                          // 회의주제
+                mtn_dt: this.detail.mtn_dt,                            // 회의일자
+                mtn_tm: this.detail.mtn_tm,                            // 회의시간
+                mtn_plc: this.detail.mtn_plc,                          // 회의장소
+                mtn_dtl: this.detail.mtn_dtl,                          // 회의내용
+                mtn_rsl: this.detail.mtn_rsl,                          // 회의결과
+                rqs_dtl: this.detail.rqs_dtl,                          // 요청사항
+                atnd_dtl: this.detail.atnd_dtl,                        // 참석자
+                atfl_mng_id : this.detail.atfl_mng_id,                 // 첨부파일id
                 login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                excelUplod: this.excelUplod,
               }).then(res => {
                 console.log(res);
                 this.$refs.grid.invoke("reloadData");
@@ -334,32 +466,32 @@ export default {
               alert("작성자 본인만 저장가능합니다.")
             }
           }
-
         } else {   //취소
           return;
         }
       } else {
       }
     },
+
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.as_pgm_dis_cd_selected == "NNN" ||this.detail.as_pgm_dis_cd_selected == "" || this.detail.as_pgm_dis_cd_selected == null) {
-        alert(' As-Is 프로그램구분코드는 필수 입력사항입니다.');
+      if (this.detail.mtn_dt == "" || this.detail.mtn_dt == null) {
+        alert('회의일자는 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.dvlpe_no == "" || this.detail.dvlpe_no == null) {
-        alert('직원명과 직원번호는 필수 입력사항입니다.');
+      } else if (this.detail.mtn_tm == "" || this.detail.mtn_tm == null) {
+        alert('회의시간은 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.as_pgm_id == "" || this.detail.as_pgm_id == null) {
-        alert('As-Is 프로그램 ID는 필수 입력사항입니다.');
+      } else if (this.detail.mtn_plc == "" || this.detail.mtn_plc == null) {
+        alert('회의장소는 필수 입력사항입니다.');
         return false;
-      }  else if (this.detail.as_pgm_nm == "" || this.detail.as_pgm_nm == null) {
-        alert('As-Is 프로그램명은 필수 입력사항입니다.');
+      }  else if (this.detail.athr_no == "" || this.detail.athr_no == null) {
+        alert('작성자는 필수 입력사항입니다.');
         return false;
-      }  else if (this.detail.to_pgm_id == "" || this.detail.to_pgm_id == null) {
-        alert('To-Be프로그램 ID는 필수 입력사항입니다.');
+      }  else if (this.detail.cnf_wek == "" || this.detail.cnf_wek == null) {
+        alert('회의주제는 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.to_pgm_nm == "" || this.detail.to_pgm_nm == null) {
-        alert('To-Be프로그램은 필수 입력사항입니다.');
+      } else if (this.detail.mtn_dtl == "" || this.detail.mtn_dtl == null) {
+        alert('회의내용은 필수 입력사항입니다.');
         return false;
       }else {
         return true;  // 필수 값 모두 입력 시 true
@@ -378,65 +510,84 @@ export default {
         return;
       }
       this.newCheck ='N'; //신규인지 기등록인지 확인
-
       const currentRowData = (this.$refs.grid.invoke("getRow", this.curRow));
-      document.getElementById("as_pgm_id").style.backgroundColor="#f2f2f2";
-      document.getElementById("as_pgm_id").disabled=true;
-      document.getElementById("as_pgm_dis_cd").style.backgroundColor="#f2f2f2";
-      document.getElementById("as_pgm_dis_cd").disabled=true;
+
       // 그리드 row 클릭 시 상세내용에 Bind
       if (currentRowData != null) {
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
       }
-
     },
 
     //조회
     fnSearch(){
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
-      this.excelUplod = 'N'
     },
 
     // 조회한 데이터로 인적사항 데이터 바인딩
     cellDataBind(currentRowData) {
-      this.detail.as_pgm_id                           = currentRowData.as_pgm_id                  // As-is프로그램id
-      this.detail.as_pgm_nm                           = currentRowData.as_pgm_nm                  // As-is프로그램명
-      this.detail.to_pgm_id                           = currentRowData.to_pgm_id                  // To-be프로그램id
-      this.detail.to_pgm_nm                           = currentRowData.to_pgm_nm                  // To-be프로그램명
-      this.detail.as_pgm_dis_cd_selected              = currentRowData.as_pgm_dis_cd              // as-is프로그램유형
-      this.$refs.combo2.$data.as_pgm_dis_cd_selected  = currentRowData.as_pgm_dis_cd              // as-is프로그램유형
-      this.detail.dvlpe_no                            = currentRowData.dvlpe_no                   // 전환담당자번호
-      this.detail.dvlpe_nm                            = currentRowData.dvlpe_nm                   // 전환담당자명
-      this.detail.trn_stt_cd_selected                 = currentRowData.trn_stt_cd                 // 전환상태
-      this.$refs.combo3.$data.trn_stt_cd_selected     = currentRowData.trn_stt_cd                 // 전환상태
-      this.detail.use_pgm_txt                         = currentRowData.use_pgm_txt                // 사용프로그램
-      this.detail.rmrk                                = currentRowData.rmrk                       // 비고
+      this.detail.mng_id               = currentRowData.mng_id              // 관리id
+      this.detail.athr_no              = currentRowData.athr_no             // 작성자사번
+      this.detail.athr_nm              = currentRowData.athr_nm             // 작성자명
+      this.detail.mtn_dt               = currentRowData.mtn_dt              // 회의일자
+      this.detail.cnf_wek              = currentRowData.cnf_wek             // 회의주제
+      this.detail.mtn_dtl              = currentRowData.mtn_dtl             // 회의내용
+      this.detail.mtn_rsl              = currentRowData.mtn_rsl             // 회의결과
+      this.detail.atnd_dtl             = currentRowData.atnd_dtl            // 참석자
+      this.detail.rqs_dtl              = currentRowData.rqs_dtl             // 요청사항
+      this.detail.prjt_id              = currentRowData.prjt_id             // 프로젝트id
+      this.detail.bkup_id              = currentRowData.bkup_id             // 백업id
+      this.detail.mtn_plc              = currentRowData.mtn_plc             // 회의장소
+      this.detail.del_yn               = currentRowData.del_yn              // 삭제여부
+      this.detail.mtn_tm               = currentRowData.mtn_tm              // 회의시간
+      this.detail.atfl_mng_id          = currentRowData.atfl_mng_id         // 첨부파일관리id
+      this.detail.org_file_nm          = currentRowData.org_file_nm         // 첨부파일명
+
+      //작성자 본인 이거나 관리구분코드가 (500,600,900) 일때 삭제버튼 활성화
+      if(sessionStorage.getItem("LOGIN_EMP_NO") === currentRowData.athr_no ||sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'|| sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
+        this.deleteBtn_yn = false
+      }else{
+        this.deleteBtn_yn = true
+      }
+
+      if(currentRowData.del_yn === 'Y'){
+        document.getElementById("openFile1").disabled =true;
+        this.saveBtn_yn = true
+        this.deleteBtn_yn = true
+      }else{
+        document.getElementById("openFile1").disabled =false;
+        this.saveBtn_yn = false
+      }
     },
 
     //직원조회 버튼 클릭 시
-    open_pjte9001_btn() {
+    open_pjte9001_btn(btn_id) {
       let empnm = ''
 
-      empnm = this.detail.dvlpe_nm
+      if (btn_id == '1') {
+        empnm = this.info.athr_nm
+      } else if (btn_id == '2') {
+        empnm = this.detail.athr_nm
+      }
 
       if((empnm === '' || empnm == null || empnm === undefined)) {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       } else {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
     },
     //엔터키를 눌러 직원 조회
-    open_pjte9001() {
+    open_pjte9001(btn_id) {
       let empnm = ''
-
       let prjt_id_selected = this.info.prjt_nm_selected
       let bkup_id_selected = this.info.bkup_id_selected
-
-      empnm = this.detail.dvlpe_nm
-
+      if (btn_id == '1') {
+        empnm = this.info.athr_nm
+      } else if (btn_id == '2') {
+        empnm = this.detail.athr_nm
+      }
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
           params: {
@@ -449,178 +600,181 @@ export default {
               let res_data = res.data.data.contents;
               // console.log(res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                this.detail.dvlpe_no = res.data.data.contents[0].empno
-                this.detail.dvlpe_nm = res.data.data.contents[0].empnm
+                if (btn_id == '1') {
+                  this.info.athr_no = res.data.data.contents[0].empno
+                  this.info.athr_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '2') {
+                  this.detail.athr_no = res.data.data.contents[0].empno
+                  this.detail.athr_nm = res.data.data.contents[0].empnm
+                }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
-                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
         let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
-
     },
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
-      if(this.detail.dvlpe_nm === "") this.detail.dvlpe_no = "";
+      if(this.info.athr_nm === "") this.info.athr_no = "";
+      if(this.detail.athr_nm === "") this.detail.athr_no = "";
     },
 
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
-      document.getElementById("as_pgm_id").style.backgroundColor="#ffffff";
-      document.getElementById("as_pgm_id").disabled=false;
-      document.getElementById("as_pgm_dis_cd").style.backgroundColor="#ffffff";
-      document.getElementById("as_pgm_dis_cd").disabled=false;
+      this.detail.athr_no       = sessionStorage.getItem("LOGIN_EMP_NO");       // 작성자사번
+      this.detail.athr_nm       = sessionStorage.getItem("LOGIN_EMP_NM");       // 작성자명
+      this.detail.mng_id        = '';                                               // 관리id
+      this.detail.mtn_dt        = '';                                               // 회의일자
+      this.detail.cnf_wek       = '';                                               // 회의주제
+      this.detail.mtn_dtl       = '';                                               // 회의내용
+      this.detail.mtn_rsl       = '';                                               // 회의결과
+      this.detail.atnd_dtl      = '';                                               // 참석자
+      this.detail.rqs_dtl       = '';                                               // 요청사항
+      this.detail.bkup_id       = '';                                               // 백업id
+      this.detail.prjt_id       = '';                                               // 프로젝트id
+      this.detail.mtn_plc       = '';                                               // 회의장소
+      this.detail.del_yn        = '';                                               // 삭제여부
+      this.detail.mtn_tm        = '';                                               // 회의시간
+      this.detail.atfl_mng_id   = '';                                               // 첨부파일관리id
+      this.detail.org_file_nm   = '';                                               // 첨부파일명
 
-      this.detail.as_pgm_id                           = ''                                                  // As-is프로그램id
-      this.detail.as_pgm_nm                           = ''                                                  // As-is프로그램명
-      this.detail.to_pgm_id                           = ''                                                  // To-be프로그램id
-      this.detail.to_pgm_nm                           = ''                                                  // To-be프로그램명
-      this.detail.as_pgm_dis_cd_selected              = this.$refs.combo2.$data.CD1000000051N[0].value      // as-is프로그램유형
-      this.$refs.combo2.$data.as_pgm_dis_cd_selected  = this.$refs.combo2.$data.CD1000000051N[0].value      // as-is프로그램유형
-      this.detail.dvlpe_no                            = sessionStorage.getItem("LOGIN_EMP_NO")         // 전환담당자번호
-      this.detail.dvlpe_nm                            = sessionStorage.getItem("LOGIN_EMP_NM")         // 전환담당자명
-      this.detail.trn_stt_cd_selected                 = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
-      this.$refs.combo3.$data.trn_stt_cd_selected     = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
-      this.detail.use_pgm_txt                         = ''                                                  // 사용프로그램
-      this.detail.rmrk                                = ''                                                  // 비고
-
-      this.detail.save_yn               = 'N'        // 등록가능여부
+      this.deleteBtn_yn = true;
+      this.saveBtn_yn = false;
       this.newCheck = 'Y';
+      document.getElementById("openFile1").disabled =true;
     },
 
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
     },
-    // 양식다운로드
-    formDownload(){
-      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
+
+    fnCloseModal(){  // 모달창 닫기
+      this.detail.modals.txt_modal1 = false;
     },
-    // 재직사항 그리드 엑셀업로드
-    gridExcelImport(event) {
-      // 엑셀파일 업로드 로직 추가
-      console.log(event.target.files[0])
-      this.file = event.target.files ? event.target.files[0] : null;
-      let input = event.target;
-      let reader = new FileReader();
-      reader.onload = () => {
-        let fileData = reader.result;
-        let wb = XLSX.read(fileData, {type: 'binary'});
-        console.log("wb ::"+ wb.SheetNames);
-        let gridExcelData;
-        wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === 'As-Is대To-Be매핑관리' || sheetName === 'Sheet1') {
-            console.log(wb.Sheets[sheetName])
-            wb.Sheets[sheetName].B1.w = "as_pgm_id"
-            wb.Sheets[sheetName].C1.w = "as_pgm_nm"
-            wb.Sheets[sheetName].D1.w = "to_pgm_id"
-            wb.Sheets[sheetName].E1.w = "to_pgm_nm"
-            wb.Sheets[sheetName].F1.w = "as_pgm_dis_cd"
-            wb.Sheets[sheetName].G1.w = "use_pgm_txt"
-            wb.Sheets[sheetName].H1.w = "dvlpe_no"
-            wb.Sheets[sheetName].I1.w = "trn_stt_cd"
-            wb.Sheets[sheetName].J1.w = "sta_dt"
-            wb.Sheets[sheetName].K1.w = "end_dt"
-            wb.Sheets[sheetName].L1.w = "rmrk"
-            let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-            let rowObj_copy = [];
+    //더블클릭시 레이어 띄우기위해
+    modalView(num){
+      //true일때 레이어 오픈
+      this.detail.modals.txt_modal1 = true;
 
-            for (let n = 0; n < rowObj.length; n++) {
-              if (isNaN(rowObj[n].sta_dt) == false) {
-                rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
-              }
-              if (isNaN(rowObj[n].end_dt) == false) {
-                rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
-              }
-              rowObj_copy[n-1] = rowObj[n];
-            }
-
-            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
-            console.log("gridExcelData ::", gridExcelData)
-          }
-        })
-        this.excelUplod = 'Y'
-
-        try {
-          this.$refs.grid.invoke('resetData', gridExcelData)
-          if(this.excelUplod === 'Y') {
-            axiosService.post("/PJTE7100/create", {
-              excelUplod: this.excelUplod,
-              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
-              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
-              rowDatas: gridExcelData
-            }).then(res => {
-              console.log(res);
-              if (res.data) {
-                alert("엑셀 업로드 저장이 완료되었습니다.")
-                this.fnSearch()
-              }
-            }).catch(e => {
-              alert("등록중 오류 ::"+ e)
-            })
-          }
-        } catch (e){
-          alert('업로드에 실패했습니다.')
-        }
-      };
-      reader.readAsBinaryString(input.files[0]);
-      event.target.value = '';
+      if (num == 1) {
+        this.large_num = '1'
+      } else if (num == 2) {
+        this.large_num = '2'
+      } else if (num == 3) {
+        this.large_num = '3'
+      }
     },
-    excelDateToJSDate(excelDate) {
-      /* 엑셀에서 넘어온 숫자형태의 데이터를 날짜형태로 바꿔주는 함수
-      ex) 1. 엑셀 파일에서 2021-02 형태로 값을 입력하면 Feb-22 형태의 날짜 데이터가 자동입력됨
-          2. gridExcelImport2 함수에서
-          XLSX.utils.sheet_to_json(wb.Sheets[sheetName]) 엑셀데이터를 JSON으로 바뀌면서
-          Feb-22 의 데이터가 44593 << 숫자형태의 데이터로 바뀜
-          3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
-       */
-      var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
-      var converted_date = date.toISOString().split('T')[0].substring(0, 7);
-      return converted_date;
+    //상세내용 확대보기  (+확대버튼)
+    textSizeUP() {
+      this.defaultFontSize++;
+      if(this.large_num == '1'){
+        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '2') {
+        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '3') {
+        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
+      }
+    },
+
+    //상세내용 확대보기  (-축소버튼)
+    textSizeDown() {
+      this.defaultFontSize--;
+      if(this.large_num == '1'){
+        document.getElementById("detailTextArea1").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '2') {
+        document.getElementById("detailTextArea2").style.fontSize = this.defaultFontSize + 'px';
+      } else if(this.large_num == '3') {
+        document.getElementById("detailTextArea3").style.fontSize = this.defaultFontSize + 'px';
+      }
+    },
+    // 첨부파일등록 팝업 오픈
+    open_file_page() {
+      let file_rgs_dscd = '804'
+      let atfl_mng_id = this.detail.atfl_mng_id
+      let mng_id = this.detail.mng_id
+      let bkup_id = '0000000000', prjt_id = sessionStorage.getItem("LOGIN_PROJ_ID")
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&mng_id=${mng_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
     },
   },
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
+    // del_yn 값 변하면 info 내의 del_yn 값 변화
+    del_yn () {
+      this.del_yn ? this.info.del_yn = 'Y' : this.info.del_yn = 'N';
+    },
+    // 일자들은 데이터 조회시 '-' 이 빠져야 하므로 .split('-').join('')으로 통일
+    mtn_sdt (){
+      this.info.mtn_sdt = this.mtn_sdt.split('-').join('');
+    } ,    // 신청일자STA
+    mtn_edt () {
+      this.info.mtn_edt = this.mtn_edt.split('-').join('');
+    },    // 신청일자END
 
+    //첨부파일
+    file_name_list() {
+      this.detail.org_file_nm = this.file_name_list[0].org_file_nm
+      this.detail.atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
+    },
   },
 
 // 변수 선언부분
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C0","C27"],
-      comboList2 : ["C-51"],
-      comboList3 : ["C-52"],
+      comboList : ["C0"],
 
       gridData: [],
+      file_name_list : [],
+      atfl_num : '',
       newCheck : 'Y',
-      excelUplod: 'N',
+      defaultFontSize: 40,
+      large_num : '',
+      deleteBtn_yn : true,
+      saveBtn_yn   : false,
+      del_yn    : false,  // 완료건 포함(체크박스 값)
+      mtn_sdt               : '',                                           // 회의시작일자
+      mtn_edt               : '',                                           // 회의종료일자
 
       info : {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected      : '0000000000',                                 // 백업ID
-        as_pgm_id             : '',                                           // ASIS프로그램ID
-        to_pgm_id             : '',                                           // TOBE프로그램ID
-        use_pgm_txt           : '',                                           // 사용프로그램
+        athr_no               : '',                                           // 작성자사번
+        athr_nm               : '',                                           // 작성자명
+        del_yn                : 'N',                                          // 완료건포함(데이터 조회용)
+        mtn_sdt               : '',                                           // 회의시작일자
+        mtn_edt               : '',                                           // 회의종료일자
+        cnf_wek               : '',                                           // 회의주제
+        mtn_dtl               : '',                                           // 회의내용
       },
 
       detail : {
-        as_pgm_id               : '',                                         // ASIS프로그램ID
-        as_pgm_nm               : '',                                         // ASIS프로그램명
-        to_pgm_id               : '',                                         // TOBE프로그램ID
-        to_pgm_nm               : '',                                         // TOBE프로그램명
-        as_pgm_dis_cd_selected  : '',                                         // As-Is 프로그램 구분코드
-        dvlpe_no                : sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호
-        dvlpe_nm                : sessionStorage.getItem("LOGIN_EMP_NM"), // 전환담당자 명
-        trn_stt_cd_selected     : '',                                         // 전환상태
-        use_pgm_txt             : '',                                         // 사용프로그램
-        rmrk                    : '',                                         // 비고
-        save_yn                 : 'N',                                        // 등록가능여부
+        athr_no               : sessionStorage.getItem("LOGIN_EMP_NO"),       // 작성자사번
+        athr_nm               : sessionStorage.getItem("LOGIN_EMP_NM"),       // 작성자명
+        mng_id                : '',                                               // 관리id
+        mtn_dt                : '',                                               // 회의일자
+        cnf_wek               : '',                                               // 회의주제
+        mtn_dtl               : '',                                               // 회의내용
+        mtn_rsl               : '',                                               // 회의결과
+        atnd_dtl              : '',                                               // 참석자
+        rqs_dtl               : '',                                               // 요청사항
+        bkup_id               : '',                                               // 백업id
+        prjt_id               : '',                                               // 프로젝트id
+        mtn_plc               : '',                                               // 회의장소
+        del_yn                : '',                                               // 삭제여부
+        mtn_tm                : '',                                               // 회의시간
+        atfl_mng_id           : '',                                               // 첨부파일관리id
+        org_file_nm           : '',                                               // 첨부파일명
+        save_yn               : 'N',                                              // 등록가능여부
+
+        /* 그리드 상세보기 모달 속성 */
+        modals: {
+          txt_modal1: false,
+        },
       },
 
       login : {
@@ -647,7 +801,7 @@ export default {
       // toast ui grid 데이터
       dataSource: {
         api: {
-          readData   : { url: process.env.VUE_APP_API + '/PJTE7100/select_7100_01', method: 'GET' },
+          readData   : { url: process.env.VUE_APP_API + '/PJTE8100/select', method: 'GET' },
         },
         initialRequest: false,
         contentType : 'application/json;',
@@ -659,131 +813,126 @@ export default {
       },
       rowHeaders: ['rowNum'],
       header: {
-        height: 45,
-        complexColumns: [
-          {header: 'As-Is',           name: 'mergeColumn1', childNames: ['as_pgm_id','as_pgm_nm']},
-          {header: 'To-Be',           name: 'mergeColumn2', childNames: ['to_pgm_id','to_pgm_nm']},
-        ]
       },
       columns: [
         {
-          header: '프로그램 ID',
-          width: 120,
+          header: '관리 ID',
+          width: 180,
           align: 'left',
-          name: 'as_pgm_id',
+          name: 'mng_id',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '프로그램명',
-          width: 120,
-          align: 'left',
-          name: 'as_pgm_nm',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
-          header: '프로그램 ID',
-          width: 120,
-          align: 'left',
-          name: 'to_pgm_id',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
-          header: '프로그램명',
-          width: 120,
-          align: 'left',
-          name: 'to_pgm_nm',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
-          header: '프로그램유형',
+          header: '회의일자',
           width: 120,
           align: 'center',
-          name: 'as_pgm_dis_nm',
+          name: 'mtn_dt',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '회의주제',
+          width: 300,
+          align: 'left',
+          name: 'cnf_wek',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '회의내용',
+          width: 300,
+          align: 'left',
+          name: 'mtn_dtl',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '회의결과',
+          width: 280,
+          align: 'left',
+          name: 'mtn_rsl',
           editor: 'text',
           filter: 'select',
         },
         {
-          header: '사용프로그램',
+          header: '작성자',
           width: 120,
           align: 'left',
-          name: 'use_pgm_txt',
+          name: 'athr_nm',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '전환담당자',
-          width: 120,
-          align: 'center',
-          name: 'dvlpe_nm',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
-          header: '전환상태',
-          width: 120,
-          align: 'center',
-          name: 'trn_stt_nm',
-          editor: 'text',
-          filter: 'select',
-        },
-        {
-          header: '시작일자',
-          width: 120,
-          align: 'center',
-          name: 'sta_dt',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
-          header: '종료일자',
-          width: 120,
-          align: 'center',
-          name: 'end_dt',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
-          header: '비고',
+          header: '참석자',
+          width: 300,
           align: 'left',
-          name: 'rmrk',
+          name: 'atnd_dtl',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: 'ASIS프로그램구분코드',
-          width: 120,
+          header: '요청사항',
+          width: 300,
           align: 'center',
-          name: 'as_pgm_dis_cd',
-          editor: 'text',
-          hidden: true,
-        },
-        {
-          header: '전환상태코드',
-          width: 120,
-          align: 'center',
-          name: 'trn_stt_cd',
-          editor: 'text',
-          hidden: true,
+          name: 'rqs_dtl',
+          hidden : true,
         },
         {
           header: '백업id',
-          width: 120,
+          width: 300,
           align: 'center',
           name: 'bkup_id',
-          editor: 'text',
-          hidden: true,
+          hidden : true,
         },
         {
           header: '프로젝트id',
-          width: 120,
+          width: 300,
           align: 'center',
           name: 'prjt_id',
-          editor: 'text',
-          hidden: true,
+          hidden : true,
+        },
+        {
+          header: '회의장소',
+          width: 300,
+          align: 'center',
+          name: 'mtn_plc',
+          hidden : true,
+        },
+        {
+          header: '삭제여부',
+          width: 300,
+          align: 'center',
+          name: 'del_yn',
+          hidden : true,
+        },
+        {
+          header: '작성자사번',
+          width: 300,
+          align: 'center',
+          name: 'athr_no',
+          hidden : true,
+        },
+        {
+          header: '회의시간',
+          width: 300,
+          align: 'center',
+          name: 'mtn_tm',
+          hidden : true,
+        },
+        {
+          header: '첨부파일관리id',
+          width: 300,
+          align: 'center',
+          name: 'atfl_mng_id',
+          hidden : true,
+        },
+        {
+          header: '첨부파일명',
+          width: 300,
+          align: 'center',
+          name: 'org_file_nm',
+          hidden : true,
         },
       ],
     }
@@ -791,5 +940,26 @@ export default {
 };
 
 </script>
+
 <style>
+.modal-content {
+  width :1680px;
+  height : 800px;
+}
+.modal-body .modal-mid{
+  background-color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+  height: 5vh;
+  width : 700px;
+  margin: 20px;
+}
+.line-con {
+  display:flex
+}
+.modal-dialog {
+  max-width: 1680px;
+  max-height: 800px;
+  margin-left : 7.75rem;
+}
 </style>
