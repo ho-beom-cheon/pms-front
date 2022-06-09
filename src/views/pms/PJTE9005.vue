@@ -360,6 +360,17 @@
                   ref="combo4"
               >
               </combo>
+              <li class="filter-item-a">
+                <div class="item-con">
+                  <label>외주인력비고</label>
+                  <input type="text"
+                         placeholder="정직원이 아닌 경우 입력"
+                         ref="cpno"
+                         v-model="detail.rmrk"
+                         style="width: 546px;"
+                  >
+                </div>
+              </li>
             </ul>
             <ul class="filter-con clear-fix-a">
               <li class="filter-item-a" style="width: 100%; margin-top: 15px;">
@@ -712,6 +723,7 @@ export default {
                 cpno: this.detail.cpno,                     // 휴대전화번호
                 company_nm: this.detail.company_nm,         // 회사명
                 grd_cd: this.detail.grd_cd_selected,        // 평판구분
+                rmrk: this.detail.rmrk,                     // 비고
                 scholl_nm1: this.detail.scholl_nm1,         // 학교명1
                 gdt_ym1: this.detail.gdt_ym1,               // 졸업년월1
                 study1: this.detail.study1,                 // 전공1
@@ -928,6 +940,7 @@ export default {
       this.detail.qlfks_nm5           = data.contents[0].qlfks_nm5             // 자격증5
       this.detail.aqu_ymm5            = data.contents[0].aqu_ymm5              // 자격증취득일5
       this.detail.atfl_mng_id         = data.contents[0].atfl_mng_id           // 첨부파일관리ID
+      this.detail.rmrk                = data.contents[0].rmrk                  // 비고
     },
 
     // 행추가
@@ -1246,6 +1259,7 @@ export default {
       this.detail.qlfks_nm5           = '' // 자격증5
       this.detail.aqu_ymm5            = '' // 자격증취득일5
       this.detail.atfl_mng_id         = '' // 첨부파일관리ID
+      this.detail.rmrk                = '' // 비고
 
       // 그리드2 , 그리드3 초기화
       this.$refs.grid2.invoke("clear");
@@ -1313,6 +1327,7 @@ export default {
         duty_txt            : '',                     // 주요업무
         cpno                : '',                     // 휴대전화번호
         company_nm          : '',                     // 회사명
+        rmrk                : '',                     // 비고
         grd_cd_selected     : 'NNN',                  // 평판구분
         scholl_nm1          : '',                     // 학교명1
         gdt_ym1             : '',                     // 졸업년월1
