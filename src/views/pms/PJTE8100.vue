@@ -293,7 +293,7 @@
         <br>
         <Modal :show.sync="detail.modals.txt_modal1"  class="modal_main">
           <div class="div-header-b">
-            <h2 v-if="this.large_num == '1'">회읟내용 확대보기</h2>
+            <h2 v-if="this.large_num == '1'">회원내용 확대보기</h2>
             <h2 v-if="this.large_num == '2'">회의결과 확대보기</h2>
             <h2 v-if="this.large_num == '3'">요청사항 확대보기</h2>
             <ul class="filter-btn">
