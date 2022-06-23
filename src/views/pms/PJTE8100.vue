@@ -86,7 +86,7 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box" style="height: 350px">
+        <div class="grid1-box" style="height: 200px">
           <div class="div-header"><h2>회의정보</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
@@ -99,7 +99,7 @@
                 :header="header"
                 :columns="columns"
                 :minBodyHeight="50"
-                :bodyHeight="260"
+                :bodyHeight="110"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -197,7 +197,7 @@
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="4"
+                                rows="8"
                                 placeholder="회의내용을 입력해주세요"
                                 v-model="detail.mtn_dtl"
                                 style="width: 1510px; margin-left: 7px"
@@ -215,7 +215,7 @@
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="4"
+                                rows="8"
                                 placeholder="회의결과를 입력해주세요"
                                 v-model="detail.mtn_rsl"
                                 style="width: 1510px; margin-left: 7px"
@@ -233,7 +233,7 @@
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="3"
+                                rows="8"
                                 placeholder="요청사항을 입력해주세요"
                                 v-model="detail.rqs_dtl"
                                 style="width: 1510px; margin-left: 7px"
@@ -251,7 +251,7 @@
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="3"
+                                rows="5"
                                 placeholder="참석자를 입력해주세요"
                                 v-model="detail.atnd_dtl"
                                 style="width: 1510px; margin-left: 7px"
