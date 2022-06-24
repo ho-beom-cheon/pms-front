@@ -573,6 +573,7 @@ export default {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),   // 권한ID
         login_bzcd: sessionStorage.getItem("LOGIN_BZCD"),       // 업무구분
         login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),   // 직원번호
+        login_emp_nm: sessionStorage.getItem("LOGIN_EMP_NM"),   // 직원명
       },
 
       detail: {
