@@ -206,7 +206,8 @@ export default {
         this.$refs.grid.invoke("showColumn",'prg_rt')
         this.$refs.grid.invoke("showColumn",'wgt_rt')
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
-        if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+        if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' &&
+            sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
           this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
           this.$refs.grid.invoke("disableColumn", 'pln_sta_tim');
           this.$refs.grid.invoke("disableColumn", 'pln_sta_dt');
@@ -431,7 +432,8 @@ export default {
       this.$refs.grid.invoke("clear");
     },
     init() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' &&
+          sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'wgt_rt');
         this.$refs.grid.invoke("disableColumn", 'pln_end_dt');
