@@ -531,7 +531,7 @@ export default {
         bkup_id_selected      : '0000000000',     // 백업ID
         mtng_room_id_selected : 'TTT',            // 회의실
         rsr_strt              : this.getCurrentYyyymmdd(),               // 예약시작일자
-        rsr_endt              : this.getCurrentYyyymmdd(),               // 예약종료일자
+        rsr_endt              : '',               // 예약종료일자
         rsr_nm                : '',               // 예약자이름
         rsr_no                : '',               // 예약자번호
       },
