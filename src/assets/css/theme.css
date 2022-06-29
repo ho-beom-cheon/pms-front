@@ -697,6 +697,15 @@ table.form-table select {
     gap: 3px;
 }
 
+.div01-b{
+    grid-column: 1/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(1, 510px);
+    gap: 3px;
+}
 
 /*PJTE8000*/
 .div1-d{
