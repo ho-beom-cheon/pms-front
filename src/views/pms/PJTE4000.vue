@@ -147,7 +147,7 @@
               @click="onClick"
           ></grid>
         </div>
-        <div class="div0-b">
+        <div class="div01-b">
           <div class="div3-b">
             <div class="div-header-b"><h2>상세내용</h2>
               <ul class="filter-btn"><p>* : 필수입력 항목입니다.</p>
