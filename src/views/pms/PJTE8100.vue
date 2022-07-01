@@ -817,12 +817,11 @@ export default {
       columns: [
         {
           header: '관리 ID',
-          width: 180,
-          align: 'left',
+          width: 90,
+          align: 'center',
           name: 'mng_id',
           editor: 'text',
           filter: 'text',
-          hidden : true,
         },
         {
           header: '회의일자',
