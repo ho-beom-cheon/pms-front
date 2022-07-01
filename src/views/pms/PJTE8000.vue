@@ -1104,11 +1104,11 @@ export default {
           alert('PM/PL명이 없습니다.');
         }
         return false;
-      } else if (this.detail.all_real_prg < 1 || this.detail.all_real_prg == "") {
+      } else if (this.detail.all_real_prg < 0 || this.detail.all_real_prg == "") {
         this.$refs.all_real_prg.focus();
         alert('[전체] 0보다 큰 실제진척율을 입력해주세요.');
         return false;
-      } else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg < 1) {
+      } else if (this.detail.all_pred_prg == "" || this.detail.all_pred_prg < 0) {
         this.$refs.all_pred_prg.focus();
         alert('[전체] 0보다 큰  예정진척율을 입력해주세요.');
         return false;
@@ -1116,11 +1116,11 @@ export default {
         this.$refs.step_nm.focus();
         alert('단계명을 입력해주세요.');
         return false;
-      } else if (this.detail.step_real_prg < 1 || this.detail.step_real_prg == "") {
+      } else if (this.detail.step_real_prg < 0 || this.detail.step_real_prg == "") {
         this.$refs.step_real_prg.focus();
         alert('[단계] 0보다 큰 실제진척율을 입력해주세요.');
         return false;
-      } else if (this.detail.step_pred_prg == "" || this.detail.step_pred_prg < 1) {
+      } else if (this.detail.step_pred_prg == "" || this.detail.step_pred_prg < 0) {
         this.$refs.step_pred_prg.focus();
         alert('[단계] 0보다 큰  예정진척율을 입력해주세요.');
         return false;
