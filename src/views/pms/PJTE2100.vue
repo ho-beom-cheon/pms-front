@@ -1088,6 +1088,7 @@ export default {
           maxWidth: 250,
           name: 'bzcd',
           align: 'center',
+          filter: 'select',
           formatter: 'listItemText',
           disabled: true,
           editor: {
@@ -1104,6 +1105,7 @@ export default {
           name: 'pgm_id',
           ellipsis : true,
           editor: "text",
+          filter: 'text',
           disabled: true,
         },
         {
@@ -1113,6 +1115,7 @@ export default {
           name: 'pgm_nm',
           ellipsis : true,
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '업무상세분류',
@@ -1120,6 +1123,7 @@ export default {
           align: 'left',
           name: 'bz_dtls_txt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '개발구분',
@@ -1133,6 +1137,7 @@ export default {
               listItems: this.$store.state.pms.CD1000000003N
             }
           },
+          filter: 'select',
         },
         {
           header: '프로그램구분',
@@ -1140,6 +1145,7 @@ export default {
           align: 'center',
           name: 'pgm_dis_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -1162,6 +1168,7 @@ export default {
           align: 'center',
           name: 'prc_step_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options:{
@@ -1181,6 +1188,7 @@ export default {
           width: 90,
           align: 'center',
           name: 'frcs_sta_dt',
+          filter: 'text',
           format: 'yyyy-mm-dd',
           editor: 'datePicker'
         },
@@ -1190,6 +1198,7 @@ export default {
           align: 'center',
           type: 'date',
           name: 'frcs_end_dt',
+          filter: 'text',
           editor: 'datePicker'
         },
         {
@@ -1199,6 +1208,7 @@ export default {
           name: 'sta_dt',
           format: 'yyyy-mm-dd',
           editor: 'datePicker',
+          filter: 'text',
           disabled: true,
         },
         {
@@ -1208,6 +1218,7 @@ export default {
           type: 'date',
           name: 'end_dt',
           editor: 'datePicker',
+          filter: 'text',
           disabled: true,
         },
         {
@@ -1216,6 +1227,7 @@ export default {
           align: 'center',
           name: 'dvlpe_cnf_dt',
           editor: 'datePicker',
+          filter: 'text',
           disabled: true,
         },
         {
@@ -1224,6 +1236,7 @@ export default {
           align: 'center',
           name: 'pl_cnf_dt',
           editor: 'datePicker',
+          filter: 'text',
           disabled: true,
         },
 
@@ -1232,6 +1245,7 @@ export default {
           width: 60,
           align: 'center',
           name: 'dvlpe_nm',
+          filter: 'text',
           editor: 'text',
         },
         {
@@ -1254,6 +1268,7 @@ export default {
           align: 'center',
           name: 'pl_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '검색',
@@ -1275,6 +1290,7 @@ export default {
           align: 'center',
           name: 'crpe_nm',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '검색',
@@ -1380,6 +1396,15 @@ export default {
           name: 'unt_tst_yn',
           align: 'center',
           hidden : true
+        },
+        {
+          header: '전환기준일자',
+          width: 100,
+          align: 'center',
+          name: 'cnv_bs_dt',
+          format: 'yyyy-mm-dd',
+          filter: 'text',
+          editor: 'datePicker',
         },
       ]
     }
