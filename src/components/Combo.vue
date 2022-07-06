@@ -975,6 +975,24 @@
         </select>
       </div>
     </li>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C55'">
+      <div class="item-con"  style   = "margin-left : 20px">회의록작성상태
+        <select
+            id      = "mtng_prc_step_cd"
+            v-model = "mtng_prc_step_cd_selected"
+            style   = "width: 130px;margin-left : 5px"
+            @change = "mtng_prc_step_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000055"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <!-- As-Is대To-Be매핑 끝 -->
   </div>
 </template>
@@ -1042,6 +1060,7 @@ export default {
     this.inp_cls_cd_change()
     this.as_pgm_dis_cd_change()
     this.trn_stt_cd_change()
+    this.mtng_prc_step_cd_change()
   },
   data() {
     return {
@@ -1099,6 +1118,9 @@ export default {
       CD1000000050T : [],  CD1000000050N : [], CD1000000050 : [],
       CD1000000051T : [],  CD1000000051N : [], CD1000000051 : [],
       CD1000000052T : [],  CD1000000052N : [], CD1000000052 : [],
+      CD1000000053T : [],  CD1000000053N : [], CD1000000053 : [],
+      CD1000000054T : [],  CD1000000054N : [], CD1000000054 : [],
+      CD1000000055T : [],  CD1000000055N : [], CD1000000055 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -1221,6 +1243,8 @@ export default {
       as_pgm_dis_cd_selected : "",
       // 전환상태
       trn_stt_cd_selected : "",
+      // 회의진행상태
+      mtng_prc_step_cd_selected : "",
     }
   },
   methods: {
@@ -1289,6 +1313,7 @@ export default {
     inp_cls_cd_change()             {  this.$emit('inp_cls_cd_change',             this.inp_cls_cd_selected)},           // 투입구분
     as_pgm_dis_cd_change()          {  this.$emit('as_pgm_dis_cd_change',          this.as_pgm_dis_cd_selected)},        // As-Is프로그램유형
     trn_stt_cd_change()             {  this.$emit('trn_stt_cd_change',             this.trn_stt_cd_selected)},           // 전환상태
+    mtng_prc_step_cd_change()       {  this.$emit('mtng_prc_step_cd_change',       this.mtng_prc_step_cd_selected)},     // 회의진행상태
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -1409,6 +1434,15 @@ export default {
               } else if (i === 52) {
                 this.CD1000000052T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000052N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 53) {
+                this.CD1000000053T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000053N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 54) {
+                this.CD1000000054T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000054N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 55) {
+                this.CD1000000055T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000055N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1588,6 +1622,18 @@ export default {
               this.CD1000000052T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000052N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000052.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 53) {
+              this.CD1000000053T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000053N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000053.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 54) {
+              this.CD1000000054T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000054N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000054.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 55) {
+              this.CD1000000055T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000055N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000055.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
             }
             this.set_yn = "Y";
             this.row++;
@@ -1654,13 +1700,15 @@ export default {
           if(this.CD1000000049N.length !== 0)   this.inp_cls_cd_selected        = this.CD1000000049N[0].value
           if(this.CD1000000051N.length !== 0)   this.as_pgm_dis_cd_selected     = this.CD1000000051N[0].value
           if(this.CD1000000052N.length !== 0)   this.trn_stt_cd_selected        = this.CD1000000052N[0].value
+          if(this.CD1000000053N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000053N[0].value
+          if(this.CD1000000054N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000054N[0].value
+          if(this.CD1000000055N.length !== 0)   this.mtng_prc_step_cd_selected  = this.CD1000000055N[0].value
         }
         this.setCdAll()
       }
     },
     setCdAll() {
       this.bzcd_n.push(this.CD1000000001N)
-
       this.cd_all.push(this.CD0000000000N)
       this.cd_all.push(this.CD1000000001N)
       this.cd_all.push(this.CD1000000002N)
@@ -1714,6 +1762,9 @@ export default {
       this.cd_all.push(this.CD1000000050N)
       this.cd_all.push(this.CD1000000051N)
       this.cd_all.push(this.CD1000000052N)
+      this.cd_all.push(this.CD1000000053N)
+      this.cd_all.push(this.CD1000000054N)
+      this.cd_all.push(this.CD1000000055N)
     },
     init()  {
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -1804,6 +1855,9 @@ export default {
             "1000000050",
             "1000000051",
             "1000000052",
+            "1000000053",
+            "1000000054",
+            "1000000055",
           ];
 
       // 조회영역 권한 체크
