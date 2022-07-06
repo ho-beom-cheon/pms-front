@@ -184,9 +184,17 @@
                          placeholder="회의주제를 입력해주세요"
                          ref="address"
                          v-model="detail.cnf_wek"
-                         style="width: 1510px; margin-left: 5px"
+                         style="width: 1235px;"
                   >
                 </div>
+              </li>
+              <li class="filter-item">
+                  <combo
+                      ref="combo2"
+                      :comboArray = "this.comboList1"
+                      @mtng_prc_step_cd_change="mtng_prc_step_cd_change"
+                  ></combo>
+
               </li>
             </ul>
             <ul class="filter-con clear-fix"  style="width: 100%">
@@ -430,6 +438,7 @@ export default {
               mtn_dtl: this.detail.mtn_dtl,                          // 회의내용
               rqs_dtl: this.detail.rqs_dtl,                          // 요청사항
               atnd_dtl: this.detail.atnd_dtl,                        // 참석자
+              mtng_prc_step_cd: this.$refs.combo2.$data.mtng_prc_step_cd_selected,        // 회의작성상태
               login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
             }).then(res => {
               this.$refs.grid.invoke("reloadData");
@@ -453,6 +462,7 @@ export default {
                 rqs_dtl: this.detail.rqs_dtl,                          // 요청사항
                 atnd_dtl: this.detail.atnd_dtl,                        // 참석자
                 atfl_mng_id : this.detail.atfl_mng_id,                 // 첨부파일id
+                mtng_prc_step_cd: this.$refs.combo2.$data.mtng_prc_step_cd_selected,        // 회의작성상태
                 login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
               }).then(res => {
                 console.log(res);
@@ -493,7 +503,13 @@ export default {
       } else if (this.detail.mtn_dtl == "" || this.detail.mtn_dtl == null) {
         alert('회의내용은 필수 입력사항입니다.');
         return false;
-      }else {
+      } else if (this.detail.mtng_prc_step_cd == "" || this.detail.mtng_prc_step_cd == null) {
+        alert('회의작성상태는 필수 입력사항입니다.');
+        return false;
+      } else if (this.detail.mtng_prc_step_cd == "200") {
+        alert('회의작성상태[작성완료]건은 수정할 수 없습니다.');
+        return false;
+      } else {
         return true;  // 필수 값 모두 입력 시 true
       }
     },
@@ -542,12 +558,21 @@ export default {
       this.detail.mtn_tm               = currentRowData.mtn_tm              // 회의시간
       this.detail.atfl_mng_id          = currentRowData.atfl_mng_id         // 첨부파일관리id
       this.detail.org_file_nm          = currentRowData.org_file_nm         // 첨부파일명
+      this.detail.mtng_prc_step_cd     = currentRowData.mtng_prc_step_cd    // 회의진행상태
+      this.$refs.combo2.$data.mtng_prc_step_cd_selected =  currentRowData.mtng_prc_step_cd     // 회의진행상태
+
 
       //작성자 본인 이거나 관리구분코드가 (500,600,900) 일때 삭제버튼 활성화
       if(sessionStorage.getItem("LOGIN_EMP_NO") === currentRowData.athr_no ||sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'|| sessionStorage.getItem("LOGIN_AUT_CD") === '900'){
         this.deleteBtn_yn = false
       }else{
         this.deleteBtn_yn = true
+      }
+
+      if(currentRowData.mtng_prc_step_cd === "200"){
+        document.getElementById("mtng_prc_step_cd").disabled =true;
+      } else {
+        document.getElementById("mtng_prc_step_cd").disabled =false;
       }
 
       if(currentRowData.del_yn === 'Y'){
@@ -641,6 +666,9 @@ export default {
       this.detail.mtn_tm        = '';                                               // 회의시간
       this.detail.atfl_mng_id   = '';                                               // 첨부파일관리id
       this.detail.org_file_nm   = '';                                               // 첨부파일명
+      this.detail.mtng_prc_step_cd = '100';                                         // 회의진행상태
+      this.$refs.combo2.$data.mtng_prc_step_cd_selected = '100'                     // 회의진행상태
+      document.getElementById("mtng_prc_step_cd").disabled =false;
 
       this.deleteBtn_yn = true;
       this.saveBtn_yn = false;
@@ -727,6 +755,7 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       comboList : ["C0"],
+      comboList1 : ["C55"],
 
       gridData: [],
       file_name_list : [],
@@ -770,6 +799,7 @@ export default {
         atfl_mng_id           : '',                                               // 첨부파일관리id
         org_file_nm           : '',                                               // 첨부파일명
         save_yn               : 'N',                                              // 등록가능여부
+        mtng_prc_step_cd      : '100',                                            // 회의진행상태
 
         /* 그리드 상세보기 모달 속성 */
         modals: {
@@ -931,6 +961,13 @@ export default {
           width: 300,
           align: 'center',
           name: 'org_file_nm',
+          hidden : true,
+        },
+        {
+          header: '회의진행상태',
+          width: 100,
+          align: 'center',
+          name: 'mtng_prc_step_cd',
           hidden : true,
         },
       ],
