@@ -204,6 +204,7 @@ export default {
       if(this.info.wbs_mng_cd_selected === '100'){
         this.validated = false;
         this.$refs.grid.invoke("showColumn",'prg_rt')
+        this.$refs.grid.invoke("showColumn",'plan_prg_rt')
         this.$refs.grid.invoke("showColumn",'wgt_rt')
         this.$refs.grid.invoke("disableColumn", 'wbs_prc_sts_cd');
         if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600' &&
@@ -217,6 +218,7 @@ export default {
       } else {
         this.validated = true;
         this.$refs.grid.invoke("hideColumn",'prg_rt')
+        this.$refs.grid.invoke("hideColumn",'plan_prg_rt')
         this.$refs.grid.invoke("hideColumn",'wgt_rt')
         this.$refs.grid.invoke("enableColumn", 'wbs_prc_sts_cd');
         this.$refs.grid.invoke("enableColumn", 'pln_end_dt');
@@ -245,6 +247,7 @@ export default {
       for(let i=0; i<gridData.length; i++) {
         if(gridData[i].wbs_cnt === "0") {
           this.$refs.grid.invoke("enableCell", i, 'prg_rt');
+          this.$refs.grid.invoke("enableCell", i, 'plan_prg_rt');
         }
       }
 
@@ -461,6 +464,7 @@ export default {
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"step_cd");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"mng_id");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"prg_rt");
+      this.$refs.grid.invoke("enableCell", gridData.length-1 ,"plan_prg_rt");
       this.$refs.grid.invoke("enableCell", gridData.length-1 ,"bzcd");
     },
     gridDelRow() {
@@ -507,31 +511,32 @@ export default {
             wb.Sheets[sheetName].K1.w = "wbs_prc_sts_cd"
             wb.Sheets[sheetName].L1.w = "wgt_rt"
             wb.Sheets[sheetName].M1.w = "prg_rt"
-            let N1 = {N1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_sta_dt'}}
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], N1)
-            wb.Sheets[sheetName].N2.w = "pln_sta_dt"
-            let O1 = {O1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_sta_tim'}}
+            wb.Sheets[sheetName].N1.w = "plan_prg_rt"
+            let O1 = {O1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_sta_dt'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], O1)
-            wb.Sheets[sheetName].O2.w = "pln_sta_tim"
-            let P1 = {P1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_end_dt'}}
+            wb.Sheets[sheetName].O2.w = "pln_sta_dt"
+            let P1 = {P1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_sta_tim'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
-            wb.Sheets[sheetName].P2.w = "pln_end_dt"
-            let Q1 = {Q1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_end_tim'}}
+            wb.Sheets[sheetName].P2.w = "pln_sta_tim"
+            let Q1 = {Q1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'pln_end_dt'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
-            wb.Sheets[sheetName].Q2.w = "pln_end_tim"
-            let R1 = {R1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_sta_dt'}}
+            wb.Sheets[sheetName].Q2.w = "pln_end_dt"
+            let R1 = {R1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'pln_end_tim'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-            wb.Sheets[sheetName].R2.w = "acl_sta_dt"
-            let S1 = {S1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_sta_tim'}}
+            wb.Sheets[sheetName].R2.w = "pln_end_tim"
+            let S1 = {S1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_sta_dt'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-            wb.Sheets[sheetName].S2.w = "acl_sta_tim"
-            let T1 = {T1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_end_dt'}}
+            wb.Sheets[sheetName].S2.w = "acl_sta_dt"
+            let T1 = {T1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_sta_tim'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
-            wb.Sheets[sheetName].T2.w = "acl_end_dt"
-            let U1 = {U1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_end_tim'}}
+            wb.Sheets[sheetName].T2.w = "acl_sta_tim"
+            let U1 = {U1 : {t: 's', v: '일자', r: '<t>일자</t>', h: '일자', w: 'acl_end_dt'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-            wb.Sheets[sheetName].U2.w = "acl_end_tim"
-            wb.Sheets[sheetName].V1.w = "rmrk"
+            wb.Sheets[sheetName].U2.w = "acl_end_dt"
+            let V1 = {V1 : {t: 's', v: '시간', r: '<t>시간</t>', h: '시간', w: 'acl_end_tim'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+            wb.Sheets[sheetName].V2.w = "acl_end_tim"
+            wb.Sheets[sheetName].W1.w = "rmrk"
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
@@ -585,8 +590,9 @@ export default {
       this.$refs.grid.invoke("focus",0, "prg_rt",true)
       let i, x, y, z, wbsCnt, roCnt, iMaxRow;
       let mngid, hgrnMngid;
-      let wgtRt, prtRt
+      let wgtRt, prtRt, planPrtRt;
       let totWgtRt = 0.0;
+      let totWgtRt1 = 0.0;
       console.log(typeof totWgtRt)
 
       iMaxRow = this.$refs.grid.invoke("getData").length; // 최대 row 수
@@ -594,6 +600,7 @@ export default {
       for(z=1; z<=5; z++) {
         for(i=0; i<iMaxRow; i++) {
           totWgtRt = 0.0;
+          totWgtRt1 = 0.0;
           mngid = this.$refs.grid.invoke("getValue", i, "mng_id");
           wbsCnt = this.$refs.grid.invoke("getValue", i, "wbs_cnt");
 
@@ -602,13 +609,15 @@ export default {
               hgrnMngid = this.$refs.grid.invoke("getValue", x, "hgrn_mng_id");
               wgtRt = this.$refs.grid.invoke("getValue", x, "wgt_rt");
               prtRt = this.$refs.grid.invoke("getValue", x, "prg_rt");
+              planPrtRt = this.$refs.grid.invoke("getValue", x, "plan_prg_rt");
 
               if(hgrnMngid === "1000000001"){
                 this.$refs.grid.invoke("disableCell", x,"prg_rt");
+                this.$refs.grid.invoke("disableCell", x,"plan_prg_rt");
               }
               if (mngid === hgrnMngid) {
                 totWgtRt = totWgtRt + wgtRt * prtRt
-
+                totWgtRt1 = totWgtRt1 + wgtRt * planPrtRt
               }
             }
             // 진행율결과값 셋팅
@@ -618,7 +627,14 @@ export default {
               totWgtRt = totWgtRt.toFixed(2);
             }
 
+            if(totWgtRt1 == 0){
+              totWgtRt1 = totWgtRt1.toFixed(1);
+            } else {
+              totWgtRt1 = totWgtRt1.toFixed(2);
+            }
+
             this.$refs.grid.invoke("setValue", i, "prg_rt", totWgtRt.toString());
+            this.$refs.grid.invoke("setValue", i, "plan_prg_rt", totWgtRt1.toString());
             this.flag = 'y'
           }
         }
@@ -663,7 +679,7 @@ export default {
 
         if(data[i].mng_cd === '100') {
           if(data[i].wgt_rt === null)         { alert("가중치는 필수 입력 사항입니다");       return false;}
-          if(data[i].prg_rt === null)         { alert("진행율은 필수 입력 사항입니다");       return false;}
+          if(data[i].prg_rt === null)         { alert("금주진척율은 필수 입력 사항입니다");       return false;}
         }
 
       }
@@ -906,10 +922,18 @@ export default {
           editor: 'text',
         },
         {
-          header: '진행율',
-          width: 50,
+          header: '금주진척율',
+          width: 80,
           align: 'right',
           name: 'prg_rt',
+          editor: 'text',
+          disabled: true,
+        },
+        {
+          header: '차주진척율',
+          width: 80,
+          align: 'right',
+          name: 'plan_prg_rt',
           editor: 'text',
           disabled: true,
         },
