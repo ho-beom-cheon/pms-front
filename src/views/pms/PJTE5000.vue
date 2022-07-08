@@ -272,6 +272,7 @@ export default {
             mng_cd       : this.info.wbs_mng_cd_selected,
             prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
             login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+            login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
             excelUplod   : this.excelUplod,
             gridData     : this.gridData,
           }).then(res => {
@@ -310,6 +311,7 @@ export default {
               mng_cd       : this.info.wbs_mng_cd_selected,
               prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
               excelUplod   : this.excelUplod,
               gridData     : this.createdRows,
             }).then(res => {
@@ -341,6 +343,7 @@ export default {
                 mng_cd       : this.info.wbs_mng_cd_selected,
                 prjt_id      : sessionStorage.getItem("LOGIN_PROJ_ID"),
                 login_emp_no : sessionStorage.getItem("LOGIN_EMP_NO"),
+                login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
                 excelUplod   : this.excelUplod,
                 updatedRows   : this.updatedRows,
               }).then(res => {
@@ -370,6 +373,7 @@ export default {
               mng_cd       : this.info.wbs_mng_cd_selected,
               prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
+              login_aut_cd : sessionStorage.getItem("LOGIN_AUT_CD"),
               excelUplod   : this.excelUplod,
               gridData     : this.deletedRows,
             }).then(res => {
