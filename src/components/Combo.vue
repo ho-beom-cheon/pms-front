@@ -963,7 +963,7 @@
       <div class="item-con"  style   = "margin-left : 43px">전환상태
         <select
             v-model = "trn_stt_cd_selected"
-            style   = "width: 230px;margin-left : 5px"
+            style   = "width: 250px;margin-left : 5px"
             @change = "trn_stt_cd_change"
         >
           <option
