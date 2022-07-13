@@ -160,6 +160,26 @@
                   @trn_stt_cd_change="trn_stt_cd_change"
               >
               </combo>
+              <li class="filter-item"   style="margin-left: 10px">
+                <div class="item-con">계획시작일자
+                  <div class="input-dateWrap">
+                    <input type="date"
+                           v-model="detail.frcs_sta_dt"
+                           ref="frcs_sta_dt"
+                           style="width: 120px;margin-left: 5px"
+                    ></div>
+                </div>
+              </li>
+              <li class="filter-item"   style="margin-left: 10px">
+                <div class="item-con">계획종료일자
+                  <div class="input-dateWrap">
+                    <input type="date"
+                           v-model="detail.frcs_end_dt"
+                           ref="frcs_end_dt"
+                           style="width: 120px;margin-left: 5px"
+                    ></div>
+                </div>
+              </li>
             </ul>
             <ul class="filter-con clear-fix"  style="width: 100%">
               <li class="filter-item" style="width: 100%">
@@ -286,7 +306,10 @@ export default {
                     use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
                     dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
                     Rmrk: this.detail.Rmrk,                                // 비고
+                    frcs_sta_dt: this.detail.frcs_sta_dt,                  // 계획시작일자
+                    frcs_end_dt: this.detail.frcs_end_dt,                  // 계획종료일자
                     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+                    login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                   }).then(res => {
                     this.$refs.grid.invoke("reloadData");
                     document.getElementById("as_pgm_id").style.backgroundColor="#f2f2f2";
@@ -320,7 +343,10 @@ export default {
                 use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
                 dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
                 rmrk: this.detail.rmrk,                                // 비고
+                frcs_sta_dt: this.detail.frcs_sta_dt,                  // 계획시작일자
+                frcs_end_dt: this.detail.frcs_end_dt,                  // 계획종료일자
                 login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+                login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                 excelUplod: this.excelUplod,
               }).then(res => {
                 console.log(res);
@@ -412,6 +438,8 @@ export default {
       this.$refs.combo3.$data.trn_stt_cd_selected     = currentRowData.trn_stt_cd                 // 전환상태
       this.detail.use_pgm_txt                         = currentRowData.use_pgm_txt                // 사용프로그램
       this.detail.rmrk                                = currentRowData.rmrk                       // 비고
+      this.detail.frcs_sta_dt                         = currentRowData.frcs_sta_dt                // 계획시작일자
+      this.detail.frcs_end_dt                         = currentRowData.frcs_end_dt                // 계획종료일자
     },
 
     //직원조회 버튼 클릭 시
@@ -486,6 +514,8 @@ export default {
       this.$refs.combo3.$data.trn_stt_cd_selected     = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
       this.detail.use_pgm_txt                         = ''                                                  // 사용프로그램
       this.detail.rmrk                                = ''                                                  // 비고
+      this.detail.frcs_sta_dt                         = ''                                                  // 계획시작일자
+      this.detail.frcs_end_dt                         = ''                                                  // 계획종료일자
 
       this.detail.save_yn               = 'N'        // 등록가능여부
       this.newCheck = 'Y';
@@ -522,9 +552,11 @@ export default {
             wb.Sheets[sheetName].G1.w = "use_pgm_txt"
             wb.Sheets[sheetName].H1.w = "dvlpe_no"
             wb.Sheets[sheetName].I1.w = "trn_stt_cd"
-            wb.Sheets[sheetName].J1.w = "sta_dt"
-            wb.Sheets[sheetName].K1.w = "end_dt"
-            wb.Sheets[sheetName].L1.w = "rmrk"
+            wb.Sheets[sheetName].J1.w = "frcs_sta_dt"
+            wb.Sheets[sheetName].K1.w = "frcs_end_dt"
+            wb.Sheets[sheetName].L1.w = "sta_dt"
+            wb.Sheets[sheetName].M1.w = "end_dt"
+            wb.Sheets[sheetName].N1.w = "rmrk"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
 
@@ -618,6 +650,8 @@ export default {
         dvlpe_no                : sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호
         dvlpe_nm                : sessionStorage.getItem("LOGIN_EMP_NM"), // 전환담당자 명
         trn_stt_cd_selected     : '',                                         // 전환상태
+        frcs_sta_dt             : '',                                         // 계획시작일자
+        frcs_end_dt             : '',                                         // 계획종료일자
         use_pgm_txt             : '',                                         // 사용프로그램
         rmrk                    : '',                                         // 비고
         save_yn                 : 'N',                                        // 등록가능여부
@@ -729,6 +763,22 @@ export default {
           name: 'trn_stt_nm',
           editor: 'text',
           filter: 'select',
+        },
+        {
+          header: '계획시작일자',
+          width: 120,
+          align: 'center',
+          name: 'frcs_sta_dt',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '계획종료일자',
+          width: 120,
+          align: 'center',
+          name: 'frcs_end_dt',
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '시작일자',
