@@ -699,6 +699,7 @@ export default {
         complexColumns: [
           {header: 'As-Is',           name: 'mergeColumn1', childNames: ['as_pgm_id','as_pgm_nm']},
           {header: 'To-Be',           name: 'mergeColumn2', childNames: ['to_pgm_id','to_pgm_nm']},
+          {header: '전환담당자',           name: 'mergeColumn3', childNames: ['dvlpe_nm','dvlpe_no']},
         ]
       },
       columns: [
@@ -762,6 +763,7 @@ export default {
           align: 'center',
           name: 'trn_stt_cd',
           formatter: 'listItemText',
+          filter: 'select',
           disabled: true,
           editor: {
             type: 'select',
@@ -771,7 +773,7 @@ export default {
           }
         },
         {
-          header: '전환사번',
+          header: '이름',
           width: 80,
           align: 'center',
           name: 'dvlpe_nm',
@@ -779,7 +781,7 @@ export default {
           filter: 'text',
         },
         {
-          header: '전환담당자',
+          header: '사번',
           width: 80,
           align: 'center',
           name: 'dvlpe_no',
@@ -803,7 +805,7 @@ export default {
           filter: 'text',
         },
         {
-          header: '시작일자',
+          header: '실제시작일자',
           width: 120,
           align: 'center',
           name: 'sta_dt',
@@ -811,7 +813,7 @@ export default {
           filter: 'text',
         },
         {
-          header: '종료일자',
+          header: '실제종료일자',
           width: 120,
           align: 'center',
           name: 'end_dt',
@@ -840,7 +842,7 @@ export default {
           name: 'prjt_id',
           editor: 'text',
           hidden: true,
-        },quit()
+        },
       ],
     }
   },
