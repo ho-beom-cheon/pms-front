@@ -118,11 +118,9 @@ const pms = {
             state.CD1000000047N = array[47];
             state.CD1000000048N = array[48];
             state.CD1000000049N = array[49];
-            state.CD1000000038 =array[50];
-            state.CD1000000042 =array[51];
-            state.CD1000000050N = array[52];
-            state.CD1000000051N = array[53];
-            state.CD1000000052N = array[54];
+            state.CD1000000050N = array[50];
+            state.CD1000000051N = array[51];
+            state.CD1000000052N = array[52];
         },
     },
     actions: {
