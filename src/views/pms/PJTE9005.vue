@@ -15,7 +15,7 @@
               @bkup_id_change="bkup_id_change"
               @prjt_nm_chage="prjt_nm_chage"
               @skill_grd_change_iss="skill_grd_change_iss"
-          ></combo>
+          ></combo>ㄹ
           <li class="filter-item">
             <div class="item-con">주요기술
               <input type="text"

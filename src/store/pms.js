@@ -56,6 +56,9 @@ const pms = {
         CD1000000047N:[],
         CD1000000048N:[],
         CD1000000049N:[],
+        CD1000000050N:[],
+        CD1000000051N:[],
+        CD1000000052N:[],
     },
     getters: {
         // CD1000000001N : state => state.CD1000000001N
@@ -117,6 +120,9 @@ const pms = {
             state.CD1000000049N = array[49];
             state.CD1000000038 =array[50];
             state.CD1000000042 =array[51];
+            state.CD1000000050N = array[52];
+            state.CD1000000051N = array[53];
+            state.CD1000000052N = array[54];
         },
     },
     actions: {
