@@ -508,8 +508,8 @@ export default {
       this.detail.to_pgm_nm                           = ''                                                  // To-be프로그램명
       this.detail.as_pgm_dis_cd_selected              = this.$refs.combo2.$data.CD1000000051N[0].value      // as-is프로그램유형
       this.$refs.combo2.$data.as_pgm_dis_cd_selected  = this.$refs.combo2.$data.CD1000000051N[0].value      // as-is프로그램유형
-      this.detail.dvlpe_no                            = sessionStorage.getItem("LOGIN_EMP_NO")         // 전환담당자번호
-      this.detail.dvlpe_nm                            = sessionStorage.getItem("LOGIN_EMP_NM")         // 전환담당자명
+      this.detail.dvlpe_no                            = ''                                                  // 전환담당자번호
+      this.detail.dvlpe_nm                            = ''                                                  // 전환담당자명
       this.detail.trn_stt_cd_selected                 = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
       this.$refs.combo3.$data.trn_stt_cd_selected     = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
       this.detail.use_pgm_txt                         = ''                                                  // 사용프로그램
@@ -544,28 +544,30 @@ export default {
         wb.SheetNames.forEach((sheetName, idx) => {
           if (sheetName === 'As-Is대To-Be매핑관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
+            wb.Sheets[sheetName].A1.w = "No"
             wb.Sheets[sheetName].B1.w = "as_pgm_id"
             wb.Sheets[sheetName].C1.w = "as_pgm_nm"
             wb.Sheets[sheetName].D1.w = "to_pgm_id"
             wb.Sheets[sheetName].E1.w = "to_pgm_nm"
             wb.Sheets[sheetName].F1.w = "as_pgm_dis_cd"
             wb.Sheets[sheetName].G1.w = "use_pgm_txt"
-            wb.Sheets[sheetName].H1.w = "dvlpe_no"
-            wb.Sheets[sheetName].I1.w = "trn_stt_cd"
-            wb.Sheets[sheetName].J1.w = "frcs_sta_dt"
-            wb.Sheets[sheetName].K1.w = "frcs_end_dt"
-            wb.Sheets[sheetName].L1.w = "sta_dt"
-            wb.Sheets[sheetName].M1.w = "end_dt"
-            wb.Sheets[sheetName].N1.w = "rmrk"
+            wb.Sheets[sheetName].H1.w = "trn_stt_cd"
+            wb.Sheets[sheetName].I1.w = "dvlpe_nm"
+            wb.Sheets[sheetName].J1.w = "dvlpe_no"
+            wb.Sheets[sheetName].K1.w = "frcs_sta_dt"
+            wb.Sheets[sheetName].L1.w = "frcs_end_dt"
+            wb.Sheets[sheetName].M1.w = "sta_dt"
+            wb.Sheets[sheetName].N1.w = "end_dt"
+            wb.Sheets[sheetName].O1.w = "rmrk"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
 
             for (let n = 0; n < rowObj.length; n++) {
-              if (isNaN(rowObj[n].sta_dt) == false) {
-                rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+              if (isNaN(rowObj[n].frcs_sta_dt) == false) {
+                rowObj[n].frcs_sta_dt = this.excelDateToJSDate(rowObj[n].frcs_sta_dt)
               }
-              if (isNaN(rowObj[n].end_dt) == false) {
-                rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+              if (isNaN(rowObj[n].frcs_end_dt) == false) {
+                rowObj[n].frcs_end_dt = this.excelDateToJSDate(rowObj[n].frcs_end_dt)
               }
               rowObj_copy[n-1] = rowObj[n];
             }
@@ -736,9 +738,15 @@ export default {
           header: '프로그램유형',
           width: 120,
           align: 'center',
-          name: 'as_pgm_dis_nm',
-          editor: 'text',
+          name: 'as_pgm_dis_cd',
           filter: 'select',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: this.$store.state.pms.CD1000000051N
+            }
+          }
         },
         {
           header: '사용프로그램',
@@ -749,20 +757,34 @@ export default {
           filter: 'text',
         },
         {
-          header: '전환담당자',
-          width: 120,
+          header: '전환상태',
+          width: 90,
+          align: 'center',
+          name: 'trn_stt_cd',
+          formatter: 'listItemText',
+          disabled: true,
+          editor: {
+            type: 'select',
+            options: {
+              listItems: this.$store.state.pms.CD1000000052N
+            }
+          }
+        },
+        {
+          header: '전환사번',
+          width: 80,
           align: 'center',
           name: 'dvlpe_nm',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '전환상태',
-          width: 120,
+          header: '전환담당자',
+          width: 80,
           align: 'center',
-          name: 'trn_stt_nm',
+          name: 'dvlpe_no',
           editor: 'text',
-          filter: 'select',
+          filter: 'text',
         },
         {
           header: '계획시작일자',
@@ -804,22 +826,6 @@ export default {
           filter: 'text',
         },
         {
-          header: 'ASIS프로그램구분코드',
-          width: 120,
-          align: 'center',
-          name: 'as_pgm_dis_cd',
-          editor: 'text',
-          hidden: true,
-        },
-        {
-          header: '전환상태코드',
-          width: 120,
-          align: 'center',
-          name: 'trn_stt_cd',
-          editor: 'text',
-          hidden: true,
-        },
-        {
           header: '백업id',
           width: 120,
           align: 'center',
@@ -834,7 +840,7 @@ export default {
           name: 'prjt_id',
           editor: 'text',
           hidden: true,
-        },
+        },quit()
       ],
     }
   },
