@@ -44,6 +44,7 @@ const PJTE9100 = () => import(/* webpackChunkName: "PJTE9100" */ './views/pms/PJ
 const PJTE9200 = () => import(/* webpackChunkName: "PJTE9200" */ './views/pms/PJTE9200.vue'); menuList.push(PJTE9200); menuListStr.push("PJTE9200");
 const PJTE9300 = () => import(/* webpackChunkName: "PJTE9300" */ './views/pms/PJTE9300.vue'); menuList.push(PJTE9300); menuListStr.push("PJTE9300");
 const PJTE9310 = () => import(/* webpackChunkName: "PJTE9310" */ './views/pms/PJTE9310.vue'); menuList.push(PJTE9310); menuListStr.push("PJTE9310");
+const PJTE9400 = () => import(/* webpackChunkName: "PJTE9400" */ './views/pms/PJTE9400.vue'); menuList.push(PJTE9400); menuListStr.push("PJTE9400");
 const PJTE9900 = () => import(/* webpackChunkName: "PJTE9900" */ './views/pms/PJTE9900.vue'); menuList.push(PJTE9900); menuListStr.push("PJTE9900");
 
 // Vue 와 Router 연결
