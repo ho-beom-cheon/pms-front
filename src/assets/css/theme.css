@@ -1458,3 +1458,7 @@ aside dl dd + dd a {
     background: url(../../assets/img/PE-icon/ic_new.svg) center/24px no-repeat;
     background-color: #B8B8B8;
 }
+.upload-btn-img{
+    background: url(../../assets/img/PE-icon/ic_upload.svg) center/24px no-repeat;
+    background-color: #B8B8B8;
+}
