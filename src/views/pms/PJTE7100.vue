@@ -39,6 +39,27 @@
               >
             </div>
           </li>
+          <li class="filter-item-n">
+            <div class="input-searchWrap" style="margin-left: 26px">전환담당자
+              <input type="text"
+                     placeholder="직원명"
+                     v-model="info.dvlpe_nm"
+                     style="width: 90px"
+                     @keyup.enter="open_pjte9001(1)"
+              >
+              <button class="search-btn"
+                      @click="open_pjte9001_btn(1)"
+              ></button>
+            </div>
+          </li>
+          <li class="filter-item">
+            <input type="text"
+                   placeholder="직원번호"
+                   v-model="info.dvlpe_no"
+                   style="width: 90px; background-color: #f2f2f2;"
+                   :disabled=true
+            >
+          </li>
         </ul>
         <ul class="filter-btn">
           <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">조회</button>
@@ -51,7 +72,7 @@
           <div class="div-header"><h2>As-Is 대 To-Be 매핑내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e">
+              <button class="btn btn-filter-e" :disabled="aut_cd_check">
                 <label for="file">엑셀업로드</label>
                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
               </button>
@@ -139,10 +160,10 @@
                          placeholder="직원명"
                          v-model="detail.dvlpe_nm"
                          style="width: 90px"
-                         @keyup.enter="open_pjte9001()"
+                         @keyup.enter="open_pjte9001(2)"
                   >
                   <button class="search-btn"
-                          @click="open_pjte9001_btn()"
+                          @click="open_pjte9001_btn(2)"
                   ></button>
                 </div>
               </li>
@@ -240,8 +261,14 @@ import XLSX from "xlsx";
 
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
-  window.pms_register.detail.dvlpe_nm = empnm
-  window.pms_register.detail.dvlpe_no = empno
+  if(btn_id === '1'){           // info
+    window.pms_register.info.dvlpe_nm = empnm
+    window.pms_register.info.dvlpe_no = empno
+  } else if(btn_id === '2'){   // detail
+    window.pms_register.detail.dvlpe_nm = empnm
+    window.pms_register.detail.dvlpe_no = empno
+  }
+
 }
 
 export default {
@@ -253,6 +280,12 @@ export default {
   },
 
   mounted() {
+    if(sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600'){
+      this.aut_cd_check = false
+    } else {
+      this.aut_cd_check = true
+    }
+
     // 화면 접속 시 데이터 조회
     this.fnSearch();
     // 화면 초기화
@@ -261,6 +294,7 @@ export default {
   },
   updated(){
     this.setNo();
+    this.setNo1();
   },
 
 // 일반적인 함수를 선언하는 부분
@@ -443,27 +477,35 @@ export default {
     },
 
     //직원조회 버튼 클릭 시
-    open_pjte9001_btn() {
+    open_pjte9001_btn(btn_id) {
       let empnm = ''
 
-      empnm = this.detail.dvlpe_nm
+      if (btn_id == '1') {
+        empnm = this.info.dvlpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.detail.dvlpe_nm
+      }
 
       if((empnm === '' || empnm == null || empnm === undefined)) {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       } else {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
       }
     },
     //엔터키를 눌러 직원 조회
-    open_pjte9001() {
+    open_pjte9001(btn_id) {
       let empnm = ''
 
       let prjt_id_selected = this.info.prjt_nm_selected
       let bkup_id_selected = this.info.bkup_id_selected
 
-      empnm = this.detail.dvlpe_nm
+      if (btn_id == '1') {
+        empnm = this.info.dvlpe_nm
+      } else if (btn_id == '2') {
+        empnm = this.detail.dvlpe_nm
+      }
 
       if (empnm != null && empnm != '') {
         axiosService.get("/PJTE9001/select", {
@@ -477,22 +519,33 @@ export default {
               let res_data = res.data.data.contents;
               // console.log(res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                this.detail.dvlpe_no = res.data.data.contents[0].empno
-                this.detail.dvlpe_nm = res.data.data.contents[0].empnm
+                if (btn_id == '1') {
+                  this.info.dvlpe_no = res.data.data.contents[0].empno
+                  this.info.dvlpe_nm = res.data.data.contents[0].empnm
+                } else if (btn_id == '2') {
+                  this.detail.dvlpe_no = res.data.data.contents[0].empno
+                  this.detail.dvlpe_nm = res.data.data.contents[0].empnm
+                }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
-                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
+                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
               }
             })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
         let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
-        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&`, "open_emp_page", "width=700, height=600");
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
 
     },
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
       if(this.detail.dvlpe_nm === "") this.detail.dvlpe_no = "";
+    },
+
+
+    // 직원명 삭제 시 직원번호 초기화
+    setNo1() {
+      if(this.info.dvlpe_nm === "") this.info.dvlpe_no = "";
     },
 
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
@@ -641,6 +694,12 @@ export default {
         as_pgm_id             : '',                                           // ASIS프로그램ID
         to_pgm_id             : '',                                           // TOBE프로그램ID
         use_pgm_txt           : '',                                           // 사용프로그램
+        dvlpe_no              : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+        sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+        sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '200' ? '':sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호
+        dvlpe_nm              : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
+        sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
+        sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '200' ? '':sessionStorage.getItem("LOGIN_EMP_NM"),  // 전환담당자 명
       },
 
       detail : {
@@ -679,6 +738,7 @@ export default {
       rowHeight: 25,
       showDummyRows: false,
       editingEvent : "click",
+      aut_cd_check : true,
 
       // toast ui grid 데이터
       dataSource: {
