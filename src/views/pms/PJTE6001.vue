@@ -266,6 +266,8 @@ export default {
             let res_data = res.data.data.contents[0];
             this.bzcd_selected = res_data.bzcd
             this.req_dscd_selected = res_data.req_dscd
+            this.reqpe_nm = res_data.reqpe_nm
+            this.reqpe_no = res_data.reqpe_no
             this.req_prc_step_cd_selected = res_data.req_prc_step_cd
             this.req_txt = res_data.req_txt
             this.prcpe_nm = res_data.prcpe_nm
