@@ -238,7 +238,7 @@ export default {
     // 첨부파일등록 팝업 오픈
     open_file_page(){
       let bkup_id='0000000000', prjt_id=this.prjt_id, atfl_mng_id=this.atfl_mng_id, file_rgs_dscd='500', mng_id = this.mng_id
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=800, height=600");
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=800");
     },
 
     // mng_id 없이 저장했을 때, mng_ig 파라미터로 하여 새 페이지 오픈(첨부파일등록 보여주기 위함)
