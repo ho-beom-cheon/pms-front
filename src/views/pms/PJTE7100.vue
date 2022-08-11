@@ -765,7 +765,7 @@ export default {
       columns: [
         {
           header: '프로그램 ID',
-          width: 120,
+          width: 160,
           align: 'left',
           name: 'as_pgm_id',
           editor: 'text',
@@ -773,7 +773,7 @@ export default {
         },
         {
           header: '프로그램명',
-          width: 120,
+          width: 220,
           align: 'left',
           name: 'as_pgm_nm',
           editor: 'text',
@@ -781,7 +781,7 @@ export default {
         },
         {
           header: '프로그램 ID',
-          width: 120,
+          width: 160,
           align: 'left',
           name: 'to_pgm_id',
           editor: 'text',
@@ -789,7 +789,7 @@ export default {
         },
         {
           header: '프로그램명',
-          width: 120,
+          width: 220,
           align: 'left',
           name: 'to_pgm_nm',
           editor: 'text',
@@ -798,7 +798,7 @@ export default {
         {
           header: '프로그램유형',
           width: 120,
-          align: 'center',
+          align: 'left',
           name: 'as_pgm_dis_cd',
           filter: 'select',
           formatter: 'listItemText',
@@ -811,7 +811,7 @@ export default {
         },
         {
           header: '사용프로그램',
-          width: 120,
+          width: 100,
           align: 'left',
           name: 'use_pgm_txt',
           editor: 'text',
