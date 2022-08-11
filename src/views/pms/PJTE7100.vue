@@ -765,7 +765,7 @@ export default {
       columns: [
         {
           header: '프로그램 ID',
-          width: 160,
+          width: 200,
           align: 'left',
           name: 'as_pgm_id',
           editor: 'text',
@@ -773,7 +773,7 @@ export default {
         },
         {
           header: '프로그램명',
-          width: 220,
+          width: 320,
           align: 'left',
           name: 'as_pgm_nm',
           editor: 'text',
@@ -781,7 +781,7 @@ export default {
         },
         {
           header: '프로그램 ID',
-          width: 160,
+          width: 200,
           align: 'left',
           name: 'to_pgm_id',
           editor: 'text',
@@ -789,7 +789,7 @@ export default {
         },
         {
           header: '프로그램명',
-          width: 220,
+          width: 320,
           align: 'left',
           name: 'to_pgm_nm',
           editor: 'text',
