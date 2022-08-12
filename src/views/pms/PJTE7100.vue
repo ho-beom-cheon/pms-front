@@ -72,7 +72,7 @@
           <div class="div-header"><h2>As-Is 대 To-Be 매핑내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
-              <button class="btn btn-filter-e" :disabled="aut_cd_check">
+              <button class="btn btn-filter-e" >
                 <label for="file">엑셀업로드</label>
                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
               </button>
@@ -622,6 +622,12 @@ export default {
               if (isNaN(rowObj[n].frcs_end_dt) == false) {
                 rowObj[n].frcs_end_dt = this.excelDateToJSDate(rowObj[n].frcs_end_dt)
               }
+              if (isNaN(rowObj[n].sta_dt) == false) {
+                rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
+              }
+              if (isNaN(rowObj[n].end_dt) == false) {
+                rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
+              }
               rowObj_copy[n-1] = rowObj[n];
             }
 
@@ -666,7 +672,7 @@ export default {
           3. excelDateToJSDate 함수에서 44593 형태의 데이터를 2021-02 형태의 데이터로 변환
        */
       var date = new Date(Math.round((excelDate - (25567 + 2)) * 86400 * 1000));
-      var converted_date = date.toISOString().split('T')[0].substring(0, 7);
+      var converted_date = date.toISOString().split('T')[0].substring(0, 10);
       return converted_date;
     },
   },
