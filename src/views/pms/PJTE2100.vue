@@ -927,9 +927,13 @@ export default {
         if(division === "1") {
           //권한ID[500:PM,600:PMO] - 모두 가능
           if(pass_yn === 'N') {
-            if (data[i].prc_step_cd === "000" || data[i].prc_step_cd === "100" || data[i].prc_step_cd === "200") {
+            if (data[i].prc_step_cd === "000" || data[i].prc_step_cd === "100" || data[i].prc_step_cd === "110" || data[i].prc_step_cd === "200") {
               if (dvlpe_no != sessionStorage.getItem("LOGIN_EMP_NO") && pl_no != sessionStorage.getItem("LOGIN_EMP_NO")) {
-                alert(pgm_nm1 + "의 처리단계[개발전,개발시작,개발자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                if(data[i].prc_step_cd === "110"){
+                    alert(pgm_nm1 + "의 처리단계[전환코딩완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                } else {
+                  alert(pgm_nm1 + "의 처리단계[개발전,개발시작,개발자완료]는 개발자 또는 PL만 가능한 처리단계입니다.")
+                }
                 return false;
               }
             } else if (data[i].prc_step_cd === "300") {
@@ -943,7 +947,7 @@ export default {
                 return false;
               }
             }
-            if(data[i].atfl_mng_id === '' && unt_tst_yn === 'Y' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100") )  { alert(pgm_nm + " 단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+            if(data[i].atfl_mng_id === '' && unt_tst_yn === 'Y' && (data[i].prc_step_cd !== "000" && data[i].prc_step_cd !== "100" && data[i].prc_step_cd !== "110") )  { alert(pgm_nm + " 단위테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
           }
         }
       }
