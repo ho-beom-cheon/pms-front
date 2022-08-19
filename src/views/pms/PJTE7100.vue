@@ -68,7 +68,7 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box" style="height: 470px">
+        <div class="grid1-box" style="height: 350px">
           <div class="div-header"><h2>As-Is 대 To-Be 매핑내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
@@ -86,7 +86,7 @@
                 :header="header"
                 :columns="columns"
                 :minBodyHeight="55"
-                :bodyHeight="380"
+                :bodyHeight="250"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -210,7 +210,7 @@
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="4"
+                                rows="6"
                                 placeholder="사용프로그램을 입력해주세요"
                                 v-model="detail.use_pgm_txt"
                                 style="width: 1490px; margin-left: 7px"
@@ -227,7 +227,7 @@
                   </th>
                   <td>
                       <textarea cols="140"
-                                rows="3"
+                                rows="10"
                                 placeholder="비고내용을 입력해주세요"
                                 v-model="detail.rmrk"
                                 style="width: 1490px; margin-left: 7px"
