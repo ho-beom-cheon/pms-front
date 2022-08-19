@@ -575,7 +575,7 @@ export default {
     },
 
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx", {fileName: "As-Is대To-Be매핑", useFormattedValue : true, onlySelected:true});
     },
     // 양식다운로드
     formDownload(){
