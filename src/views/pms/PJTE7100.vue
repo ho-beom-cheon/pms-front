@@ -365,7 +365,7 @@ export default {
             })
           }else{
             //기등록일때
-            if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.dvlpe_no) {
+            if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.dvlpe_no || this.detail.as_pgm_dis_cd_selected == "990") {
               axiosService.put("/PJTE7100/update_7100_01", {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
                 as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
