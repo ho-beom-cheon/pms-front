@@ -413,32 +413,35 @@ export default {
     },
     onClick(ev) {
       // TO-DO현황 ROW클릭 시 클릭한ROW의 rowNum으로 TO-DO상세내역 재조회
-      if (ev.columnName == 'todo_nm' || ev.columnName == 'proc_cnt') {
+      if (ev.columnName == 'todo_nm' || ev.columnName == 'proc_cnt' || ev.columnName == 'btn_nm') {
         this.info.gubun = "2"
 
         // TO-DO상세내역 그리드 타이틀 변경 (todo_cd에 따라)
         let todo_cd = this.$refs.grid1.invoke("getValue", ev.rowKey, "todo_cd")
-        if (todo_cd == '10' || todo_cd == '11' || todo_cd == '12' || todo_cd == '13') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '진행내용'})
-        } else if (todo_cd == '20' || todo_cd == '21' || todo_cd == '22' || todo_cd == '23') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '미진사유'})
-        } else if (todo_cd == '30' || todo_cd == '31' || todo_cd == '32' || todo_cd == '33') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '결함내용'})
-        } else if (todo_cd == '40' || todo_cd == '41') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '신청내용'})
-        } else if (todo_cd == '50') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '요청및조치내용'})
-        } else if (todo_cd == '60' || todo_cd == '61' || todo_cd == '62') {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '비고내용'})
+        if (ev.columnName == 'todo_nm' || ev.columnName == 'proc_cnt') {
+          if (todo_cd == '10' || todo_cd == '11' || todo_cd == '12' || todo_cd == '13') {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '진행내용'})
+          } else if (todo_cd == '20' || todo_cd == '21' || todo_cd == '22' || todo_cd == '23') {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '미진사유'})
+          } else if (todo_cd == '30' || todo_cd == '31' || todo_cd == '32' || todo_cd == '33') {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '결함내용'})
+          } else if (todo_cd == '40' || todo_cd == '41') {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '신청내용'})
+          } else if (todo_cd == '50') {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '요청및조치내용'})
+          } else if (todo_cd == '60' || todo_cd == '61' || todo_cd == '62') {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '비고내용'})
+          } else {
+            this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '상세내용'})
+          }
+          this.info.rowNum = ev.rowKey;
+          this.$refs.grid2.invoke("setRequestParams", this.info);
+          this.$refs.grid2.invoke("readData");
         } else {
-          this.$refs.grid2.invoke("setColumnHeaders", {rmrk: '상세내용'})
+          let scrn_id = this.$refs.grid1.invoke("getValue", ev.rowKey, "scrn_id")
+          this.$router.push({path : scrn_id})
         }
-        this.info.rowNum = ev.rowKey;
-        this.$refs.grid2.invoke("setRequestParams", this.info);
-        this.$refs.grid2.invoke("readData");
-      }
-      // 프로젝트 공지사항 ROW클릭 시 오른쪽 input, selectBox에 바인딩
-      if (ev.columnName == 'rgs_dt' || ev.columnName == 'ntar_bzcd' || ev.columnName == 'titl_txt') {
+      } else if(ev.columnName == 'rgs_dt' || ev.columnName == 'ntar_bzcd' || ev.columnName == 'titl_txt') {
         this.curRow = ev.rowKey;
         const currentRowData = (this.$refs.grid3.invoke("getRow", this.curRow));
         if (currentRowData != null) {
@@ -630,14 +633,27 @@ export default {
       columns1: [
         {
           header: 'TO-DO업무',
-          width: 250,
+          width: 195,
           align: 'left',
           name: 'todo_nm',
         },
         {
           header: '처리건수',
+          width: 70,
           align: 'right',
           name: 'proc_cnt',
+        },
+        {
+          header: '바로가기',
+          width: 70,
+          align: 'center',
+          name: 'btn_nm',
+        },
+        {
+          header: '화면ID',
+          hidden : true,
+          align: 'center',
+          name: 'scrn_id',
         },
       ],
       columns2: [
@@ -650,7 +666,7 @@ export default {
         },
         {
           header: '시작일자',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'pln_sta_dt',
           format: 'yyyy-mm-dd',
@@ -658,7 +674,7 @@ export default {
         },
         {
           header: '종료일자',
-          width: 120,
+          width: 100,
           align: 'center',
           name: 'pln_end_dt',
           format: 'yyyy-mm-dd',

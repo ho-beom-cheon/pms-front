@@ -31,14 +31,12 @@
               >
             </div>
           </li>
-          <li class="filter-item">
-            <div class="input-searchWrap" >사용프로그램
-              <input type="text"
-                     v-model="info.use_pgm_txt"
-                     style="width: 180px"
-              >
-            </div>
-          </li>
+          <combo
+              ref="combo2T"
+              :comboArray = "this.infocomboList1"
+              @as_pgm_dis_cd_changeT="as_pgm_dis_cd_changeT"
+          >
+          </combo>
           <li class="filter-item-n">
             <div class="input-searchWrap" style="margin-left: 26px">전환담당자
               <input type="text"
@@ -302,6 +300,7 @@ export default {
     // Combo.vue 에서 받아온 값
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},            // 프로젝트
     bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
+    as_pgm_dis_cd_changeT(params) {this.info.info_as_pgm_dis_cd = params},    // As-Is프로그램유형
     as_pgm_dis_cd_change(params)  {this.detail.as_pgm_dis_cd_selected = params},    // As-Is프로그램유형
     trn_stt_cd_change(params)     {this.detail.trn_stt_cd_selected = params},// 전환상태
 
@@ -686,6 +685,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
+      infocomboList1 : ["C-51T"],
       comboList : ["C0","C27"],
       comboList2 : ["C-51"],
       comboList3 : ["C-52"],
@@ -700,6 +700,7 @@ export default {
         as_pgm_id             : '',                                           // ASIS프로그램ID
         to_pgm_id             : '',                                           // TOBE프로그램ID
         use_pgm_txt           : '',                                           // 사용프로그램
+        info_as_pgm_dis_cd    : 'TTT',                                        // As-Is 프로그램 구분코드
         dvlpe_no              : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
         sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
         sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '200' ? '':sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호

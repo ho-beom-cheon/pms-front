@@ -959,6 +959,24 @@
       </div>
     </li>
 
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-51T'">
+      <div class="item-con">As-Is프로그램유형
+        <select
+            id      = "as_pgm_dis_cdT"
+            v-model = "as_pgm_dis_cd_selectedT"
+            style   = "width: 250px;margin-left : 5px"
+            @change = "as_pgm_dis_cd_changeT"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000051T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-52'">
       <div class="item-con"  style   = "margin-left : 43px">전환상태
         <select
@@ -1059,6 +1077,7 @@ export default {
     this.rsr_endt_change()
     this.inp_cls_cd_change()
     this.as_pgm_dis_cd_change()
+    this.as_pgm_dis_cd_changeT()
     this.trn_stt_cd_change()
     this.mtng_prc_step_cd_change()
   },
@@ -1241,6 +1260,8 @@ export default {
       inp_cls_cd_selected : "",
       // As-Is프로그램유형
       as_pgm_dis_cd_selected : "",
+      // As-Is프로그램유형
+      as_pgm_dis_cd_selectedT : "",
       // 전환상태
       trn_stt_cd_selected : "",
       // 회의진행상태
@@ -1312,6 +1333,7 @@ export default {
     rsr_endt_change()               {  this.$emit('rsr_endt_change',               this.rsr_endt_selected)},             // 예약종료일자
     inp_cls_cd_change()             {  this.$emit('inp_cls_cd_change',             this.inp_cls_cd_selected)},           // 투입구분
     as_pgm_dis_cd_change()          {  this.$emit('as_pgm_dis_cd_change',          this.as_pgm_dis_cd_selected)},        // As-Is프로그램유형
+    as_pgm_dis_cd_changeT()         {  this.$emit('as_pgm_dis_cd_changeT',         this.as_pgm_dis_cd_selectedT)},        // As-Is프로그램유형
     trn_stt_cd_change()             {  this.$emit('trn_stt_cd_change',             this.trn_stt_cd_selected)},           // 전환상태
     mtng_prc_step_cd_change()       {  this.$emit('mtng_prc_step_cd_change',       this.mtng_prc_step_cd_selected)},     // 회의진행상태
 
@@ -1697,6 +1719,7 @@ export default {
           if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
           if(this.CD1000000049N.length !== 0)   this.inp_cls_cd_selected        = this.CD1000000049N[0].value
           if(this.CD1000000051N.length !== 0)   this.as_pgm_dis_cd_selected     = this.CD1000000051N[0].value
+          if(this.CD1000000051T.length !== 0)   this.as_pgm_dis_cd_selectedT    = this.CD1000000051T[0].value
           if(this.CD1000000052N.length !== 0)   this.trn_stt_cd_selected        = this.CD1000000052N[0].value
           if(this.CD1000000053N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000053N[0].value
           if(this.CD1000000054N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000054N[0].value
