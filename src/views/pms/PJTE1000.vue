@@ -633,7 +633,7 @@ export default {
       columns1: [
         {
           header: 'TO-DO업무',
-          width: 195,
+          width: 265,
           align: 'left',
           name: 'todo_nm',
         },
@@ -645,6 +645,7 @@ export default {
         },
         {
           header: '바로가기',
+          hidden : true,
           width: 70,
           align: 'center',
           name: 'btn_nm',
