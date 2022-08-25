@@ -283,8 +283,21 @@ export default {
       return converted_date;
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "투입인력현황", useFormattedValue : true});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "투입인력현황_"+this.getCurrentYyyymmdd(), useFormattedValue : true});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
       console.log(event.target.files[0]);

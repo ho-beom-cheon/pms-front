@@ -983,8 +983,21 @@ export default {
 
 
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx", {fileName: "주간보고내역_"+this.getCurrentYyyymmdd()});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     gridExcelImport() {
 
     },
