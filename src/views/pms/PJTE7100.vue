@@ -580,8 +580,21 @@ export default {
     },
 
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "As-Is대To-Be매핑", useFormattedValue : true, onlySelected:true});
+      this.$refs.grid.invoke("export", "xlsx", {fileName: "As-Is대To-Be매핑_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     // 양식다운로드
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가

@@ -969,15 +969,28 @@ export default {
     // 엑셀 다운로드
     gridExcelExport(grid_num){
       if(grid_num === 1){
-        this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
+        this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"인력내역_"+this.getCurrentYyyymmdd()});
 
       }else if(grid_num === 2){
-        this.$refs.grid2.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
+        this.$refs.grid2.invoke("export", "xlsx", {useFormattedValue:true, fileName:"재직사항_"+this.getCurrentYyyymmdd()});
 
       }else if(grid_num === 3){
-        this.$refs.grid3.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
+        this.$refs.grid3.invoke("export", "xlsx", {useFormattedValue:true, fileName:"경력사항_"+this.getCurrentYyyymmdd()});
       }
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     // 재직사항 그리드 엑셀업로드
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가

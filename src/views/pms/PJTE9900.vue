@@ -755,8 +755,21 @@ export default {
     },
     // 엑셀 다운로드
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue: true, onlySelected: true});
+      this.$refs.grid.invoke("export", "xlsx", {fileName: "KanbanBoard내역_"+this.getCurrentYyyymmdd(), useFormattedValue: true, onlySelected: true});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     // 테이블백업
     tableBackUp() {
       let aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");

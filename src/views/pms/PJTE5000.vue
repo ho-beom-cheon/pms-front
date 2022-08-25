@@ -486,8 +486,21 @@ export default {
       this.$refs.grid.invoke("moveRow", this.curRow, this.upDownCount);
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "WBS관리_"+this.getCurrentYyyymmdd(), useFormattedValue : true});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
       console.log(event.target.files[0])
