@@ -344,13 +344,13 @@ export default {
                     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
                     login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                   }).then(res => {
-                    this.$refs.grid.invoke("reloadData");
+                    //this.$refs.grid.invoke("reloadData");
                     document.getElementById("as_pgm_id").style.backgroundColor="#f2f2f2";
                     document.getElementById("as_pgm_id").disabled=true;
                     document.getElementById("as_pgm_dis_cd").style.backgroundColor="#f2f2f2";
                     document.getElementById("as_pgm_dis_cd").disabled=true;
                     alert("신규저장을 완료했습니다.")
-                    this.fnSearch()
+                    //this.fnSearch()
                   }).catch(e => {
                     alert("신규저장에 실패했습니다.")
                   })
@@ -365,6 +365,19 @@ export default {
           }else{
             //기등록일때
             if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.dvlpe_no || this.detail.as_pgm_dis_cd_selected == "990") {
+
+              this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_nm', this.detail.as_pgm_nm);
+              this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_id', this.detail.to_pgm_id);
+              this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_nm', this.detail.to_pgm_nm);
+              this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_dis_cd', this.detail.as_pgm_dis_cd_selected);
+              this.$refs.grid.invoke("setValue", this.curRow, 'use_pgm_txt', this.detail.use_pgm_txt);
+              this.$refs.grid.invoke("setValue", this.curRow, 'trn_stt_cd', this.detail.trn_stt_cd_selected);
+              this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_nm', this.detail.dvlpe_nm);
+              this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', this.detail.dvlpe_no);
+              this.$refs.grid.invoke("setValue", this.curRow, 'frcs_sta_dt', this.detail.frcs_sta_dt);
+              this.$refs.grid.invoke("setValue", this.curRow, 'frcs_end_dt', this.detail.frcs_end_dt);
+              this.$refs.grid.invoke("setValue", this.curRow, 'rmrk', this.detail.rmrk);
+
               axiosService.put("/PJTE7100/update_7100_01", {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
                 as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
@@ -383,9 +396,8 @@ export default {
                 excelUplod: this.excelUplod,
               }).then(res => {
                 console.log(res);
-                this.$refs.grid.invoke("reloadData");
+                //this.$refs.grid.invoke("reloadData");
                 alert("저장을 완료했습니다.")
-                this.fnSearch()
               }).catch(e => {
                 alert("저장에 실패했습니다.")
               })
@@ -414,13 +426,7 @@ export default {
       }  else if (this.detail.as_pgm_nm == "" || this.detail.as_pgm_nm == null) {
         alert('As-Is 프로그램명은 필수 입력사항입니다.');
         return false;
-      }  else if (this.detail.to_pgm_id == "" || this.detail.to_pgm_id == null) {
-        alert('To-Be프로그램 ID는 필수 입력사항입니다.');
-        return false;
-      } else if (this.detail.to_pgm_nm == "" || this.detail.to_pgm_nm == null) {
-        alert('To-Be프로그램은 필수 입력사항입니다.');
-        return false;
-      }else {
+      }  else {
         return true;  // 필수 값 모두 입력 시 true
       }
     },
