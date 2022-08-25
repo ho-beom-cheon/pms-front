@@ -1022,7 +1022,19 @@ export default {
 
     },
     gridExcelExport(){
-      this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
+      this.$refs.grid1.invoke("export", "xlsx", {useFormattedValue:true, fileName:"PMS사용자목록_"+this.getCurrentYyyymmdd()});
+    },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
     },
 
     // 첨부파일 팝업(PJTE9002) 테스트용 method

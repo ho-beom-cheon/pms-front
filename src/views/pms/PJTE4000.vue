@@ -699,8 +699,21 @@ export default {
       this.$refs.grid.invoke("readData");
     },
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx",{fileName: "엑셀다운로드", useFormattedValue : true});
+      this.$refs.grid.invoke("export", "xlsx",{fileName: "ActionItem및이슈관리현황_"+this.getCurrentYyyymmdd(), useFormattedValue : true});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     gridExcelImport() {
 
     },

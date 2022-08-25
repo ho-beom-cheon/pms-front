@@ -248,8 +248,21 @@ export default {
     // 그리드 엑셀다운로드
     gridExcelExport(){
       // useFormattedValue 옵션으로 그리드 데이터 내에 select된 값 value가 아닌 text 값으로 설정되어 다운로드 가능
-      this.$refs.grid.invoke("export", "xlsx", {useFormattedValue:true, fileName:"엑셀다운로드"});
+      this.$refs.grid.invoke("export", "xlsx", {useFormattedValue:true, fileName:"PMS신청관리_"+this.getCurrentYyyymmdd()});
     },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     // PJTE6001(PMS신청등록) 팝업 오픈 method
     open_page(mng_id){
       // 파라미터 설정

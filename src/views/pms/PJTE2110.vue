@@ -236,10 +236,10 @@ export default {
       this.$refs.grid3.invoke("clear");
       this.$refs.grid4.invoke("clear");
     },
-    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
-    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
-    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
-    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "엑셀다운로드", useFormattedValue : true} );},
+    gridExcelExport1() {this.$refs.grid1.invoke("export", "xlsx", {fileName: "개발업무별진척현황_"+dateString, useFormattedValue : true} );},
+    gridExcelExport2() {this.$refs.grid2.invoke("export", "xlsx", {fileName: "개발담당자별진척현황_"+dateString, useFormattedValue : true} );},
+    gridExcelExport3() {this.$refs.grid3.invoke("export", "xlsx", {fileName: "개발결함현황_"+dateString, useFormattedValue : true} );},
+    gridExcelExport4() {this.$refs.grid4.invoke("export", "xlsx", {fileName: "개발및결함미진내역_"+dateString, useFormattedValue : true} );},
 
     open_pjte9001(event) {
       const targetId = event.currentTarget.id;
