@@ -640,12 +640,6 @@ export default {
               if (isNaN(rowObj[n].frcs_end_dt) == false) {
                 rowObj[n].frcs_end_dt = this.excelDateToJSDate(rowObj[n].frcs_end_dt)
               }
-              if (isNaN(rowObj[n].sta_dt) == false) {
-                rowObj[n].sta_dt = this.excelDateToJSDate(rowObj[n].sta_dt)
-              }
-              if (isNaN(rowObj[n].end_dt) == false) {
-                rowObj[n].end_dt = this.excelDateToJSDate(rowObj[n].end_dt)
-              }
               rowObj_copy[n-1] = rowObj[n];
             }
 
