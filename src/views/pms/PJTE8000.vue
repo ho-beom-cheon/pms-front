@@ -721,10 +721,12 @@ export default {
       let dept_cd_selected = this.detail.dept_cd_selected
       let bef_emp_no = this.info.login_emp_no
       let bef_aut_cd = this.info.login_aut_cd
+      let prjt_nm_selected  = sessionStorage.getItem("LOGIN_PROJ_ID")  // 프로젝트명
 
       if ((week_sqn_cd_selected != null && week_sqn_cd_selected != '') && (real_prjt_id_selected != null && real_prjt_id_selected != '')) {
         axiosService.get("/PJTE8000/select02", {
           params: {
+            prjt_nm_selected,
             week_yymm,
             week_sqn_cd_selected,
             real_prjt_id_selected,
