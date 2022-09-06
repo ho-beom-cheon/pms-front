@@ -713,7 +713,7 @@ export default {
         as_pgm_id             : '',                                           // ASIS프로그램ID
         to_pgm_id             : '',                                           // TOBE프로그램ID
         use_pgm_txt           : '',                                           // 사용프로그램
-        info_as_pgm_dis_cd    : 'TTT',                                        // As-Is 프로그램 구분코드
+        info_as_pgm_dis_cd    : sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ? '990':'TTT',                                        // As-Is 프로그램 구분코드
         dvlpe_no              : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
         sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
         sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '200' ? '':sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호

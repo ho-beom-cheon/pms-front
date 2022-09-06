@@ -1719,7 +1719,16 @@ export default {
           if(this.CD1000000048N.length !== 0)   this.rsr_strt_selected          = this.CD1000000048N[0].value
           if(this.CD1000000049N.length !== 0)   this.inp_cls_cd_selected        = this.CD1000000049N[0].value
           if(this.CD1000000051N.length !== 0)   this.as_pgm_dis_cd_selected     = this.CD1000000051N[0].value
-          if(this.CD1000000051T.length !== 0)   this.as_pgm_dis_cd_selectedT    = this.CD1000000051T[0].value
+
+          if(this.CD1000000051T.length !== 0)
+          {
+            if(sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ) {
+              this.as_pgm_dis_cd_selectedT = '990'
+            } else {
+              this.as_pgm_dis_cd_selectedT = this.CD1000000051T[0].value
+            }
+          }
+
           if(this.CD1000000052N.length !== 0)   this.trn_stt_cd_selected        = this.CD1000000052N[0].value
           if(this.CD1000000053N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000053N[0].value
           if(this.CD1000000054N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000054N[0].value
