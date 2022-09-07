@@ -417,10 +417,10 @@ export default {
         this.info.man_no = sessionStorage.getItem("LOGIN_EMP_NO")
       }
 
-      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000003'){
-        this.listYn = true;
-      } else {
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === '0000000001'){
         this.listYn = false;
+      } else {
+        this.listYn = true;
       }
     },
 
@@ -873,6 +873,10 @@ export default {
     },
 
     fnOpenModal() {
+      if(this.detail.post_id == null || this.detail.post_id == ""){
+        alert("답글을 추가할 게시내역을 선택해주세요.(더블클릭)");
+        return;
+      }
       this.detail.txt_psw_reply = ''
       this.detail.rpl_titl = ''
       this.modals.txt_modal3 = true;
@@ -1028,7 +1032,7 @@ export default {
       header3:   { height: 30,},
       columns1:  [ //게시내역
         {
-          header: '게시제목',
+          header: '게시제목(답글건수/댓글건수)',
           align: 'left',
           name: 'dis_post_titl',
           editor: 'text',
