@@ -322,6 +322,16 @@ export default {
                   } else if (res.data.data[0].prjt_id === "0000000010"){
                     this.$router.push('/PJTE1000');
                   }else {
+                    this.gesipan.gesipan_id       = '0000000001'
+                    this.gesipan.annym_yn         = 'N'
+                    this.gesipan.afrm_yn          = 'Y'
+                    this.gesipan.cmnt_yn          = 'Y'
+                    this.gesipan.rply_yn          = 'Y'
+                    this.gesipan.good_yn          = 'Y'
+                    this.gesipan.nmb_inq_yn       = 'Y'
+                    this.gesipan.pgn_yn           = 'Y'
+                    this.gesipan.file_upld_yn     = 'Y'
+                    this.setData(this.gesipan);
                     this.$router.push('/PJTE1000');
                   }
                   /* 세션 스토리지 값 저장 */
