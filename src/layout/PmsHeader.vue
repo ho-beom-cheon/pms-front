@@ -16,7 +16,7 @@
     </div>
     <div class="gnb-con">
       <ul class="gnb-menu">
-        <li class="active" v-if="this.projId ==='0000000001'"><a href="#">{{ this.current_menu }}</a></li>
+        <li class="active" v-if="this.projId ==='0000000001'"><a href="#">{{ this.current_menu3 }}</a></li>
         <li class="active" v-else-if="this.projId ==='0000000003'"><a href="#">{{ this.current_menu2 }}</a></li>
         <li class="active" v-else><a href="#">{{ this.current_menu }}</a></li>
         <li><a href="#"></a></li>
@@ -66,6 +66,7 @@ export default {
 
       current_menu: '',
       current_menu2: '',
+      current_menu3: '',
 
       menu_list: [
         {id: 'PJTE1000', path: '/PJTE1000', name: 'ProjectEyes현황'},
@@ -86,7 +87,7 @@ export default {
         {id: 'PJTE9200', path: '/PJTE9200', name: '회의실예약'},
         {id: 'PJTE9100', path: '/PJTE9100', name: 'KMS게시판생성'},
         {id: 'PJTE9110', path: '/PJTE9110', name: 'KMS게시판'},
-        {id: 'PJTE9120', path: '/PJTE9120', name: 'KMS게시글등록'},
+        {id: 'PJTE9120', path: '/PJTE9120', name: '프로젝트개발자게시판'},
         {id: 'PJTE7100', path: '/PJTE7100', name: 'As-Is대To-Be매핑관리'},
         {id: 'PJTE9300', path: '/PJTE9300', name: '프로젝트인력요청현황'},
         {id: 'PJTE9400', path: '/PJTE9400', name: '파일관리'},
@@ -104,6 +105,12 @@ export default {
         {id: 'PJTE9310', path: '/PJTE9310', name: '투입인력현황'},
         {id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리'},
         {id: 'PJTE9300', path: '/PJTE9300', name: '프로젝트인력요청현황'},
+      ],
+      menu_list3: [
+        {id: 'PJTE9100', path: '/PJTE9100', name: 'KMS게시판생성'},
+        {id: 'PJTE9110', path: '/PJTE9110', name: 'KMS게시판'},
+        {id: 'PJTE9120', path: '/PJTE9120', name: 'KMS게시글등록'},
+        {id: 'PJTE9000', path: '/PJTE9000', name: '시스템관리'},
       ],
     }
   },
@@ -136,6 +143,13 @@ export default {
       for (let i = 0; i < this.menu_list2.length; i++) {
         if (this.$route.path === this.menu_list2[i].path) {
           this.current_menu2 = this.menu_list2[i].name
+        }
+      }
+    },
+    fn_current_menu3() {
+      for (let i = 0; i < this.menu_list3.length; i++) {
+        if (this.$route.path === this.menu_list3[i].path) {
+          this.current_menu3 = this.menu_list3[i].name
         }
       }
     }

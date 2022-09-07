@@ -209,7 +209,7 @@ export default {
         {
           id: 'PJTE9120',
           path: '/PJTE9120',
-          name: '개발관련토론방'
+          name: '프로젝트개발자게시판'
         },
         {
           id: 'PJTE9000',
