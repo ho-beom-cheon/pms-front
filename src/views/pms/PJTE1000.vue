@@ -352,7 +352,8 @@ export default {
 
               // 관리ID가 있으면 UPDATE
             } else {
-              if (this.detail.rgs_no == sessionStorage.getItem("LOGIN_EMP_NO")) { // 공지 등록자가 본인인지 체크
+              if (this.detail.rgs_no == sessionStorage.getItem("LOGIN_EMP_NO") || sessionStorage.getItem("LOGIN_AUT_CD") == "500" ||
+                  sessionStorage.getItem("LOGIN_AUT_CD") == "600" || sessionStorage.getItem("LOGIN_AUT_CD") == "900") { // 공지 등록자가 본인인지 체크
                 axiosService.put("/PJTE1000/update",
                     {
                       bkup_id: this.detail.bkup_id_selected,                     // (상세)백업ID
