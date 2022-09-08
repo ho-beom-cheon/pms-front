@@ -338,7 +338,7 @@ export default {
                     to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
                     use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
                     dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
-                    Rmrk: this.detail.Rmrk,                                // 비고
+                    rmrk: this.detail.rmrk,                                // 비고
                     frcs_sta_dt: this.detail.frcs_sta_dt,                  // 계획시작일자
                     frcs_end_dt: this.detail.frcs_end_dt,                  // 계획종료일자
                     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
