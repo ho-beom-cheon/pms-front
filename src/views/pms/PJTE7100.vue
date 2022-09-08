@@ -566,8 +566,8 @@ export default {
       this.detail.to_pgm_nm                           = ''                                                  // To-be프로그램명
       this.detail.as_pgm_dis_cd_selected              = this.$refs.combo2.$data.CD1000000051N[0].value      // as-is프로그램유형
       this.$refs.combo2.$data.as_pgm_dis_cd_selected  = this.$refs.combo2.$data.CD1000000051N[0].value      // as-is프로그램유형
-      this.detail.dvlpe_no                            = ''                                                  // 전환담당자번호
-      this.detail.dvlpe_nm                            = ''                                                  // 전환담당자명
+      this.detail.dvlpe_no                            = sessionStorage.getItem("LOGIN_EMP_NO")          // 전환담당자번호
+      this.detail.dvlpe_nm                            = sessionStorage.getItem("LOGIN_EMP_NM")          // 전환담당자명
       this.detail.trn_stt_cd_selected                 = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
       this.$refs.combo3.$data.trn_stt_cd_selected     = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
       this.detail.use_pgm_txt                         = ''                                                  // 사용프로그램
@@ -714,12 +714,8 @@ export default {
         to_pgm_id             : '',                                           // TOBE프로그램ID
         use_pgm_txt           : '',                                           // 사용프로그램
         info_as_pgm_dis_cd    : sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ? '990':'TTT',                                        // As-Is 프로그램 구분코드
-        dvlpe_no              : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
-        sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
-        sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '200' ? '':sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호
-        dvlpe_nm              : sessionStorage.getItem("LOGIN_AUT_CD") === '300' || sessionStorage.getItem("LOGIN_AUT_CD") === '400' ||
-        sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
-        sessionStorage.getItem("LOGIN_AUT_CD") === '900' || sessionStorage.getItem("LOGIN_AUT_CD") === '200' ? '':sessionStorage.getItem("LOGIN_EMP_NM"),  // 전환담당자 명
+        dvlpe_no              : '', // 전환담당자 번호
+        dvlpe_nm              : '',  // 전환담당자 명
       },
 
       detail : {
