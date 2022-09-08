@@ -336,6 +336,7 @@ export default {
                     as_pgm_nm: this.detail.as_pgm_nm,                      // as-is 프로그램명
                     to_pgm_id: this.detail.to_pgm_id,                      // to-be 프로그램id
                     to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
+                    trn_stt_cd : this.detail.trn_stt_cd_selected,          // 전환상태코드
                     use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
                     dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
                     rmrk: this.detail.rmrk,                                // 비고
