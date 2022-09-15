@@ -714,7 +714,7 @@ export default {
         as_pgm_id             : '',                                           // ASIS프로그램ID
         to_pgm_id             : '',                                           // TOBE프로그램ID
         use_pgm_txt           : '',                                           // 사용프로그램
-        info_as_pgm_dis_cd    : sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ? '990':'TTT',                                        // As-Is 프로그램 구분코드
+        info_as_pgm_dis_cd    : sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ? '999':'TTT',                                        // As-Is 프로그램 구분코드
         dvlpe_no              : '', // 전환담당자 번호
         dvlpe_nm              : '',  // 전환담당자 명
       },
