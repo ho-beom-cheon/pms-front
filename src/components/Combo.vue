@@ -1723,7 +1723,7 @@ export default {
           if(this.CD1000000051T.length !== 0)
           {
             if(sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ) {
-              this.as_pgm_dis_cd_selectedT = '990'
+              this.as_pgm_dis_cd_selectedT = '999'
             } else {
               this.as_pgm_dis_cd_selectedT = this.CD1000000051T[0].value
             }
