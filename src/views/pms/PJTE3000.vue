@@ -57,6 +57,7 @@
               <input type="text"
                      placeholder="직원번호"
                      v-model="info.dvlpe_no"
+                     id="id.dvlpe_no"
                      style="width: 70px; background-color: #f2f2f2;"
                      :disabled=true
               >
@@ -243,6 +244,7 @@ export default {
   },
   updated() {
     // console.log("updated");
+    this.setNo();
   },
   beforeDestroy() {
     // console.log("beforeDestroy");
@@ -273,6 +275,18 @@ export default {
       this.$refs.grid.invoke("disable");
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
+
+      // '100' 권한,개발자명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '100'){
+        this.info.dvlpe_nm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.dvlpe_no = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+      // '200' 권한, pl명
+      if(sessionStorage.getItem("LOGIN_AUT_CD") === '200'){
+        this.info.pl_nm = sessionStorage.getItem("LOGIN_EMP_NM")
+        this.info.pl_no = sessionStorage.getItem("LOGIN_EMP_NO")
+      }
+
     },
     /*그리드 클릭 이벤트*/
     onClick(ev) {
@@ -360,6 +374,13 @@ export default {
         let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
+    },
+
+    // 직원명 삭제 시 직원번호 초기화
+    setNo() {
+      if(this.info.pl_nm === "") this.info.pl_no = "";
+      if(this.info.dvlpe_nm === "") this.info.dvlpe_no = "";
+      if(this.info.rgpe_nm === "") this.info.rgpe_no = "";
     },
     //직원조회 버튼 클릭 시
     open_pjte9001_btn(btn_id) {
@@ -497,6 +518,7 @@ export default {
           maxWidth: 250,
           align: 'center',
           name: 'bzcd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -510,6 +532,7 @@ export default {
           width: 140,
           align: 'left',
           name: 'rgs_dscd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -521,13 +544,15 @@ export default {
         {
           header: '테스트케이스ID',
           width: 150,
-          align: 'center',
+          align: 'left',
+          filter: 'text',
           name: 'cctn_id'
         },
         {
           header: '테스트케이스명',
           width: 250,
           align: 'left',
+          filter: 'text',
           name: 'cctn_nm'
         },
         {
@@ -536,6 +561,7 @@ export default {
           align: 'center',
           name: 'err_tycd',
           type: 'text',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -549,6 +575,7 @@ export default {
           width: 100,
           align: 'center',
           name: 'err_prc_step_cd',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
@@ -563,6 +590,7 @@ export default {
           align: 'center',
           name: 'rgs_dt',
           format: 'yyyy-mm-dd',
+          filter: 'text',
           editor: 'datePicker',
         },
         {
@@ -570,12 +598,14 @@ export default {
           width: 80,
           align: 'center',
           name: 'rgpe_nm',
+          filter: 'text',
           editor: 'text',
         },
         {
           header: '번호',
           width: 80,
           align: 'center',
+          filter: 'text',
           name: 'rgpe_no',
         },
         {
@@ -583,6 +613,7 @@ export default {
           width: 300,
           align: 'left',
           name: 'err_txt',
+          filter: 'text',
           ellipsis: true,
         },
         {
@@ -590,6 +621,7 @@ export default {
           width: 360,
           align: 'left',
           name: 'ttmn_txt',
+          filter: 'text',
           ellipsis: true,
         },
         {
@@ -598,6 +630,7 @@ export default {
           align: 'center',
           type: 'date',
           name: 'ttmn_scd_dt',
+          filter: 'text',
           editor: 'datePicker'
         },
         {
@@ -605,6 +638,7 @@ export default {
           width: 110,
           align: 'center',
           name: 'ttmn_dt',
+          filter: 'text',
           editor: 'datePicker'
         },
         {
@@ -612,12 +646,14 @@ export default {
           width: 80,
           align: 'center',
           name: 'dvlpe_nm',
+          filter: 'text',
           editor: 'text',
         },
         {
           header: '번호',
           width: 80,
           align: 'center',
+          filter: 'text',
           name: 'dvlpe_no',
         },
         {
@@ -625,12 +661,14 @@ export default {
           width: 80,
           align: 'center',
           name: 'pl_nm',
+          filter: 'text',
           editor: 'text',
         },
         {
           header: '번호',
           width: 80,
           align: 'center',
+          filter: 'text',
           name: 'pl_no',
         },
         {
@@ -639,6 +677,7 @@ export default {
           align: 'center',
           name: 'bfjr_bzcd',
           type: 'text',
+          filter: 'select',
           formatter: 'listItemText',
           editor: {
             type: 'select',
