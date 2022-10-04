@@ -324,7 +324,8 @@ export default {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
 
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'
+          && sessionStorage.getItem("LOGIN_AUT_CD") !== '900' ){
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
