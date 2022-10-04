@@ -331,7 +331,8 @@ export default {
     itg_tst_prc_cd_change(params) {this.info.itg_tst_prc_cd_selected = params},
 
     init() {
-      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'){
+      if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'
+      && sessionStorage.getItem("LOGIN_AUT_CD") !== '900'){
         // 특정 열 비활성화
         this.$refs.grid.invoke("disableColumn", 'frcs_sta_dt');
         this.$refs.grid.invoke("disableColumn", 'frcs_end_dt');
