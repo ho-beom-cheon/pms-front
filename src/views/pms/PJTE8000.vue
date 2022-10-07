@@ -670,48 +670,69 @@ export default {
         //필수항목 확인
         if (this.checkPrimary() == true) {
           //확인창
-          if (confirm("정말 등록/변경 하시겠습니까??") == true) {
-              axiosService.post("/PJTE8000/insert",
-                  {
-                    prjt_id: this.info.login_proj_id,        // (상세)프로젝트아이디
-                    bef_emp_no: this.info.login_emp_no,
-                    bef_aut_cd: this.info.login_aut_cd,
-                    real_prjt_id: this.detail.real_prjt_id_selected,                       // (상세)제목
-                    week_yymm: this.detail.week_yymm,               // (상세)요청내용
-                    week_sqn_cd: this.detail.week_sqn_cd_selected,        // (상세)요청구분
-                    dept_cd: this.detail.dept_cd_selected,
-                    pm_no: this.detail.pm_no,                           // (상세)요청일자
-                    all_real_prg: this.detail.all_real_prg,                       // (상세)요청자
-                    all_pred_prg: this.detail.all_pred_prg,      // (상세)처리단계
-                    step_nm: this.detail.step_nm,                 // (상세)조치업무명
-                    step_real_prg: this.detail.step_real_prg,             // (상세)조치담당자
-                    step_pred_prg: this.detail.step_pred_prg,                 // (상세)조치예정일자
-                    prg_txt: this.detail.prg_txt,                         // (상세)조치일자
-                    iss_txt: this.detail.iss_txt,                     // (상세)조치내용
-                    req_txt: this.detail.req_txt,             // (상세)해결방안내용
-                    atfl_mng_id: this.detail.atfl_mng_id,                // (상세)영향도
-                    opr_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
-                  }
-              )
-                  .then(res => {
-                    if (res.status == 200) {
-                      alert("등록 완료되었습니다.");
-                      //insert 후 재조회
-                      this.$refs.grid.invoke("reloadData");
-                      document.getElementById("openFile").disabled =false;
-                      document.getElementById("openFile1").disabled =false;
-                    }
-                  }).catch(e => {
-                alert("등록 실패하였습니다.");
-              })
+          console.log("조회 시작");
 
-          } else {   //취소
-            return;
-          }
-        }
+          console.log("조회 데이터:"+this.detail.real_prjt_id_selected+":"+this.detail.week_yymm+":"+this.detail.week_sqn_cd_selected+":"+this.detail.db_chg_ts);
+
+          axiosService.get("/PJTE8000/select04", {
+            params: {
+              prjt_nm_selected: this.info.login_proj_id,
+              real_prjt_id: this.detail.real_prjt_id_selected,                       // (상세)제목
+              week_yymm: this.detail.week_yymm,               // (상세)요청내용
+              week_sqn_cd: this.detail.week_sqn_cd_selected,        // (상세)요청구분
+              db_chg_ts: this.detail.db_chg_ts, //db변경일시
+            }
+          }).then(res => {
+            console.log(res);
+            if (res.data) {
+              if (res.data.data.contents[0].db_chg_yn == 'Y') {
+                alert('해당 주간보고가 이미 다른 사용자에 의해 변경되었습니다.\n변경한 내용을 복사하고 재조회후 다시 작성해서 등록해주세요.');
+                return;
+              } else {
+                if (confirm("정말 등록/변경 하시겠습니까??") == true) {
+                  axiosService.post("/PJTE8000/insert",
+                      {
+                        prjt_id: this.info.login_proj_id,        // (상세)프로젝트아이디
+                        bef_emp_no: this.info.login_emp_no,
+                        bef_aut_cd: this.info.login_aut_cd,
+                        real_prjt_id: this.detail.real_prjt_id_selected,                       // (상세)제목
+                        week_yymm: this.detail.week_yymm,               // (상세)요청내용
+                        week_sqn_cd: this.detail.week_sqn_cd_selected,        // (상세)요청구분
+                        dept_cd: this.detail.dept_cd_selected,
+                        pm_no: this.detail.pm_no,                           // (상세)요청일자
+                        all_real_prg: this.detail.all_real_prg,                       // (상세)요청자
+                        all_pred_prg: this.detail.all_pred_prg,      // (상세)처리단계
+                        step_nm: this.detail.step_nm,                 // (상세)조치업무명
+                        step_real_prg: this.detail.step_real_prg,             // (상세)조치담당자
+                        step_pred_prg: this.detail.step_pred_prg,                 // (상세)조치예정일자
+                        prg_txt: this.detail.prg_txt,                         // (상세)조치일자
+                        iss_txt: this.detail.iss_txt,                     // (상세)조치내용
+                        req_txt: this.detail.req_txt,             // (상세)해결방안내용
+                        atfl_mng_id: this.detail.atfl_mng_id,                // (상세)영향도
+                        opr_no: this.detail.login_emp_no,                // (상세)Session 직원 번호
+                        login_emp_no:this.info.login_emp_no,             //로그인 사번
+                      }
+                  )
+                      .then(res => {
+                        if (res.status == 200) {
+                          alert("등록 완료되었습니다.");
+                          //insert 후 재조회
+                          this.fnSearch();
+                        }
+                      }).catch(e => {
+                    alert("등록 실패하였습니다.");
+                  })
+
+                } else {   //취소
+                  return;
+                }
+              }
+            }
+        })
       } else {
-        alert('필수입력 항목을 입력해주세요.');
+          return;
       }
+    }
     },
 // 지난 주간보고조회
     fnLastSerch() {
@@ -911,6 +932,7 @@ export default {
       this.detail.bef_req_txt = ''                                                                          // (상세)요청내용
       this.detail.bef_org_file_nm = ''                                                                      // (상세)첨부파일
       this.detail.bef_atfl_mng_id = ''                                                                      // (상세)첨부파일
+      this.detail.db_chg_ts       = '99991231125900';                             // (상세)db변경일시
     },
     //셀 row 클릭시 주간보고,지난주 주간보고에 바인딩
     onClick(ev) {
@@ -969,6 +991,7 @@ export default {
       this.detail.bef_req_txt = currentRowData.bef_req_txt;                              // (지난주 상세)요청내용
       this.detail.bef_org_file_nm = currentRowData.bef_org_file_nm;                             // (상세)첨부파일명
       this.detail.bef_atfl_mng_id = currentRowData.bef_atfl_mng_id;                             // (상세)첨부파일id
+      this.detail.db_chg_ts       = currentRowData.db_chg_ts;                             // (상세)db변경일시
 
       this.fnWekVail();
       //클릭했을때 첨부파일버튼 활성화
@@ -1262,6 +1285,8 @@ export default {
         bef_req_txt               : '',     // 요청내용
         bef_org_file_nm           : '',     // (상세)첨부파일
         bef_atfl_mng_id           : '',     // (상세)첨부파일
+        db_chg_ts                 : '',    //db변경일시
+        db_chg_yn                 : '',    //db변경여부
         /**/
         bkup_id_selected: '0000000000',          // 백업ID
         prjt_id_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
@@ -1581,6 +1606,13 @@ export default {
           width: 230,
           align: 'left',
           name: 'bef_atfl_mng_id',
+          hidden : true,
+        },
+        {
+          header: 'db변경일시',
+          width: 130,
+          align: 'left',
+          name: 'db_chg_ts',
           hidden : true,
         },
       ]
