@@ -365,7 +365,6 @@ export default {
             })
           }else{
             //기등록일때
-            if (sessionStorage.getItem("LOGIN_EMP_NO") == this.detail.dvlpe_no || this.detail.as_pgm_dis_cd_selected == "990") {
 
               this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_nm', this.detail.as_pgm_nm);
               this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_id', this.detail.to_pgm_id);
@@ -402,9 +401,6 @@ export default {
               }).catch(e => {
                 alert("저장에 실패했습니다.")
               })
-            } else {
-              alert("작성자 본인만 저장가능합니다.")
-            }
           }
 
         } else {   //취소
