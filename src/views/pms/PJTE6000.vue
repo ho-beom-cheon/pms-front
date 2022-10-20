@@ -168,6 +168,9 @@ export default {
     window.pms_manage = this;
     console.log("mounted");
   },
+  updated(){
+    this.setNo();
+  },
   // 일반적인 함수를 선언하는 부분
   methods: {
     //직원조회 버튼 클릭 시
@@ -226,7 +229,11 @@ export default {
         let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
       }
-
+    },
+// 직원명 삭제 시 직원번호 초기화
+    setNo() {
+      if(this.info.reqpe_nm === "") this.info.reqpe_no = "";
+      if(this.info.prcpe_nm === "") this.info.prcpe_no = "";
     },
     // Combo.vue 에서 받아온 값
     bkup_id_change(params) {this.info.bkup_id_selected = params},
