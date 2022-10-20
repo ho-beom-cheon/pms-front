@@ -26,7 +26,7 @@
       <section class="page-contents">
         <section class="filter">
           <ul class="filter-btn">
-            <button class="btn btn-filter-e" style="margin-left: 20px;" @click="fnOpenModal(1)">상위생성</button>
+            <button class="btn btn-filter-e" style="margin-left: 20px;" @click="fnOpenModal(1)">최상위폴더생성</button>
           </ul>
         </section>
         <div class="grid1-box" style="height: 650px">
@@ -438,7 +438,19 @@ export default {
 
       columns1: [ //답글내역
         {
-          header: '폴더',
+          header: '하위폴더생성',
+          width: 90,
+          align: 'right',
+          name: 'new_btn',
+        },
+        {
+          header: '파일업로드',
+          width: 90,
+          align: 'center',
+          name: 'upload_btn',
+        },
+        {
+          header: '폴더(등록건수)',
           align: 'left',
           name: 'dis_fld_nm',
           whiteSpace: 'pre',
@@ -446,22 +458,10 @@ export default {
         },
         {
           header: '비고',
-          width: 500,
+          width: 460,
           align: 'left',
           name: 'rmrk',
           editor: 'text',
-        },
-        {
-          header: '하위생성',
-          width: 70,
-          align: 'right',
-          name: 'new_btn',
-        },
-        {
-          header: '파일',
-          width: 70,
-          align: 'center',
-          name: 'upload_btn',
         },
         {
           header: '삭제',

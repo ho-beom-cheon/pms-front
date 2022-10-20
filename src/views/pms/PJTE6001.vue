@@ -235,6 +235,10 @@ export default {
       }
       // this.pop = window.open("../PJTE9001/", "open_pjte9001", "width=700, height=600");
     },
+    // 직원명 삭제 시 직원번호 초기화
+    setNo() {
+      if(this.prcpe_nm === "") this.prcpe_no = "";
+    },
     // 첨부파일등록 팝업 오픈
     open_file_page(){
       let bkup_id='0000000000', prjt_id=this.prjt_id, atfl_mng_id=this.atfl_mng_id, file_rgs_dscd='500', mng_id = this.mng_id
@@ -383,6 +387,11 @@ export default {
     this.$children[0].$data.req_prc_step_cd_selected_pop = this.req_prc_step_cd_selected
     this.$children[0].$data.bzcd_selected_pop = this.bzcd_selected
     window.pms_register = this;
+  },
+  updated(){
+    // 100, 200 권한에 따른 구분함수
+    // 개발자 : 100, PL : 200
+    this.setNo();
   },
   beforeDestroy() {
   },
