@@ -462,6 +462,7 @@ export default {
           align: 'left',
           name: 'rmrk',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '삭제',

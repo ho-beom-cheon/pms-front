@@ -1052,6 +1052,7 @@ export default {
           align: 'center',
           name: 'post_dt',
           editor: 'text',
+          filter: 'text',
         },
         {
           header: '게시자',
@@ -1059,6 +1060,7 @@ export default {
           align: 'center',
           name: 'post_nm',
           editor: 'text',
+          filter: 'text',
           //hidden: true,
         },
         {

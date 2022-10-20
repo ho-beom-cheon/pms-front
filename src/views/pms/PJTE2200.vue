@@ -1107,6 +1107,7 @@ export default {
           name: 'bzcd',
           formatter: 'listItemText',
           disabled: true,
+          filter: 'select',
           editor: {
             type: 'select',
             options: {
@@ -1120,6 +1121,7 @@ export default {
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
+          filter: 'select',
           disabled: true,
           editor: {
             type: 'select',
@@ -1170,6 +1172,7 @@ export default {
           align: 'center',
           name: 'itg_tst_prc_cd',
           formatter: 'listItemText',
+          filter: 'select',
           editor: {
             type: 'select',
             options: {
