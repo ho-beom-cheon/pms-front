@@ -372,6 +372,7 @@ export default {
           header: '신청ID',
           width: 90,
           align: 'center',
+          filter: 'text',
           name: 'mng_id'/*요청자번호*/
         },
         {
