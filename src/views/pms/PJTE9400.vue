@@ -78,10 +78,13 @@
             <li class="filter-item-a">
               <div class="item-con line-con">
                 <label style="padding-left: 10px">비고</label>
-                <input type="text"
-                       v-model="detail.rmrk"
-                       style="width: 400px;height:100px"
-                >
+                <textarea
+                    id="modalId"
+                    cols="62"
+                    rows="6"
+                    v-model="detail.rmrk"
+                    style="margin-bottom: 10px; line-height: normal; padding-top: 5px"
+                ></textarea>
               </div>
             </li>
           </ul>
