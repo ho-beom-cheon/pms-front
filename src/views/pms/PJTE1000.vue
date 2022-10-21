@@ -646,7 +646,6 @@ export default {
         },
         {
           header: '바로가기',
-          hidden : true,
           width: 70,
           align: 'center',
           name: 'btn_nm',
