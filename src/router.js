@@ -56,8 +56,7 @@ aRootPath.path = "/";
 aRootPath.redirect = "/login";
 aRootPath.meta = {authRequired : false}
 aRootPath.props = true
-arrRoutes.push(aRootPath) ;
-
+arrRoutes.push(aRootPath) 
 
 for (var idx = 0; idx < menuListStr.length; idx++) {
 
@@ -83,6 +82,7 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
     }
   } else {
     tmpObj.components = {header: PmsHeader, footer: PmsFooter, default: menuList[idx]};
+    console.log("aaaaaaS : " + sessionStorage.getItem("jwt-auth-token"))
     if(sessionStorage.getItem("jwt-auth-token")){
       tmpObj.meta = {authRequired : false}
     } else {
@@ -122,27 +122,28 @@ export const router = new Router({
 * - from : 현재 url 정보가 담긴 라우터 객체
 * - next : to에 지정한 url로 이동하기 위해 꼭 호출해야 하는 함수
 *  */
-router.beforeEach(function (to,from,next){
-  if(to.fullPath === '/login'){
-    sessionStorage.setItem("jwt-auth-token", "")
-  }
-  if(to.name === '/other'){
-    next({path:'/login'})
-  }
-  if(to.matched.some(function (routeInfo){
-    if(from.fullPath === '/login'){
-      next()
-    } else {
-      return routeInfo.meta.authRequired;
-    }
-  })){
-    next({path:'/login'})
-    window.alert("잘못된 경로로 접근하였습니다.");
-  } else
-  {
-    next()
-  }
-})
+
+  // router.beforeEach(function (to, from, next) {
+  //   if (to.fullPath === '/login') {
+  //     sessionStorage.setItem("jwt-auth-token", "")
+  //   }
+  //   if (to.name === '/other') {
+  //     next({path: '/login'})
+  //   }
+  //   if (to.matched.some(function (routeInfo) {
+  //     if (from.fullPath === '/login') {
+  //       next()
+  //     } else {
+  //       console.log("cjsghqja : " + routeInfo.meta.authRequired)
+  //       return routeInfo.meta.authRequired;
+  //     }
+  //   })) {
+  //     next({path: '/login'})
+  //     window.alert("잘못된 경로로 접근하였습니다.");
+  //   } else {
+  //     next()
+  //   }
+  // })
 
 
 
