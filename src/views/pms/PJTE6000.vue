@@ -289,7 +289,7 @@ export default {
         this.checkRegisterData = false;
       }
     },
-    // check_Yn 값 변하면 info 내의 check_Yn 값 변화1
+    // check_Yn 값 변하면 info 내의 check_Yn 값 변화
     check_Yn () {
       this.check_Yn ? this.info.check_Yn = 'Y' : this.info.check_Yn = 'N';
     },
