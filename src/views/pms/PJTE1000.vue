@@ -440,7 +440,9 @@ export default {
           this.$refs.grid2.invoke("readData");
         } else {
           let scrn_id = this.$refs.grid1.invoke("getValue", ev.rowKey, "scrn_id")
+
           this.$router.push({path : scrn_id})
+          //this.$router.push("/PJTE2100")
         }
       } else if(ev.columnName == 'rgs_dt' || ev.columnName == 'ntar_bzcd' || ev.columnName == 'titl_txt') {
         this.curRow = ev.rowKey;
