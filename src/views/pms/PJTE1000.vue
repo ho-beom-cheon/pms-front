@@ -634,7 +634,7 @@ export default {
       columns1: [
         {
           header: 'TO-DO업무',
-          width: 265,
+          width: 195,
           align: 'left',
           name: 'todo_nm',
         },
@@ -645,7 +645,7 @@ export default {
           name: 'proc_cnt',
         },
         {
-          header: '바로가기',
+          header: '화면이동',
           width: 70,
           align: 'center',
           name: 'btn_nm',

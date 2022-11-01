@@ -73,7 +73,7 @@
             처리일자
           </th>
           <td colspan="2">
-            <input type="text" :value="prc_dt" :disabled="read" ref="req_dt" style="background-color: #f2f2f2;">
+            <input type="text" :value="prc_dt" :disabled="read" ref="prc_dt" style="background-color: #f2f2f2;">
           </td>
         </tr>
         <tr>
@@ -272,6 +272,7 @@ export default {
             this.req_dscd_selected = res_data.req_dscd
             this.reqpe_nm = res_data.reqpe_nm
             this.reqpe_no = res_data.reqpe_no
+            this.req_dt = res_data.req_dt ? res_data.req_dt.substr(0,4)+ '-' +res_data.req_dt.substr(4,2) + '-' + res_data.req_dt.substr(6) : res_data.req_dt
             this.req_prc_step_cd_selected = res_data.req_prc_step_cd
             this.req_txt = res_data.req_txt
             this.prcpe_nm = res_data.prcpe_nm
