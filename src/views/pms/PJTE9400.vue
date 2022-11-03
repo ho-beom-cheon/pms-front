@@ -27,6 +27,7 @@
         <section class="filter">
           <ul class="filter-btn">
             <button class="btn btn-filter-d" @click="batchDownload">첨부파일일괄다운로드ⓘ</button>
+            <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
             <button class="btn btn-filter-e" style="margin-left: 20px;" @click="fnOpenModal(1)">최상위폴더생성</button>
           </ul>
         </section>
@@ -242,6 +243,23 @@ export default {
         this.fnOpenModal(3);
       }
     },
+    // 엑셀 다운로드
+    gridExcelExport(){
+      this.$refs.grid1.invoke("export", "xlsx",{fileName: "파일관리_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
+    },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     // 첨부파일 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '805' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
