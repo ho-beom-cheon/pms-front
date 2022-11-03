@@ -106,6 +106,7 @@ export default {
     combo
   },
   mounted() {
+    this.init()
     this.fnSearch()
     this.radioValues = "radio01"
   },
@@ -117,6 +118,11 @@ export default {
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     bzcd_change(params) {this.info.bzcd_selected = params},
     file_rgs_dscd_change(params) {this.info.file_rgs_dscd_selected = params},
+
+    // 화면 init
+    init() {
+      this.$children[0].$data.file_rgs_dscd_selected = this.info.file_rgs_dscd_selected
+    },
 
     // 조회
     fnSearch() {

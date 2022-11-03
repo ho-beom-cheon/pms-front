@@ -16,6 +16,7 @@
           <button class="btn btn-filter-p" style="margin-top: 5px" @click="fnSearch">재조회</button>
         </ul>
         <ul class="filter-btn" >
+          <button class="btn btn-filter-d" @click="batchDownload">첨부파일일괄다운로드ⓘ</button>
           <button class="btn btn-filter-d" :hidden="prjt_gbn"
                   style="margin-left: 10px;"
                   @click="open_file_page(3)">설계산출물 양식 ⓘ
@@ -313,6 +314,11 @@ export default {
       this.detail.rgs_nm = sessionStorage.getItem("LOGIN_EMP_NM")  // (상세)등록자번호
       this.detail.atfl_mng_id = ''                                      // (상세)첨부파일관리ID
       this.detail.del_yn = false                                        // 공지사항 삭제 체크박스
+    },
+    // 첨부파일 일괄다운로드
+    batchDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = 'TTT' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
     },
     fnSave() {
       //백업ID가 현재 일 때만 저장
