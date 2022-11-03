@@ -26,6 +26,7 @@
       <section class="page-contents">
         <section class="filter">
           <ul class="filter-btn">
+            <button class="btn btn-filter-d" @click="batchDownload">첨부파일일괄다운로드ⓘ</button>
             <button class="btn btn-filter-e" style="margin-left: 20px;" @click="fnOpenModal(1)">최상위폴더생성</button>
           </ul>
         </section>
@@ -241,6 +242,11 @@ export default {
         this.fnOpenModal(3);
       }
     },
+    // 첨부파일 일괄다운로드
+    batchDownload(){
+      let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), file_rgs_dscd = '805' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
+    },
 
     fnSave() {
       if(this.modalSno ==  '1') {  // 상위생성 클릭 후 저장버튼
@@ -455,13 +461,14 @@ export default {
         {
           header: '폴더(등록건수)',
           align: 'left',
+          width: 550,
           name: 'dis_fld_nm',
           whiteSpace: 'pre',
           filter: 'text',
         },
         {
           header: '비고',
-          width: 460,
+          width: 800,
           align: 'left',
           name: 'rmrk',
           editor: 'text',
