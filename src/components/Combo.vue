@@ -1402,6 +1402,9 @@ export default {
               } else if (i === 24) {
                 this.CD1000000024T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000024N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 25) {
+                this.CD1000000025T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000025N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 26) {
                 this.CD1000000026T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000026N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -1683,7 +1686,13 @@ export default {
           if(this.CD1000000019.length !== 0)   this.wbs_mng_cd_selected          = this.CD1000000019[0].value
           if(this.CD1000000021T.length !== 0)  this.check_cd_selected            = this.CD1000000021T[0].value
           if(this.CD1000000022T.length !== 0)  this.file_cd_selected             = this.CD1000000022T[0].value
-          if(this.CD1000000025T.length !== 0)  this.file_rgs_dscd_selected       = this.CD1000000025T[0].value
+          if(this.CD1000000025T.length !== 0) {
+            if(this.$route.query.file_rgs_dscd !== '') {
+              this.file_rgs_dscd_selected = this.$route.query.file_rgs_dscd
+            } else {
+              this.file_rgs_dscd_selected = this.CD1000000025T[0].value
+            }
+          }
           if(this.CD1000000026T.length !== 0)  this.itg_tst_prc_cd_selected      = this.CD1000000026T[0].value
           if(this.CD1000000027T.length !== 0)  this.bkup_id_selected             = this.CD1000000027T[0].value
           if(this.CD1000000035T.length !== 0)  this.wbs_prc_sts_cd_selected      = this.CD1000000035T[0].value
