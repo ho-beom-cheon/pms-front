@@ -1157,6 +1157,7 @@ export default {
           width: 200,
           align: 'left',
           name: 'tst_case_nm',
+          editor: 'text',
           filter: 'text',
         },
         {
