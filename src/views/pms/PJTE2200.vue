@@ -681,23 +681,38 @@ export default {
                 return false;
               }
             }
-            if(this.untValidation(data,data[i].scnr_id) === false && (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100") )  { alert(pgm_nm + " 통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
+            if(this.untValidation(data[i].unt_tst_yn, data[i].scnr_id, data[i].tst_case_id) === false && (data[i].itg_tst_prc_cd !== "000" && data[i].itg_tst_prc_cd !== "100") )  { alert(pgm_nm + " 통합테스트결과서 증빙은 필수 입력 사항입니다");   return false;}
           }
         }
       }
       return  true;
     },
     // 통합테스트 시나리오 증빙 여부 검증
-    untValidation(data,scnr_id) {
-      let unt_tst_yn = false
-      for(let i=0; i<data.length; i++) {
-        let sh_scnr_id = data[i].scnr_id
-        let atfl_mng_id = data[i].atfl_mng_id
-        if(sh_scnr_id === scnr_id && atfl_mng_id != ''){
-          unt_tst_yn = true
+    untValidation(ch_unt_tst_yn, scnr_id, tst_case_id) {
+      console.log("ch_unt_tst_yn:"+ch_unt_tst_yn)
+      console.log("scnr_id:"+scnr_id)
+      console.log("tst_case_id:"+tst_case_id)
+
+      this.gridData = this.$refs.grid.invoke("getData");
+
+      for(let i=0; i<this.gridData.length; i++) {
+        let sh_scnr_id = this.gridData[i].scnr_id
+        let sh_tst_case_id = this.gridData[i].tst_case_id
+        let atfl_mng_id = this.gridData[i].atfl_mng_id
+        console.log("sh_scnr_id:"+sh_scnr_id)
+        console.log("sh_tst_case_id:"+tst_case_id)
+        console.log("atfl_mng_id:"+atfl_mng_id)
+        if(ch_unt_tst_yn === "Y") {
+          if (sh_scnr_id === scnr_id && atfl_mng_id != '') {
+            return true;
+          }
+        } else {
+          if (sh_tst_case_id === tst_case_id && atfl_mng_id != '') {
+            return true;
+          }
         }
       }
-        return  unt_tst_yn;
+        return  false;
     },
     onGridUpdated(grid){
       this.$refs.grid.invoke("addColumnClassName", "rmrk", "disableColor");
