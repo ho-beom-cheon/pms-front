@@ -71,7 +71,12 @@
           </div>
           <div class="div0-a">
             <div class="div3-a">
-              <div class="div-header-a"><h2>공지사항</h2>
+              <div class="div-header"><h2>공지사항</h2>
+                <ul class="filter-btn">
+                  <div class="btn btn-filter-e">
+                    <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+                  </div>
+                </ul>
               </div>
               <div class="div-grid-a">
                 <grid
@@ -418,6 +423,25 @@ export default {
       this.detail.ntar_bzcd_selected = this.$refs.combo2.$data.CD1000000018T[0].value     //(상세)공지업무
       this.$refs.combo2.$data.ntar_bzcd_selected = this.$refs.combo2.$data.CD1000000018T[0].value
     },
+
+    gridExcelExport() {
+      this.$refs.grid3.invoke("showColumn",'ancpt');
+      this.$refs.grid3.invoke("export", "xlsx",{fileName: "공지사항_"+this.getCurrentYyyymmdd(),useFormattedValue : true} );
+      this.$refs.grid3.invoke("hideColumn",'ancpt');
+    },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
+
     onClick(ev) {
       // TO-DO현황 ROW클릭 시 클릭한ROW의 rowNum으로 TO-DO상세내역 재조회
       if (ev.columnName == 'todo_nm' || ev.columnName == 'proc_cnt' || ev.columnName == 'btn_nm') {
@@ -724,6 +748,13 @@ export default {
           align: 'left',
           name: 'titl_txt',
           filter: { type: 'text'},
+        },
+        {
+          header: '공지사항',
+          width: 0,
+          align: 'left',
+          name: 'ancpt',
+          hidden: true,
         },
       ],
     }
