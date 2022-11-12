@@ -317,7 +317,7 @@ export default {
         prjt_id : this.prjt_id,
         req_dscd : this.req_dscd_selected,
         reqpe_no : this.reqpe_no,
-        // req_dt : this.req_dt,
+        prcpe_no : this.prcpe_no,
         req_txt : this.req_txt,
         login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO')
 
