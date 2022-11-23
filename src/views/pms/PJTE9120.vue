@@ -42,8 +42,9 @@
           <div class="div-header">
             <h2 v-if="this.info.prjt_nm_selected === '0000000003'">진행중 프로젝트내역</h2>
             <h2 v-else>게시내역</h2>
-            <ul class="filter-btn" v-bind:hidden="this.listYn">
-              <button class="btn btn-filter-p" style="margin-left: 10px"><router-link tag="a" to="/PJTE9110">KMS게시판가기</router-link></button>
+            <ul class="filter-btn">
+              <button class="btn btn-filter-p" v-bind:hidden="this.listYn" style="margin-left: 10px"><router-link tag="a" to="/PJTE9110">KMS게시판가기</router-link></button>
+              <button class="btn btn-filter-p" style="margin-left: 20px;" @click="fnSearch">조회</button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
