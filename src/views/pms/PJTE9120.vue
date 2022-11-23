@@ -233,8 +233,8 @@
                        style="width: 400px; margin-right: 70px;"
                 >
                 <div style="float: right">
-                  <button id="crpenm-new1" class="btn btn-filter-e" @click="fnSave(4)" style="margin-right: 5px" >신규</button>
-                  <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >등록</button>
+                  <button id="crpenm-new1" class="btn btn-filter-e" @click="fnSave(4)" style="margin-right: 5px" >댓글신규추가</button>
+                  <button id="crpenm-edit1" class="btn btn-filter-p" @click="fnSave(1)" style="margin-right: 5px" >하위댓글등록</button>
                   <button id="crpenm-close1" class="btn btn-filter-b" @click="fnCloseModal(1)">닫기</button>
                 </div>
               </td>
