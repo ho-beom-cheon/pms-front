@@ -174,10 +174,15 @@
         <br>
         <!--   모달 추가(댓글 추가(댓글내역), 댓글 삭제 추가(비밀번호 입력), 답글정보 추가    -->
         <Modal :show.sync="modals.txt_modal1" class="modal_main">
-          <div class="modal-pop-body">
+          <div class="div-header">
             <h2>
               댓글내역
             </h2>
+            <ul class="filter-btn">
+              <div class="btn btn-filter-e">
+                <a href="#" @click="gridExcelExport">엑셀다운로드</a>
+              </div>
+            </ul>
           </div>
           <hr>
           <table>
@@ -195,7 +200,7 @@
                 :header="header3"
                 :columns="columns3"
                 @click="onClick3"
-                :bodyHeight="300"
+                :bodyHeight="500"
                 :bodyWidth="600"
                 :width="800"
                 :showDummyRows="showDummyRows"
@@ -217,12 +222,15 @@
             </colgroup>
             <tbody>
             <tr>
-              <th>댓글</th>
+              <th style="vertical-align: middle">댓글</th>
               <td>
-                <input type="text"
-                       v-model="detail.cmnt_titl"
-                       style="width: 740px;"
-                >
+                <textarea cols="145"
+                          rows="10"
+                          style="width: 100%; height: 50px; line-height: normal;"
+                          placeholder="댓글내용을 입력해주세요"
+                          v-model="detail.cmnt_titl"
+                          ref="ancpt"
+                ></textarea>
               </td>
             </tr>
             <tr>
@@ -504,6 +512,21 @@ export default {
         this.$refs.grid1.invoke("hideColumn",'cmnt_btn')
       }
     },
+    gridExcelExport() {
+      this.$refs.grid3.invoke("export", "xlsx",{fileName: "댓글내역_"+this.getCurrentYyyymmdd(),useFormattedValue : true} );
+    },
+
+    getCurrentYyyymmdd() {
+      let date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth()+1;
+      let day = ("0" + date.getDate()).slice(-2);
+
+      if(month < 10){
+        month = "0"+month;
+      }
+      return year + '-' +  month + '-' + day;
+    },
 
     onGridUpdated1(grid){
       this.$refs.grid2.invoke("addColumnClassName","del_btn", "del-btn-img");
@@ -580,6 +603,12 @@ export default {
         document.getElementById("gridKey").value = "3"
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
+      } else if(ev.columnName == 'cmnt_titl') {
+        this.curRow = ev.rowKey;
+        const currentRowData = (this.$refs.grid3.invoke("getRow", this.curRow));
+        if (currentRowData != null) {
+          this.cellDataBind3(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+        }
       }
     },
 
@@ -825,6 +854,11 @@ export default {
       this.detail.post_dsc = currentRowData.post_dsc;                // (상세)게시글설명
       this.detail.atfl_mng_id = currentRowData.atfl_mng_id;          // (상세)첨부파일관리 ID
       this.detail.org_file_nm = currentRowData.org_file_nm;          // (상세)첨부피일명
+    },
+
+    /* 게시내역 Row dblClick 시 게시정보에 Bind */
+    cellDataBind3(currentRowData) {
+      this.detail.cmnt_titl   = currentRowData.cmnt_titl
     },
 
     // 조회한 데이터로 게시내역 데이터 바인딩
