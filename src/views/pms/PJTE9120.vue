@@ -346,7 +346,6 @@ class CustomRenderer1 {
   constructor(props) {
     const el = document.createElement('img');
     el.src = 'some-image-link';
-
     this.el = el;
     this.render(props);
   }
