@@ -200,6 +200,7 @@
                 :header="header3"
                 :columns="columns3"
                 @click="onClick3"
+                @dblclick="dblonClick3"
                 :bodyHeight="500"
                 :bodyWidth="600"
                 :width="800"
@@ -602,7 +603,18 @@ export default {
         document.getElementById("gridKey").value = "3"
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
-      } else if(ev.columnName == 'cmnt_titl') {
+      } else {
+        this.detail.cmnt_titl = "";
+      }
+    },
+
+    dblonClick3(ev) {  // 그리드 셀 더블클릭 시 선택버튼 클릭
+      // 현재 Row 가져오기
+      this.curRow = ev.rowKey;
+      let gridRow = this.$refs.grid3.invoke("getRow",this.curRow);
+      const currentCellData = (this.$refs.grid3.invoke("getFocusedCell"));
+
+      if(ev.columnName != 'del_btn') {
         this.curRow = ev.rowKey;
         const currentRowData = (this.$refs.grid3.invoke("getRow", this.curRow));
         if (currentRowData != null) {
@@ -1019,6 +1031,7 @@ export default {
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: false,
+      open: false,
       editingEvent : "click",
 
       /* 그리드 상세보기 및 등록 모달 속성 */
@@ -1253,9 +1266,9 @@ export default {
         {
           header: '댓글',
           align: 'left',
-          name: 'cmnt_titl',
-          editor: 'text',
+          name: 'cmnt_titl1',
           filter: 'text',
+          editor: 'text',
           whiteSpace: 'pre',
         },
         {
@@ -1322,6 +1335,13 @@ export default {
           width: 70,
           align: 'right',
           name: 'prjt_id',
+          editor: 'text',
+          hidden: true,
+        },
+        {
+          header: '댓글',
+          align: 'left',
+          name: 'cmnt_titl',
           editor: 'text',
           hidden: true,
         },
