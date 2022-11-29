@@ -227,7 +227,7 @@
               <td>
                 <textarea cols="145"
                           rows="10"
-                          style="width: 100%; height: 50px; line-height: normal;"
+                          style="width: 100%; height: 140px; line-height: normal;"
                           placeholder="댓글내용을 입력해주세요"
                           v-model="detail.cmnt_titl"
                           ref="ancpt"
@@ -240,7 +240,7 @@
                 <input type="text"
                        placeholder="비밀번호를 입력해주세요."
                        v-model="detail.txt_psw_comment"
-                       style="width: 400px; margin-right: 70px;"
+                       style="width: 150px; margin-right: 70px;"
                 >
                 <div style="float: right">
                   <button id="crpenm-new1" class="btn btn-filter-e" @click="fnSave(4)" style="margin-right: 5px" >댓글신규추가</button>
