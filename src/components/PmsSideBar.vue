@@ -89,7 +89,8 @@
               <li id="PJTE9200"><a href="/PJTE9200">{{ menu_list[13].name }}</a></li>
               <li id="PJTE9400"><a href="/PJTE9400">{{ menu_list[14].name }}</a></li>
               <li id="PJTE9120"><a href="/PJTE9120">{{ menu_list[15].name }}</a></li>
-              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[16].name }}</a></li>
+              <li id="PJTE7200"><a href="/PJTE7200">{{ menu_list[16].name }}</a></li>
+              <li id="PJTE9000" v-if ="this.LoginAutCd === '500' || this.LoginAutCd === '600' || this.LoginAutCd === '900'"><a href="/PJTE9000">{{ menu_list[17].name }}</a></li>
             </ul>
 
           </div>
@@ -210,6 +211,11 @@ export default {
           id: 'PJTE9120',
           path: '/PJTE9120',
           name: '프로젝트개발자게시판'
+        },
+        {
+          id: 'PJTE7200',
+          path: '/PJTE7200',
+          name: '배포요청관리'
         },
         {
           id: 'PJTE9000',

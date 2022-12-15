@@ -91,6 +91,7 @@ export default {
         {id: 'PJTE7100', path: '/PJTE7100', name: 'As-Is대To-Be매핑관리'},
         {id: 'PJTE9300', path: '/PJTE9300', name: '프로젝트인력요청현황'},
         {id: 'PJTE9400', path: '/PJTE9400', name: '파일관리'},
+        {id: 'PJTE7200', path: '/PJTE7200', name: '배포요청관리'},
       ],
       menu_list2: [
         {id: 'PJTE1000', path: '/PJTE1000', name: '공지사항'},

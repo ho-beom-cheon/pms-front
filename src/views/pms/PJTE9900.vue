@@ -372,18 +372,6 @@ export default {
       }
       return year + '-' + month;
     },
-    // YYYYMMDD 형태의 현재 년월일을 구하는 함수
-    getCurrentYyyymmdd() {
-      let date = new Date();
-      let year = date.getFullYear();
-      let month = date.getMonth()+1;
-      let day = ("0" + date.getDate()).slice(-2);
-
-      if(month < 10){
-        month = "0"+month;
-      }
-      return year + '-' +  month + '-' + day;
-    },
     // 저장 버튼
     fnSave() {
       // 변경 사항 유무 체크

@@ -1012,6 +1012,41 @@
       </div>
     </li>
     <!-- As-Is대To-Be매핑 끝 -->
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C57'">
+      <div class="item-con"  style   = "margin-left : 20px">배포구분
+        <select
+            id      = "dstr"
+            v-model = "dstr_selected"
+            style   = "width: 130px;margin-left : 5px"
+            @change = "dstr_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000057"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+
+    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C58'">
+      <div class="item-con"  style   = "margin-left : 20px">배포요청상태
+        <select
+            id      = "prcs_stts_cd"
+            v-model = "prcs_stts_cd_selected"
+            style   = "width: 130px;margin-left : 5px"
+            @change = "prcs_stts_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000058"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
   </div>
 </template>
 
@@ -1080,6 +1115,8 @@ export default {
     this.as_pgm_dis_cd_changeT()
     this.trn_stt_cd_change()
     this.mtng_prc_step_cd_change()
+    this.dstr_change()
+    this.prcs_stts_cd_change()
   },
   data() {
     return {
@@ -1140,6 +1177,8 @@ export default {
       CD1000000053T : [],  CD1000000053N : [], CD1000000053 : [],
       CD1000000054T : [],  CD1000000054N : [], CD1000000054 : [],
       CD1000000055T : [],  CD1000000055N : [], CD1000000055 : [],
+      CD1000000057T : [],  CD1000000057N : [], CD1000000057 : [],
+      CD1000000058T : [],  CD1000000058N : [], CD1000000058 : [],
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
@@ -1266,6 +1305,11 @@ export default {
       trn_stt_cd_selected : "",
       // 회의진행상태
       mtng_prc_step_cd_selected : "",
+      // 배포구분
+      dstr_selected : "",
+      // 배포요청상태
+      prcs_stts_cd_selected : "",
+
     }
   },
   methods: {
@@ -1336,6 +1380,8 @@ export default {
     as_pgm_dis_cd_changeT()         {  this.$emit('as_pgm_dis_cd_changeT',         this.as_pgm_dis_cd_selectedT)},        // As-Is프로그램유형
     trn_stt_cd_change()             {  this.$emit('trn_stt_cd_change',             this.trn_stt_cd_selected)},           // 전환상태
     mtng_prc_step_cd_change()       {  this.$emit('mtng_prc_step_cd_change',       this.mtng_prc_step_cd_selected)},     // 회의진행상태
+    dstr_change()                   {  this.$emit('dstr_change',                   this.dstr_selected)},                 // 배포구분
+    prcs_stts_cd_change()           {  this.$emit('prcs_stts_cd_change',           this.prcs_stts_cd_selected)},         // 배포요청상태
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -1468,6 +1514,12 @@ export default {
               } else if (i === 55) {
                 this.CD1000000055T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000055N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 57) {
+                this.CD1000000057T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000057N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 58) {
+                this.CD1000000058T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000058N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               }
             }
             if(i === 0) {
@@ -1659,6 +1711,14 @@ export default {
               this.CD1000000055T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000055N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000055.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 57) {
+              this.CD1000000057T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000057N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000057.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if(i === 58) {
+              this.CD1000000058T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
+              this.CD1000000058N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000058.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
             }
             this.set_yn = "Y";
             this.row++;
@@ -1742,6 +1802,8 @@ export default {
           if(this.CD1000000053N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000053N[0].value
           if(this.CD1000000054N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000054N[0].value
           if(this.CD1000000055N.length !== 0)   this.mtng_prc_step_cd_selected  = this.CD1000000055N[0].value
+          if(this.CD1000000057N.length !== 0)   this.dstr_selected              = this.CD1000000057N[0].value
+          if(this.CD1000000058N.length !== 0)   this.prcs_stts_cd_selected      = this.CD1000000058N[0].value
         }
         this.setCdAll()
       }
@@ -1804,6 +1866,8 @@ export default {
       this.cd_all.push(this.CD1000000053N)
       this.cd_all.push(this.CD1000000054N)
       this.cd_all.push(this.CD1000000055N)
+      this.cd_all.push(this.CD1000000057N)
+      this.cd_all.push(this.CD1000000058N)
     },
     init()  {
       //백업ID, 프로젝트명(권한ID '500','600'경우 활성화)
@@ -1897,6 +1961,8 @@ export default {
             "1000000053",
             "1000000054",
             "1000000055",
+            "1000000057",
+            "1000000058",
           ];
 
       // 조회영역 권한 체크
