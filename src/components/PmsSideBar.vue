@@ -218,6 +218,11 @@ export default {
           name: '프로젝트개발자게시판'
         },
         {
+          id: 'PJTE7200',
+          path: '/PJTE7200',
+          name: '배포요청관리'
+        },
+        {
           id: 'PJTE9000',
           path: '/PJTE9000',
           name: '시스템관리'
