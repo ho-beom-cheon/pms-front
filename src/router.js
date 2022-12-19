@@ -31,6 +31,7 @@ const PJTE6000 = () => import(/* webpackChunkName: "PJTE6000" */ './views/pms/PJ
 const PJTE6001 = () => import(/* webpackChunkName: "PJTE6001" */ './views/pms/PJTE6001.vue'); menuList.push(PJTE6001); menuListStr.push("PJTE6001");
 const PJTE7000 = () => import(/* webpackChunkName: "PJTE7000" */ './views/pms/PJTE7000.vue'); menuList.push(PJTE7000); menuListStr.push("PJTE7000");
 const PJTE7100 = () => import(/* webpackChunkName: "PJTE7100" */ './views/pms/PJTE7100.vue'); menuList.push(PJTE7100); menuListStr.push("PJTE7100");
+const PJTE7200 = () => import(/* webpackChunkName: "PJTE7200" */ './views/pms/PJTE7200.vue'); menuList.push(PJTE7200); menuListStr.push("PJTE7200");
 const PJTE8000 = () => import(/* webpackChunkName: "PJTE8000" */ './views/pms/PJTE8000.vue'); menuList.push(PJTE8000); menuListStr.push("PJTE8000");
 const PJTE8100 = () => import(/* webpackChunkName: "PJTE8100" */ './views/pms/PJTE8100.vue'); menuList.push(PJTE8100); menuListStr.push("PJTE8100");
 const PJTE9000 = () => import(/* webpackChunkName: "PJTE9000" */ './views/pms/PJTE9000.vue'); menuList.push(PJTE9000); menuListStr.push("PJTE9000");
@@ -67,7 +68,6 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
 
   // 첫 로그인 화면
   if("/login".indexOf(menuListStr[idx]) > 0){
-    console.log("tmpObj ::",tmpObj);
     tmpObj.components = {default: menuList[idx]};
     tmpObj.meta = {authRequired : false}
     tmpObj.props = true
@@ -82,7 +82,6 @@ for (var idx = 0; idx < menuListStr.length; idx++) {
     }
   } else {
     tmpObj.components = {header: PmsHeader, footer: PmsFooter, default: menuList[idx]};
-    console.log("aaaaaaS : " + sessionStorage.getItem("jwt-auth-token"))
     if(sessionStorage.getItem("jwt-auth-token")){
       tmpObj.meta = {authRequired : false}
     } else {
