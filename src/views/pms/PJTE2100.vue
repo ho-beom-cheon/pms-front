@@ -1040,8 +1040,7 @@ export default {
         login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
         login_bzcd            : sessionStorage.getItem("LOGIN_BZCD"),
         login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO"),
-        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),
-      },
+        login_proj_id         : sessionStorage.getItem("LOGIN_PROJ_ID"),      },
 
       updatedRows : this.updatedRows,
       deletedRows : this.deletedRows,
