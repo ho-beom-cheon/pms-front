@@ -1013,23 +1013,23 @@
     </li>
     <!-- As-Is대To-Be매핑 끝 -->
 
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C57'">
-      <div class="item-con"  style   = "margin-left : 20px">배포구분
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C57'">
+      <div class="item-con">배포구분
         <select
             id      = "dstr"
-            v-model = "dstr_selected"
-            style   = "width: 130px;margin-left : 5px"
-            @change = "dstr_change"
+            v-model = "bkup_id_selected"
+            style   = "width: 120px"
+            @change = "bkup_id_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000057"
+              v-for  = "(item, idx) in CD1000000057T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
           ></option>
         </select>
       </div>
-
+    </li>
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C58'">
       <div class="item-con"  style   = "margin-left : 20px">배포요청상태
         <select

@@ -31,6 +31,10 @@
               >
             </div>
           </li>
+          <combo
+              :comboArray = "this.comboList2"
+              @prcs_stts_cd_change="prcs_stts_cd_change"
+          ></combo>
           <li class="filter-item-n">
             <div class="input-searchWrap">요청자
               <input type="text"
@@ -372,7 +376,7 @@ export default {
     // Combo.vue 에서 받아온 값
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},            // 프로젝트
     bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
-
+    prcs_stts_cd_change(params)   {this.info.prcs_stts_cd_selected = params},       // 배포구분
     // 화면 init
     init() {
       // 그리드 초기화
@@ -731,8 +735,8 @@ export default {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       infocomboList1: ["C-51T"],
       comboList: ["C0", "C27"],
-      comboList2: ["C-51"],
-      comboList3: ["C-52"],
+      comboList2: ["C57"],
+      comboList3: ["C-57", "C-58"],
 
       gridData: [],
       newCheck: 'Y',
@@ -741,6 +745,7 @@ export default {
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID
+        prcs_stts_cd_selected : this.$store.state.pms.CD1000000057,
 
         reqer_nm : '', //요청자이름
         reqer_no : '', //요청자번호
@@ -750,6 +755,7 @@ export default {
         rever_no : '', //검토자번호
         req_day  : '', //요청일자
         dpm_day  : '', //배포일자
+        cmpl_yn  : 'N', //완료건 포함여부
       },
       detail: {
         req_id    : '',
@@ -795,7 +801,7 @@ export default {
       // toast ui grid 데이터
       dataSource: {
         api: {
-          readData: {url: process.env.VUE_APP_API + '/PJTE7100/select_7100_01', method: 'GET'},
+          readData: {url: process.env.VUE_APP_API + '/PJTE7200/select_7200_01', method: 'GET'},
         },
         initialRequest: false,
         contentType: 'application/json;',
@@ -852,7 +858,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000002N
+              listItems: this.$store.state.pms.CD1000000057N
             }
           }
         },
@@ -866,7 +872,7 @@ export default {
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000002N
+              listItems: this.$store.state.pms.CD1000000058N
             }
           },
         },
