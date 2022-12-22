@@ -19,7 +19,7 @@
             <div class="input-dateWrap">요청일자
               <input  type="date"
                       style="width: 125px"
-                      v-model="info.req_day"
+                      v-model="info.rqs_dt"
               >
             </div>
           </li>
@@ -27,19 +27,19 @@
             <div class="item-con">배포일시
               <input  type="text"
                       style="width: 125px"
-                      v-model="info.dpm_day"
+                      v-model="info.rls_dt"
               >
             </div>
           </li>
           <combo
-              :comboArray = "this.comboList2"
-              @prcs_stts_cd_change="prcs_stts_cd_change"
+              :comboArray2= "this.comboList2"
+              @dstr_change="dstr_change"
           ></combo>
           <li class="filter-item-n">
             <div class="input-searchWrap">요청자
               <input type="text"
                      placeholder="직원명"
-                     v-model="info.reqer_nm"
+                     v-model="info.rqs_nm"
                      style="width: 90px"
                      @keyup.enter="open_pjte9001(1)"
               >
@@ -51,7 +51,7 @@
           <li class="filter-item">
             <input type="text"
                    placeholder="직원번호"
-                   v-model="info.reqer_no"
+                   v-model="info.rqs_no"
                    style="width: 90px; background-color: #f2f2f2;"
                    :disabled=true
             >
@@ -60,18 +60,17 @@
             <div class="input-searchWrap">검토자
               <input type="text"
                      placeholder="직원명"
-                     v-model="info.rever_nm"
+                     v-model="info.rvw_nm"
                      style="width: 90px"
                      @keyup.enter="open_pjte9001(2)"
               >
-              <button class="search-btn"
-                      @click="open_pjte9001_btn(2)"              ></button>
+              <button class="search-btn" @click="open_pjte9001_btn(2)"></button>
             </div>
           </li>
           <li class="filter-item">
             <input type="text"
                    placeholder="직원번호"
-                   v-model="info.rever_no"
+                   v-model="info.rvw_no"
                    style="width: 90px; background-color: #f2f2f2;"
                    :disabled=true
             >
@@ -80,7 +79,7 @@
             <div class="input-searchWrap">승인자
               <input type="text"
                      placeholder="직원명"
-                     v-model="info.apper_nm"
+                     v-model="info.aprv_nm"
                      style="width: 90px"
                      @keyup.enter="open_pjte9001(3)"
               >
@@ -92,10 +91,16 @@
           <li class="filter-item">
             <input type="text"
                    placeholder="직원번호"
-                   v-model="info.apper_no"
+                   v-model="info.aprv_no"
                    style="width: 90px; background-color: #f2f2f2;"
                    :disabled=true
             >
+          </li>
+          <li class="filter-item">
+            <div class="item-con">
+              <input type="checkbox" id="cmpl_yn" v-model="cmpl_yn">
+              <label>　완료건 포함</label>
+            </div>
           </li>
         </ul>
       </section>
@@ -139,7 +144,7 @@
                 <div class="item-con" >요청ID
                   <input type="text"
                          id      = "as_pgm_id"
-                         v-model="detail.req_id"
+                         v-model="detail.rqs_id"
                          style= "width: 180px; margin-left: 5px; background-color: #f2f2f2;"
                          :disabled=true
                   >
@@ -148,7 +153,7 @@
               <li class="filter-item">
                 <div class="item-con">요청일자
                   <input type="date"
-                         v-model="detail.req_dt"
+                         v-model="detail.rqs_dt"
                          style= "width: 150px; margin-left: 5px; background-color: #f2f2f2;"
                          :disabled=true
                   >
@@ -158,38 +163,23 @@
                 <div class="item-con" >배포일시
                   <input type="text"
                          ref="address"
-                         v-model="detail.dpm_dt"
+                         v-model="detail.rls_dt"
                          style="width: 150px; margin-left: 5px;"
                   >
                 </div>
               </li>
-              <li class="filter-item"  style="margin-left: 6px">
-                <div class="item-con" >배포구분
-                  <input type="text"
-                         placeholder="입력"
-                         ref="address"
-                         v-model="detail.dpm_div"
-                         style="width: 200px; margin-left: 5px"
-                  >
-                </div>
-              </li>
-              <li class="filter-item">
-                <div class="item-con" >처리상태
-                  <input type="text"
-                         placeholder="입력"
-                         ref="address"
-                         v-model="detail.proc_stat"
-                         style="width: 200px; margin-left: 5px"
-                  >
-                </div>
-              </li>
+              <combo
+                  :comboArray3 = "this.comboList3"
+                  @prcs_stts_cd_change="prcs_stts_cd_change"
+                  @dstr_change="dstr_change"
+              ></combo>
             </ul>
             <ul class="filter-con clear-fix" style="width: 100%; margin-left:10px">
               <li class="filter-item-n" >
                 <div class="input-searchWrap">요청자
                   <input type="text"
                          placeholder="직원명"
-                         v-model="detail.reqer_nm"
+                         v-model="detail.rqs_nm"
                          style="width: 90px; margin-left:5px"
                          @keyup.enter="open_pjte9001(2)"
                   >
@@ -201,7 +191,7 @@
               <li class="filter-item">
                 <input type="text"
                        placeholder="직원번호"
-                       v-model="detail.reqer_no"
+                       v-model="detail.rqs_no"
                        style="width: 90px; background-color: #f2f2f2;"
                        :disabled=true
                 >
@@ -210,7 +200,7 @@
                 <div class="input-searchWrap">검토자
                   <input type="text"
                          placeholder="직원명"
-                         v-model="detail.rever_nm"
+                         v-model="detail.rvw_nm"
                          style="width: 90px; margin-left:5px"
                          @keyup.enter="open_pjte9001(2)"
                   >
@@ -222,7 +212,7 @@
               <li class="filter-item">
                 <input type="text"
                        placeholder="직원번호"
-                       v-model="detail.rever_no"
+                       v-model="detail.rvw_no"
                        style="width: 90px; background-color: #f2f2f2;"
                        :disabled=true
                 >
@@ -231,7 +221,7 @@
                 <div class="input-searchWrap">승인자
                   <input type="text"
                          placeholder="직원명"
-                         v-model="detail.apper_nm"
+                         v-model="detail.aprv_nm"
                          style="width: 90px; margin-left:5px"
                          @keyup.enter="open_pjte9001(2)"
                   >
@@ -243,7 +233,7 @@
               <li class="filter-item">
                 <input type="text"
                        placeholder="직원번호"
-                       v-model="detail.apper_no"
+                       v-model="detail.aprv_no"
                        style="width: 90px; background-color: #f2f2f2;"
                        :disabled=true
                 >
@@ -334,14 +324,14 @@ import XLSX from "xlsx";
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id) => {
   if(btn_id === '1'){           // info
-    window.pms_register.info.reqer_nm = empnm
-    window.pms_register.info.reqer_no = empno
+    window.pms_register.info.rqs_nm = empnm
+    window.pms_register.info.rqs_no = empno
   } else if(btn_id === '2'){   // detail
-    window.pms_register.info.rever_nm = empnm
-    window.pms_register.info.rever_no = empno
+    window.pms_register.info.rvw_nm = empnm
+    window.pms_register.info.rvw_no = empno
   } else if(btn_id === '3'){   // detail
-    window.pms_register.info.apper_nm = empnm
-    window.pms_register.info.apper_no = empno
+    window.pms_register.info.aprv_nm = empnm
+    window.pms_register.info.aprv_no = empno
   }
 }
 
@@ -377,6 +367,7 @@ export default {
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},            // 프로젝트
     bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
     prcs_stts_cd_change(params)   {this.info.prcs_stts_cd_selected = params},       // 배포구분
+    dstr_change(params)         {this.info.dstr_selected = params},                 // 배포요청상태
     // 화면 init
     init() {
       // 그리드 초기화
@@ -520,9 +511,12 @@ export default {
 
     // 조회한 데이터로 인적사항 데이터 바인딩
     cellDataBind(currentRowData) {
-      this.detail.req_id                                 = currentRowData.req_id                     // 요청 ID
+      this.detail.rqs_id                                 = currentRowData.rqs_id                     // 요청 ID
       this.detail.rmrk                                   = currentRowData.rmrk                       // 비고
       // this.$refs.combo2.$data.as_pgm_dis_cd_selected  = currentRowData.as_pgm_dis_cd              // as-is프로그램유형
+    },
+    cmpl_yn () {
+      this.cmpl_yn ? this.info.cmpl_yn = 'Y' : this.info.cmpl_yn = 'N';
     },
 
     //직원조회 버튼 클릭 시
@@ -530,11 +524,11 @@ export default {
       let empnm = ''
 
       if (btn_id == '1') {
-        empnm = this.info.reqer_nm
+        empnm = this.info.rqs_nm
       } else if (btn_id == '2') {
-        empnm = this.info.rever_nm
+        empnm = this.info.rvw_nm
       } else if (btn_id == '3') {
-        empnm = this.info.apper_nm
+        empnm = this.info.aprv_nm
       }
 
       if((empnm === '' || empnm == null || empnm === undefined)) {
@@ -553,11 +547,11 @@ export default {
       let bkup_id_selected = this.info.bkup_id_selected
 
       if (btn_id == '1') {
-        empnm = this.info.reqer_nm
+        empnm = this.info.rqs_nm
       } else if (btn_id == '2') {
-        empnm = this.info.rever_nm
+        empnm = this.info.rvw_nm
       } else if (btn_id == '3') {
-        empnm = this.info.apper_nm
+        empnm = this.info.aprv_nm
       }
 
       if (empnm != null && empnm != '') {
@@ -573,14 +567,14 @@ export default {
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
 
-                  this.info.reqer_no = res.data.data.contents[0].empno
-                  this.info.reqer_nm = res.data.data.contents[0].empnm
+                  this.info.rqs_no = res.data.data.contents[0].empno
+                  this.info.rqs_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
-                  this.detail.dvlpe_no = res.data.data.contents[0].empno
-                  this.detail.dvlpe_nm = res.data.data.contents[0].empnm
+                  this.info.rvw_no = res.data.data.contents[0].empno
+                  this.info.rvw_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '3') {
-                  this.detail.dvlpe_no = res.data.data.contents[0].empno
-                  this.detail.dvlpe_nm = res.data.data.contents[0].empnm
+                  this.info.aprv_no = res.data.data.contents[0].empno
+                  this.info.aprv_nm = res.data.data.contents[0].empnm
                 }
               } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
                 let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
@@ -595,15 +589,15 @@ export default {
     },
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
-      if(this.info.reqer_nm === "") this.info.reqer_nm = "";
-      if(this.info.rever_nm === "") this.info.rever_nm = "";
-      if(this.info.apper_nm === "") this.info.apper_nm = "";
+      if(this.info.rqs_nm === "") this.info.rqs_nm = "";
+      if(this.info.rvw_nm === "") this.info.rvw_nm = "";
+      if(this.info.aprv_nm === "") this.info.aprv_nm = "";
     },
     // 직원명 삭제 시 직원번호 초기화
     setNo1() {
-      if(this.info.reqer_nm === "") this.info.reqer_no = "";
-      if(this.info.rever_nm === "") this.info.rever_no = "";
-      if(this.info.apper_nm === "") this.info.apper_no = "";
+      if(this.info.rqs_nm === "") this.info.rqs_no = "";
+      if(this.info.rvw_nm === "") this.info.rvw_no = "";
+      if(this.info.aprv_nm === "") this.info.aprv_no = "";
     },
 
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
@@ -736,42 +730,44 @@ export default {
       infocomboList1: ["C-51T"],
       comboList: ["C0", "C27"],
       comboList2: ["C57"],
-      comboList3: ["C-57", "C-58"],
+      comboList3: ["C57", "C58"],
 
       gridData: [],
       newCheck: 'Y',
       excelUplod: 'N',
+      cmpl_yn : false,
 
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID
         prcs_stts_cd_selected : this.$store.state.pms.CD1000000057,
+        dstr_selected : this.$store.state.pms.CD1000000058,
 
-        reqer_nm : '', //요청자이름
-        reqer_no : '', //요청자번호
-        apper_nm : '', //승인자이름
-        apper_no : '', //승인자번호
-        rever_nm : '', //검토자이름
-        rever_no : '', //검토자번호
-        req_day  : '', //요청일자
-        dpm_day  : '', //배포일자
+        rqs_nm : '', //요청자이름
+        rqs_no : '', //요청자번호
+        aprv_nm : '', //승인자이름
+        aprv_no : '', //승인자번호
+        rvw_nm : '', //검토자이름
+        rvw_no : '', //검토자번호
+        rqs_dt  : '', //요청일자
+        rls_dt  : '', //배포일자
         cmpl_yn  : 'N', //완료건 포함여부
       },
       detail: {
-        req_id    : '',
-        req_dt    : '',
-        dpm_dt    : '',
-        dpm_div   : '',
-        proc_stat : '',
-        req_res   : '',
+        rqs_id    : '',
+        dstr   : '',
+        prcs_stts_cd : '',
+        rsn_rqs   : '',
         rmrk      : '',
 
-        reqer_nm : '', //요청자이름
-        reqer_no : '', //요청자번호
-        apper_nm : '', //승인자이름
-        apper_no : '', //승인자번호
-        rever_nm : '', //검토자이름
-        rever_no : '', //검토자번호
+        rqs_nm : '', //요청자이름
+        rqs_no : '', //요청자번호
+        aprv_nm : '', //승인자이름
+        aprv_no : '', //승인자번호
+        rvw_nm : '', //검토자이름
+        rvw_no : '', //검토자번호
+        rqs_dt  : '', //요청일자
+        rls_dt  : '', //배포일자
 
         info_as_pgm_dis_cd: sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ? '999' : 'TTT',                                        // As-Is 프로그램 구분코드
       },
@@ -821,14 +817,14 @@ export default {
           header: '요청 ID',
           width: 250,
           align: 'center',
-          name: 'req_id',
+          name: 'rqs_id',
           editor: 'text',
           filter: 'text',
         },
         {
           header: '요청사유',
           align: 'left',
-          name: 'req_res',
+          name: 'rsn_rqs',
           editor: 'text',
           filter: 'text',
         },
@@ -836,7 +832,7 @@ export default {
           header: '요청일자',
           width: 100,
           align: 'center',
-          name: 'req_dt',
+          name: 'rqs_dt',
           editor: 'text',
           filter: 'text',
         },
@@ -844,7 +840,7 @@ export default {
           header: '배포일자',
           width: 100,
           align: 'center',
-          name: 'dpm_dt',
+          name: 'rls_dt',
           editor: 'text',
           filter: 'text',
         },
@@ -852,7 +848,7 @@ export default {
           header: '배포구분',
           width: 120,
           align: 'left',
-          name: 'dpm_div',
+          name: 'dstr',
           formatter: 'listItemText',
           filter: 'select',
           editor: {
@@ -866,7 +862,7 @@ export default {
           header: '처리상태',
           width: 120,
           align: 'center',
-          name: 'proc_stat',
+          name: 'prcs_stts_cd',
           formatter: 'listItemText',
           filter: 'select',
           editor: {
@@ -880,7 +876,7 @@ export default {
           header: '요청자',
           width: 80,
           align: 'center',
-          name: 'requester_nm',
+          name: 'rqs_nm',
           editor: 'text',
           filter: 'text',
         },
@@ -888,7 +884,7 @@ export default {
           header: '검토자',
           width: 80,
           align: 'center',
-          name: 'reviewer_nm',
+          name: 'rvw_nm',
           editor: 'text',
           filter: 'text',
         },
@@ -896,7 +892,7 @@ export default {
           header: '승인자',
           width: 80,
           align: 'center',
-          name: 'apprver_nm',
+          name: 'aprv_nm',
           editor: 'text',
           filter: 'text',
         }
@@ -923,7 +919,7 @@ export default {
         {
           header: '배포요청패키지명',
           align: 'left',
-          name: 'dpm_req_pkg_nm',
+          name: 'pck_nm',
           editor: 'text',
           filter: 'text',
         },
