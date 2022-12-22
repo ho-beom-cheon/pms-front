@@ -1011,7 +1011,7 @@
         </select>
       </div>
     </li>
-    <!-- As-Is대To-Be매핑 끝 -->
+    <!-- As-Is대To-Be매핑 끝  -->
 
     <li class="filter-item" v-for="item in this.comboList2" :key="item.id" v-if="item === 'C57'">
       <div class="item-con">배포구분
