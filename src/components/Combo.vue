@@ -1011,15 +1011,15 @@
         </select>
       </div>
     </li>
-    <!-- As-Is대To-Be매핑 끝 -->
+    <!-- As-Is대To-Be매핑 끝  -->
 
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C57'">
+    <li class="filter-item" v-for="item in this.comboList2" :key="item.id" v-if="item === 'C57'">
       <div class="item-con">배포구분
         <select
             id      = "dstr"
-            v-model = "bkup_id_selected"
+            v-model = "dstr_selected"
             style   = "width: 120px"
-            @change = "bkup_id_change"
+            @change = "dstr_change"
         >
           <option
               v-for  = "(item, idx) in CD1000000057T"
@@ -1059,6 +1059,7 @@ export default {
   props: {
     comboArray: Array,
     comboArray2: Array,
+    comboArray3: Array,
   },
   mounted () {
     this.init()
@@ -1182,6 +1183,8 @@ export default {
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
+      comboList3: this.comboArray3,
+
       code_it : [],
       cd_all : [],
       row : 0,
