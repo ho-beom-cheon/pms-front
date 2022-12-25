@@ -1013,7 +1013,26 @@
     </li>
     <!-- As-Is대To-Be매핑 끝  -->
 
-    <li class="filter-item" v-for="item in this.comboList2" :key="item.id" v-if="item === 'C57'">
+<!--    배포요청관리 시작 -->
+    <li class="filter-item" v-for="item in this.comboList2" :key="item.id" v-if="item === 'C58'">
+      <div class="item-con" style="padding-top: 2px">배포요청상태
+        <select
+            id      = "prcs_stts_cd"
+            v-model = "prcs_stts_cd_selected"
+            style   = "width: 120px;"
+            @change = "prcs_stts_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000058T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+
+    <li class="filter-item" v-for="item in this.comboList3" :key="item.id" v-if="item === 'C3-57'">
       <div class="item-con">배포구분
         <select
             id      = "dstr"
@@ -1030,16 +1049,16 @@
         </select>
       </div>
     </li>
-    <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C58'">
-      <div class="item-con"  style   = "margin-left : 20px">배포요청상태
+    <li class="filter-item-a" v-for="item in this.comboList3" :key="item.id" v-if="item === 'C3-58'">
+      <div class="item-con" style="padding-top: 2px">배포요청상태
         <select
             id      = "prcs_stts_cd"
             v-model = "prcs_stts_cd_selected"
-            style   = "width: 130px;margin-left : 5px"
+            style   = "width: 120px;"
             @change = "prcs_stts_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000058"
+              v-for  = "(item, idx) in CD1000000058T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -1047,6 +1066,7 @@
         </select>
       </div>
     </li>
+    <!--    배포요청관리 끝 -->
   </div>
 </template>
 
@@ -1178,6 +1198,7 @@ export default {
       CD1000000053T : [],  CD1000000053N : [], CD1000000053 : [],
       CD1000000054T : [],  CD1000000054N : [], CD1000000054 : [],
       CD1000000055T : [],  CD1000000055N : [], CD1000000055 : [],
+      CD1000000056T : [],  CD1000000056N : [], CD1000000056 : [],
       CD1000000057T : [],  CD1000000057N : [], CD1000000057 : [],
       CD1000000058T : [],  CD1000000058N : [], CD1000000058 : [],
 
@@ -1517,6 +1538,9 @@ export default {
               } else if (i === 55) {
                 this.CD1000000055T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000055N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              } else if (i === 56) {
+                this.CD1000000056T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+                this.CD1000000056N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
               } else if (i === 57) {
                 this.CD1000000057T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
                 this.CD1000000057N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
@@ -1714,6 +1738,10 @@ export default {
               this.CD1000000055T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000055N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               this.CD1000000055.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
+            } else if (i === 56) {
+              this.CD1000000056T.push({"text": "전체", "value": "TTT"}); //전체 포함 코드정보
+              this.CD1000000056N.push({"text": " ", "value": "NNN"});   //NULL 포함 코드정보
+              this.CD1000000056.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); // 등록 포함 코드정보
             } else if(i === 57) {
               this.CD1000000057T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000057N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
@@ -1805,8 +1833,9 @@ export default {
           if(this.CD1000000053N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000053N[0].value
           if(this.CD1000000054N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000054N[0].value
           if(this.CD1000000055N.length !== 0)   this.mtng_prc_step_cd_selected  = this.CD1000000055N[0].value
-          if(this.CD1000000057N.length !== 0)   this.dstr_selected              = this.CD1000000057N[0].value
-          if(this.CD1000000058N.length !== 0)   this.prcs_stts_cd_selected      = this.CD1000000058N[0].value
+          if(this.CD1000000056N.length !== 0)   this.mtng_prc_step_cd_selected  = this.CD1000000056N[0].value
+          if(this.CD1000000057T.length !== 0)   this.dstr_selected              = this.CD1000000057T[0].value
+          if(this.CD1000000058T.length !== 0)   this.prcs_stts_cd_selected      = this.CD1000000058T[0].value
         }
         this.setCdAll()
       }
@@ -1869,6 +1898,7 @@ export default {
       this.cd_all.push(this.CD1000000053N)
       this.cd_all.push(this.CD1000000054N)
       this.cd_all.push(this.CD1000000055N)
+      this.cd_all.push(this.CD1000000056N)
       this.cd_all.push(this.CD1000000057N)
       this.cd_all.push(this.CD1000000058N)
     },
@@ -1964,6 +1994,7 @@ export default {
             "1000000053",
             "1000000054",
             "1000000055",
+            "1000000056",
             "1000000057",
             "1000000058",
           ];
