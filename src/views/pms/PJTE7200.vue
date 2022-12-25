@@ -98,8 +98,8 @@
           </li>
           <li class="filter-item">
             <div class="item-con">
-              <input type="checkbox" @click="check_yn" v-model="cmpl_yn">
-              <label>　완료건 포함</label>
+              <input type="checkbox" @click="check_yn" v-model="cmpl_yn" style="margin-left: 10px; margin-bottom: 4px;">
+              <label style="margin-left: 3px">완료건 포함</label>
             </div>
           </li>
         </ul>
@@ -111,7 +111,7 @@
           <div class="div-header">
             <ul class="filter-btn">
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">조회</button>
+              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -322,7 +322,7 @@
               ></grid>
             </div>
           </div>
-          <ul>
+          <ul class="div-header">
             <li class="filter-btn" style="margin-right: 5px">
               <button class="btn btn-filter-p">TAR생성</button>
               <button class="btn btn-filter-p" @click="fnSave">저장</button>
