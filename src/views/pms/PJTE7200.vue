@@ -31,10 +31,10 @@
               >
             </div>
           </li>
-          <combo
-              :comboArray2= "this.comboList2"
-              @prcs_stts_cd_change="prcs_stts_cd_change"
-          ></combo>
+<!--          <combo-->
+<!--              :comboArray2= "this.comboList2"-->
+<!--              @prcs_stts_cd_change="prcs_stts_cd_change"-->
+<!--          ></combo>-->
           <li class="filter-item-n">
             <div class="input-searchWrap">요청자
               <input type="text"
@@ -420,7 +420,6 @@ export default {
     // 저장 버튼
     fnSave(){
       //필수항목 확인
-      if (this.checkPrimary() == true) {
         if (confirm("정말 저장하시겠습니까?") === true) {
             axiosService.get("/PJTE7200/select_7200_02", {
               params: {
@@ -430,76 +429,32 @@ export default {
               }
             }).then(res => {
               console.log(res);
-              if (res.data) {
-                if(res.data.data.contents[0].save_yn == 'N') {
-                  axiosService.post("/PJTE7200/insert_7200_01", {
-                    prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-
-                    login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                    login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
-                  }).then(res => {
-                    alert("신규저장을 완료했습니다.")
-                    //this.fnSearch()
-                  }).catch(e => {
-                    alert("신규저장에 실패했습니다.")
-                  })
-                }else {
-                  alert('이미 등록되어있습니다. 확인 후 등록해주세요.')
-                  return false;
-                }
-              }
-            }).catch(e => {
-              alert("저장에 실패했습니다.")
+                let gridData = this.$refs.grid2.invoke("getData");
+                axiosService.post("/PJTE7200/insert_7200_01", {
+                  prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
+                  rqs_id : this.detail.rqs_id,
+                  rsn_rqs : this.detail.rsn_rqs,
+                  rls_dt : this.detail.rls_dt,
+                  // dstr : this.detail.dstr_selected,
+                  dstr : '100',
+                  // prcs_stts_cd : this.detail.prcs_stts_cd_selected,
+                  prcs_stts_cd : '100',
+                  rqs_no : this.detail.rqs_no,
+                  rvw_no : this.detail.rvw_no,
+                  aprv_no : this.detail.aprv_no,
+                  rmrmk   : this.detail.rmrk,
+                  org_file_nm : this.detail.org_file_nm,
+                  login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+                  rowData : gridData,
+                }).then(res => {
+                  alert("저장을 완료했습니다.")
+                  //this.fnSearch()
+                }).catch(e => {
+                  alert("저장에 실패했습니다.")
+                })
             })
-
-            // //기등록일때
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_nm', this.detail.as_pgm_nm);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_id', this.detail.to_pgm_id);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_nm', this.detail.to_pgm_nm);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_dis_cd', this.detail.as_pgm_dis_cd_selected);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'use_pgm_txt', this.detail.use_pgm_txt);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'trn_stt_cd', this.detail.trn_stt_cd_selected);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_nm', this.detail.dvlpe_nm);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', this.detail.dvlpe_no);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'frcs_sta_dt', this.detail.frcs_sta_dt);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'frcs_end_dt', this.detail.frcs_end_dt);
-            //   this.$refs.grid.invoke("setValue", this.curRow, 'rmrk', this.detail.rmrk);
-            //
-            //   axiosService.put("/PJTE7200/update_7200_01", {
-            //     prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-            //     rmrk: this.detail.rmrk,                                // 비고
-            //     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-            //     login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
-            //     excelUplod: this.excelUplod,
-            //   }).then(res => {
-            //     console.log(res);
-            //     //this.$refs.grid.invoke("reloadData");
-            //     alert("저장을 완료했습니다.")
-            //   }).catch(e => {
-            //     alert("저장에 실패했습니다.")
-            //   })
-          }
-
-        } else {   //취소
-          return;
         }
     },
-    /* 저장을 하기위한 필수 항목 체크 */
-    checkPrimary() {
-      if (this.detail.rqs_id == "NNN" || this.detail.rqs_id == "" || this.detail.rqs_id == null) {
-        alert('요청 ID는 필수 입력사항입니다.');
-        return false;
-      } else if (this.detail.rqs_no == "" || this.detail.rqs_no == null) {
-        alert('직원명과 직원번호는 필수 입력사항입니다.');
-        return false;
-      } else if (this.detail.rls_dt == "" || this.detail.rls_dt == null) {
-        alert('배포일시는 필수 입력사항입니다.');
-        return false;
-      }  else {
-        return true;  // 필수 값 모두 입력 시 true
-      }
-    },
-
     onGridUpdated(grid){
 
     },
@@ -523,6 +478,7 @@ export default {
 
     //조회
     fnSearch(){
+      this.fnClear()
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
       this.excelUplod = 'N'
@@ -559,8 +515,8 @@ export default {
       let atfl_mng_id = ''
 
       if (num == 1) {
-        file_rgs_dscd = '902'   //TODO : 파라메타 맞춰서 수정필요
-        atfl_mng_id = '0000000000'
+        file_rgs_dscd = '802'
+        atfl_mng_id = this.detail.rqs_id
       }
       let bkup_id = '0000000000', prjt_id = this.info.prjt_nm_selected, mng_id = this.detail.rqs_id
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
@@ -849,8 +805,8 @@ export default {
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID
-        dstr_selected : this.$store.state.pms.CD1000000057,
-        prcs_stts_cd_selected : this.$store.state.pms.CD1000000058,
+        dstr_selected : 'TTT',
+        prcs_stts_cd_selected : 'TTT',
 
         rqs_nm : '', //요청자이름
         rqs_no : '', //요청자번호
@@ -881,8 +837,8 @@ export default {
         atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
         org_file_nm: this.org_file_nm,    // 원파일명
 
-        dstr_selected : this.$store.state.pms.CD1000000057,
-        prcs_stts_cd_selected : this.$store.state.pms.CD1000000058,
+        dstr_selected : 'TTT',
+        prcs_stts_cd_selected : 'TTT',
       },
       login: {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),    // 권한ID
