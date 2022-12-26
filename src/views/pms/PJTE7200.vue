@@ -13,7 +13,7 @@
               :comboArray = "this.comboList"
               @prjt_nm_chage="prjt_nm_chage"
               @bkup_id_change="bkup_id_change"
-              hidden="false"
+              :hidden="true"
           ></combo>
           <li class="filter-item">
             <div class="input-dateWrap">요청일자
@@ -33,7 +33,7 @@
           </li>
           <combo
               :comboArray2= "this.comboList2"
-              @dstr_change="dstr_change"
+              @prcs_stts_cd_change="prcs_stts_cd_change"
           ></combo>
           <li class="filter-item-n">
             <div class="input-searchWrap">요청자
@@ -98,8 +98,8 @@
           </li>
           <li class="filter-item">
             <div class="item-con">
-              <input type="checkbox" id="cmpl_yn" v-model="cmpl_yn">
-              <label>　완료건 포함</label>
+              <input type="checkbox" @click="check_yn" v-model="cmpl_yn" style="margin-left: 10px; margin-bottom: 4px;">
+              <label style="margin-left: 3px">완료건 포함</label>
             </div>
           </li>
         </ul>
@@ -111,7 +111,7 @@
           <div class="div-header">
             <ul class="filter-btn">
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">조회</button>
+              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -170,8 +170,9 @@
               </li>
               <combo
                   :comboArray3 = "this.comboList3"
-                  @prcs_stts_cd_change="prcs_stts_cd_change"
                   @dstr_change="dstr_change"
+                  @prcs_stts_cd_change="prcs_stts_cd_change"
+                  ref="combo"
               ></combo>
             </ul>
             <ul class="filter-con clear-fix" style="width: 100%; margin-left:10px">
@@ -181,10 +182,10 @@
                          placeholder="직원명"
                          v-model="detail.rqs_nm"
                          style="width: 90px; margin-left:5px"
-                         @keyup.enter="open_pjte9001(2)"
+                         @keyup.enter="open_pjte9001_dtail(4)"
                   >
                   <button class="search-btn"
-                          @click="open_pjte9001_btn(2)"
+                          @click="open_pjte9001_detail_btn(4)"
                   ></button>
                 </div>
               </li>
@@ -202,10 +203,10 @@
                          placeholder="직원명"
                          v-model="detail.rvw_nm"
                          style="width: 90px; margin-left:5px"
-                         @keyup.enter="open_pjte9001(2)"
+                         @keyup.enter="open_pjte9001_dtail(5)"
                   >
                   <button class="search-btn"
-                          @click="open_pjte9001_btn(2)"
+                          @click="open_pjte9001_detail_btn(5)"
                   ></button>
                 </div>
               </li>
@@ -223,10 +224,10 @@
                          placeholder="직원명"
                          v-model="detail.aprv_nm"
                          style="width: 90px; margin-left:5px"
-                         @keyup.enter="open_pjte9001(2)"
+                         @keyup.enter="open_pjte9001_dtail(6)"
                   >
                   <button class="search-btn"
-                          @click="open_pjte9001_btn(2)"
+                          @click="open_pjte9001_detail_btn(6)"
                   ></button>
                 </div>
               </li>
@@ -249,7 +250,7 @@
                       <textarea cols="270"
                                 rows="4"
                                 placeholder="요청사유를 입력해주세요"
-                                v-model="detail.req_res"
+                                v-model="detail.rsn_rqs"
                                 style="width: 100%; margin-left: 7px"
                       ></textarea>
                   </td>
@@ -273,6 +274,22 @@
                 </div>
               </li>
             </ul>
+            <ul class="filter-con clear-fix">
+              <li class="filter-item" style="width: 100%">
+                <div class="item-con">
+                  <th style="vertical-align: middle;text-align: right ;width: 44px; margin-right: 5px">
+                    <label>첨부파일</label>
+                  </th>
+                  <td>
+                    <input type="text"
+                           :disabled=true
+                           v-model="detail.org_file_nm"
+                           style="background-color: #f2f2f2; width: 500px;margin-left: 6px">
+                    <button class="btn btn-filter-p" @click="open_file_page(1)" style="margin-left: 3px; margin-bottom: 4px">첨부</button>
+                  </td>
+                </div>
+              </li>
+            </ul>
           </section>
 
         </div>
@@ -284,7 +301,9 @@
                   <label for="file">엑셀업로드</label>
                   <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
                 </button>
-                <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
+                <button class="btn btn-filter-e" @click="gridExcelExport2">엑셀다운로드</button>
+                <button class="btn btn-filter-b" @click="gridAddRow">행추가</button>
+                <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
               </ul>
             </div>
             <div class="gridWrap" style="min-width: 750px;">
@@ -303,6 +322,12 @@
               ></grid>
             </div>
           </div>
+          <ul class="div-header">
+            <li class="filter-btn" style="margin-right: 5px">
+              <button class="btn btn-filter-p">TAR생성</button>
+              <button class="btn btn-filter-p" @click="fnSave">저장</button>
+            </li>
+          </ul>
         </section>
         <br>
         <br>
@@ -321,18 +346,34 @@ import 'tui-date-picker/dist/tui-date-picker.css';
 import {axiosService} from "@/api/http";
 import XLSX from "xlsx";
 
+// 첨부파일 데이터를 받아옴
+window.fileData = (fileLists) => {
+  window.pms_register.file_name_list = [...fileLists]; // 받아온 데이터를 리스트에 저장
+}
 // 직원조회 팝업에서 받은 값
-window.empData = (empnm ,empno, btn_id) => {
-  if(btn_id === '1'){           // info
-    window.pms_register.info.rqs_nm = empnm
-    window.pms_register.info.rqs_no = empno
-  } else if(btn_id === '2'){   // detail
-    window.pms_register.info.rvw_nm = empnm
-    window.pms_register.info.rvw_no = empno
-  } else if(btn_id === '3'){   // detail
-    window.pms_register.info.aprv_nm = empnm
-    window.pms_register.info.aprv_no = empno
-  }
+window.empData = (empnm ,empno, btn_id, gubun) => {
+
+    if (btn_id === '1') {
+      window.pms_register.info.rqs_nm = empnm
+      window.pms_register.info.rqs_no = empno
+    } else if (btn_id === '2') {
+      window.pms_register.info.rvw_nm = empnm
+      window.pms_register.info.rvw_no = empno
+    } else if (btn_id === '3') {
+      window.pms_register.info.aprv_nm = empnm
+      window.pms_register.info.aprv_no = empno
+    }
+
+    if(btn_id === '4'){
+      window.pms_register.detail.rqs_nm = empnm
+      window.pms_register.detail.rqs_no = empno
+    } else if(btn_id === '5'){
+      window.pms_register.detail.rvw_nm = empnm
+      window.pms_register.detail.rvw_no = empno
+    } else if(btn_id === '6'){
+      window.pms_register.detail.aprv_nm = empnm
+      window.pms_register.detail.aprv_no = empno
+    }
 }
 
 export default {
@@ -367,7 +408,7 @@ export default {
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},            // 프로젝트
     bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
     prcs_stts_cd_change(params)   {this.info.prcs_stts_cd_selected = params},       // 배포구분
-    dstr_change(params)         {this.info.dstr_selected = params},                 // 배포요청상태
+    dstr_change(params)           {this.info.dstr_selected = params},               // 배포요청상태
     // 화면 init
     init() {
       // 그리드 초기화
@@ -381,100 +422,78 @@ export default {
       //필수항목 확인
       if (this.checkPrimary() == true) {
         if (confirm("정말 저장하시겠습니까?") === true) {
-          if(this.newCheck == "Y"){
-            axiosService.get("/PJTE7100/select_7100_02", {
+            axiosService.get("/PJTE7200/select_7200_02", {
               params: {
                 prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
                 bkup_id_selected: this.info.bkup_id_selected,
-                as_pgm_id: this.detail.as_pgm_id,                      // As-Is프로그램id
-                as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // As-Is프로그램유형
+                rqs_id: this.detail.rqs_id,
               }
             }).then(res => {
               console.log(res);
               if (res.data) {
                 if(res.data.data.contents[0].save_yn == 'N') {
-                  axiosService.post("/PJTE7100/insert_7100_01", {
+                  axiosService.post("/PJTE7200/insert_7200_01", {
                     prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-                    as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
-                    as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // as-is 프로그램구분코드
-                    as_pgm_nm: this.detail.as_pgm_nm,                      // as-is 프로그램명
-                    to_pgm_id: this.detail.to_pgm_id,                      // to-be 프로그램id
-                    to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
-                    trn_stt_cd : this.detail.trn_stt_cd_selected,          // 전환상태코드
-                    use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
-                    dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
-                    rmrk: this.detail.rmrk,                                // 비고
-                    frcs_sta_dt: this.detail.frcs_sta_dt,                  // 계획시작일자
-                    frcs_end_dt: this.detail.frcs_end_dt,                  // 계획종료일자
+
                     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
                     login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
                   }).then(res => {
-                    //this.$refs.grid.invoke("reloadData");
-                    document.getElementById("as_pgm_id").style.backgroundColor="#f2f2f2";
-                    document.getElementById("as_pgm_id").disabled=true;
-                    document.getElementById("as_pgm_dis_cd").style.backgroundColor="#f2f2f2";
-                    document.getElementById("as_pgm_dis_cd").disabled=true;
                     alert("신규저장을 완료했습니다.")
                     //this.fnSearch()
                   }).catch(e => {
                     alert("신규저장에 실패했습니다.")
                   })
                 }else {
-                  alert('등록하려는 As-Is 대 To-Be매핑이 이미 등록되어있습니다. 확인 후 등록해주세요.')
+                  alert('이미 등록되어있습니다. 확인 후 등록해주세요.')
                   return false;
                 }
               }
             }).catch(e => {
               alert("저장에 실패했습니다.")
             })
-          }else{
-            //기등록일때
-              this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_nm', this.detail.as_pgm_nm);
-              this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_id', this.detail.to_pgm_id);
-              this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_nm', this.detail.to_pgm_nm);
-              this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_dis_cd', this.detail.as_pgm_dis_cd_selected);
-              this.$refs.grid.invoke("setValue", this.curRow, 'use_pgm_txt', this.detail.use_pgm_txt);
-              this.$refs.grid.invoke("setValue", this.curRow, 'trn_stt_cd', this.detail.trn_stt_cd_selected);
-              this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_nm', this.detail.dvlpe_nm);
-              this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', this.detail.dvlpe_no);
-              this.$refs.grid.invoke("setValue", this.curRow, 'frcs_sta_dt', this.detail.frcs_sta_dt);
-              this.$refs.grid.invoke("setValue", this.curRow, 'frcs_end_dt', this.detail.frcs_end_dt);
-              this.$refs.grid.invoke("setValue", this.curRow, 'rmrk', this.detail.rmrk);
 
-              axiosService.put("/PJTE7200/update_7200_01", {
-                prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-                rmrk: this.detail.rmrk,                                // 비고
-                login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
-                excelUplod: this.excelUplod,
-              }).then(res => {
-                console.log(res);
-                //this.$refs.grid.invoke("reloadData");
-                alert("저장을 완료했습니다.")
-              }).catch(e => {
-                alert("저장에 실패했습니다.")
-              })
+            // //기등록일때
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_nm', this.detail.as_pgm_nm);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_id', this.detail.to_pgm_id);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_nm', this.detail.to_pgm_nm);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_dis_cd', this.detail.as_pgm_dis_cd_selected);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'use_pgm_txt', this.detail.use_pgm_txt);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'trn_stt_cd', this.detail.trn_stt_cd_selected);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_nm', this.detail.dvlpe_nm);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_no', this.detail.dvlpe_no);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'frcs_sta_dt', this.detail.frcs_sta_dt);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'frcs_end_dt', this.detail.frcs_end_dt);
+            //   this.$refs.grid.invoke("setValue", this.curRow, 'rmrk', this.detail.rmrk);
+            //
+            //   axiosService.put("/PJTE7200/update_7200_01", {
+            //     prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
+            //     rmrk: this.detail.rmrk,                                // 비고
+            //     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+            //     login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"), // 권한ID
+            //     excelUplod: this.excelUplod,
+            //   }).then(res => {
+            //     console.log(res);
+            //     //this.$refs.grid.invoke("reloadData");
+            //     alert("저장을 완료했습니다.")
+            //   }).catch(e => {
+            //     alert("저장에 실패했습니다.")
+            //   })
           }
 
         } else {   //취소
           return;
         }
-      } else {
-      }
     },
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
-      if (this.detail.as_pgm_dis_cd_selected == "NNN" ||this.detail.as_pgm_dis_cd_selected == "" || this.detail.as_pgm_dis_cd_selected == null) {
-        alert(' As-Is 프로그램구분코드는 필수 입력사항입니다.');
+      if (this.detail.rqs_id == "NNN" || this.detail.rqs_id == "" || this.detail.rqs_id == null) {
+        alert('요청 ID는 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.dvlpe_no == "" || this.detail.dvlpe_no == null) {
+      } else if (this.detail.rqs_no == "" || this.detail.rqs_no == null) {
         alert('직원명과 직원번호는 필수 입력사항입니다.');
         return false;
-      } else if (this.detail.as_pgm_id == "" || this.detail.as_pgm_id == null) {
-        alert('As-Is 프로그램 ID는 필수 입력사항입니다.');
-        return false;
-      }  else if (this.detail.as_pgm_nm == "" || this.detail.as_pgm_nm == null) {
-        alert('As-Is 프로그램명은 필수 입력사항입니다.');
+      } else if (this.detail.rls_dt == "" || this.detail.rls_dt == null) {
+        alert('배포일시는 필수 입력사항입니다.');
         return false;
       }  else {
         return true;  // 필수 값 모두 입력 시 true
@@ -512,11 +531,39 @@ export default {
     // 조회한 데이터로 인적사항 데이터 바인딩
     cellDataBind(currentRowData) {
       this.detail.rqs_id                                 = currentRowData.rqs_id                     // 요청 ID
+      this.detail.rsn_rqs                                = currentRowData.rsn_rqs                    // 요청사유
       this.detail.rmrk                                   = currentRowData.rmrk                       // 비고
-      // this.$refs.combo2.$data.as_pgm_dis_cd_selected  = currentRowData.as_pgm_dis_cd              // as-is프로그램유형
+      this.detail.rqs_nm                                 = currentRowData.rqs_nm                     // 요청자
+      this.detail.rqs_no                                 = currentRowData.rqs_no
+      this.detail.rvw_nm                                 = currentRowData.rvw_nm                     // 검토자
+      this.detail.rvw_no                                 = currentRowData.rvw_no
+      this.detail.aprv_nm                                = currentRowData.aprv_nm                    // 승인자
+      this.detail.aprv_no                                = currentRowData.aprv_no
+
+      this.detail.prcs_stts_cd_selected                  = currentRowData.prcs_stts_cd
+      this.$refs.combo.$data.prcs_stts_cd_selected       = currentRowData.prcs_stts_cd
+      this.detail.dstr_selected                          = currentRowData.dstr
+      this.$refs.combo.$data.dstr_selected               = currentRowData.dstr
+
+      this.detail.atfl_mng_id = currentRowData.atfl_mng_id;              // (상세)첨부파일관리ID
+      this.detail.org_file_nm = currentRowData.org_file_nm;              // (상세)원파일명
     },
-    cmpl_yn () {
-      this.cmpl_yn ? this.info.cmpl_yn = 'Y' : this.info.cmpl_yn = 'N';
+    check_yn () {
+      this.cmpl_yn ? this.info.cmpl_yn = 'N' : this.info.cmpl_yn = 'Y';
+    },
+
+    // 첨부파일등록 팝업 오픈
+    open_file_page(num) {
+      // console.log(num)
+      let file_rgs_dscd = ''
+      let atfl_mng_id = ''
+
+      if (num == 1) {
+        file_rgs_dscd = '902'   //TODO : 파라메타 맞춰서 수정필요
+        atfl_mng_id = '0000000000'
+      }
+      let bkup_id = '0000000000', prjt_id = this.info.prjt_nm_selected, mng_id = this.detail.rqs_id
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
 
     //직원조회 버튼 클릭 시
@@ -566,7 +613,6 @@ export default {
               // console.log(res_data)
               if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
                 if (btn_id == '1') {
-
                   this.info.rqs_no = res.data.data.contents[0].empno
                   this.info.rqs_nm = res.data.data.contents[0].empnm
                 } else if (btn_id == '2') {
@@ -587,27 +633,123 @@ export default {
       }
 
     },
+    //직원조회 버튼 클릭 시
+    open_pjte9001_detail_btn(btn_id) {
+      let empnm = ''
+
+      if (btn_id == '4') {
+        empnm = this.detail.rqs_nm
+      } else if (btn_id == '5') {
+        empnm = this.detail.rvw_nm
+      } else if (btn_id == '6') {
+        empnm = this.detail.aprv_nm
+      }
+
+      if((empnm === '' || empnm == null || empnm === undefined)) {
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      } else {
+        let bkup_id = this.info.bkup_id_selected, prjt_id =  this.info.prjt_nm_selected
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&empnm=${empnm}&`, "open_emp_page", "width=700, height=600");
+      }
+    },
+
+    //엔터키를 눌러 직원 조회
+    open_pjte9001_dtail(btn_id) {
+      let empnm = ''
+
+      let prjt_id_selected = this.info.prjt_nm_selected
+      let bkup_id_selected = this.info.bkup_id_selected
+
+      if (btn_id == '4') {
+        empnm = this.detail.rqs_nm
+      } else if (btn_id == '5') {
+        empnm = this.detail.rvw_nm
+      } else if (btn_id == '6') {
+        empnm = this.detail.aprv_nm
+      }
+
+      if (empnm != null && empnm != '') {
+        axiosService.get("/PJTE9001/select", {
+          params: {
+            empnm,
+            prjt_id_selected,
+            bkup_id_selected
+          }
+        }).then(res => {
+          let res_data = res.data.data.contents;
+          // console.log(res_data)
+          if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+            if (btn_id == '4') {
+              this.detail.rqs_no = res.data.data.contents[0].empno
+              this.detail.rqs_nm = res.data.data.contents[0].empnm
+            } else if (btn_id == '5') {
+              this.detail.rvw_no = res.data.data.contents[0].empno
+              this.detail.rvw_nm = res.data.data.contents[0].empnm
+            } else if (btn_id == '6') {
+              this.detail.aprv_no = res.data.data.contents[0].empno
+              this.detail.aprv_nm = res.data.data.contents[0].empnm
+            }
+          } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+            let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
+            window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+          }
+        })
+      } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
+        let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
+        window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+      }
+
+    },
     // 직원명 삭제 시 직원번호 초기화
     setNo() {
       if(this.info.rqs_nm === "") this.info.rqs_nm = "";
       if(this.info.rvw_nm === "") this.info.rvw_nm = "";
       if(this.info.aprv_nm === "") this.info.aprv_nm = "";
+
+      if(this.detail.rqs_nm === "") this.detail.rqs_nm = "";
+      if(this.detail.rvw_nm === "") this.detail.rvw_nm = "";
+      if(this.detail.aprv_nm === "") this.detail.aprv_nm = "";
     },
     // 직원명 삭제 시 직원번호 초기화
     setNo1() {
       if(this.info.rqs_nm === "") this.info.rqs_no = "";
       if(this.info.rvw_nm === "") this.info.rvw_no = "";
       if(this.info.aprv_nm === "") this.info.aprv_no = "";
-    },
 
+      if(this.detail.rqs_nm === "") this.detail.rqs_no = "";
+      if(this.detail.rvw_nm === "") this.detail.rvw_no = "";
+      if(this.detail.aprv_nm === "") this.detail.aprv_no = "";
+    },
+    // 행추가
+    gridAddRow(){
+      this.addCheak = 'Y';
+      this.$refs.grid2.invoke("appendRow",
+          {},
+          {focus:true}) ;
+    },
+    // 행삭제
+    gridDelRow(){
+      this.addCheak = 'N'
+      this.$refs.grid2.invoke("removeRow", this.curRow, {showConfirm:false});
+    },
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
-      document.getElementById("as_pgm_id").style.backgroundColor="#ffffff";
-      document.getElementById("as_pgm_id").disabled=false;
-      document.getElementById("as_pgm_dis_cd").style.backgroundColor="#ffffff";
-      document.getElementById("as_pgm_dis_cd").disabled=false;
-
-      this.$refs.combo3.$data.trn_stt_cd_selected     = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태       // 계획종료일자
+      this.detail.rsn_rqs  = ''
+      this.detail.rqs_id   = ''
+      this.detail.rqs_no   = ''
+      this.detail.rqs_nm   = ''
+      this.detail.rvw_no   = ''
+      this.detail.rvw_nm   = ''
+      this.detail.aprv_no  = ''
+      this.detail.aprv_nm  = ''
+      this.detail.rls_dt   = ''
+      this.detail.rqs_dt   = ''
+      this.detail.org_file_nm = ''
+      this.detail.dstr_selected                      = 'TTT'
+      this.$refs.combo.$data.dstr_selected           = 'TTT';
+      this.detail.prcs_stts_cd_selected              = 'TTT'
+      this.$refs.combo.$data.prcs_stts_cd_selected   = 'TTT';
 
       this.detail.save_yn               = 'N'        // 등록가능여부
       this.newCheck                     = 'Y';
@@ -615,6 +757,9 @@ export default {
 
     gridExcelExport() {
       this.$refs.grid.invoke("export", "xlsx", {fileName: "배포요청관리_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
+    },
+    gridExcelExport2() {
+      this.$refs.grid2.invoke("export", "xlsx", {fileName: "배포목록_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
     },
 
     getCurrentYyyymmdd() {
@@ -629,7 +774,6 @@ export default {
       return year + '-' +  month + '-' + day;
     },
 
-    // 재직사항 그리드 엑셀업로드
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
       console.log(event.target.files[0])
@@ -642,64 +786,24 @@ export default {
         console.log("wb ::"+ wb.SheetNames);
         let gridExcelData;
         wb.SheetNames.forEach((sheetName, idx) => {
-          if (sheetName === 'As-Is대To-Be매핑관리' || sheetName === 'Sheet1') {
+          if (sheetName === '배포목록' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "No"
-            wb.Sheets[sheetName].B1.w = "as_pgm_id"
-            wb.Sheets[sheetName].C1.w = "as_pgm_nm"
-            wb.Sheets[sheetName].D1.w = "to_pgm_id"
-            wb.Sheets[sheetName].E1.w = "to_pgm_nm"
-            wb.Sheets[sheetName].F1.w = "as_pgm_dis_cd"
-            wb.Sheets[sheetName].G1.w = "use_pgm_txt"
-            wb.Sheets[sheetName].H1.w = "trn_stt_cd"
-            wb.Sheets[sheetName].I1.w = "dvlpe_nm"
-            wb.Sheets[sheetName].J1.w = "dvlpe_no"
-            wb.Sheets[sheetName].K1.w = "frcs_sta_dt"
-            wb.Sheets[sheetName].L1.w = "frcs_end_dt"
-            wb.Sheets[sheetName].M1.w = "sta_dt"
-            wb.Sheets[sheetName].N1.w = "end_dt"
-            wb.Sheets[sheetName].O1.w = "rmrk"
+            wb.Sheets[sheetName].B1.w = "pck_nm"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
-            let rowObj_copy = [];
 
-            for (let n = 0; n < rowObj.length; n++) {
-              if (isNaN(rowObj[n].frcs_sta_dt) == false) {
-                rowObj[n].frcs_sta_dt = this.excelDateToJSDate(rowObj[n].frcs_sta_dt)
-              }
-              if (isNaN(rowObj[n].frcs_end_dt) == false) {
-                rowObj[n].frcs_end_dt = this.excelDateToJSDate(rowObj[n].frcs_end_dt)
-              }
-              rowObj_copy[n-1] = rowObj[n];
-            }
-
-            gridExcelData = JSON.parse(JSON.stringify(rowObj_copy));
+            gridExcelData = JSON.parse(JSON.stringify(rowObj));
             console.log("gridExcelData ::", gridExcelData)
           }
         })
         this.excelUplod = 'Y'
-
         try {
-          this.$refs.grid.invoke('resetData', gridExcelData)
-          if(this.excelUplod === 'Y') {
-            axiosService.post("/PJTE7100/create", {
-              excelUplod: this.excelUplod,
-              login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
-              login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
-              login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
-              rowDatas: gridExcelData
-            }).then(res => {
-              console.log(res);
-              if (res.data) {
-                alert("엑셀 업로드 저장이 완료되었습니다.")
-                this.fnSearch()
-              }
-            }).catch(e => {
-              alert("등록중 오류 ::"+ e)
-            })
-          }
+          this.$refs.grid2.invoke('resetData', gridExcelData)
+          alert('업로드 파일이 적용되었습니다.')
         } catch (e){
           alert('업로드에 실패했습니다.')
         }
+
       };
       reader.readAsBinaryString(input.files[0]);
       event.target.value = '';
@@ -720,28 +824,33 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
-
+    file_name_list() {
+      // 1. 첨부파일 1개만 보여줄 때
+      this.detail.org_file_nm = this.file_name_list[0].org_file_nm
+      this.detail.atfl_mng_id = this.file_name_list[this.file_name_list.length-1].atfl_mng_id
+    },
   },
 
 // 변수 선언부분
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      infocomboList1: ["C-51T"],
       comboList: ["C0", "C27"],
-      comboList2: ["C57"],
-      comboList3: ["C57", "C58"],
+      comboList2: ["C58"],
+      comboList3: ["C3-57", "C3-58"],
 
       gridData: [],
       newCheck: 'Y',
       excelUplod: 'N',
+      addCheak: 'N',
       cmpl_yn : false,
+      file_name_list: [],
 
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID
-        prcs_stts_cd_selected : this.$store.state.pms.CD1000000057,
-        dstr_selected : this.$store.state.pms.CD1000000058,
+        dstr_selected : this.$store.state.pms.CD1000000057,
+        prcs_stts_cd_selected : this.$store.state.pms.CD1000000058,
 
         rqs_nm : '', //요청자이름
         rqs_no : '', //요청자번호
@@ -769,7 +878,11 @@ export default {
         rqs_dt  : '', //요청일자
         rls_dt  : '', //배포일자
 
-        info_as_pgm_dis_cd: sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP' ? '999' : 'TTT',                                        // As-Is 프로그램 구분코드
+        atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
+        org_file_nm: this.org_file_nm,    // 원파일명
+
+        dstr_selected : this.$store.state.pms.CD1000000057,
+        prcs_stts_cd_selected : this.$store.state.pms.CD1000000058,
       },
       login: {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),    // 권한ID
@@ -810,7 +923,11 @@ export default {
       rowHeaders: ['rowNum'],
       header: {
         height: 45,
-        complexColumns: []
+        complexColumns: [
+          {header: '요청자',           name: 'mergeColumn1', childNames: ['rqs_nm','rqs_no']},
+          {header: '검토자',           name: 'mergeColumn2', childNames: ['rvw_nm','rvw_no']},
+          {header: '승인자',           name: 'mergeColumn3', childNames: ['aprv_nm','aprv_no']},
+        ]
       },
       columns: [
         {
@@ -847,14 +964,14 @@ export default {
         {
           header: '배포구분',
           width: 120,
-          align: 'left',
+          align: 'center',
           name: 'dstr',
           formatter: 'listItemText',
           filter: 'select',
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000057N
+              listItems: this.$store.state.pms.CD1000000057
             }
           }
         },
@@ -864,38 +981,59 @@ export default {
           align: 'center',
           name: 'prcs_stts_cd',
           formatter: 'listItemText',
-          filter: 'select',
+          filter: 'text',
           editor: {
             type: 'select',
             options: {
-              listItems: this.$store.state.pms.CD1000000058N
+              listItems: this.$store.state.pms.CD1000000058
             }
           },
         },
         {
-          header: '요청자',
-          width: 80,
+          header: '이름',
+          width: 60,
           align: 'center',
           name: 'rqs_nm',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '검토자',
+          header: '사번',
           width: 80,
+          align: 'center',
+          name: 'rqs_no',
+          filter: 'text',
+        },
+        {
+          header: '이름',
+          width: 60,
           align: 'center',
           name: 'rvw_nm',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '승인자',
+          header: '사번',
           width: 80,
+          align: 'center',
+          name: 'rvw_no',
+          filter: 'text',
+        },
+        {
+          header: '이름',
+          width: 60,
           align: 'center',
           name: 'aprv_nm',
           editor: 'text',
           filter: 'text',
-        }
+        },
+        {
+          header: '사번',
+          width: 80,
+          align: 'center',
+          name: 'aprv_no',
+          filter: 'text',
+        },
       ],
 
       dataSource2: {
