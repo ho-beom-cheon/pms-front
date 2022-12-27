@@ -1041,7 +1041,7 @@
             @change = "dstr_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000057T"
+              v-for  = "(item, idx) in CD1000000057"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
@@ -1058,7 +1058,7 @@
             @change = "prcs_stts_cd_change"
         >
           <option
-              v-for  = "(item, idx) in CD1000000058T"
+              v-for  = "(item, idx) in CD1000000058"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
