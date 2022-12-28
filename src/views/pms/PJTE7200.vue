@@ -31,10 +31,6 @@
               >
             </div>
           </li>
-<!--          <combo-->
-<!--              :comboArray2= "this.comboList2"-->
-<!--              @prcs_stts_cd_change="prcs_stts_cd_change"-->
-<!--          ></combo>-->
           <li class="filter-item-n">
             <div class="input-searchWrap">요청자
               <input type="text"
@@ -98,20 +94,24 @@
           </li>
           <li class="filter-item">
             <div class="item-con">
-              <input type="checkbox" @click="check_yn" v-model="cmpl_yn" style="margin-left: 10px; margin-bottom: 4px;">
+              <input type="checkbox" @click="check_yn" v-model="cmpl_yn" style="margin-left: 10px; margin-bottom: 2px;">
               <label style="margin-left: 3px">완료건 포함</label>
             </div>
           </li>
+        </ul>
+        <ul class="filter-btn">
+          <div class="btn btn-filter-p" style="margin-left: 10px">
+            <a href="#" @click="fnSearch">조회</a>
+          </div>
         </ul>
       </section>
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box" style="height: 250px">
-          <div class="div-header">
+        <div class="grid1-box" style="height: 180px">
+          <div class="div-header-b"><h2>요청내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
-              <button class="btn btn-filter-p" @click="fnSearch">조회</button>
             </ul>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -121,7 +121,7 @@
                 :header="header"
                 :columns="columns"
                 :minBodyHeight="55"
-                :bodyHeight="155"
+                :bodyHeight="75"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -145,7 +145,7 @@
                   <input type="text"
                          id      = "as_pgm_id"
                          v-model="detail.rqs_id"
-                         style= "width: 180px; margin-left: 5px; background-color: #f2f2f2;"
+                         style= "width: 180px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
                          :disabled=true
                   >
                 </div>
@@ -154,7 +154,7 @@
                 <div class="item-con">요청일자
                   <input type="date"
                          v-model="detail.rqs_dt"
-                         style= "width: 150px; margin-left: 5px; background-color: #f2f2f2;"
+                         style= "width: 150px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
                          :disabled=true
                   >
                 </div>
@@ -164,7 +164,7 @@
                   <input type="text"
                          ref="address"
                          v-model="detail.rls_dt"
-                         style="width: 150px; margin-left: 5px;"
+                         style="width: 150px; margin-left: 5px;text-align: center"
                   >
                 </div>
               </li>
@@ -193,7 +193,7 @@
                 <input type="text"
                        placeholder="직원번호"
                        v-model="detail.rqs_no"
-                       style="width: 90px; background-color: #f2f2f2;"
+                       style="width: 90px; background-color: #f2f2f2;text-align: center"
                        :disabled=true
                 >
               </li>
@@ -214,7 +214,7 @@
                 <input type="text"
                        placeholder="직원번호"
                        v-model="detail.rvw_no"
-                       style="width: 90px; background-color: #f2f2f2;"
+                       style="width: 90px; background-color: #f2f2f2;text-align: center"
                        :disabled=true
                 >
               </li>
@@ -235,7 +235,7 @@
                 <input type="text"
                        placeholder="직원번호"
                        v-model="detail.aprv_no"
-                       style="width: 90px; background-color: #f2f2f2;"
+                       style="width: 90px; background-color: #f2f2f2;text-align: center"
                        :disabled=true
                 >
               </li>
@@ -248,7 +248,7 @@
                   </th>
                   <td>
                       <textarea cols="270"
-                                rows="4"
+                                rows="9"
                                 placeholder="요청사유를 입력해주세요"
                                 v-model="detail.rsn_rqs"
                                 style="width: 100%; margin-left: 7px"
@@ -265,9 +265,9 @@
                   </th>
                   <td>
                       <textarea cols="260"
-                                rows="4"
+                                rows="5"
                                 placeholder="비고내용을 입력해주세요"
-                                v-model="detail.rmrk"
+                                v-model="detail.rmrmk"
                                 style="width: 100%; margin-left: 7px"
                       ></textarea>
                   </td>
@@ -294,7 +294,7 @@
 
         </div>
         <section class="page-contents">
-          <div class="grid1-box" style="height: 270px">
+          <div class="grid1-box" style="height: 200px">
             <div class="div-header"><h2>배포목록</h2>
               <ul class="filter-btn">
                 <button class="btn btn-filter-e" >
@@ -313,12 +313,13 @@
                   :header="header2"
                   :columns="columns2"
                   :minBodyHeight="55"
-                  :bodyHeight="175"
+                  :bodyHeight="120"
                   :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions2"
                   :rowHeaders="rowHeaders2"
                   :rowHeight="rowHeight"
+                  @click="onClick2"
               ></grid>
             </div>
           </div>
@@ -407,8 +408,8 @@ export default {
     // Combo.vue 에서 받아온 값
     prjt_nm_chage(params)         {this.info.prjt_nm_selected = params},            // 프로젝트
     bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
-    prcs_stts_cd_change(params)   {this.info.prcs_stts_cd_selected = params},       // 배포구분
-    dstr_change(params)           {this.info.dstr_selected = params},               // 배포요청상태
+    prcs_stts_cd_change(params)   {this.detail.prcs_stts_cd_selected = params},       // 배포요청상태
+    dstr_change(params)           {this.detail.dstr_selected = params},               // 배포구분
     // 화면 init
     init() {
       // 그리드 초기화
@@ -420,41 +421,58 @@ export default {
     // 저장 버튼
     fnSave(){
       //필수항목 확인
+      console.log("dstr_selected ::", this.detail.dstr_selected)
+
+      if(this.detail.dstr_selected === undefined || this.detail.dstr_selected === '')   { alert("배포구분은 필수 입력 사항입니다"); return;}
+      if(this.detail.prcs_stts_cd_selected === undefined || this.detail.prcs_stts_cd_selected === '')   { alert("배포요청상태는 필수 입력 사항입니다"); return;}
+      if(this.detail.rqs_no === undefined || this.detail.rqs_no === '')   { alert("요청자는 필수 입력 사항입니다"); return;}
+      if(this.detail.rvw_no === undefined || this.detail.rvw_no === '')   { alert("검토자는 필수 입력 사항입니다"); return;}
+      if(this.detail.aprv_no === undefined || this.detail.aprv_no === '')   { alert("승인자는 필수 입력 사항입니다"); return;}
+      if(this.detail.rsn_rqs === undefined || this.detail.rsn_rqs === '')   { alert("요청사유는 필수 입력 사항입니다"); return;}
+
+      if(this.detail.prcs_stts_cd_selected === '500' && this.detail.rls_dt === '')   { alert("배포요청상태가 [배포완료]인경우 배포일시는 필수입력사항입니다\n배포일시형식[YYYY-MM-DD HH24:II:SS]"); return;}
+
+      let gridData = this.$refs.grid2.invoke("getData");
+
+      if (this.vaildation(gridData, "2") === false) {return;}
+
         if (confirm("정말 저장하시겠습니까?") === true) {
-            axiosService.get("/PJTE7200/select_7200_02", {
-              params: {
-                prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),
-                bkup_id_selected: this.info.bkup_id_selected,
-                rqs_id: this.detail.rqs_id,
-              }
-            }).then(res => {
-              console.log(res);
-                let gridData = this.$refs.grid2.invoke("getData");
+                console.log("gridData ::", gridData)
                 axiosService.post("/PJTE7200/insert_7200_01", {
                   prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
                   rqs_id : this.detail.rqs_id,
                   rsn_rqs : this.detail.rsn_rqs,
                   rls_dt : this.detail.rls_dt,
-                  // dstr : this.detail.dstr_selected,
-                  dstr : '100',
-                  // prcs_stts_cd : this.detail.prcs_stts_cd_selected,
-                  prcs_stts_cd : '100',
+                  dstr : this.detail.dstr_selected,
+                  prcs_stts_cd : this.detail.prcs_stts_cd_selected,
                   rqs_no : this.detail.rqs_no,
                   rvw_no : this.detail.rvw_no,
                   aprv_no : this.detail.aprv_no,
                   rmrmk   : this.detail.rmrk,
                   org_file_nm : this.detail.org_file_nm,
-                  login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                  rowData : gridData,
+                  login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+                  gridData : gridData,
                 }).then(res => {
                   alert("저장을 완료했습니다.")
-                  //this.fnSearch()
+                  this.fnSearch()
                 }).catch(e => {
                   alert("저장에 실패했습니다.")
                 })
-            })
+
         }
     },
+
+    // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
+    vaildation(data, division) {
+      if(data.length === 0) { alert("배포목록은 한건이상 등록해야 합니다.");      return false;}
+      for(let i=0; i<data.length; i++){
+        if(data[i].tst_case_id === null)  { alert((i+1)+"번째 테스트케이스ID는 필수 입력 사항입니다"); return false;}
+        if(data[i].mdfc        === null)  { alert((i+1)+"번째 수정사항은 필수 입력 사항입니다"); return false;}
+        if(data[i].rqs_pck_nm  === null)  { alert((i+1)+"번째 배포요청패키지명은 필수 입력 사항입니다"); return false;}
+      }
+      return  true;
+    },
+
     onGridUpdated(grid){
 
     },
@@ -473,7 +491,14 @@ export default {
       // 그리드 row 클릭 시 상세내용에 Bind
       if (currentRowData != null) {
         this.cellDataBind(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
+        this.$refs.grid2.invoke("setRequestParams", this.info);
+        this.$refs.grid2.invoke("readData");
       }
+    },
+
+    onClick2(ev) {
+      // 현재 Row 가져오기
+      this.curRow2 = ev.rowKey;
     },
 
     //조회
@@ -486,9 +511,12 @@ export default {
 
     // 조회한 데이터로 인적사항 데이터 바인딩
     cellDataBind(currentRowData) {
+      this.info.rqs_id                                   = currentRowData.rqs_id                     // 요청 ID
       this.detail.rqs_id                                 = currentRowData.rqs_id                     // 요청 ID
+      this.detail.rqs_dt                                 = currentRowData.rqs_dt                     // 요청일자
+      this.detail.rls_dt                                 = currentRowData.rls_dt                     // 배포일시
       this.detail.rsn_rqs                                = currentRowData.rsn_rqs                    // 요청사유
-      this.detail.rmrk                                   = currentRowData.rmrk                       // 비고
+      this.detail.rmrmk                                  = currentRowData.rmrmk                       // 비고
       this.detail.rqs_nm                                 = currentRowData.rqs_nm                     // 요청자
       this.detail.rqs_no                                 = currentRowData.rqs_no
       this.detail.rvw_nm                                 = currentRowData.rvw_nm                     // 검토자
@@ -515,9 +543,12 @@ export default {
       let atfl_mng_id = ''
 
       if (num == 1) {
-        file_rgs_dscd = '802'
-        atfl_mng_id = this.detail.rqs_id
+        file_rgs_dscd = '806'
+        atfl_mng_id = this.detail.atfl_mng_id
       }
+
+      if(this.detail.rqs_id === undefined || this.detail.rqs_id === '')   { alert("첨부파일을 저장후 가능합니다."); return;}
+
       let bkup_id = '0000000000', prjt_id = this.info.prjt_nm_selected, mng_id = this.detail.rqs_id
       window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&mng_id=${mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
     },
@@ -687,35 +718,37 @@ export default {
     // 행삭제
     gridDelRow(){
       this.addCheak = 'N'
-      this.$refs.grid2.invoke("removeRow", this.curRow, {showConfirm:false});
+      this.$refs.grid2.invoke("removeRow", this.curRow2, {showConfirm:false});
     },
     // [신규초기화] 버튼 클릭 시 상세내용 값 초기화
     fnClear() {
       this.detail.rsn_rqs  = ''
       this.detail.rqs_id   = ''
+      this.detail.rqs_dt   = ''
+      this.detail.rls_dt   = ''
       this.detail.rqs_no   = ''
       this.detail.rqs_nm   = ''
       this.detail.rvw_no   = ''
       this.detail.rvw_nm   = ''
       this.detail.aprv_no  = ''
       this.detail.aprv_nm  = ''
-      this.detail.rls_dt   = ''
-      this.detail.rqs_dt   = ''
+      this.detail.rmrmk   = ''
       this.detail.org_file_nm = ''
-      this.detail.dstr_selected                      = 'TTT'
-      this.$refs.combo.$data.dstr_selected           = 'TTT';
-      this.detail.prcs_stts_cd_selected              = 'TTT'
-      this.$refs.combo.$data.prcs_stts_cd_selected   = 'TTT';
+      this.detail.dstr_selected                      = '';
+      this.$refs.combo.$data.dstr_selected           = '';
+      this.detail.prcs_stts_cd_selected              = '';
+      this.$refs.combo.$data.prcs_stts_cd_selected   = '';
 
-      this.detail.save_yn               = 'N'        // 등록가능여부
+      this.detail.save_yn               = 'N' ;       // 등록가능여부
       this.newCheck                     = 'Y';
+      this.$refs.grid2.invoke("clear");
     },
 
     gridExcelExport() {
-      this.$refs.grid.invoke("export", "xlsx", {fileName: "배포요청관리_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
+      this.$refs.grid.invoke("export", "xlsx", {fileName: "배포요청관리(요청내역)_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
     },
     gridExcelExport2() {
-      this.$refs.grid2.invoke("export", "xlsx", {fileName: "배포목록_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
+      this.$refs.grid2.invoke("export", "xlsx", {fileName: "배포요청관리(배포목록)_"+this.getCurrentYyyymmdd(), useFormattedValue : true, onlySelected:true});
     },
 
     getCurrentYyyymmdd() {
@@ -745,7 +778,9 @@ export default {
           if (sheetName === '배포목록' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "No"
-            wb.Sheets[sheetName].B1.w = "pck_nm"
+            wb.Sheets[sheetName].B1.w = "tst_case_id"
+            wb.Sheets[sheetName].C1.w = "mdfc"
+            wb.Sheets[sheetName].D1.w = "rqs_pck_nm"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
 
             gridExcelData = JSON.parse(JSON.stringify(rowObj));
@@ -805,9 +840,10 @@ export default {
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID
-        dstr_selected : 'TTT',
-        prcs_stts_cd_selected : 'TTT',
+        dstr_selected : '',
+        prcs_stts_cd_selected : '',
 
+        rqs_id : '',
         rqs_nm : '', //요청자이름
         rqs_no : '', //요청자번호
         aprv_nm : '', //승인자이름
@@ -837,8 +873,8 @@ export default {
         atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
         org_file_nm: this.org_file_nm,    // 원파일명
 
-        dstr_selected : 'TTT',
-        prcs_stts_cd_selected : 'TTT',
+        dstr_selected : '',
+        prcs_stts_cd_selected : '',
       },
       login: {
         login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),    // 권한ID
@@ -852,6 +888,7 @@ export default {
       /* grid 속성 */
       count: 0,
       curRow: -1,
+      curRow2: -1,
       title: "",
       scrollX: false,
       scrollY: false,
@@ -888,7 +925,7 @@ export default {
       columns: [
         {
           header: '요청 ID',
-          width: 250,
+          width: 110,
           align: 'center',
           name: 'rqs_id',
           editor: 'text',
@@ -910,8 +947,8 @@ export default {
           filter: 'text',
         },
         {
-          header: '배포일자',
-          width: 100,
+          header: '배포일시',
+          width: 150,
           align: 'center',
           name: 'rls_dt',
           editor: 'text',
@@ -947,7 +984,7 @@ export default {
         },
         {
           header: '이름',
-          width: 60,
+          width: 70,
           align: 'center',
           name: 'rqs_nm',
           editor: 'text',
@@ -962,7 +999,7 @@ export default {
         },
         {
           header: '이름',
-          width: 60,
+          width: 70,
           align: 'center',
           name: 'rvw_nm',
           editor: 'text',
@@ -977,7 +1014,7 @@ export default {
         },
         {
           header: '이름',
-          width: 60,
+          width: 70,
           align: 'center',
           name: 'aprv_nm',
           editor: 'text',
@@ -990,11 +1027,35 @@ export default {
           name: 'aprv_no',
           filter: 'text',
         },
+        {
+          header: '비고',
+          width: 80,
+          align: 'left',
+          name: 'rmrmk',
+          filter: 'text',
+          hidden : true,
+        },
+        {
+          header: '첨부파일',
+          width: 80,
+          align: 'left',
+          name: 'atfl_mng_id',
+          filter: 'text',
+          hidden : true,
+        },
+        {
+          header: '첨부파일명',
+          width: 80,
+          align: 'left',
+          name: 'org_file_nm',
+          filter: 'text',
+          hidden : true,
+        },
       ],
 
       dataSource2: {
         api: {
-          readData: {url: process.env.VUE_APP_API + '/PJTE7100/select_7100_01', method: 'GET'},
+          readData: {url: process.env.VUE_APP_API + '/PJTE7200/select_7200_02', method: 'GET'},
         },
         initialRequest: false,
         contentType: 'application/json;',
@@ -1006,14 +1067,30 @@ export default {
       },
       rowHeaders2: ['rowNum'],
       header2: {
-        height: 45,
+        height: 25,
         complexColumns: []
       },
       columns2: [
         {
+          header: '테스트케이스ID',
+          width: 150,
+          align: 'center',
+          name: 'tst_case_id',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '수정사항',
+          width: 650,
+          align: 'left',
+          name: 'mdfc',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
           header: '배포요청패키지명',
           align: 'left',
-          name: 'pck_nm',
+          name: 'rqs_pck_nm',
           editor: 'text',
           filter: 'text',
         },
