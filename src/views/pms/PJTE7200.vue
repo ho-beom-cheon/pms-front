@@ -448,7 +448,7 @@ export default {
                   rqs_no : this.detail.rqs_no,
                   rvw_no : this.detail.rvw_no,
                   aprv_no : this.detail.aprv_no,
-                  rmrmk   : this.detail.rmrk,
+                  rmrmk   : this.detail.rmrmk,
                   org_file_nm : this.detail.org_file_nm,
                   login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
                   gridData : gridData,
@@ -859,7 +859,7 @@ export default {
         dstr   : '',
         prcs_stts_cd : '',
         rsn_rqs   : '',
-        rmrk      : '',
+        rmrmk      : '',
 
         rqs_nm : '', //요청자이름
         rqs_no : '', //요청자번호
