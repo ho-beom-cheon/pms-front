@@ -424,6 +424,7 @@ export default {
       //필수항목 확인
       console.log("dstr_selected ::", this.detail.dstr_selected)
 
+
       if(this.detail.dstr_selected === undefined || this.detail.dstr_selected === '')   { alert("배포구분은 필수 입력 사항입니다"); return;}
       if(this.detail.prcs_stts_cd_selected === undefined || this.detail.prcs_stts_cd_selected === '')   { alert("배포요청상태는 필수 입력 사항입니다"); return;}
       if(this.detail.rqs_no === undefined || this.detail.rqs_no === '')   { alert("요청자는 필수 입력 사항입니다"); return;}
