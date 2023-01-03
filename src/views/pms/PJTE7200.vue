@@ -326,7 +326,7 @@
           </div>
           <ul class="div-header">
             <li class="filter-btn" style="margin-right: 5px">
-              <button class="btn btn-filter-p">TAR생성</button>
+              <button class="btn btn-filter-p" @click="fnTar">TAR생성</button>
               <button class="btn btn-filter-p" @click="fnSave">저장</button>
             </li>
           </ul>
@@ -419,6 +419,12 @@ export default {
       this.$refs.grid.invoke("disable");
 
     },
+
+    fnTar() {
+      // 그리드 초기화
+      if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+    },
+
     // 저장 버튼
     fnSave(){
       //필수항목 확인
@@ -433,6 +439,9 @@ export default {
       if(this.detail.rsn_rqs === undefined || this.detail.rsn_rqs === '')   { alert("요청사유는 필수 입력 사항입니다"); return;}
 
       if(this.detail.prcs_stts_cd_selected === '500' && this.detail.rls_dt === '')   { alert("배포요청상태가 [배포완료]인경우 배포일시는 필수입력사항입니다\n배포일시형식[YYYY-MM-DD HH24:II:SS]"); return;}
+      console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
+      console.log("save_prcs_stts_cd ::", this.detail.save_prcs_stts_cd)
+      if(this.detail.prcs_stts_cd_selected === '200' && this.detail.save_prcs_stts_cd !== '190')   { alert("배포요청상태가 [검토요청]인경우 이전배포요청이 [TAR생성성공]인경만 가능합니다."); return;}
 
       let gridData = this.$refs.grid2.invoke("getData");
 
@@ -528,6 +537,7 @@ export default {
 
       this.detail.prcs_stts_cd_selected                  = currentRowData.prcs_stts_cd
       this.$refs.combo.$data.prcs_stts_cd_selected       = currentRowData.prcs_stts_cd
+      this.detail.save_prcs_stts_cd                      = currentRowData.prcs_stts_cd
       this.detail.dstr_selected                          = currentRowData.dstr
       this.$refs.combo.$data.dstr_selected               = currentRowData.dstr
 
@@ -712,6 +722,8 @@ export default {
     },
     // 행추가
     gridAddRow(){
+      console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행추가를 할수없습니다."); return;}
       this.addCheak = 'Y';
       this.$refs.grid2.invoke("appendRow",
           {},
@@ -719,6 +731,7 @@ export default {
     },
     // 행삭제
     gridDelRow(){
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행삭제를 할수없습니다."); return;}
       this.addCheak = 'N'
       this.$refs.grid2.invoke("removeRow", this.curRow2, {showConfirm:false});
     },
@@ -740,6 +753,7 @@ export default {
       this.$refs.combo.$data.dstr_selected           = '';
       this.detail.prcs_stts_cd_selected              = '';
       this.$refs.combo.$data.prcs_stts_cd_selected   = '';
+      this.detail.save_prcs_stts_cd  = ''
 
       this.detail.save_yn               = 'N' ;       // 등록가능여부
       this.newCheck                     = 'Y';
@@ -772,6 +786,7 @@ export default {
 
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 엑셀업로드를 할수없습니다."); return;}
       console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       let input = event.target;
@@ -867,6 +882,7 @@ export default {
         prcs_stts_cd : '',
         rsn_rqs   : '',
         rmrmk      : '',
+        save_prcs_stts_cd : '',
 
         rqs_nm : '', //요청자이름
         rqs_no : '', //요청자번호
@@ -1088,7 +1104,7 @@ export default {
         },
         {
           header: '수정사항',
-          width: 650,
+          width: 570,
           align: 'left',
           name: 'mdfc',
           editor: 'text',
@@ -1099,6 +1115,13 @@ export default {
           align: 'left',
           name: 'rqs_pck_nm',
           editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '생성상태',
+          width: 80,
+          align: 'left',
+          name: 'scs_yn',
           filter: 'text',
         },
       ]
