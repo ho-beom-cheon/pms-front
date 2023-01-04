@@ -315,19 +315,18 @@ export default {
             wb.Sheets[sheetName].A1.w = "NO";        // no
             wb.Sheets[sheetName].B1.w = "dept_nm";   // 부문
             wb.Sheets[sheetName].C1.w = "hdq_nm";    // 소속본부
-            wb.Sheets[sheetName].D1.w = "tm_nm";     // 소속팀
-            wb.Sheets[sheetName].E1.w = "rank_nm";   // 직급
-            wb.Sheets[sheetName].F1.w = "empnm";     // 성명
-            wb.Sheets[sheetName].G1.w = "empno";     // 직원번호
-            wb.Sheets[sheetName].H1.w = "ent_dt";     // 입사일
-            wb.Sheets[sheetName].I1.w = "inp_prj_nm";// 투입프로젝트
-            wb.Sheets[sheetName].J1.w = "inp_dt";// 투입일
-            wb.Sheets[sheetName].K1.w = "wth_dt";// 철수일(예정)
-            wb.Sheets[sheetName].L1.w = "prj_typ_nm";// 프로젝트구분명
-            wb.Sheets[sheetName].M1.w = "prf_ar";    // 수행지역
-            wb.Sheets[sheetName].N1.w = "inp_cls_cd";// 투입구분
-            wb.Sheets[sheetName].O1.w = "rmrk";      // 비고
-            wb.Sheets[sheetName].P1.w = "wth_sch_yn";// 철수예정
+            wb.Sheets[sheetName].D1.w = "rank_nm";   // 직급
+            wb.Sheets[sheetName].E1.w = "empnm";     // 성명
+            wb.Sheets[sheetName].F1.w = "empno";     // 직원번호
+            wb.Sheets[sheetName].G1.w = "ent_dt";     // 입사일
+            wb.Sheets[sheetName].H1.w = "inp_prj_nm";// 투입프로젝트
+            wb.Sheets[sheetName].I1.w = "inp_dt";// 투입일
+            wb.Sheets[sheetName].J1.w = "wth_dt";// 철수일(예정)
+            wb.Sheets[sheetName].K1.w = "prj_typ_nm";// 프로젝트구분명
+            wb.Sheets[sheetName].L1.w = "prf_ar";    // 수행지역
+            wb.Sheets[sheetName].M1.w = "inp_cls_cd";// 투입구분
+            wb.Sheets[sheetName].N1.w = "rmrk";      // 비고
+            wb.Sheets[sheetName].O1.w = "wth_sch_yn";// 철수예정
 
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
@@ -457,13 +456,6 @@ export default {
           header: '소속본부',
           width: 150,
           name: 'hdq_nm',
-          align: 'left',
-          filter: 'select',
-        },
-        {
-          header: '소속팀',
-          width: 150,
-          name: 'tm_nm',
           align: 'left',
           filter: 'select',
         },
