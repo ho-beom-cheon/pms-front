@@ -446,14 +446,14 @@ export default {
       },
       columns: [
         {
-          header: '부문',
+          header: '본부',
           width: 100,
           name: 'dept_nm',
           align: 'left',
           filter: 'select',
         },
         {
-          header: '소속본부',
+          header: '사업부',
           width: 150,
           name: 'hdq_nm',
           align: 'left',
