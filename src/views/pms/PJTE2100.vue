@@ -340,6 +340,12 @@ export default {
         this.info.pl_nm = sessionStorage.getItem("LOGIN_EMP_NM")
         this.info.pl_no = sessionStorage.getItem("LOGIN_EMP_NO")
       }
+
+      if(sessionStorage.getItem("LOGIN_PROJ_ID") === 'NICECBAP'){
+        this.$refs.grid.invoke("setColumnHeaders", {
+          rqu_sbh_id : '개발차수'
+        });
+      }
     },
     // 저장 버튼
     fnSave(){
