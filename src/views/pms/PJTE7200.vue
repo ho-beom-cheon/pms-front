@@ -108,7 +108,7 @@
 
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box" style="height: 180px">
+        <div class="grid1-box" style="height: 310px">
           <div class="div-header-b"><h2>요청내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-e" @click="gridExcelExport">엑셀다운로드</button>
@@ -121,7 +121,7 @@
                 :header="header"
                 :columns="columns"
                 :minBodyHeight="55"
-                :bodyHeight="75"
+                :bodyHeight="205"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
@@ -132,7 +132,7 @@
           </div>
         </div>
 <!-- 요청정보 -->
-        <div class="grid1-box" style="height: 100%">
+        <div class="grid1-box" style="height: 215px">
           <div class="div-header-b"><h2>요청정보</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">초기화</button>
@@ -239,45 +239,9 @@
                        :disabled=true
                 >
               </li>
-            </ul>
-            <ul class="filter-con clear-fix">
-              <li class="filter-item" style="width: 100%">
+              <li class="filter-item">
                 <div class="item-con">
-                  <th style="vertical-align: middle;text-align: right">
-                    <label>요청사유</label>
-                  </th>
-                  <td>
-                      <textarea cols="270"
-                                rows="9"
-                                placeholder="요청사유를 입력해주세요"
-                                v-model="detail.rsn_rqs"
-                                style="width: 100%; margin-left: 7px"
-                      ></textarea>
-                  </td>
-                </div>
-              </li>
-            </ul>
-            <ul class="filter-con clear-fix">
-              <li class="filter-item" style="width: 100%">
-                <div class="item-con">
-                  <th style="vertical-align: middle;text-align: right ;width: 44px">
-                    <label>비고</label>
-                  </th>
-                  <td>
-                      <textarea cols="260"
-                                rows="5"
-                                placeholder="비고내용을 입력해주세요"
-                                v-model="detail.rmrmk"
-                                style="width: 100%; margin-left: 7px"
-                      ></textarea>
-                  </td>
-                </div>
-              </li>
-            </ul>
-            <ul class="filter-con clear-fix">
-              <li class="filter-item" style="width: 100%">
-                <div class="item-con">
-                  <th style="vertical-align: middle;text-align: right ;width: 44px; margin-right: 5px">
+                  <th style="vertical-align: middle;text-align: right ;width: 200px; margin-right: 20px">
                     <label>첨부파일</label>
                   </th>
                   <td>
@@ -290,11 +254,40 @@
                 </div>
               </li>
             </ul>
+            <ul class="filter-con clear-fix">
+              <li class="filter-item" style="width: 100%">
+                <div class="item-con">
+                  <th style="vertical-align: top;text-align: right">
+                    <label>요청사유</label>
+                  </th>
+                  <td>
+                      <textarea cols="270"
+                                rows="6"
+                                placeholder="요청사유를 입력해주세요"
+                                v-model="detail.rsn_rqs"
+                                style="width: 100%; margin-left: 7px"
+                      ></textarea>
+                  </td>
+                  <th style="vertical-align: top;text-align: right ;width: 44px">
+                    <label>비고</label>
+                  </th>
+                  <td>
+                      <textarea cols="260"
+                                rows="6"
+                                placeholder="비고내용을 입력해주세요"
+                                v-model="detail.rmrmk"
+                                style="width: 100%; margin-left: 7px"
+                      ></textarea>
+                  </td>
+                </div>
+              </li>
+            </ul>
+
           </section>
 
         </div>
         <section class="page-contents">
-          <div class="grid1-box" style="height: 200px">
+          <div class="grid1-box" style="height: 225px">
             <div class="div-header"><h2>배포목록</h2>
               <ul class="filter-btn">
                 <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
@@ -314,7 +307,7 @@
                   :header="header2"
                   :columns="columns2"
                   :minBodyHeight="55"
-                  :bodyHeight="120"
+                  :bodyHeight="150"
                   :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions2"
