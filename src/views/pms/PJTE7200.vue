@@ -422,7 +422,21 @@ export default {
 
     fnTar() {
       // 그리드 초기화
-      if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+      // if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+      this.req_rscs = this.$refs.grid2.invoke("getData")
+      console.log(this.$refs.grid2.invoke("getData"))
+
+      axiosService.get("http://10.94.30.90:14444/nideploy/reqmktar.jsp", {
+        params: {
+          reqid : "test",
+          reqrscs : "/NCB/"
+        }
+      }).then(res => {
+        console.log("res", res)
+
+      }).catch(e => {
+        console.log("실패")
+      })
     },
 
     // 저장 버튼
@@ -858,7 +872,13 @@ export default {
       addCheak: 'N',
       cmpl_yn : false,
       file_name_list: [],
+      req_rscs : [],
 
+      tar: {
+        issuc : false,
+        reqid : "",
+        tarname: [],
+      },
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID

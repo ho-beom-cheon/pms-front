@@ -61,7 +61,7 @@
 
     <li class="filter-item-a"  v-for="item in this.comboList" :key="item.id" v-if="item === 'C-40'">
       <div class="item-con" >
-        <td class="td-box">*부문명
+        <td class="td-box">*본부명
         </td>
         <select
             v-model = "dept_cd_selected_iss"
@@ -709,7 +709,7 @@
     </li>
     <!--   부문 코드 -->
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C40'">
-      <div class="item-con">부문명
+      <div class="item-con">본부명
         <select
             v-model = "dept_cd_selected"
             style   = "width: 110px"
