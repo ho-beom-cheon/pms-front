@@ -549,7 +549,6 @@ export default {
 
       // 댓글내역 조회(모달창)
       if(ev.columnName == 'cmnt_btn') {  // 컬럼명이 <댓글버튼>일 때만 모달 오픈
-        this.curRow = '';
         this.modals.txt_modal1 = true;
         this.modalTxt = currentCellData.value;
         const aut_cd = sessionStorage.getItem("LOGIN_AUT_CD");
@@ -615,7 +614,6 @@ export default {
       const currentCellData = (this.$refs.grid3.invoke("getFocusedCell"));
 
       if(ev.columnName != 'del_btn') {
-        this.curRow = ev.rowKey;
         const currentRowData = (this.$refs.grid3.invoke("getRow", this.curRow));
         if (currentRowData != null) {
           this.cellDataBind3(currentRowData) // currentRowData가 있을 때 Row 클릭 시 상세내용에 Bind
