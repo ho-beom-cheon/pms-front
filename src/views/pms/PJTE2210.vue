@@ -575,7 +575,7 @@ export default {
       columns3: [
         {
           header: '업무구분',
-          width: 100,
+          width: 110,
           align: 'center',
           name: 'bzcd',
           disabled: true,
