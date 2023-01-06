@@ -415,21 +415,59 @@ export default {
 
     fnTar() {
       // 그리드 초기화
-      // if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
-      this.req_rscs = this.$refs.grid2.invoke("getData")
-      console.log(this.$refs.grid2.invoke("getData"))
+      this.req_rscs = "";
+      if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+
+      for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
+          this.req_rscs += this.$refs.grid2.invoke("getValue", i, "rqs_pck_nm")+",";
+      }
+
+      this.req_rscs = this.req_rscs.slice(0, this.req_rscs.length - 1)
+
+      console.log("req_rscs 확인 : " +  this.req_rscs)
 
       axiosService.get("http://10.94.30.90:14444/nideploy/reqmktar.jsp", {
         params: {
-          reqid : "test",
-          reqrscs : "/NCB/"
+          reqid : this.detail.rqs_id,
+          reqrscs : this.req_rscs,
         }
       }).then(res => {
         console.log("res", res)
-
+        this.detail.prcs_stts_cd_selected                  = "190"
+        this.$refs.combo.$data.prcs_stts_cd_selected       = "190"
+        for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
+          this.$refs.grid2.invoke("setValue", i, "scs_yn","성공");
+        }
       }).catch(e => {
-        console.log("실패")
+        this.detail.prcs_stts_cd_selected                  = "180"
+        this.$refs.combo.$data.prcs_stts_cd_selected       = "180"
       })
+      this.fnTarSave();
+    },
+
+    fnTarSave(){
+        let gridData = this.$refs.grid2.invoke("getData");
+
+        console.log("gridData ::", gridData)
+        axiosService.post("/PJTE7200/insert_7200_01", {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
+          rqs_id : this.detail.rqs_id,
+          rsn_rqs : this.detail.rsn_rqs,
+          rls_dt : this.detail.rls_dt,
+          dstr : this.detail.dstr_selected,
+          prcs_stts_cd : this.detail.prcs_stts_cd_selected,
+          rqs_no : this.detail.rqs_no,
+          rvw_no : this.detail.rvw_no,
+          aprv_no : this.detail.aprv_no,
+          rmrmk   : this.detail.rmrmk,
+          org_file_nm : this.detail.org_file_nm,
+          login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+          gridData : gridData,
+        }).then(res => {
+          alert("저장을 완료했습니다.")
+        }).catch(e => {
+          alert("저장에 실패했습니다.")
+        })
     },
 
     // 저장 버튼
@@ -730,7 +768,7 @@ export default {
     // 행추가
     gridAddRow(){
       console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
-      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행추가를 할수없습니다."); return;}
+      // if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행추가를 할수없습니다."); return;}
       this.addCheak = 'Y';
       this.$refs.grid2.invoke("appendRow",
           {},
@@ -865,7 +903,9 @@ export default {
       addCheak: 'N',
       cmpl_yn : false,
       file_name_list: [],
-      req_rscs : [],
+
+      req_rscs_array : [],
+      req_rscs : "",    //배포패키지명 리스트
 
       tar: {
         issuc : false,
