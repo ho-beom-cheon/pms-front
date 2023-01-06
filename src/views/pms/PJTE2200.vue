@@ -1176,7 +1176,7 @@ export default {
           filter: 'text',
         },
         {
-          header: '증빙첨부',
+          header: '증빙',
           width: 80,
           align: 'center',
           name: 'atfl_mng_id_yn',

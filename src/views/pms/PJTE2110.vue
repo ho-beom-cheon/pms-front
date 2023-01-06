@@ -15,6 +15,7 @@
               @prjt_nm_chage="prjt_nm_chage"
               @bzcd_change="bzcd_change"
               @setDays="setDays"
+              @sqn_cd_change="sqn_cd_change"
           ></Combo>
           <li class="filter-item">
             <div class="item-con">기준일
@@ -190,6 +191,7 @@ export default {
     bkup_id_change(params) {this.info.bkup_id_selected = params},
     prjt_nm_chage(params) {this.info.prjt_nm_selected = params},
     bzcd_change(params) {this.info.bzcd_selected = params},
+    sqn_cd_change(params) {this.info.sqn_cd_selected = params},
 
     setDays(data) {
       this.info.s_day = data.s_day;
@@ -258,11 +260,12 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C1"],
+      comboList : ["C27","C0","C1","C6"],
 
       info: {
         crpe_no: this.crpe_no,             // 담당자 사번
         inq_date: dateString,         // 기준일자
+        sqn_cd : this.sqn_cd,
         /* select 박스 */
         bkup_id_selected: "0000000000",      // 프로젝트명
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),      // 프로젝트명
@@ -270,6 +273,7 @@ export default {
                        sessionStorage.getItem("LOGIN_AUT_CD") === '500' || sessionStorage.getItem("LOGIN_AUT_CD") === '600' ||
                        sessionStorage.getItem("LOGIN_AUT_CD") === '900' ? 'TTT':sessionStorage.getItem("LOGIN_BZCD"),       // 업무구분
         gubun : '',
+        qn_cd_selected : 'TTT',       // 차수구분
         s_day               : '',
         proc_dt             : '',
         err_proc_dt         : '',
@@ -316,6 +320,20 @@ export default {
             type: 'select',
             options:{
               listItems: this.$store.state.pms.CD1000000001N
+            }
+          }
+        },
+        {
+          header: '차수',
+          width: 55,
+          align: 'center',
+          name: 'sqn_cd',
+          disabled: true,
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
@@ -434,6 +452,20 @@ export default {
           }
         },
         {
+          header: '차수',
+          width: 60,
+          align: 'center',
+          name: 'sqn_cd',
+          formatter: 'listItemText',
+          disabled: true,
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000006N
+            }
+          }
+        },
+        {
           header: '담당자',
           width: 70,
           align: 'left',
@@ -529,7 +561,7 @@ export default {
       columns3: [
         {
           header: '업무구분',
-          width: 100,
+          width: 110,
           align: 'center',
           name: 'bzcd',
           type:'text',
@@ -543,27 +575,41 @@ export default {
           }
         },
         {
+          header: '차수',
+          width: 60,
+          align: 'center',
+          name: 'sqn_cd',
+          formatter: 'listItemText',
+          disabled: true,
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000006N
+            }
+          }
+        },
+        {
           header: '전체',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'tot_err_cnt',
 
         },
         {
           header: '결함',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'err_cnt',
         },
         {
           header: '개선',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'impt_cnt',
         },
         {
           header: '기타',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'etc_err_cnt',
         },
@@ -575,19 +621,19 @@ export default {
         },
         {
           header: '완료',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'cmpl_cnt',
         },
         {
           header: '진행',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'ncmpl_cnt',
         },
         {
           header: '보류',
-          width: 65,
+          width: 55,
           align: 'right',
           name: 'spnd_cnt',
         },
@@ -611,6 +657,20 @@ export default {
             type: 'select',
             options:{
               listItems: this.$store.state.pms.CD1000000001N
+            }
+          }
+        },
+        {
+          header: '차수',
+          width: 50,
+          align: 'center',
+          name: 'sqn_cd',
+          disabled: true,
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000006N
             }
           }
         },
