@@ -1149,7 +1149,7 @@ export default {
       CD1000000003T : [],  CD1000000003N : [],
       CD1000000004T : [],  CD1000000004N : [],
       CD1000000005T : [],  CD1000000005N : [],
-      CD1000000006T : [],  CD1000000006N : [],
+      CD1000000006T : [],  CD1000000006N : [], CD1000000006 : [],
       CD1000000007T : [],  CD1000000007N : [],
       CD1000000008T : [],  CD1000000008N : [],
       CD1000000009T : [],  CD1000000009N : [],
@@ -1576,6 +1576,7 @@ export default {
             } else if(i === 6) {
               this.CD1000000006T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
               this.CD1000000006N.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
+              this.CD1000000006.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //NULL 포함 코드정보
               // this.CD0000000000.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD});  //등록 코드정보
             } else if(i === 7) {
               this.CD1000000007T.push({"text": data[z].DTLS_TYNM, "value": data[z].DTLS_TYCD}); //전체 포함 코드정보
