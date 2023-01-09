@@ -601,12 +601,12 @@ export default {
     },
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=650");
     },
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=bzcd=this.info.bzcd_selected, file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=900");
     },
     fnCloseModal(){  // 모달창 닫기
       this.modals.txt_modal1 = false;
@@ -1078,7 +1078,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 635,
+      bodyHeight: 670,
       rowHeight: 25,
       minRowHeight: 10,
       showDummyRows: false,

@@ -19,9 +19,11 @@
                 @bkup_id_change="bkup_id_change"
                 @prjt_nm_chage="prjt_nm_chage"
                 @bzcd_change="bzcd_change"
+                @sqn_cd_change="sqn_cd_change"
+                @prc_step_cd_change="prc_step_cd_change"
                 @dvlp_dis_cd_change="dvlp_dis_cd_change"
                 @pgm_dis_cd_change="pgm_dis_cd_change"
-                @prc_step_cd_change="prc_step_cd_change"
+                ref="combo"
             ></combo>
             <li class="filter-item">
               <div class="item-con">프로그램ID
@@ -100,14 +102,17 @@
                 <div class="input-dateWrap"><input type="date" :min="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
-            <button class="btn btn-filter-p" style="margin-left: 47px" @click="fnSearch">조회</button>
+            <div class="btn btn-filter-p" style="margin-left: 470px">
+              <a href="#" @click="fnSearch">조회</a>
+            </div>
           </ul>
+
           <div class="mt-1">
             <ul class="filter-btn">
               <button class="btn btn-filter-d" @click="batchDownload">TC증빙 일괄다운로드ⓘ</button>
               <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
               <div title="업무구분을 선택한 후 엑셀을 업로드 할 수 있습니다.">
-              <button class="btn btn-filter-e" v-bind:disabled="this.info.bzcd_selected=='TTT'">
+              <button class="btn btn-filter-e" v-bind:disabled="this.info.bzcd_selected=='TTT'||this.info.sqn_cd_selected=='TTT'">
                 <label for="file">엑셀업로드</label>
                 <input type="file" id="file"  @change="gridExcelImport"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;">
               </button>
@@ -317,12 +322,24 @@ export default {
     bzcd_change(params) {this.info.bzcd_selected = params},
     dvlp_dis_cd_change(params) {this.info.dvlp_dis_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
-    prc_step_cd_change(params) {this.info.prc_step_cd_selected = params},
+    prc_step_cd_change(params) {
+      console.log("prc_step_cd_change전:"+params);
+      if(params===null || params === undefined){
+        this.info.prc_step_cd_selected = "TTT"
+        this.$refs.combo.$data.prc_step_cd_selected  = "TTT"
+      } else {
+        this.info.prc_step_cd_selected = params
+      }
+      console.log("prc_step_cd_change후:"+this.info.prc_step_cd_selected);
+    },
+    sqn_cd_change(params) {this.info.sqn_cd_selected = params},
 
     // 화면 init
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
+
+      console.log("init:"+this.$refs.combo.$data.prc_step_cd_selected);
 
       if(sessionStorage.getItem("LOGIN_AUT_CD") !== '500' && sessionStorage.getItem("LOGIN_AUT_CD") !== '600'
           && sessionStorage.getItem("LOGIN_AUT_CD") !== '900' ){
@@ -353,6 +370,7 @@ export default {
               login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
               login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              sqn_cd      : this.info.sqn_cd_selected,
               gridData: this.gridData
             }).then(res => {
               console.log(res);
@@ -390,6 +408,7 @@ export default {
               login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
               login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
               login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+              sqn_cd      : this.info.sqn_cd_selected,
               gridData: this.createdRows
             }).then(res => {
               console.log(res)
@@ -413,6 +432,7 @@ export default {
                 login_proj_id: sessionStorage.getItem("LOGIN_PROJ_ID"),
                 login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"),
                 login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD"),
+                sqn_cd      : this.info.sqn_cd_selected,
                 gridData: this.updatedRows
               }).then(res => {
                 console.log(res)
@@ -605,12 +625,12 @@ export default {
     // 양식다운로드
     formDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=sessionStorage.getItem("LOGIN_BZCD"), atfl_mng_id = "0000000000", file_rgs_dscd = '901' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=500");
+      this.pop = window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=650");
     },
     // TC증빙 일괄다운로드
     batchDownload(){
       let bkup_id='0000000000', prjt_id=sessionStorage.getItem("LOGIN_PROJ_ID"), bzcd=this.info.bzcd_selected, file_rgs_dscd = '100' //atfl_mng_id 값은 양식 파일 첨부 ID 추후에 추가
-      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=710");
+      this.pop = window.open(`../PJTE9003/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&bzcd=${bzcd}&file_rgs_dscd=${file_rgs_dscd}`, "open_file_page", "width=1000, height=900");
     },
     // 모달창에서 수정버튼 클릭 시 그리드Text 변경
     fnEdit(){
@@ -922,6 +942,7 @@ export default {
         if(data[i].bzcd === null)         { alert(pgm_nm+" 업무구분은 필수 입력 사항입니다");      return false;}
         if(data[i].pgm_id === null)       { alert(pgm_nm+" 프로그램ID는 필수 입력 사항입니다");    return false;}
         if(data[i].pgm_nm === null)       { alert(pgm_nm+" 프로그램명은 필수 입력 사항입니다");   return false;}
+        if(data[i].sqn_cd === null)       { alert(pgm_nm+" 차수는 필수 입력 사항입니다");    return false;}
         if(data[i].dvlp_dis_cd === null)  { alert(pgm_nm+" 개발구분은 필수 입력 사항입니다");      return false;}
         if(data[i].pgm_dis_cd === null)   { alert(pgm_nm+" 프로그램 구분은 필수 입력 사항입니다");  return false;}
         if(data[i].prc_step_cd === null)  { alert(pgm_nm+" 처리단계는 필수 입력 사항입니다");      return false;}
@@ -998,7 +1019,7 @@ export default {
   data() {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList : ["C27","C0","C1","C3","C4","C2"],
+      comboList : ["C27","C0","C1","C6","C2","C3","C4"],
 
       gridData: [],
       excelUplod: 'N',
@@ -1037,6 +1058,7 @@ export default {
         dvlp_dis_cd_selected  : 'TTT',
         pgm_dis_cd_selected   : 'TTT',
         prc_step_cd_selected  : 'TTT',
+        sqn_cd_selected       : 'TTT',
       },
       login : {
         login_aut_cd          : sessionStorage.getItem("LOGIN_AUT_CD"),
@@ -1054,7 +1076,7 @@ export default {
       title:"",
       scrollX:false,
       scrollY:false,
-      bodyHeight: 630,
+      bodyHeight: 670,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: false,
