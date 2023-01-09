@@ -416,7 +416,7 @@ export default {
     fnTar() {
       // 그리드 초기화
       this.req_rscs = "";
-      if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+      // if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
 
       for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
           this.req_rscs += this.$refs.grid2.invoke("getValue", i, "rqs_pck_nm")+",";
@@ -425,8 +425,7 @@ export default {
       this.req_rscs = this.req_rscs.slice(0, this.req_rscs.length - 1)
 
       console.log("req_rscs 확인 : " +  this.req_rscs)
-
-      axiosService.get("http://10.94.30.90:14444/nideploy/reqmktar.jsp", {
+      axiosService.get("/PJTE7200/tarCreate", {
         params: {
           reqid : this.detail.rqs_id,
           reqrscs : this.req_rscs,
@@ -442,7 +441,7 @@ export default {
         this.detail.prcs_stts_cd_selected                  = "180"
         this.$refs.combo.$data.prcs_stts_cd_selected       = "180"
       })
-      this.fnTarSave();
+      // this.fnTarSave();
     },
 
     fnTarSave(){
