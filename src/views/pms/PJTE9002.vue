@@ -232,6 +232,7 @@ export default {
         this.pjt_list.push({"text": data[i].DTLS_TYNM, "value": data[i].DTLS_TYCD});
       }
       this.pjt_selected = this.$route.query.prjt_id;
+      this.atfl_mng_id = this.$route.query.atfl_mng_id;
       this.fnSearch();
     },
 

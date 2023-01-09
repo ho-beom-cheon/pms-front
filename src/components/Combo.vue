@@ -321,22 +321,6 @@
         </select>
       </div>
     </li>
-    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
-      <div class="item-con">개발구분
-        <select
-            v-model = "dvlp_dis_cd_selected"
-            style   = "width: 94px"
-            @change = "dvlp_dis_cd_change"
-        >
-          <option
-              v-for  = "(item, idx) in CD1000000003T"
-              :key   = "idx"
-              v-text = "item.text"
-              :value = "item.value"
-          ></option>
-        </select>
-      </div>
-    </li>
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C6'">
       <div class="item-con">차수
         <select
@@ -430,6 +414,22 @@
         >
           <option
               v-for  = "(item, idx) in CD1000000002T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C3'">
+      <div class="item-con">개발구분
+        <select
+            v-model = "dvlp_dis_cd_selected"
+            style   = "width: 94px"
+            @change = "dvlp_dis_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000003T"
               :key   = "idx"
               v-text = "item.text"
               :value = "item.value"
