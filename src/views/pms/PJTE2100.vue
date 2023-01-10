@@ -323,14 +323,13 @@ export default {
     dvlp_dis_cd_change(params) {this.info.dvlp_dis_cd_selected = params},
     pgm_dis_cd_change(params) {this.info.pgm_dis_cd_selected = params},
     prc_step_cd_change(params) {
-      console.log("prc_step_cd_change전:"+params);
+
       if(params===null || params === undefined){
         this.info.prc_step_cd_selected = "TTT"
         this.$refs.combo.$data.prc_step_cd_selected  = "TTT"
       } else {
         this.info.prc_step_cd_selected = params
       }
-      console.log("prc_step_cd_change후:"+this.info.prc_step_cd_selected);
     },
     sqn_cd_change(params) {this.info.sqn_cd_selected = params},
 
@@ -739,8 +738,9 @@ export default {
             wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
             wb.Sheets[sheetName].J1.w = "prc_step_cd"
             wb.Sheets[sheetName].K1.w = "prg_txt"
-            let L1 = {
-              L1: {
+            wb.Sheets[sheetName].L1.w = "err_btn"
+            let M1 = {
+              M1: {
                 t: 's',
                 v: '예상시작일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -748,10 +748,10 @@ export default {
                 w: 'frcs_sta_dt'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], L1)
-            wb.Sheets[sheetName].L2.w = "frcs_sta_dt"
-            let M1 = {
-              M1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
+            wb.Sheets[sheetName].M2.w = "frcs_sta_dt"
+            let N1 = {
+              N1: {
                 t: 's',
                 v: '예상종료일',
                 r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -759,16 +759,16 @@ export default {
                 w: 'frcs_end_dt'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
-            wb.Sheets[sheetName].M2.w = "frcs_end_dt"
-            wb.Sheets[sheetName].N1.w = "sta_dt"
-            wb.Sheets[sheetName].O1.w = "end_dt"
-            wb.Sheets[sheetName].P1.w = "dvlpe_cnf_dt"
-            wb.Sheets[sheetName].Q1.w = "pl_cnf_dt"
-            wb.Sheets[sheetName].R2.w = "dvlpe_nm"
-            wb.Sheets[sheetName].S2.w = "dvlpe_btn"
-            let T1 = {
-              T1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], N1)
+            wb.Sheets[sheetName].N2.w = "frcs_end_dt"
+            wb.Sheets[sheetName].O1.w = "sta_dt"
+            wb.Sheets[sheetName].P2.w = "end_dt"
+            wb.Sheets[sheetName].Q1.w = "dvlpe_cnf_dt"
+            wb.Sheets[sheetName].R1.w = "pl_cnf_dt"
+            wb.Sheets[sheetName].S2.w = "dvlpe_nm"
+            wb.Sheets[sheetName].T2.w = "dvlpe_btn"
+            let U1 = {
+              U1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -776,12 +776,12 @@ export default {
                 w: 'dvlpe_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
-            wb.Sheets[sheetName].T2.w = "dvlpe_no"
-            wb.Sheets[sheetName].U2.w = "pl_nm"
-            wb.Sheets[sheetName].V2.w = "pl_btn"
-            let W1 = {
-              W1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+            wb.Sheets[sheetName].U2.w = "dvlpe_no"
+            wb.Sheets[sheetName].V2.w = "pl_nm"
+            wb.Sheets[sheetName].W2.w = "pl_btn"
+            let X1 = {
+              X1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -789,12 +789,12 @@ export default {
                 w: 'pl_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
-            wb.Sheets[sheetName].W2.w = "pl_no"
-            wb.Sheets[sheetName].X2.w = "crpe_nm"
-            wb.Sheets[sheetName].Y2.w = "crpe_btn"
-            let Z1 = {
-              Z1: {
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
+            wb.Sheets[sheetName].X2.w = "pl_no"
+            wb.Sheets[sheetName].Y2.w = "crpe_nm"
+            wb.Sheets[sheetName].Z2.w = "crpe_btn"
+            let AA1 = {
+              AA1: {
                 t: 's',
                 v: '사번',
                 r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -802,16 +802,15 @@ export default {
                 w: 'crpe_no'
               }
             }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Z1)
-            wb.Sheets[sheetName].Z2.w = "crpe_no"
-            wb.Sheets[sheetName].AA2.w = "err_tot_cnt"
-            wb.Sheets[sheetName].AB2.w = "err_cmpl_cnt"
-            wb.Sheets[sheetName].AC2.w = "err_ncmpl_cnt"
-            wb.Sheets[sheetName].AD2.w = "err_btn"
-            wb.Sheets[sheetName].AE1.w = "rqu_sbh_id"
-            wb.Sheets[sheetName].AF1.w = "pal_atfl_mng_id_yn"
-            wb.Sheets[sheetName].AG1.w = "rmrk"
-
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], AA1)
+            wb.Sheets[sheetName].AA2.w = "crpe_no"
+            wb.Sheets[sheetName].AB2.w = "err_tot_cnt"
+            wb.Sheets[sheetName].AC2.w = "err_cmpl_cnt"
+            wb.Sheets[sheetName].AD2.w = "err_ncmpl_cnt"
+            wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
+            wb.Sheets[sheetName].AF1.w = "rmrk"
+            wb.Sheets[sheetName].AG1.w = "cnv_bs_dt"
+            wb.Sheets[sheetName].AH1.w = "rqu_sbh_id"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
 
@@ -1111,7 +1110,7 @@ export default {
         complexColumns: [
           {header: '계획',             name: 'mergeColumn1', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '실적',             name: 'mergeColumn2', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt', 'err_btn'], headerAlign:'center'},
+          {header: '결함',             name: 'mergeColumn3', childNames: ['err_tot_cnt', 'err_cmpl_cnt', 'err_ncmpl_cnt'], headerAlign:'center'},
           {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},
           {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], headerAlign:'center'},
           {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], headerAlign:'center'},
@@ -1237,6 +1236,12 @@ export default {
           filter: 'text',
         },
         {
+          header: '결함등록',
+          width: 60,
+          align: 'center',
+          name: 'err_btn',
+        },
+        {
           header: '예상시작일',
           width: 90,
           align: 'center',
@@ -1360,14 +1365,6 @@ export default {
           name: 'crpe_no',
         },
         {
-          header: '문서',
-          width: 130,
-          align: 'center',
-          name: 'atfl_mng_id',
-          type : 'text',
-          hidden : true,
-        },
-        {
           header: '전체',
           width: 40,
           align: 'right',
@@ -1386,14 +1383,30 @@ export default {
           name: 'err_ncmpl_cnt',
         },
         {
-          header: '등록',
-          width: 40,
+          header: '첨부파일관리ID',
+          width: 120,
           align: 'center',
-          name: 'err_btn',
-          //renderer: CustomRenderer,
+          name: 'pal_atfl_mng_id_yn',
+          defaultValue: '미첨부',
         },
         {
-          header: '요구사항 ID',
+          header: '비고',
+          width: 200,
+          align: 'left',
+          name: 'rmrk',
+          filter: 'text',
+        },
+        {
+          header: '전환기준일자',
+          width: 100,
+          align: 'center',
+          name: 'cnv_bs_dt',
+          format: 'yyyy-mm-dd',
+          filter: 'text',
+          editor: 'datePicker',
+        },
+        {
+          header: '요구사항ID',
           width: 120,
           align: 'left',
           name: 'rqu_sbh_id',
@@ -1402,11 +1415,12 @@ export default {
           filter: 'text',
         },
         {
-          header: '첨부파일관리ID',
-          width: 120,
+          header: '문서',
+          width: 130,
           align: 'center',
-          name: 'pal_atfl_mng_id_yn',
-          defaultValue: '미첨부',
+          name: 'atfl_mng_id',
+          type : 'text',
+          hidden : true,
         },
         {
           header: '첨부파일관리ID',
@@ -1414,13 +1428,6 @@ export default {
           align: 'center',
           name: 'pal_atfl_mng_id',
           hidden : true
-        },
-        {
-          header: '비고',
-          width: 200,
-          align: 'left',
-          name: 'rmrk',
-          filter: 'text',
         },
         {
           header: '등록여부',
@@ -1449,15 +1456,6 @@ export default {
           name: 'unt_tst_yn',
           align: 'center',
           hidden : true
-        },
-        {
-          header: '전환기준일자',
-          width: 100,
-          align: 'center',
-          name: 'cnv_bs_dt',
-          format: 'yyyy-mm-dd',
-          filter: 'text',
-          editor: 'datePicker',
         },
       ]
     }
