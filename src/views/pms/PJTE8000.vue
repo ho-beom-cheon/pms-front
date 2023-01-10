@@ -762,6 +762,7 @@ export default {
 
                 this.detail.bef_pm_nm = res.data.data.contents[0].bef_pm_nm
                 this.detail.bef_pm_no = res.data.data.contents[0].bef_pm_no
+                this.detail.bef_week_sqn_cd = res.data.data.contents[0].bef_week_sqn_cd
                 this.detail.bef_week_sqn_nm = res.data.data.contents[0].bef_week_sqn_nm
                 this.detail.bef_week_yymm = this.getYyyymm(res.data.data.contents[0].bef_week_yymm)
                 this.detail.bef_dept_cd = res.data.data.contents[0].bef_dept_cd
@@ -786,6 +787,7 @@ export default {
                 //지난주 주간보고 초기화
                 this.detail.bef_pm_nm = ''                                                                            // (상세)pm명
                 this.detail.bef_pm_no = ''                                                                            // (상세)pmno
+                this.detail.bef_week_sqn_cd = ''
                 this.detail.bef_week_sqn_nm = ''                                                                      // (상세)pm명
                 this.detail.bef_week_yymm = ''                                                                        // (상세)pmno
                 this.detail.bef_all_pred_prg = ''                                                                     // (상세)예상진척율
@@ -810,15 +812,26 @@ export default {
       // console.log(num)
       let file_rgs_dscd = ''
       let atfl_mng_id = ''
+
+      let week_sqn_cd = ''
+      let week_yymm = ''
+      let real_prjt_id = ''
+
       if(num == 1) {
         file_rgs_dscd='800'
         atfl_mng_id = this.detail.atfl_mng_id
+        week_sqn_cd = this.detail.week_sqn_cd_selected
+        week_yymm   = this.detail.week_yymm
+        real_prjt_id = this.detail.real_prjt_id_selected
       } else if(num = 2){
         file_rgs_dscd='800'
         atfl_mng_id = this.detail.bef_atfl_mng_id
+        week_sqn_cd = this.detail.bef_week_sqn_nm
+        week_yymm   = this.detail.bef_week_yymm
+        real_prjt_id = this.detail.real_prjt_id_selected
       }
       let bkup_id='0000000000', prjt_id= sessionStorage.getItem("LOGIN_PROJ_ID")
-      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}`, "open_file_page", "width=1000, height=800");
+      window.open(`../PJTE9002/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&atfl_mng_id=${atfl_mng_id}&file_rgs_dscd=${file_rgs_dscd}&num=${num}&week_sqn_cd=${week_sqn_cd}&week_yymm=${week_yymm}&real_prjt_id=${real_prjt_id}`, "open_file_page", "width=1000, height=800");
     },
     //직원조회 버튼 클릭 시
     open_pjte9001_btn(btn_id) {
@@ -920,6 +933,7 @@ export default {
       //지난주 주간보고 초기화
       this.detail.bef_pm_nm = ''                                                                            // (상세)pm명
       this.detail.bef_pm_no = ''                                                                            // (상세)pmno
+      this.detail.bef_week_sqn_cd = ''
       this.detail.bef_week_sqn_nm = ''                                                                      // (상세)pm명
       this.detail.bef_week_yymm = ''                                                                        // (상세)pmno
       this.detail.bef_all_pred_prg = ''                                                                     // (상세)예상진척율
@@ -977,6 +991,7 @@ export default {
       this.detail.org_file_nm = currentRowData.org_file_nm;                             // (상세)첨부파일명
       this.detail.atfl_mng_id = currentRowData.atfl_mng_id;                             // (상세)첨부파일id
       //지난주 주간보고
+      this.detail.bef_week_sqn_cd = currentRowData.bef_week_sqn_cd;
       this.detail.bef_week_sqn_nm = currentRowData.bef_week_sqn_nm;                      // (지난주 상세)차수명
       this.detail.bef_week_yymm = this.getYyyymm(currentRowData.bef_week_yymm);          // (지난주 상세)주간년월
       this.detail.bef_pm_no = currentRowData.bef_pm_no;                                  // (지난주 상세)pm번호
@@ -1271,6 +1286,7 @@ export default {
         org_file_nm           : '',     // (상세)첨부파일
         atfl_mng_id           : '',     // (상세)첨부파일
         //지난주
+        bef_week_sqn_cd           : '',
         bef_week_sqn_nm            : '',     // 주간년월 차수
         bef_week_yymm             : '',     // 주간년월
         bef_pm_no                 : '',     // pm번호
