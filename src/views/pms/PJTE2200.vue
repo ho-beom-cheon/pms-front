@@ -773,8 +773,9 @@ export default {
               wb.Sheets[sheetName].H1.w = "atfl_mng_id_yn"
               wb.Sheets[sheetName].I1.w = "itg_tst_prc_cd"
               wb.Sheets[sheetName].J1.w = "rmrk"
-              let K1 = {
-                K1: {
+              wb.Sheets[sheetName].K1.w = "err_btn"
+              let L1 = {
+                L1: {
                   t: 's',
                   v: '예상시작일',
                   r: '<t>예상시작일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -782,10 +783,10 @@ export default {
                   w: 'frcs_sta_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], K1)
-              wb.Sheets[sheetName].K2.w = "frcs_sta_dt"
-              let L1 = {
-                L1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], L1)
+              wb.Sheets[sheetName].L2.w = "frcs_sta_dt"
+              let M1 = {
+                M1: {
                   t: 's',
                   v: '예상종료일',
                   r: '<t>예상종료일</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -793,14 +794,14 @@ export default {
                  w: 'frcs_end_dt'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName],L1)
-              wb.Sheets[sheetName].L2.w = "frcs_end_dt"
-              wb.Sheets[sheetName].M2.w = "sta_dt"
-              wb.Sheets[sheetName].N2.w = "end_dt"
-              wb.Sheets[sheetName].O1.w = "dvlpe_cnf_dt"
-              wb.Sheets[sheetName].P1.w = "pl_cnf_dt"
-              let Q1 = {
-                Q1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName],M1)
+              wb.Sheets[sheetName].M2.w = "frcs_end_dt"
+              wb.Sheets[sheetName].N2.w = "sta_dt"
+              wb.Sheets[sheetName].O2.w = "end_dt"
+              wb.Sheets[sheetName].P1.w = "dvlpe_cnf_dt"
+              wb.Sheets[sheetName].Q1.w = "pl_cnf_dt"
+              let R1 = {
+                R1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -808,10 +809,10 @@ export default {
                   w: 'dvlpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
-              wb.Sheets[sheetName].Q2.w = "dvlpe_enm"
-              let R1 = {
-                R1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
+              wb.Sheets[sheetName].R2.w = "dvlpe_enm"
+              let S1 = {
+                S1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -819,10 +820,10 @@ export default {
                   w: 'dvlpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], R1)
-              wb.Sheets[sheetName].R2.w = "dvlpe_btn"
-              let S1 = {
-                S1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
+              wb.Sheets[sheetName].S2.w = "dvlpe_btn"
+              let T1 = {
+                T1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -830,10 +831,10 @@ export default {
                   w: 'dvlpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], S1)
-              wb.Sheets[sheetName].S2.w = "dvlpe_eno"
-              let T1 = {
-                T1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
+              wb.Sheets[sheetName].T2.w = "dvlpe_eno"
+              let U1 = {
+                U1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -841,10 +842,10 @@ export default {
                   w: 'pl_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], T1)
-              wb.Sheets[sheetName].T2.w = "pl_enm"
-              let U1 = {
-                U1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
+              wb.Sheets[sheetName].U2.w = "pl_enm"
+              let V1 = {
+                V1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -852,10 +853,10 @@ export default {
                   w: 'pl_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-              wb.Sheets[sheetName].U2.w = "pl_btn"
-              let V1 = {
-                V1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
+              wb.Sheets[sheetName].V2.w = "pl_btn"
+              let W1 = {
+                W1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -863,10 +864,10 @@ export default {
                   w: 'pl_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], V1)
-              wb.Sheets[sheetName].V2.w = "pl_eno"
-              let W1 = {
-                W1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
+              wb.Sheets[sheetName].W2.w = "pl_eno"
+              let X1 = {
+                X1: {
                   t: 's',
                   v: '명',
                   r: '<t>명</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -874,10 +875,10 @@ export default {
                   w: 'crpe_enm'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], W1)
-              wb.Sheets[sheetName].W2.w = "crpe_enm"
-              let X1 = {
-                X1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
+              wb.Sheets[sheetName].X2.w = "crpe_enm"
+              let Y1 = {
+                Y1: {
                   t: 's',
                   v: '버튼',
                   r: '<t>버튼</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -885,10 +886,10 @@ export default {
                   w: 'crpe_btn'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
-              wb.Sheets[sheetName].X2.w = "crpe_btn"
-              let Y1 = {
-                Y1: {
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Y1)
+              wb.Sheets[sheetName].Y2.w = "crpe_btn"
+              let Z1 = {
+                Z1: {
                   t: 's',
                   v: '사번',
                   r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
@@ -896,12 +897,11 @@ export default {
                   w: 'crpe_eno'
                 }
               }
-              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Y1)
-              wb.Sheets[sheetName].Y2.w = "crpe_eno"
-              wb.Sheets[sheetName].Z2.w = "err_tot_cnt"
-              wb.Sheets[sheetName].AA2.w = "err_cmpl_cnt"
-              wb.Sheets[sheetName].AB2.w = "err_ncmpl_cnt"
-              wb.Sheets[sheetName].AC2.w = "err_btn"
+              wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Z1)
+              wb.Sheets[sheetName].Z2.w = "crpe_eno"
+              wb.Sheets[sheetName].AA2.w = "err_tot_cnt"
+              wb.Sheets[sheetName].AB2.w = "err_cmpl_cnt"
+              wb.Sheets[sheetName].AC2.w = "err_ncmpl_cnt"
               wb.Sheets[sheetName].AD1.w = "pgm_id"
               wb.Sheets[sheetName].AE1.w = "scrn_id"
               wb.Sheets[sheetName].AF1.w = "trn_cd"
@@ -1105,7 +1105,7 @@ export default {
           {header: '결함건수',  name: 'mergeColumn1', childNames: ['col19', 'col20', 'col21']},
           {header: '계획', name: 'mergeColumn2', childNames: ['frcs_sta_dt', 'frcs_end_dt']},
           {header: '실적', name: 'mergeColumn3', childNames: ['sta_dt', 'end_dt']},
-          {header: '결함',      name: 'mergeColumn4', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt','err_btn']},
+          {header: '결함',      name: 'mergeColumn4', childNames: ['err_tot_cnt', 'err_cmpl_cnt','err_ncmpl_cnt']},
           {header: '개발자',     name: 'mergeColumn5', childNames: ['dvlpe_enm', 'dvlpe_btn','dvlpe_eno']},
           {header: 'PL',        name: 'mergeColumn6', childNames: ['pl_enm', 'pl_btn','pl_eno']},
           {header: '담당현업',   name: 'mergeColumn7', childNames: ['crpe_enm', 'crpe_btn','crpe_eno']},
@@ -1201,6 +1201,13 @@ export default {
           width: 250,
           name: 'rmrk',
           filter: 'text',
+        },
+        {
+          header: '결함등록',
+          width: 60,
+          name: 'err_btn',
+          align: 'center',
+          //renderer: CustomRenderer,
         },
         {
           header: '예상시작일',
@@ -1312,13 +1319,6 @@ export default {
           name: 'crpe_eno',
         },
         {
-          header: '증빙첨부',
-          width: 100,
-          align: 'center',
-          name: 'atfl_mng_id',
-          hidden : true
-        },
-        {
           header: '전체',
           width: 40,
           align: 'right',
@@ -1335,13 +1335,6 @@ export default {
           width: 40,
           align: 'right',
           name: 'err_ncmpl_cnt',
-        },
-        {
-          header: '등록',
-          width: 40,
-          name: 'err_btn',
-          align: 'center',
-          //renderer: CustomRenderer,
         },
         {
           header: '프로그램ID',
@@ -1426,6 +1419,13 @@ export default {
           name: 'tst_achi_rst',
           editor: "text",
           filter: 'text',
+        },
+        {
+          header: '증빙첨부',
+          width: 100,
+          align: 'center',
+          name: 'atfl_mng_id',
+          hidden : true
         },
         {
           header: '백업ID',
