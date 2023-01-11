@@ -1141,7 +1141,7 @@ export default {
           filter: 'text',
         },
         {
-          header: '생성내용',
+          header: '생성결과',
           width: 350,
           align: 'left',
           name: 'err_msg_cnt',
