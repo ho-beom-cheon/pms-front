@@ -1127,7 +1127,7 @@ export default {
         },
         {
           header: '수정사항',
-          width: 570,
+          width: 470,
           align: 'left',
           name: 'mdfc',
           editor: 'text',
@@ -1141,10 +1141,10 @@ export default {
           filter: 'text',
         },
         {
-          header: '생성상태',
-          width: 80,
+          header: '생성내용',
+          width: 350,
           align: 'left',
-          name: 'scs_yn',
+          name: 'err_msg_cnt',
           filter: 'text',
         },
       ]
