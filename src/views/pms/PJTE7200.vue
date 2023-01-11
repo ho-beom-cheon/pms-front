@@ -429,51 +429,22 @@ export default {
         params: {
           reqid : this.detail.rqs_id,
           reqrscs : this.req_rscs,
+          prjt_id : this.login.login_proj_id,
+          login_emp_no : this.login.login_emp_no,
         }
       }).then(res => {
         console.log("res", res)
-        this.detail.prcs_stts_cd_selected                  = "190"
-        this.$refs.combo.$data.prcs_stts_cd_selected       = "190"
-        for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
-          this.$refs.grid2.invoke("setValue", i, "scs_yn","성공");
-        }
+        alert("TRA생성 완료했습니다.")
+        this.fnSearch();
       }).catch(e => {
-        this.detail.prcs_stts_cd_selected                  = "180"
-        this.$refs.combo.$data.prcs_stts_cd_selected       = "180"
+        alert("TRA생성 실패했습니다.")
       })
-      // this.fnTarSave();
-    },
-
-    fnTarSave(){
-        let gridData = this.$refs.grid2.invoke("getData");
-
-        console.log("gridData ::", gridData)
-        axiosService.post("/PJTE7200/insert_7200_01", {
-          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-          rqs_id : this.detail.rqs_id,
-          rsn_rqs : this.detail.rsn_rqs,
-          rls_dt : this.detail.rls_dt,
-          dstr : this.detail.dstr_selected,
-          prcs_stts_cd : this.detail.prcs_stts_cd_selected,
-          rqs_no : this.detail.rqs_no,
-          rvw_no : this.detail.rvw_no,
-          aprv_no : this.detail.aprv_no,
-          rmrmk   : this.detail.rmrmk,
-          org_file_nm : this.detail.org_file_nm,
-          login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-          gridData : gridData,
-        }).then(res => {
-          alert("저장을 완료했습니다.")
-        }).catch(e => {
-          alert("저장에 실패했습니다.")
-        })
     },
 
     // 저장 버튼
     fnSave(){
       //필수항목 확인
       console.log("dstr_selected ::", this.detail.dstr_selected)
-
 
       if(this.detail.dstr_selected === undefined || this.detail.dstr_selected === '')   { alert("배포구분은 필수 입력 사항입니다"); return;}
       if(this.detail.prcs_stts_cd_selected === undefined || this.detail.prcs_stts_cd_selected === '')   { alert("배포요청상태는 필수 입력 사항입니다"); return;}
