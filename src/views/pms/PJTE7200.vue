@@ -1119,7 +1119,7 @@ export default {
       columns2: [
         {
           header: '테스트케이스ID',
-          width: 150,
+          width: 120,
           align: 'center',
           name: 'tst_case_id',
           editor: 'text',
@@ -1141,8 +1141,15 @@ export default {
           filter: 'text',
         },
         {
+          header: '생성상태',
+          width: 60,
+          align: 'center',
+          name: 'scs_yn',
+          filter: 'text',
+        },
+        {
           header: '생성결과',
-          width: 350,
+          width: 400,
           align: 'left',
           name: 'err_msg_cnt',
           filter: 'text',
