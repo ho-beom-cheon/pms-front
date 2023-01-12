@@ -426,7 +426,7 @@ export default {
     fnTar() {
       // 그리드 초기화
       this.req_rscs = "";
-      if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
 
       if (this.$refs.grid2.invoke("isModified") === true) {
         alert("변경된 배포목록이 있습니다.\n저장후 TAR생성을 해주세요.");
