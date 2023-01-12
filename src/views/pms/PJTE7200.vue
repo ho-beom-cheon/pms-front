@@ -453,7 +453,9 @@ export default {
         }
       }).then(res => {
         console.log("res", res)
-            if (res.result === true) {
+        console.log("res.data", res.data)
+        console.log("res.data.result", res.data.result)
+            if (res.data.result === true) {
               alert("TRA생성 완료했습니다.")
             } else {
               alert("TRA생성 실패했습니다.")
