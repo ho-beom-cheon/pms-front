@@ -143,7 +143,7 @@
               <li class="filter-item">
                 <div class="item-con" >요청ID
                   <input type="text"
-                         id      = "as_pgm_id"
+                         id      = "rqs_id"
                          v-model="detail.rqs_id"
                          style= "width: 180px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
                          :disabled=true
@@ -160,11 +160,21 @@
                 </div>
               </li>
               <li class="filter-item">
+                <div class="item-con" >TAR생성일시
+                  <input type="text"
+                         ref="tar_chg_ts"
+                         v-model="detail.tar_chg_ts"
+                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
+                         :disabled=true
+                  >
+                </div>
+              </li>
+              <li class="filter-item">
                 <div class="item-con" >배포일시
                   <input type="text"
-                         ref="address"
+                         ref="rls_dt"
                          v-model="detail.rls_dt"
-                         style="width: 150px; margin-left: 5px;text-align: center"
+                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
                   >
                 </div>
               </li>
@@ -416,7 +426,16 @@ export default {
     fnTar() {
       // 그리드 초기화
       this.req_rscs = "";
-      // if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+      if(this.detail.save_prcs_stts_cd !== '100' && this.detail.save_prcs_stts_cd !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
+
+      if (this.$refs.grid2.invoke("isModified") === true) {
+        alert("변경된 배포목록이 있습니다.\n저장후 TAR생성을 해주세요.");
+        return;
+      }
+
+      if (confirm("정말 TAR생성을 하시겠습니까?") === false) {
+        return;
+      }
 
       for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
           this.req_rscs += this.$refs.grid2.invoke("getValue", i, "rqs_pck_nm")+",";
@@ -434,10 +453,14 @@ export default {
         }
       }).then(res => {
         console.log("res", res)
-        alert("TRA생성 완료했습니다.")
-        this.fnSearch();
+            if (res.result === true) {
+              alert("TRA생성 완료했습니다.")
+            } else {
+              alert("TRA생성 실패했습니다.")
+            }
+            this.fnSearch();
       }).catch(e => {
-        alert("TRA생성 실패했습니다.")
+        alert("TRA생성시 오류가 발생했습니다.")
       })
     },
 
@@ -542,6 +565,7 @@ export default {
       this.detail.rqs_id                                 = currentRowData.rqs_id                     // 요청 ID
       this.detail.rqs_dt                                 = currentRowData.rqs_dt                     // 요청일자
       this.detail.rls_dt                                 = currentRowData.rls_dt                     // 배포일시
+      this.detail.tar_chg_ts                             = currentRowData.tar_chg_ts                 // TAR생성일시
       this.detail.rsn_rqs                                = currentRowData.rsn_rqs                    // 요청사유
       this.detail.rmrmk                                  = currentRowData.rmrmk                       // 비고
       this.detail.rqs_nm                                 = currentRowData.rqs_nm                     // 요청자
@@ -757,6 +781,7 @@ export default {
       this.detail.rqs_id   = ''
       this.detail.rqs_dt   = ''
       this.detail.rls_dt   = ''
+      this.detail.tar_chg_ts   = ''
       this.detail.rqs_no   = ''
       this.detail.rqs_nm   = ''
       this.detail.rvw_no   = ''
@@ -916,6 +941,7 @@ export default {
         rvw_no : '', //검토자번호
         rqs_dt  : '', //요청일자
         rls_dt  : '', //배포일자
+        tar_chg_ts : '', //TAR생성일시
 
         atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
         org_file_nm: this.org_file_nm,    // 원파일명
@@ -1095,6 +1121,14 @@ export default {
           width: 80,
           align: 'left',
           name: 'org_file_nm',
+          filter: 'text',
+          hidden : true,
+        },
+        {
+          header: 'TAR생성일시',
+          width: 80,
+          align: 'left',
+          name: 'tar_chg_ts',
           filter: 'text',
           hidden : true,
         },
