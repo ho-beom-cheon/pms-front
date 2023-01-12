@@ -453,9 +453,10 @@ export default {
       if(this.detail.aprv_no === undefined || this.detail.aprv_no === '')   { alert("승인자는 필수 입력 사항입니다"); return;}
       if(this.detail.rsn_rqs === undefined || this.detail.rsn_rqs === '')   { alert("요청사유는 필수 입력 사항입니다"); return;}
 
-      if(this.detail.prcs_stts_cd_selected === '500' && this.detail.rls_dt === '')   { alert("배포요청상태가 [배포완료]인경우 배포일시는 필수입력사항입니다\n배포일시형식[YYYY-MM-DD HH24:II:SS]"); return;}
       console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
       console.log("save_prcs_stts_cd ::", this.detail.save_prcs_stts_cd)
+      if(this.detail.prcs_stts_cd_selected === '190')   { alert("배포요청상태를 [TAR생성성공]은 화면에서 저장할수 없습니다."); return;}
+
       if(this.detail.prcs_stts_cd_selected === '200' && this.detail.save_prcs_stts_cd !== '190')   { alert("배포요청상태가 [검토요청]인경우 이전배포요청이 [TAR생성성공]인경만 가능합니다."); return;}
 
       let gridData = this.$refs.grid2.invoke("getData");
@@ -738,7 +739,7 @@ export default {
     // 행추가
     gridAddRow(){
       console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
-      // if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행추가를 할수없습니다."); return;}
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== '180' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행추가를 할수없습니다."); return;}
       this.addCheak = 'Y';
       this.$refs.grid2.invoke("appendRow",
           {},
@@ -746,7 +747,7 @@ export default {
     },
     // 행삭제
     gridDelRow(){
-      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행삭제를 할수없습니다."); return;}
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== '180' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 행삭제를 할수없습니다."); return;}
       this.addCheak = 'N'
       this.$refs.grid2.invoke("removeRow", this.curRow2, {showConfirm:false});
     },
@@ -801,7 +802,7 @@ export default {
 
     gridExcelImport(event) {
       // 엑셀파일 업로드 로직 추가
-      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록]아닌 경우 엑셀업로드를 할수없습니다."); return;}
+      if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== '180' && this.detail.prcs_stts_cd_selected !== 'undefined')   { alert("배포요청상태가 [등록/TAR생성실패]아닌 경우 엑셀업로드를 할수없습니다."); return;}
       console.log(event.target.files[0])
       this.file = event.target.files ? event.target.files[0] : null;
       let input = event.target;
