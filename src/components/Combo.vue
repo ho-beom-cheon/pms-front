@@ -337,6 +337,7 @@
         </select>
       </div>
     </li>
+
     <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C26'">
       <div class="item-con">처리단계
         <select
@@ -964,7 +965,7 @@
         <select
             id      = "as_pgm_dis_cdT"
             v-model = "as_pgm_dis_cd_selectedT"
-            style   = "width: 250px;margin-left : 5px"
+            style   = "width: 210px;margin-left : 5px"
             @change = "as_pgm_dis_cd_changeT"
         >
           <option
@@ -978,10 +979,10 @@
     </li>
 
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C-52'">
-      <div class="item-con"  style   = "margin-left : 43px">전환상태
+      <div class="item-con"  style   = "margin-left : 45px">전환상태
         <select
             v-model = "trn_stt_cd_selected"
-            style   = "width: 250px;margin-left : 5px"
+            style   = "width: 130px;margin-left : 5px"
             @change = "trn_stt_cd_change"
         >
           <option
@@ -993,7 +994,22 @@
         </select>
       </div>
     </li>
-
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C6N'">
+      <div class="item-con" style   = "margin-left : 5px">차수
+        <select
+            v-model = "asis_sqn_cd_selected"
+            style   = "width: 80px;margin-left : 5px"
+            @change = "asis_sqn_cd_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000006"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C55'">
       <div class="item-con"  style   = "margin-left : 20px">회의록작성상태
         <select
@@ -1094,6 +1110,7 @@ export default {
     this.prjt_nm_chage()
     this.prjt_nm_change_pop()
     this.sqn_cd_change()
+    this.asis_sqn_cd_change()
     this.itg_tst_prc_cd_change()
     this.req_dis_cd_change()
     this.rgs_dis_cd_change()
@@ -1327,6 +1344,8 @@ export default {
       as_pgm_dis_cd_selectedT : "",
       // 전환상태
       trn_stt_cd_selected : "",
+      //차수
+      asis_sqn_cd_selected : "",
       // 회의진행상태
       mtng_prc_step_cd_selected : "",
       // 배포구분
@@ -1356,6 +1375,7 @@ export default {
     prjt_nm_chage()                 {  this.$emit('prjt_nm_chage',                 this.prjt_nm_selected)},              // 프로젝트명
     prjt_nm_change_pop()            {  this.$emit('prjt_nm_change_pop',            this.prjt_nm_selected_pop)},          // 프로젝트명(팝업)
     sqn_cd_change()                 {  this.$emit('sqn_cd_change',                 this.sqn_cd_selected)},               // 차수구분코드
+    asis_sqn_cd_change()            {  this.$emit('asis_sqn_cd_change',            this.asis_sqn_cd_selected)},               //
     itg_tst_prc_cd_change()         {  this.$emit('itg_tst_prc_cd_change',         this.itg_tst_prc_cd_selected)},       // 통합테스트 처리구분코드
     req_dis_cd_change()             {  this.$emit('req_dis_cd_change',             this.req_dis_cd_selected)},           // 요청구분코드
     rgs_dis_cd_change()             {  this.$emit('rgs_dis_cd_change',             this.rgs_dis_cd_selected)},           // 관리구분코드
@@ -1761,6 +1781,7 @@ export default {
           if(this.CD1000000003T.length !== 0)  this.dvlp_dis_cd_selected         = this.CD1000000003T[0].value
           if(this.CD1000000004T.length !== 0)  this.pgm_dis_cd_selected          = this.CD1000000004T[0].value
           if(this.CD1000000006T.length !== 0)  this.sqn_cd_selected              = this.CD1000000006T[0].value
+          if(this.CD1000000006.length !== 0)  this.asis_sqn_cd_selected          = this.CD1000000006[0].value
           if(this.CD1000000007T.length !== 0)  this.err_tycd_selected            = this.CD1000000007T[0].value
           if(this.CD1000000008T.length !== 0)  this.err_rgs_dscd_selected        = this.CD1000000008T[0].value
           if(this.CD1000000009T.length !== 0)  this.err_prc_step_cd_selected     = this.CD1000000009T[0].value
