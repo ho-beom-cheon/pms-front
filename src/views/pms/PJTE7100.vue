@@ -14,12 +14,13 @@
               :comboArray = "this.comboList"
               @prjt_nm_chage="prjt_nm_chage"
               @bkup_id_change="bkup_id_change"
+              @sqn_cd_change="sqn_cd_change"
           ></combo>
           <li class="filter-item">
             <div class="input-searchWrap" >As-Is 프로그램 ID
               <input type="text"
                      v-model="info.as_pgm_id"
-                     style="width: 180px"
+                     style="width: 150px"
               >
             </div>
           </li>
@@ -27,7 +28,7 @@
             <div class="input-searchWrap" >To-Be 프로그램 ID
               <input type="text"
                      v-model="info.to_pgm_id"
-                     style="width: 180px"
+                     style="width: 150px"
               >
             </div>
           </li>
@@ -42,7 +43,7 @@
               <input type="text"
                      placeholder="직원명"
                      v-model="info.dvlpe_nm"
-                     style="width: 90px"
+                     style="width: 80px"
                      @keyup.enter="open_pjte9001(1)"
               >
               <button class="search-btn"
@@ -54,7 +55,7 @@
             <input type="text"
                    placeholder="직원번호"
                    v-model="info.dvlpe_no"
-                   style="width: 90px; background-color: #f2f2f2;"
+                   style="width: 80px; background-color: #f2f2f2;"
                    :disabled=true
             >
           </li>
@@ -177,6 +178,12 @@
                   ref="combo3"
                   :comboArray = "this.comboList3"
                   @trn_stt_cd_change="trn_stt_cd_change"
+              >
+              </combo>
+              <combo
+                  ref="combo4"
+                  :comboArray = "this.comboList4"
+                  @asis_sqn_cd_change="asis_sqn_cd_change"
               >
               </combo>
               <li class="filter-item"   style="margin-left: 10px">
@@ -303,6 +310,8 @@ export default {
     as_pgm_dis_cd_changeT(params) {this.info.info_as_pgm_dis_cd = params},    // As-Is프로그램유형
     as_pgm_dis_cd_change(params)  {this.detail.as_pgm_dis_cd_selected = params},    // As-Is프로그램유형
     trn_stt_cd_change(params)     {this.detail.trn_stt_cd_selected = params},// 전환상태
+    sqn_cd_change(params) {this.info.sqn_cd_selected = params},
+    asis_sqn_cd_change(params) {this.detail.asis_sqn_cd_selected = params},
 
     // 화면 init
     init() {
@@ -333,6 +342,7 @@ export default {
                     prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
                     as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
                     as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // as-is 프로그램구분코드
+                    sqn_cd:this.detail.asis_sqn_cd_selected,               // 차수구분코드
                     as_pgm_nm: this.detail.as_pgm_nm,                      // as-is 프로그램명
                     to_pgm_id: this.detail.to_pgm_id,                      // to-be 프로그램id
                     to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
@@ -370,6 +380,7 @@ export default {
               this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_id', this.detail.to_pgm_id);
               this.$refs.grid.invoke("setValue", this.curRow, 'to_pgm_nm', this.detail.to_pgm_nm);
               this.$refs.grid.invoke("setValue", this.curRow, 'as_pgm_dis_cd', this.detail.as_pgm_dis_cd_selected);
+              this.$refs.grid.invoke("setValue", this.curRow, 'sqn_cd', this.detail.asis_sqn_cd_selected);
               this.$refs.grid.invoke("setValue", this.curRow, 'use_pgm_txt', this.detail.use_pgm_txt);
               this.$refs.grid.invoke("setValue", this.curRow, 'trn_stt_cd', this.detail.trn_stt_cd_selected);
               this.$refs.grid.invoke("setValue", this.curRow, 'dvlpe_nm', this.detail.dvlpe_nm);
@@ -382,6 +393,7 @@ export default {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
                 as_pgm_id: this.detail.as_pgm_id,                      // as-is 프로그램id
                 as_pgm_dis_cd: this.detail.as_pgm_dis_cd_selected,     // as-is 프로그램구분코드
+                sqn_cd:this.detail.asis_sqn_cd_selected,               // 차수구분코드
                 as_pgm_nm: this.detail.as_pgm_nm,                      // as-is 프로그램명
                 to_pgm_id: this.detail.to_pgm_id,                      // to-be 프로그램id
                 to_pgm_nm: this.detail.to_pgm_nm,                      // to-be 프로그램명
@@ -468,6 +480,8 @@ export default {
       this.detail.to_pgm_nm                           = currentRowData.to_pgm_nm                  // To-be프로그램명
       this.detail.as_pgm_dis_cd_selected              = currentRowData.as_pgm_dis_cd              // as-is프로그램유형
       this.$refs.combo2.$data.as_pgm_dis_cd_selected  = currentRowData.as_pgm_dis_cd              // as-is프로그램유형
+      this.detail.asis_sqn_cd_selected                = currentRowData.sqn_cd                     // 차수구분코드
+      this.$refs.combo4.$data.asis_sqn_cd_selected    = currentRowData.sqn_cd                     // 차수구분코드
       this.detail.dvlpe_no                            = currentRowData.dvlpe_no                   // 전환담당자번호
       this.detail.dvlpe_nm                            = currentRowData.dvlpe_nm                   // 전환담당자명
       this.detail.trn_stt_cd_selected                 = currentRowData.trn_stt_cd                 // 전환상태
@@ -567,6 +581,8 @@ export default {
       this.detail.dvlpe_nm                            = sessionStorage.getItem("LOGIN_EMP_NM")          // 전환담당자명
       this.detail.trn_stt_cd_selected                 = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
       this.$refs.combo3.$data.trn_stt_cd_selected     = this.$refs.combo3.$data.CD1000000052N[0].value      // 전환상태
+      this.detail.asis_sqn_cd_selected                = ''      // 전환상태
+      this.$refs.combo4.$data.asis_sqn_cd_selected    = ''      // 전환상태
       this.detail.use_pgm_txt                         = ''                                                  // 사용프로그램
       this.detail.rmrk                                = ''                                                  // 비고
       this.detail.frcs_sta_dt                         = ''                                                  // 계획시작일자
@@ -613,20 +629,21 @@ export default {
           if (sheetName === 'As-Is대To-Be매핑관리' || sheetName === 'Sheet1') {
             console.log(wb.Sheets[sheetName])
             wb.Sheets[sheetName].A1.w = "No"
-            wb.Sheets[sheetName].B1.w = "as_pgm_id"
-            wb.Sheets[sheetName].C1.w = "as_pgm_nm"
-            wb.Sheets[sheetName].D1.w = "to_pgm_id"
-            wb.Sheets[sheetName].E1.w = "to_pgm_nm"
-            wb.Sheets[sheetName].F1.w = "as_pgm_dis_cd"
-            wb.Sheets[sheetName].G1.w = "use_pgm_txt"
-            wb.Sheets[sheetName].H1.w = "trn_stt_cd"
-            wb.Sheets[sheetName].I1.w = "dvlpe_nm"
-            wb.Sheets[sheetName].J1.w = "dvlpe_no"
-            wb.Sheets[sheetName].K1.w = "frcs_sta_dt"
-            wb.Sheets[sheetName].L1.w = "frcs_end_dt"
-            wb.Sheets[sheetName].M1.w = "sta_dt"
-            wb.Sheets[sheetName].N1.w = "end_dt"
-            wb.Sheets[sheetName].O1.w = "rmrk"
+            wb.Sheets[sheetName].B1.w = "sqn_cd"
+            wb.Sheets[sheetName].C1.w = "as_pgm_id"
+            wb.Sheets[sheetName].D1.w = "as_pgm_nm"
+            wb.Sheets[sheetName].E1.w = "to_pgm_id"
+            wb.Sheets[sheetName].F1.w = "to_pgm_nm"
+            wb.Sheets[sheetName].G1.w = "as_pgm_dis_cd"
+            wb.Sheets[sheetName].H1.w = "use_pgm_txt"
+            wb.Sheets[sheetName].I1.w = "trn_stt_cd"
+            wb.Sheets[sheetName].J1.w = "dvlpe_nm"
+            wb.Sheets[sheetName].K1.w = "dvlpe_no"
+            wb.Sheets[sheetName].L1.w = "frcs_sta_dt"
+            wb.Sheets[sheetName].M1.w = "frcs_end_dt"
+            wb.Sheets[sheetName].N1.w = "sta_dt"
+            wb.Sheets[sheetName].O1.w = "end_dt"
+            wb.Sheets[sheetName].P1.w = "rmrk"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
 
@@ -696,9 +713,10 @@ export default {
     return {
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
       infocomboList1 : ["C-51T"],
-      comboList : ["C0","C27"],
+      comboList : ["C0","C27","C6"],
       comboList2 : ["C-51"],
       comboList3 : ["C-52"],
+      comboList4 : ["C6N"],
 
       gridData: [],
       newCheck : 'Y',
@@ -707,6 +725,7 @@ export default {
       info : {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected      : '0000000000',                                 // 백업ID
+        sqn_cd_selected       : 'TTT',
         as_pgm_id             : '',                                           // ASIS프로그램ID
         to_pgm_id             : '',                                           // TOBE프로그램ID
         use_pgm_txt           : '',                                           // 사용프로그램
@@ -721,6 +740,7 @@ export default {
         to_pgm_id               : '',                                         // TOBE프로그램ID
         to_pgm_nm               : '',                                         // TOBE프로그램명
         as_pgm_dis_cd_selected  : '',                                         // As-Is 프로그램 구분코드
+        asis_sqn_cd_selected    : '',
         dvlpe_no                : sessionStorage.getItem("LOGIN_EMP_NO"), // 전환담당자 번호
         dvlpe_nm                : sessionStorage.getItem("LOGIN_EMP_NM"), // 전환담당자 명
         trn_stt_cd_selected     : '',                                         // 전환상태
@@ -776,6 +796,20 @@ export default {
         ]
       },
       columns: [
+        {
+          header: '차수',
+          width: 60,
+          align: 'center',
+          name: 'sqn_cd',
+          filter: 'select',
+          formatter: 'listItemText',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: this.$store.state.pms.CD1000000006N
+            }
+          }
+        },
         {
           header: '프로그램 ID',
           width: 200,
@@ -916,6 +950,7 @@ export default {
           editor: 'text',
           hidden: true,
         },
+
       ],
     }
   },
