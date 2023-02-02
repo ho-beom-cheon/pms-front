@@ -31,7 +31,7 @@
             <button class="btn btn-filter-e" style="margin-left: 20px;" @click="fnOpenModal(1)">최상위폴더생성</button>
           </ul>
         </section>
-        <div class="grid1-box" style="height: 650px">
+        <div class="grid1-box" style="height: 750px">
           <div class="div-header"><h2>폴더정보</h2>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -43,7 +43,7 @@
                 @dblclick="dblclick"
                 @click="onClick"
                 :minBodyHeight="55"
-                :bodyHeight="550"
+                :bodyHeight="680"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :columnOptions="columnOptions"
