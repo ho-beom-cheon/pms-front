@@ -780,7 +780,7 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 640,
+      bodyHeight: 700,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: false,
