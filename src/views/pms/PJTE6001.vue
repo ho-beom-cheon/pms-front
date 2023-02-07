@@ -54,7 +54,7 @@
           <th style="line-height: 20;">
             신청내용
           </th>
-          <td colspan="5">
+          <td colspan="8">
             <textarea cols="30" rows="10" placeholder="신청내용을 입력해주세요" v-model="req_txt" ref="req_txt"></textarea>
           </td>
         </tr>
@@ -70,6 +70,12 @@
             </div>
           </td>
           <th>
+            조치예정일
+          </th>
+          <td colspan="2">
+            <input type="date" v-model="ttmn_scd_dt" ref="ttmn_scd_dt" style="width: 110px;">
+          </td>
+          <th>
             처리일자
           </th>
           <td colspan="2">
@@ -80,13 +86,13 @@
           <th style="line-height: 23;">
             처리내용
           </th>
-          <td colspan="5">
+          <td colspan="8">
             <textarea cols="30" rows="10" placeholder="" style="width: 100%" v-model="prc_txt" ref="prc_txt"></textarea>
           </td>
         </tr>
         <tr v-if="mng_id">
           <th>첨부파일</th>
-          <td colspan="4">
+          <td colspan="7">
             <input type="text" :disabled="read" :value="org_file_nm">
           </td>
           <th>
@@ -95,7 +101,7 @@
         </tr>
         <tr v-else>
           <th>첨부파일</th>
-          <td colspan="4">
+          <td colspan="7">
             <span>첨부파일등록은 저장 후 가능합니다.</span>
           </td>
         </tr>
@@ -164,6 +170,7 @@ export default {
       prcpe_nm : '',              // 처리자명
       prcpe_no : '',              // 처리자 직원번호
       prc_dt:'',                  // 처리일자
+      ttmn_scd_dt:'',
       prc_txt : '',               // 처리내용
       file_name_list : [],
       org_file_nm : '',           // 원파일명
@@ -365,6 +372,7 @@ export default {
         prcpe_no : this.prcpe_no,
         req_prc_step_cd : this.req_prc_step_cd_selected,
         prc_txt : this.prc_txt,
+        ttmn_scd_dt : this.ttmn_scd_dt,
         login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),
         bkup_id : '0000000000',
         prjt_id : this.prjt_id,
