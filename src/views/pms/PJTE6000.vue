@@ -432,6 +432,14 @@ export default {
           filter: 'text',
         },
         {
+          header: '조치예정일자',
+          width: 90,
+          align: 'center',
+          name: 'ttmn_scd_dt',
+          format: 'yyyy-mm-dd',
+          filter: 'text',
+        },
+        {
           header: '처리일자',
           width: 90,
           align: 'center',
