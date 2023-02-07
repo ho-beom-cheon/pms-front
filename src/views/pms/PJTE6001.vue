@@ -327,8 +327,8 @@ export default {
         reqpe_no : this.reqpe_no,
         prcpe_no : this.prcpe_no,
         req_txt : this.req_txt,
-        login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO')
-
+        login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),
+        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD")
       })
           .then(res => {
             console.log(res.data)
@@ -377,7 +377,8 @@ export default {
         login_emp_no : sessionStorage.getItem('LOGIN_EMP_NO'),
         bkup_id : '0000000000',
         prjt_id : this.prjt_id,
-        mng_id : this.mng_id
+        mng_id : this.mng_id,
+        login_aut_cd: sessionStorage.getItem("LOGIN_AUT_CD")
       })
           .then(res => {
             console.log(res);
