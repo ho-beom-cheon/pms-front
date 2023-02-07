@@ -284,6 +284,7 @@ export default {
             this.req_txt = res_data.req_txt
             this.prcpe_nm = res_data.prcpe_nm
             this.prcpe_no = res_data.prcpe_no
+            this.ttmn_scd_dt = res_data.ttmn_scd_dt ? res_data.ttmn_scd_dt.substr(0,4)+ '-' +res_data.ttmn_scd_dt.substr(4,2) + '-' + res_data.ttmn_scd_dt.substr(6) : res_data.ttmn_scd_dt
             this.prc_dt = res_data.prc_dt ? res_data.prc_dt.substr(0,4)+ '-' +res_data.prc_dt.substr(4,2) + '-' + res_data.prc_dt.substr(6) : res_data.prc_dt
             this.prc_txt = res_data.prc_txt
             this.org_file_nm = res_data.org_file_nm
