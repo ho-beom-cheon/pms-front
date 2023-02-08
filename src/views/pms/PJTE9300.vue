@@ -27,7 +27,7 @@
       </section>
       <!-- page contents -->
       <section class="page-contents">
-        <div class="grid1-box" style="height: 350px">
+        <div class="grid1-box" style="height: 280px">
           <div class="div-header"><h2>요청인력내역</h2>
             <ul class="filter-btn">
               <button class="btn btn-filter-b" id="addRowBtn" @click="gridAddRow">행추가</button>
@@ -56,7 +56,7 @@
         <ul class="filter-btn" style="margin-top: 7px">
           <button class="btn btn-filter-p" id="saveBtn" @click="fnSave">저장</button>
         </ul>
-        <div class="grid1-box" style="height: 350px">
+        <div class="grid1-box" style="height: 450px">
           <div class="div-header"><h2>대기인력내역</h2>
           </div>
           <div class="gridWrap" style="min-width: 750px;">
@@ -65,7 +65,7 @@
                 :data="dataSource2"
                 :header="header"
                 :columns="columns2"
-                :bodyHeight="bodyHeight"
+                :bodyHeight="bodyHeight1"
                 :minRowHeight="minRowHeight"
                 :showDummyRows="showDummyRows"
                 :editingEvent="editingEvent"
@@ -409,7 +409,8 @@ export default {
       title: "",
       scrollX: false,
       scrollY: false,
-      bodyHeight: 280,
+      bodyHeight: 200,
+      bodyHeight1: 380,
       minRowHeight: 10,
       rowHeight: 25,
       showDummyRows: false,
