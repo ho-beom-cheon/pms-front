@@ -738,79 +738,40 @@ export default {
             wb.Sheets[sheetName].I1.w = "atfl_mng_id_yn"
             wb.Sheets[sheetName].J1.w = "prc_step_cd"
             wb.Sheets[sheetName].K1.w = "prg_txt"
-            wb.Sheets[sheetName].L1.w = "err_btn"
-            let M1 = {
-              M1: {
-                t: 's',
-                v: '예상시작일',
-                r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '예상시작일',
-                w: 'frcs_sta_dt'
-              }
-            }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], M1)
-            wb.Sheets[sheetName].M2.w = "frcs_sta_dt"
-            let N1 = {
-              N1: {
-                t: 's',
-                v: '예상종료일',
-                r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '예상종료일',
-                w: 'frcs_end_dt'
-              }
-            }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], N1)
-            wb.Sheets[sheetName].N2.w = "frcs_end_dt"
-            wb.Sheets[sheetName].O1.w = "sta_dt"
-            wb.Sheets[sheetName].P2.w = "end_dt"
-            wb.Sheets[sheetName].Q1.w = "dvlpe_cnf_dt"
-            wb.Sheets[sheetName].R1.w = "pl_cnf_dt"
-            wb.Sheets[sheetName].S2.w = "dvlpe_nm"
-            wb.Sheets[sheetName].T2.w = "dvlpe_btn"
-            let U1 = {
-              U1: {
-                t: 's',
-                v: '사번',
-                r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '사번',
-                w: 'dvlpe_no'
-              }
-            }
-            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], U1)
-            wb.Sheets[sheetName].U2.w = "dvlpe_no"
-            wb.Sheets[sheetName].V2.w = "pl_nm"
-            wb.Sheets[sheetName].W2.w = "pl_btn"
-            let X1 = {
-              X1: {
-                t: 's',
-                v: '사번',
-                r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '사번',
-                w: 'pl_no'
-              }
-            }
+            wb.Sheets[sheetName].L1.w = "cnv_bs_dt"
+            wb.Sheets[sheetName].M1.w = "err_btn"
+            wb.Sheets[sheetName].N1.w = "rmrk"
+            wb.Sheets[sheetName].O1.w = "rqu_sbh_id"
+            let P1 = {P1: { t: 's',v: '예상시작일',r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',h: '예상시작일',w: 'frcs_sta_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], P1)
+            wb.Sheets[sheetName].P2.w = "frcs_sta_dt"
+            let Q1 = {Q1: { t: 's',v: '예상종료일',r: '<t>예상종료일자</t><phoneticPr fontId="1" type="noConversion"/>',h: '예상종료일',w: 'frcs_end_dt'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], Q1)
+            wb.Sheets[sheetName].Q2.w = "frcs_end_dt"
+            wb.Sheets[sheetName].R1.w = "sta_dt"
+            wb.Sheets[sheetName].S2.w = "end_dt"
+            wb.Sheets[sheetName].T1.w = "dvlpe_cnf_dt"
+            wb.Sheets[sheetName].U1.w = "pl_cnf_dt"
+            wb.Sheets[sheetName].V2.w = "dvlpe_nm"
+            wb.Sheets[sheetName].W2.w = "dvlpe_btn"
+            let X1 = {X1: { t: 's',v: '사번',r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',h: '사번',w: 'dvlpe_no'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], X1)
-            wb.Sheets[sheetName].X2.w = "pl_no"
-            wb.Sheets[sheetName].Y2.w = "crpe_nm"
-            wb.Sheets[sheetName].Z2.w = "crpe_btn"
-            let AA1 = {
-              AA1: {
-                t: 's',
-                v: '사번',
-                r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',
-                h: '사번',
-                w: 'crpe_no'
-              }
-            }
+            wb.Sheets[sheetName].X2.w = "dvlpe_no"
+            wb.Sheets[sheetName].Y2.w = "pl_nm"
+            wb.Sheets[sheetName].Z2.w = "pl_btn"
+            let AA1 = {AA1: { t: 's',v: '사번',r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',h: '사번',w: 'pl_no'}}
             wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], AA1)
-            wb.Sheets[sheetName].AA2.w = "crpe_no"
-            wb.Sheets[sheetName].AB2.w = "err_tot_cnt"
-            wb.Sheets[sheetName].AC2.w = "err_cmpl_cnt"
-            wb.Sheets[sheetName].AD2.w = "err_ncmpl_cnt"
-            wb.Sheets[sheetName].AE1.w = "pal_atfl_mng_id_yn"
-            wb.Sheets[sheetName].AF1.w = "rmrk"
-            wb.Sheets[sheetName].AG1.w = "cnv_bs_dt"
-            wb.Sheets[sheetName].AH1.w = "rqu_sbh_id"
+            wb.Sheets[sheetName].AA2.w = "pl_no"
+            wb.Sheets[sheetName].AB2.w = "crpe_nm"
+            wb.Sheets[sheetName].AC2.w = "crpe_btn"
+            let AD1 = {AD1: { t: 's',v: '사번',r: '<t>사번</t><phoneticPr fontId="1" type="noConversion"/>',h: '사번',w: 'crpe_no'}}
+            wb.Sheets[sheetName] = Object.assign(wb.Sheets[sheetName], AD1)
+            wb.Sheets[sheetName].AD2.w = "crpe_no"
+            wb.Sheets[sheetName].AE2.w = "err_tot_cnt"
+            wb.Sheets[sheetName].AF2.w = "err_cmpl_cnt"
+            wb.Sheets[sheetName].AG2.w = "err_ncmpl_cnt"
+            wb.Sheets[sheetName].AH1.w = "pal_atfl_mng_id_yn"
+
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
 
@@ -1114,14 +1075,15 @@ export default {
           {header: '개발자',           name: 'mergeColumn4', childNames: ['dvlpe_btn','dvlpe_nm','dvlpe_no']},
           {header: 'PL',              name: 'mergeColumn5', childNames: ['pl_nm', 'pl_btn','pl_no'], headerAlign:'center'},
           {header: '담당현업',         name: 'mergeColumn6', childNames: ['crpe_nm', 'crpe_btn','crpe_no'], headerAlign:'center'},
-          {header: '단위테스트',       name: 'mergeColumn7', childNames: ['atfl_mng_id_yn'], headerAlign:'center'},
+          {header: '테스트',           name: 'mergeColumn7', childNames: ['atfl_mng_id_yn'], headerAlign:'center'},
           {header: '설계서',           name: 'mergeColumn8', childNames: ['pal_atfl_mng_id_yn'], headerAlign:'center'},
+          {header: '결함',            name: 'mergeColumn9', childNames: ['err_btn'], headerAlign:'center'},
         ]
       },
       columns: [
         {
           header: '업무구분',
-          width: 120,
+          width: 110,
           minWidth: 50,
           maxWidth: 250,
           name: 'bzcd',
@@ -1157,7 +1119,7 @@ export default {
         },
         {
           header: '차수',
-          width: 80,
+          width: 60,
           align: 'center',
           name: 'sqn_cd',
           formatter: 'listItemText',
@@ -1208,7 +1170,7 @@ export default {
         },
         {
           header: '증빙',
-          width: 80,
+          width: 40,
           align: 'center',
           name: 'atfl_mng_id_yn',
           type : 'text',
@@ -1236,10 +1198,35 @@ export default {
           filter: 'text',
         },
         {
-          header: '결함등록',
-          width: 60,
+          header: '전환기준일자',
+          width: 100,
+          align: 'center',
+          name: 'cnv_bs_dt',
+          format: 'yyyy-mm-dd',
+          filter: 'text',
+          editor: 'datePicker',
+        },
+        {
+          header: '등록',
+          width: 30,
           align: 'center',
           name: 'err_btn',
+        },
+        {
+          header: '비고',
+          width: 200,
+          align: 'left',
+          name: 'rmrk',
+          filter: 'text',
+        },
+        {
+          header: '관련프로그램',
+          width: 120,
+          align: 'left',
+          name: 'rqu_sbh_id',
+          ellipsis : true,
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '예상시작일',
@@ -1388,31 +1375,6 @@ export default {
           align: 'center',
           name: 'pal_atfl_mng_id_yn',
           defaultValue: '미첨부',
-        },
-        {
-          header: '비고',
-          width: 200,
-          align: 'left',
-          name: 'rmrk',
-          filter: 'text',
-        },
-        {
-          header: '전환기준일자',
-          width: 100,
-          align: 'center',
-          name: 'cnv_bs_dt',
-          format: 'yyyy-mm-dd',
-          filter: 'text',
-          editor: 'datePicker',
-        },
-        {
-          header: '요구사항ID',
-          width: 120,
-          align: 'left',
-          name: 'rqu_sbh_id',
-          ellipsis : true,
-          editor: 'text',
-          filter: 'text',
         },
         {
           header: '문서',
