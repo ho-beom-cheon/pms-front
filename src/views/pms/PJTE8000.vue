@@ -467,24 +467,24 @@
             <textarea v-if="this.large_num == '1'"
                       id="detailTextArea1"
                       v-model="detail.prg_txt"
-                      :disabled=true
-                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      :disabled=false
+                      style="height: 690px; width: 1650px; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '2'"
                       cols="200"
                       rows="105"
                       id="detailTextArea2"
                       v-model="detail.iss_txt"
-                      :disabled=true
-                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      :disabled=false
+                      style="height: 690px; width: 1650px; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '3'"
                       cols="200"
                       rows="105"
                       id="detailTextArea3"
                       v-model="detail.req_txt"
-                      :disabled=true
-                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      :disabled=false
+                      style="height: 690px; width: 1650px; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '4'"
                       cols="200"
@@ -492,7 +492,7 @@
                       id="detailTextArea4"
                       v-model="detail.bef_prg_txt"
                       :disabled=true
-                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '5'"
                       cols="200"
@@ -500,7 +500,7 @@
                       id="detailTextArea5"
                       v-model="detail.bef_iss_txt"
                       :disabled=true
-                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; line-height: normal;font-size : 30px"
             ></textarea>
             <textarea v-if="this.large_num == '6'"
                       cols="200"
@@ -508,7 +508,7 @@
                       id="detailTextArea6"
                       v-model="detail.bef_req_txt"
                       :disabled=true
-                      style="height: 690px; width: 1650px; background-color: #f2f2f2; border: none; line-height: normal;font-size : 30px"
+                      style="height: 690px; width: 1650px; background-color: #f2f2f2; line-height: normal;font-size : 30px"
             ></textarea>
             <div style="float: right;margin-top: 5px">
               <button class="btn btn-filter-b" @click="fnCloseModal">닫기</button>

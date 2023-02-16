@@ -17,6 +17,12 @@
               @bkup_id_change="bkup_id_change"
               @prjt_nm_chage="prjt_nm_chage"
           ></combo>
+          <li class="filter-item">
+            <div class="item-con">
+              <input type="checkbox" id="check_Yn" v-model="check_Yn">
+              <label>　숨김폴더 포함</label>
+            </div>
+          </li>
         </ul>
         <ul class="filter-btn">
           <button class="btn btn-filter-p" style="margin-left: 20px;" @click="fnSearch">조회</button>
@@ -187,9 +193,10 @@ export default {
         return true;  // 필수 값 모두 입력 시 true
       }
     },
+    // check_Yn 값 변하면 info 내의 check_Yn 값 변화
 
     onGridUpdated1(grid){
-      this.$refs.grid1.invoke("addColumnClassName","del_btn", "del-btn-img");
+      //this.$refs.grid1.invoke("addColumnClassName","del_btn", "del-btn-img");
       this.$refs.grid1.invoke("addColumnClassName","new_btn", "new-btn-img");
       this.$refs.grid1.invoke("addColumnClassName","upload_btn", "upload-btn-img");
     },
@@ -214,7 +221,7 @@ export default {
       }
 
       if(ev.columnName == 'del_btn'){
-        if (confirm("정말 삭제하시겠습니까?") === true) {
+        if (confirm("변경 하시겠습니까?") === true) {
           this.fnDelete();
         }
       }
@@ -340,19 +347,25 @@ export default {
       const currentCellData = (this.$refs.grid1.invoke("getFocusedCell"));
       currentRowData = (this.$refs.grid1.invoke("getRow", this.curRow));
 
+      if(currentRowData.use_yn === "Y"){
+        this.detail.use_yn ="N"
+      } else {
+        this.detail.use_yn ="Y"
+      }
+
       console.log(currentRowData.hgrn_mng_id);
         axiosService.put("/PJTE9400/update01", {
-          hgrn_mng_id           : currentRowData.hgrn_mng_id, // 게시글 ID
+          fld_mng_id           : currentRowData.fld_mng_id, // 게시글 ID
+          use_yn                : this.detail.use_yn,
           prjt_id               : sessionStorage.getItem("LOGIN_PROJ_ID"),
           login_emp_no          : sessionStorage.getItem("LOGIN_EMP_NO")
         }).then(res => {
           if (res.data) {
-            alert("삭제가 완료되었습니다.")
-            this.modals.txt_modal2 = false; // 비밀번호 입력 모달 닫기
+            alert("완료되었습니다.")
             this.init()
             this.$refs.grid1.invoke("readData")
           } else {
-            alert("삭제에 실패하였습니다.")
+            alert("실패하였습니다.")
           }
         })
     },
@@ -392,6 +405,9 @@ export default {
 // 특정 데이터에 실행되는 함수를 선언하는 부분
 // newValue, oldValue 두개의 매개변수를 사용할 수 있음
   watch:{
+    check_Yn () {
+      this.check_Yn ? this.info.check_Yn = 'Y' : this.info.check_Yn = 'N';
+    },
   },
 
   // 변수 선언부분
@@ -408,12 +424,15 @@ export default {
       info : {
         prjt_nm_selected      : sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트명
         bkup_id_selected      : '0000000000',     // 백업 ID
+        check_Yn : 'N'
       },
       detail : {
         fld_nm              : '',     //폴더명
         rmrk                : '',     //비고
         fld_mng_id          : '',     //파일관리번호
         coh_hgrn_mng_id     : '',     //선택된상위폴더
+        use_yn              : '',
+        del_btn             : '',
 
         atfl_mng_id         : this.atfl_mng_id,  // 단위테스트 케이스 첨부파일관리
         atfl_mng_id_yn      : this.atfl_mng_id_yn,  // 단위테스트 케이스 첨부파일관리
@@ -427,6 +446,8 @@ export default {
         login_emp_nm          : sessionStorage.getItem("LOGIN_EMP_NM"),    // 직원명
         login_catn_dcd        : sessionStorage.getItem("LOGIN_CATN_DCD"),  // 구성원 구분코드
       },
+
+      check_Yn    : false,  // 완료건 포함(체크박스 값)
 
       /* grid 속성 */
       count:0,
@@ -493,10 +514,19 @@ export default {
           filter: 'text',
         },
         {
-          header: '삭제',
+          header: '변경',
           width: 70,
           align: 'center',
           name: 'del_btn',
+          type : 'text',
+        },
+        {
+          header: '사용여부',
+          width: 70,
+          align: 'center',
+          name: 'use_yn',
+          editor: 'text',
+          hidden : true,
         },
         {
           header: '폴더명',
