@@ -1057,7 +1057,7 @@ export default {
           align: 'center',
           name: 'prcs_stts_cd',
           formatter: 'listItemText',
-          filter: 'text',
+          filter: 'select',
           editor: {
             type: 'select',
             options: {
