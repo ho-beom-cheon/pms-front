@@ -432,18 +432,25 @@ export default {
           filter: 'text',
         },
         {
+          header: '처리상태',
+          width: 80,
+          align: 'left',
+          name: 'req_prc_step_cd',
+          formatter: 'listItemText',
+          disabled : true,
+          filter: 'select',
+          editor: {
+            type: 'select',
+            options:{
+              listItems: this.$store.state.pms.CD1000000011N
+            }
+          }
+        },
+        {
           header: '조치예정일자',
           width: 90,
           align: 'center',
           name: 'ttmn_scd_dt',
-          format: 'yyyy-mm-dd',
-          filter: 'text',
-        },
-        {
-          header: '처리일자',
-          width: 90,
-          align: 'center',
-          name: 'prc_dt',
           format: 'yyyy-mm-dd',
           filter: 'text',
         },
@@ -464,18 +471,12 @@ export default {
           filter: 'text',
         },
         {
-          header: '처리상태',
-          align: 'left',
-          name: 'req_prc_step_cd',
-          formatter: 'listItemText',
-          disabled : true,
-          filter: 'select',
-          editor: {
-            type: 'select',
-            options:{
-              listItems: this.$store.state.pms.CD1000000011N
-            }
-          }
+          header: '처리일자',
+          width: 90,
+          align: 'center',
+          name: 'prc_dt',
+          format: 'yyyy-mm-dd',
+          filter: 'text',
         }
       ]
     }
