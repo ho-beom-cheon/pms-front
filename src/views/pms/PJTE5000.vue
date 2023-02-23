@@ -628,10 +628,6 @@ export default {
               prtRt = this.$refs.grid.invoke("getValue", x, "prg_rt");
               planPrtRt = this.$refs.grid.invoke("getValue", x, "plan_prg_rt");
 
-              if(hgrnMngid === "1000000001"){
-                this.$refs.grid.invoke("disableCell", x,"prg_rt");
-                this.$refs.grid.invoke("disableCell", x,"plan_prg_rt");
-              }
               if (mngid === hgrnMngid) {
                 totWgtRt = totWgtRt + wgtRt * prtRt
                 totWgtRt1 = totWgtRt1 + wgtRt * planPrtRt
