@@ -52,9 +52,9 @@
         </ul>
 
         <ul class="filter-btn">
-          <div class="btn btn-filter-p" style="margin-left: 10px">
-            <a href="#" @click="fnSearch">조회</a>
-          </div>
+          <button class="btn btn-filter-p" style = "margin-left: 20px" @click="fnSearch">
+            <a href="#" >조회</a>
+          </button>
         </ul>
       </section>
 
