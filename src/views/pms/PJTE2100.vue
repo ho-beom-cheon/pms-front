@@ -102,9 +102,9 @@
                 <div class="input-dateWrap"><input type="date" :min="info.dvlpe_sta_dt" v-model="info.dvlpe_end_dt"></div>
               </div>
             </li>
-            <div class="btn btn-filter-p" style="margin-left: 470px">
-              <a href="#" @click="fnSearch">조회</a>
-            </div>
+            <button class="btn btn-filter-p" style="margin-left: 470px" @click="fnSearch">
+              <a href="#">조회</a>
+            </button>
           </ul>
 
           <div class="mt-1">
