@@ -1165,6 +1165,7 @@ export default {
           name: 'empno',
           editor : 'text',
           align: 'center',
+          filter: { type: 'text'},
           disabled : true,
         },
         {
