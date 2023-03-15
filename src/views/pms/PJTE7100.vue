@@ -153,6 +153,16 @@
                   @as_pgm_dis_cd_change="as_pgm_dis_cd_change"
               >
               </combo>
+              <li class="filter-item"   style="margin-left: 10px">
+                <div class="item-con">전환기준일자
+                  <div class="input-dateWrap">
+                    <input type="date"
+                           v-model="detail.cnv_bs_dt"
+                           ref="cnv_bs_dt"
+                           style="width: 120px;margin-left: 5px"
+                    ></div>
+                </div>
+              </li>
               <li class="filter-item-n">
                 <div class="input-searchWrap" style="margin-left: 26px">전환담당자
                   <input type="text"
@@ -350,6 +360,7 @@ export default {
                     use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
                     dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
                     rmrk: this.detail.rmrk,                                // 비고
+                    cnv_bs_dt: this.detail.cnv_bs_dt,                      // 전환기준일자
                     frcs_sta_dt: this.detail.frcs_sta_dt,                  // 계획시작일자
                     frcs_end_dt: this.detail.frcs_end_dt,                  // 계획종료일자
                     login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
@@ -388,6 +399,7 @@ export default {
               this.$refs.grid.invoke("setValue", this.curRow, 'frcs_sta_dt', this.detail.frcs_sta_dt);
               this.$refs.grid.invoke("setValue", this.curRow, 'frcs_end_dt', this.detail.frcs_end_dt);
               this.$refs.grid.invoke("setValue", this.curRow, 'rmrk', this.detail.rmrk);
+              this.$refs.grid.invoke("setValue", this.curRow, 'cnv_bs_dt', this.detail.cnv_bs_dt);
 
               axiosService.put("/PJTE7100/update_7100_01", {
                 prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
@@ -401,6 +413,7 @@ export default {
                 use_pgm_txt: this.detail.use_pgm_txt,                  // 사용프로그램
                 dvlpe_no: this.detail.dvlpe_no,                        // 전환담당자번호
                 rmrk: this.detail.rmrk,                                // 비고
+                cnv_bs_dt: this.detail.cnv_bs_dt,                      // 전환기준일자
                 frcs_sta_dt: this.detail.frcs_sta_dt,                  // 계획시작일자
                 frcs_end_dt: this.detail.frcs_end_dt,                  // 계획종료일자
                 login_emp_no:sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
@@ -490,6 +503,7 @@ export default {
       this.detail.rmrk                                = currentRowData.rmrk                       // 비고
       this.detail.frcs_sta_dt                         = currentRowData.frcs_sta_dt                // 계획시작일자
       this.detail.frcs_end_dt                         = currentRowData.frcs_end_dt                // 계획종료일자
+      this.detail.cnv_bs_dt                           = currentRowData.cnv_bs_dt                  // 전환기준일자
     },
 
     //직원조회 버튼 클릭 시
@@ -585,6 +599,7 @@ export default {
       this.$refs.combo4.$data.asis_sqn_cd_selected    = ''      // 전환상태
       this.detail.use_pgm_txt                         = ''                                                  // 사용프로그램
       this.detail.rmrk                                = ''                                                  // 비고
+      this.detail.cnv_bs_dt                           = ''                                                  // 전환기준일자
       this.detail.frcs_sta_dt                         = ''                                                  // 계획시작일자
       this.detail.frcs_end_dt                         = ''                                                  // 계획종료일자
 
@@ -644,6 +659,7 @@ export default {
             wb.Sheets[sheetName].N1.w = "sta_dt"
             wb.Sheets[sheetName].O1.w = "end_dt"
             wb.Sheets[sheetName].P1.w = "rmrk"
+            wb.Sheets[sheetName].Q1.w = "cnv_bs_dt"
             let rowObj = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
             let rowObj_copy = [];
 
@@ -748,6 +764,7 @@ export default {
         frcs_end_dt             : '',                                         // 계획종료일자
         use_pgm_txt             : '',                                         // 사용프로그램
         rmrk                    : '',                                         // 비고
+        cnv_bs_dt               : '',                                         // 전환기준일자
         save_yn                 : 'N',                                        // 등록가능여부
       },
 
@@ -931,6 +948,14 @@ export default {
           header: '비고',
           align: 'left',
           name: 'rmrk',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '전환기준일자',
+          width: 120,
+          align: 'center',
+          name: 'cnv_bs_dt',
           editor: 'text',
           filter: 'text',
         },
