@@ -947,7 +947,7 @@
         <select
             id      = "as_pgm_dis_cd"
             v-model = "as_pgm_dis_cd_selected"
-            style   = "width: 415px;margin-left : 5px"
+            style   = "width: 190px;margin-left : 5px"
             @change = "as_pgm_dis_cd_change"
         >
           <option
