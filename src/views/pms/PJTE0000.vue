@@ -15,7 +15,7 @@
         </h1>
         <span class="info-msg">
           <i class="ic-info"></i>
-          <p>최초비밀번호 : 사번 + 211111</p>
+          <p>최초비밀번호 : 사번 + 2111</p>
         </span>
         <table class="form-table">
           <tbody>
