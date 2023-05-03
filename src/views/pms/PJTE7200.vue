@@ -23,14 +23,6 @@
               >
             </div>
           </li>
-          <li class="filter-item">
-            <div class="item-con">배포일시
-              <input  type="text"
-                      style="width: 125px"
-                      v-model="info.rls_dt"
-              >
-            </div>
-          </li>
           <li class="filter-item-n">
             <div class="input-searchWrap">요청자
               <input type="text"
@@ -100,8 +92,8 @@
           </li>
         </ul>
         <ul class="filter-btn">
-          <div class="btn btn-filter-p" style="margin-left: 10px">
-            <a href="#" @click="fnSearch">조회</a>
+          <div class="btn btn-filter-p" style="margin-left: 10px" @click="fnSearch">
+            <a href="#">조회</a>
           </div>
         </ul>
       </section>
@@ -172,8 +164,18 @@
               <li class="filter-item">
                 <div class="item-con" >배포일시
                   <input type="text"
-                         ref="rls_dt"
-                         v-model="detail.rls_dt"
+                         ref="ins_dply_ts"
+                         v-model="detail.ins_dply_ts"
+                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
+                  >
+                  <input type="text"
+                         ref="dr_dply_ts"
+                         v-model="detail.dr_dply_ts"
+                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
+                  >
+                  <input type="text"
+                         ref="opr_dply_ts"
+                         v-model="detail.opr_dply_ts"
                          style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
                   >
                 </div>
@@ -474,8 +476,8 @@ export default {
       if(this.detail.dstr_selected === undefined || this.detail.dstr_selected === '')   { alert("배포구분은 필수 입력 사항입니다"); return;}
       if(this.detail.prcs_stts_cd_selected === undefined || this.detail.prcs_stts_cd_selected === '')   { alert("배포요청상태는 필수 입력 사항입니다"); return;}
       if(this.detail.rqs_no === undefined || this.detail.rqs_no === '')   { alert("요청자는 필수 입력 사항입니다"); return;}
-      if(this.detail.rvw_no === undefined || this.detail.rvw_no === '')   { alert("검토자는 필수 입력 사항입니다"); return;}
-      if(this.detail.aprv_no === undefined || this.detail.aprv_no === '')   { alert("승인자는 필수 입력 사항입니다"); return;}
+      //if(this.detail.rvw_no === undefined || this.detail.rvw_no === '')   { alert("검토자는 필수 입력 사항입니다"); return;}
+      //if(this.detail.aprv_no === undefined || this.detail.aprv_no === '')   { alert("승인자는 필수 입력 사항입니다"); return;}
       if(this.detail.rsn_rqs === undefined || this.detail.rsn_rqs === '')   { alert("요청사유는 필수 입력 사항입니다"); return;}
 
       console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
@@ -568,6 +570,9 @@ export default {
       this.detail.rqs_dt                                 = currentRowData.rqs_dt                     // 요청일자
       this.detail.rls_dt                                 = currentRowData.rls_dt                     // 배포일시
       this.detail.tar_chg_ts                             = currentRowData.tar_chg_ts                 // TAR생성일시
+      this.detail.ins_dply_ts                            = currentRowData.ins_dply_ts                // 검수배포일시
+      this.detail.dr_dply_ts                             = currentRowData.dr_dply_ts                 // DR배포일시
+      this.detail.opr_dply_ts                            = currentRowData.opr_dply_ts                // 운영배포일시
       this.detail.rsn_rqs                                = currentRowData.rsn_rqs                    // 요청사유
       this.detail.rmrmk                                  = currentRowData.rmrmk                       // 비고
       this.detail.rqs_nm                                 = currentRowData.rqs_nm                     // 요청자
@@ -784,6 +789,9 @@ export default {
       this.detail.rqs_dt   = ''
       this.detail.rls_dt   = ''
       this.detail.tar_chg_ts   = ''
+      this.detail.ins_dply_ts   = ''
+      this.detail.dr_dply_ts   = ''
+      this.detail.opr_dply_ts   = ''
       this.detail.rqs_no   = ''
       this.detail.rqs_nm   = ''
       this.detail.rvw_no   = ''
@@ -944,6 +952,9 @@ export default {
         rqs_dt  : '', //요청일자
         rls_dt  : '', //배포일자
         tar_chg_ts : '', //TAR생성일시
+        ins_dply_ts : '', //검수배포일시
+        dr_dply_ts : '', //DR배포일시
+        opr_dply_ts : '', //운영배포일시
 
         atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
         org_file_nm: this.org_file_nm,    // 원파일명
@@ -1030,10 +1041,26 @@ export default {
           filter: 'text',
         },
         {
-          header: '배포일시',
+          header: '검수배포일시',
           width: 150,
           align: 'center',
-          name: 'rls_dt',
+          name: 'ins_dply_ts',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: 'DR배포일시',
+          width: 150,
+          align: 'center',
+          name: 'dr_dply_ts',
+          editor: 'text',
+          filter: 'text',
+        },
+        {
+          header: '운영배포일시',
+          width: 150,
+          align: 'center',
+          name: 'opr_dply_ts',
           editor: 'text',
           filter: 'text',
         },
