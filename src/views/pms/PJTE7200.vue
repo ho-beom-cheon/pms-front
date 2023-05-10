@@ -428,6 +428,10 @@ export default {
     fnTar() {
       // 그리드 초기화
       this.req_rscs = "";
+      console.log("save_chg_yn ::", this.detail.save_chg_yn)
+
+      if(this.detail.save_chg_yn === 'N') { alert("배포완료된 요청내역은 TAR생성이 불가합니다."); return;}
+
       if(this.detail.prcs_stts_cd_selected !== '100' && this.detail.prcs_stts_cd_selected !== '180')  { alert("TRA생성은 배포요청상태가 [등록/TRA생성실패]가 아닌 경우 생성할 수없습니다."); return;}
 
       if (this.$refs.grid2.invoke("isModified") === true) {
@@ -482,6 +486,10 @@ export default {
 
       console.log("prcs_stts_cd_selected ::", this.detail.prcs_stts_cd_selected)
       console.log("save_prcs_stts_cd ::", this.detail.save_prcs_stts_cd)
+      console.log("save_chg_yn ::", this.detail.save_chg_yn)
+
+      if(this.detail.save_chg_yn === 'N' && (this.detail.prcs_stts_cd_selected === '100' || this.detail.prcs_stts_cd_selected === '180'))   { alert("배포완료된 요청내역은 배포요청상태[등록/TAR생성실패]으로 변경불가합니다."); return;}
+
       if(this.detail.prcs_stts_cd_selected === '190')   { alert("배포요청상태를 [TAR생성성공]은 화면에서 저장할수 없습니다."); return;}
 
       if(this.detail.prcs_stts_cd_selected === '200' && this.detail.save_prcs_stts_cd !== '190')   { alert("배포요청상태가 [검토요청]인경우 이전배포요청이 [TAR생성성공]인경만 가능합니다."); return;}
@@ -573,6 +581,7 @@ export default {
       this.detail.ins_dply_ts                            = currentRowData.ins_dply_ts                // 검수배포일시
       this.detail.dr_dply_ts                             = currentRowData.dr_dply_ts                 // DR배포일시
       this.detail.opr_dply_ts                            = currentRowData.opr_dply_ts                // 운영배포일시
+      this.detail.save_chg_yn                            = currentRowData.save_chg_yn                // 변경가능여부
       this.detail.rsn_rqs                                = currentRowData.rsn_rqs                    // 요청사유
       this.detail.rmrmk                                  = currentRowData.rmrmk                       // 비고
       this.detail.rqs_nm                                 = currentRowData.rqs_nm                     // 요청자
@@ -792,6 +801,7 @@ export default {
       this.detail.ins_dply_ts   = ''
       this.detail.dr_dply_ts   = ''
       this.detail.opr_dply_ts   = ''
+      this.detail.save_chg_yn   = 'Y'
       this.detail.rqs_no   = ''
       this.detail.rqs_nm   = ''
       this.detail.rvw_no   = ''
@@ -955,6 +965,7 @@ export default {
         ins_dply_ts : '', //검수배포일시
         dr_dply_ts : '', //DR배포일시
         opr_dply_ts : '', //운영배포일시
+        save_chg_yn : '', //변경가능여부
 
         atfl_mng_id: this.atfl_mng_id,    // 첨부파일관리ID
         org_file_nm: this.org_file_nm,    // 원파일명
@@ -1035,7 +1046,7 @@ export default {
         {
           header: 'TAR생성일시',
           width: 150,
-          align: 'left',
+          align: 'center',
           name: 'tar_chg_ts',
           editor: 'text',
           filter: 'text',
@@ -1158,6 +1169,14 @@ export default {
           width: 80,
           align: 'left',
           name: 'org_file_nm',
+          filter: 'text',
+          hidden : true,
+        },
+        {
+          header: '변경가능여부',
+          width: 80,
+          align: 'left',
+          name: 'save_chg_yn',
           filter: 'text',
           hidden : true,
         },
