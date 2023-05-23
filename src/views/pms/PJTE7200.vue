@@ -84,6 +84,12 @@
                    :disabled=true
             >
           </li>
+          <combo
+              :comboArray4 = "this.comboList4"
+              @dstr_changeT="dstr_changeT"
+              @prcs_stts_cd_changeT="prcs_stts_cd_changeT"
+              ref="combo"
+          ></combo>
           <li class="filter-item">
             <div class="item-con">
               <input type="checkbox" @click="check_yn" v-model="cmpl_yn" style="margin-left: 10px; margin-bottom: 2px;">
@@ -416,6 +422,8 @@ export default {
     bkup_id_change(params)        {this.info.bkup_id_selected = params},            // 백업id
     prcs_stts_cd_change(params)   {this.detail.prcs_stts_cd_selected = params},       // 배포요청상태
     dstr_change(params)           {this.detail.dstr_selected = params},               // 배포구분
+    prcs_stts_cd_changeT(params)   {this.info.prcs_stts_cd_selectedT = params},       // 배포요청상태
+    dstr_changeT(params)           {this.info.dstr_selectedT = params},               // 배포구분
     // 화면 init
     init() {
       // 그리드 초기화
@@ -912,6 +920,7 @@ export default {
       comboList: ["C0", "C27"],
       comboList2: ["C58"],
       comboList3: ["C3-57", "C3-58"],
+      comboList4: ["C3-57T", "C3-58T"],
 
       gridData: [],
       newCheck: 'Y',
@@ -931,8 +940,8 @@ export default {
       info: {
         prjt_nm_selected: sessionStorage.getItem("LOGIN_PROJ_ID"),  // 프로젝트명
         bkup_id_selected: '0000000000',                                 // 백업ID
-        dstr_selected : '',
-        prcs_stts_cd_selected : '',
+        dstr_selectedT : '',
+        prcs_stts_cd_selectedT : '',
 
         rqs_id : '',
         rqs_nm : '', //요청자이름
