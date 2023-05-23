@@ -1082,6 +1082,40 @@
         </select>
       </div>
     </li>
+    <li class="filter-item" v-for="item in this.comboList4" :key="item.id" v-if="item === 'C3-57T'">
+      <div class="item-con">배포구분
+        <select
+            id      = "dstrT"
+            v-model = "dstr_selectedT"
+            style   = "width: 120px"
+            @change = "dstr_changeT"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000057T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
+    <li class="filter-item-a" v-for="item in this.comboList4" :key="item.id" v-if="item === 'C3-58T'">
+      <div class="item-con" style="padding-top: 2px">배포요청상태
+        <select
+            id      = "prcs_stts_cdT"
+            v-model = "prcs_stts_cd_selectedT"
+            style   = "width: 120px;"
+            @change = "prcs_stts_cd_changeT"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000058T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <!--    배포요청관리 끝 -->
   </div>
 </template>
@@ -1096,6 +1130,7 @@ export default {
     comboArray: Array,
     comboArray2: Array,
     comboArray3: Array,
+    comboArray4: Array,
   },
   mounted () {
     this.init()
@@ -1155,6 +1190,8 @@ export default {
     this.mtng_prc_step_cd_change()
     this.dstr_change()
     this.prcs_stts_cd_change()
+    this.dstr_changeT()
+    this.prcs_stts_cd_changeT()
   },
   data() {
     return {
@@ -1222,6 +1259,7 @@ export default {
       comboList: this.comboArray,
       comboList2: this.comboArray2,
       comboList3: this.comboArray3,
+      comboList4: this.comboArray4,
 
       code_it : [],
       cd_all : [],
@@ -1352,6 +1390,10 @@ export default {
       dstr_selected : "",
       // 배포요청상태
       prcs_stts_cd_selected : "",
+      // 배포구분
+      dstr_selectedT : "",
+      // 배포요청상태
+      prcs_stts_cd_selectedT : "",
 
     }
   },
@@ -1426,6 +1468,8 @@ export default {
     mtng_prc_step_cd_change()       {  this.$emit('mtng_prc_step_cd_change',       this.mtng_prc_step_cd_selected)},     // 회의진행상태
     dstr_change()                   {  this.$emit('dstr_change',                   this.dstr_selected)},                 // 배포구분
     prcs_stts_cd_change()           {  this.$emit('prcs_stts_cd_change',           this.prcs_stts_cd_selected)},         // 배포요청상태
+    dstr_changeT()                   {  this.$emit('dstr_changeT',                 this.dstr_selectedT)},                 // 배포구분
+    prcs_stts_cd_changeT()           {  this.$emit('prcs_stts_cd_changeT',         this.prcs_stts_cd_selectedT)},         // 배포요청상태
 
     setCombo(data) {
       for(let i=0; i<this.code_it.length; i++) {
@@ -1856,8 +1900,8 @@ export default {
           if(this.CD1000000054N.length !== 0)   this.prc_step_cd_selected       = this.CD1000000054N[0].value
           if(this.CD1000000055N.length !== 0)   this.mtng_prc_step_cd_selected  = this.CD1000000055N[0].value
           if(this.CD1000000056N.length !== 0)   this.mtng_prc_step_cd_selected  = this.CD1000000056N[0].value
-          if(this.CD1000000057T.length !== 0)   this.dstr_selected              = this.CD1000000057T[0].value
-          if(this.CD1000000058T.length !== 0)   this.prcs_stts_cd_selected      = this.CD1000000058T[0].value
+          if(this.CD1000000057T.length !== 0)   this.dstr_selectedT             = this.CD1000000057T[0].value
+          if(this.CD1000000058T.length !== 0)   this.prcs_stts_cd_selectedT     = this.CD1000000058T[0].value
         }
         this.setCdAll()
       }
