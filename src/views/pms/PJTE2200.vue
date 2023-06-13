@@ -1176,6 +1176,13 @@ export default {
           filter: 'text',
         },
         {
+          header: '프로그램ID',
+          width: 120,
+          name: 'pgm_id',
+          editor: "text",
+          filter: 'text',
+        },
+        {
           header: '증빙',
           width: 80,
           align: 'center',
@@ -1335,13 +1342,6 @@ export default {
           width: 40,
           align: 'right',
           name: 'err_ncmpl_cnt',
-        },
-        {
-          header: '프로그램ID',
-          width: 120,
-          name: 'pgm_id',
-          editor: "text",
-          filter: 'text',
         },
         {
           header: '화면ID',
