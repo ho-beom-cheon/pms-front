@@ -63,27 +63,6 @@
                    :disabled=true
             >
           </li>
-          <li class="filter-item-n">
-            <div class="input-searchWrap">승인자
-              <input type="text"
-                     placeholder="직원명"
-                     v-model="info.aprv_nm"
-                     style="width: 90px"
-                     @keyup.enter="open_pjte9001(3)"
-              >
-              <button class="search-btn"
-                      @click="open_pjte9001_btn(3)"
-              ></button>
-            </div>
-          </li>
-          <li class="filter-item">
-            <input type="text"
-                   placeholder="직원번호"
-                   v-model="info.aprv_no"
-                   style="width: 90px; background-color: #f2f2f2;"
-                   :disabled=true
-            >
-          </li>
           <combo
               :comboArray4 = "this.comboList4"
               @dstr_changeT="dstr_changeT"
@@ -129,183 +108,167 @@
             ></grid>
           </div>
         </div>
-<!-- 요청정보 -->
-        <div class="grid1-box" style="height: 215px">
-          <div class="div-header-b"><h2>요청정보</h2>
-            <ul class="filter-btn">
-              <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">초기화</button>
-            </ul>
-          </div>
-          <section class="filter">
-            <ul class="filter-con clear-fix" style="width: 100%; margin-left:9px">
-              <li class="filter-item">
-                <div class="item-con" >요청ID
+        <!-- 요청정보 -->
+        <div class="div01-X">
+          <div class="div3-a" style="width: 700px;">
+            <div class="div-header-b"><h2>요청정보</h2>
+              <ul class="filter-btn">
+                <button class="btn btn-filter-b" style="margin-left: 20px" @click="fnClear">초기화</button>
+              </ul>
+            </div>
+            <section class="filter">
+
+              <ul class="filter-con clear-fix" style="width: 100%; margin-left:9px">
+                <combo
+                    :comboArray3 = "this.comboList3"
+                    @dstr_change="dstr_change"
+                    @prcs_stts_cd_change="prcs_stts_cd_change"
+                    ref="combo"
+                ></combo>
+              </ul>
+              <ul class="filter-con clear-fix" style="width: 100%; margin-left:10px">
+                <li class="filter-item-n" >
+                  <div class="input-searchWrap">
+                    <label style="width: 95px;text-align: center">요청자</label>
+                    <input type="text"
+                           placeholder="직원명"
+                           v-model="detail.rqs_nm"
+                           style="width: 90px; margin-left:5px"
+                           @keyup.enter="open_pjte9001_dtail(4)"
+                    >
+                    <button class="search-btn"
+                            @click="open_pjte9001_detail_btn(4)"
+                    ></button>
+                  </div>
+                </li>
+                <li class="filter-item">
                   <input type="text"
-                         id      = "rqs_id"
-                         v-model="detail.rqs_id"
-                         style= "width: 180px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
+                         placeholder="직원번호"
+                         v-model="detail.rqs_no"
+                         style="width: 90px; background-color: #f2f2f2;text-align: center"
                          :disabled=true
                   >
-                </div>
-              </li>
-              <li class="filter-item">
-                <div class="item-con">요청일자
-                  <input type="date"
-                         v-model="detail.rqs_dt"
-                         style= "width: 150px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
+                </li>
+                <li class="filter-item-n">
+                  <div class="input-searchWrap">
+                    <label style="width: 65px;text-align: right">검토자</label>
+                    <input type="text"
+                           placeholder="직원명"
+                           v-model="detail.rvw_nm"
+                           style="width: 90px; margin-left:5px"
+                           @keyup.enter="open_pjte9001_dtail(5)"
+                    >
+                    <button class="search-btn"
+                            @click="open_pjte9001_detail_btn(5)"
+                    ></button>
+                  </div>
+                </li>
+                <li class="filter-item">
+                  <input type="text"
+                         placeholder="직원번호"
+                         v-model="detail.rvw_no"
+                         style="width: 90px; background-color: #f2f2f2;text-align: center"
                          :disabled=true
                   >
-                </div>
-              </li>
-              <li class="filter-item">
-                <div class="item-con" >TAR생성일시
-                  <input type="text"
-                         ref="tar_chg_ts"
-                         v-model="detail.tar_chg_ts"
-                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
-                         :disabled=true
-                  >
-                </div>
-              </li>
-              <li class="filter-item">
-                <div class="item-con" >배포일시
-                  <input type="text"
-                         ref="ins_dply_ts"
-                         v-model="detail.ins_dply_ts"
-                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
-                  >
-                  <input type="text"
-                         ref="dr_dply_ts"
-                         v-model="detail.dr_dply_ts"
-                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
-                  >
-                  <input type="text"
-                         ref="opr_dply_ts"
-                         v-model="detail.opr_dply_ts"
-                         style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
-                  >
-                </div>
-              </li>
-              <combo
-                  :comboArray3 = "this.comboList3"
-                  @dstr_change="dstr_change"
-                  @prcs_stts_cd_change="prcs_stts_cd_change"
-                  ref="combo"
-              ></combo>
-            </ul>
-            <ul class="filter-con clear-fix" style="width: 100%; margin-left:10px">
-              <li class="filter-item-n" >
-                <div class="input-searchWrap">요청자
-                  <input type="text"
-                         placeholder="직원명"
-                         v-model="detail.rqs_nm"
-                         style="width: 90px; margin-left:5px"
-                         @keyup.enter="open_pjte9001_dtail(4)"
-                  >
-                  <button class="search-btn"
-                          @click="open_pjte9001_detail_btn(4)"
-                  ></button>
-                </div>
-              </li>
-              <li class="filter-item">
-                <input type="text"
-                       placeholder="직원번호"
-                       v-model="detail.rqs_no"
-                       style="width: 90px; background-color: #f2f2f2;text-align: center"
-                       :disabled=true
-                >
-              </li>
-              <li class="filter-item-n">
-                <div class="input-searchWrap">검토자
-                  <input type="text"
-                         placeholder="직원명"
-                         v-model="detail.rvw_nm"
-                         style="width: 90px; margin-left:5px"
-                         @keyup.enter="open_pjte9001_dtail(5)"
-                  >
-                  <button class="search-btn"
-                          @click="open_pjte9001_detail_btn(5)"
-                  ></button>
-                </div>
-              </li>
-              <li class="filter-item">
-                <input type="text"
-                       placeholder="직원번호"
-                       v-model="detail.rvw_no"
-                       style="width: 90px; background-color: #f2f2f2;text-align: center"
-                       :disabled=true
-                >
-              </li>
-              <li class="filter-item-n">
-                <div class="input-searchWrap">승인자
-                  <input type="text"
-                         placeholder="직원명"
-                         v-model="detail.aprv_nm"
-                         style="width: 90px; margin-left:5px"
-                         @keyup.enter="open_pjte9001_dtail(6)"
-                  >
-                  <button class="search-btn"
-                          @click="open_pjte9001_detail_btn(6)"
-                  ></button>
-                </div>
-              </li>
-              <li class="filter-item">
-                <input type="text"
-                       placeholder="직원번호"
-                       v-model="detail.aprv_no"
-                       style="width: 90px; background-color: #f2f2f2;text-align: center"
-                       :disabled=true
-                >
-              </li>
-              <li class="filter-item">
-                <div class="item-con">
-                  <th style="vertical-align: middle;text-align: right ;width: 200px; margin-right: 20px">
-                    <label>첨부파일</label>
-                  </th>
-                  <td>
+                </li>
+              </ul>
+              <ul class="filter-con clear-fix">
+                <li class="filter-item" style="width: 100%">
+                  <div class="item-con">
+                    <th style="vertical-align: middle">
+                      <label style="width: 100px;text-align: center">요청사유</label>
+                    </th>
+                    <td>
+                      <textarea cols="260"
+                                rows="10"
+                                placeholder="요청사유를 입력해주세요"
+                                v-model="detail.rsn_rqs"
+                                style="width: 560px; margin-left: 7px"
+                      ></textarea>
+                    </td>
+                  </div>
+                </li>
+              </ul>
+              <ul class="filter-con clear-fix">
+                <li class="filter-item" style="width: 100%">
+                  <div class="item-con">
+                    <th style="vertical-align: middle">
+                      <label style="width: 100px;text-align: center">비고</label>
+                    </th>
+                    <td>
+                    <textarea cols="260"
+                              rows="7"
+                              placeholder="비고내용을 입력해주세요"
+                              v-model="detail.rmrmk"
+                              style="width: 560px; margin-left: 7px"
+                    ></textarea>
+                    </td>
+                  </div>
+                </li>
+              </ul>
+              <ul class="filter-con clear-fix" style="width: 100%; margin-left:10px">
+                <li class="filter-item">
+                  <div class="item-con">
+                    <label style="width: 90px;text-align: center">첨부파일</label>
                     <input type="text"
                            :disabled=true
                            v-model="detail.org_file_nm"
-                           style="background-color: #f2f2f2; width: 500px;margin-left: 6px">
+                           style="background-color: #f2f2f2; width: 465px;margin-left: 6px">
                     <button class="btn btn-filter-p" @click="open_file_page(1)" style="margin-left: 3px; margin-bottom: 4px">첨부</button>
-                  </td>
-                </div>
-              </li>
-            </ul>
-            <ul class="filter-con clear-fix">
-              <li class="filter-item" style="width: 100%">
-                <div class="item-con">
-                  <th style="vertical-align: top;text-align: right">
-                    <label>요청사유</label>
-                  </th>
-                  <td>
-                      <textarea cols="270"
-                                rows="6"
-                                placeholder="요청사유를 입력해주세요"
-                                v-model="detail.rsn_rqs"
-                                style="width: 100%; margin-left: 7px"
-                      ></textarea>
-                  </td>
-                  <th style="vertical-align: top;text-align: right ;width: 44px">
-                    <label>비고</label>
-                  </th>
-                  <td>
-                      <textarea cols="260"
-                                rows="6"
-                                placeholder="비고내용을 입력해주세요"
-                                v-model="detail.rmrmk"
-                                style="width: 100%; margin-left: 7px"
-                      ></textarea>
-                  </td>
-                </div>
-              </li>
-            </ul>
+                  </div>
+                </li>
+              </ul>
+              <ul class="filter-con clear-fix" style="width: 100%; margin-left:9px">
+                <li class="filter-item">
+                  <div class="item-con">
+                    <label style="width: 95px;text-align: center">요청일자</label>
+                    <input type="date"
+                           v-model="detail.rqs_dt"
+                           style= "width: 150px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
+                           :disabled=true
+                    >
+                  </div>
+                </li>
+                <li class="filter-item">
+                  <div class="item-con">
+                    <label style="width: 95px;text-align: right">요청ID</label>
+                    <input type="text"
+                           id      = "rqs_id"
+                           v-model="detail.rqs_id"
+                           style= "width: 150px; margin-left: 5px; background-color: #f2f2f2;text-align: center"
+                           :disabled=true
+                    >
+                  </div>
+                </li>
 
-          </section>
-
-        </div>
-        <section class="page-contents">
-          <div class="grid1-box" style="height: 225px">
+              </ul>
+              <ul class="filter-con clear-fix" style="width: 100%; margin-left:9px">
+                <li class="filter-item" style="vertical-align: middle">
+                  <div class="item-con">
+                    <label style="width: 95px;text-align: center">TAR생성일시</label>
+                    <input type="text"
+                           ref="tar_chg_ts"
+                           v-model="detail.tar_chg_ts"
+                           style="width: 150px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
+                           :disabled=true
+                    >
+                    <label style="width: 110px;text-align: right">배포일시</label>
+                    <input type="text"
+                           ref="ins_dply_ts"
+                           v-model="detail.ins_dply_ts"
+                           style="width: 135px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
+                    >
+                    <input type="text"
+                           ref="opr_dply_ts"
+                           v-model="detail.opr_dply_ts"
+                           style="width: 135px; margin-left: 5px;background-color: #f2f2f2;text-align: center"
+                    >
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </div>
+          <div class="div4-a">
             <div class="div-header"><h2>배포목록</h2>
               <ul class="filter-btn">
                 <button class="btn btn-filter-d" @click="formDownload">양식다운로드ⓘ</button>
@@ -318,14 +281,14 @@
                 <button class="btn btn-filter-b" @click="gridDelRow">행삭제</button>
               </ul>
             </div>
-            <div class="gridWrap" style="min-width: 750px;">
+            <div class="div-grid-a">
               <grid
                   ref="grid2"
                   :data="dataSource2"
                   :header="header2"
                   :columns="columns2"
                   :minBodyHeight="55"
-                  :bodyHeight="150"
+                  :bodyHeight="375"
                   :minRowHeight="minRowHeight"
                   :showDummyRows="showDummyRows"
                   :columnOptions="columnOptions2"
@@ -334,18 +297,14 @@
                   @click="onClick2"
               ></grid>
             </div>
+            <ul class="div-header">
+              <li class="filter-btn" style="margin-right: 5px">
+                <button class="btn btn-filter-p" @click="fnTar">TAR생성</button>
+                <button class="btn btn-filter-p" @click="fnSave">저장</button>
+              </li>
+            </ul>
           </div>
-          <ul class="div-header">
-            <li class="filter-btn" style="margin-right: 5px">
-              <button class="btn btn-filter-p" @click="fnTar">TAR생성</button>
-              <button class="btn btn-filter-p" @click="fnSave">저장</button>
-            </li>
-          </ul>
-        </section>
-        <br>
-        <br>
-        <br>
-        <br>
+        </div>
       </section>
     </div>
   </div>
@@ -366,27 +325,27 @@ window.fileData = (fileLists) => {
 // 직원조회 팝업에서 받은 값
 window.empData = (empnm ,empno, btn_id, gubun) => {
 
-    if (btn_id === '1') {
-      window.pms_register.info.rqs_nm = empnm
-      window.pms_register.info.rqs_no = empno
-    } else if (btn_id === '2') {
-      window.pms_register.info.rvw_nm = empnm
-      window.pms_register.info.rvw_no = empno
-    } else if (btn_id === '3') {
-      window.pms_register.info.aprv_nm = empnm
-      window.pms_register.info.aprv_no = empno
-    }
+  if (btn_id === '1') {
+    window.pms_register.info.rqs_nm = empnm
+    window.pms_register.info.rqs_no = empno
+  } else if (btn_id === '2') {
+    window.pms_register.info.rvw_nm = empnm
+    window.pms_register.info.rvw_no = empno
+  } else if (btn_id === '3') {
+    window.pms_register.info.aprv_nm = empnm
+    window.pms_register.info.aprv_no = empno
+  }
 
-    if(btn_id === '4'){
-      window.pms_register.detail.rqs_nm = empnm
-      window.pms_register.detail.rqs_no = empno
-    } else if(btn_id === '5'){
-      window.pms_register.detail.rvw_nm = empnm
-      window.pms_register.detail.rvw_no = empno
-    } else if(btn_id === '6'){
-      window.pms_register.detail.aprv_nm = empnm
-      window.pms_register.detail.aprv_no = empno
-    }
+  if(btn_id === '4'){
+    window.pms_register.detail.rqs_nm = empnm
+    window.pms_register.detail.rqs_no = empno
+  } else if(btn_id === '5'){
+    window.pms_register.detail.rvw_nm = empnm
+    window.pms_register.detail.rvw_no = empno
+  } else if(btn_id === '6'){
+    window.pms_register.detail.aprv_nm = empnm
+    window.pms_register.detail.aprv_no = empno
+  }
 }
 
 export default {
@@ -452,7 +411,7 @@ export default {
       }
 
       for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
-          this.req_rscs += this.$refs.grid2.invoke("getValue", i, "rqs_pck_nm")+",";
+        this.req_rscs += this.$refs.grid2.invoke("getValue", i, "rqs_pck_nm")+",";
       }
 
       this.req_rscs = this.req_rscs.slice(0, this.req_rscs.length - 1)
@@ -469,12 +428,12 @@ export default {
         console.log("res", res)
         console.log("res.data", res.data)
         console.log("res.data.result", res.data.result)
-            if (res.data.result === true) {
-              alert("TRA생성 완료했습니다.")
-            } else {
-              alert("TRA생성 실패했습니다.")
-            }
-            this.fnSearch();
+        if (res.data.result === true) {
+          alert("TRA생성 완료했습니다.")
+        } else {
+          alert("TRA생성 실패했습니다.")
+        }
+        this.fnSearch();
       }).catch(e => {
         alert("TRA생성시 오류가 발생했습니다.")
       })
@@ -506,30 +465,30 @@ export default {
 
       if (this.vaildation(gridData, "2") === false) {return;}
 
-        if (confirm("정말 저장하시겠습니까?") === true) {
-                console.log("gridData ::", gridData)
-                axiosService.post("/PJTE7200/insert_7200_01", {
-                  prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
-                  rqs_id : this.detail.rqs_id,
-                  rsn_rqs : this.detail.rsn_rqs,
-                  rls_dt : this.detail.rls_dt,
-                  dstr : this.detail.dstr_selected,
-                  prcs_stts_cd : this.detail.prcs_stts_cd_selected,
-                  rqs_no : this.detail.rqs_no,
-                  rvw_no : this.detail.rvw_no,
-                  aprv_no : this.detail.aprv_no,
-                  rmrmk   : this.detail.rmrmk,
-                  org_file_nm : this.detail.org_file_nm,
-                  login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
-                  gridData : gridData,
-                }).then(res => {
-                  alert("저장을 완료했습니다.")
-                  this.fnSearch()
-                }).catch(e => {
-                  alert("저장에 실패했습니다.")
-                })
+      if (confirm("정말 저장하시겠습니까?") === true) {
+        console.log("gridData ::", gridData)
+        axiosService.post("/PJTE7200/insert_7200_01", {
+          prjt_id: sessionStorage.getItem("LOGIN_PROJ_ID"), // 프로젝트ID
+          rqs_id : this.detail.rqs_id,
+          rsn_rqs : this.detail.rsn_rqs,
+          rls_dt : this.detail.rls_dt,
+          dstr : this.detail.dstr_selected,
+          prcs_stts_cd : this.detail.prcs_stts_cd_selected,
+          rqs_no : this.detail.rqs_no,
+          rvw_no : this.detail.rvw_no,
+          aprv_no : this.detail.aprv_no,
+          rmrmk   : this.detail.rmrmk,
+          org_file_nm : this.detail.org_file_nm,
+          login_emp_no: sessionStorage.getItem("LOGIN_EMP_NO"), //로그인번호
+          gridData : gridData,
+        }).then(res => {
+          alert("저장을 완료했습니다.")
+          this.fnSearch()
+        }).catch(e => {
+          alert("저장에 실패했습니다.")
+        })
 
-        }
+      }
     },
 
     // vaildation('검증 랗 데이터', '일반저장(1) | 기타저장(2) 구분')
@@ -573,7 +532,9 @@ export default {
 
     //조회
     fnSearch(){
-      this.fnClear()
+      this.fnClear();
+      this.detail.rqs_no   = '';
+      this.detail.rqs_nm   = '';
       this.$refs.grid.invoke("setRequestParams", this.info);
       this.$refs.grid.invoke("readData");
       this.excelUplod = 'N'
@@ -596,8 +557,8 @@ export default {
       this.detail.rqs_no                                 = currentRowData.rqs_no
       this.detail.rvw_nm                                 = currentRowData.rvw_nm                     // 검토자
       this.detail.rvw_no                                 = currentRowData.rvw_no
-      this.detail.aprv_nm                                = currentRowData.aprv_nm                    // 승인자
-      this.detail.aprv_no                                = currentRowData.aprv_no
+      //this.detail.aprv_nm                                = currentRowData.aprv_nm                    // 승인자
+      //this.detail.aprv_no                                = currentRowData.aprv_no
 
       this.detail.prcs_stts_cd_selected                  = currentRowData.prcs_stts_cd
       this.$refs.combo.$data.prcs_stts_cd_selected       = currentRowData.prcs_stts_cd
@@ -672,24 +633,24 @@ export default {
             bkup_id_selected
           }
         }).then(res => {
-              let res_data = res.data.data.contents;
-              // console.log(res_data)
-              if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
-                if (btn_id == '1') {
-                  this.info.rqs_no = res.data.data.contents[0].empno
-                  this.info.rqs_nm = res.data.data.contents[0].empnm
-                } else if (btn_id == '2') {
-                  this.info.rvw_no = res.data.data.contents[0].empno
-                  this.info.rvw_nm = res.data.data.contents[0].empnm
-                } else if (btn_id == '3') {
-                  this.info.aprv_no = res.data.data.contents[0].empno
-                  this.info.aprv_nm = res.data.data.contents[0].empnm
-                }
-              } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
-                let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
-                window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
-              }
-            })
+          let res_data = res.data.data.contents;
+          // console.log(res_data)
+          if (res_data.length == 1) {  // 입력한 직원명으로 조회한 값이 단건일 경우 : 직원번호 바인딩
+            if (btn_id == '1') {
+              this.info.rqs_no = res.data.data.contents[0].empno
+              this.info.rqs_nm = res.data.data.contents[0].empnm
+            } else if (btn_id == '2') {
+              this.info.rvw_no = res.data.data.contents[0].empno
+              this.info.rvw_nm = res.data.data.contents[0].empnm
+            } else if (btn_id == '3') {
+              this.info.aprv_no = res.data.data.contents[0].empno
+              this.info.aprv_nm = res.data.data.contents[0].empnm
+            }
+          } else { // 입력한 직원명으로 조회한 값이 여러건일 경우 : PJTE9001 팝업 호출 후 파라미터 값으로 조회
+            let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
+            window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&empnm=${empnm}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
+          }
+        })
       } else { // 직원명에 입력한 값이 없을 때 : PJTE9001 팝업 호출
         let bkup_id = this.info.bkup_id_selected, prjt_id = this.info.prjt_nm_selected
         window.open(`../PJTE9001/?bkup_id=${bkup_id}&prjt_id=${prjt_id}&btn_id=${btn_id}&`, "open_emp_page", "width=700, height=600");
@@ -778,11 +739,11 @@ export default {
     setNo1() {
       if(this.info.rqs_nm === "") this.info.rqs_no = "";
       if(this.info.rvw_nm === "") this.info.rvw_no = "";
-      if(this.info.aprv_nm === "") this.info.aprv_no = "";
+      //if(this.info.aprv_nm === "") this.info.aprv_no = "";
 
       if(this.detail.rqs_nm === "") this.detail.rqs_no = "";
       if(this.detail.rvw_nm === "") this.detail.rvw_no = "";
-      if(this.detail.aprv_nm === "") this.detail.aprv_no = "";
+      //if(this.detail.aprv_nm === "") this.detail.aprv_no = "";
     },
     // 행추가
     gridAddRow(){
@@ -810,8 +771,8 @@ export default {
       this.detail.dr_dply_ts   = ''
       this.detail.opr_dply_ts   = ''
       this.detail.save_chg_yn   = 'Y'
-      this.detail.rqs_no   = ''
-      this.detail.rqs_nm   = ''
+      this.detail.rqs_no   = sessionStorage.getItem("LOGIN_EMP_NO")
+      this.detail.rqs_nm   = sessionStorage.getItem("LOGIN_EMP_NM")
       this.detail.rvw_no   = ''
       this.detail.rvw_nm   = ''
       this.detail.aprv_no  = ''
@@ -1025,13 +986,13 @@ export default {
         complexColumns: [
           {header: '요청자',           name: 'mergeColumn1', childNames: ['rqs_nm','rqs_no']},
           {header: '검토자',           name: 'mergeColumn2', childNames: ['rvw_nm','rvw_no']},
-          {header: '승인자',           name: 'mergeColumn3', childNames: ['aprv_nm','aprv_no']},
+         // {header: '승인자',           name: 'mergeColumn3', childNames: ['aprv_nm','aprv_no']},
         ]
       },
       columns: [
         {
           header: '요청 ID',
-          width: 110,
+          width: 90,
           align: 'center',
           name: 'rqs_id',
           editor: 'text',
@@ -1039,16 +1000,17 @@ export default {
         },
         {
           header: '요청사유',
+          width: 200,
           align: 'left',
           name: 'rsn_rqs',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '요청일자',
-          width: 100,
-          align: 'center',
-          name: 'rqs_dt',
+          header: '비고',
+          width: 200,
+          align: 'left',
+          name: 'rmrmk',
           editor: 'text',
           filter: 'text',
         },
@@ -1069,14 +1031,6 @@ export default {
           filter: 'text',
         },
         {
-          header: 'DR배포일시',
-          width: 150,
-          align: 'center',
-          name: 'dr_dply_ts',
-          editor: 'text',
-          filter: 'text',
-        },
-        {
           header: '운영배포일시',
           width: 150,
           align: 'center',
@@ -1085,8 +1039,8 @@ export default {
           filter: 'text',
         },
         {
-          header: '배포구분',
-          width: 120,
+          header: '시스템구분',
+          width: 110,
           align: 'center',
           name: 'dstr',
           formatter: 'listItemText',
@@ -1111,6 +1065,14 @@ export default {
               listItems: this.$store.state.pms.CD1000000058
             }
           },
+        },
+        {
+          header: '요청일자',
+          width: 100,
+          align: 'center',
+          name: 'rqs_dt',
+          editor: 'text',
+          filter: 'text',
         },
         {
           header: '이름',
@@ -1149,6 +1111,7 @@ export default {
           name: 'aprv_nm',
           editor: 'text',
           filter: 'text',
+          hidden : true,
         },
         {
           header: '사번',
@@ -1156,12 +1119,14 @@ export default {
           align: 'center',
           name: 'aprv_no',
           filter: 'text',
+          hidden : true,
         },
         {
-          header: '비고',
-          width: 80,
-          align: 'left',
-          name: 'rmrmk',
+          header: 'DR배포일시',
+          width: 150,
+          align: 'center',
+          name: 'dr_dply_ts',
+          editor: 'text',
           filter: 'text',
           hidden : true,
         },
@@ -1210,8 +1175,8 @@ export default {
       },
       columns2: [
         {
-          header: '테스트케이스ID',
-          width: 120,
+          header: '테스트ID',
+          width: 100,
           align: 'center',
           name: 'tst_case_id',
           editor: 'text',
@@ -1219,7 +1184,7 @@ export default {
         },
         {
           header: '수정사항',
-          width: 470,
+          width: 320,
           align: 'left',
           name: 'mdfc',
           editor: 'text',
@@ -1227,17 +1192,18 @@ export default {
         },
         {
           header: '배포요청패키지명',
+          width: 400,
           align: 'left',
           name: 'rqs_pck_nm',
           editor: 'text',
           filter: 'text',
         },
         {
-          header: '생성상태',
-          width: 60,
+          header: '상태',
+          width: 50,
           align: 'center',
           name: 'scs_yn',
-          filter: 'text',
+          filter: 'select',
         },
         {
           header: '생성결과',

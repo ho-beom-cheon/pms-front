@@ -1048,12 +1048,13 @@
       </div>
     </li>
 
-    <li class="filter-item" v-for="item in this.comboList3" :key="item.id" v-if="item === 'C3-57'">
-      <div class="item-con">배포구분
+    <li class="filter-item-a" v-for="item in this.comboList3" :key="item.id" v-if="item === 'C3-57'">
+      <div class="item-con">
+        <label style="width: 85px;text-align: center">시스템구분</label>
         <select
             id      = "dstr"
             v-model = "dstr_selected"
-            style   = "width: 120px"
+            style   = "width: 180px"
             @change = "dstr_change"
         >
           <option
@@ -1066,11 +1067,12 @@
       </div>
     </li>
     <li class="filter-item-a" v-for="item in this.comboList3" :key="item.id" v-if="item === 'C3-58'">
-      <div class="item-con" style="padding-top: 2px">배포요청상태
+      <div class="item-con">
+        <label style="width: 70px;text-align: center">배포요청상태</label>
         <select
             id      = "prcs_stts_cd"
             v-model = "prcs_stts_cd_selected"
-            style   = "width: 120px;"
+            style   = "width: 180px;"
             @change = "prcs_stts_cd_change"
         >
           <option
@@ -1083,7 +1085,7 @@
       </div>
     </li>
     <li class="filter-item" v-for="item in this.comboList4" :key="item.id" v-if="item === 'C3-57T'">
-      <div class="item-con">배포구분
+      <div class="item-con">시스템구분
         <select
             id      = "dstrT"
             v-model = "dstr_selectedT"

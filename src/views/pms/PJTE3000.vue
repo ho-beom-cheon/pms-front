@@ -543,7 +543,7 @@ export default {
         },
         {
           header: '테스트케이스ID',
-          width: 150,
+          width: 130,
           align: 'left',
           filter: 'text',
           name: 'cctn_id'
@@ -556,8 +556,8 @@ export default {
           name: 'cctn_nm'
         },
         {
-          header: '결함유형',
-          width: 100,
+          header: '유형',
+          width: 60,
           align: 'center',
           name: 'err_tycd',
           type: 'text',
@@ -585,8 +585,8 @@ export default {
           }
         },
         {
-          header: '결함등록일자',
-          width: 120,
+          header: '등록일자',
+          width: 90,
           align: 'center',
           name: 'rgs_dt',
           format: 'yyyy-mm-dd',
@@ -595,7 +595,7 @@ export default {
         },
         {
           header: '이름',
-          width: 80,
+          width: 60,
           align: 'center',
           name: 'rgpe_nm',
           filter: 'text',
@@ -603,10 +603,25 @@ export default {
         },
         {
           header: '번호',
-          width: 80,
+          width: 60,
           align: 'center',
           filter: 'text',
           name: 'rgpe_no',
+        },
+        {
+          header: '이름',
+          width: 60,
+          align: 'center',
+          name: 'dvlpe_nm',
+          filter: 'text',
+          editor: 'text',
+        },
+        {
+          header: '번호',
+          width: 60,
+          align: 'center',
+          filter: 'text',
+          name: 'dvlpe_no',
         },
         {
           header: '결함내용',
@@ -635,30 +650,16 @@ export default {
         },
         {
           header: '조치일자',
-          width: 110,
+          width: 90,
           align: 'center',
           name: 'ttmn_dt',
           filter: 'text',
           editor: 'datePicker'
         },
+
         {
           header: '이름',
-          width: 80,
-          align: 'center',
-          name: 'dvlpe_nm',
-          filter: 'text',
-          editor: 'text',
-        },
-        {
-          header: '번호',
-          width: 80,
-          align: 'center',
-          filter: 'text',
-          name: 'dvlpe_no',
-        },
-        {
-          header: '이름',
-          width: 80,
+          width: 60,
           align: 'center',
           name: 'pl_nm',
           filter: 'text',
@@ -666,7 +667,7 @@ export default {
         },
         {
           header: '번호',
-          width: 80,
+          width: 60,
           align: 'center',
           filter: 'text',
           name: 'pl_no',
