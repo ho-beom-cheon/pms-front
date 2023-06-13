@@ -437,7 +437,10 @@ export default {
     /* 저장을 하기위한 필수 항목 체크 */
     checkPrimary() {
       if (this.detail.as_pgm_dis_cd_selected == "NNN" ||this.detail.as_pgm_dis_cd_selected == "" || this.detail.as_pgm_dis_cd_selected == null) {
-        alert(' As-Is 프로그램구분코드는 필수 입력사항입니다.');
+        alert(' As-Is 프로그램유형은 필수 입력사항입니다.');
+        return false;
+      } else if (this.detail.as_pgm_dis_cd_selected == "999") {
+        alert(' As-Is 프로그램유형[공통/DTO/함수/Header File]은 조회용 코드입니다.\nAs-Is 프로그램유형을 다시 선택해주세요.');
         return false;
       } else if (this.detail.dvlpe_no == "" || this.detail.dvlpe_no == null) {
         alert('직원명과 직원번호는 필수 입력사항입니다.');

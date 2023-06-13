@@ -707,6 +707,16 @@ table.form-table select {
     gap: 3px;
 }
 
+.div01-X{
+    grid-column: 1/5;
+    margin: 5px;
+    border: 1px solid #d5d5d5;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(1, 480px);
+    gap: 3px;
+}
+
 /*PJTE8000*/
 .div1-d{
     grid-column: 4/7;
@@ -1099,7 +1109,18 @@ aside dl dd + dd a {
 }
 
 /* SECTION -- FILTER */
+
 .filter {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.filter-7200 {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 15px;
