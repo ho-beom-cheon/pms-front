@@ -395,6 +395,8 @@ export default {
     fnTar() {
       // 그리드 초기화
       this.req_rscs = "";
+      let save_yn = "Y";
+
       console.log("save_chg_yn ::", this.detail.save_chg_yn)
 
       if(this.detail.save_chg_yn === 'N') { alert("배포완료된 요청내역은 TAR생성이 불가합니다."); return;}
@@ -406,12 +408,21 @@ export default {
         return;
       }
 
-      if (confirm("정말 TAR생성을 하시겠습니까?") === false) {
-        return;
-      }
-
       for(let i = 0; i<this.$refs.grid2.invoke("getData").length; i++){
         this.req_rscs += this.$refs.grid2.invoke("getValue", i, "rqs_pck_nm")+",";
+        if(this.$refs.grid2.invoke("getValue", i, "sqn_cd") === "1차"){
+          save_yn = "N";
+        }
+      }
+
+      if(save_yn === "N"){
+        if (confirm("배포목록중 1차대상 프로그램이 존재합니다.\nTAR생성을 진행하시겠습니까?") === false) {
+          return;
+        }
+      } else {
+        if (confirm("정말 TAR생성을 하시겠습니까?") === false) {
+          return;
+        }
       }
 
       this.req_rscs = this.req_rscs.slice(0, this.req_rscs.length - 1)
@@ -1000,7 +1011,7 @@ export default {
         },
         {
           header: '요청사유',
-          width: 200,
+          width: 230,
           align: 'left',
           name: 'rsn_rqs',
           editor: 'text',
@@ -1176,7 +1187,7 @@ export default {
       columns2: [
         {
           header: '테스트ID',
-          width: 100,
+          width: 80,
           align: 'center',
           name: 'tst_case_id',
           editor: 'text',
@@ -1192,11 +1203,18 @@ export default {
         },
         {
           header: '배포요청패키지명',
-          width: 400,
+          width: 385,
           align: 'left',
           name: 'rqs_pck_nm',
           editor: 'text',
           filter: 'text',
+        },
+        {
+          header: '차수',
+          width: 50,
+          align: 'center',
+          name: 'sqn_cd',
+          filter: 'select',
         },
         {
           header: '상태',
