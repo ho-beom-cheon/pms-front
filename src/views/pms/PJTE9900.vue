@@ -828,7 +828,7 @@ export default {
     },
   },
 
-// 변수 선언부분
+// 변수 선언부분.
   data() {
     return {
 
