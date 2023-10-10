@@ -60,13 +60,6 @@
                 @dept_cd_change="dept_cd_change"
             >
             </combo>
-            <li class="filter-item">
-              <div class="item-con">
-                <input type="checkbox" id="cmpl_yn" v-model="info.cmpl_yn">
-                <label v-bind:hidden="this.detail.hidden_yn1">종료 프로젝트 포함</label>
-                <label v-bind:hidden="this.detail.hidden_yn2">종료 업무 포함</label>
-              </div>
-            </li>
             <li class="filter-btn">
               <button class="btn btn-filter-p" style="margin-left: 20px;margin-top: 5px" @click="fnSearch" >조회</button>
             </li>
@@ -1265,7 +1258,6 @@ export default {
         bef_emp_no            : sessionStorage.getItem("LOGIN_EMP_NO"),
 
         week_seq_val : 'Y',
-        cmpl_yn: false,
       },
 
       detail: {

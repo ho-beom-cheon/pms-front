@@ -328,6 +328,8 @@ export default {
     dept_cd_change(params) {this.info.dept_cd_selected = params},
     bkup_id_change(params) {this.info.bkup_id_selected = params},
 
+
+
     init() {
       // 그리드 초기화
       this.$refs.grid.invoke("clear");
@@ -831,7 +833,7 @@ export default {
     return {
 
       // 해당 화면에 사용할 콤보박스 입력(코드 상세 보기 참조)
-      comboList: ["C40", "C27"],
+      comboList: ["C40", "C27", "C-P1"],
       gridData: [],
       addCheak: 'N',
 
