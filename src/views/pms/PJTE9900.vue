@@ -694,7 +694,7 @@ export default {
       this.$refs.grid.invoke("readData");
       this.info.week_yymm = '';
     },
-    //후속작업 조회.
+    //후속작업 조회
     fnBakSearch() {
       this.info.gubun = "3";
       this.info.dept_cd_selected = this.$refs.grid.invoke("getValue", this.curRow, "dept_cd");
