@@ -726,7 +726,22 @@
         </select>
       </div>
     </li>
-
+    <li class="filter-item" v-for="item in this.comboList" :key="item.id" v-if="item === 'C1000'">
+      <div class="item-con">test
+        <select
+            v-model = "bkup_id_selected"
+            style   = "width: 120px"
+            @change = "bkup_id_change"
+        >
+          <option
+              v-for  = "(item, idx) in CD1000000027T"
+              :key   = "idx"
+              v-text = "item.text"
+              :value = "item.value"
+          ></option>
+        </select>
+      </div>
+    </li>
     <li class="filter-item-a" v-for="item in this.comboList" :key="item.id" v-if="item === 'C44-1'">
       <div class="item-con"><label>게시부문</label>
         <select
@@ -1257,6 +1272,9 @@ export default {
       CD1000000056T : [],  CD1000000056N : [], CD1000000056 : [],
       CD1000000057T : [],  CD1000000057N : [], CD1000000057 : [],
       CD1000000058T : [],  CD1000000058N : [], CD1000000058 : [],
+      CD1000000059T : [],  CD1000000059N : [], CD1000000059 : [],
+
+
 
       comboList: this.comboArray,
       comboList2: this.comboArray2,
